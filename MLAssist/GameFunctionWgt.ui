@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameFunctionWgt</class>
+ <widget class="QWidget" name="GameFunctionWgt">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>546</width>
+    <height>213</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GameFunctionWgt</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="tabPosition">
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="GameOftenFunctionWgt" name="gameOftenFunWgt">
+      <attribute name="title">
+       <string>常用</string>
+      </attribute>
+     </widget>
+     <widget class="GameNpcSymbolWgt" name="gameNpcSymbolWgt">
+      <attribute name="title">
+       <string>NPC地标</string>
+      </attribute>
+     </widget>
+     <widget class="GameGamerWgt" name="gamerWgt">
+      <attribute name="title">
+       <string>玩家</string>
+      </attribute>
+     </widget>
+     <widget class="GameItemsPosWgt" name="gameItems">
+      <attribute name="title">
+       <string>物品</string>
+      </attribute>
+     </widget>
+     <widget class="GameSysCfgWgt" name="gameSysCfgWgt">
+      <attribute name="title">
+       <string>系统</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GameOftenFunctionWgt</class>
+   <extends>QWidget</extends>
+   <header>GameOftenFunctionWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameNpcSymbolWgt</class>
+   <extends>QWidget</extends>
+   <header>GameNpcSymbolWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameGamerWgt</class>
+   <extends>QWidget</extends>
+   <header>GameGamerWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameItemsPosWgt</class>
+   <extends>QWidget</extends>
+   <header>GameItemsPosWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameSysCfgWgt</class>
+   <extends>QWidget</extends>
+   <header>GameSysCfgWgt.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

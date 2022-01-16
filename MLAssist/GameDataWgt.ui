@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameDataWgt</class>
+ <widget class="QWidget" name="GameDataWgt">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>714</width>
+    <height>247</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GameDataWgt</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QHeaderView::section 
+{
+	background-color: rgb(166,202,240);
+	color: black;	
+	border-right: 1px solid rgb(0, 0, 0);
+}
+QTableCornerButton::section{
+	background-color:rgb(166,202,240);
+}
+QTableWidget
+{
+	selection-background-color:lightblue;
+	selection-color:Black;
+	background-color: rgb(255, 255, 225);
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>人物状态</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTableWidget" name="tableWidget">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <attribute name="horizontalHeaderMinimumSectionSize">
+            <number>25</number>
+           </attribute>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>80</number>
+           </attribute>
+           <attribute name="horizontalHeaderHighlightSections">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>17</number>
+           </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>17</number>
+           </attribute>
+           <attribute name="verticalHeaderHighlightSections">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderStretchLastSection">
+            <bool>false</bool>
+           </attribute>
+           <column>
+            <property name="text">
+             <string>系统状态</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>人物状态</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>人物技能</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>宠物状态</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="GameBattleInfoWgt" name="tab_2">
+      <attribute name="title">
+       <string>战斗资料</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>人物设置</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item>
+        <widget class="QGroupBox" name="groupBox_autoAddPoint">
+         <property name="toolTip">
+          <string>宠物升级自动加点，基于当前配置</string>
+         </property>
+         <property name="title">
+          <string>自动加点</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="toolTip">
+               <string>用来防止加点错误，例如读取其他配置时候，名字不一致就不触发</string>
+              </property>
+              <property name="text">
+               <string>人物名称:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="AutoAddPoint_name"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="AutoAddPoint_nomal">
+            <property name="toolTip">
+             <string>每次4点，下面项最多勾选4个，勾选多了，最后一个永远加不上</string>
+            </property>
+            <property name="title">
+             <string>升级加点</string>
+            </property>
+            <property name="checkable">
+             <bool>false</bool>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QCheckBox" name="normalAddPointHp">
+               <property name="text">
+                <string>血</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="normalAddPointAttack">
+               <property name="text">
+                <string>攻</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="normalAddPointDefence">
+               <property name="text">
+                <string>防</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="normalAddPointAgility">
+               <property name="text">
+                <string>敏</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="normalAddPointMp">
+               <property name="text">
+                <string>魔</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="AutoAddPoint_burst">
+            <property name="toolTip">
+             <string>指定加点，优于升级加点规则</string>
+            </property>
+            <property name="title">
+             <string>指定加点</string>
+            </property>
+            <property name="checkable">
+             <bool>false</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <layout class="QFormLayout" name="formLayout">
+             <property name="horizontalSpacing">
+              <number>3</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>3</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QCheckBox" name="specialAddPointHp">
+                 <property name="text">
+                  <string>血</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_specialHp"/>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QCheckBox" name="specialAddPointAttack">
+                 <property name="text">
+                  <string>攻</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_Attack"/>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <item>
+                <widget class="QCheckBox" name="specialAddPointDefence">
+                 <property name="text">
+                  <string>防</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_defence"/>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QCheckBox" name="specialAddPointAgility">
+                 <property name="text">
+                  <string>敏</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_agility"/>
+               </item>
+              </layout>
+             </item>
+             <item row="3" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <item>
+                <widget class="QCheckBox" name="specialAddPointMp">
+                 <property name="text">
+                  <string>魔</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_specialMp"/>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>295</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="GameEquipWgt" name="tab_4">
+      <attribute name="title">
+       <string>人物装备</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GameBattleInfoWgt</class>
+   <extends>QWidget</extends>
+   <header>GameBattleInfoWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameEquipWgt</class>
+   <extends>QWidget</extends>
+   <header>GameEquipWgt.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

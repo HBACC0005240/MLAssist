@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/MLAssist">
+        <file>Resources/close.png</file>
+        <file>Resources/logo.png</file>
+        <file>Resources/zoom-fit-width.svg</file>
+        <file>Resources/zoom-in.svg</file>
+        <file>Resources/zoom-out.svg</file>
+        <file>Resources/recovery.png</file>
+        <file>Resources/zoomin.png</file>
+        <file>Resources/zoomout.png</file>
+        <file>Resources/Clear Formatting.png</file>
+        <file>Resources/clear.png</file>
+        <file>Resources/zoom-fit.png</file>
+        <file>Resources/logo.ico</file>
+        <file>Resources/min.png</file>
+        <file>Resources/map-export.png</file>
+    </qresource>
+    <qresource prefix="/Config">
+        <file>Resources/config/name.json</file>
+        <file>Resources/config/profession.json</file>
+        <file>Resources/config/title.json</file>
+        <file>Resources/config/cg.db</file>
+    </qresource>
+</RCC>

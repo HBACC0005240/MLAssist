@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MLAssistClass</class>
+ <widget class="QWidget" name="MLAssistClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>263</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MLAssist</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#MLAssistClass{
+	border: 1px solid  rgb(112, 112, 112);
+	border-radius: 4px;
+}
+QScrollBar::vertical{width:7px;}
+QScrollBar::horizontal{height:7px;}
+QHeaderView::section 
+{
+	background-color: rgb(166,202,240);
+	color: black;	
+	border-right: 1px solid rgb(0, 0, 0);
+}
+QTableCornerButton::section{
+	background-color:rgb(166,202,240);
+}
+QTableView
+{
+	selection-background-color:lightblue;
+	selection-color:Black;
+	background-color: rgb(255, 255, 225);
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="widget_title" native="true">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>14</height>
+      </size>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_title">
+        <property name="text">
+         <string>魔力宝贝辅助</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>700</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_min">
+        <property name="minimumSize">
+         <size>
+          <width>14</width>
+          <height>14</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>14</width>
+          <height>14</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="MLAssist.qrc">
+          <normaloff>:/MLAssist/Resources/min.png</normaloff>:/MLAssist/Resources/min.png</iconset>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_close">
+        <property name="minimumSize">
+         <size>
+          <width>14</width>
+          <height>14</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>14</width>
+          <height>14</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/MLAssist/Resources/close.png);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="MLAssist.qrc">
+          <normaloff>:/MLAssist/Resources/close.png</normaloff>:/MLAssist/Resources/close.png</iconset>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="usesScrollButtons">
+      <bool>false</bool>
+     </property>
+     <widget class="AttachGameWnd" name="attachedWindget">
+      <attribute name="title">
+       <string>挂接</string>
+      </attribute>
+     </widget>
+     <widget class="GameDataWgt" name="gameDataWgt">
+      <attribute name="title">
+       <string>资料</string>
+      </attribute>
+     </widget>
+     <widget class="GameChatWgt" name="gameChatWgt">
+      <attribute name="title">
+       <string>聊天</string>
+      </attribute>
+     </widget>
+     <widget class="GameBattleWgt" name="gameBattleWgt">
+      <attribute name="title">
+       <string>战斗</string>
+      </attribute>
+     </widget>
+     <widget class="GamePostwar" name="gamePostwarWgt">
+      <attribute name="title">
+       <string>战后</string>
+      </attribute>
+     </widget>
+     <widget class="GameBattleSetWgt" name="gameBattleSetWgt">
+      <attribute name="title">
+       <string>遇敌</string>
+      </attribute>
+     </widget>
+     <widget class="GamePetWgt" name="gamePetWgt">
+      <attribute name="title">
+       <string>宠物</string>
+      </attribute>
+     </widget>
+     <widget class="GameWorkWgt" name="gameWorkWgt">
+      <attribute name="title">
+       <string>物品</string>
+      </attribute>
+     </widget>
+     <widget class="GameFunctionWgt" name="gameFuncWgt">
+      <attribute name="title">
+       <string>功能</string>
+      </attribute>
+     </widget>
+     <widget class="GameMapWgt" name="mapWgt">
+      <attribute name="title">
+       <string>地图</string>
+      </attribute>
+     </widget>
+     <widget class="GameLuaScriptWgt" name="gameLuaWgt">
+      <attribute name="title">
+       <string>脚本</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>AttachGameWnd</class>
+   <extends>QWidget</extends>
+   <header>AttachGameWnd.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameDataWgt</class>
+   <extends>QWidget</extends>
+   <header>GameDataWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameWorkWgt</class>
+   <extends>QWidget</extends>
+   <header>GameWorkWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameChatWgt</class>
+   <extends>QWidget</extends>
+   <header>GameChatWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameFunctionWgt</class>
+   <extends>QWidget</extends>
+   <header>GameFunctionWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameBattleWgt</class>
+   <extends>QWidget</extends>
+   <header>GameBattleWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameBattleSetWgt</class>
+   <extends>QWidget</extends>
+   <header>GameBattleSetWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GamePostwar</class>
+   <extends>QWidget</extends>
+   <header>GamePostwar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GamePetWgt</class>
+   <extends>QWidget</extends>
+   <header>GamePetWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameLuaScriptWgt</class>
+   <extends>QWidget</extends>
+   <header>GameLuaScriptWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameMapWgt</class>
+   <extends>QWidget</extends>
+   <header>GameMapWgt.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="MLAssist.qrc"/>
+ </resources>
+ <connections/>
+</ui>

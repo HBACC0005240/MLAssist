@@ -1,0 +1,652 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="qxtglobalshortcut5">
+      <UniqueIdentifier>{a07a424a-4484-44fc-b0d3-e1299d8287da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Astar">
+      <UniqueIdentifier>{4b7bd317-1090-41c9-ab22-1579e8e3019b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameMap">
+      <UniqueIdentifier>{71934e9e-949d-4f67-a0b3-1aa2e63fae78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protos">
+      <UniqueIdentifier>{fc0e7775-b3ff-47e1-9949-662a37a6979d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MLAssist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\qxtglobalshortcut5\qxtglobal.cpp">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\qxtglobalshortcut5\qxtglobalshortcut.cpp">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\qxtglobalshortcut5\qxtglobalshortcut_win.cpp">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\qxtglobalshortcut5\qxtwindowsystem.cpp">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\qxtglobalshortcut5\qxtwindowsystem_win.cpp">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClCompile>
+    <ClCompile Include="FZParseScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AttachGameWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDataWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScriptWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWorkWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameChatWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFunctionWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBattleWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBattleSetWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\YunLai.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGLuaFun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoBattle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePostwar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleSetDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="class_db.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleModuleRegisty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mypaintmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar\AStar.cpp">
+      <Filter>Astar</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar\AStarGrid.cpp">
+      <Filter>Astar</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar\AStarNode.cpp">
+      <Filter>Astar</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar\AStarUtil.cpp">
+      <Filter>Astar</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatMapDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap\GraphicsView.cpp">
+      <Filter>GameMap</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap\GameMapWall.cpp">
+      <Filter>GameMap</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePetWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePythonScriptWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLuaScriptWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserDefDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AccountForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameNpcSymbolWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOftenFunctionWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GPCalc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scriptform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMapWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOftenCoordinateWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BFSSearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectGraphSearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDebugWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGamerWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameItemsPosWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tsp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScriptSetWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBattleInfoWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITTabBarStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserDefComboBoxDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCustomBattleWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSysCfgWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEquipWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomQuickKeyDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomKeySequenceEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PetDoubleActionSetDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScriptStopWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RpcSocketClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\protos\cgdata.grpc.pb.cc">
+      <Filter>protos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\protos\cgdata.pb.cc">
+      <Filter>protos</Filter>
+    </ClCompile>
+    <ClCompile Include="ITObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITObjectDataMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\ITDatabaseConn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\ITObjectID.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITEventLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qaesencryption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MLAssistHttpServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MLAssist.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\qxtglobalshortcut5\qxtglobalshortcut.h">
+      <Filter>qxtglobalshortcut5</Filter>
+    </QtMoc>
+    <QtMoc Include="FZParseScript.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AttachGameWnd.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameDataWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameCtrl.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameScriptWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameWorkWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameChatWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameFunctionWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameBattleWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameBattleSetWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AutoBattle.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GamePostwar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="BattleSetDlg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="mapform.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="mypaintmap.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CGFunction.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="FloatMapDlg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameMap\GraphicsView.h">
+      <Filter>GameMap</Filter>
+    </QtMoc>
+    <QtMoc Include="GameMap\GameMapWall.h">
+      <Filter>GameMap</Filter>
+    </QtMoc>
+    <QtMoc Include="GamePetWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GamePythonScriptWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameLuaScriptWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="UserDefDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AccountForm.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameNpcSymbolWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameOftenFunctionWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ProcessTable.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GPCalc.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="scriptform.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameMapWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameOftenCoordinateWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameDebugWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameGamerWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameItemsPosWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MApplication.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameScriptSetWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameBattleInfoWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="UserDefComboBoxDlg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="BattleSetting.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameCustomBattleWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameSysCfgWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameEquipWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomQuickKeyDlg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomKeySequenceEdit.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PetDoubleActionSetDlg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameScriptStopWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ITObjectDataMgr.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\ITDatabaseConn.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ITEventLoop.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="qaesencryption.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MLAssistHttpServer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="MLAssist.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AttachGameWnd.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameDataWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameScriptWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameWorkWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameChatWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameFunctionWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameBattleWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameBattleSetWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GamePostwar.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="BattleSetDlg.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="mapform.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="FloatMapDlg.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GamePetWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GamePythonScriptWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameLuaScriptWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="UserDefDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AccountForm.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameNpcSymbolWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameOftenFunctionWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="scriptform.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameMapWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameOftenCoordinateWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameDebugWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameGamerWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameItemsPosWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameScriptSetWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameBattleInfoWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="UserDefComboBoxDlg.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameCustomBattleWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameSysCfgWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameEquipWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="CustomQuickKeyDlg.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="PetDoubleActionSetDlg.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameScriptStopWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="MLAssist.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\qxtglobalshortcut5\qxtglobal.h">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\qxtglobalshortcut5\qxtglobalshortcut_p.h">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\qxtglobalshortcut5\qxtwindowsystem.h">
+      <Filter>qxtglobalshortcut5</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YunLai.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameservice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CGLuaFun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="class_db.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleModuleRegisty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar\AStar.h">
+      <Filter>Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar\AStarGrid.h">
+      <Filter>Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar\AStarNode.h">
+      <Filter>Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar\AStarUtil.h">
+      <Filter>Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar\AStarDef.h">
+      <Filter>Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BFSSearch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectGraphSearch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ITDebugDump.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tsp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITTabBarStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RpcSocketClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\protos\cgdata.grpc.pb.h">
+      <Filter>protos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\protos\cgdata.pb.h">
+      <Filter>protos</Filter>
+    </ClInclude>
+    <ClInclude Include="ITObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ITObjectID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MLAssist.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="Resources\logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtTranslation Include="lang.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\protos\cgdata.proto">
+      <Filter>protos</Filter>
+    </None>
+  </ItemGroup>
+</Project>

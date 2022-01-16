@@ -1,0 +1,6 @@
+[submodule "include/LuaBridge"]
+	path = include/LuaBridge
+	url = https://github.com/vinniefalco/LuaBridge.git
+[submodule "qhttp"]
+	path = qhttp
+	url = https://github.com/azadkuh/qhttp.git

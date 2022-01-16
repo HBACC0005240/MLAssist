@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/MLAssistGidTool">
+        <file>Resources/logo.ico</file>
+    </qresource>
+</RCC>

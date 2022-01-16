@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="lua54">
+      <UniqueIdentifier>{34ba6ada-4773-4975-aa12-cc48b0db9286}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lua.jam" />
+    <None Include="LuaC.jam" />
+    <None Include="LuaCall.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="LuaObject.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="LuaPlusSharedLib.jam" />
+    <None Include="LuaPlusStaticLib.jam" />
+    <None Include="LuaStackObject.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="LuaStackTableIterator.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="LuaState.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="lua54\lua">
+      <Filter>lua54</Filter>
+    </None>
+    <None Include="lua54\luac">
+      <Filter>lua54</Filter>
+    </None>
+    <None Include="lua54\Makefile">
+      <Filter>lua54</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LuaAutoBlock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaCall.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaFunction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaHelper_Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaHelper_StackObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaPlus.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaPlusCD.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaPlusConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaPlusInternal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaStackObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaStackTableIterator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaStateCD.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaStateOutFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaStateOutString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaTableIterator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\framework.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lapi.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lauxlib.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lcode.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lctype.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\ldebug.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\ldo.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lfunc.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lgc.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\ljumptab.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\llex.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\llimits.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lmem.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lobject.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lopcodes.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lopnames.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lparser.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lprefix.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lstate.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lstring.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\ltable.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\ltm.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lua.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lua.hpp">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\luaconf.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lualib.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lundump.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lvm.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\lzio.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+    <ClInclude Include="lua54\pch.h">
+      <Filter>lua54</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LuaPlus.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaPlusAddons.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaState_DumpObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lapi.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lauxlib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lbaselib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lbitlib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lcode.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lcorolib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lctype.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ldblib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ldebug.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ldo.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ldump.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lfunc.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lgc.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\linit.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\liolib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\llex.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lmathlib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lmem.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\loadlib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lobject.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lopcodes.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\loslib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lparser.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lstate.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lstring.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lstrlib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ltable.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ltablib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\ltm.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lua.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\Lua.cpp">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\luac.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lundump.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lutf8lib.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lvm.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\lzio.c">
+      <Filter>lua54</Filter>
+    </ClCompile>
+    <ClCompile Include="lua54\pch.cpp">
+      <Filter>lua54</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,360 @@
+
+syntax = "proto3";
+
+package CGData;
+
+service MLRpcService
+{
+	rpc Initialize(CGGmeTypeRequest) returns (CGVoidData);
+	rpc Connect(CGVoidData) returns (CGBoolData);
+	rpc IsInGame(CGVoidData) returns (CGIntData);
+	rpc GetWorldStatus(CGVoidData) returns (CGIntData);
+	rpc GetGameStatus(CGVoidData) returns (CGIntData);
+	rpc GetBGMIndex(CGVoidData) returns (CGIntData);
+	rpc GetSysTime(CGVoidData) returns (CGSysTimeResponse);
+	rpc GetPlayerInfo(CGVoidData) returns (CGCharacterData);
+	rpc SetPlayerFlagEnabled(CGPlayerFlagEnabledData) returns (CGVoidData);
+}
+message CGGmeTypeRequest
+{
+	int32 type=1;		// 0 1 2 3
+}
+service CGRpcService {
+	// 根据item的id，获取item信息
+	rpc GetCGItemData (CGItemRequest) returns (CGItemResponse);
+	rpc GetConnectState (CGVoidData) returns (CGVoidData);
+
+	//获取所有宠物算档数据
+	rpc GetPetGradeCalcData (CGPetGradeCalcRequest) returns (CGPetGradeCalcResponse){};
+
+	//获取服务端所有id和map名称的映射，用于本地缓存
+	rpc GetServerStoreMapData (CGMapDataRequest) returns (CGMapDataResponse){};
+
+	//客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
+	rpc StoreCGItemData (CGStoreItemRequest) returns (CGStoreItemResponse){};
+
+	//客户端向服务器发送地图信息，服务端缓存更新
+	rpc StoreCGMapData (CGStoreMapRequest) returns (CGStoreMapResponse){};
+
+	//定时上报当辅助信息
+	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};				//上报当前游戏数据
+	rpc UploadGidBankData (UploadGidBankDataRequest) returns (UploadGidBankDataResponse){};	//上报当前游戏数据
+
+	//发布是rpc的普通方法
+	rpc Publish (StringPub) returns (StringPub);
+	//订阅则是一个单向的流服务，服务端返回的数据可能很大
+	rpc Subscribe (StringPub) returns (stream StringPub);
+
+}
+
+message StringPub
+{
+  string value =1;
+}
+message UploadGidBankDataRequest
+{
+	string gid=1;			//当前游戏id 账号下的子游戏id
+	string character_name=2;		//游戏人物名称
+	int32 gold=3;				
+	repeated CGPetData pet_data=4;
+	repeated CGItemData items=5;
+	//银行的 单独上传
+}
+message CGAccountGidData
+{
+	string account=1;		//可选 自动登录时，把大通行证上报
+	string gid=2;			//当前游戏id 账号下的子游戏id
+	int32 game_type=3;		//道具电信or网通
+	int32 big_server=4;		//牧羊 金牛
+	uint32 server_line=5;	//当前游戏线路
+	int32 character=6;		//左边角色 右边角色
+}
+//上报当前游戏数据
+message UploadGidDataRequest
+{
+	string gid=1;
+	string character_name=2;		//游戏人物名称
+	CGCharacterData character_data=3;
+	repeated CGPetData pet_data=4;
+	repeated CGItemData items=5;
+}
+message CGBaseData
+{
+	string name=1;		//名称
+	int32 hp = 2;		//血量
+	int32 mp = 3;		//魔力
+	int32 maxhp = 4;	//总血量
+	int32 maxmp = 5;	//总魔力
+	int32 level = 6;	//等级
+	int32 xp = 7;		//当前经验
+	int32 maxxp = 8;	//最大经验
+	int32 health = 9; //健康值0-100	
+}
+message CGSkillBaseData
+{
+	string name=1;			//技能名称
+	string info=2;			//技能介绍
+	int32 id = 3;				//技能id
+	int32 cost = 4;			//耗魔
+	int32 flags = 5;			//
+	int32 index = 6;			//技能位置
+	int32 level = 7;			//等级
+	int32 maxLevel = 8;		//最高等级
+	bool available = 9;		//是否可用
+	int32 xp = 10;
+	int32 maxxp = 11;
+	repeated CGSkillBaseData subskills=12; //技能子项
+}
+message CGAttrBaseData
+{
+	int32 points_remain = 1;	  //未加点数
+	int32 points_endurance = 2; //体
+	int32 points_strength = 3;  //力
+	int32 points_defense = 4;	  //强
+	int32 points_agility = 5;	  //敏
+	int32 points_magical = 6;	  //魔
+	int32 value_attack = 7;	  //攻击
+	int32 value_defensive = 8;  //防御
+	int32 value_agility = 9;	  //敏捷
+	int32 value_spirit = 10;	  //精神
+	int32 value_recovery = 11;  //回复
+	int32 resist_poison = 12;	  //抵抗-毒
+	int32 resist_sleep = 13;	  //抵抗-昏睡
+	int32 resist_medusa = 14;	  //抵抗-石化
+	int32 resist_drunk = 15;	  //抵抗-酒醉
+	int32 resist_chaos = 16;	  //抵抗-混乱
+	int32 resist_forget = 17;	  //抵抗-遗忘
+	int32 fix_critical = 18;	  //修正-必杀
+	int32 fix_strikeback = 19;  //修正-反击
+	int32 fix_accurancy = 20;	  //修正-命中
+	int32 fix_dodge = 21;		  //修正-闪躲
+	int32 element_earth = 22;	  //地
+	int32 element_water = 23;	  //水
+	int32 element_fire = 24;	  //火
+	int32 element_wind = 25;	  //风
+};
+message CGCharacterPersDesc
+{
+	int32 changeBits=1;
+	int32 sellIcon=2;
+	string sellString=3;
+	int32 buyIcon=4;
+	string buyString=5;
+	int32 wantIcon=6;
+	string wantString=7;
+	string descString=8;
+}
+message CGCharacterData
+{
+	CGBaseData base_data=1;	//人物角色数据
+	int32 souls = 2;			//掉魂
+	int32 level = 3;			//等级
+	int32 gold = 4;			//金钱	
+	int32 image_id =5;		//人物模型图片id
+	int32 score = 6;			//战绩？
+	int32 skillslots =7;		//技能格
+	int32 use_title = 8;		//当前使用的称号
+	int32 avatar_id = 9;
+	int32 unitid = 10;
+	int32 petid = 11;				  //当前出战宠物id
+	bool petriding = 12;		  //骑乘中？
+	int32 direction = 13;			  //面对的方向
+	int32 punchclock = 14;		  //卡时
+	bool usingpunchclock = 15;	  //是否打卡中
+	string job=16;				  //职业名称
+	repeated string titles=17;	  //称号
+	int32 manu_endurance = 18;	  //耐力
+	int32 manu_skillful = 19;		  //灵巧
+	int32 manu_intelligence = 20;	  //智力
+	int32 value_charisma = 21;	  //魅力
+	int32 x = 22;					  //当前坐标
+	int32 y = 23;
+	string map_name=24;			  //地图名称
+	int32 map_number = 25;		  //地图编号
+	int32 server_line = 26;	  //当前服务器线路
+	CGAttrBaseData detail=27;	  //属性
+	repeated CGSkillBaseData skill=28;//技能列表
+	string nick=29;
+	CGCharacterPersDesc pers_desc=30;
+	int32 battle_position=31;
+}
+message CGPetData
+{
+	CGBaseData base_data=1;		//宠物数据
+	int32 index = 2;				//顺序位置
+	int32 flags = 3;
+	int32 battle_flags = 4;
+	int32 loyality = 5;			//忠诚
+	bool default_battle = 6;	//当前战斗宠物	
+	int32 state = 7;
+	int32 grade = 8;				//档次
+	int32 lossMinGrade = 9;
+	int32 lossMaxGrade = 10;
+	repeated CGSkillBaseData skill=11;	//技能列表
+	CGAttrBaseData detail=12;			//宠物属性
+	string real_name=13;
+	int32 race=14;			//种族
+	int32 skillslots =15;		//技能格
+
+}
+message CGItemData
+{
+	int32 image_id=1;
+	int32 item_id = 2;
+	string name = 3;
+	int32 type = 4;
+	int32 level=5;
+	string attr=6;
+	string info=7;
+	int32 pos=8;
+	bool assessed=9;
+	int32 count=10;
+}
+
+//上报当前游戏数据回传
+message UploadGidDataResponse
+{
+
+}
+//上报当前游戏数据回传
+message UploadGidBankDataResponse
+{
+
+}
+
+//更新服务器地图信息
+message CGStoreMapRequest
+{
+	int32 map_number=1;
+	string map_name=2;
+}
+message CGStoreMapResponse
+{
+
+}
+
+
+//获取地图信息
+message CGMapDataRequest 
+{
+	
+}
+//返回地图名称和编号映射
+message CGMapDataResponse  
+{
+	repeated CGMapData maps=1;
+}
+message CGMapData
+{
+	uint64 id=1;
+	int32 map_number=2;
+	string map_name=3;
+	string desc=4;
+	int32 often=5;
+}
+
+//获取宠物算档数据
+message CGPetGradeCalcRequest 
+{
+	
+}
+//返回宠物算档数据
+message CGPetGradeCalcResponse  
+{
+	repeated CGPetGradeCalcData pet=1;
+}
+message CGPetGradeCalcData
+{
+	uint64 id=1;
+	int32 number = 2;
+	string name = 3;
+	int32 raceType = 4;
+	string raceTypeName = 5;
+	double baseBP=6;			//能力倍率
+	int32 totalGrade=7;			//综合档次
+	repeated double bestBPGrade=8;		//满档成长档次
+	int32 can_catch=9;		//0x0001 0=不可捕捉，1=可以捕捉
+	int32 card_type=10;		//0x0002 0=无，1=银卡，2=金卡	
+	int32 image_id=11;		//0x0008
+	int32 rate_endurance=12; //0x000C 0=半颗星，3=2颗星，5=3颗星，9=5颗星
+	int32 rate_strength=13;	//0x0010 力量
+	int32 rate_defense=14;	//0x0014 防御
+	int32 rate_agility=15;	//0x0018 敏捷
+	int32 rate_magical=16;	//0x001C 魔法
+	int32 element_earth=17;	//0x0020 地
+	int32 element_water=18;	//0x0024 水
+	int32 element_fire=19;	//0x0028 火
+	int32 element_wind=20;	//0x002C 风
+	int32 skill_slots=21;	//0x0030 技能栏
+}
+
+//获取item信息
+message CGItemRequest 
+{
+	int32 item_id = 1;
+}
+
+
+//返回item信息
+message CGItemResponse 
+{
+	uint64 id=1;		//数据库id
+	int32 item_id = 2;
+	string name = 3;
+	int32 type = 4;
+	int32 price = 5;
+	int32 maxpile=6;
+	int32 level=7;
+	int32 sellLimitCount=8;
+	string attribute=9;
+	string desc=10;
+	bool exist=11;
+}
+//缓存item信息
+message CGStoreItemRequest
+{
+	int32 item_id = 1;
+	string name = 2;
+	int32 type = 3;
+	int32 price = 4;
+	int32 maxpile=5;
+	int32 level=6;
+	int32 sellLimitCount=7;
+	string attribute=8;
+	string desc=9;
+	bool assessed=10;
+}
+//返回item信息
+message CGStoreItemResponse
+{
+	int32 id = 1;
+	string maybeName=2;
+}
+message CGVoidData
+{
+
+}
+message CGBoolData
+{
+	bool val=1;
+}
+message CGIntData
+{
+	int32 val=1;
+}
+message CGSysTimeResponse
+{
+	int32 years=1;
+	int32 month=2;
+	int32 days=3;
+	int32 hours=4;
+	int32 mins=5;
+	int32 secs=6;
+	int32 local_time=7;
+	int32 server_time=8;
+};
+message CGPlayerFlagEnabledData
+{
+	int32 index=1;
+	bool enable=2;
+}

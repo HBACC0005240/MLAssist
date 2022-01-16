@@ -1,0 +1,22 @@
+nodegyp和qhttp是原cga部分功能，主要用来支持js脚本，以及js脚本和辅助的通信而建，CGANode是把c++API接口封装为js可以识别的库
+
+lua和luaplus是用来支持lua脚本的项目
+
+CGAHook和CGALib是辅助核心，CGAHook用于捕获游戏数据并建立服务端，提供api接口供各个客户端使用，CGALib是一个c++调用库，用于和CGAHook通信
+
+MLAssistGidTool是账号创建工具
+
+MLAssistTool是辅助和窗口管理工具，并通过谷歌gprc协议提供服务，目前有算档依赖接口以及未鉴定物品显示实际名称功能，还有收集各个角色信息功能，不包括密码，只有角色信息、宠物信息、银行信息，用于支持后续联动
+
+protos文件夹下，是grpc协议接口定义
+
+rest_rpc是CGALib依赖的c++通信库
+
+ThirdPart下有2个，一个libxl，后续用于导出仓库信息excel表用，另一个是qmqtt，是用于消息通信用，可以自建服务器来中转，所有辅助可以通过服务器中转，发布接收一些订阅消息
+项目依赖c++ boost库
+
+编译用的是qt5.15.2  vs2019，根据自己需要调整，项目是32位，需要安装32位库   
+
+NodeJS v14+ (32位 或 64位 均可)
+
+node-gyp (建议跟随 https://www.npmjs.com/package/node-gyp 的指示来安装 node-gyp)
