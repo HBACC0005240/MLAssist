@@ -3808,8 +3808,8 @@ void GameCtrl::OnSetAutoDropPet(int state)
 
 void GameCtrl::OnSetScirptDelayTime(int nTime)
 {
-	if (nTime < 100)
-		m_nScriptDelayTime = 100;
+	if (nTime < 0)
+		m_nScriptDelayTime = 0;
 	else
 		m_nScriptDelayTime = nTime;
 }

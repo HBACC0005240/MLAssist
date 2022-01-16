@@ -327,14 +327,13 @@ bool AccountForm::QueryAttachGameWnd()
 								break;
 							}
 							else
-							{
-								if (g_pGameCtrl->getGamePID() == 0)
-									return false;
-								if (pid == g_pGameCtrl->getGamePID())
+							{							
+								if ( pid != g_pGameCtrl->getGamePID())
+								{
+									qDebug() << "该ID已附加，退出！";
+									qApp->exit(0);
 									return true;
-								qDebug() << "该ID已附加，退出！";
-								qApp->exit(0);
-								return true;
+								}								
 							}
 						}
 					}
@@ -367,13 +366,13 @@ bool AccountForm::QueryAttachGameWnd()
 				}
 				else
 				{
-					if (g_pGameCtrl->getGamePID() == 0)
-						return false;
-					if (wnd->m_ProcessId == g_pGameCtrl->getGamePID())
+					
+					if (wnd->m_ProcessId != g_pGameCtrl->getGamePID())
+					{
+						qDebug() << "该ID已附加，退出！";
+						qApp->exit(0);
 						return true;
-					qDebug() << "该ID已附加，退出！";
-					qApp->exit(0);
-					return true;
+					}				
 				}
 			}
 		}
