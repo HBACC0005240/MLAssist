@@ -382,6 +382,7 @@ void GamePetWgt::on_dropPet_LineEdit_editingFinished()
 void GamePetWgt::on_pushButton_saveBook_clicked()
 {
 	g_pGameFun->SavePetPictorialBookToHtml();
+	QMessageBox::information(this, "提示", "保存完成,程序所在图鉴文件夹下", "确定");
 }
 
 void GamePetWgt::onTableCustomContextMenu(const QPoint &pos)

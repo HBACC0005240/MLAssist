@@ -141,6 +141,39 @@ bool ITObjectDataMgr::init()
 		//3、item实时通信获取但不获取所有，获取当前包裹的，并本地缓存，发现获取的服务器数据不是最新，则发通知服务器更新
 		auto petData = RpcSocketClient::getInstance().GetPetGradeCalcData(); //这个是图鉴部分  和ITGamePet还不一样
 		g_pGamePetCalc->setCaclPetData(petData);
+		if (petData.size() > 0)
+		{
+			for (auto it=petData.begin();it!=petData.end();++it)
+			{
+				auto petBook = it.value();
+				ITGamePetPtr pObj = newOneObject(TObject_Pet).dynamicCast<ITGamePet>();
+				if (pObj)
+				{
+					pObj->_petNumber = petBook->number;
+					pObj->_petRaceType = petBook->raceType;
+					pObj->_petRace = petBook->raceTypeName;
+					pObj->_petBaseBp = petBook->baseBP;
+					pObj->_growVigor = petBook->bestBPGrade[0];
+					pObj->_growStrength = petBook->bestBPGrade[1];
+					pObj->_growDefense = petBook->bestBPGrade[2];
+					pObj->_growAgility = petBook->bestBPGrade[3];
+					pObj->_growMagic = petBook->bestBPGrade[4];
+					pObj->_canCatch = petBook->can_catch;
+					pObj->_cardType = petBook->card_type;
+					pObj->_imageId = petBook->image_id;
+					pObj->_skillCount = petBook->skill_slots;
+					pObj->_elementEarth = petBook->element_earth;
+					pObj->_elementWater = petBook->element_water;
+					pObj->_elementFire = petBook->element_fire;
+					pObj->_elementWind = petBook->element_wind;
+					pObj->setObjectName(petBook->name);
+					//pObj->setObjectDsec(sDesc);
+					//pObj->setObjectCode(nCode);
+				}
+				m_numberForPet.insert(petBook->number, pObj);
+			}
+			
+		}
 		RpcSocketClient::getInstance().GetServerStoreMapData();
 	}
 	else
