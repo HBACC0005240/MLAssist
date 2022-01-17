@@ -1418,7 +1418,7 @@ void CGFunction::AllCompound(QString name)
 			qDebug() << "合成中";
 			//pThis->Work(pSkill->id, 0);
 			emit signal_workStart();
-			int nTimeOut = assessedOnce ? 2000 : 9000;
+			int nTimeOut = assessedOnce ? 2000 : 90000;
 			WaitRecvWorkResult(nTimeOut);
 			assessedOnce = true;
 			emit signal_workEnd();
@@ -1443,13 +1443,17 @@ void CGFunction::StartWork(int workType, int nDelayTime /*=6000*/, QString compo
 	m_nCurrentWorkType = workType;
 	m_sCurrentCompoundName = compoundName;
 	m_bWorking = true;
-	QString skillName = m_workTypeForText.value(m_nCurrentWorkType);
-	m_nCurrentWorkSkillIndex = g_pGameFun->FindPlayerSkill(skillName);
-	if (m_nCurrentWorkSkillIndex < 0)
+	if (workType != TWork_Compound)
 	{
-		qDebug() << QString("没有%1技能").arg(skillName);
-		return;
+		QString skillName = m_workTypeForText.value(m_nCurrentWorkType);
+		m_nCurrentWorkSkillIndex = g_pGameFun->FindPlayerSkill(skillName);
+		if (m_nCurrentWorkSkillIndex < 0)
+		{
+			qDebug() << QString("没有%1技能").arg(skillName);
+			return;
+		}
 	}
+
 	m_nCurrentWorkDelayTime = nDelayTime;
 	RestFun();
 	//	g_pGameCtrl->OnSetWorkDelayTime(ntime);

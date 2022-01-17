@@ -529,14 +529,18 @@ void GameWorkWgt::ResetWorkText()
 void GameWorkWgt::StartWork()
 {
 	m_bStopWork = false;
-	QString skillName = m_workTypeForText.value(m_nCurrentWorkType);
-	m_nCurrentWorkSkillIndex = g_pGameFun->FindPlayerSkill(skillName);
-	if (m_nCurrentWorkSkillIndex < 0)
+	if (m_nCurrentWorkType != TWork_Compound)
 	{
-		ResetWorkText();
-		QMessageBox::information(this, "提示：", QString("没有%1技能").arg(skillName), "确定");
-		return;
+		QString skillName = m_workTypeForText.value(m_nCurrentWorkType);
+		m_nCurrentWorkSkillIndex = g_pGameFun->FindPlayerSkill(skillName);
+		if (m_nCurrentWorkSkillIndex < 0)
+		{
+			ResetWorkText();
+			QMessageBox::information(this, "提示：", QString("没有%1技能").arg(skillName), "确定");
+			return;
+		}
 	}
+	
 	int ntime = m_workTypeForTime.value(m_nCurrentWorkType);
 	//	ntime += 4500;	//内部会-4500  这里加上
 	m_nCurrentWorkDelayTime = ntime;
