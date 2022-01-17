@@ -1896,9 +1896,9 @@ bool CGFunction::ForgetPlayerSkill(int x, int y, QString skillName)
 {
 	bool bResult = false;
 	TurnAboutEx(x, y);
-	WaitRecvNpcDialog();
-	g_CGAInterface->ClickNPCDialog(-1, 1, bResult);
 	auto dlg = WaitRecvNpcDialog();
+	g_CGAInterface->ClickNPCDialog(-1, 1, bResult);
+	dlg = WaitRecvNpcDialog();
 	if (!dlg)
 		return false;
 	//auto msgList = dlg->message.split("|");

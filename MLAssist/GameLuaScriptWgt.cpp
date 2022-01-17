@@ -52,13 +52,13 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	connect(this, SIGNAL(runScriptSignal()), this, SLOT(on_pushButton_start_clicked()));
 	connect(this, SIGNAL(switchScript(const QString &)), this, SLOT(doSwitchScript(const QString &)));
 	connect(&ITObjectDataMgr::getInstance(), &ITObjectDataMgr::signal_mqttMsg, this, &GameLuaScriptWgt::DealMqttTopicData, Qt::ConnectionType::QueuedConnection);
-	ui.plainTextEdit->setMaximumBlockCount(m_scriptLogMaxLine);
-	//ui.textEdit_log->setMaximumBlockCount(m_scriptLogMaxLine);
+	ui.plainTextEdit->setMaximumBlockCount(10);
+	ui.textEdit_log->setMaximumBlockCount(m_scriptLogMaxLine);
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnAutoRestart()));
 	timer->start(1000);
-	ui.textEdit_log->setDocument(ui.plainTextEdit->document());
+	//ui.textEdit_log->setDocument(ui.plainTextEdit->document());
 	initScriptSystem();
 	//lua_State* pLuaState = luaL_newstate();
 	//luaL_openlibs(pLuaState);
@@ -1061,7 +1061,8 @@ void GameLuaScriptWgt::DoLoadScript(QString path, bool autorestart, bool freezes
 		return;
 	}
 	m_scriptLogMaxLine = consolemaxlines;
-	ui.plainTextEdit->setMaximumBlockCount(m_scriptLogMaxLine);
+	ui.plainTextEdit->setMaximumBlockCount(10);
+	ui.textEdit_log->setMaximumBlockCount(m_scriptLogMaxLine);
 
 	//m_scriptPath = path;
 	ui.checkBox_scriptRestart->setChecked(autorestart);
@@ -1118,7 +1119,7 @@ void GameLuaScriptWgt::AddDebugMsg(const QString &sMessage, QString sColor)
 	//ui.textEdit_log->moveCursor(QTextCursor::End);
 	//ui.textEdit_log->insertHtml(sMsgData);
 	AddScriptLogMsg(ui.plainTextEdit, sMsgData); //不两份了 不然卡
-	//	AddScriptLogMsg(ui.textEdit_log, sMsgData);
+	AddScriptLogMsg(ui.textEdit_log, sMsgData);
 }
 
 void GameLuaScriptWgt::AddLogMsg(const QString &sMessage)
