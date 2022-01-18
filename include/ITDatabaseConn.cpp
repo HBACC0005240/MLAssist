@@ -120,6 +120,11 @@ ITDataBaseConn::ITDataBaseConn(QString strdbtype)
 		m_db = QSqlDatabase::addDatabase("QMYSQL");
 		m_nDBType = DB_TYPE_MYSQL;
 	}
+	else if (strdbtype.contains("SQLITECIPHER", Qt::CaseInsensitive))
+	{
+		m_db = QSqlDatabase::addDatabase("SQLITECIPHER");
+		m_nDBType = DB_TYPE_SQLITECIPHER;
+	}
 	else if (strdbtype.contains("SQLITE", Qt::CaseInsensitive))
 	{
 		m_db = QSqlDatabase::addDatabase("QSQLITE");
@@ -160,10 +165,16 @@ bool ITDataBaseConn::openDataBase(const QString& strDBName, const QString& strho
 		strDriver = strDBName;
 		nport = 3306;
 	}
+	else if (m_strDBType.contains("SQLITECIPHER", Qt::CaseInsensitive))
+	{
+		strDriver = strDBName;
+		m_db.setConnectOptions("QSQLITE_CREATE_KEY");
+	}
 	else if (m_strDBType.contains("SQLITE", Qt::CaseInsensitive))
 	{
 		strDriver = strDBName;
 	}
+
 	else
 	{
 		strDriver = QString("DRIVER={SQL SERVER};port=1433;SERVER=%1;DATABASE=%2").arg(strhostname).arg(strDBName);

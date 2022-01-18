@@ -335,9 +335,9 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("字符串转换", m_luaFun, &CGLuaFun::Lua_Translate);
 	objGlobal.Register("注册函数", m_luaFun, &CGLuaFun::Lua_RegisterLuaFun);
 	objGlobal.Register("utf8ToGbk", m_luaFun, &CGLuaFun::Lua_Translate);
-	objGlobal.Register("GetMapPos", m_luaFun, &CGLuaFun::GetMapPos);
 	objGlobal.Register("取当前坐标", m_luaFun, &CGLuaFun::GetMapPos);
 	objGlobal.Register("取当前地图名", m_luaFun, &CGLuaFun::Lua_GetMapName);
+
 	objGlobal.Register("取当前地图编号", m_luaFun, &CGLuaFun::Lua_GetMapNumber);
 	objGlobal.Register("取当前地图数据", m_luaFun, &CGLuaFun::Lua_GetMapData);
 	objGlobal.Register("取当前楼层", m_luaFun, &CGLuaFun::Lua_GetMapFloorNumberFromName);
@@ -370,8 +370,10 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("设置个人简介", m_luaFun, &CGLuaFun::Lua_SetPlayerInfo);
 
 	objGlobal.Register("世界状态", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);
+
 	objGlobal.Register("游戏状态", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
 	objGlobal.Register("游戏时间", m_luaFun, &CGLuaFun::Lua_GetSysTimeEx);
+
 	objGlobal.Register("游戏窗口状态", m_luaFun, &CGLuaFun::Lua_GetConnectGameWndStatus);
 	objGlobal.Register("打开游戏窗口", m_luaFun, &CGLuaFun::Lua_RunGameWnd);
 
@@ -482,7 +484,6 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("装备代码物品", m_luaFun, &CGLuaFun::Lua_EquipItemEx);
 	objGlobal.Register("取下装备", m_luaFun, &CGLuaFun::Lua_UnEquipItem);
 	objGlobal.Register("取下代码装备", m_luaFun, &CGLuaFun::Lua_UnEquipItemEx);
-
 	objGlobal.Register("开始遇敌", m_luaFun, &CGLuaFun::Lua_BeginAutoAction);
 	objGlobal.Register("停止遇敌", m_luaFun, &CGLuaFun::Lua_EndAutoAction);
 	objGlobal.Register("等待", m_luaFun, &CGLuaFun::Lua_WaitTime);
@@ -499,10 +500,8 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("对话坐标选否", m_luaFun, &CGLuaFun::Lua_TalkNpcPosSelectNo);
 	objGlobal.Register("菜单选择", m_luaFun, &CGLuaFun::Lua_PlayerMenuSelect);
 	objGlobal.Register("菜单项选择", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
-
 	objGlobal.Register("回复", m_luaFun, &CGLuaFun::Lua_Renew);
 	objGlobal.Register("renew", m_luaFun, &CGLuaFun::Lua_Renew);
-
 	objGlobal.Register("人物", m_luaFun, &CGLuaFun::Lua_GetPlayerData);
 	objGlobal.Register("人物信息", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
 	objGlobal.Register("下级称号数据", m_luaFun, &CGLuaFun::Lua_GetNextTitleData);
@@ -527,7 +526,6 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("是否战斗中", m_luaFun, &CGLuaFun::Lua_IsInBattle);
 	objGlobal.Register("是否空闲中", m_luaFun, &CGLuaFun::Lua_IsInNormalState);
 	objGlobal.Register("设置", m_luaFun, &CGLuaFun::Lua_SysConfig);
-
 	objGlobal.Register("等待到指定地图", m_luaFun, &CGLuaFun::Lua_Nowhile);
 	objGlobal.Register("调试", m_luaFun, &CGLuaFun::Lua_DebugMessage);
 	objGlobal.Register("日志", m_luaFun, &CGLuaFun::Lua_LogMessage);
@@ -539,14 +537,122 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("合成", m_luaFun, &CGLuaFun::Lua_AllCompound);
 	objGlobal.Register("AllCompound", m_luaFun, &CGLuaFun::Lua_AllCompound);
 	objGlobal.Register("压矿", m_luaFun, &CGLuaFun::Lua_Exchange);
-
 	objGlobal.Register("穿墙", m_luaFun, &CGLuaFun::Lua_ThroughWall);
 	objGlobal.Register("切图", m_luaFun, &CGLuaFun::Lua_ThroughWall);
 	objGlobal.Register("方向穿墙", m_luaFun, &CGLuaFun::Lua_ThroughWallEx);
-
 	objGlobal.Register("是否目标附近", m_luaFun, &CGLuaFun::Lua_IsNearTarget);
 	objGlobal.Register("自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
 	objGlobal.Register("自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
+
+	objGlobal.Register("GetMapName", m_luaFun, &CGLuaFun::Lua_GetMapName);
+	objGlobal.Register("GetGameStatus", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
+	objGlobal.Register("GetWorldStatus", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);
+	objGlobal.Register("GetSysTime", m_luaFun, &CGLuaFun::Lua_GetSysTimeEx);
+	objGlobal.Register("GetBGMIndex", m_luaFun, &CGLuaFun::Lua_GetBGMIndex);
+	objGlobal.Register("GetPlayerInfo", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
+	objGlobal.Register("GetPetsInfo", m_luaFun, &CGLuaFun::Lua_GetPetData);
+	objGlobal.Register("GetMapPos", m_luaFun, &CGLuaFun::GetMapPos);
+	/*objGlobal.Register("SetPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_SetPlayerFlagEnabled);
+	objGlobal.Register("IsPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_IsPlayerFlagEnabled);
+	objGlobal.Register("IsSkillValid", m_luaFun, &CGLuaFun::Lua_IsSkillValid);
+	objGlobal.Register("GetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSkillInfo);
+	objGlobal.Register("GetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSkillsInfo);
+	objGlobal.Register("GetSubSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillInfo);
+	objGlobal.Register("GetSubSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillsInfo);
+	objGlobal.Register("IsPetValid", m_luaFun, &CGLuaFun::Lua_IsPetValid);
+	objGlobal.Register("GetPetInfo", m_luaFun, &CGLuaFun::Lua_GetPetInfo);
+	objGlobal.Register("GetBankPetsInfo", m_luaFun, &CGLuaFun::Lua_GetBankPetsInfo);
+	objGlobal.Register("IsPetSkillValid", m_luaFun, &CGLuaFun::Lua_IsPetSkillValid);
+	objGlobal.Register("GetPetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillInfo);
+	objGlobal.Register("GetPetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillsInfo);
+	objGlobal.Register("GetMapIndex", m_luaFun, &CGLuaFun::Lua_GetMapIndex);
+	objGlobal.Register("GetMoveSpeed", m_luaFun, &CGLuaFun::Lua_GetMoveSpeed);
+	objGlobal.Register("GetMouseXY", m_luaFun, &CGLuaFun::Lua_GetMouseXY);
+	objGlobal.Register("GetMouseOrientation", m_luaFun, &CGLuaFun::Lua_GetMouseOrientation);
+	objGlobal.Register("WalkTo", m_luaFun, &CGLuaFun::Lua_WalkTo);
+	objGlobal.Register("TurnTo", m_luaFun, &CGLuaFun::Lua_TurnTo);
+	objGlobal.Register("SetMoveSpeed", m_luaFun, &CGLuaFun::Lua_SetMoveSpeed);
+	objGlobal.Register("ForceMove", m_luaFun, &CGLuaFun::Lua_ForceMove);
+	objGlobal.Register("ForceMoveTo", m_luaFun, &CGLuaFun::Lua_ForceMoveTo);
+	objGlobal.Register("IsMapCellPassable", m_luaFun, &CGLuaFun::Lua_IsMapCellPassable);
+	objGlobal.Register("LogBack", m_luaFun, &CGLuaFun::Lua_LogBack);
+	objGlobal.Register("LogOut", m_luaFun, &CGLuaFun::Lua_LogOut);
+	objGlobal.Register("BackSelectServer", m_luaFun, &CGLuaFun::Lua_BackSelectServer);
+	objGlobal.Register("SayWords", m_luaFun, &CGLuaFun::Lua_SayWords);
+	objGlobal.Register("ChangeNickName", m_luaFun, &CGLuaFun::Lua_ChangeNickName);
+	objGlobal.Register("ChangeTitleName", m_luaFun, &CGLuaFun::Lua_ChangeTitleName);
+	objGlobal.Register("ChangePersDesc", m_luaFun, &CGLuaFun::Lua_ChangePersDesc);
+	objGlobal.Register("ChangePetName", m_luaFun, &CGLuaFun::Lua_ChangePetName);
+	objGlobal.Register("GetCardsInfo", m_luaFun, &CGLuaFun::Lua_GetCardsInfo);
+	objGlobal.Register("GetCardsRecvMsg", m_luaFun, &CGLuaFun::Lua_GetCardsRecvMsg);
+	objGlobal.Register("GetPicBooksInfo", m_luaFun, &CGLuaFun::Lua_GetPicBooksInfo);
+	objGlobal.Register("IsItemValid", m_luaFun, &CGLuaFun::Lua_IsItemValid);
+	objGlobal.Register("GetItemInfo", m_luaFun, &CGLuaFun::Lua_GetItemInfo);
+	objGlobal.Register("GetItemsInfo", m_luaFun, &CGLuaFun::Lua_GetItemsInfo);
+	objGlobal.Register("GetBankItemsInfo", m_luaFun, &CGLuaFun::Lua_GetBankItemsInfo);
+	objGlobal.Register("GetBankGold", m_luaFun, &CGLuaFun::Lua_GetBankGold);
+	objGlobal.Register("UseItem", m_luaFun, &CGLuaFun::Lua_UseItem);
+	objGlobal.Register("MoveItem", m_luaFun, &CGLuaFun::Lua_MoveItem);
+	objGlobal.Register("MovePet", m_luaFun, &CGLuaFun::Lua_MovePet);
+	objGlobal.Register("MoveGold", m_luaFun, &CGLuaFun::Lua_MoveGold);
+	objGlobal.Register("DropItem", m_luaFun, &CGLuaFun::Lua_DropItem);
+	objGlobal.Register("DropPet", m_luaFun, &CGLuaFun::Lua_DropPet);
+	objGlobal.Register("ChangePetState", m_luaFun, &CGLuaFun::Lua_ChangePetState);
+	objGlobal.Register("ClickNPCDialog", m_luaFun, &CGLuaFun::Lua_ClickNPCDialog);
+	objGlobal.Register("SellNPCStore", m_luaFun, &CGLuaFun::Lua_SellNPCStore);
+	objGlobal.Register("BuyNPCStore", m_luaFun, &CGLuaFun::Lua_BuyNPCStore);
+	objGlobal.Register("PlayerMenuSelect", m_luaFun, &CGLuaFun::Lua_PlayerMenuSelect);
+	objGlobal.Register("UnitMenuSelect", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
+	objGlobal.Register("UpgradePlayer", m_luaFun, &CGLuaFun::Lua_UpgradePlayer);
+	objGlobal.Register("UpgradePet", m_luaFun, &CGLuaFun::Lua_UpgradePet);
+	objGlobal.Register("IsBattleUnitValid", m_luaFun, &CGLuaFun::Lua_IsBattleUnitValid);
+	objGlobal.Register("GetBattleUnit", m_luaFun, &CGLuaFun::Lua_GetBattleUnit);
+	objGlobal.Register("GetBattleUnits", m_luaFun, &CGLuaFun::Lua_GetBattleUnits);
+	objGlobal.Register("GetBattleContext", m_luaFun, &CGLuaFun::Lua_GetBattleContext);
+	objGlobal.Register("BattleNormalAttack", m_luaFun, &CGLuaFun::Lua_BattleNormalAttack);
+	objGlobal.Register("BattleSkillAttack", m_luaFun, &CGLuaFun::Lua_BattleSkillAttack);
+	objGlobal.Register("BattleRebirth", m_luaFun, &CGLuaFun::Lua_BattleRebirth);
+	objGlobal.Register("BattleGuard", m_luaFun, &CGLuaFun::Lua_BattleGuard);
+	objGlobal.Register("BattleEscape", m_luaFun, &CGLuaFun::Lua_BattleEscape);
+	objGlobal.Register("BattleExchangePosition", m_luaFun, &CGLuaFun::Lua_BattleExchangePosition);
+	objGlobal.Register("BattleDoNothing", m_luaFun, &CGLuaFun::Lua_BattleDoNothing);
+	objGlobal.Register("BattleChangePet", m_luaFun, &CGLuaFun::Lua_BattleChangePet);
+	objGlobal.Register("BattleUseItem", m_luaFun, &CGLuaFun::Lua_BattleUseItem);
+	objGlobal.Register("BattlePetSkillAttack", m_luaFun, &CGLuaFun::Lua_BattlePetSkillAttack);
+	objGlobal.Register("BattleSetHighSpeedEnabled", m_luaFun, &CGLuaFun::Lua_BattleSetHighSpeedEnabled);
+	objGlobal.Register("SetGameTextUIEnabled", m_luaFun, &CGLuaFun::Lua_SetGameTextUIEnabled);
+	objGlobal.Register("SetGameTextUICurrentScript", m_luaFun, &CGLuaFun::Lua_SetGameTextUICurrentScript);
+	objGlobal.Register("GetBattleEndTick", m_luaFun, &CGLuaFun::Lua_GetBattleEndTick);
+	objGlobal.Register("SetBattleEndTick", m_luaFun, &CGLuaFun::Lua_SetBattleEndTick);
+	objGlobal.Register("SetWorkDelay", m_luaFun, &CGLuaFun::Lua_SetWorkDelay);
+	objGlobal.Register("StartWork", m_luaFun, &CGLuaFun::Lua_StartWork);
+	objGlobal.Register("SetWorkAcceleration", m_luaFun, &CGLuaFun::Lua_SetWorkAcceleration);
+	objGlobal.Register("SetImmediateDoneWork", m_luaFun, &CGLuaFun::Lua_SetImmediateDoneWork);
+	objGlobal.Register("GetImmediateDoneWorkState", m_luaFun, &CGLuaFun::Lua_GetImmediateDoneWorkState);
+	objGlobal.Register("CraftItem", m_luaFun, &CGLuaFun::Lua_CraftItem);
+	objGlobal.Register("AssessItem", m_luaFun, &CGLuaFun::Lua_AssessItem);
+	objGlobal.Register("GetCraftInfo", m_luaFun, &CGLuaFun::Lua_GetCraftInfo);
+	objGlobal.Register("GetCraftsInfo", m_luaFun, &CGLuaFun::Lua_GetCraftsInfo);
+	objGlobal.Register("GetCraftStatus", m_luaFun, &CGLuaFun::Lua_GetCraftStatus);
+	objGlobal.Register("DoRequest", m_luaFun, &CGLuaFun::Lua_DoRequest);
+	objGlobal.Register("TradeAddStuffs", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
+	objGlobal.Register("AddAllTradeItems", m_luaFun, &CGLuaFun::Lua_AddAllTradeItems);
+	objGlobal.Register("IsUIDialogPresent", m_luaFun, &CGLuaFun::Lua_IsUIDialogPresent);
+	objGlobal.Register("GetTeamPlayerInfo", m_luaFun, &CGLuaFun::Lua_GetTeamPlayerInfo);
+	objGlobal.Register("FixMapWarpStuck", m_luaFun, &CGLuaFun::Lua_FixMapWarpStuck);
+	objGlobal.Register("SetNoSwitchAnim", m_luaFun, &CGLuaFun::Lua_SetNoSwitchAnim);
+	objGlobal.Register("GetMoveHistory", m_luaFun, &CGLuaFun::Lua_GetMoveHistory);
+	objGlobal.Register("EnableFlags", m_luaFun, &CGLuaFun::Lua_EnableFlags);
+	objGlobal.Register("SetWindowResolution", m_luaFun, &CGLuaFun::Lua_SetWindowResolution);
+	objGlobal.Register("RequestDownloadMap", m_luaFun, &CGLuaFun::Lua_RequestDownloadMap);
+	objGlobal.Register("GetNextAnimTickCount", m_luaFun, &CGLuaFun::Lua_GetNextAnimTickCount);
+	objGlobal.Register("LoginGameServer", m_luaFun, &CGLuaFun::Lua_LoginGameServer);
+	objGlobal.Register("CreateCharacter", m_luaFun, &CGLuaFun::Lua_CreateCharacter);
+	objGlobal.Register("PlayGesture", m_luaFun, &CGLuaFun::Lua_PlayGesture);
+	objGlobal.Register("DeleteCard", m_luaFun, &CGLuaFun::Lua_DeleteCard);
+	objGlobal.Register("SendMail", m_luaFun, &CGLuaFun::Lua_SendMail);
+	objGlobal.Register("SendPetMail", m_luaFun, &CGLuaFun::Lua_SendPetMail);*/
+
 	//luaL_requiref(ls, "common", nullptr, true);
 	(*pState)->DoString("common=require(\"common\")");
 }

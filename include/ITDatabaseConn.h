@@ -22,6 +22,7 @@ enum DataBaseDefine
 	DB_TYPE_MYSQL = 2,
 	DB_TYPE_ORACLE = 3,
 	DB_TYPE_SQLITE = 4,
+	DB_TYPE_SQLITECIPHER = 5,
 };
 class ITRecordSet
 {

@@ -147,7 +147,7 @@ public:
 	//存钱
 	bool DepositGold(int nVal);
 	//存宠
-	bool DepositPet(const QString &petName);
+	bool DepositPet(const QString &petName, bool bSensitive = true);
 	//身上指定位置宠存银行
 	bool DepositPetPos(int pos);
 	//身上指定位置宠存银行指定位置
@@ -155,8 +155,8 @@ public:
 
 	//取钱
 	bool WithdrawGold(int nVal);
-	//取宠
-	bool WithdrawPet(const QString &petName);
+	//取宠 精确匹配
+	bool WithdrawPet(const QString &petName, bool bSensitive = true);
 	bool WithdrawPetEx(int srcIndex, int bankIndex);
 	//物品存银行
 	bool SaveToBankOnce(QString itemName, int maxCount = 0);

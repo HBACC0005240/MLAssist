@@ -2841,6 +2841,14 @@ void GameCtrl::OnGetCharacterData()
 				}
 			}
 			memcpy(&pNewChar->detail, &info.detail, sizeof(GameAttrBase));
+			pNewChar->persdesc.changeBits = info.persdesc.changeBits;
+			pNewChar->persdesc.sellIcon = info.persdesc.sellIcon;
+			pNewChar->persdesc.sellString = info.persdesc.sellString;
+			pNewChar->persdesc.buyIcon = info.persdesc.buyIcon;
+			pNewChar->persdesc.buyString = info.persdesc.buyString;
+			pNewChar->persdesc.wantIcon = info.persdesc.wantIcon;
+			pNewChar->persdesc.wantString = info.persdesc.wantString;
+			pNewChar->persdesc.descString = info.persdesc.descString;
 		}
 
 		QList<int> existPetIndexs;

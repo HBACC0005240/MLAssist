@@ -39,6 +39,8 @@ void FloatMapDlg::LoadMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QShare
 void FloatMapDlg::LoadMapInfo(QString name, int x, int y, int mapindex)
 {
 	m_pGameMapWallItem->LoadMapInfo(name, x, y, mapindex);
+	ui.label_mapName->setText(name);
+	ui.label_mapNum->setText(QString::number(mapindex));
 }
 
 void FloatMapDlg::RepaintCollisionPixels(int xbase, int ybase, int xtop, int ytop)

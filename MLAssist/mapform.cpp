@@ -155,11 +155,13 @@ void MapForm::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QSh
 void MapForm::OnNotifyGetMapInfo(QString name, int index1, int index2, int index3, int x, int y)
 {
 	if (!m_pFloatMapDlg->isHidden())
+	{
 		m_pFloatMapDlg->LoadMapInfo(name, x, y, index3);
+	}
 	if (!this->isVisible())
 		return;
-	ui.widget_paintmap->m_bShowCrosshair = ui.checkBox_showcrosshair->isChecked();
 	m_pFloatMapDlg->SetCrosshair(ui.checkBox_showcrosshair->isChecked());
+	ui.widget_paintmap->m_bShowCrosshair = ui.checkBox_showcrosshair->isChecked();
 	ui.widget_paintmap->LoadMapInfo(name, x, y, index3);
 	ui.label_mapname->setText(name);
 	ui.label_xy->setText(tr("坐标：(%1, %2)").arg(x).arg(y));

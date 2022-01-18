@@ -218,6 +218,14 @@ int CGLuaFun::Lua_GetSysTimeEx(LuaState *L)
 	return 1;
 }
 
+int CGLuaFun::Lua_GetBGMIndex(LuaState *L)
+{
+	int index = -1;
+	g_CGAInterface->GetBGMIndex(index);
+	L->PushInteger(index);
+	return 1;
+}
+
 int CGLuaFun::Lua_SetCharacterSwitch(LuaState *L)
 {
 	LuaStack args(L);
@@ -1514,6 +1522,17 @@ int CGLuaFun::Lua_GetPlayerAllData(LuaState *L)
 		subObj.SetInteger("element_fire", info.detail.element_fire);
 		subObj.SetInteger("element_wind", info.detail.element_wind);
 		tableObj.SetObject("detail", subObj);
+		LuaObject descObj(L);
+		descObj.AssignNewTable();
+		descObj.SetInteger("changeBits", info.persdesc.changeBits);
+		descObj.SetInteger("sellIcon", info.persdesc.sellIcon);
+		descObj.SetString("sellString", info.persdesc.sellString.c_str());
+		descObj.SetInteger("buyIcon", info.persdesc.buyIcon);
+		descObj.SetString("buyString", info.persdesc.buyString.c_str());
+		descObj.SetInteger("wantIcon", info.persdesc.wantIcon);
+		descObj.SetString("wantString", info.persdesc.wantString.c_str());
+		descObj.SetString("descString", info.persdesc.descString.c_str());	
+		tableObj.SetObject("persdesc", descObj);
 	}
 	LuaObject skillObj(L);
 	skillObj.AssignNewTable();
@@ -1886,6 +1905,48 @@ int CGLuaFun::Lua_SetPlayerInfo(LuaState *L)
 			L->PushBoolean(bRet);
 			return 1;
 		}
+	}
+	else if (sLower == "简介")
+	{
+		//8个参数
+		if (args.Count() < 9)
+		{
+			return 0;
+		}
+		int changeBits = args[2].GetInteger();
+		int sellIcon = args[3].GetInteger();
+		std::string sellString = args[4].GetString();
+		int buyIcon = args[5].GetInteger();
+		std::string buyString = args[6].GetString();
+		int wantIcon = args[7].GetInteger();
+		std::string wantString = args[8].GetString();
+		std::string descString = args[9].GetString();
+		CGA::cga_pers_desc_t desc;
+		desc.sellIcon = sellIcon;
+		desc.sellString = sellString;
+		
+		desc.buyIcon = buyIcon;
+		desc.buyString = buyString;
+		desc.wantIcon = wantIcon;
+		desc.wantString = wantString;
+		desc.descString = descString;
+		if (sellIcon)
+			changeBits |= 1;
+		if (!sellString.empty())
+			changeBits |= 2;
+		if (buyIcon)
+			changeBits |= 4;
+		if (!buyString.empty())
+			changeBits |= 8;
+		if (wantIcon)
+			changeBits |= 0x10;
+		if (!wantString.empty())
+			changeBits |= 0x20;
+		if (!descString.empty())
+			changeBits |= 0x40;
+		desc.changeBits = changeBits;
+
+		g_CGAInterface->ChangePersDesc(desc);
 	}
 	return 0;
 }

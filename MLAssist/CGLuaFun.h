@@ -40,6 +40,7 @@ public:
 	int Lua_SysConfig(LuaState *L);
 	//获取游戏时间
 	int Lua_GetSysTimeEx(LuaState *L);
+	int Lua_GetBGMIndex(LuaState *L);
 
 	//设置战聊易
 	int Lua_SetCharacterSwitch(LuaState *L);

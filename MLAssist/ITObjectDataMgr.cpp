@@ -89,9 +89,12 @@ bool ITObjectDataMgr::init()
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
 
+	QString sMQTTServerIp = iniFile.value("server/mqttIP", "www.luguo666.com").toString();
+	int nMQTTServerPort = iniFile.value("game/mqttPort", 1883).toInt();
+
 	m_client = new QMqttClient;
-	m_client->setHostname("www.luguo666.com");
-	m_client->setPort(1883);
+	m_client->setHostname(sMQTTServerIp);
+	m_client->setPort(nMQTTServerPort);
 
 	connect(m_client, &QMqttClient::stateChanged, this, &ITObjectDataMgr::updateLogStateChange);
 	connect(m_client, &QMqttClient::disconnected, this, &ITObjectDataMgr::brokerDisconnected);
@@ -143,7 +146,7 @@ bool ITObjectDataMgr::init()
 		g_pGamePetCalc->setCaclPetData(petData);
 		if (petData.size() > 0)
 		{
-			for (auto it=petData.begin();it!=petData.end();++it)
+			for (auto it = petData.begin(); it != petData.end(); ++it)
 			{
 				auto petBook = it.value();
 				ITGamePetPtr pObj = newOneObject(TObject_Pet).dynamicCast<ITGamePet>();
@@ -172,7 +175,6 @@ bool ITObjectDataMgr::init()
 				}
 				m_numberForPet.insert(petBook->number, pObj);
 			}
-			
 		}
 		RpcSocketClient::getInstance().GetServerStoreMapData();
 	}
@@ -183,8 +185,8 @@ bool ITObjectDataMgr::init()
 		{
 			QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
 			bool bRet = false;
-			m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITE"));
-			if (connectToDB("SQLITE", "CG", sDBPath, "admin", "123456"))
+			m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITECIPHER"));
+			if (connectToDB("SQLITECIPHER", "CG", sDBPath, "admin", "123456"))
 			{
 				qDebug() << "打开数据库成功！";
 				//		QtConcurrent::run(loadDataBaseInfo, this);
@@ -1548,7 +1550,7 @@ void ITObjectDataMgr::OnCheckConnectMqtt()
 							m_client->disconnectFromHost();
 					});*/
 		}
-	//	m_retrySubscribes.clear();
+		//	m_retrySubscribes.clear();
 	}
 }
 //连接成功信号 订阅
@@ -1565,7 +1567,7 @@ void ITObjectDataMgr::OnMqttConnected()
 	auto sub = m_client->subscribe(QString("qtmqtt/topic1"));
 	m_client -> connect(sub, &QMqttSubscription::stateChanged, this, &ITObjectDataMgr::OnSubscribeState);*/
 	//m_client->connect(
-	//		sub, &QMqttSubscription::stateChanged, [this](QMqttSubscription::SubscriptionState s) 
+	//		sub, &QMqttSubscription::stateChanged, [this](QMqttSubscription::SubscriptionState s)
 	//		{
 	//			qInfo() << "Subscription state:" << s;
 	//			if (s == QMqttSubscription::Unsubscribed)
@@ -1577,12 +1579,12 @@ void ITObjectDataMgr::OnSubscribeState(QMqttSubscription::SubscriptionState s)
 {
 	qInfo() << "Subscription state:" << s;
 	if (s == QMqttSubscription::Unsubscribed)
-		m_client->disconnectFromHost();	
+		m_client->disconnectFromHost();
 }
 
 void ITObjectDataMgr::on_publishMqttMsg(const QString &topic, const QString &msg)
 {
-	PublishOneTopic(topic,msg);
+	PublishOneTopic(topic, msg);
 }
 
 bool ITObjectDataMgr::pingToDestination(const QString &strIp)

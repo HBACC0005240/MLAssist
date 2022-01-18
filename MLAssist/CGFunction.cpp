@@ -3107,7 +3107,7 @@ bool CGFunction::DepositGold(int nVal)
 	return bRes;
 }
 
-bool CGFunction::DepositPet(const QString &petName)
+bool CGFunction::DepositPet(const QString &petName, bool bSensitive)
 {
 	CGA::cga_pets_info_t bankPets;
 	g_CGAInterface->GetBankPetsInfo(bankPets);
@@ -3119,14 +3119,29 @@ bool CGFunction::DepositPet(const QString &petName)
 	CGA::cga_pets_info_t pets;
 	g_CGAInterface->GetPetsInfo(pets);
 	int petPos = -1;
-	for (auto pet : pets)
+	if (bSensitive)
 	{
-		if (pet.realname == petName.toStdString() || pet.name == petName.toStdString())
+		for (auto pet : pets)
 		{
-			petPos = pet.index;
-			break;
+			if (pet.realname == petName.toStdString() || pet.name == petName.toStdString())
+			{
+				petPos = pet.index;
+				break;
+			}
+		}
+	
+	}else
+	{
+		for (auto pet : pets)
+		{
+			if (QString::fromStdString(pet.realname).contains(petName) || QString::fromStdString(pet.name).contains(petName))
+			{
+				petPos = pet.index;
+				break;
+			}
 		}
 	}
+	
 	if (petPos == -1)
 	{
 		qDebug() << "身上没有【" + petName + "】宠物!";
@@ -3227,7 +3242,7 @@ bool CGFunction::WithdrawGold(int nVal)
 	return bRes;
 }
 
-bool CGFunction::WithdrawPet(const QString &petName)
+bool CGFunction::WithdrawPet(const QString &petName,bool bSensitive)
 {
 	CGA::cga_pets_info_t bankPets;
 	g_CGAInterface->GetBankPetsInfo(bankPets);
@@ -3245,15 +3260,28 @@ bool CGFunction::WithdrawPet(const QString &petName)
 	}
 
 	int bankPos = -1;
-	for (auto bankPet : bankPets)
+	if (bSensitive)
 	{
-		if (bankPet.realname == petName.toStdString() || bankPet.name == petName.toStdString())
+		for (auto bankPet : bankPets)
 		{
-			bankPos = bankPet.index;
-			break;
+			if (bankPet.realname == petName.toStdString() || bankPet.name == petName.toStdString())
+			{
+				bankPos = bankPet.index;
+				break;
+			}
+		}
+	}else
+	{
+		for (auto bankPet : bankPets)
+		{
+			if (QString::fromStdString(bankPet.realname).contains(petName) || QString::fromStdString(bankPet.name).contains(petName))
+			{
+				bankPos = bankPet.index;
+				break;
+			}
 		}
 	}
-
+	
 	QList<int> petIndex;
 	for (auto pet : pets)
 	{

@@ -62,21 +62,38 @@ void GameSysCfgWgt::on_pushButton_fetchItem_clicked()
 	//	g_pGameFun->WithdrawItemAll(sItem);
 	//	Sleep(1000);	//等数据包到达服务器，否则取东西位置会重复
 	//}
-
+	bool bSensitive = ui.checkBox_fetchItem_Sensitive->isChecked();
 	QList<CGA::cga_item_info_t> filterBankInfos;
 	CGA::cga_items_info_t bankInfos;
 	g_CGAInterface->GetBankItemsInfo(bankInfos);
-	for (auto sItem : sItemList)
+	if (bSensitive)
 	{
-		for (int i = 0; i < bankInfos.size(); i++)
+		for (auto sItem : sItemList)
 		{
-			CGA::cga_item_info_t itemInfo = bankInfos.at(i);
-			if (itemInfo.name == sItem.toStdString() /*|| itemInfo.itemid == sItem.toInt()*/) //银行id 返回的是空这里不判断id
+			for (int i = 0; i < bankInfos.size(); i++)
 			{
-				filterBankInfos.push_back(itemInfo);
+				CGA::cga_item_info_t itemInfo = bankInfos.at(i);
+				if (itemInfo.name == sItem.toStdString() /*|| itemInfo.itemid == sItem.toInt()*/) //银行id 返回的是空这里不判断id
+				{
+					filterBankInfos.push_back(itemInfo);
+				}
 			}
 		}
+	}else
+	{
+		for (auto sItem : sItemList)
+		{
+			for (int i = 0; i < bankInfos.size(); i++)
+			{
+				CGA::cga_item_info_t itemInfo = bankInfos.at(i);
+				if (QString::fromStdString(itemInfo.name).contains(sItem) /*|| itemInfo.itemid == sItem.toInt()*/) //银行id 返回的是空这里不判断id
+				{
+					filterBankInfos.push_back(itemInfo);
+				}
+			}
+		}		
 	}
+	
 	//找到指定物品 取出
 	if (filterBankInfos.size() > 0)
 	{
@@ -119,6 +136,7 @@ void GameSysCfgWgt::on_pushButton_saveItem_clicked()
 	//{
 	//	g_pGameFun->SaveToBankAll(sItem);
 	//}
+	bool bSensitive = ui.checkBox_saveItem_Sensitive->isChecked();
 
 	CGA::cga_items_info_t myinfos;
 	if (!g_CGAInterface->GetBankItemsInfo(myinfos))
@@ -147,17 +165,35 @@ void GameSysCfgWgt::on_pushButton_saveItem_clicked()
 	CGA::cga_items_info_t itemsinfo;
 	if (g_CGAInterface->GetItemsInfo(itemsinfo))
 	{
-		for (auto sItem : sItemList) //要存的物品位置拿出来
+		if (bSensitive)
 		{
-			for (size_t i = 0; i < itemsinfo.size(); ++i)
+			for (auto sItem : sItemList) //要存的物品位置拿出来
 			{
-				const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-				if (iteminfo.pos > 7 && (iteminfo.assess_flags & 1) == 1 && (sItem.toStdString() == iteminfo.name || sItem.toInt() == iteminfo.itemid))
+				for (size_t i = 0; i < itemsinfo.size(); ++i)
 				{
-					bagItemPosList.append(iteminfo.pos);
+					const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
+					if (iteminfo.pos > 7 && (iteminfo.assess_flags & 1) == 1 && (sItem.toStdString() == iteminfo.name || sItem.toInt() == iteminfo.itemid))
+					{
+						bagItemPosList.append(iteminfo.pos);
+					}
+				}
+			}
+		}else
+		{
+
+			for (auto sItem : sItemList) //要存的物品位置拿出来
+			{
+				for (size_t i = 0; i < itemsinfo.size(); ++i)
+				{
+					const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
+					if (iteminfo.pos > 7 && (iteminfo.assess_flags & 1) == 1 && (QString::fromStdString(iteminfo.name).contains(sItem) || sItem.toInt() == iteminfo.itemid))
+					{
+						bagItemPosList.append(iteminfo.pos);
+					}
 				}
 			}
 		}
+	
 		int bankIndex = 0;
 		for (int i = 0; i < bagItemPosList.size(); ++i)
 		{
@@ -184,10 +220,12 @@ void GameSysCfgWgt::on_pushButton_fetchPet_clicked()
 	}
 	else
 		sPetList << sPets;
+	bool bSensitive = ui.checkBox_fetchPet_Sensitive->isChecked();
 	for (auto sPet : sPetList)
 	{
-		g_pGameFun->WithdrawPet(sPet);
+		g_pGameFun->WithdrawPet(sPet, bSensitive);
 	}
+
 }
 
 void GameSysCfgWgt::on_pushButton_savePet_clicked()
@@ -200,9 +238,10 @@ void GameSysCfgWgt::on_pushButton_savePet_clicked()
 	}
 	else
 		sPetList << sPets;
+	bool bSensitive = ui.checkBox_savePet_Sensitive->isChecked();
 	for (auto sPet : sPetList)
 	{
-		g_pGameFun->DepositPet(sPet);
+		g_pGameFun->DepositPet(sPet, bSensitive);
 	}
 }
 

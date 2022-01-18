@@ -199,6 +199,18 @@ struct GameAttrBase
 	int element_fire = 0;	  //火
 	int element_wind = 0;	  //风
 };
+struct PlayerDesc
+{	
+	int changeBits;
+	int sellIcon;
+	std::string sellString;
+	int buyIcon;
+	std::string buyString;
+	int wantIcon;
+	std::string wantString;
+	std::string descString;
+} ;
+
 //游戏人物信息
 struct Character : public GameInfo
 {
@@ -232,6 +244,7 @@ struct Character : public GameInfo
 								  //QString mapName;  //地图名称
 								  //int mapIndex = 0; //地图index
 								  //QString sGid;	  //游戏id
+	PlayerDesc persdesc;
 };
 
 //游戏宠物信息

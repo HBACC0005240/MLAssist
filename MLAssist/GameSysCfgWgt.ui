@@ -16,6 +16,12 @@
   <layout class="QHBoxLayout" name="horizontalLayout_8">
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="maximumSize">
+      <size>
+       <width>160</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
       <string>快捷键</string>
      </property>
@@ -294,6 +300,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="checkBox_fetchItem_Sensitive">
+          <property name="text">
+           <string>精确匹配</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButton_fetchItem">
           <property name="text">
            <string>一键取出</string>
@@ -315,6 +328,13 @@
          <widget class="QLineEdit" name="lineEdit_saveItem">
           <property name="placeholderText">
            <string>物品1|物品2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_saveItem_Sensitive">
+          <property name="text">
+           <string>精确匹配</string>
           </property>
          </widget>
         </item>
@@ -344,6 +364,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="checkBox_fetchPet_Sensitive">
+          <property name="text">
+           <string>精确匹配</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButton_fetchPet">
           <property name="text">
            <string>一键取出</string>
@@ -365,6 +392,13 @@
          <widget class="QLineEdit" name="lineEdit_savePet">
           <property name="placeholderText">
            <string>宠物1|宠物2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_savePet_Sensitive">
+          <property name="text">
+           <string>精确匹配</string>
           </property>
          </widget>
         </item>
@@ -435,9 +469,12 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Maximum</enum>
+     </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>156</width>
+       <width>0</width>
        <height>20</height>
       </size>
      </property>
