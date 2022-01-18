@@ -1155,6 +1155,8 @@ void GameLuaScriptWgt::DoLoadScript(QString path, bool autorestart, bool freezes
 {
 	if (path.isEmpty())
 		return;
+	if (!path.endsWith("lua") && !path.endsWith("luae"))
+		return;
 	QString tmpPath = path;
 	//全路径
 	if (QFile::exists(tmpPath) == false)

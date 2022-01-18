@@ -25,6 +25,8 @@ ScriptForm::ScriptForm(QWidget *parent) :
 	ui->setupUi(this);
 	connect(g_pGameCtrl, &GameCtrl::NotifyAttachProcessOk, this, &ScriptForm::OnNotifyAttachProcessOk, Qt::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::HttpLoadScript, this, &ScriptForm::OnHttpLoadScript);
+	connect(g_pGameCtrl, &GameCtrl::NotifyFillLoadScript, this, &ScriptForm::OnNotifyFillLoadScript, Qt::QueuedConnection);
+
 	m_output = new QPlainTextEdit(this);
 	ui->verticalLayout_debug->addWidget(m_output);
 	m_output->setReadOnly(true);
@@ -515,8 +517,10 @@ void ScriptForm::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, qu
 	qputenv("CGA_GAME_PORT", qportString);
 }
 
-void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines)
+void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
 {
+	if (path.endsWith("lua") || path.endsWith("luae"))
+		return;
 	if (!path.isEmpty())
 	{
 		QFile file(path);

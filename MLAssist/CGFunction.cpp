@@ -1898,61 +1898,61 @@ bool CGFunction::LearnPlayerSkill(int x, int y)
 
 bool CGFunction::ForgetPlayerSkill(int x, int y, QString skillName)
 {
+	int existSkill = FindPlayerSkill(skillName);
+	if (existSkill < 0)
+		return false;	
 	bool bResult = false;
 	TurnAboutEx(x, y);
 	auto dlg = WaitRecvNpcDialog();
-	g_CGAInterface->ClickNPCDialog(-1, 1, bResult);
-	dlg = WaitRecvNpcDialog();
-	if (!dlg)
-		return false;
-	//auto msgList = dlg->message.split("|");
-	//QStringList skillList;
-	//if (msgList.size() > 1)
-	//{
-	//	for (int i=0;i<msgList.size();++i)
-	//	{
-	//		if (i%3==0)
-	//		{
-	//			qDebug() << msgList[i];
-	//			skillList.append(msgList[i]);
-	//		}
-	//	}
-	//}
-	CGA::cga_skills_info_t skillsinfo;
-	if (g_CGAInterface->GetSkillsInfo(skillsinfo))
+	int count = 0; //10次
+	while (dlg && count < 10)
 	{
-		for (size_t i = 0; i < skillsinfo.size(); ++i)
+		if (dlg->type == 16)
 		{
-			const CGA::cga_skill_info_t &skinfo = skillsinfo.at(i);
-			qDebug() << QString::fromStdString(skinfo.name) << skinfo.pos;
+			g_CGAInterface->ClickNPCDialog(-1, 1, bResult);
+			dlg = WaitRecvNpcDialog();
 		}
-	}
-	qSort(skillsinfo.begin(), skillsinfo.end(), [&](const CGA::cga_skill_info_t &a, const CGA::cga_skill_info_t &b)
-			{ return a.pos < b.pos; });
-	for (size_t i = 0; i < skillsinfo.size(); ++i)
-	{
-		const CGA::cga_skill_info_t &skinfo = skillsinfo.at(i);
-		qDebug() << QString::fromStdString(skinfo.name) << skinfo.pos;
-	}
-	int index = -1;
-	for (size_t i = 0; i < skillsinfo.size(); ++i)
-	{
-		const CGA::cga_skill_info_t &skinfo = skillsinfo.at(i);
-		if (skinfo.name == skillName.toStdString())
+		if (dlg->type == 18)
 		{
-			index = i;
-		}
-	}
-	if (index < 0)
-		return false;
+			CGA::cga_skills_info_t skillsinfo;
+			g_CGAInterface->GetSkillsInfo(skillsinfo);
 
-	qDebug() << index;
-	g_CGAInterface->ClickNPCDialog(0, index, bResult);
-	WaitRecvNpcDialog();
-	g_CGAInterface->ClickNPCDialog(4, -1, bResult);
-	WaitRecvNpcDialog();
-	g_CGAInterface->ClickNPCDialog(1, -1, bResult);
-	return true;
+			qSort(skillsinfo.begin(), skillsinfo.end(), [&](const CGA::cga_skill_info_t &a, const CGA::cga_skill_info_t &b)
+					{ return a.pos < b.pos; });
+			int index = -1;
+			for (size_t i = 0; i < skillsinfo.size(); ++i)
+			{
+				const CGA::cga_skill_info_t &skinfo = skillsinfo.at(i);
+				qDebug() << QString::fromStdString(skinfo.name) << skinfo.pos;
+				if (skinfo.name == skillName.toStdString())
+				{
+					index = i;
+					break;
+				}
+			}
+			if (index < 0)
+				return false;
+
+			g_CGAInterface->ClickNPCDialog(0, index, bResult);
+			dlg = WaitRecvNpcDialog();
+		}
+		if (dlg->options == 12)
+		{
+			g_CGAInterface->ClickNPCDialog(4, -1, bResult);
+			dlg = WaitRecvNpcDialog();
+		}
+		if (dlg->message.contains("已经删除"))
+		{
+			TurnAboutEx(x, y);
+			WaitRecvNpcDialog();
+			g_CGAInterface->ClickNPCDialog(0, 0, bResult);
+			WaitRecvNpcDialog();
+			g_CGAInterface->ClickNPCDialog(0, 0, bResult);
+			return true;
+		}
+		count++;
+	}
+	return false;
 }
 
 bool CGFunction::ForgetPlayerSkillEx(int d, QString skillName)
