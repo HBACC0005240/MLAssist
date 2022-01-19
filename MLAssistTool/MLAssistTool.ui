@@ -35,7 +35,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="tab_1">
        <attribute name="title">
         <string>控制</string>
        </attribute>
@@ -535,7 +535,7 @@ color: rgb(255, 255, 255);</string>
         </item>
        </layout>
       </widget>
-      <widget class="GameAccountWgt" name="tab_4">
+      <widget class="GameAccountWgt" name="tab_3">
        <attribute name="title">
         <string>账号</string>
        </attribute>
@@ -556,6 +556,11 @@ color: rgb(255, 255, 255);</string>
          <number>0</number>
         </property>
        </layout>
+      </widget>
+      <widget class="GamePlayerDataWgt" name="gamePlayerData">
+       <attribute name="title">
+        <string>角色信息</string>
+       </attribute>
       </widget>
      </widget>
     </item>
@@ -587,6 +592,12 @@ color: rgb(255, 255, 255);</string>
    <class>GameAccountWgt</class>
    <extends>QWidget</extends>
    <header>GameAccountWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GamePlayerDataWgt</class>
+   <extends>QWidget</extends>
+   <header>GamePlayerDataWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

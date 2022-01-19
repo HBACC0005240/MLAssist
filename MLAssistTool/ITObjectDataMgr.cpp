@@ -600,9 +600,20 @@ bool ITObjectDataMgr::LoadAccountRole()
 			quint64 nID = (quint64)recordset->getIntValue("id");
 			QString sGid = recordset->getStrValue("gid");
 			QString sName = recordset->getStrValue("name");
+			ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
+			if (pGid == nullptr)
+			{
+				pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
+				m_idForAccountGid.insert(sGid, pGid);
+			}
 			ITGidRolePtr pCharacter = newOneObject(TObject_GidRole, nID).dynamicCast<ITGidRole>();
 			if (pCharacter)
 			{
+				if (pGid)
+				{
+					pGid->addChildObj(pCharacter);
+					pCharacter->setObjectParent(pGid);
+				}
 				pCharacter->_gid = sGid;
 				pCharacter->_level = recordset->getIntValue("level");
 				pCharacter->_type = recordset->getIntValue("type");
@@ -1852,7 +1863,8 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 {
 	if (!request)
 		return;
-	QString sID = QString::fromStdString(request->gid()) + QString::fromStdString(request->character_name());
+	QString sGid = QString::fromStdString(request->gid());
+	QString sID = sGid + QString::fromStdString(request->character_name());
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
@@ -1861,6 +1873,18 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	}
 	else
 		pCharacter->setEditStatus();
+	//附带生成一个gid
+	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
+	if (pGid == nullptr)
+	{
+		pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
+		if (pGid)
+		{
+			m_idForAccountGid.insert(sGid, pGid);
+			pGid->addChildObj(pCharacter);
+			pCharacter->setObjectParent(pGid);
+		}
+	}
 
 	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
 	pCharacter->_gid = QString::fromStdString(request->gid());

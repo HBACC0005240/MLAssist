@@ -119,7 +119,7 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("punchclockstate", TRet_Game_PunchclockState);
 	m_returnGameDataHash.insert("职业", TRet_Game_Job);
 	m_returnGameDataHash.insert("job", TRet_Game_Job);
-	m_returnGameDataHash.insert("阶级", TRet_Game_PlayerRank);
+	m_returnGameDataHash.insert("职称等级", TRet_Game_PlayerRank);
 	m_returnGameDataHash.insert("职称", TRet_Game_Profession);
 	m_returnGameDataHash.insert("profession", TRet_Game_Profession);
 	m_returnGameDataHash.insert("称号", TRet_Game_Prestige);
@@ -687,9 +687,9 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 		case TRet_Game_Gold: return playerinfo.gold;
 		case TRet_Game_Punchclock: return playerinfo.punchclock;
 		case TRet_Game_PunchclockState: return playerinfo.usingpunchclock;
-		case TRet_Game_Job: return QString::fromStdString(playerinfo.job);
+		case TRet_Game_Job: return GetCharacterProfession();
 		case TRet_Game_PlayerRank: return GetCharacterRank();
-		case TRet_Game_Profession: return GetCharacterProfession();
+		case TRet_Game_Profession: return QString::fromStdString(playerinfo.job);
 		case TRet_Game_OathGroup: return GetCharacterOathGroup();
 		case TRet_Game_Sex: return GetCharacterSex(playerinfo.image_id);
 		case TRet_Game_ImageID: return playerinfo.image_id;
@@ -1900,7 +1900,7 @@ bool CGFunction::ForgetPlayerSkill(int x, int y, QString skillName)
 {
 	int existSkill = FindPlayerSkill(skillName);
 	if (existSkill < 0)
-		return false;	
+		return false;
 	bool bResult = false;
 	TurnAboutEx(x, y);
 	auto dlg = WaitRecvNpcDialog();
@@ -3129,8 +3129,8 @@ bool CGFunction::DepositPet(const QString &petName, bool bSensitive)
 				break;
 			}
 		}
-	
-	}else
+	}
+	else
 	{
 		for (auto pet : pets)
 		{
@@ -3141,7 +3141,7 @@ bool CGFunction::DepositPet(const QString &petName, bool bSensitive)
 			}
 		}
 	}
-	
+
 	if (petPos == -1)
 	{
 		qDebug() << "身上没有【" + petName + "】宠物!";
@@ -3242,7 +3242,7 @@ bool CGFunction::WithdrawGold(int nVal)
 	return bRes;
 }
 
-bool CGFunction::WithdrawPet(const QString &petName,bool bSensitive)
+bool CGFunction::WithdrawPet(const QString &petName, bool bSensitive)
 {
 	CGA::cga_pets_info_t bankPets;
 	g_CGAInterface->GetBankPetsInfo(bankPets);
@@ -3270,7 +3270,8 @@ bool CGFunction::WithdrawPet(const QString &petName,bool bSensitive)
 				break;
 			}
 		}
-	}else
+	}
+	else
 	{
 		for (auto bankPet : bankPets)
 		{
@@ -3281,7 +3282,7 @@ bool CGFunction::WithdrawPet(const QString &petName,bool bSensitive)
 			}
 		}
 	}
-	
+
 	QList<int> petIndex;
 	for (auto pet : pets)
 	{
@@ -3637,7 +3638,7 @@ QString CGFunction::GetCharacterProfession(QString sJob)
 {
 	if (sJob.isEmpty())
 	{
-		sJob = GetCharacterData("job").toString();
+		sJob = GetCharacterData("职称").toString();
 	}
 	if (m_professions.isEmpty())
 		return sJob;
@@ -3658,7 +3659,7 @@ int CGFunction::GetCharacterRank(QString sJob /*= ""*/)
 {
 	if (sJob.isEmpty())
 	{
-		sJob = GetCharacterData("job").toString();
+		sJob = GetCharacterData("职称").toString();
 	}
 	if (m_professions.isEmpty())
 		return 0;
@@ -3680,7 +3681,7 @@ QString CGFunction::GetCharacterOathGroup(QString sJob)
 {
 	if (sJob.isEmpty())
 	{
-		sJob = GetCharacterData("job").toString();
+		sJob = GetCharacterData("职称").toString();
 	}
 	if (m_professions.isEmpty())
 		return sJob;

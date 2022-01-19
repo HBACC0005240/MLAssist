@@ -146,6 +146,7 @@ private:
 
 
 	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//gid+name 对应指定游戏人物
+	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid+name 对应指定gid
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
 	QMutex m_objMutex;

@@ -298,7 +298,6 @@ bool AccountForm::QueryAttachGameWnd()
 				if (GetWindowTextW(hWnd, szText, 256))
 				{
 					auto wndTitle = QString::fromWCharArray(szText);
-					//不判断是否附加过，有就重复附加
 					bool attached = IsProcessAttached(pid);
 					//				qDebug() << wndTitle << "附加" << attached;
 					//if (!attached) //已经附加过 则退出当前
@@ -499,11 +498,13 @@ void AccountForm::OnAutoLogin()
 	else if (!m_game_pid || !IsProcessThreadPresent(m_game_pid, m_game_tid))
 	{
 		m_lastGameWndConnTime.restart();
-		//	qDebug() << "附加窗口";
+		//附加失败 以及游戏尚未启动 走这个
+
+		////先屏蔽下面重复附加判断代码;
 		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加
-		if (m_bFindNormalWnd && m_attachExistGameWndTime.elapsed() < 15 * 1000)
+		if ((m_bFindNormalWnd && m_attachExistGameWndTime.elapsed() < 15 * 1000) || !m_bFindNormalWnd)
 		{
-			//			qDebug() << "15秒内 返回";
+			//			qDebug() << "附加成功 15秒内 返回";
 			return;
 		}
 		//上次找到指定窗口 或没找到  时间也超过15秒 则重新进行操作
@@ -513,7 +514,6 @@ void AccountForm::OnAutoLogin()
 			qDebug() << "存在空闲窗口，进行附加！";
 			m_attachExistGameWndTime.start();
 			m_bFindNormalWnd = true;
-			//失败 kill已有窗口？
 		}
 		else
 		{
