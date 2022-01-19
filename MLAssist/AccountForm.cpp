@@ -502,7 +502,7 @@ void AccountForm::OnAutoLogin()
 
 		////先屏蔽下面重复附加判断代码;
 		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加
-		if ((m_bFindNormalWnd && m_attachExistGameWndTime.elapsed() < 15 * 1000) || !m_bFindNormalWnd)
+		if (m_bFindNormalWnd && m_attachExistGameWndTime.elapsed() < 15 * 1000)
 		{
 			//			qDebug() << "附加成功 15秒内 返回";
 			return;
