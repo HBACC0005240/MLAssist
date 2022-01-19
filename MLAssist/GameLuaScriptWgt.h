@@ -16,7 +16,7 @@ public:
 
 	void initTableWidget();
 	void initScriptSystem();
-	QString GetLoginScriptData();
+	QString GetLoginScriptData(int type = 0);
 	static void doRunScriptThread(GameLuaScriptWgt *pThis);
 	static void LuaHook(lua_State *L, lua_Debug *ar);
 	static void doCheckGameStateStartScript(GameLuaScriptWgt *pThis);

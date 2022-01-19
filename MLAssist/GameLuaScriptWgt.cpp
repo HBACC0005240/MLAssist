@@ -657,8 +657,21 @@ void GameLuaScriptWgt::initScriptSystem()
 	(*pState)->DoString("common=require(\"common\")");
 }
 
-QString GameLuaScriptWgt::GetLoginScriptData()
+QString GameLuaScriptWgt::GetLoginScriptData(int type)
 {
+	//正在运行js脚本，bat默认js路径
+	//if (ui.jsWidget->IsRuningScript())
+	//{
+	//	return ui.jsWidget
+	//}
+	////当前没有运行脚本，但lua脚本路径为空，js有，则生成js脚本
+	//if (m_scriptPath.isEmpty() && !ui.jsWidget->GetScriptPath().isEmpty())
+	//{
+	//	return ui.jsWidget
+	//}
+	//默认lua脚本
+	if (type == 3)
+		return ui.jsWidget->GetLoginScriptData();
 	QString sLoginArg;
 	sLoginArg = QString(" -loadscript=\"%2\" -scriptautorestart=%3 -scriptfreezestop=%4 -scriptautoterm=%5"
 						" -injuryprotect=%6 -soulprotect=%7 -logbackrestart=%8 -transuserinput=%9 ")

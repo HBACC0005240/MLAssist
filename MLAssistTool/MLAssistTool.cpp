@@ -185,10 +185,21 @@ void MLAssistTool::onRefreshFzData()
 				/*		WINDOWPLACEMENT wp;
 						wp.length = sizeof(WINDOWPLACEMENT);
 						GetWindowPlacement(hWnd, &wp);*/
+				bool bHung = IsHungAppWindow(hWnd);
+				bool bShowTable = true;
+				int nState = 1; //正常
+				if (bHung)
+				{
+					nState = -1;	//挂起
+					if (!checkKillHungGame(hWnd, pid))
+						m_gameWndForLastHungTime.insert(hWnd, GetTickCount());
+					else
+						bShowTable = false;	//结束进程的 不显示
+				}				
 				long szLng = GetWindowLong(hWnd, GWL_STYLE);	//    '取的窗口原先的样式				
 			//	SetWindowLong(dstHwnd, GWL_EXSTYLE, rtn);		//     '把新的样式赋给窗体
 				auto wndTitle = QString::fromWCharArray(szText);
-				FzTableItemPtr item(new FzTableItem((quint32)pid, (quint32)0, (quint32)hWnd, wndTitle, 0, szLng));//wp.showCmd));
+				FzTableItemPtr item(new FzTableItem((quint32)pid, (quint32)0, (quint32)hWnd, wndTitle, nState, szLng));//wp.showCmd));
 				list.append(item);
 			}
 		}

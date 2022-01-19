@@ -424,7 +424,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="ScriptForm" name="tab_2">
+     <widget class="ScriptForm" name="jsWidget">
       <attribute name="title">
        <string>js</string>
       </attribute>

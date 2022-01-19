@@ -22,6 +22,9 @@ public:
 	virtual void dropEvent(QDropEvent *event);
 
 	void UpdateGameTextUI(bool show);
+	QString GetScriptPath() { return m_scriptPath; }
+	bool IsRuningScript();
+	QString GetLoginScriptData();
 
 signals:
 	void ReportNavigatorPath(QString json);

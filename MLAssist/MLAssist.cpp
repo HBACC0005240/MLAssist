@@ -372,8 +372,8 @@ bool MLAssist::ParseSettings(const QByteArray &data, QJsonDocument &doc)
 
 	ui.gameBattleWgt->doLoadJsConfig(obj);
 	ui.gamePostwarWgt->doLoadJsConfig(obj);
-	ui.gameFuncWgt->doLoadJsConfig(obj);	
-	
+	ui.gameFuncWgt->doLoadJsConfig(obj);
+
 	if (obj.contains("chat"))
 	{
 		//ParseChatSettings(obj.take("chat"));
@@ -429,7 +429,7 @@ void MLAssist::SaveLoginBat(int type)
 	sOpenCfgPath = sOpenCfgPath.replace(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()), ".");
 	QString sReadCfgArgs = QString(" -loadsettings=\"%1\"")
 								   .arg(sOpenCfgPath);
-	QString sScriptArgs = ui.gameLuaWgt->GetLoginScriptData();
+	QString sScriptArgs = ui.gameLuaWgt->GetLoginScriptData(type);
 	sScriptArgs = sScriptArgs.replace(QCoreApplication::applicationDirPath(), ".");
 	sScriptArgs = sScriptArgs.replace(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()), ".");
 	switch (type)
@@ -446,6 +446,7 @@ void MLAssist::SaveLoginBat(int type)
 			break;
 		}
 		case 2:
+		case 3:
 		{
 			sBat += sLoginArgs;
 			sBat += sReadCfgArgs;

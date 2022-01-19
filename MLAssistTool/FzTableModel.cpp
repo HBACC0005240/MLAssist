@@ -110,6 +110,18 @@ QVariant FzTableModel::data(const QModelIndex& index, int role) const
 			case 2: {
 				return modelItem->m_sTitle;
 			}case 3: {
+				if (modelItem->m_nState == -1)
+				{
+					return "未响应";
+				}
+				else if (modelItem->m_nState == 0)
+				{
+					return "离线";
+				}
+				else if (modelItem->m_nState == 1)
+				{
+					return "正常";
+				}
 				return "";
 			}case 4: {
 

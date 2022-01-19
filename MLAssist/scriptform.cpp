@@ -397,6 +397,27 @@ void ScriptForm::UpdateGameTextUI(bool show)
 	}
 }
 
+bool ScriptForm::IsRuningScript()
+{
+	return ui->pushButton_run->isEnabled();
+}
+
+QString ScriptForm::GetLoginScriptData()
+{
+	QString sLoginArg;
+	sLoginArg = QString(" -loadscript=\"%2\" -scriptautorestart=%3 -scriptfreezestop=%4 -scriptautoterm=%5"
+						" -injuryprotect=%6 -soulprotect=%7 -logbackrestart=%8 -transuserinput=%9 ")
+						.arg(m_scriptPath)
+						.arg(ui->checkBox_autorestart->isChecked())
+						.arg(ui->checkBox_freezestop->isChecked())
+						.arg(false)
+						.arg(ui->checkBox_injuryProt->isChecked())
+						.arg(ui->checkBox_soulProt->isChecked())
+						.arg(false)
+						.arg(false);
+	return sLoginArg;
+}
+
 void ScriptForm::RunNavigatorScript(int x, int y, int enter, QString *result)
 {
 	if (!m_bNavigating && !m_bListening && !m_bDebugging && m_node->state() != QProcess::Running)

@@ -60,7 +60,9 @@ AccountForm::AccountForm(QWidget *parent) :
 	QMenu *saveOption = new QMenu;
 	saveOption->addAction("保存登录", this, SLOT(OnSaveLoginBat()));
 	saveOption->addAction("保存登录和配置", this, SLOT(OnSaveLoginConfigBat()));
-	saveOption->addAction("保存登录配置和脚本", this, SLOT(OnSaveLoginScriptCfgBat()));
+	saveOption->addAction("保存登录配置和脚本(Lua)", this, SLOT(OnSaveLoginScriptCfgBat()));
+	saveOption->addAction("保存登录配置和脚本(Js)", []()
+			{ emit g_pGameCtrl->signal_saveLoginBat(3); });
 	ui->pushButton_saveBat->setMenu(saveOption);
 	connect(g_pGameCtrl, &GameCtrl::NotifyConnectionState, this, &AccountForm::OnNotifyConnectionState, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyAttachProcessOk, this, &AccountForm::OnNotifyAttachProcessOk, Qt::QueuedConnection);
@@ -327,13 +329,13 @@ bool AccountForm::QueryAttachGameWnd()
 								break;
 							}
 							else
-							{							
-								if ( pid != g_pGameCtrl->getGamePID())
+							{
+								if (pid != g_pGameCtrl->getGamePID())
 								{
 									qDebug() << "该ID已附加，退出！";
 									qApp->exit(0);
 									return true;
-								}								
+								}
 							}
 						}
 					}
@@ -366,13 +368,13 @@ bool AccountForm::QueryAttachGameWnd()
 				}
 				else
 				{
-					
+
 					if (wnd->m_ProcessId != g_pGameCtrl->getGamePID())
 					{
 						qDebug() << "该ID已附加，退出！";
 						qApp->exit(0);
 						return true;
-					}				
+					}
 				}
 			}
 		}
