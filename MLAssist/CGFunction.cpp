@@ -6636,6 +6636,7 @@ bool CGFunction::DownloadMap()
 
 bool CGFunction::DownloadMapEx(int xfrom, int yfrom, int xsize, int ysize)
 {
+	return false;
 	int last_index3 = GetMapIndex();
 	int x = xfrom, y = yfrom;
 	DWORD dwWaitTime = GetTickCount();

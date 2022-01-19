@@ -168,7 +168,7 @@ void MLAssist::on_ctrl_app(int val)
 					FollowGameWnd(gameRect.left, gameRect.top, gameRect.right, gameRect.bottom);
 				else if (g_pGameCtrl->GetFollowGamePos() == 1)
 					this->move(gameRect.left, gameRect.bottom - this->height());
-				else if (g_pGameCtrl->GetFollowGamePos() == 1)
+				else if (g_pGameCtrl->GetFollowGamePos() == 2)
 					this->move(gameRect.left, (gameRect.bottom - gameRect.top) / 2);
 				//this->setWindowFlag(Qt::WindowStaysOnTopHint,true);
 				//this->setVisible(true);

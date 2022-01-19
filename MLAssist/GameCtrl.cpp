@@ -2252,6 +2252,7 @@ void GameCtrl::OnQueueDownloadMap()
 {
 	if (!m_IsDownloadingMap)
 		return;
+	return;	//下载地图封了 先屏蔽
 	//	qDebug() << "OnQueueDownloadMap";
 	int ingame = 0;
 	bool connected = g_CGAInterface->IsConnected();
