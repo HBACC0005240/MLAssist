@@ -4913,6 +4913,20 @@ QList<QPoint> CGFunction::MakeMapOpen()
 
 void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 {
+	CGA::cga_map_cells_t cells;
+	if (g_CGAInterface->GetMapCollisionTable(true, cells) == false)
+	{
+		qDebug() << "获取地图失败，等待5秒";
+		Sleep(5000);
+	}
+	else
+	{
+		if (cells.x_size == 0 || cells.y_size == 0)
+		{
+			qDebug() << "获取地图失败，等待5秒";
+			Sleep(5000);
+		}		
+	}
 	QPoint curPos = GetMapCoordinate();
 	auto entranceList = GetMazeEntranceList();
 	if (entranceList.size() >= 2)
@@ -4944,7 +4958,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	QList<QPoint> allMoveAblePosList;
 	SearchAroundMapOpen(allMoveAblePosList, 2);
 	QPoint inPos;
-	//if (entranceList.size() == 1)
+	if (entranceList.size() >= 1)
 	{
 		inPos = entranceList[0];
 	}
@@ -4962,15 +4976,15 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	return ;
 }
 
-void CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type)
+bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type)
 {
 	QList<QPoint> searchPath;
 	QPoint curPos = GetMapCoordinate();
 	//获取当前所有可行走区域坐标
 	auto moveAblePosList = GetMovablePoints(curPos);
 	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
-	auto clipMoveAblePosList = GetMovablePointsEx(curPos);
-	QList<QPoint> newMoveAblePosList = moveAblePosList;
+	auto clipMoveAblePosList = GetMovablePointsEx(curPos,12);
+	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
 	//这是筛出的4方向边界点
 	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
 	{
@@ -4997,30 +5011,37 @@ void CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 					auto bd = GetDistanceEx(curPos.x(), curPos.y(), b->_centrePos.x(), b->_centrePos.y());
 					return ad < bd;
 				});
-		auto tSearchPos = tSearchList[0];
-		AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
-		allMoveAblePosList += moveAbleRangePosList;
-		if (type == 1)
-			SearchAroundMapOpen(allMoveAblePosList, type);
-		else if (type == 2)
+		allMoveAblePosList += clipMoveAblePosList;
+		for (auto tSearchPos:tSearchList)
 		{
-			auto entranceList = GetMapEntranceList();
-			if (entranceList.size() >= 2)
+			//auto tSearchPos = tSearchList[0];
+			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+			if (type == 1)
 			{
-				bool bReachable = true;
-				for (auto tEntrance : entranceList)
-				{
-					if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
-					{
-						bReachable = false;
-						break;
-					}
-				}
-				if (bReachable) //两个出入口可达 退出 否则继续搜索
-					return;
+				if (SearchAroundMapOpen(allMoveAblePosList, type))
+					return true;
 			}
-			SearchAroundMapOpen(allMoveAblePosList, type);
-		}
+			else if (type == 2)
+			{
+				auto entranceList = GetMazeEntranceList();
+				if (entranceList.size() >= 2)
+				{
+					bool bReachable = true;
+					for (auto tEntrance : entranceList)
+					{
+						if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+						{
+							bReachable = false;
+							break;
+						}
+					}
+					if (bReachable) //两个出入口可达 退出 否则继续搜索
+						return true;
+				}
+				if (SearchAroundMapOpen(allMoveAblePosList, type))
+					return true;
+			}
+		}		
 	}
 	//for (auto tSearchPos : tSearchList)
 	//{
@@ -5029,7 +5050,89 @@ void CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 	//	allMoveAblePosList += moveAblePosList; //已探索所有边界点
 	//	SearchAroundMapOpen(allMoveAblePosList);
 	//}
-	return;
+	return false;
+}
+
+bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos, QPoint &nextPos, int searchType /*= 1*/)
+{
+	QList<QPoint> searchPath;
+	QPoint curPos = GetMapCoordinate();
+	//获取当前所有可行走区域坐标
+	auto moveAblePosList = GetMovablePoints(curPos);
+	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
+	auto clipMoveAblePosList = GetMovablePointsEx(curPos, 12);
+	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
+	//这是筛出的4方向边界点
+	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
+	{
+		newMoveAblePosList.removeOne(clipMoveAblePosList[i]);
+	}
+	//增加判断，当前过滤的边界点，是否有以前探索的，有的话就移除那个方向的点
+	QList<QPoint> filterMoveAblePosList = newMoveAblePosList;
+	for (auto tPos : newMoveAblePosList)
+	{
+		qDebug() << tPos;
+		//AutoMoveTo(tPos.x(),tPos.y());
+		if (allMoveAblePosList.contains(tPos))
+			filterMoveAblePosList.removeOne(tPos);
+	}
+	//合并各自方向边界点
+	auto tSearchList = MergePoint(filterMoveAblePosList);
+	if (tSearchList.size() > 0)
+	{
+		//找当前最近的没搜寻点
+		qSort(tSearchList.begin(), tSearchList.end(), [&](TSearchRectPtr a, TSearchRectPtr b)
+				{
+					auto ad = GetDistanceEx(curPos.x(), curPos.y(), a->_centrePos.x(), a->_centrePos.y());
+					auto bd = GetDistanceEx(curPos.x(), curPos.y(), b->_centrePos.x(), b->_centrePos.y());
+					return ad < bd;
+				});
+		allMoveAblePosList += clipMoveAblePosList;
+		for (auto tSearchPos : tSearchList)
+		{
+			//auto tSearchPos = tSearchList[0];
+			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+			if (findPos == QPoint(0, 0))
+			{
+				auto mapUnit = FindMapUnit(name, searchType);
+				if (mapUnit) //找到 直接前往
+				{
+					qDebug() << "找到目标：" << name << " 坐标:" << mapUnit->xpos << mapUnit->ypos << "ModelID：" << mapUnit->model_id << " Name:" << QString::fromStdString(mapUnit->unit_name)
+							 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
+					MoveToNpcNear(mapUnit->xpos, mapUnit->ypos, 1);
+					findPos.setX(mapUnit->xpos);
+					findPos.setY(mapUnit->ypos);								
+				}
+			}
+			if (nextPos == QPoint(0,0))
+			{
+				auto entranceList = GetMazeEntranceList();
+				if (entranceList.size() >= 2)
+				{
+					bool bReachable = true;
+					QPoint tNextPos;
+					for (auto tEntrance : entranceList)
+					{
+						if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+						{
+							bReachable = false;
+							break;
+						}
+						if (tEntrance != enterPos)
+							tNextPos = tEntrance;
+					}
+					if (bReachable) //两个出入口可达 退出 否则继续搜索
+						nextPos = tNextPos;	//不判断 直接赋值了
+				}				
+			}		
+			if (nextPos == QPoint(0, 0) || findPos==QPoint(0,0))
+			{
+				if (SearchAroundMapUnit(allMoveAblePosList, name, findPos, enterPos,nextPos, searchType))
+					return true;
+			}			
+		}
+	}
+	return false;
 }
 
 //加载地图 判断坐标是否可达
@@ -5465,6 +5568,76 @@ bool CGFunction::SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int s
 	//没有找到 继续下一层
 	qDebug() << "没有找到 继续下一层！";
 	AutoMoveTo(nextMazeEntPos.x(), nextMazeEntPos.y());
+	return false;
+}
+
+bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType /*= 1*/)
+{
+	CGA::cga_map_cells_t cells;
+	if (g_CGAInterface->GetMapCollisionTable(true, cells) == false)
+	{
+		qDebug() << "获取地图失败，等待5秒";
+		Sleep(5000);
+	}
+	else
+	{
+		if (cells.x_size == 0 || cells.y_size == 0)
+		{
+			qDebug() << "获取地图失败，等待5秒";
+			Sleep(5000);
+		}
+	}
+	QPoint tEntracePos = GetMapCoordinate();
+
+	QPoint tFindPos,tNextMazePos;
+	auto mapUnit = FindMapUnit(name, searchType);
+	if (mapUnit) //找到 直接前往
+	{
+		qDebug() << "找到目标：" << name << " 坐标:" << mapUnit->xpos << mapUnit->ypos << "ModelID：" << mapUnit->model_id << " Name:" << QString::fromStdString(mapUnit->unit_name)
+				 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
+		MoveToNpcNear(mapUnit->xpos, mapUnit->ypos, 1);
+		tFindPos.setX(mapUnit->xpos);
+		tFindPos.setY(mapUnit->ypos);
+	}
+	
+	QPoint curPos = GetMapCoordinate();
+	auto entranceList = GetMazeEntranceList();
+	if (entranceList.size() >= 2)
+	{
+		bool bReachable = true;
+		for (auto tEntrance : entranceList)
+		{
+			if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+			{
+				bReachable = false;
+				break;
+			}
+		}
+		if (bReachable) //两个出入口可达 退出 否则继续搜索
+		{
+			qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
+					{
+						auto ad = GetDistanceEx(curPos.x(), curPos.y(), a.x(), a.y());
+						auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
+						return ad < bd;
+					});
+			tNextMazePos = entranceList[1];			
+		}
+	}
+	if (tFindPos != QPoint() && tNextMazePos != QPoint())
+	{
+		findPos = tFindPos;
+		nextPos = tNextMazePos;
+		return true;
+	}
+	QList<QPoint> allMoveAblePosList;
+	if (SearchAroundMapUnit(allMoveAblePosList, name, tFindPos, tEntracePos, tNextMazePos, searchType))
+	{
+		findPos = tFindPos;
+		nextPos = tNextMazePos;
+		return true;
+	}	
+	
 	return false;
 }
 

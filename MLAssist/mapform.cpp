@@ -199,7 +199,7 @@ void MapForm::on_pushButton_loadmap_clicked()
 	std::string filemap;
 	if (g_CGAInterface->GetMapIndex(index1, index2, mapIndex, filemap))
 	{
-		if (!QString::fromStdString(filemap).contains("map\\0")) //0下面地图 才进行缓存 迷宫不缓存
+		if (QString::fromStdString(filemap).contains("map\\0")) //0下面地图 才进行缓存 迷宫不缓存
 		{
 			qDebug() << "只有迷宫才能开图！";
 			return;
