@@ -62,6 +62,7 @@ public:
 
 	QString GetBattleTypeText(int ntype) { return m_battleMapText.value(ntype); }
 	int GetBattleTypeFromText(QString text) { return m_battleMapText.key(text); }
+	void SetBattleDelay(bool bEnabled,int delay);
 
 private:
 	bool CheckProtect();		 //1级和boss战停止战斗
@@ -112,6 +113,7 @@ signals:
 public:
 	bool m_bAutoBattle = false;			//是否自动战斗
 	bool m_bHighSpeed = false;			//是否高速战斗
+	bool m_bWaitAfterBattle = false;	//是否战斗结束延时
 	bool m_bFirstRoundNoDelay = true;	//是否第一回合加速
 	bool m_bAllEscape = false;			//全跑
 	bool m_bNoLv1Escape = false;		//无1级逃跑
@@ -131,7 +133,8 @@ public:
 	bool m_bHave1LvLastSet = false;		//有1级怪时 最后设置
 	int m_iDelayFrom;
 	int m_iDelayTo;
-	int m_nHightSpeedDelay = 4; //高速延时值 默认4
+	int m_nHightSpeedDelay = 4;			//高速延时值 默认4
+	int m_nBattleDelay = 5;				//战斗延时值 默认5
 
 	uint64_t m_LastWarpMap202;
 	CGA_BattleContext_t m_BattleContext;

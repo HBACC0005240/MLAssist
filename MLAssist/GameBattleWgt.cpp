@@ -12,6 +12,7 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
+	ui.pushButton_petDoubleAction->hide();
 	m_pSoundAlarm = new QSound(QApplication::applicationDirPath() + "//ALARM.wav");
 	ui.tabWidget->setStyle(new ITTabBarStyle);
 
@@ -40,6 +41,8 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 			{ ui.checkBox_HighSpeed->setChecked(bFlag); });
 	connect(g_pGameCtrl, &GameCtrl::signal_setHightSpeedBattleDelayUI, this, [&](int delayTime)
 			{ ui.comboBox_highSpeedDelay->setCurrentIndex(ui.comboBox_highSpeedDelay->findData(delayTime)); });
+	connect(g_pGameCtrl, &GameCtrl::signal_setBattleDelayUI, this, [&](int delayTime)
+			{ ui.comboBox_battleDelay->setCurrentIndex(ui.comboBox_battleDelay->findData(delayTime)); });
 	connect(g_pGameCtrl, &GameCtrl::signal_switchAllEncounterEscapeUI, this, [&](bool bFlag)
 			{ ui.checkBox_allEscape->setChecked(bFlag); });
 	connect(g_pGameCtrl, &GameCtrl::signal_switchNoLvlEncounterEscapeUI, this, [&](bool bFlag)
@@ -81,6 +84,13 @@ void GameBattleWgt::init()
 	{
 		ui.comboBox_highSpeedDelay->addItem(QString::number(i), i);
 	}
+	ui.comboBox_battleDelay->clear();
+	ui.comboBox_battleDelay->addItem("战斗延时", 5);
+	for (size_t i = 0; i <= 10; i++)
+	{
+		ui.comboBox_battleDelay->addItem(QString::number(i), i);
+	}
+
 	for (int i = 1; i <= 10; i++)
 	{
 		QString szObjName = QString("pushButton_%1Enemy").arg(i);
@@ -386,6 +396,16 @@ void GameBattleWgt::on_comboBox_highSpeedDelay_currentIndexChanged(int index)
 {
 	int nDelayTime = ui.comboBox_highSpeedDelay->currentData().toInt();
 	g_pAutoBattleCtrl->OnSetHightSpeedDelayVal(nDelayTime);
+}
+
+void GameBattleWgt::on_comboBox_battleDelay_currentIndexChanged(int index)
+{
+	int nDelayTime = ui.comboBox_battleDelay->currentData().toInt();
+	if (nDelayTime == 0)
+	{
+		g_pAutoBattleCtrl->SetBattleDelay(false,0);
+	}else
+		g_pAutoBattleCtrl->SetBattleDelay(true,nDelayTime);
 }
 
 void GameBattleWgt::on_pushButton_TroopHp_clicked()
@@ -985,7 +1005,9 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 	ui.checkBox_auto->setChecked(iniFile.value("AutoBattle").toBool());
 	ui.checkBox_HighSpeed->setChecked(iniFile.value("HighSpeed").toBool());
 	int nDelayTime = iniFile.value("HightSpeedDelay").toInt();
+	int nBattleDelayTime = iniFile.value("BattleDelay").toInt();
 	ui.comboBox_highSpeedDelay->setCurrentIndex(ui.comboBox_highSpeedDelay->findData(nDelayTime));
+	ui.comboBox_battleDelay->setCurrentIndex(ui.comboBox_battleDelay->findData(nBattleDelayTime));
 	ui.checkBox_firstNoDelay->setChecked(iniFile.value("FirstRoundNoDelay").toBool());
 	ui.checkBox_bossProtect->setChecked(iniFile.value("BossProtect").toBool());
 	ui.checkBox_Lv1Protect->setChecked(iniFile.value("Lv1Protect").toBool());
@@ -1309,6 +1331,7 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 	g_pAutoBattleCtrl->OnSetNoLv1Escape(ui.checkBox_NoLv1Escape->checkState());
 	//高速延时
 	on_comboBox_highSpeedDelay_currentIndexChanged(ui.comboBox_highSpeedDelay->currentIndex());
+	on_comboBox_battleDelay_currentIndexChanged(ui.comboBox_battleDelay->currentIndex());
 
 	on_checkBox_selfHp1_stateChanged(ui.checkBox_selfHp1->checkState());
 	on_checkBox_selfHp2_stateChanged(ui.checkBox_selfHp2->checkState());
@@ -1367,6 +1390,7 @@ void GameBattleWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("HighSpeed", g_pAutoBattleCtrl->m_bHighSpeed);										//是否高速战斗
 																										//	iniFile.setValue("HightSpeedDelay", g_pAutoBattleCtrl->m_nHightSpeedDelay);		//延时
 	iniFile.setValue("HightSpeedDelay", ui.comboBox_highSpeedDelay->currentData(Qt::UserRole).toInt()); //延时
+	iniFile.setValue("BattleDelay", ui.comboBox_battleDelay->currentData(Qt::UserRole).toInt());	//延时
 	iniFile.setValue("FirstRoundNoDelay", g_pAutoBattleCtrl->m_bFirstRoundNoDelay);						//第一回合加速
 	iniFile.setValue("BossProtect", g_pAutoBattleCtrl->m_bBOSSProtect);									//Boss战停止
 	iniFile.setValue("Lv1Protect", g_pAutoBattleCtrl->m_bLevelOneProtect);								//1级怪停止

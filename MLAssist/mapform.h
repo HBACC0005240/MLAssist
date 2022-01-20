@@ -20,6 +20,8 @@ protected:
 	void hideEvent(QHideEvent *event);
 
 	static void AutoMazeThread(MapForm *pThis);
+	static void AutoMazeOpen(MapForm *pThis);
+
 public slots:
 	void OnNotifyRefreshMapRegion(int xbase, int ybase, int xtop, int ytop, int index3);
 	void OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QSharedPointer<CGA_MapCellData_t> obj, QSharedPointer<CGA_MapUnits_t> units);

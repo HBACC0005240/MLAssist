@@ -256,7 +256,13 @@ bool CBattleWorker::OnBattleAction(int flags)
 		m_BattleContext.m_bIsPlayerEscaped = false;			//人物是否逃跑
 		return true;
 	}
-
+	else
+	{
+		if (m_bWaitAfterBattle)
+		{
+			g_CGAInterface->SetSwitchAnimForceWait(1, m_nBattleDelay*1000);
+		}
+	}
 	int gameStatus = 0;
 	if (!g_CGAInterface->GetGameStatus(gameStatus) && gameStatus != 10)
 		return false;
@@ -1114,4 +1120,14 @@ QHash<int, CBattleSettingPtr> CBattleWorker::GetInternalLv1Settings()
 void CBattleWorker::ClearHaveLv1Setting()
 {
 	m_pLv1SettingList.clear();
+}
+
+void CBattleWorker::SetBattleDelay(bool bEnabled, int delay)
+{
+	if (m_bWaitAfterBattle && !bEnabled)
+	{
+		g_CGAInterface->SetSwitchAnimForceWait(0, 0);
+	}
+	m_bWaitAfterBattle = bEnabled;
+	m_nBattleDelay = delay;
 }

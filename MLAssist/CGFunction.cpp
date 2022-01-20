@@ -82,6 +82,7 @@ CGFunction::CGFunction()
 	m_sysConfigMap.insert("自动战斗", TSysConfigSet_AutoBattle);
 	m_sysConfigMap.insert("高速战斗", TSysConfigSet_HighSpeedBattle);
 	m_sysConfigMap.insert("高速延时", TSysConfigSet_HighSpeedDelay);
+	m_sysConfigMap.insert("战斗延时", TSysConfigSet_BattleDelay);
 	m_sysConfigMap.insert("遇敌全跑", TSysConfigSet_AllEncounterEscape);
 	m_sysConfigMap.insert("无一级逃跑", TSysConfigSet_NoLv1Escape);
 	m_sysConfigMap.insert("不带宠二动", TSysConfigSet_NoPetDoubleAction);
@@ -4140,7 +4141,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 				/*qDebug() << "AutoNavigator"
 						 << "战斗或者切图";*/
 				isNormal = false;
-				Sleep(3000); //还是多等2秒吧  防止卡位
+				Sleep(1000); //还是多等2秒吧  防止卡位
 			}
 			//2、判断地图是否发送变更 例如：迷宫送出来，登出，切到下个图
 			if (curMapIndex != GetMapIndex() || curMapName != GetMapName())
@@ -4910,15 +4911,40 @@ QList<QPoint> CGFunction::MakeMapOpen()
 	//return searchPath;
 }
 
-QList<QPoint> CGFunction::MakeMapOpenContainNextEntrance()
+void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 {
-	QList<QPoint> searchPath;
-	auto entranceList = GetMazeEntranceList();
 	QPoint curPos = GetMapCoordinate();
+	auto entranceList = GetMazeEntranceList();
+	if (entranceList.size() >= 2)
+	{
+		bool bReachable = true;
+		for (auto tEntrance : entranceList)
+		{
+			if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+			{
+				bReachable = false;
+				break;
+			}
+		}
+		if (bReachable) //两个出入口可达 退出 否则继续搜索
+		{
+			qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
+					{
+						auto ad = GetDistanceEx(curPos.x(), curPos.y(), a.x(), a.y());
+						auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
+						return ad < bd;
+					});
+			if (isNearFar)//取远
+				AutoMoveTo(entranceList[1].x(), entranceList[1].y());
+			else
+				AutoMoveTo(entranceList[0].x(),entranceList[0].y());
+			return;
+		}
+	}
 	QList<QPoint> allMoveAblePosList;
 	SearchAroundMapOpen(allMoveAblePosList, 2);
 	QPoint inPos;
-	if (entranceList.size() == 1)
+	//if (entranceList.size() == 1)
 	{
 		inPos = entranceList[0];
 	}
@@ -4928,12 +4954,12 @@ QList<QPoint> CGFunction::MakeMapOpenContainNextEntrance()
 	{
 		if (tPos != inPos)
 		{
-			nextPos = tPos;
+			nextPos = tPos;	
 			AutoMoveTo(nextPos.x(), nextPos.y());
-			return searchPath;
+			return ;
 		}
 	}
-	return searchPath;
+	return ;
 }
 
 void CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type)
@@ -6170,7 +6196,7 @@ bool CGFunction::RenewNpcClicked(QSharedPointer<CGA_NPCDialog_t> dlg)
 
 bool CGFunction::AutoWalkMaze(int isDownMap, QString filterPosList, int isNearFar)
 {
-	MakeMapOpenContainNextEntrance();
+	MakeMapOpenContainNextEntrance(isNearFar);
 	return false;
 	if (isDownMap)
 	{
@@ -6219,6 +6245,7 @@ bool CGFunction::AutoWalkMaze(int isDownMap, QString filterPosList, int isNearFa
 //自动穿越迷宫 停止条件为到指定名称地图 或寻路错误
 bool CGFunction::AutoWalkRandomMaze()
 {
+	return AutoWalkRandomMazeEx();	
 	QStringList sFilterNameList = m_sTargetMazeName.split("|");
 	bool bRet = false;
 	QList<QPoint> enterPosList;								  //进入点
@@ -6313,6 +6340,61 @@ bool CGFunction::AutoWalkRandomMaze()
 			qDebug() << "AutoWalkMaze 寻路错误，返回！";
 			return false;
 		}
+	}
+
+	return true;
+}
+
+bool CGFunction::AutoWalkRandomMazeEx()
+{
+	QStringList sFilterNameList = m_sTargetMazeName.split("|");
+	bool bRet = false;
+	QList<QPoint> enterPosList;								  //进入点
+	int beginFloor = g_pGameFun->GetMapFloorNumberFromName(); //开始楼层
+	int lastFloor = beginFloor;
+	while (!m_bStop && !g_pGameCtrl->GetExitGame())
+	{
+		QString curMapName = GetMapName();
+		int curMapNum = GetMapIndex();
+		if (sFilterNameList.size() > 0) //精确匹配
+		{
+			if (sFilterNameList.contains(curMapName) || sFilterNameList.contains(QString::number(curMapNum)))
+			{
+				qDebug() << "到达目的地" << curMapName << m_sTargetMazeName;
+				return true;
+			}
+		}
+		else //模糊匹配
+		{
+			if (!m_sTargetMazeName.isEmpty() && (curMapName.contains(m_sTargetMazeName) || curMapNum == m_sTargetMazeName.toInt()))
+			{
+				qDebug() << "到达目的地" << curMapName << m_sTargetMazeName;
+				return true;
+			}
+		}
+		//增加楼层判断
+		int curFloor = g_pGameFun->GetMapFloorNumberFromName(); //当前楼层
+		if (curFloor != 0)										//获取错误 不判断楼层
+		{
+			if (curFloor < lastFloor) //一般都是大于 小于的还没遇到
+			{						  //大于正常走 小于 这里处理
+				qDebug() << "当前楼层小于上次楼层，返回上一层重新走迷宫";
+				auto curPos = g_pGameFun->GetMapCoordinate();
+				auto tmpPos = g_pGameFun->GetRandomSpace(curPos.x(), curPos.y(), 1);
+				g_pGameFun->AutoMoveTo(tmpPos.x(), tmpPos.y());
+				g_pGameFun->AutoMoveTo(curPos.x(), curPos.y());
+			}
+			WaitInNormalState();
+			curFloor = g_pGameFun->GetMapFloorNumberFromName();
+			if (curFloor != 0)
+				lastFloor = curFloor;
+		}
+
+		//		if (!IsMapDownload())
+		{
+			MakeMapOpenContainNextEntrance(1);
+			Sleep(2000); //等待2秒
+		}	
 	}
 
 	return true;
@@ -7177,6 +7259,10 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 				case TSysConfigSet_HighSpeedDelay:
 				{
 					emit g_pGameCtrl->signal_setHightSpeedBattleDelayUI(data1.toInt());
+					break;
+				}case TSysConfigSet_BattleDelay:
+				{
+					emit g_pGameCtrl->signal_setBattleDelayUI(data1.toInt());
 					break;
 				}
 				case TSysConfigSet_AllEncounterEscape:

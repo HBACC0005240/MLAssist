@@ -55,6 +55,11 @@ void MapForm::AutoMazeThread(MapForm *pThis)
 	g_pGameFun->AutoWalkRandomMaze();
 }
 
+void MapForm::AutoMazeOpen(MapForm *pThis)
+{
+	g_pGameFun->MakeMapOpenContainNextEntrance(1);
+}
+
 void MapForm::UpdateMousePosition(int x, int y)
 {
 	ui.label_xy_2->setText(tr("鼠标点击坐标(%1, %2)").arg(x).arg(y));
@@ -190,7 +195,17 @@ void MapForm::OnCloseWindow()
 
 void MapForm::on_pushButton_loadmap_clicked()
 {
-	g_pGameFun->MakeMapOpenContainNextEntrance();
+	int index1 = 0, index2 = 0, mapIndex = 0;
+	std::string filemap;
+	if (g_CGAInterface->GetMapIndex(index1, index2, mapIndex, filemap))
+	{
+		if (!QString::fromStdString(filemap).contains("map\\0")) //0下面地图 才进行缓存 迷宫不缓存
+		{
+			qDebug() << "只有迷宫才能开图！";
+			return;
+		}
+	}
+	QtConcurrent::run(AutoMazeOpen, this);
 	return;
 	if (m_collision)
 	{

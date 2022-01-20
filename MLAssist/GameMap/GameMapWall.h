@@ -43,6 +43,7 @@ public:
 	void SaveMapData();
 
 	static void SearchThread(GameMapWall *pThis);
+	static void AutoMazeOpen(GameMapWall *pThis);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);

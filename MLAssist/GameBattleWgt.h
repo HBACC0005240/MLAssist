@@ -38,6 +38,7 @@ public slots:
 	void on_pushButton_clearNum_clicked();
 	void on_pushButton_clearRound_clicked();
 	void on_comboBox_highSpeedDelay_currentIndexChanged(int index);
+	void on_comboBox_battleDelay_currentIndexChanged(int index);
 	void on_pushButton_TroopHp_clicked();
 	void on_pushButton_PetMp_clicked();
 	void on_pushButton_PetHp_clicked();

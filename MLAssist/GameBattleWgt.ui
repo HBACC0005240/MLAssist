@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>626</width>
-    <height>257</height>
+    <height>268</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -165,6 +165,70 @@
              </widget>
             </item>
             <item>
+             <widget class="QComboBox" name="comboBox_battleDelay">
+              <item>
+               <property name="text">
+                <string>战斗延迟</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>6</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>8</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>10</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="checkBox_firstNoDelay">
               <property name="text">
                <string>第一合加速</string>
@@ -250,6 +314,12 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_petDoubleAction">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>15</height>
+             </size>
+            </property>
             <property name="styleSheet">
              <string notr="true">color: rgb(255, 0, 0);</string>
             </property>
@@ -266,7 +336,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>40</height>
+              <height>0</height>
              </size>
             </property>
            </spacer>

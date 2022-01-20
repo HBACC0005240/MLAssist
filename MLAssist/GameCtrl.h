@@ -220,6 +220,7 @@ signals:
 	void signal_switchEncounterSpeedUI(int);						   //打开关闭高速遇敌
 	void signal_switchAutoEncounterUI(bool);						   //打开关闭自动遇敌
 	void signal_setHightSpeedBattleDelayUI(int);					   //设置高速战斗延时
+	void signal_setBattleDelayUI(int);								   //设置战斗延时
 	void signal_switchAllEncounterEscapeUI(bool);					   //打开关闭遇敌全跑
 	void signal_switchNoLvlEncounterEscapeUI(bool);					   //打开关闭无1级全跑
 	void signal_switchNoPetDoubleActionUI(bool);					   //打开关闭无宠二动

@@ -359,6 +359,7 @@ enum TSysConfigSet
 	TSysConfigSet_AutoBattle,		  //自动战斗
 	TSysConfigSet_HighSpeedBattle,	  //高速战斗
 	TSysConfigSet_HighSpeedDelay,	  //高速延时
+	TSysConfigSet_BattleDelay,		  //战斗延时
 	TSysConfigSet_AllEncounterEscape, //遇敌全跑
 	TSysConfigSet_CharacterSwitch,	  //人物开关
 	TSysConfigSet_MoveSpeed,		  //行走速度

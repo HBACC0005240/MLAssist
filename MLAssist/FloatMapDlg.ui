@@ -285,7 +285,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_downMap">
             <property name="text">
-             <string>下载地图</string>
+             <string>自动开图</string>
             </property>
            </widget>
           </item>

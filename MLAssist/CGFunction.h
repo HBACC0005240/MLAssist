@@ -332,7 +332,7 @@ public:
 	//地图全开
 	QList<QPoint> MakeMapOpen();
 	//下层寻路
-	QList<QPoint> MakeMapOpenContainNextEntrance();
+	void MakeMapOpenContainNextEntrance(int isNearFar=1);
 	//1地图全开 2有2个迷宫出入口，并可达即可
 	void SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type = 1);
 	//目标是否可达
@@ -405,6 +405,7 @@ public:
 
 	//穿越随机迷宫 检查下载 进行下载
 	bool AutoWalkRandomMaze();
+	bool AutoWalkRandomMazeEx();
 
 	//设置目标迷宫名称
 	void SetTargetMazeName(QString name) { m_sTargetMazeName = name; }

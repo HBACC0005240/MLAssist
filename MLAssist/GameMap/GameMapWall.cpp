@@ -395,10 +395,22 @@ void GameMapWall::RunSearch()
 
 void GameMapWall::DownLoadMap()
 {
-	if (m_collision)
+	int index1 = 0, index2 = 0, mapIndex = 0;
+	std::string filemap;
+	if (g_CGAInterface->GetMapIndex(index1, index2, mapIndex, filemap))
 	{
-		emit RequestDownloadMap(m_collision->xsize, m_collision->ysize);
+		if (!QString::fromStdString(filemap).contains("map\\0")) //0下面地图 才进行缓存 迷宫不缓存
+		{
+			qDebug() << "只有迷宫才能开图！";
+			return;
+		}
 	}
+	QtConcurrent::run(AutoMazeOpen, this);
+
+	//if (m_collision)
+	//{
+	//	emit RequestDownloadMap(m_collision->xsize, m_collision->ysize);
+	//}
 }
 
 void GameMapWall::SaveMapData()
@@ -429,6 +441,10 @@ void GameMapWall::SearchThread(GameMapWall *pThis)
 		}
 	}
 	pThis->m_bAutoMaze = false;
+}
+void GameMapWall::AutoMazeOpen(GameMapWall *pThis)
+{
+	g_pGameFun->MakeMapOpenContainNextEntrance(1);
 }
 
 bool GameMapWall::IsDisplayMap()
