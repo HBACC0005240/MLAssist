@@ -4140,7 +4140,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 				/*qDebug() << "AutoNavigator"
 						 << "战斗或者切图";*/
 				isNormal = false;
-				Sleep(1000);
+				Sleep(3000); //还是多等2秒吧  防止卡位
 			}
 			//2、判断地图是否发送变更 例如：迷宫送出来，登出，切到下个图
 			if (curMapIndex != GetMapIndex() || curMapName != GetMapName())
@@ -4789,6 +4789,222 @@ QList<QPoint> CGFunction::FindRandomSearchPath(int tx, int ty)
 	}
 	return searchPath;
 }
+QList<QPoint> CGFunction::MakeMapOpen()
+{
+	QList<QPoint> searchPath;
+	auto entranceList = GetMazeEntranceList();
+	QPoint curPos = GetMapCoordinate();
+	QList<QPoint> allMoveAblePosList;
+	SearchAroundMapOpen(allMoveAblePosList);
+	QPoint inPos;
+	if (entranceList.size() == 1)
+	{
+		inPos = entranceList[0];
+	}
+	entranceList = GetMazeEntranceList();
+	QPoint nextPos;
+	for (auto tPos : entranceList)
+	{
+		if (tPos != inPos)
+		{
+			nextPos = tPos;
+			AutoMoveTo(nextPos.x(), nextPos.y());
+			return searchPath;
+		}
+	}
+	return searchPath;
+
+	//获取当前所有可行走区域坐标
+	auto moveAblePosList = GetMovablePoints(curPos);
+	auto clipMoveAblePosList = GetMovablePointsEx(curPos);
+	QList<QPoint> newMoveAblePosList = moveAblePosList;
+	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
+	{
+		newMoveAblePosList.removeOne(clipMoveAblePosList[i]);
+	}
+	for (auto tPos : newMoveAblePosList)
+	{
+		qDebug() << tPos;
+		//AutoMoveTo(tPos.x(),tPos.y());
+	}
+	auto tSearchList = MergePoint(newMoveAblePosList);
+	for (auto tSearchPos : tSearchList)
+	{
+		AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+	}
+	return searchPath;
+	//auto searchList = MergePoint(moveAblePosList);
+	//QVector<short> mapData;
+	//int width = 0;
+	//int height = 0;
+	//CreateMapImage(mapData, width, height);
+	////最大支持的地图 默认迷宫 不超过100 100 超过不进行查找 直接返回
+	//int nMaxWidth = 100;
+	//int nMaxHeight = 100;
+	//if (width < 1 || height < 1 || width > nMaxWidth || height > nMaxHeight)
+	//{
+	//	qDebug() << "地图过大，查询失败!SearchMap CreateMapImage Ero!";
+	//	return searchPath;
+	//}
+	//TSearchRectList tracePosList;
+	////tsp排序
+	//if (searchList.size() > 1)
+	//{
+	//	Tsp tsp;
+	//	tsp.SetStart(curPos, tgtPos);
+	//	QVector<QPoint> tmpPosList;
+	//	for (auto pos : searchList)
+	//	{
+	//		if (pos->_rectPosList.contains(curPos) || pos->_rectPosList.contains(tgtPos))
+	//			continue;
+	//		tmpPosList.append(pos->_centrePos);
+	//	}
+	//	if (tmpPosList.size() <= 1 && tmpPosList.size() > 0)
+	//	{
+	//		tracePosList.append(searchList.at(0));
+	//	}
+	//	else if (tmpPosList.size() <= 0)
+	//	{
+	//		for (int i = 0; i < searchList.size(); ++i)
+	//		{
+	//			auto searPos = searchList.at(i);
+	//			tracePosList.append(searPos);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		tsp.Input(tmpPosList, mapData, width, height);
+	//		tsp.SA();
+	//		//	tsp.Print(tsp.GetBestPath(),tmpPosList.size());
+	//		auto bestPath = tsp.GetBestPath();
+	//		for (int i = 0; i < bestPath.citys.size(); ++i)
+	//		{
+	//			auto searPos = searchList.at(bestPath.citys.at(i));
+	//			tracePosList.append(searPos);
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	for (int i = 0; i < searchList.size(); ++i)
+	//	{
+	//		auto searPos = searchList.at(i);
+	//		tracePosList.append(searPos);
+	//	}
+	//}
+
+	////打印路线
+	////	signal_load_navpath
+	//QVector<quint32> navpath;
+	//for (auto tgtPos : tracePosList)
+	//{
+	//	navpath.push_back((tgtPos->_centrePos.x() & 0xFFFF) | ((tgtPos->_centrePos.y() & 0xFFFF) << 16));
+	//}
+	////emit g_pGameCtrl->signal_load_navpath(navpath);
+	//int curMapIndex = GetMapIndex();
+	////开始遍历搜索
+	//for (auto tgtPos : tracePosList)
+	//{
+	//	searchPath.append(tgtPos->_centrePos);
+	//}
+	//return searchPath;
+}
+
+QList<QPoint> CGFunction::MakeMapOpenContainNextEntrance()
+{
+	QList<QPoint> searchPath;
+	auto entranceList = GetMazeEntranceList();
+	QPoint curPos = GetMapCoordinate();
+	QList<QPoint> allMoveAblePosList;
+	SearchAroundMapOpen(allMoveAblePosList, 2);
+	QPoint inPos;
+	if (entranceList.size() == 1)
+	{
+		inPos = entranceList[0];
+	}
+	entranceList = GetMazeEntranceList();
+	QPoint nextPos;
+	for (auto tPos : entranceList)
+	{
+		if (tPos != inPos)
+		{
+			nextPos = tPos;
+			AutoMoveTo(nextPos.x(), nextPos.y());
+			return searchPath;
+		}
+	}
+	return searchPath;
+}
+
+void CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type)
+{
+	QList<QPoint> searchPath;
+	QPoint curPos = GetMapCoordinate();
+	//获取当前所有可行走区域坐标
+	auto moveAblePosList = GetMovablePoints(curPos);
+	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
+	auto clipMoveAblePosList = GetMovablePointsEx(curPos);
+	QList<QPoint> newMoveAblePosList = moveAblePosList;
+	//这是筛出的4方向边界点
+	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
+	{
+		newMoveAblePosList.removeOne(clipMoveAblePosList[i]);
+	}
+	//增加判断，当前过滤的边界点，是否有以前探索的，有的话就移除那个方向的点
+	QList<QPoint> filterMoveAblePosList = newMoveAblePosList;
+	for (auto tPos : newMoveAblePosList)
+	{
+		qDebug() << tPos;
+		//AutoMoveTo(tPos.x(),tPos.y());
+		if (allMoveAblePosList.contains(tPos))
+			filterMoveAblePosList.removeOne(tPos);
+	}
+	//合并各自方向边界点
+	auto tSearchList = MergePoint(filterMoveAblePosList);
+	if (tSearchList.size() > 0)
+	{
+
+		//找当前最近的没搜寻点
+		qSort(tSearchList.begin(), tSearchList.end(), [&](TSearchRectPtr a, TSearchRectPtr b)
+				{
+					auto ad = GetDistanceEx(curPos.x(), curPos.y(), a->_centrePos.x(), a->_centrePos.y());
+					auto bd = GetDistanceEx(curPos.x(), curPos.y(), b->_centrePos.x(), b->_centrePos.y());
+					return ad < bd;
+				});
+		auto tSearchPos = tSearchList[0];
+		AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+		allMoveAblePosList += moveAbleRangePosList;
+		if (type == 1)
+			SearchAroundMapOpen(allMoveAblePosList, type);
+		else if (type == 2)
+		{
+			auto entranceList = GetMapEntranceList();
+			if (entranceList.size() >= 2)
+			{
+				bool bReachable = true;
+				for (auto tEntrance : entranceList)
+				{
+					if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+					{
+						bReachable = false;
+						break;
+					}
+				}
+				if (bReachable) //两个出入口可达 退出 否则继续搜索
+					return;
+			}
+			SearchAroundMapOpen(allMoveAblePosList, type);
+		}
+	}
+	//for (auto tSearchPos : tSearchList)
+	//{
+	//	//移动到第一个边界点
+	//	AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+	//	allMoveAblePosList += moveAblePosList; //已探索所有边界点
+	//	SearchAroundMapOpen(allMoveAblePosList);
+	//}
+	return;
+}
 
 //加载地图 判断坐标是否可达
 bool CGFunction::IsReachableTargetEx(int sx, int sy, int tx, int ty)
@@ -5313,12 +5529,12 @@ TSearchRectList CGFunction::MergePoint(QList<QPoint> posList, int nDis /*= 10*/)
 	return searchRectPosList;
 }
 
-bool CGFunction::FindByNextPoints(CGA::cga_map_cells_t &map, QPoint tmpCentre, QList<QPoint> &foundedPoints)
+bool CGFunction::FindByNextPoints(CGA::cga_map_cells_t &map, QPoint tmpCentre, QList<QPoint> &foundedPoints, QRect tRect)
 {
 	QList<QPoint> nextPoints;
 	auto isMoveAble = [&](QPoint p)
 	{
-		if (p.x() > map.x_bottom && p.x() < map.x_size && p.y() > map.y_bottom && p.y() < map.y_size)
+		if (p.x() > tRect.x() && p.x() < tRect.width() && p.y() > tRect.y() && p.y() < tRect.height())
 		{
 			if (map.cell.at((size_t)(p.x() + p.y() * map.x_size)) == 0)
 			{
@@ -5337,7 +5553,7 @@ bool CGFunction::FindByNextPoints(CGA::cga_map_cells_t &map, QPoint tmpCentre, Q
 	isMoveAble(QPoint(tmpCentre.x(), tmpCentre.y() - 1));
 	for (auto tmpPos : nextPoints)
 	{
-		FindByNextPoints(map, tmpPos, foundedPoints);
+		FindByNextPoints(map, tmpPos, foundedPoints, tRect);
 	}
 	return true;
 }
@@ -5421,9 +5637,14 @@ QList<QPoint> CGFunction::GetMovablePoints(QPoint start)
 {
 	QList<QPoint> foundedPoints;
 	CGA::cga_map_cells_t map;
+	QRect tRect;
 	if (g_CGAInterface->GetMapCollisionTable(true, map))
 	{
-		FindByNextPoints(map, start, foundedPoints);
+		tRect.setX(map.x_bottom);
+		tRect.setY(map.y_bottom);
+		tRect.setWidth(map.x_size);
+		tRect.setHeight(map.y_size);
+		FindByNextPoints(map, start, foundedPoints, tRect);
 	}
 	return foundedPoints;
 }
@@ -5434,9 +5655,17 @@ QList<QPoint> CGFunction::GetMovablePointsEx(QPoint start, int range)
 	CGA::cga_map_cells_t map;
 	if (g_CGAInterface->GetMapCollisionTable(true, map))
 	{
-		auto isMoveAble = [&](QPoint p)
+		int minx = start.x() - range;
+		minx = minx < map.x_bottom ? map.x_bottom : minx;
+		int miny = start.y() - range;
+		miny = miny < map.y_bottom ? map.y_bottom : miny;
+		int maxx = start.x() + range;
+		maxx = maxx > map.x_size ? map.x_size : maxx;
+		int maxy = start.y() + range;
+		maxy = maxy > map.y_size ? map.y_size : maxy;
+		/*	auto isMoveAble = [&](QPoint p)
 		{
-			if (p.x() > map.x_bottom && p.x() < map.x_size && p.y() > map.y_bottom && p.y() < map.y_size)
+			if (p.x() >= minx && p.x() < maxx && p.y() >= miny && p.y() < maxy)
 			{
 				if (map.cell.at((size_t)(p.x() + p.y() * map.x_size)) == 0)
 				{
@@ -5446,23 +5675,15 @@ QList<QPoint> CGFunction::GetMovablePointsEx(QPoint start, int range)
 					}
 				}
 			}
-		};
-		int minx = start.x() - range;
-		minx = minx < map.x_bottom ? map.x_bottom : minx;
-		int miny = start.y() - range;
-		miny = miny < map.y_bottom ? map.y_bottom : miny;
-		int maxx = start.x() + range;
-		maxx = maxx > map.x_size ? map.x_size : maxx;
-		int maxy = start.y() + range;
-		maxy = maxy > map.y_size ? map.y_size : maxy;
+		};*/
+		//		isMoveAble(start);
+		QRect tRect;
 
-		for (int i = minx; i < maxx; ++i)
-		{
-			for (int n = miny; n < maxy; n++)
-			{
-				isMoveAble(QPoint(i, n));
-			}
-		}
+		tRect.setX(minx);
+		tRect.setY(miny);
+		tRect.setWidth(maxx);
+		tRect.setHeight(maxy);
+		FindByNextPoints(map, start, foundedPoints, tRect);
 	}
 	return foundedPoints;
 }
@@ -5949,6 +6170,8 @@ bool CGFunction::RenewNpcClicked(QSharedPointer<CGA_NPCDialog_t> dlg)
 
 bool CGFunction::AutoWalkMaze(int isDownMap, QString filterPosList, int isNearFar)
 {
+	MakeMapOpenContainNextEntrance();
+	return false;
 	if (isDownMap)
 	{
 		//if (!IsMapDownload())

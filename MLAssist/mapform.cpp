@@ -190,6 +190,8 @@ void MapForm::OnCloseWindow()
 
 void MapForm::on_pushButton_loadmap_clicked()
 {
+	g_pGameFun->MakeMapOpenContainNextEntrance();
+	return;
 	if (m_collision)
 	{
 		RequestDownloadMap(m_collision->xsize, m_collision->ysize);

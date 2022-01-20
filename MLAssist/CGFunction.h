@@ -329,6 +329,12 @@ public:
 	QList<QPoint> FindRandomEntry(int x, int y, int w, int h, QList<QPoint> filterPosList);
 	//获取迷宫遍历搜索路线
 	QList<QPoint> FindRandomSearchPath(int tx, int ty);
+	//地图全开
+	QList<QPoint> MakeMapOpen();
+	//下层寻路
+	QList<QPoint> MakeMapOpenContainNextEntrance();
+	//1地图全开 2有2个迷宫出入口，并可达即可
+	void SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type = 1);
 	//目标是否可达
 	bool IsReachableTargetEx(int sx, int sy, int tx, int ty);
 	bool IsReachableTarget(int tx, int ty);
@@ -354,7 +360,7 @@ public:
 	//获取可移动点列表
 	QList<QPoint> GetMovablePoints(QPoint start);
 	QList<QPoint> GetMovablePointsEx(QPoint start, int range = 10);
-	bool FindByNextPoints(CGA::cga_map_cells_t &map, QPoint start, QList<QPoint> &foundedPoints);
+	bool FindByNextPoints(CGA::cga_map_cells_t &map, QPoint start, QList<QPoint> &foundedPoints, QRect tRect);
 
 	QSharedPointer<CGA::cga_map_unit_t> FindMapUnit(const QString &name, int type = 1);
 

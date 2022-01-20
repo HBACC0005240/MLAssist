@@ -263,7 +263,7 @@ void GamePostwar::doSaveJsConfig(QJsonObject &obj)
 	nCount = ui.listWidget_die->count();
 	for (int i = 0; i < nCount; ++i)
 	{
-		QListWidgetItem *pItem = ui.listWidget_ren->item(i);
+		QListWidgetItem *pItem = ui.listWidget_die->item(i);
 		QString sName = pItem->text();
 		QStringList sNameList = sName.split("&");
 		if (sNameList.size() < 2)
