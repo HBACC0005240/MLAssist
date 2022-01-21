@@ -57,7 +57,8 @@ void MapForm::AutoMazeThread(MapForm *pThis)
 
 void MapForm::AutoMazeOpen(MapForm *pThis)
 {
-	g_pGameFun->MakeMapOpenContainNextEntrance(1);
+	//g_pGameFun->MakeMapOpenContainNextEntrance(1);
+	g_pGameFun->MakeMapOpenEx();
 }
 
 void MapForm::UpdateMousePosition(int x, int y)

@@ -866,7 +866,7 @@ int CGLuaFun::Lua_SearchMap(LuaState *L)
 	int searchType = args.Count() > 1 ? args[2].GetInteger() : 1; //默认搜索NPC
 	QPoint nextPos;
 	QPoint findPos;
-	bool bRet = g_pGameFun->SearchMap(sName, findPos, nextPos, searchType);
+	bool bRet = g_pGameFun->SearchMapEx(sName, findPos, nextPos, searchType);
 	L->PushBoolean(bRet);
 	L->PushInteger(findPos.x());
 	L->PushInteger(findPos.y());
@@ -1531,7 +1531,7 @@ int CGLuaFun::Lua_GetPlayerAllData(LuaState *L)
 		descObj.SetString("buyString", info.persdesc.buyString.c_str());
 		descObj.SetInteger("wantIcon", info.persdesc.wantIcon);
 		descObj.SetString("wantString", info.persdesc.wantString.c_str());
-		descObj.SetString("descString", info.persdesc.descString.c_str());	
+		descObj.SetString("descString", info.persdesc.descString.c_str());
 		tableObj.SetObject("persdesc", descObj);
 	}
 	LuaObject skillObj(L);
@@ -1924,7 +1924,7 @@ int CGLuaFun::Lua_SetPlayerInfo(LuaState *L)
 		CGA::cga_pers_desc_t desc;
 		desc.sellIcon = sellIcon;
 		desc.sellString = sellString;
-		
+
 		desc.buyIcon = buyIcon;
 		desc.buyString = buyString;
 		desc.wantIcon = wantIcon;

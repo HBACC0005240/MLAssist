@@ -4834,81 +4834,98 @@ QList<QPoint> CGFunction::MakeMapOpen()
 		AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
 	}
 	return searchPath;
-	//auto searchList = MergePoint(moveAblePosList);
-	//QVector<short> mapData;
-	//int width = 0;
-	//int height = 0;
-	//CreateMapImage(mapData, width, height);
-	////最大支持的地图 默认迷宫 不超过100 100 超过不进行查找 直接返回
-	//int nMaxWidth = 100;
-	//int nMaxHeight = 100;
-	//if (width < 1 || height < 1 || width > nMaxWidth || height > nMaxHeight)
-	//{
-	//	qDebug() << "地图过大，查询失败!SearchMap CreateMapImage Ero!";
-	//	return searchPath;
-	//}
-	//TSearchRectList tracePosList;
-	////tsp排序
-	//if (searchList.size() > 1)
-	//{
-	//	Tsp tsp;
-	//	tsp.SetStart(curPos, tgtPos);
-	//	QVector<QPoint> tmpPosList;
-	//	for (auto pos : searchList)
-	//	{
-	//		if (pos->_rectPosList.contains(curPos) || pos->_rectPosList.contains(tgtPos))
-	//			continue;
-	//		tmpPosList.append(pos->_centrePos);
-	//	}
-	//	if (tmpPosList.size() <= 1 && tmpPosList.size() > 0)
-	//	{
-	//		tracePosList.append(searchList.at(0));
-	//	}
-	//	else if (tmpPosList.size() <= 0)
-	//	{
-	//		for (int i = 0; i < searchList.size(); ++i)
-	//		{
-	//			auto searPos = searchList.at(i);
-	//			tracePosList.append(searPos);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		tsp.Input(tmpPosList, mapData, width, height);
-	//		tsp.SA();
-	//		//	tsp.Print(tsp.GetBestPath(),tmpPosList.size());
-	//		auto bestPath = tsp.GetBestPath();
-	//		for (int i = 0; i < bestPath.citys.size(); ++i)
-	//		{
-	//			auto searPos = searchList.at(bestPath.citys.at(i));
-	//			tracePosList.append(searPos);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	for (int i = 0; i < searchList.size(); ++i)
-	//	{
-	//		auto searPos = searchList.at(i);
-	//		tracePosList.append(searPos);
-	//	}
-	//}
+}
+//按小矩形去划分大矩形
+void CGFunction::MakeMapOpenEx()
+{
+	CGA::cga_map_cells_t map;
+	if (!g_CGAInterface->GetMapCollisionTable(true, map))
+	{
+		qDebug() << "获取地图数据失败!";
+		return;
+	}
+	if (map.x_size == 0 || map.y_size == 0)
+	{
+		qDebug() << "地图数据错误，尚未加载完成！";
+		return;
+	}
+	QPoint curPos = GetMapCoordinate();
+	int defRectWidth = 20;	//宽  注：不要超过26 人物探测范围是13*13  26
+	int defRectHeight = 20; //高
 
-	////打印路线
-	////	signal_load_navpath
-	//QVector<quint32> navpath;
-	//for (auto tgtPos : tracePosList)
-	//{
-	//	navpath.push_back((tgtPos->_centrePos.x() & 0xFFFF) | ((tgtPos->_centrePos.y() & 0xFFFF) << 16));
-	//}
-	////emit g_pGameCtrl->signal_load_navpath(navpath);
-	//int curMapIndex = GetMapIndex();
-	////开始遍历搜索
-	//for (auto tgtPos : tracePosList)
-	//{
-	//	searchPath.append(tgtPos->_centrePos);
-	//}
-	//return searchPath;
+	int nXCount = map.x_size / defRectWidth;
+	int nYCount = map.y_size / defRectHeight;
+
+	qDebug() << nXCount << nYCount;
+	TSearchRectList searchRects;
+	//宽高 默认bottom都为0  这里不处理极端情况
+	for (int i = 0; i < nXCount; i++) //肯定会超过
+	{
+		for (int j = 0; j < nYCount; j++)
+		{
+			TSearchRectPtr tSearchPtr(new TSearchRect);
+			tSearchPtr->_rect = QRect(i * defRectWidth, j * defRectHeight, defRectWidth, defRectHeight);
+			tSearchPtr->_centrePos = tSearchPtr->_rect.center();
+			searchRects.append(tSearchPtr);
+		}
+	}
+	int nSurplusXCount = map.x_size % defRectWidth;
+	int nSurplusYCount = map.x_size % defRectWidth;
+	nYCount = map.y_size % defRectHeight;
+	if (nSurplusXCount > 0)
+	{
+		int tWidth = (map.x_size - nXCount * defRectWidth);
+		for (int j = 0; j < nYCount; j++)
+		{
+			TSearchRectPtr tSearchPtr(new TSearchRect);
+			tSearchPtr->_rect = QRect(nXCount * defRectWidth, j * defRectHeight, tWidth, defRectHeight);
+			tSearchPtr->_centrePos = tSearchPtr->_rect.center();
+			searchRects.append(tSearchPtr);
+		}
+	}
+	if (nSurplusYCount > 0)
+	{
+		int tHeight = (map.y_size - nYCount * defRectHeight);
+		for (int i = 0; i < nYCount; i++)
+		{
+			TSearchRectPtr tSearchPtr(new TSearchRect);
+			tSearchPtr->_rect = QRect(i * defRectWidth, nYCount * defRectHeight, defRectWidth, tHeight);
+			tSearchPtr->_centrePos = tSearchPtr->_rect.center();
+			searchRects.append(tSearchPtr);
+		}
+	}
+	for (auto tRect : searchRects)
+	{
+		if (tRect->_rect.contains(curPos))
+		{
+			qDebug() << tRect->_rect << curPos << searchRects.indexOf(tRect);
+			break;
+		}
+	}
+	return;
+
+	QList<QPoint> searchPath;
+	auto entranceList = GetMazeEntranceList();
+
+	QList<QPoint> allMoveAblePosList;
+	SearchAroundMapOpen(allMoveAblePosList);
+	QPoint inPos;
+	if (entranceList.size() == 1)
+	{
+		inPos = entranceList[0];
+	}
+	entranceList = GetMazeEntranceList();
+	QPoint nextPos;
+	for (auto tPos : entranceList)
+	{
+		if (tPos != inPos)
+		{
+			nextPos = tPos;
+			AutoMoveTo(nextPos.x(), nextPos.y());
+			return;
+		}
+	}
+	return;
 }
 
 void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
@@ -4925,7 +4942,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 		{
 			qDebug() << "获取地图失败，等待5秒";
 			Sleep(5000);
-		}		
+		}
 	}
 	QPoint curPos = GetMapCoordinate();
 	auto entranceList = GetMazeEntranceList();
@@ -4948,10 +4965,10 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 						auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
 						return ad < bd;
 					});
-			if (isNearFar)//取远
+			if (isNearFar) //取远
 				AutoMoveTo(entranceList[1].x(), entranceList[1].y());
 			else
-				AutoMoveTo(entranceList[0].x(),entranceList[0].y());
+				AutoMoveTo(entranceList[0].x(), entranceList[0].y());
 			return;
 		}
 	}
@@ -4968,12 +4985,13 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	{
 		if (tPos != inPos)
 		{
-			nextPos = tPos;	
+			nextPos = tPos;
 			AutoMoveTo(nextPos.x(), nextPos.y());
-			return ;
+			return;
 		}
 	}
-	return ;
+	//最后一层需要加个查找黑色区域，然后找附加坐标去开图
+	return;
 }
 
 bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type)
@@ -4983,7 +5001,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 	//获取当前所有可行走区域坐标
 	auto moveAblePosList = GetMovablePoints(curPos);
 	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
-	auto clipMoveAblePosList = GetMovablePointsEx(curPos,12);
+	auto clipMoveAblePosList = GetMovablePointsEx(curPos, 12);
 	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
 	//这是筛出的4方向边界点
 	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
@@ -5012,7 +5030,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 					return ad < bd;
 				});
 		allMoveAblePosList += clipMoveAblePosList;
-		for (auto tSearchPos:tSearchList)
+		for (auto tSearchPos : tSearchList)
 		{
 			//auto tSearchPos = tSearchList[0];
 			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
@@ -5041,7 +5059,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 				if (SearchAroundMapOpen(allMoveAblePosList, type))
 					return true;
 			}
-		}		
+		}
 	}
 	//for (auto tSearchPos : tSearchList)
 	//{
@@ -5101,10 +5119,10 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 							 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
 					MoveToNpcNear(mapUnit->xpos, mapUnit->ypos, 1);
 					findPos.setX(mapUnit->xpos);
-					findPos.setY(mapUnit->ypos);								
+					findPos.setY(mapUnit->ypos);
 				}
 			}
-			if (nextPos == QPoint(0,0))
+			if (nextPos == QPoint(0, 0))
 			{
 				auto entranceList = GetMazeEntranceList();
 				if (entranceList.size() >= 2)
@@ -5121,15 +5139,15 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 						if (tEntrance != enterPos)
 							tNextPos = tEntrance;
 					}
-					if (bReachable) //两个出入口可达 退出 否则继续搜索
-						nextPos = tNextPos;	//不判断 直接赋值了
-				}				
-			}		
-			if (nextPos == QPoint(0, 0) || findPos==QPoint(0,0))
+					if (bReachable)			//两个出入口可达 退出 否则继续搜索
+						nextPos = tNextPos; //不判断 直接赋值了
+				}
+			}
+			if (nextPos == QPoint(0, 0) || findPos == QPoint(0, 0))
 			{
-				if (SearchAroundMapUnit(allMoveAblePosList, name, findPos, enterPos,nextPos, searchType))
+				if (SearchAroundMapUnit(allMoveAblePosList, name, findPos, enterPos, nextPos, searchType))
 					return true;
-			}			
+			}
 		}
 	}
 	return false;
@@ -5589,7 +5607,7 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 	}
 	QPoint tEntracePos = GetMapCoordinate();
 
-	QPoint tFindPos,tNextMazePos;
+	QPoint tFindPos, tNextMazePos;
 	auto mapUnit = FindMapUnit(name, searchType);
 	if (mapUnit) //找到 直接前往
 	{
@@ -5599,7 +5617,7 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 		tFindPos.setX(mapUnit->xpos);
 		tFindPos.setY(mapUnit->ypos);
 	}
-	
+
 	QPoint curPos = GetMapCoordinate();
 	auto entranceList = GetMazeEntranceList();
 	if (entranceList.size() >= 2)
@@ -5621,7 +5639,7 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 						auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
 						return ad < bd;
 					});
-			tNextMazePos = entranceList[1];			
+			tNextMazePos = entranceList[1];
 		}
 	}
 	if (tFindPos != QPoint() && tNextMazePos != QPoint())
@@ -5636,8 +5654,13 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 		findPos = tFindPos;
 		nextPos = tNextMazePos;
 		return true;
-	}	
-	
+	}
+	else
+	{
+		qDebug() << "没有找到 继续下一层！";
+		AutoMoveTo(tNextMazePos.x(), tNextMazePos.y());
+	}
+
 	return false;
 }
 
@@ -6418,7 +6441,7 @@ bool CGFunction::AutoWalkMaze(int isDownMap, QString filterPosList, int isNearFa
 //自动穿越迷宫 停止条件为到指定名称地图 或寻路错误
 bool CGFunction::AutoWalkRandomMaze()
 {
-	return AutoWalkRandomMazeEx();	
+	return AutoWalkRandomMazeEx();
 	QStringList sFilterNameList = m_sTargetMazeName.split("|");
 	bool bRet = false;
 	QList<QPoint> enterPosList;								  //进入点
@@ -6567,7 +6590,7 @@ bool CGFunction::AutoWalkRandomMazeEx()
 		{
 			MakeMapOpenContainNextEntrance(1);
 			Sleep(2000); //等待2秒
-		}	
+		}
 	}
 
 	return true;
@@ -7433,7 +7456,8 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 				{
 					emit g_pGameCtrl->signal_setHightSpeedBattleDelayUI(data1.toInt());
 					break;
-				}case TSysConfigSet_BattleDelay:
+				}
+				case TSysConfigSet_BattleDelay:
 				{
 					emit g_pGameCtrl->signal_setBattleDelayUI(data1.toInt());
 					break;

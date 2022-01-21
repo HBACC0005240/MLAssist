@@ -331,6 +331,7 @@ public:
 	QList<QPoint> FindRandomSearchPath(int tx, int ty);
 	//地图全开
 	QList<QPoint> MakeMapOpen();
+	void MakeMapOpenEx();
 	//下层寻路
 	void MakeMapOpenContainNextEntrance(int isNearFar=1);
 	//1地图全开 2有2个迷宫出入口，并可达即可
