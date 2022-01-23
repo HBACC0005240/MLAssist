@@ -4791,8 +4791,18 @@ QList<QPoint> CGFunction::FindRandomSearchPath(int tx, int ty)
 	return searchPath;
 }
 QList<QPoint> CGFunction::MakeMapOpen()
-{
+{	
 	QList<QPoint> searchPath;
+
+	int index1, index2, index3;
+	std::string filemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
+	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+	{
+		qDebug() << "当前是固定地图，不进行地图全开！";
+		return searchPath;
+	}
+
 	auto entranceList = GetMazeEntranceList();
 	QPoint curPos = GetMapCoordinate();
 	QList<QPoint> allMoveAblePosList;
@@ -4812,26 +4822,6 @@ QList<QPoint> CGFunction::MakeMapOpen()
 			AutoMoveTo(nextPos.x(), nextPos.y());
 			return searchPath;
 		}
-	}
-	return searchPath;
-
-	//获取当前所有可行走区域坐标
-	auto moveAblePosList = GetMovablePoints(curPos);
-	auto clipMoveAblePosList = GetMovablePointsEx(curPos);
-	QList<QPoint> newMoveAblePosList = moveAblePosList;
-	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
-	{
-		newMoveAblePosList.removeOne(clipMoveAblePosList[i]);
-	}
-	for (auto tPos : newMoveAblePosList)
-	{
-		qDebug() << tPos;
-		//AutoMoveTo(tPos.x(),tPos.y());
-	}
-	auto tSearchList = MergePoint(newMoveAblePosList);
-	for (auto tSearchPos : tSearchList)
-	{
-		AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
 	}
 	return searchPath;
 }
@@ -4930,6 +4920,16 @@ void CGFunction::MakeMapOpenEx()
 
 void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 {
+	int index1, index2, index3;
+	std::string filemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
+	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+	{
+		qDebug() << "当前是固定地图，不进行地图全开！";
+		return ;
+	}
+	if (g_pGameCtrl->GetExitGame() || m_bStop)
+		return;
 	CGA::cga_map_cells_t cells;
 	if (g_CGAInterface->GetMapCollisionTable(true, cells) == false)
 	{
@@ -4943,6 +4943,11 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 			qDebug() << "获取地图失败，等待5秒";
 			Sleep(5000);
 		}
+	}
+	if (cells.x_size >= 300 || cells.y_size >= 300)
+	{
+		qDebug() << "地图大于300，不进行探索！";
+		return ;
 	}
 	QPoint curPos = GetMapCoordinate();
 	auto entranceList = GetMazeEntranceList();
@@ -4996,10 +5001,14 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 
 bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type)
 {
+	if (g_pGameCtrl->GetExitGame() || m_bStop)
+		return false;
 	QList<QPoint> searchPath;
 	QPoint curPos = GetMapCoordinate();
 	//获取当前所有可行走区域坐标
 	auto moveAblePosList = GetMovablePoints(curPos);
+	if (moveAblePosList.size() < 1)
+		return false;
 	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
 	auto clipMoveAblePosList = GetMovablePointsEx(curPos, 12);
 	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
@@ -5073,10 +5082,15 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 
 bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos, QPoint &nextPos, int searchType /*= 1*/)
 {
+	if (g_pGameCtrl->GetExitGame() || m_bStop)
+		return false;
 	QList<QPoint> searchPath;
 	QPoint curPos = GetMapCoordinate();
 	//获取当前所有可行走区域坐标
 	auto moveAblePosList = GetMovablePoints(curPos);
+	if (moveAblePosList.size() < 1)
+		return false;
+	
 	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
 	auto clipMoveAblePosList = GetMovablePointsEx(curPos, 12);
 	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
@@ -5150,6 +5164,8 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 			}
 		}
 	}
+	if (nextPos != QPoint(0, 0) && findPos != QPoint(0, 0))	
+		return true;
 	return false;
 }
 
@@ -5591,6 +5607,17 @@ bool CGFunction::SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int s
 
 bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType /*= 1*/)
 {
+	int index1, index2, index3;
+	std::string filemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
+	if (QString::fromStdString(filemap).contains("map\\0"))//固定地图 退出
+	{
+		qDebug() << "当前是固定地图，不进行地图搜索功能！";
+		return false;
+	}
+	if (g_pGameCtrl->GetExitGame() || m_bStop)
+		return false;
+
 	CGA::cga_map_cells_t cells;
 	if (g_CGAInterface->GetMapCollisionTable(true, cells) == false)
 	{
@@ -5605,8 +5632,12 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 			Sleep(5000);
 		}
 	}
+	if (cells.x_size >= 300 || cells.y_size >= 300)
+	{
+		qDebug() << "地图大于300，不进行探索！";
+		return false;
+	}
 	QPoint tEntracePos = GetMapCoordinate();
-
 	QPoint tFindPos, tNextMazePos;
 	auto mapUnit = FindMapUnit(name, searchType);
 	if (mapUnit) //找到 直接前往
@@ -5644,23 +5675,33 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 	}
 	if (tFindPos != QPoint() && tNextMazePos != QPoint())
 	{
-		findPos = tFindPos;
-		nextPos = tNextMazePos;
+		qDebug() << "找到目标：" << name << " 坐标:" << mapUnit->xpos << mapUnit->ypos << "ModelID：" << mapUnit->model_id << " Name:" << QString::fromStdString(mapUnit->unit_name)
+				 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
+		findPos.setX(tFindPos.x());		
+		findPos.setY(tFindPos.y());
+		nextPos.setX(tNextMazePos.x());
+		nextPos.setY(tNextMazePos.y());
+		MoveToNpcNear(findPos.x(), findPos.y(), 1);		
 		return true;
 	}
 	QList<QPoint> allMoveAblePosList;
 	if (SearchAroundMapUnit(allMoveAblePosList, name, tFindPos, tEntracePos, tNextMazePos, searchType))
 	{
-		findPos = tFindPos;
-		nextPos = tNextMazePos;
+		qDebug() << "找到目标和下层坐标：" << name << " 目标坐标:" << findPos << "下层坐标：" << nextPos << "当前层：" << GetMapName();
+		findPos.setX(tFindPos.x());
+		findPos.setY(tFindPos.y());
+		nextPos.setX(tNextMazePos.x());
+		nextPos.setY(tNextMazePos.y());
+		MoveToNpcNear(findPos.x(), findPos.y(), 1);		
 		return true;
 	}
+	if (tNextMazePos == QPoint())
+		return false;
 	else
 	{
 		qDebug() << "没有找到 继续下一层！";
 		AutoMoveTo(tNextMazePos.x(), tNextMazePos.y());
 	}
-
 	return false;
 }
 
@@ -5862,6 +5903,11 @@ QList<QPoint> CGFunction::GetMovablePoints(QPoint start)
 	QRect tRect;
 	if (g_CGAInterface->GetMapCollisionTable(true, map))
 	{
+		if (map.x_size >= 300 || map.y_size >= 300)
+		{
+			qDebug() << "地图大于300，不进行探索！";
+			return foundedPoints;
+		}
 		tRect.setX(map.x_bottom);
 		tRect.setY(map.y_bottom);
 		tRect.setWidth(map.x_size);
@@ -6551,7 +6597,15 @@ bool CGFunction::AutoWalkRandomMazeEx()
 	while (!m_bStop && !g_pGameCtrl->GetExitGame())
 	{
 		QString curMapName = GetMapName();
-		int curMapNum = GetMapIndex();
+		//int curMapNum = GetMapIndex();
+		int index1, index2, curMapNum;
+		std::string filemap;
+		g_CGAInterface->GetMapIndex(index1, index2, curMapNum, filemap);
+		if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+		{
+			qDebug() << "当前是固定地图，不进行自动走迷宫！";
+			return false;
+		}
 		if (sFilterNameList.size() > 0) //精确匹配
 		{
 			if (sFilterNameList.contains(curMapName) || sFilterNameList.contains(QString::number(curMapNum)))
