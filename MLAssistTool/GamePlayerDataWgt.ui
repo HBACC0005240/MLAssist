@@ -66,7 +66,65 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget"/>
+         <widget class="QTableWidget" name="tableWidget_item">
+          <attribute name="horizontalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderStretchLastSection">
+           <bool>false</bool>
+          </attribute>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+         </widget>
         </item>
         <item>
          <widget class="QTableWidget" name="tableWidget_pet"/>
@@ -108,7 +166,119 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_bankItem"/>
+         <widget class="QTableWidget" name="tableWidget_bankItem">
+          <attribute name="horizontalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>新建行</string>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>新建列</string>
+           </property>
+          </column>
+         </widget>
         </item>
         <item>
          <widget class="QTableWidget" name="tableWidget_bankPet"/>

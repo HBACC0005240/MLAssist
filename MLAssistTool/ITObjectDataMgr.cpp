@@ -314,6 +314,7 @@ void ITObjectDataMgr::loadDataBaseInfo(ITObjectDataMgr* pThis)
 	//角色数据
 	pThis->LoadIdentification();
 	pThis->LoadAccount();
+	pThis->LoadAccountGid();
 	pThis->LoadAccountRole();
 	pThis->LoadGidItems();
 	pThis->LoadGidPets();
@@ -586,6 +587,41 @@ bool ITObjectDataMgr::LoadAccount()
 	return false;
 }
 
+bool ITObjectDataMgr::LoadAccountGid()
+{
+	if (m_dbconn == NULL)
+		return false;
+	QString strsql = QString("SELECT * FROM gid");
+	auto recordset = m_dbconn->execQuerySql(strsql);
+	if (recordset != NULL)
+	{
+		while (recordset->next())
+		{
+			quint64 nID = (quint64)recordset->getIntValue("id");
+			QString gid = recordset->getStrValue("gid");
+			quint64 aid = (quint64)recordset->getIntValue("aid");
+			QString sDesc = recordset->getStrValue("desc");	//详细信息 从item表拿
+			auto pAccountObj = FindObject(aid).dynamicCast<ITAccount>();
+			ITAccountGidPtr pObj = newOneObject(TObject_AccountGid, nID).dynamicCast<ITAccountGid>();
+			if (pObj)
+			{
+				pObj->_userGid = gid;
+				pObj->setObjectName(gid);
+				pObj->setObjectDsec(sDesc);
+				pObj->setObjectID(nID);
+				if (pAccountObj)
+				{
+					pAccountObj->addChildObj(pObj);
+					pObj->setObjectParent(pAccountObj);
+				}
+				m_pObjectList.append(pObj);
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
 bool ITObjectDataMgr::LoadAccountRole()
 {
 	if (m_dbconn == NULL)
@@ -604,6 +640,8 @@ bool ITObjectDataMgr::LoadAccountRole()
 			if (pGid == nullptr)
 			{
 				pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
+				pGid->setObjectName(sGid);
+				pGid->_userGid = sGid;
 				m_idForAccountGid.insert(sGid, pGid);
 			}
 			ITGidRolePtr pCharacter = newOneObject(TObject_GidRole, nID).dynamicCast<ITGidRole>();
@@ -1342,8 +1380,8 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		quint64 aid = 0;
 		auto tmpObj = pObj.dynamicCast<ITAccountGid>();
 		auto pOwn = tmpObj->getObjectParent();
-		if (pObj)
-			aid = pObj->getObjectID();
+		if (pOwn)
+			aid = pOwn->getObjectID();
 		strSql = QString("INSERT INTO gid(id,gid,aid,desc) VALUES(%1,'%2','%3','%4')")
 			.arg((int)tmpObj->getObjectID()).arg(tmpObj->_userGid)
 			.arg(aid)
@@ -1564,8 +1602,8 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		quint64 aid = 0;
 		auto tmpObj = pObj.dynamicCast<ITAccountGid>();
 		auto pOwn = tmpObj->getObjectParent();
-		if (pObj)
-			aid = pObj->getObjectID();
+		if (pOwn)
+			aid = pOwn->getObjectID();
 		strSql = QString("UPDATE gid gid='%1',aid=%2,desc='%3' WHERE id=%4")
 			.arg(tmpObj->_userGid)
 			.arg((int)aid)

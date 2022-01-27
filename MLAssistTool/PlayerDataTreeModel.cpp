@@ -58,22 +58,27 @@ QVariant PlayerDataTreeModel::headerData(int section, Qt::Orientation orientatio
 
 void PlayerDataTreeModel::SetupModelData()
 {
-	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_GidRole);
+	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+
+	qSort(pObjList.begin(), pObjList.end(), [&](ITObjectPtr& a, ITObjectPtr& b)
+	{
+		return a->getObjectName() < b->getObjectName();
+	});
 	for (ITObjectPtr tObj : pObjList)
 	{
 		TreeItem* tempitem = new TreeItem(tObj->getObjectName());
 		tempitem->setData(Qt::UserRole, tObj->getObjectID());
 		m_rootItem->appendChild(tempitem);
-		//auto pAccountAsse = qSharedPointerDynamicCast<ITGidRole>(tObj);
-		//auto pAccountList = pAccountAsse->GetAllChildObj();
-		//for (auto pAccount : pAccountList)
-		//{
-		//	TreeItem* subitem = new TreeItem(pAccount->getObjectName());
-		//	subitem->setData(Qt::UserRole, pAccount->getObjectID());
+		auto pAccountAsse = qSharedPointerDynamicCast<ITAccountGid>(tObj);
+		auto pAccountList = pAccountAsse->GetAllChildObj();
+		for (auto pAccount : pAccountList)
+		{
+			TreeItem* subitem = new TreeItem(pAccount->getObjectName());
+			subitem->setData(Qt::UserRole, pAccount->getObjectID());
 
-		//	tempitem->appendChild(subitem);
-		//	//SetupModelSubData(pAccount, subitem);
-		//}
+			tempitem->appendChild(subitem);
+			//SetupModelSubData(pAccount, subitem);
+		}
 	}
 
 }

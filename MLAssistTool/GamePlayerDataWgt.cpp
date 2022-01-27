@@ -5,9 +5,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
+#include <QDebug>
 #include "AddAccountDlg.h"
 
-GamePlayerDataWgt::GamePlayerDataWgt(QWidget *parent)
+GamePlayerDataWgt::GamePlayerDataWgt(QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
@@ -29,6 +30,7 @@ void GamePlayerDataWgt::init()
 	ui.treeView->setContextMenuPolicy(Qt::CustomContextMenu);      //TreeView启用右键菜单信号
 
 	//connect(ui.treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(on_treeView_customContextMenuRequested(const QPoint&)));
+	connect(ui.treeView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(doTreeViewClicked(const QModelIndex&)));
 
 }
 
@@ -191,5 +193,28 @@ void GamePlayerDataWgt::doAddAccountGid()
 	{
 		pGid->setObjectName(sText);
 		resetModel();
+	}
+}
+
+void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
+{
+	if (!index.isValid())
+		return;
+	TreeItem* Item = static_cast<TreeItem*>(index.internalPointer());
+	if (Item)
+	{
+		auto objid = Item->data(Qt::UserRole).toULongLong();
+		m_curSelectObj = ITObjectDataMgr::getInstance().FindObject(objid);
+		if (m_curSelectObj == nullptr)
+			return;
+		qDebug() << m_curSelectObj;
+
+		if (m_curSelectObj->getObjectType() != TObject_GidRole)
+			return;
+		ITGidRolePtr pRole = qSharedPointerCast<ITGidRole>(m_curSelectObj);
+		ui.lineEdit_gold->setText(QString::number(pRole->_gold));
+		ui.lineEdit_bankGold->setText(QString::number(pRole->_bankgold));
+
+		//tableWidget_item
 	}
 }

@@ -193,6 +193,12 @@ CGFunction::CGFunction()
 	readTitleJson();
 }
 
+CGFunction::~CGFunction()
+{
+	SafeDelete(m_pUserComboBoxDlg);
+	SafeDelete(m_pUserDlg);
+}
+
 void CGFunction::StopFun()
 {
 	m_bStop = true;
@@ -3606,6 +3612,200 @@ bool CGFunction::WithdrawItemAllEx()
 	}
 	return true;
 }
+//一键整理包裹
+void CGFunction::SortBagItems(bool bFront /*=false*/)
+{
+	auto pItemList = g_pGameFun->GetGameItems();
+	QList<QSharedPointer<GameItem> > sortItemList;
+	QList<int> sortIdList;
+	QMap<int, QList<QSharedPointer<GameItem> > > idMapItem;
+	for (auto pItem : pItemList)
+	{
+		if (pItem->exist && pItem->pos >= 8)
+		{
+			QSharedPointer<GameItem> newItem(new GameItem);
+			newItem->id = pItem->id;
+			newItem->pos = pItem->pos;
+			sortItemList.append(newItem);
+			if (!sortIdList.contains(pItem->id))
+			{
+				sortIdList.append(pItem->id);
+				QList<QSharedPointer<GameItem> > tmpSortItemList;
+				tmpSortItemList.append(newItem);
+				idMapItem.insert(pItem->id, tmpSortItemList);
+			}
+			else
+			{
+				auto tmpSortItemList = idMapItem.value(pItem->id);
+				tmpSortItemList.append(newItem);
+				idMapItem.insert(pItem->id, tmpSortItemList);
+			}
+		}
+	}
+	qSort(sortIdList.begin(), sortIdList.end(), [&](const int &a, const int &b)
+			{ return a > b; });
+	if (bFront)
+	{
+		QList<int> itemIndexMgr; //空位列表
+		bool bRet = false;
+		for (int i = 0; i < sortIdList.size(); ++i)
+		{
+			auto tmpSortItemList = idMapItem.value(sortIdList[i]);
+			for (auto tmpSortItem : tmpSortItemList)
+			{
+				for (int n = 8; n < 28; ++n)
+				{
+					if (!itemIndexMgr.contains(n))
+					{ //分配位置
+						g_CGAInterface->MoveItem(tmpSortItem->pos, n, -1, bRet);
+						itemIndexMgr.append(n);
+						//原有位置给赋值
+						for (auto pTmpSortItem : sortItemList)
+						{
+							if (pTmpSortItem->pos == n)
+							{
+								pTmpSortItem->pos = tmpSortItem->pos;
+								break;
+							}
+						}
+						tmpSortItem->pos = n;
+						break;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		QList<int> itemIndexMgr; //空位列表
+		bool bRet = false;
+		for (int i = 0; i < sortIdList.size(); ++i)
+		{
+			auto tmpSortItemList = idMapItem.value(sortIdList[i]);
+			for (auto tmpSortItem : tmpSortItemList)
+			{
+				//for (int n = 8; n < 28; ++n)
+				for (int n = 27; n >= 8; --n)
+				{
+					if (!itemIndexMgr.contains(n))
+					{ //分配位置
+						g_CGAInterface->MoveItem(tmpSortItem->pos, n, -1, bRet);
+						itemIndexMgr.append(n);
+						//原有位置给赋值
+						for (auto pTmpSortItem : sortItemList)
+						{
+							if (pTmpSortItem->pos == n)
+							{
+								pTmpSortItem->pos = tmpSortItem->pos;
+								break;
+							}
+						}
+						tmpSortItem->pos = n;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+//默认前  不知道银行开了多少 从前往后排
+//获取不到id 用名称排序
+void CGFunction::SortBankItems(bool bFront /*= false*/)
+{
+	CGA::cga_items_info_t myinfos;
+	g_CGAInterface->GetBankItemsInfo(myinfos);
+	QList<QSharedPointer<GameItem> > sortItemList;
+	QList<QString> sortIdList;
+	QMap<QString, QList<QSharedPointer<GameItem> > > idMapItem;
+	for (int i = 0; i < myinfos.size(); i++)
+	{
+		CGA::cga_item_info_t itemInfo = myinfos.at(i);
+
+		QSharedPointer<GameItem> newItem(new GameItem);
+		newItem->id = itemInfo.itemid;
+		newItem->pos = itemInfo.pos;
+		newItem->name = QString::fromStdString(itemInfo.name);
+		sortItemList.append(newItem);
+		if (!sortIdList.contains(newItem->name))
+		{
+			sortIdList.append(newItem->name);
+			QList<QSharedPointer<GameItem> > tmpSortItemList;
+			tmpSortItemList.append(newItem);
+			idMapItem.insert(newItem->name, tmpSortItemList);
+		}
+		else
+		{
+			auto tmpSortItemList = idMapItem.value(newItem->name);
+			tmpSortItemList.append(newItem);
+			idMapItem.insert(newItem->name, tmpSortItemList);
+		}
+	}
+	qSort(sortIdList.begin(), sortIdList.end(), [&](const int &a, const int &b)
+			{ return a > b; });
+	if (bFront)
+	{
+		QList<int> itemIndexMgr; //空位列表
+		bool bRet = false;
+		for (int i = 0; i < sortIdList.size(); ++i)
+		{
+			auto tmpSortItemList = idMapItem.value(sortIdList[i]);
+			for (auto tmpSortItem : tmpSortItemList)
+			{
+				for (int n = 100; n < 180; ++n)
+				{
+					if (!itemIndexMgr.contains(n))
+					{ //分配位置
+						g_CGAInterface->MoveItem(tmpSortItem->pos, n, -1, bRet);
+						itemIndexMgr.append(n);
+						//原有位置给赋值
+						for (auto pTmpSortItem : sortItemList)
+						{
+							if (pTmpSortItem->pos == n)
+							{
+								pTmpSortItem->pos = tmpSortItem->pos;
+								break;
+							}
+						}
+						tmpSortItem->pos = n;
+						break;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		QList<int> itemIndexMgr; //空位列表
+		bool bRet = false;
+		for (int i = 0; i < sortIdList.size(); ++i)
+		{
+			auto tmpSortItemList = idMapItem.value(sortIdList[i]);
+			for (auto tmpSortItem : tmpSortItemList)
+			{
+				//for (int n = 8; n < 28; ++n)
+				for (int n = 179; n >= 100; --n)
+				{
+					if (!itemIndexMgr.contains(n))
+					{ //分配位置
+						g_CGAInterface->MoveItem(tmpSortItem->pos, n, -1, bRet);
+						itemIndexMgr.append(n);
+						//原有位置给赋值
+						for (auto pTmpSortItem : sortItemList)
+						{
+							if (pTmpSortItem->pos == n)
+							{
+								pTmpSortItem->pos = tmpSortItem->pos;
+								break;
+							}
+						}
+						tmpSortItem->pos = n;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
 
 GameItemList CGFunction::GetMagicFoodItems()
 {
@@ -4791,7 +4991,7 @@ QList<QPoint> CGFunction::FindRandomSearchPath(int tx, int ty)
 	return searchPath;
 }
 QList<QPoint> CGFunction::MakeMapOpen()
-{	
+{
 	QList<QPoint> searchPath;
 
 	int index1, index2, index3;
@@ -4926,7 +5126,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图全开！";
-		return ;
+		return;
 	}
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return;
@@ -4947,7 +5147,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	if (cells.x_size >= 300 || cells.y_size >= 300)
 	{
 		qDebug() << "地图大于300，不进行探索！";
-		return ;
+		return;
 	}
 	QPoint curPos = GetMapCoordinate();
 	auto entranceList = GetMazeEntranceList();
@@ -5090,7 +5290,7 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 	auto moveAblePosList = GetMovablePoints(curPos);
 	if (moveAblePosList.size() < 1)
 		return false;
-	
+
 	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
 	auto clipMoveAblePosList = GetMovablePointsEx(curPos, 12);
 	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
@@ -5164,7 +5364,7 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 			}
 		}
 	}
-	if (nextPos != QPoint(0, 0) && findPos != QPoint(0, 0))	
+	if (nextPos != QPoint(0, 0) && findPos != QPoint(0, 0))
 		return true;
 	return false;
 }
@@ -5610,7 +5810,7 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 	int index1, index2, index3;
 	std::string filemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
-	if (QString::fromStdString(filemap).contains("map\\0"))//固定地图 退出
+	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图搜索功能！";
 		return false;
@@ -5677,11 +5877,11 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 	{
 		qDebug() << "找到目标：" << name << " 坐标:" << mapUnit->xpos << mapUnit->ypos << "ModelID：" << mapUnit->model_id << " Name:" << QString::fromStdString(mapUnit->unit_name)
 				 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
-		findPos.setX(tFindPos.x());		
+		findPos.setX(tFindPos.x());
 		findPos.setY(tFindPos.y());
 		nextPos.setX(tNextMazePos.x());
 		nextPos.setY(tNextMazePos.y());
-		MoveToNpcNear(findPos.x(), findPos.y(), 1);		
+		MoveToNpcNear(findPos.x(), findPos.y(), 1);
 		return true;
 	}
 	QList<QPoint> allMoveAblePosList;
@@ -5692,7 +5892,7 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 		findPos.setY(tFindPos.y());
 		nextPos.setX(tNextMazePos.x());
 		nextPos.setY(tNextMazePos.y());
-		MoveToNpcNear(findPos.x(), findPos.y(), 1);		
+		MoveToNpcNear(findPos.x(), findPos.y(), 1);
 		return true;
 	}
 	if (tNextMazePos == QPoint())

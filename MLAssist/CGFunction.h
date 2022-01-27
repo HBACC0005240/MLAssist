@@ -18,6 +18,7 @@ class CGFunction : public QObject
 public:
 	static CGFunction *GetInstance();
 	CGFunction();
+	~CGFunction();
 
 	void StopFun(); //停止
 	bool IsStop() { return m_bStop; }
@@ -164,11 +165,13 @@ public:
 	bool SavePosToBank(int pos);
 	bool SaveDstItemCountToBank(QString itemName, int maxCount = 0);
 	bool SaveBagAllItemsToBank();
-
 	//银行取物品 物品名称或code 取的数量
 	bool WithdrawItem(const QString &itemName, int count = 20);
 	bool WithdrawItemAll(const QString &itemName, int count = 20);
 	bool WithdrawItemAllEx();
+
+	void SortBagItems(bool bFront = false);
+	void SortBankItems(bool bFront = true);
 
 	//获取料理item
 	GameItemList GetMagicFoodItems();
@@ -333,10 +336,10 @@ public:
 	QList<QPoint> MakeMapOpen();
 	void MakeMapOpenEx();
 	//下层寻路
-	void MakeMapOpenContainNextEntrance(int isNearFar=1);
+	void MakeMapOpenContainNextEntrance(int isNearFar = 1);
 	//1地图全开 2有2个迷宫出入口，并可达即可
 	bool SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type = 1);
-	bool SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos,QPoint& enterPos,  QPoint &nextPos, int searchType = 1);
+	bool SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos, QPoint &nextPos, int searchType = 1);
 	//目标是否可达
 	bool IsReachableTargetEx(int sx, int sy, int tx, int ty);
 	bool IsReachableTarget(int tx, int ty);

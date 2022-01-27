@@ -85,6 +85,7 @@ public:
 protected:
 	bool LoadIdentification();
 	bool LoadAccount();
+	bool LoadAccountGid();
 	bool LoadAccountRole();
 	bool LoadGidItems();
 	bool LoadGidPets();

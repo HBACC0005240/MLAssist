@@ -21,6 +21,7 @@ public slots:
 	void doAddAccountAssemble();
 	void doAddAccount();
 	void doAddAccountGid();
+	void doTreeViewClicked(const QModelIndex& index);
 
 private:
 	Ui::GamePlayerDataWgt ui;
