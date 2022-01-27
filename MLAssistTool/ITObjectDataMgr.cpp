@@ -639,6 +639,8 @@ bool ITObjectDataMgr::LoadAccountRole()
 			ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 			if (pGid == nullptr)
 			{
+				QMutexLocker locker(&m_rpcGidMutex);
+
 				pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
 				pGid->setObjectName(sGid);
 				pGid->_userGid = sGid;
@@ -1915,13 +1917,17 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 	if (pGid == nullptr)
 	{
-		pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
-		if (pGid)
+		QMutexLocker locker(&m_rpcGidMutex);
+		if (m_idForAccountGid.value(sGid) == nullptr)
 		{
-			m_idForAccountGid.insert(sGid, pGid);
-			pGid->addChildObj(pCharacter);
-			pCharacter->setObjectParent(pGid);
-		}
+			pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
+			if (pGid)
+			{
+				m_idForAccountGid.insert(sGid, pGid);
+				pGid->addChildObj(pCharacter);
+				pCharacter->setObjectParent(pGid);
+			}
+		}	
 	}
 
 	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
@@ -2053,6 +2059,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			pItemPtr->setObjectName(QString::fromStdString(reqItem.name()));
 			pItemPtr->_itemCount = reqItem.count();
 			pItemPtr->_itemPos = reqItem.pos();
+			pItemPtr->_bExist = true;
 			pItemPtr->setObjectCode(reqItem.item_id());
 			posExist.append(reqItem.pos());
 		}
@@ -2063,7 +2070,9 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			auto pItemPtr = pCharacter->_itemPosForPtr.value(i);
 			if (pItemPtr)
 			{
+				pItemPtr->_bExist = false;
 				deleteOneObject(pItemPtr);
+				pCharacter->_itemPosForPtr.remove(i);
 			}
 		}
 	}

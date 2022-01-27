@@ -335,3 +335,13 @@ void GameSysCfgWgt::on_toolButton_fetchAll_clicked()
 		ui.lineEdit_fetchAll->setText(sKey);
 	}
 }
+
+void GameSysCfgWgt::on_pushButton_sortBag_clicked()
+{
+	g_pGameFun->SortBagItems();
+}
+
+void GameSysCfgWgt::on_pushButton_sortBank_clicked()
+{
+	g_pGameFun->SortBankItems();
+}

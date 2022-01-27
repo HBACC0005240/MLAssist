@@ -151,5 +151,6 @@ private:
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
 	QMutex m_objMutex;
+	QMutex m_rpcGidMutex;		
 };
 #endif

@@ -3720,7 +3720,7 @@ void CGFunction::SortBankItems(bool bFront /*= false*/)
 	for (int i = 0; i < myinfos.size(); i++)
 	{
 		CGA::cga_item_info_t itemInfo = myinfos.at(i);
-
+		qDebug() << itemInfo.image_id << itemInfo.itemid << itemInfo.pos << QString::fromStdString(itemInfo.name);
 		QSharedPointer<GameItem> newItem(new GameItem);
 		newItem->id = itemInfo.itemid;
 		newItem->pos = itemInfo.pos;
@@ -3740,7 +3740,7 @@ void CGFunction::SortBankItems(bool bFront /*= false*/)
 			idMapItem.insert(newItem->name, tmpSortItemList);
 		}
 	}
-	qSort(sortIdList.begin(), sortIdList.end(), [&](const int &a, const int &b)
+	qSort(sortIdList.begin(), sortIdList.end(), [&](const QString &a, const QString &b)
 			{ return a > b; });
 	if (bFront)
 	{

@@ -30,6 +30,8 @@ public slots:
 	void on_toolButton_tradeNoAccept_clicked();
 	void on_toolButton_saveAll_clicked();
 	void on_toolButton_fetchAll_clicked();
+	void on_pushButton_sortBag_clicked();
+	void on_pushButton_sortBank_clicked();
 
 private:
 	Ui::GameSysCfgWgt ui;

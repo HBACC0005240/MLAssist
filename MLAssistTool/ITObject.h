@@ -221,6 +221,7 @@ public:
 	int _sellMinCount = 0; //卖店最少数量
 	int _itemPos = 0;		//物品位置
 	QString _itemAttr;	   //物品描述
+	bool _bExist = false;	//是否存在
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameItem)
 

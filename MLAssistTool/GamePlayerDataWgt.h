@@ -11,10 +11,13 @@ class GamePlayerDataWgt : public QWidget
 public:
 	GamePlayerDataWgt(QWidget* parent = Q_NULLPTR);
 	~GamePlayerDataWgt();
+
 	void init();
+	void initTable(QTableWidget* pTable,int nCount=20);
 protected:
 	void resetModel();
 	QString DisplayInputDlg(const QString& title, const QString& labelName);
+	void GetRowColFromItemPos(int itempos, int& row, int& col);
 
 public slots:
 	void on_treeView_customContextMenuRequested(const QPoint&);
@@ -22,6 +25,7 @@ public slots:
 	void doAddAccount();
 	void doAddAccountGid();
 	void doTreeViewClicked(const QModelIndex& index);
+	void doUpdateBagItemTableWidget(ITGidRolePtr pRole);
 
 private:
 	Ui::GamePlayerDataWgt ui;

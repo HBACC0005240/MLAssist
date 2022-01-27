@@ -32,6 +32,32 @@ void GamePlayerDataWgt::init()
 	//connect(ui.treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(on_treeView_customContextMenuRequested(const QPoint&)));
 	connect(ui.treeView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(doTreeViewClicked(const QModelIndex&)));
 
+	initTable(ui.tableWidget_item,20);
+	initTable(ui.tableWidget_bankItem,80);
+}
+
+void GamePlayerDataWgt::initTable(QTableWidget* pTable, int nCount/*=20*/)
+{
+	pTable->horizontalHeader()->setStyleSheet("font:bold;");
+	pTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	pTable->verticalHeader()->setVisible(false);
+	//	pTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	pTable->horizontalHeader()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	pTable->horizontalHeader()->setStretchLastSection(true);
+	//	pTable->horizontalHeader()->setFixedHeight(30);
+	//pTable->setColumnWidth(1, 130);
+	pTable->verticalHeader()->setDefaultSectionSize(15);
+	pTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	pTable->setContextMenuPolicy(Qt::CustomContextMenu); //打开右键功能
+	int nRow = nCount / 5;
+	for (int i = 0; i < nRow; ++i)
+	{
+		for (size_t n = 0; n < 5; n++)
+		{
+			QTableWidgetItem* pItem = new QTableWidgetItem();
+			pTable->setItem(i, n, pItem);
+		}
+	}
 }
 
 void GamePlayerDataWgt::resetModel()
@@ -214,7 +240,73 @@ void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 		ITGidRolePtr pRole = qSharedPointerCast<ITGidRole>(m_curSelectObj);
 		ui.lineEdit_gold->setText(QString::number(pRole->_gold));
 		ui.lineEdit_bankGold->setText(QString::number(pRole->_bankgold));
-
+		doUpdateBagItemTableWidget(pRole);
 		//tableWidget_item
+	}
+}
+void GamePlayerDataWgt::GetRowColFromItemPos(int itempos, int& row, int& col)
+{
+	row = itempos / 5;
+	col = itempos % 5;
+}
+
+void GamePlayerDataWgt::doUpdateBagItemTableWidget(ITGidRolePtr pRole)
+{
+	if (!pRole)
+		return;
+	int row = 0, col = 0;
+	qDebug() << "总数:" << pRole->_itemPosForPtr.size();
+	QVector<int> itemPosList;
+
+	for (auto it=pRole->_itemPosForPtr.begin();it!=pRole->_itemPosForPtr.end();++it)
+	{
+		if (it.key() < 8)
+			continue;
+		
+		auto pItem = it.value();
+		if(!pItem->_bExist)
+			continue;
+		itemPosList.append(pItem->_itemPos);
+
+		qDebug() << it.key() << pItem->getObjectName() << pItem->_itemPos << pItem->_itemAttr;
+
+		GetRowColFromItemPos(pItem->_itemPos - 8, row, col);
+		QTableWidgetItem* pTableItem = ui.tableWidget_item->item(row, col);
+		if (pTableItem == nullptr)
+			continue;
+		
+		QString szText = QString("%1\n%2").arg(pItem->getObjectName()).arg(pItem->_itemAttr);
+		QString szToolTip = szText;
+		szToolTip = szToolTip.remove("$0");
+		szToolTip = szToolTip.remove("$1");
+		szToolTip = szToolTip.remove("$2");
+		szToolTip = szToolTip.remove("$3");
+		szToolTip = szToolTip.remove("$4");
+		if (szToolTip != pTableItem->text() /*|| userData != pItem*/)
+		{
+			//				pTableItem->setToolTip(QString("%1 \n%2\n等级 %3\n%4\n种类 %5").arg(pItem->name).arg(pItem->attr).arg(pItem->level).arg(pItem->type).arg(pItem->info));
+			
+			pTableItem->setToolTip(szToolTip);
+			pTableItem->setText(szToolTip);
+			pTableItem->setTextColor(QColor(0, 0, 0));
+			pTableItem->setData(Qt::UserRole, QVariant::fromValue(pItem));
+			//	qDebug() << "Exist Update" << pItem->name << pTableItem->text() << i << pItem->pos << pItem->attr << pItem->id;
+		}
+	
+	}
+	for (int i = 8; i < 28; ++i)
+	{
+		if (!itemPosList.contains(i))
+		{
+			GetRowColFromItemPos(i - 8, row, col);
+			QTableWidgetItem* pTableItem = ui.tableWidget_item->item(row, col);
+			if (pTableItem == nullptr)
+				continue;
+			if ("" != pTableItem->text())
+			{
+				pTableItem->setText("");
+				pTableItem->setData(Qt::UserRole, 0);
+			}
+		}
 	}
 }
