@@ -1348,6 +1348,9 @@ int CGLuaFun::Lua_TurnAboutPointDir(LuaState *L)
 int CGLuaFun::Lua_Npc(LuaState *L)
 {
 	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+
 	int opt = args[1].GetInteger();
 	int index = args[2].GetInteger();
 	g_pGameFun->Npc(opt, index);
@@ -2485,6 +2488,22 @@ int CGLuaFun::Lua_WithdrawAllItem(LuaState *L)
 	return 0;
 }
 
+int CGLuaFun::Lua_SortBagItems(LuaState *L)
+{
+	LuaStack args(L);
+	bool bFront = args.Count() > 0 ? args[1].GetBoolean() : false;
+	g_pGameFun->SortBagItems(bFront);
+	return 0;
+}
+
+int CGLuaFun::Lua_SortBankItems(LuaState *L)
+{
+	LuaStack args(L);
+	bool bFront = args.Count() > 0 ? args[1].GetBoolean() : true;
+	g_pGameFun->SortBankItems(bFront);
+	return 0;
+}
+
 int CGLuaFun::Lua_DropGold(LuaState *L)
 {
 	LuaStack args(L);
@@ -2519,7 +2538,7 @@ int CGLuaFun::Lua_DropPet(LuaState *L)
 		L->PushBoolean(bRet);
 		return 1;
 	}
-	else if (args.Count() > 0 && args[1].IsString())
+	else if (args.Count() > 0 && args[1].IsInteger())
 	{
 		int nPos = args.Count() > 0 ? args[1].GetInteger() : 0;
 		bool bRet = g_pGameFun->DropPetEx(nPos);
@@ -2992,6 +3011,542 @@ int CGLuaFun::Lua_GetLastTopicMsg(LuaState *L)
 	tableObj.SetString("msg", topicMsg.second.toStdString().c_str());
 	tableObj.Push(L);
 	return 1;
+}
+
+int CGLuaFun::Lua_SellNPCStore(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		return 0;
+	}
+	CGA::cga_sell_items_t cgaSaleItems;
+	if (args[1].IsTable())
+	{
+		LuaObject itemData = args[1];
+		if (!itemData.IsNil())
+		{
+			for (LuaTableIterator it(itemData); it; it.Next())
+			{
+				auto itData = it.GetValue();
+				if (itData.IsTable())
+				{
+					int itemid = itData.GetByName("id").ToInteger();
+					int itempos = itData.GetByName("pos").ToInteger();
+					int itemcount = itData.GetByName("count").ToInteger();
+					CGA::cga_sell_item_t cgaItem;
+					cgaItem.itemid = itemid;
+					cgaItem.itempos = itempos;
+					cgaItem.count = itemcount;
+					cgaSaleItems.push_back(cgaItem);
+				}
+			}
+		}
+	}
+	bool bResult = false;
+	g_CGAInterface->SellNPCStore(cgaSaleItems, bResult);
+	return 0;
+}
+
+int CGLuaFun::Lua_BuyNPCStore(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		return 0;
+	}
+	CGA::cga_buy_items_t items; //vector  index count
+	if (args[1].IsTable())
+	{
+		LuaObject itemData = args[1];
+		if (!itemData.IsNil())
+		{
+			for (LuaTableIterator it(itemData); it; it.Next())
+			{
+				auto itData = it.GetValue();
+				if (itData.IsTable())
+				{
+					int index = itData.GetByName("index").ToInteger();
+					int count = itData.GetByName("count").ToInteger();
+					CGA::cga_buy_item_t cgaItem;
+					cgaItem.index = index;
+					cgaItem.count = count;
+					items.push_back(cgaItem);
+				}
+			}
+		}
+	}
+	bool bResult = false;
+	g_CGAInterface->BuyNPCStore(items, bResult);
+	return 0;
+}
+//0 体力 1力量 2强度 3敏捷 4魔法
+int CGLuaFun::Lua_UpgradePlayer(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int type = args[1].GetInteger();
+	g_CGAInterface->UpgradePlayer(type);
+	return 0;
+}
+
+int CGLuaFun::Lua_UpgradePet(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	int type = args[2].GetInteger();
+	g_CGAInterface->UpgradePet(index, type);
+	return 0;
+}
+
+int CGLuaFun::Lua_GetBankGold(LuaState *L)
+{
+	int gold = 0;
+	g_CGAInterface->GetBankGold(gold);
+	L->PushInteger(gold);
+	return 1;
+}
+
+int CGLuaFun::Lua_MoveItem(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 3)
+		return 0;
+	int srcPos = args[1].GetInteger();
+	int dstPos = args[2].GetInteger();
+	int count = args[3].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->MoveItem(srcPos, dstPos, count, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_MovePet(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int srcPos = args[1].GetInteger();
+	int dstPos = args[2].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->MovePet(srcPos, dstPos, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_MoveGold(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int gold = args[1].GetInteger();
+	int opt = args[2].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->MoveGold(gold, opt, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_DropItem(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int pos = args[1].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->DropItem(pos, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_ChangePetState(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	int state = args[2].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->ChangePetState(index, state, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_SetPlayerFlagEnabled(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	bool bEnable = args[2].GetBoolean();
+	g_CGAInterface->SetPlayerFlagEnabled(index, bEnable);
+	return 0;
+}
+
+int CGLuaFun::Lua_IsPlayerFlagEnabled(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		L->PushBoolean(false);
+		return 1;
+	}
+	int index = args[1].GetInteger();
+	bool bEnable = false;
+	g_CGAInterface->IsPlayerFlagEnabled(index, bEnable);
+	L->PushBoolean(bEnable);
+	return 1;
+}
+
+int CGLuaFun::Lua_GetMapIndex(LuaState *L)
+{
+	int index1, index2, index3;
+	std::string filemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
+	L->PushInteger(index1);
+	L->PushInteger(index2);
+	L->PushInteger(index3);
+	L->PushString(filemap.c_str());
+	return 4;
+}
+
+int CGLuaFun::Lua_GetMoveSpeed(LuaState *L)
+{
+	float x = 0, y = 0;
+	g_CGAInterface->GetMoveSpeed(x, y);
+	L->PushNumber(x);
+	L->PushNumber(y);
+	return 2;
+}
+
+int CGLuaFun::Lua_GetMouseXY(LuaState *L)
+{
+	int x = 0, y = 0;
+	g_CGAInterface->GetMouseXY(x, y);
+	L->PushInteger(x);
+	L->PushInteger(y);
+	return 2;
+}
+
+int CGLuaFun::Lua_GetMouseOrientation(LuaState *L)
+{
+	int dir;
+	g_CGAInterface->GetMouseOrientation(dir);
+	L->PushInteger(dir);
+	return 1;
+}
+
+int CGLuaFun::Lua_WalkTo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int x = args[1].GetInteger();
+	int y = args[2].GetInteger();
+	g_CGAInterface->WalkTo(x, y);
+	return 0;
+}
+
+int CGLuaFun::Lua_TurnTo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int x = args[1].GetInteger();
+	int y = args[2].GetInteger();
+	g_CGAInterface->TurnTo(x, y);
+	return 0;
+}
+
+int CGLuaFun::Lua_SetMoveSpeed(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int speed = args[1].GetInteger();
+	g_CGAInterface->SetMoveSpeed(speed);
+	return 0;
+}
+
+int CGLuaFun::Lua_ForceMove(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int dir = args[1].GetInteger();
+	bool bShow = args[2].GetBoolean();
+	bool bRes = false;
+	g_CGAInterface->ForceMove(dir, bShow, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_ForceMoveTo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 3)
+		return 0;
+	int x = args[1].GetInteger();
+	int y = args[2].GetInteger();
+	bool bShow = args[3].GetBoolean();
+	bool bRes = false;
+	g_CGAInterface->ForceMoveTo(x, y, bShow, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_IsMapCellPassable(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int x = args[1].GetInteger();
+	int y = args[2].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->IsMapCellPassable(x, y, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_LogBack(LuaState *L)
+{
+	g_CGAInterface->LogBack();
+	return 0;
+}
+
+int CGLuaFun::Lua_LogOut(LuaState *L)
+{
+	g_CGAInterface->LogOut();
+	return 0;
+}
+
+int CGLuaFun::Lua_BackSelectServer(LuaState *L)
+{
+	g_CGAInterface->BackSelectServer();
+	return 0;
+}
+
+int CGLuaFun::Lua_ChangeNickName(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	std::string titleName = args[1].GetString();
+	bool bRet = false;
+	g_CGAInterface->ChangeNickName(titleName, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_ChangeTitleName(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int index = args[1].GetInteger();
+	bool bRet = false;
+	g_CGAInterface->ChangeTitleName(index, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_ChangePersDesc(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 8)
+	{
+		return 0;
+	}
+	int changeBits = args[1].GetInteger();
+	int sellIcon = args[2].GetInteger();
+	std::string sellString = args[3].GetString();
+	int buyIcon = args[4].GetInteger();
+	std::string buyString = args[5].GetString();
+	int wantIcon = args[6].GetInteger();
+	std::string wantString = args[7].GetString();
+	std::string descString = args[8].GetString();
+	CGA::cga_pers_desc_t desc;
+	desc.sellIcon = sellIcon;
+	desc.sellString = sellString;
+	desc.buyIcon = buyIcon;
+	desc.buyString = buyString;
+	desc.wantIcon = wantIcon;
+	desc.wantString = wantString;
+	desc.descString = descString;
+	if (sellIcon)
+		changeBits |= 1;
+	if (!sellString.empty())
+		changeBits |= 2;
+	if (buyIcon)
+		changeBits |= 4;
+	if (!buyString.empty())
+		changeBits |= 8;
+	if (wantIcon)
+		changeBits |= 0x10;
+	if (!wantString.empty())
+		changeBits |= 0x20;
+	if (!descString.empty())
+		changeBits |= 0x40;
+	desc.changeBits = changeBits;
+	g_CGAInterface->ChangePersDesc(desc);
+	return 0;
+}
+
+int CGLuaFun::Lua_ChangePetName(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	std::string name = args[2].GetString();
+	bool bRet = false;
+	g_CGAInterface->ChangePetName(index, name, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_SendMail(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	std::string msg = args[2].GetString();
+	bool bRet = false;
+	g_CGAInterface->SendMail(index, msg, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_SendPetMail(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	int petIndex = args[2].GetInteger();
+	int itempos = args[3].GetInteger();
+	std::string msg = args[4].GetString();
+	bool bRet = false;
+	g_CGAInterface->SendPetMail(index, petIndex, itempos, msg, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_DeleteCard(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	bool packed = args[2].GetInteger();
+	bool bRet = false;
+	g_CGAInterface->DeleteCard(index, packed, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_PlayGesture(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int index = args[1].GetInteger();
+	bool bRet = false;
+	g_CGAInterface->PlayGesture(index);
+	return 0;
+}
+
+int CGLuaFun::Lua_CreateCharacter(LuaState *L)
+{
+	//LuaStack args(L);
+	//bool isCreate = args[1].GetBoolean();
+	//QString sName = args[2].GetString();
+	//int nCharType = args[3].GetInteger();
+	//int nEye = args[4].GetInteger();
+	//int nMouth = args[5].GetInteger();
+	//int nColor = args[6].GetInteger();
+	//QString sPoint = args[7].GetString();
+	//QString sCrystal = args[8].GetString();
+	//CGA::cga_create_chara_t create_char;
+	//g_CGAInterface->CreateCharacter(create_char);
+	return 0;
+}
+
+int CGLuaFun::Lua_LoginGameServer(LuaState *L)
+{
+	//	g_CGAInterface->LoginGameServer(index);
+	return 0;
+}
+
+int CGLuaFun::Lua_StartWork(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	int subIndex = args[2].GetInteger();
+	bool bRet = false;
+	g_CGAInterface->StartWork(index, subIndex, bRet);
+	return 0;
+}
+
+int CGLuaFun::Lua_SetWorkAcceleration(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int percent = args[1].GetInteger();
+	g_CGAInterface->SetWorkAcceleration(percent);
+	return 0;
+}
+
+int CGLuaFun::Lua_SetImmediateDoneWork(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	bool bEnabled = args[1].GetBoolean();
+	g_CGAInterface->SetImmediateDoneWork(bEnabled);
+	return 0;
+}
+
+int CGLuaFun::Lua_GetImmediateDoneWorkState(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int state = args[1].GetInteger();
+	g_CGAInterface->GetImmediateDoneWorkState(state);
+	return 0;
+}
+
+int CGLuaFun::Lua_CraftItem(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	CGA::cga_craft_item_t craft;
+	if (!args[1].IsTable())
+		return 0;
+	LuaObject luaTable = args[1];
+	int skill_index = luaTable.GetByName("skill_index").ToInteger();
+	int subskill_index = luaTable.GetByName("subskill_index").ToInteger();
+	int sub_type = luaTable.GetByName("sub_type").ToInteger();
+	LuaObject itemposTbl = luaTable.GetByName("count");
+	craft.skill_index = skill_index;
+	craft.subskill_index = subskill_index;
+	craft.sub_type = sub_type;
+	craft.itempos[0] = itemposTbl.GetByIndex(0).GetInteger();
+	craft.itempos[1] = itemposTbl.GetByIndex(1).GetInteger();
+	craft.itempos[2] = itemposTbl.GetByIndex(2).GetInteger();
+	craft.itempos[3] = itemposTbl.GetByIndex(3).GetInteger();
+	craft.itempos[4] = itemposTbl.GetByIndex(4).GetInteger();
+	craft.itempos[5] = itemposTbl.GetByIndex(5).GetInteger();
+	bool bRes = false;
+	g_CGAInterface->CraftItem(craft, bRes);
+	return 0;
+}
+
+int CGLuaFun::Lua_AssessItem(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	int pos = args[1].GetInteger();
+	bool bRes = false;
+	g_CGAInterface->AssessItem(index, pos, bRes);
+	return 0;
 }
 
 void CGLuaFun::PauseScript()

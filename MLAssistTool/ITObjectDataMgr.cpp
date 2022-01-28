@@ -615,6 +615,7 @@ bool ITObjectDataMgr::LoadAccountGid()
 					pObj->setObjectParent(pAccountObj);
 				}
 				m_pObjectList.append(pObj);
+				m_idForAccountGid.insert(gid, pObj);
 			}
 		}
 		return true;
@@ -1927,7 +1928,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 				pGid->addChildObj(pCharacter);
 				pCharacter->setObjectParent(pGid);
 			}
-		}	
+		}
 	}
 
 	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
@@ -2026,16 +2027,20 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			skillPtr->_available = reqSkill.available();
 			skillPtr->_xp = reqSkill.xp();
 			skillPtr->_maxxp = reqSkill.maxxp();
+			skillPtr->_bExist = true;
+
 			posExist.append(reqSkill.index());
 		}
+		//技能删除
 		for (int i = 0; i < 15; ++i)
 		{
 			if (posExist.contains(i))
 				continue;
-			auto pItemPtr = pCharacter->_skillPosForSkill.value(i);
-			if (pItemPtr)
+			auto pObjPtr = pCharacter->_skillPosForSkill.value(i);
+			if (pObjPtr)
 			{
-				deleteOneObject(pItemPtr);
+				pObjPtr->_bExist = false;
+				deleteOneObject(pObjPtr);
 			}
 		}
 	}
@@ -2059,6 +2064,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			pItemPtr->setObjectName(QString::fromStdString(reqItem.name()));
 			pItemPtr->_itemCount = reqItem.count();
 			pItemPtr->_itemPos = reqItem.pos();
+			pItemPtr->_itemType = reqItem.type();	//不需要这么多信息的，从原始Item表拿
 			pItemPtr->_bExist = true;
 			pItemPtr->setObjectCode(reqItem.item_id());
 			posExist.append(reqItem.pos());
@@ -2138,6 +2144,8 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			petPtr->_element_wind = reqPet.detail().element_wind();
 			petPtr->_element_water = reqPet.detail().element_water();
 			petPtr->_element_fire = reqPet.detail().element_fire();
+			petPtr->_bExist = true;
+
 			posExist.append(reqPet.index());
 
 			if (reqPet.skill_size() > 0)
@@ -2165,21 +2173,24 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 					skillPtr->_available = reqSkill.available();
 					skillPtr->_xp = reqSkill.xp();
 					skillPtr->_maxxp = reqSkill.maxxp();
+					skillPtr->_bExist = true;
 					posExist.append(reqSkill.index());
 				}
+				//技能删除
 				for (int i = 0; i < 10; ++i)
 				{
 					if (posExist.contains(i))
 						continue;
-					auto pItemPtr = petPtr->_skillPosForSkill.value(i);
-					if (pItemPtr)
+					auto pObjPtr = petPtr->_skillPosForSkill.value(i);
+					if (pObjPtr)
 					{
-						deleteOneObject(pItemPtr);
+						pObjPtr->_bExist = false;
+						deleteOneObject(pObjPtr);
 					}
 				}
 			}
-
 		}
+		//宠物删除
 		for (int i = 0; i < 5; ++i)
 		{
 			if (posExist.contains(i))
@@ -2187,6 +2198,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			auto petPtr = pCharacter->_petPosForPet.value(i);
 			if (petPtr)
 			{
+				petPtr->_bExist = false;
 				deleteOneObject(petPtr);
 			}
 		}
@@ -2233,6 +2245,8 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			pItemPtr->setObjectName(QString::fromStdString(reqItem.name()));
 			pItemPtr->_itemCount = reqItem.count();
 			pItemPtr->_itemPos = reqItem.pos();
+			pItemPtr->_itemType = reqItem.type();
+			pItemPtr->_bExist = true;
 			pItemPtr->setObjectCode(reqItem.item_id());
 			posExist.append(reqItem.pos());
 		}
@@ -2243,6 +2257,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			auto pItemPtr = pCharacter->_itemPosForPtr.value(i);
 			if (pItemPtr)
 			{
+				pItemPtr->_bExist = false;
 				deleteOneObject(pItemPtr);
 			}
 		}
@@ -2308,6 +2323,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			petPtr->_element_wind = reqPet.detail().element_wind();
 			petPtr->_element_water = reqPet.detail().element_water();
 			petPtr->_element_fire = reqPet.detail().element_fire();
+			petPtr->_bExist = true;
 			posExist.append(reqPet.index());
 
 			/*if (reqPet.skill_size() > 0)
@@ -2357,6 +2373,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			auto petPtr = pCharacter->_petPosForPet.value(i);
 			if (petPtr)
 			{
+				petPtr->_bExist = false;
 				deleteOneObject(petPtr);
 			}
 		}

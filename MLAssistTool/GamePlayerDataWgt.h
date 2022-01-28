@@ -26,7 +26,7 @@ public slots:
 	void doAddAccountGid();
 	void doTreeViewClicked(const QModelIndex& index);
 	void doUpdateBagItemTableWidget(ITGidRolePtr pRole);
-
+	void doUpdateBankItemTableWidget(ITGidRolePtr pRole);
 private:
 	Ui::GamePlayerDataWgt ui;
 	PlayerDataTreeModel* m_pPlayerDataTreeModel;

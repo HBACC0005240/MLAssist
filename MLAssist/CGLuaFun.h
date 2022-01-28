@@ -336,7 +336,8 @@ public:
 	int Lua_WithdrawItem(LuaState *L);
 	//取物品-全
 	int Lua_WithdrawAllItem(LuaState *L);
-
+	int Lua_SortBagItems(LuaState *L);
+	int Lua_SortBankItems(LuaState *L);
 	//扔钱
 	int Lua_DropGold(LuaState *L);
 	//存钱
@@ -376,6 +377,57 @@ public:
 	//获取已接收到的订阅消息
 	int Lua_GetTopicMsgList(LuaState *L);
 	int Lua_GetLastTopicMsg(LuaState *L);
+
+	/**************************原生CGA接口**********************/
+	//卖物品
+	int Lua_SellNPCStore(LuaState *L);
+	//买物品
+	int Lua_BuyNPCStore(LuaState *L);
+	//人物加点
+	int Lua_UpgradePlayer(LuaState *L);
+	//宠物加点
+	int Lua_UpgradePet(LuaState *L);
+	//银行金币
+	int Lua_GetBankGold(LuaState *L);
+	//移动物品 银行 包裹
+	int Lua_MoveItem(LuaState *L);
+	//移动宠物
+	int Lua_MovePet(LuaState *L);
+	//金币操作  1存 2取 3扔
+	int Lua_MoveGold(LuaState *L);
+	int Lua_DropItem(LuaState *L);
+	int Lua_ChangePetState(LuaState *L);
+	int Lua_SetPlayerFlagEnabled(LuaState *L);
+	int Lua_IsPlayerFlagEnabled(LuaState *L);
+	int Lua_GetMapIndex(LuaState *L);
+	int Lua_GetMoveSpeed(LuaState *L);
+	int Lua_GetMouseXY(LuaState *L);
+	int Lua_GetMouseOrientation(LuaState *L);
+	int Lua_WalkTo(LuaState *L);
+	int Lua_TurnTo(LuaState *L);
+	int Lua_SetMoveSpeed(LuaState *L);
+	int Lua_ForceMove(LuaState *L);
+	int Lua_ForceMoveTo(LuaState *L);
+	int Lua_IsMapCellPassable(LuaState *L);
+	int Lua_LogBack(LuaState *L);
+	int Lua_LogOut(LuaState *L);
+	int Lua_BackSelectServer(LuaState *L);
+	int Lua_ChangeNickName(LuaState *L);
+	int Lua_ChangeTitleName(LuaState *L);
+	int Lua_ChangePersDesc(LuaState *L);
+	int Lua_ChangePetName(LuaState *L);
+	int Lua_SendMail(LuaState *L);
+	int Lua_SendPetMail(LuaState *L);
+	int Lua_DeleteCard(LuaState *L);
+	int Lua_PlayGesture(LuaState *L);
+	int Lua_CreateCharacter(LuaState *L);
+	int Lua_LoginGameServer(LuaState *L);
+	int Lua_StartWork(LuaState *L);
+	int Lua_SetWorkAcceleration(LuaState *L);
+	int Lua_SetImmediateDoneWork(LuaState *L);
+	int Lua_GetImmediateDoneWorkState(LuaState *L);
+	int Lua_CraftItem(LuaState *L);
+	int Lua_AssessItem(LuaState *L);
 
 	void PauseScript();
 	void ResumeScript();

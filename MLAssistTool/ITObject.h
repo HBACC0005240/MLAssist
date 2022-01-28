@@ -201,6 +201,8 @@ public:
 	int _lossMinGrade = 0;	//最少掉档
 	int _lossMaxGrade = 0;	//最多掉档
 	int _pos = 0;
+	bool _bExist = true;	//是否存在
+
 	ITGameSkillList _skillList;
 	QHash<int, ITGameSkillPtr> _skillPosForSkill;
 };
@@ -221,7 +223,7 @@ public:
 	int _sellMinCount = 0; //卖店最少数量
 	int _itemPos = 0;		//物品位置
 	QString _itemAttr;	   //物品描述
-	bool _bExist = false;	//是否存在
+	bool _bExist = true;	//是否存在
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameItem)
 
@@ -390,6 +392,8 @@ public:
 	bool _available = 0;		//是否可用
 	int _xp = 0;
 	int _maxxp = 0;
+	bool _bExist = true;	//是否存在
+
 	ITGameSkillList _subskills; //技能子项
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameSkill)
