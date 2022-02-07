@@ -385,3 +385,8 @@ void GamePlayerDataWgt::doUpdateBankItemTableWidget(ITGidRolePtr pRole)
 	}
 	//ui.tableWidget_bankItem->resizeRowsToContents();
 }
+
+void GamePlayerDataWgt::on_pushButton_refreshModel_clicked()
+{
+	resetModel();
+}

@@ -2408,26 +2408,15 @@ bool CGFunction::WaitTrade(const QString &sName /*= ""*/, const QString &myTrade
 
 QSharedPointer<CGA::cga_trade_dialog_t> CGFunction::WaitTradeDialog(int timeout)
 {
-	QMutex mutex;
 	QSharedPointer<CGA::cga_trade_dialog_t> retDlg;
 	qDebug() << "正在等待交易对话框";
 	bool bSuccess = true;
 	QEventLoop loop;
 	QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyTradeDialog, [&](QSharedPointer<CGA::cga_trade_dialog_t> dlg)
-			{
-				if (mutex.tryLock())
-				{
-					retDlg = dlg;
-					if (loop.isRunning())
-						loop.quit();
-					mutex.unlock();
-				}
-			});
+	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyTradeDialog, &loop, &QEventLoop::quit);
 	loop.exec();
-	QMutexLocker locker(&mutex);
-
+	retDlg = g_pGameCtrl->GetLastTradeDialog();	
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	return retDlg;
 }
@@ -7391,6 +7380,7 @@ bool CGFunction::DownloadMap()
 
 bool CGFunction::DownloadMapEx(int xfrom, int yfrom, int xsize, int ysize)
 {
+	MakeMapOpen();
 	return false;
 	int last_index3 = GetMapIndex();
 	int x = xfrom, y = yfrom;
@@ -9675,7 +9665,7 @@ QString CGFunction::GetAllChatMsg(int count)
 {
 	if (m_chatMsgList.size() < 1)
 		return "";
-
+	
 	if (count == 0)
 	{
 		QString sMsg;
@@ -9690,9 +9680,12 @@ QString CGFunction::GetAllChatMsg(int count)
 	}
 	else
 	{
+		int tmpCount = count;
 		QString sMsg;
+		if (m_chatMsgList.size() < tmpCount)
+			tmpCount = 0;
 		QMutexLocker locker(&m_charMutex);
-		int i = m_chatMsgList.size() - count;
+		int i = m_chatMsgList.size() - tmpCount;
 		for (; i < m_chatMsgList.size(); ++i)
 		{
 			sMsg.append(m_chatMsgList[i].second);
@@ -9716,7 +9709,10 @@ QList<QPair<int, QString> > CGFunction::GetDetailAllChatMsg(int count /*= 0*/)
 	else
 	{
 		QMutexLocker locker(&m_charMutex);
-		int i = m_chatMsgList.size() - count;
+		int tmpCount = count;
+		if (m_chatMsgList.size() < tmpCount)
+			tmpCount = 0;
+		int i = m_chatMsgList.size() - tmpCount;
 		for (; i < m_chatMsgList.size(); ++i)
 		{
 			detailMsg.append(m_chatMsgList[i]);

@@ -5,6 +5,7 @@
 #include <windows.h>
 #include "DbgHelp.h"
 #include <QDateTime>
+#include <QDir>
 //ANSI转化成UNICODE
 static LPWSTR ANSITOUNICODE(const char* pBuf)
 {

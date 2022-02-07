@@ -1155,19 +1155,21 @@ bool ITObjectDataMgr::insertNewDataToDB()
 {
 	ITObjectList tempSuccessList; ///把成功的删除，不重复增加，修改和删除不做处理了
 	bool bSucc = true;
-	for (int i = 0; i < m_pAddObjectList.size(); i++)
+	auto pTempObjList = m_pAddObjectList;
+	for (int i = 0; i < pTempObjList.size(); i++)
 	{
 		//recordLog(m_addlist[i]);
-		if (!insertOneDeviceToDB(m_pAddObjectList[i]))
+		if (!insertOneDeviceToDB(pTempObjList[i]))
 		{
 			bSucc = false;
 			break;
 		}
-		tempSuccessList.append(m_pAddObjectList[i]);
+		tempSuccessList.append(pTempObjList[i]);
 
-		m_pAddObjectList[i]->setNomalStatus();
-		m_pObjectList.append(m_pAddObjectList[i]);
+		pTempObjList[i]->setNomalStatus();
+		m_pObjectList.append(pTempObjList[i]);
 	}
+	QMutexLocker locker(&m_objMutex);
 	if (!bSucc)
 	{ ///删除成功写入数据库的项
 		foreach(auto pDev, tempSuccessList)

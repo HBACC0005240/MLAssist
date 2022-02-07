@@ -65,7 +65,6 @@ public:
 	QSharedPointer<Character> getGameCharacter() { return m_pGameCharacter; }  //获取人物信息
 	GameSkillList getGameSkills() { return m_pGameSkills; }					   //获取人物技能信息
 	GamePetList getGamePets() { return m_pGamePets; }						   //获取人物宠物信息
-	GameBattleUnitList getGameBattles() { return m_pBattleUnits; }			   //获取战斗信息
 	GameItemList getGameItems() { return m_pGameItems; }					   //获取人物物品信息
 	GameFirstAidCfg *getGameFirstAidCfg() { return m_pFirstAidCfg; }		   //获取人物急救设置
 	GameHealCfg *getGameHealCfg() { return m_pHealCfg; }					   //获取人物治疗设置
@@ -158,6 +157,7 @@ public:
 
 	//获取最新对话框
 	QSharedPointer<CGA_NPCDialog_t> GetLastNpcDialog();
+	QSharedPointer<CGA::cga_trade_dialog_t> GetLastTradeDialog();
 	QSharedPointer<CGA::cga_working_result_t> GetLastWorkResult();
 
 	//启动游戏是否隐藏
@@ -346,7 +346,6 @@ private:
 	QSharedPointer<Character> m_pGameCharacter = nullptr;								 //当前游戏人物信息
 	GamePetList m_pGamePets;															 //人物宠物信息
 	GameSkillList m_pGameSkills;														 //人物技能信息
-	GameBattleUnitList m_pBattleUnits;													 //队伍和敌人信息
 	GameCompoundList m_pCompoundList;													 //可以合成的物品列表 其他地方取对象 不要保存
 	int m_nRunScriptState = SCRIPT_CTRL_STOP;											 //脚本运行状态
 	int m_nMoveSpeed;																	 //移动速度
@@ -421,7 +420,9 @@ private:
 	int m_followGamePos = 0;															 //跟随游戏显示位置
 	QVector<QPair<quint64, QSharedPointer<CGA_NPCDialog_t> > > m_npcDlgCache;			 //对话框缓存
 	QVector<QPair<quint64, QSharedPointer<CGA::cga_working_result_t> > > m_workResCache; //工作缓存
+	QVector<QPair<quint64, QSharedPointer<CGA::cga_trade_dialog_t> > > m_tradeDlgCache;	 //交易对话框缓存
 	QMutex m_npcDlgMutex;
+	QMutex m_tradeDlgMutex;
 	QMutex m_workResMutex;
 };
 #define g_pGameCtrl GameCtrl::getInstace()

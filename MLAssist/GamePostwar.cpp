@@ -712,17 +712,17 @@ void GamePostwar::on_checkBox_petEatMagic_stateChanged(int state)
 
 void GamePostwar::on_lineEdit_playerEatMedicament_editingFinished()
 {
-	on_checkBox_petEatMagic_stateChanged(ui.checkBox_playerEatMedicament->checkState());
+	on_checkBox_playerEatMedicament_stateChanged(ui.checkBox_playerEatMedicament->checkState());
 }
 
 void GamePostwar::on_lineEdit_playerEatMagic_editingFinished()
 {
-	on_checkBox_petEatMagic_stateChanged(ui.checkBox_playerEatMagic->checkState());
+	on_checkBox_playerEatMagic_stateChanged(ui.checkBox_playerEatMagic->checkState());
 }
 
 void GamePostwar::on_lineEdit_petEatMedicament_editingFinished()
 {
-	on_checkBox_petEatMagic_stateChanged(ui.checkBox_petEatMedicament->checkState());
+	on_checkBox_petEatMedicament_stateChanged(ui.checkBox_petEatMedicament->checkState());
 }
 
 void GamePostwar::on_lineEdit_petEatMagic_editingFinished()

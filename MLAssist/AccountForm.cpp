@@ -239,9 +239,10 @@ bool AccountForm::IsGltExpired()
 	if (m_glt.isEmpty())
 		return true;
 
-	if (m_loginresult.elapsed() > 1000 * 60 * 5) //这个有点快 60秒就判断超时了 增加到5分钟
+	if (m_loginresult.elapsed() > 1000 * 60 ) 
 		return true;
-
+	if (m_lastGameAccount != ui->lineEdit_account->text())
+		return true;
 	if (m_glt_map && m_glt_lock)
 	{
 		WaitForSingleObject(m_glt_lock, INFINITE);
@@ -502,11 +503,13 @@ void AccountForm::OnAutoLogin()
 
 		////先屏蔽下面重复附加判断代码;
 		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加
-		if (m_bFindNormalWnd && m_attachExistGameWndTime.elapsed() < 15 * 1000)
+		if (m_bFindNormalWnd)
 		{
 			//			qDebug() << "附加成功 15秒内 返回";
 			return;
 		}
+		if (m_attachExistGameWndTime.elapsed() < 15 * 1000)
+			return;
 		//上次找到指定窗口 或没找到  时间也超过15秒 则重新进行操作
 		//增加附加已有游戏窗口功能
 		if (QueryAttachGameWnd()) //等待附加成功
@@ -715,6 +718,7 @@ bool AccountForm::QueryAccount(QString &label, QString &errorMsg)
 	//qDebug("query");
 
 	m_loginquery = QTime::currentTime();
+	m_lastGameAccount = ui->lineEdit_account->text();
 	m_StdOut.clear();
 
 	QString argstr = QString("-account %1 -pwd %2 -gametype %3 -rungame %4 -skipupdate %5")

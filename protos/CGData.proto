@@ -45,6 +45,12 @@ service CGRpcService {
 	//订阅则是一个单向的流服务，服务端返回的数据可能很大
 	rpc Subscribe (StringPub) returns (stream StringPub);
 
+	/******************客户端查询数据接口**************/
+	//查询指定账号下各GID的角色数据
+	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};				
+	//查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
+	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};				
+
 }
 
 message StringPub

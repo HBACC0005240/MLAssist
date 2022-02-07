@@ -317,7 +317,7 @@ void CBattleCondition_PlayerMp::GetConditionName(QString &str)
 }
 bool CBattleCondition_PlayerMp::Check(CGA_BattleContext_t &context, int &conditionTarget)
 {
-	if (context.m_iPlayerPosition < 0 || context.m_iPlayerPosition >= 20)
+	if (context.m_iPlayerPosition < 0 || context.m_iPlayerPosition >= 20 || context.m_iPlayerPosition >= context.m_UnitGroup.size())
 		return false;
 	int curv = context.m_UnitGroup[context.m_iPlayerPosition]->mp;
 	int maxv = context.m_UnitGroup[context.m_iPlayerPosition]->maxmp;

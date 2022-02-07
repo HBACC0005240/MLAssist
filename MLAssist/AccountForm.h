@@ -81,6 +81,7 @@ private:
 	QTime m_lastGameWndConnTime; //最后一个窗口连接失败时间
 
 	QString m_glt;
+	QString m_lastGameAccount;
 	QTime m_loginquery;
 	QTime m_loginresult;
 	HANDLE m_polcn_lock;

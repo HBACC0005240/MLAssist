@@ -399,6 +399,7 @@ public:
 	int Lua_ChangePetState(LuaState *L);
 	int Lua_SetPlayerFlagEnabled(LuaState *L);
 	int Lua_IsPlayerFlagEnabled(LuaState *L);
+	int Lua_IsSkillValid(LuaState *L);
 	int Lua_GetMapIndex(LuaState *L);
 	int Lua_GetMoveSpeed(LuaState *L);
 	int Lua_GetMouseXY(LuaState *L);
@@ -428,6 +429,9 @@ public:
 	int Lua_GetImmediateDoneWorkState(LuaState *L);
 	int Lua_CraftItem(LuaState *L);
 	int Lua_AssessItem(LuaState *L);
+	int Lua_GetCraftInfo(LuaState *L);
+	int Lua_GetCraftsInfo(LuaState *L);
+	int Lua_GetCraftStatus(LuaState *L);
 
 	void PauseScript();
 	void ResumeScript();

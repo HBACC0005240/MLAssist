@@ -113,11 +113,11 @@ GameCtrl::GameCtrl()
 	//	}
 	//}
 	////初始化战斗单位信息
-	for (int i = 0; i < 20; ++i)
+	/*for (int i = 0; i < 20; ++i)
 	{
 		GameBattleUnitPtr pUnit = GameBattleUnitPtr(new GameBattleUnit);
-		m_pBattleUnits.append(pUnit);
-	}
+		pBattleUnits.append(pUnit);
+	}*/
 	////可以合成物品信息 也默认初始化下 生产技能栏占得多 主技能10级 当他50个 剩下50个给其他技能
 	//for (int i = 0; i < 100; ++i)
 	//{
@@ -336,9 +336,9 @@ int GameCtrl::GetLastBattlePetAvgLv()
 	//int count = 0;
 	//for (int i = 0xA; i < 20; ++i)
 	//{
-	//	if (!m_pBattleUnits[i]->exist)
+	//	if (!pBattleUnits[i]->exist)
 	//		continue;
-	//	level += m_pBattleUnits[i]->level;
+	//	level += pBattleUnits[i]->level;
 	//	count += 1;
 	//}
 	//if (count <= 0) //只算自己的
@@ -821,7 +821,7 @@ bool GameCtrl::OnEatItem()
 	//获取最新的判断 否则会有问题
 
 	CGA::cga_player_info_t char_info;
-	if (g_CGAInterface->GetPlayerInfo(char_info))
+	if (!g_CGAInterface->GetPlayerInfo(char_info))
 	{
 		return false;
 	}
@@ -1012,6 +1012,10 @@ bool GameCtrl::AutoFirstAid()
 			break;
 			//return false;
 		}
+		if (pFirstAidSkill->subskills.size() < 1)
+			return false;
+		if (pFirstAidSkill->subskills.size() < (m_pFirstAidCfg->nLv + 1))
+			return false;
 		m_pFirstAidCfg->dCost = pFirstAidSkill->subskills.at(m_pFirstAidCfg->nLv)->cost;
 		//	qDebug() << QString("耗魔%1").arg(m_pFirstAidCfg->dCost);
 		if (m_pGameCharacter->mp < m_pFirstAidCfg->dCost)
@@ -1133,6 +1137,11 @@ bool GameCtrl::AutoHeal()
 														//		qDebug() << QString("最高可使用等级%1").arg(pSelectSkill->maxLevel);
 		return false;
 	}
+	if (pSelectSkill->subskills.size() < 1)
+		return false;
+	if (pSelectSkill->subskills.size() < ( m_pHealCfg->nLv+1))
+		return false;
+	
 	m_pHealCfg->dCost = pSelectSkill->subskills.at(m_pHealCfg->nLv)->cost;
 	//	qDebug() << QString("耗魔%1").arg(m_pHealCfg->dCost);
 	if (m_pGameCharacter->mp < m_pHealCfg->dCost)
@@ -1330,8 +1339,8 @@ bool GameCtrl::AutoPetRiding()
 		return false;
 	if (m_pGameCharacter->petriding) //骑乘中 返回
 		return false;
-	//判断骑乘水晶？
-	if (QDateTime::currentMSecsSinceEpoch() < (m_pAutoPetRiding->lastUseSkill + 2000)) //1秒用一次
+	//判断骑乘水晶 状态更新有间隔 这里改为5秒判断使用
+	if (QDateTime::currentMSecsSinceEpoch() < (m_pAutoPetRiding->lastUseSkill + 5000)) //1秒用一次
 		return false;
 	GameSkillPtr pSelectSkill = nullptr;
 	foreach (auto pSkill, m_pGameSkills)
@@ -1947,6 +1956,17 @@ QSharedPointer<CGA_NPCDialog_t> GameCtrl::GetLastNpcDialog()
 	else
 		return lastData.second;
 }
+QSharedPointer<CGA::cga_trade_dialog_t> GameCtrl::GetLastTradeDialog()
+{
+	if (m_tradeDlgCache.size() < 1)
+		return nullptr;
+	QMutexLocker locker(&m_tradeDlgMutex);
+	auto lastData = m_tradeDlgCache.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return nullptr;
+	else
+		return lastData.second;
+}
 
 QSharedPointer<CGA::cga_working_result_t> GameCtrl::GetLastWorkResult()
 {
@@ -2215,6 +2235,18 @@ void GameCtrl::NotifyTimeoutThread(GameCtrl *pThis)
 				if ((curTime - it->first) > 30000)
 				{
 					it = pThis->m_workResCache.erase(it);
+				}
+				else
+					++it;
+			}
+		}{
+			QMutexLocker locker(&pThis->m_tradeDlgMutex);
+			quint64 curTime = GetTickCount();
+			for (auto it = pThis->m_tradeDlgCache.begin(); it != pThis->m_tradeDlgCache.end();)
+			{
+				if ((curTime - it->first) > 30000)
+				{
+					it = pThis->m_tradeDlgCache.erase(it);
 				}
 				else
 					++it;
@@ -3111,7 +3143,7 @@ void GameCtrl::OnNotifyBattleAction(int flags)
 		return;
 
 	GetBattleUnits();
-	//CBattleWorker::getInstace()->OnNotifyGetBattleInfo(m_pBattleUnits); //更新战斗单位信息
+	//CBattleWorker::getInstace()->OnNotifyGetBattleInfo(pBattleUnits); //更新战斗单位信息
 	//CBattleWorker::getInstace()->OnNotifyGetSkillsInfo(m_pGameSkills);	//更新技能信息 平常不进行更新
 	//CBattleWorker::getInstace()->OnNotifyGetPetsInfo(m_pGamePets);		//更新技能信息 平常不进行更新
 	//CBattleWorker::getInstace()->OnNotifyGetItemsInfo(m_pGameItems);	//更新技能信息 平常不进行更新
@@ -3278,6 +3310,8 @@ void GameCtrl::NotifyTradeDialogCallback(CGA::cga_trade_dialog_t dlg)
 	QSharedPointer<CGA::cga_trade_dialog_t> notifydlg(new CGA::cga_trade_dialog_t);
 	notifydlg->name = dlg.name;
 	notifydlg->level = dlg.level;
+	QMutexLocker locker(&m_tradeDlgMutex);
+	m_tradeDlgCache.append(qMakePair(GetTickCount(), notifydlg));
 	//有脚本执行情况下，防止用户过快调用函数，延时发送，没有脚本执行，立即发送
 	if (m_nRunScriptState == SCRIPT_CTRL_RUN)
 	{
@@ -3876,13 +3910,16 @@ void GameCtrl::OnSetAutoEatDogFood(int state)
 void GameCtrl::GetBattleUnits()
 {
 	g_pAutoBattleCtrl->ResetBattleAnalysisData();
+	GameBattleUnitList pBattleUnits;
 	//重置战斗中各单位信息
 	for (int i = 0; i < 20; ++i)
 	{
-		m_pBattleUnits[i]->exist = false;
-		m_pBattleUnits[i]->isback = false;
-		m_pBattleUnits[i]->debuff = 0;
-		m_pBattleUnits[i]->petriding_modelid = 0;
+		GameBattleUnitPtr pUnit = GameBattleUnitPtr(new GameBattleUnit);
+		pUnit->exist = false;
+		pUnit->isback = false;
+		pUnit->debuff = 0;
+		pUnit->petriding_modelid = 0;
+		pBattleUnits.append(pUnit);
 	}
 
 	//计算宠物等级用
@@ -3917,20 +3954,20 @@ void GameCtrl::GetBattleUnits()
 		for (size_t i = 0; i < us.size(); ++i)
 		{
 			const CGA::cga_battle_unit_t &u = us.at(i);
-			m_pBattleUnits[u.pos]->exist = true;
-			m_pBattleUnits[u.pos]->name = QString::fromStdString(u.name);
-			m_pBattleUnits[u.pos]->hp = u.curhp;
-			m_pBattleUnits[u.pos]->maxhp = u.maxhp;
-			m_pBattleUnits[u.pos]->mp = u.curmp;
-			m_pBattleUnits[u.pos]->maxmp = u.maxmp;
-			m_pBattleUnits[u.pos]->level = u.level;
-			m_pBattleUnits[u.pos]->flags = u.flags;
-			m_pBattleUnits[u.pos]->pos = u.pos;
-			m_pBattleUnits[u.pos]->petriding_modelid = u.petriding_modelid;
+			pBattleUnits[u.pos]->exist = true;
+			pBattleUnits[u.pos]->name = QString::fromStdString(u.name);
+			pBattleUnits[u.pos]->hp = u.curhp;
+			pBattleUnits[u.pos]->maxhp = u.maxhp;
+			pBattleUnits[u.pos]->mp = u.curmp;
+			pBattleUnits[u.pos]->maxmp = u.maxmp;
+			pBattleUnits[u.pos]->level = u.level;
+			pBattleUnits[u.pos]->flags = u.flags;
+			pBattleUnits[u.pos]->pos = u.pos;
+			pBattleUnits[u.pos]->petriding_modelid = u.petriding_modelid;
 
-			m_pBattleUnits[u.pos]->debuff = 0;
-			m_pBattleUnits[u.pos]->multi_hp = 0;
-			m_pBattleUnits[u.pos]->multi_maxhp = 0;
+			pBattleUnits[u.pos]->debuff = 0;
+			pBattleUnits[u.pos]->multi_hp = 0;
+			pBattleUnits[u.pos]->multi_maxhp = 0;
 			if (petPosList.contains(u.pos))
 			{
 				nLv += u.level;
@@ -3969,7 +4006,7 @@ void GameCtrl::GetBattleUnits()
 			m_lastBattleAvgTeamPetLv = nLv / nCount;
 		}
 	}
-	emit NotifyGameBattlesInfo(m_pBattleUnits);
+	emit NotifyGameBattlesInfo(pBattleUnits);
 }
 
 void GameCtrl::SetScriptRunState(int state)

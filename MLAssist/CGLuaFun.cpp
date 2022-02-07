@@ -1556,6 +1556,8 @@ int CGLuaFun::Lua_GetPlayerAllData(LuaState *L)
 			subObj.SetInteger("pos", skinfo.pos);
 
 			CGA::cga_subskills_info_t subskillsinfo;
+			LuaObject subSkillObj(L);
+			subSkillObj.AssignNewTable();
 			//获取合成物品信息
 			CGA::cga_craft_info_t craftInfo;
 			if (g_CGAInterface->GetSubSkillsInfo(skinfo.index, subskillsinfo))
@@ -1572,9 +1574,11 @@ int CGLuaFun::Lua_GetPlayerAllData(LuaState *L)
 					subTbObj.SetInteger("cost", subskinfo.cost);
 					subTbObj.SetInteger("flags", subskinfo.flags);
 					subTbObj.SetBoolean("available", subskinfo.available);
-					subObj.SetObject(j + 1, subTbObj);
+					subSkillObj.SetObject(j + 1, subTbObj);
 				}
 			}
+			subObj.SetObject("subskill", subSkillObj);
+
 			skillObj.SetObject(i + 1, subObj);
 		}
 	}
@@ -3196,6 +3200,21 @@ int CGLuaFun::Lua_IsPlayerFlagEnabled(LuaState *L)
 	return 1;
 }
 
+int CGLuaFun::Lua_IsSkillValid(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		L->PushBoolean(false);
+		return 1;
+	}
+	int skillid = args[1].GetInteger();
+	bool valid = false;
+	g_CGAInterface->IsSkillValid(skillid,valid);
+	L->PushBoolean(valid);
+	return 1;
+}
+
 int CGLuaFun::Lua_GetMapIndex(LuaState *L)
 {
 	int index1, index2, index3;
@@ -3543,10 +3562,96 @@ int CGLuaFun::Lua_AssessItem(LuaState *L)
 	if (args.Count() < 2)
 		return 0;
 	int index = args[1].GetInteger();
-	int pos = args[1].GetInteger();
+	int pos = args[2].GetInteger();
 	bool bRes = false;
 	g_CGAInterface->AssessItem(index, pos, bRes);
 	return 0;
+}
+
+int CGLuaFun::Lua_GetCraftInfo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	int index = args[1].GetInteger();
+	int subIndex = args[2].GetInteger();
+	CGA::cga_craft_info_t craft;
+	g_CGAInterface->GetCraftInfo(index, subIndex, craft);
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
+	tableObj.SetInteger("id", craft.id);
+	tableObj.SetInteger("cost", craft.cost);
+	tableObj.SetInteger("level", craft.level);
+	tableObj.SetInteger("itemid", craft.itemid);
+	tableObj.SetInteger("index", craft.index);
+	tableObj.SetString("name", craft.name.c_str());
+	tableObj.SetString("info", craft.info.c_str());
+	tableObj.SetBoolean("available", craft.available);
+	
+	LuaObject subTableObj(L);
+	subTableObj.AssignNewTable();
+	for (int i = 0; i < 5; ++i)
+	{
+		LuaObject mtTbObj(L);
+		mtTbObj.AssignNewTable();
+		mtTbObj.SetInteger("itemid", craft.materials[i].itemid);
+		mtTbObj.SetInteger("count", craft.materials[i].count);
+		mtTbObj.SetString("name", craft.materials[i].name.c_str());
+		subTableObj.SetObject(i + 1, mtTbObj);
+	}
+	tableObj.SetObject("materials", subTableObj);
+	tableObj.Push(L); //这个不能省 省了就无效报错了
+	return 1;
+}
+
+int CGLuaFun::Lua_GetCraftsInfo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int index = args[1].GetInteger();
+	CGA::cga_crafts_info_t crafts;
+	g_CGAInterface->GetCraftsInfo(index, crafts);
+	LuaObject allTableObj(L);
+	allTableObj.AssignNewTable();
+	for (int n=0;n<crafts.size();++n)
+	{
+		const CGA::cga_craft_info_t &craft = crafts[n];
+		LuaObject tableObj(L);
+		tableObj.AssignNewTable();
+		tableObj.SetInteger("id", craft.id);
+		tableObj.SetInteger("cost", craft.cost);
+		tableObj.SetInteger("level", craft.level);
+		tableObj.SetInteger("itemid", craft.itemid);
+		tableObj.SetInteger("index", craft.index);
+		tableObj.SetString("name", craft.name.c_str());
+		tableObj.SetString("info", craft.info.c_str());
+		tableObj.SetBoolean("available", craft.available);
+
+		LuaObject subTableObj(L);
+		subTableObj.AssignNewTable();
+		for (int i = 0; i < 5; ++i)
+		{
+			LuaObject mtTbObj(L);
+			mtTbObj.AssignNewTable();
+			mtTbObj.SetInteger("itemid", craft.materials[i].itemid);
+			mtTbObj.SetInteger("count", craft.materials[i].count);
+			mtTbObj.SetString("name", craft.materials[i].name.c_str());
+			subTableObj.SetObject(i + 1, mtTbObj);
+		}
+		tableObj.SetObject("materials", subTableObj);
+		allTableObj.SetObject(n + 1, tableObj);
+	}	
+	allTableObj.Push(L); 
+	return 1;
+}
+
+int CGLuaFun::Lua_GetCraftStatus(LuaState *L)
+{
+	int status = 0;
+	g_CGAInterface->GetCraftStatus(status);
+	L->PushInteger(status);
+	return 1;
 }
 
 void CGLuaFun::PauseScript()
