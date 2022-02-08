@@ -755,6 +755,7 @@ namespace CGA
 		int* g_bank_gold;
 		npcdlg_item_info_t* g_npcdlg_item_base;
 		char* g_player_name;
+		char* g_player_gid;
 		int* g_player_remain_points;
 		pet_t* g_pet_base;
 		int* g_pet_id;

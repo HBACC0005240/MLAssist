@@ -130,12 +130,12 @@ struct GameBattleUnit : public GameInfo
 struct GameSkill
 {
 	bool exist = false; //是否存在
-	QString name;  //技能名称
-	QString info;  //技能介绍
-	int id = 0;	   //技能id
-	int cost = 0;  //耗魔
-	int flags = 0; //
-	int index = 0; //技能位置
+	QString name;		//技能名称
+	QString info;		//技能介绍
+	int id = 0;			//技能id
+	int cost = 0;		//耗魔
+	int flags = 0;		//
+	int index = 0;		//技能位置
 	int pos = 0;
 	int level = 0;			//等级
 	int maxLevel = 0;		//最高等级
@@ -200,7 +200,7 @@ struct GameAttrBase
 	int element_wind = 0;	  //风
 };
 struct PlayerDesc
-{	
+{
 	int changeBits;
 	int sellIcon;
 	std::string sellString;
@@ -209,7 +209,7 @@ struct PlayerDesc
 	int wantIcon;
 	std::string wantString;
 	std::string descString;
-} ;
+};
 
 //游戏人物信息
 struct Character : public GameInfo
@@ -243,7 +243,7 @@ struct Character : public GameInfo
 								  //int y = 0;
 								  //QString mapName;  //地图名称
 								  //int mapIndex = 0; //地图index
-								  //QString sGid;	  //游戏id
+	QString sGid;				  //游戏id
 	PlayerDesc persdesc;
 };
 
@@ -263,7 +263,7 @@ struct GamePet : public GameInfo
 	int lossMinGrade = -1;
 	int lossMaxGrade = -1;
 	bool bCalcGrade = true; //是否计算档次
-	int race = 0;	//种族
+	int race = 0;			//种族
 	int skillslots = 0;
 };
 //人物物品信息

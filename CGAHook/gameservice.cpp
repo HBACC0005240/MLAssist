@@ -3067,6 +3067,7 @@ void CGAService::Initialize(game_type type)
 		g_bank_gold = CONVERT_GAMEVAR(int*, 0x90481C);//ok
 		g_npcdlg_item_base = CONVERT_GAMEVAR(npcdlg_item_info_t*, 0x8D3198);//ok
 		g_player_name = CONVERT_GAMEVAR(char*, 0xBDB998);//ok
+		g_player_gid = CONVERT_GAMEVAR(char*, 0xBDB488);//ok
 		g_pet_base = CONVERT_GAMEVAR(pet_t*, 0xE109F8);//ok
 		g_pet_state = CONVERT_GAMEVAR(int*, 0x92F568);//ok
 		g_player_remain_points = CONVERT_GAMEVAR(int*, 0x8E3C50);//ok
@@ -3668,8 +3669,8 @@ const int g_yUnit = 16;
 const int g_playerUnit = 15;
 const int s_UnitPosToXY[][2] =
 {
-	{ 480, 370 - g_yUnit+ g_playerUnit},{ 540, 346 - g_yUnit + g_playerUnit },{ 410, 405 - g_yUnit + g_playerUnit},{ 610, 300 - g_yUnit + g_playerUnit },{ 350, 438 - g_yUnit + g_playerUnit},//370 too large
-	{ 416, 323 - g_yUnit +  g_playerUnit},{ 480, 287 - g_yUnit + g_playerUnit},{ 352, 359 - g_yUnit + g_playerUnit},{ 547, 251 - g_yUnit + g_playerUnit},{ 290, 395 - g_yUnit + g_playerUnit},
+	{ 480, 370 - g_yUnit + g_playerUnit},{ 540, 346 - g_yUnit + g_playerUnit },{ 410, 405 - g_yUnit + g_playerUnit},{ 610, 300 - g_yUnit + g_playerUnit },{ 350, 438 - g_yUnit + g_playerUnit},//370 too large
+	{ 416, 323 - g_yUnit + g_playerUnit},{ 480, 287 - g_yUnit + g_playerUnit},{ 352, 359 - g_yUnit + g_playerUnit},{ 547, 251 - g_yUnit + g_playerUnit},{ 290, 395 - g_yUnit + g_playerUnit},
 	{ 157, 187 - g_yUnit},{ 220, 150 - g_yUnit },{ 92 , 224 - g_yUnit },{ 282, 112 - g_yUnit},{ 40, 260 - g_yUnit },//158 too small
 	{ 215, 238 - g_yUnit},{ 277, 201 - g_yUnit },{ 154, 274 - g_yUnit },{ 342, 166 - g_yUnit},{ 88, 311 - g_yUnit},
 };
@@ -3740,7 +3741,7 @@ void CGAService::DrawCustomText()
 						TextOutA(hDC, x - width / 2, y + 15, buf, len);
 						SetTextColor(hDC, RGB(0, 200, 255));
 						TextOutA(hDC, x - width / 2 - 1, y - 1 + 15, buf, len);
-						
+
 						sprintf(buf, "%d", m_battle_units[i].level);
 						len = strlen(buf);
 
@@ -3976,6 +3977,7 @@ void CGAService::WM_GetPlayerInfo(cga_player_info_t* info)
 	if (m_game_type == cg_item_6000 && *g_pet_riding_stru)
 		info->petriding = (*(DWORD*)(*(DWORD*)(*(DWORD*)g_pet_riding_stru + 0xC) + 0x38)) ? true : false;
 	info->name = boost::locale::conv::to_utf<char>(g_player_name, "GBK");
+	info->gid = boost::locale::conv::to_utf<char>(g_player_gid, "GBK");
 	info->job = boost::locale::conv::to_utf<char>(g_job_name, "GBK");
 	info->nick = boost::locale::conv::to_utf<char>((*g_playerBase)->player_nick, "GBK");
 	for (size_t i = 0; i < 96; ++i)
@@ -7557,11 +7559,11 @@ void CGAService::WM_GetCardsRecvMsg(cga_cards_recv_msg_t* info)
 			cga_card_recv_msg_s& inf = info->at(info->size() - 1);
 			for (int j = 0; j < 10; ++j)
 			{
-				CGA::card_recv_msg_t& card_rcv_msg = g_card_recv_msg[i*10+j];				
+				CGA::card_recv_msg_t& card_rcv_msg = g_card_recv_msg[i * 10 + j];
 				inf.msgs[j].date = boost::locale::conv::to_utf<char>(card_rcv_msg.sdate, "GBK");
 				inf.msgs[j].msg = boost::locale::conv::to_utf<char>(card_rcv_msg.msg, "GBK");
 				inf.msgs[j].state = card_rcv_msg.state;
-			}			
+			}
 		}
 	}
 }

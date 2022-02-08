@@ -386,14 +386,13 @@ void GameDataWgt::OnNotifyGameCharacterInfo(CharacterPtr char_info)
 	auto gamePlayer = char_info;
 	//0xE8FECA  E21C4A这两个应该是环境变量，周围有其他信息，不是太准
 	//5CEE6C BDB488 这两个应该比较准 不知道哪个 先用1个BDB488附近有服务器id地址，并且和游戏名字地址接近 用这个
-	if (g_pGameCtrl->getGamePID() != 0 && g_pGameCtrl->getGameBaseAddr() != 0)
-	{
-		QString szLoginUser = YunLai::ReadMemoryStrFromProcessID(g_pGameCtrl->getGamePID(), (ULONG_PTR)g_pGameCtrl->getGameBaseAddr() + 0xBDB488, 100); //
-		g_pGameCtrl->SetGameGid(szLoginUser);
-		setItemText(0, 0, szLoginUser, QColor("red"));
-	}
-	
-
+	//if (g_pGameCtrl->getGamePID() != 0 && g_pGameCtrl->getGameBaseAddr() != 0)
+	//{
+	//	QString szLoginUser = YunLai::ReadMemoryStrFromProcessID(g_pGameCtrl->getGamePID(), (ULONG_PTR)g_pGameCtrl->getGameBaseAddr() + 0xBDB488, 100); //
+	//	g_pGameCtrl->SetGameGid(szLoginUser);
+	//	setItemText(0, 0, szLoginUser, QColor("red"));
+	//}
+	setItemText(0, 0, gamePlayer->sGid, QColor("red"));
 	setItemText(1, 0, gamePlayer->name, QColor("blue"));
 	//地图更新 还是由另外一个通知 比这个快点
 	//setItemText(2, 0, gamePlayer->mapName);

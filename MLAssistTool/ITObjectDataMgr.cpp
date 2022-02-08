@@ -411,7 +411,7 @@ ITObjectPtr ITObjectDataMgr::newOneObject(int nObjType, ITObjectPtr pOwn /*= NUL
 {
 	ITObjectPtr pNewObj = nullptr;
 	quint64 uNewID = getNewObjectID();
-	qDebug() << uNewID;
+	//qDebug() << uNewID;
 
 	pNewObj = g_objectModuleReg.CreateNewObject(nObjType);
 	if (!pNewObj)
@@ -425,8 +425,8 @@ ITObjectPtr ITObjectDataMgr::newOneObject(int nObjType, ITObjectPtr pOwn /*= NUL
 	}
 	if (pNewObj)
 	{
-		QMutexLocker locker(&m_objMutex);
 		pNewObj->setAddStatus();
+		QMutexLocker locker(&m_objMutex);
 		m_pAddObjectList.append(pNewObj);
 	}
 	return pNewObj;

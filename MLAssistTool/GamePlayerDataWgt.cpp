@@ -35,9 +35,24 @@ void GamePlayerDataWgt::init()
 	initTable(ui.tableWidget_item, 20);
 	ui.tableWidget_item->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	initTable(ui.tableWidget_bankItem, 80);
+	initTable(ui.tableWidget_pet, 60, 20);
+	initTable(ui.tableWidget_bankPet, 60, 20);
+	QStringList saveHeadList;
+	saveHeadList << "宠物1" << "宠物2" << "宠物3" << "宠物4" << "宠物5";
+	ui.tableWidget_pet->setColumnCount(saveHeadList.size());
+	ui.tableWidget_pet->setHorizontalHeaderLabels(saveHeadList);
+	ui.tableWidget_bankPet->setColumnCount(saveHeadList.size());
+	ui.tableWidget_bankPet->setHorizontalHeaderLabels(saveHeadList);
+	QStringList rowHeadList;
+	rowHeadList << "名称" << "生命" << "魔力" << "等级" << "经验" << "档次"\
+		<< "攻击" << "防御" << "敏捷" << "魔法" << "忠诚" << "状态";
+	ui.tableWidget_pet->verticalHeader()->setVisible(true);
+	ui.tableWidget_bankPet->verticalHeader()->setVisible(true);
+	ui.tableWidget_pet->setVerticalHeaderLabels(rowHeadList);
+	ui.tableWidget_bankPet->setVerticalHeaderLabels(rowHeadList);
 }
 
-void GamePlayerDataWgt::initTable(QTableWidget* pTable, int nCount/*=20*/)
+void GamePlayerDataWgt::initTable(QTableWidget* pTable, int nCount/*=20*/, int height)
 {
 	pTable->horizontalHeader()->setStyleSheet("font:bold;");
 	pTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -58,7 +73,7 @@ void GamePlayerDataWgt::initTable(QTableWidget* pTable, int nCount/*=20*/)
 			QTableWidgetItem* pItem = new QTableWidgetItem();
 			pTable->setItem(i, n, pItem);
 		}
-		pTable->setRowHeight(i, 40);
+		pTable->setRowHeight(i, height);
 	}
 }
 
@@ -244,6 +259,8 @@ void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 		ui.lineEdit_bankGold->setText(QString::number(pRole->_bankgold));
 		doUpdateBagItemTableWidget(pRole);
 		doUpdateBankItemTableWidget(pRole);
+		doUpdatePetTableWidget(ui.tableWidget_pet, pRole);
+		doUpdatePetTableWidget(ui.tableWidget_bankPet, pRole);
 		//tableWidget_item
 	}
 }
@@ -386,6 +403,104 @@ void GamePlayerDataWgt::doUpdateBankItemTableWidget(ITGidRolePtr pRole)
 	//ui.tableWidget_bankItem->resizeRowsToContents();
 }
 
+void GamePlayerDataWgt::doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePtr pRole)
+{
+	if (!pRole)
+		return;
+	pTable->setUpdatesEnabled(false);
+
+	int baseNum = 0;
+	if (pTable == ui.tableWidget_bankPet)
+	{
+		baseNum = 100;
+	}
+	for (size_t i = baseNum; i < 5 + baseNum; i++)
+	{
+		auto pPet = pRole->_petPosForPet.value(i);
+		int pos = i;
+		QString name;
+		QString szHp;
+		QString szMp;
+		QString sLv;
+		QString sXp;
+		QString sDangCi;
+		QString sAttac, sDefensive, sAgility, sSpirit, sLoyality;
+		QString state;
+		QColor gradeColor("black");
+		QColor backColor("white");
+		if (pPet && pPet->_bExist)
+		{
+			name = pPet->getObjectName();
+			if (name.isEmpty())
+			{
+				name = pPet->_realName;
+			}
+			pos = pPet->_pos;
+			if (pos < 0 || pos >= 5)
+			{
+				pos = i;
+			}
+			szHp = QString("%1/%2").arg(pPet->_hp).arg(pPet->_maxhp);
+			szMp = QString("%1/%2").arg(pPet->_mp).arg(pPet->_maxmp);
+			sLv = QString::number(pPet->_level);
+			sXp = QString("%1").arg(pPet->_maxxp - pPet->_xp);
+			sAttac = QString("%1").arg(pPet->_value_attack);
+			sDefensive = QString("%1").arg(pPet->_value_defensive);
+			sAgility = QString("%1").arg(pPet->_value_agility);
+			sSpirit = QString("%1").arg(pPet->_value_spirit);
+			sLoyality = QString("%1").arg(pPet->_loyality);
+
+			if (pPet->_grade >= 0)
+			{
+				if (pPet->_lossMinGrade != pPet->_lossMaxGrade && pPet->_lossMaxGrade != -1)
+					sDangCi = QString("%1~%2").arg(pPet->_lossMinGrade).arg(pPet->_lossMaxGrade);
+				else
+					sDangCi = QString("%1").arg(pPet->_grade);
+				if (pPet->_grade <= 3)
+				{
+					gradeColor = QColor(255, 0, 0); //QColor(255, 215, 0); //金色
+				}
+				else if (pPet->_grade > 3 && pPet->_grade <= 6)
+				{
+					gradeColor = QColor("#800080"); //紫色
+				}
+				else if (pPet->_grade > 6 && pPet->_grade <= 9)
+				{
+					gradeColor = QColor("blue"); //蓝色
+				}
+				else if (pPet->_grade > 9 && pPet->_grade <= 12)
+				{
+					gradeColor = QColor("green"); //绿色
+				}
+			}
+			state = "";// m_petState.value(pPet->battle_flags);
+		}
+		setItemText(pTable, 0, pos, name, QColor("blue"));
+		setItemText(pTable, 1, pos, szHp, QColor("red"));
+		setItemText(pTable, 2, pos, szMp, QColor("blue"));
+		setItemText(pTable, 3, pos, sLv, QColor("blue"));
+		setItemText(pTable, 4, pos, sXp, QColor("green"));
+		setItemText(pTable, 5, pos, sDangCi, gradeColor);
+		setItemText(pTable, 6, pos, sAttac);
+		setItemText(pTable, 7, pos, sDefensive);
+		setItemText(pTable, 8, pos, sAgility);
+		setItemText(pTable, 9, pos, sSpirit);
+		setItemText(pTable, 10, pos, sLoyality);
+		setItemText(pTable, 11, pos, state);
+	}
+	pTable->setUpdatesEnabled(true);
+}
+
+void GamePlayerDataWgt::setItemText(QTableWidget* pTable, int row, int col, const QString& szText, const QColor& szColor, const QColor& backColor)
+{
+	QTableWidgetItem* pItem = pTable->item(row, col);
+	if (pItem && pItem->text() != szText)
+	{
+		pItem->setText(szText);
+		pItem->setTextColor(szColor);
+		pItem->setBackgroundColor(backColor);
+	}
+}
 void GamePlayerDataWgt::on_pushButton_refreshModel_clicked()
 {
 	resetModel();

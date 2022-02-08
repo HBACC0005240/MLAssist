@@ -1139,9 +1139,9 @@ bool GameCtrl::AutoHeal()
 	}
 	if (pSelectSkill->subskills.size() < 1)
 		return false;
-	if (pSelectSkill->subskills.size() < ( m_pHealCfg->nLv+1))
+	if (pSelectSkill->subskills.size() < (m_pHealCfg->nLv + 1))
 		return false;
-	
+
 	m_pHealCfg->dCost = pSelectSkill->subskills.at(m_pHealCfg->nLv)->cost;
 	//	qDebug() << QString("耗魔%1").arg(m_pHealCfg->dCost);
 	if (m_pGameCharacter->mp < m_pHealCfg->dCost)
@@ -2239,7 +2239,8 @@ void GameCtrl::NotifyTimeoutThread(GameCtrl *pThis)
 				else
 					++it;
 			}
-		}{
+		}
+		{
 			QMutexLocker locker(&pThis->m_tradeDlgMutex);
 			quint64 curTime = GetTickCount();
 			for (auto it = pThis->m_tradeDlgCache.begin(); it != pThis->m_tradeDlgCache.end();)
@@ -2284,7 +2285,7 @@ void GameCtrl::OnQueueDownloadMap()
 {
 	if (!m_IsDownloadingMap)
 		return;
-	return;	//下载地图封了 先屏蔽
+	return; //下载地图封了 先屏蔽
 	//	qDebug() << "OnQueueDownloadMap";
 	int ingame = 0;
 	bool connected = g_CGAInterface->IsConnected();
@@ -2817,6 +2818,7 @@ void GameCtrl::OnGetCharacterData()
 		if (g_CGAInterface->GetPlayerInfo(info))
 		{
 			pNewChar->name = QString::fromStdString(info.name);
+			pNewChar->sGid = QString::fromStdString(info.gid);
 			pNewChar->job = QString::fromStdString(info.job);
 			pNewChar->level = info.level;
 			pNewChar->gold = info.gold;

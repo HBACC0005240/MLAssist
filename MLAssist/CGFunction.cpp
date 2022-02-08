@@ -1999,6 +1999,14 @@ QString CGFunction::GetMapName()
 	return QString::fromStdString(name);
 }
 
+QString CGFunction::GetMapFilePath()
+{
+	int index1, index2, index3;
+	std::string filemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
+	return QString::fromStdString(filemap);
+}
+
 int CGFunction::GetMapIndex()
 {
 	int index1, index2, index3;
@@ -2416,7 +2424,7 @@ QSharedPointer<CGA::cga_trade_dialog_t> CGFunction::WaitTradeDialog(int timeout)
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
 	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyTradeDialog, &loop, &QEventLoop::quit);
 	loop.exec();
-	retDlg = g_pGameCtrl->GetLastTradeDialog();	
+	retDlg = g_pGameCtrl->GetLastTradeDialog();
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	return retDlg;
 }
@@ -4982,11 +4990,7 @@ QList<QPoint> CGFunction::FindRandomSearchPath(int tx, int ty)
 QList<QPoint> CGFunction::MakeMapOpen()
 {
 	QList<QPoint> searchPath;
-
-	int index1, index2, index3;
-	std::string filemap;
-	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
-	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+	if (GetMapFilePath().contains("map\\0")) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图全开！";
 		return searchPath;
@@ -5192,7 +5196,11 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 {
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return false;
-	QList<QPoint> searchPath;
+	if (GetMapFilePath().contains("map\\0")) //固定地图 退出
+	{
+		qDebug() << "当前是固定地图，不进行地图全开！";
+		return false;
+	}
 	QPoint curPos = GetMapCoordinate();
 	//获取当前所有可行走区域坐标
 	auto moveAblePosList = GetMovablePoints(curPos);
@@ -5273,7 +5281,11 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 {
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return false;
-	QList<QPoint> searchPath;
+	if (GetMapFilePath().contains("map\\0")) //固定地图 退出
+	{
+		qDebug() << "当前是固定地图，不进行地图全开！";
+		return false;
+	}
 	QPoint curPos = GetMapCoordinate();
 	//获取当前所有可行走区域坐标
 	auto moveAblePosList = GetMovablePoints(curPos);
@@ -9665,7 +9677,7 @@ QString CGFunction::GetAllChatMsg(int count)
 {
 	if (m_chatMsgList.size() < 1)
 		return "";
-	
+
 	if (count == 0)
 	{
 		QString sMsg;

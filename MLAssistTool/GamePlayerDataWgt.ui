@@ -419,7 +419,93 @@
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <widget class="QTableWidget" name="tableWidget_pet"/>
+             <widget class="QTableWidget" name="tableWidget_pet">
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>新建行</string>
+               </property>
+              </row>
+              <column>
+               <property name="text">
+                <string>新建列</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>新建列</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>新建列</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>新建列</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>新建列</string>
+               </property>
+              </column>
+             </widget>
             </widget>
            </item>
           </layout>
@@ -430,7 +516,93 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QTableWidget" name="tableWidget_bankPet"/>
+            <widget class="QTableWidget" name="tableWidget_bankPet">
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>新建行</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>新建列</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>新建列</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>新建列</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>新建列</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>新建列</string>
+              </property>
+             </column>
+            </widget>
            </item>
           </layout>
          </widget>

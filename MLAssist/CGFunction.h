@@ -310,6 +310,7 @@ public:
 
 	//获取当前地图名称
 	QString GetMapName();
+	QString GetMapFilePath();
 
 	//获取地图编号
 	int GetMapIndex();

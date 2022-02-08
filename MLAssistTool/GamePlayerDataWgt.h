@@ -13,11 +13,12 @@ public:
 	~GamePlayerDataWgt();
 
 	void init();
-	void initTable(QTableWidget* pTable,int nCount=20);
+	void initTable(QTableWidget* pTable,int nCount=20, int height=40);
 protected:
 	void resetModel();
 	QString DisplayInputDlg(const QString& title, const QString& labelName);
 	void GetRowColFromItemPos(int itempos, int& row, int& col);
+	void setItemText(QTableWidget* pTable, int row, int col, const QString& szText, const QColor& szColor = QColor("black"), const QColor& backColor = QColor("white"));
 
 public slots:
 	void on_treeView_customContextMenuRequested(const QPoint&);
@@ -27,6 +28,7 @@ public slots:
 	void doTreeViewClicked(const QModelIndex& index);
 	void doUpdateBagItemTableWidget(ITGidRolePtr pRole);
 	void doUpdateBankItemTableWidget(ITGidRolePtr pRole);
+	void doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePtr pRole);
 	void on_pushButton_refreshModel_clicked();
 
 
