@@ -196,6 +196,11 @@ QTableView
        <string>调试</string>
       </attribute>
      </widget>
+     <widget class="GameSysCfgWgt" name="sysCfgWgt">
+      <attribute name="title">
+       <string>配置</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -212,6 +217,12 @@ QTableView
    <class>GameDebugWgt</class>
    <extends>QWidget</extends>
    <header>GameDebugWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameSysCfgWgt</class>
+   <extends>QWidget</extends>
+   <header>GameSysCfgWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

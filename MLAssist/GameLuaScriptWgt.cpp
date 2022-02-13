@@ -561,16 +561,16 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("SetPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_SetPlayerFlagEnabled);
 	objGlobal.Register("IsPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_IsPlayerFlagEnabled);
 	objGlobal.Register("IsSkillValid", m_luaFun, &CGLuaFun::Lua_IsSkillValid);
-	//objGlobal.Register("GetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSkillInfo);
-	//objGlobal.Register("GetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSkillsInfo);
-	//objGlobal.Register("GetSubSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillInfo);
-	//objGlobal.Register("GetSubSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillsInfo);
-	////objGlobal.Register("IsPetValid", m_luaFun, &CGLuaFun::Lua_IsPetValid);
-	//objGlobal.Register("GetPetInfo", m_luaFun, &CGLuaFun::Lua_GetPetInfo);
-	//objGlobal.Register("GetBankPetsInfo", m_luaFun, &CGLuaFun::Lua_GetBankPetsInfo);
-	//objGlobal.Register("IsPetSkillValid", m_luaFun, &CGLuaFun::Lua_IsPetSkillValid);
-	//objGlobal.Register("GetPetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillInfo);
-	//objGlobal.Register("GetPetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillsInfo);
+	objGlobal.Register("GetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSkillInfo);
+	objGlobal.Register("GetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSkillsInfo);
+	objGlobal.Register("GetSubSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillInfo);
+	objGlobal.Register("GetSubSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillsInfo);
+	objGlobal.Register("IsPetValid", m_luaFun, &CGLuaFun::Lua_IsPetValid);
+	objGlobal.Register("GetPetInfo", m_luaFun, &CGLuaFun::Lua_GetPetInfo);
+	objGlobal.Register("GetBankPetsInfo", m_luaFun, &CGLuaFun::Lua_GetBankPetsInfo);
+	objGlobal.Register("IsPetSkillValid", m_luaFun, &CGLuaFun::Lua_IsPetSkillValid);
+	objGlobal.Register("GetPetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillInfo);
+	objGlobal.Register("GetPetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillsInfo);
 	objGlobal.Register("GetMapIndex", m_luaFun, &CGLuaFun::Lua_GetMapIndex);
 	objGlobal.Register("GetMoveSpeed", m_luaFun, &CGLuaFun::Lua_GetMoveSpeed);
 	objGlobal.Register("GetMouseXY", m_luaFun, &CGLuaFun::Lua_GetMouseXY);
@@ -589,13 +589,13 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("ChangeTitleName", m_luaFun, &CGLuaFun::Lua_ChangeTitleName);
 	objGlobal.Register("ChangePersDesc", m_luaFun, &CGLuaFun::Lua_ChangePersDesc);
 	objGlobal.Register("ChangePetName", m_luaFun, &CGLuaFun::Lua_ChangePetName);
-	/*objGlobal.Register("GetCardsInfo", m_luaFun, &CGLuaFun::Lua_GetCardsInfo);
-		objGlobal.Register("GetCardsRecvMsg", m_luaFun, &CGLuaFun::Lua_GetCardsRecvMsg);
+	objGlobal.Register("GetCardsInfo", m_luaFun, &CGLuaFun::Lua_GetCardsInfo);
+	objGlobal.Register("GetCardsRecvMsg", m_luaFun, &CGLuaFun::Lua_GetCardsRecvMsg);
 	objGlobal.Register("GetPicBooksInfo", m_luaFun, &CGLuaFun::Lua_GetPicBooksInfo);
 	objGlobal.Register("IsItemValid", m_luaFun, &CGLuaFun::Lua_IsItemValid);
 	objGlobal.Register("GetItemInfo", m_luaFun, &CGLuaFun::Lua_GetItemInfo);
 	objGlobal.Register("GetItemsInfo", m_luaFun, &CGLuaFun::Lua_GetItemsInfo);
-	objGlobal.Register("GetBankItemsInfo", m_luaFun, &CGLuaFun::Lua_GetBankItemsInfo);*/
+	objGlobal.Register("GetBankItemsInfo", m_luaFun, &CGLuaFun::Lua_GetBankItemsInfo);
 	objGlobal.Register("GetBankGold", m_luaFun, &CGLuaFun::Lua_GetBankGold);
 	objGlobal.Register("UseItem", m_luaFun, &CGLuaFun::Lua_UseItem);
 	objGlobal.Register("MoveItem", m_luaFun, &CGLuaFun::Lua_MoveItem);
@@ -611,7 +611,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("UnitMenuSelect", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
 	objGlobal.Register("UpgradePlayer", m_luaFun, &CGLuaFun::Lua_UpgradePlayer);
 	objGlobal.Register("UpgradePet", m_luaFun, &CGLuaFun::Lua_UpgradePet);
-	/*objGlobal.Register("IsBattleUnitValid", m_luaFun, &CGLuaFun::Lua_IsBattleUnitValid);
+	objGlobal.Register("IsBattleUnitValid", m_luaFun, &CGLuaFun::Lua_IsBattleUnitValid);
 	objGlobal.Register("GetBattleUnit", m_luaFun, &CGLuaFun::Lua_GetBattleUnit);
 	objGlobal.Register("GetBattleUnits", m_luaFun, &CGLuaFun::Lua_GetBattleUnits);
 	objGlobal.Register("GetBattleContext", m_luaFun, &CGLuaFun::Lua_GetBattleContext);
@@ -630,7 +630,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("SetGameTextUICurrentScript", m_luaFun, &CGLuaFun::Lua_SetGameTextUICurrentScript);
 	objGlobal.Register("GetBattleEndTick", m_luaFun, &CGLuaFun::Lua_GetBattleEndTick);
 	objGlobal.Register("SetBattleEndTick", m_luaFun, &CGLuaFun::Lua_SetBattleEndTick);
-	objGlobal.Register("SetWorkDelay", m_luaFun, &CGLuaFun::Lua_SetWorkDelay);*/
+	objGlobal.Register("SetWorkDelay", m_luaFun, &CGLuaFun::Lua_SetWorkDelay);
 	objGlobal.Register("StartWork", m_luaFun, &CGLuaFun::Lua_StartWork);
 	objGlobal.Register("SetWorkAcceleration", m_luaFun, &CGLuaFun::Lua_SetWorkAcceleration);
 	objGlobal.Register("SetImmediateDoneWork", m_luaFun, &CGLuaFun::Lua_SetImmediateDoneWork);
@@ -640,7 +640,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("GetCraftInfo", m_luaFun, &CGLuaFun::Lua_GetCraftInfo);
 	objGlobal.Register("GetCraftsInfo", m_luaFun, &CGLuaFun::Lua_GetCraftsInfo);
 	objGlobal.Register("GetCraftStatus", m_luaFun, &CGLuaFun::Lua_GetCraftStatus);
-	/*objGlobal.Register("DoRequest", m_luaFun, &CGLuaFun::Lua_DoRequest);
+	objGlobal.Register("DoRequest", m_luaFun, &CGLuaFun::Lua_DoRequest);
 	objGlobal.Register("TradeAddStuffs", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
 	objGlobal.Register("AddAllTradeItems", m_luaFun, &CGLuaFun::Lua_AddAllTradeItems);
 	objGlobal.Register("IsUIDialogPresent", m_luaFun, &CGLuaFun::Lua_IsUIDialogPresent);
@@ -651,7 +651,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("EnableFlags", m_luaFun, &CGLuaFun::Lua_EnableFlags);
 	objGlobal.Register("SetWindowResolution", m_luaFun, &CGLuaFun::Lua_SetWindowResolution);
 	objGlobal.Register("RequestDownloadMap", m_luaFun, &CGLuaFun::Lua_RequestDownloadMap);
-	objGlobal.Register("GetNextAnimTickCount", m_luaFun, &CGLuaFun::Lua_GetNextAnimTickCount);*/
+	objGlobal.Register("GetNextAnimTickCount", m_luaFun, &CGLuaFun::Lua_GetNextAnimTickCount);
 	objGlobal.Register("LoginGameServer", m_luaFun, &CGLuaFun::Lua_LoginGameServer);
 	objGlobal.Register("CreateCharacter", m_luaFun, &CGLuaFun::Lua_CreateCharacter);
 	objGlobal.Register("PlayGesture", m_luaFun, &CGLuaFun::Lua_PlayGesture);

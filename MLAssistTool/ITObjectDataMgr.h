@@ -128,9 +128,15 @@ private:
 	QString m_strDBType;		   //当前数据库类型
 	QString m_strDBUser;		   //当前数据库用户名
 	QString m_strDBPwd;			   //当前数据库密码
-	ITObjectList m_pObjectList;	   //所有数据
-	ITObjectList m_pAddObjectList; //新增数据
-	ITObjectList m_pDelObjectList; //删除数据
+	//ITObjectList m_pObjectList;	   //所有数据
+	//ITObjectList m_pAddObjectList; //新增数据
+	//ITObjectList m_pDelObjectList; //删除数据
+	//QHash<quint64, ITObjectPtr> m_idForObj;
+	//QHash<quint64, ITObjectPtr> m_idForDelObj;
+	//QHash<quint64, ITObjectPtr> m_idForAllObj;
+	QHash<quint64, ITObjectPtr> m_pObjectList;
+	QHash<quint64, ITObjectPtr> m_pAddObjectList;
+	QHash<quint64, ITObjectPtr> m_pDelObjectList;
 
 	QMap<int, QImage> m_mapIndexForData; //地图index和数据映射
 	//暂不使用 解析原dat地图数据用
@@ -142,6 +148,7 @@ private:
 	QHash<QString, QHash<int, ITObjectPtr> > m_tableForObj; //加速查询
 	QHash<int, ITGameItemPtr> m_codeForGameItem;			//代码和道具映射
 	QMap<int, ITGameMapPtr> m_numberForGameMap;				//地图编码和地图对象映射
+	QMap<int, ITGameGateMapPtr> m_numberForGateMap;			//地图编码和地图可达对象映射
 	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
 
@@ -151,6 +158,6 @@ private:
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
 	QMutex m_objMutex;
-	QMutex m_rpcGidMutex;		
+	QMutex m_rpcGidMutex;
 };
 #endif

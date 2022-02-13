@@ -206,7 +206,7 @@ void RpcSocketClient::UploadGidData()
 		return;
 	}
 	CGData::UploadGidDataRequest request;
-	request.set_gid(g_pGameCtrl->GetGameGid().toStdString());
+	request.set_gid(pChara->sGid.toStdString());
 	request.set_character_name(pChara->name.toStdString());
 	CGData::CGCharacterData *charData = new CGData::CGCharacterData;
 	request.set_allocated_character_data(charData);
@@ -446,7 +446,7 @@ void RpcSocketClient::UploadGidBankData()
 		return;
 	}
 	CGData::UploadGidBankDataRequest request;
-	request.set_gid(g_pGameCtrl->GetGameGid().toStdString());
+	request.set_gid(pChara->sGid.toStdString());
 	request.set_character_name(pChara->name.toStdString());
 
 	int bankGold = 0;

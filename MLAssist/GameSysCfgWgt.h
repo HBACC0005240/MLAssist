@@ -3,6 +3,7 @@
 #include <QWidget>
 #include "ui_GameSysCfgWgt.h"
 #include <QKeySequence>
+#include <QSettings>
 class GameSysCfgWgt : public QWidget
 {
 	Q_OBJECT
@@ -17,6 +18,8 @@ protected:
 	bool GetInputKey(QString& inputKey);
 
 public slots:
+	void doLoadUserConfig(QSettings &iniFile);
+	void doSaveUserConfig(QSettings &iniFile);
 	void on_pushButton_fetchItem_clicked();
 	void on_pushButton_saveItem_clicked();
 	void on_pushButton_fetchPet_clicked();
@@ -32,6 +35,7 @@ public slots:
 	void on_toolButton_fetchAll_clicked();
 	void on_pushButton_sortBag_clicked();
 	void on_pushButton_sortBank_clicked();
+	void on_checkBox_autoSaveBank_stateChanged(int state);
 
 private:
 	Ui::GameSysCfgWgt ui;

@@ -3992,6 +3992,7 @@ CharacterPtr CGFunction::GetGameCharacter()
 		pNewChar->manu_skillful = info.manu_skillful;
 		pNewChar->manu_intelligence = info.manu_intelligence;
 		pNewChar->value_charisma = info.value_charisma;
+		pNewChar->sGid = QString::fromStdString(info.gid);
 		pNewChar->titles.clear(); //那边在调用 只能读
 		for (auto tmpTitle : info.titles)
 		{
@@ -9137,7 +9138,7 @@ bool CGFunction::SaveGatherAccountInfos()
 	QString path;
 	if (path.isEmpty())
 	{
-		QString saveName = GetGameCharacter()->name + "-" + g_pGameCtrl->GetGameGid();
+		QString saveName = GetGameCharacter()->name + "-" + GetGameCharacter()->sGid;
 		path = QString("%1\\仓库\\%2-仓库信息.html").arg(QApplication::applicationDirPath()).arg(saveName);
 	}
 	QFile file(path);

@@ -3548,6 +3548,10 @@ void GameCtrl::OnNotifyNPCDialog(const QSharedPointer<CGA_NPCDialog_t> &dlg)
 			default: break;
 		}
 	}
+	if (dlg->type == 23 && m_bAutoUpLoadBankData)//上传银行数据
+	{
+		RpcSocketClient::getInstance().UploadGidBankData();
+	}
 }
 
 void GameCtrl::OnNotifyPlayerMenu(QSharedPointer<CGA::cga_player_menu_items_t> menu)
@@ -3907,6 +3911,11 @@ void GameCtrl::OnSetAutoEatTimeCrystal(int state)
 void GameCtrl::OnSetAutoEatDogFood(int state)
 {
 	m_bAutoEatDogFood = (state == Qt::Checked ? true : false);
+}
+
+void GameCtrl::OnSetAutoUploadBankData(int state)
+{
+	m_bAutoUpLoadBankData = (state == Qt::Checked ? true : false);
 }
 
 void GameCtrl::GetBattleUnits()

@@ -46,6 +46,8 @@ protected:
 	//自动登录需要
 	void OnQueueAttachProcess(quint32 ProcessId, quint32 ThreadId, quint32 hWnd, QString dllPath);
 public slots:
+	void doLoadUserConfig(QSettings &iniFile);
+	void doSaveUserConfig(QSettings &iniFile);
 	void on_pushButton_logback();
 	void on_pushButton_logout();
 	void on_pushButton_attach_clicked();

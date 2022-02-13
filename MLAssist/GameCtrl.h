@@ -322,6 +322,7 @@ public slots:
 	void OnSetAutoEatDeepBlue(int state);										//打开关闭自动吃深蓝
 	void OnSetAutoEatTimeCrystal(int state);									//打开关闭自动吃时水
 	void OnSetAutoEatDogFood(int state);										//打开关闭自动吃狗粮
+	void OnSetAutoUploadBankData(int state);									//打开关闭自动上传银行数据
 
 private:
 	QMutex m_gidMutex;
@@ -377,6 +378,7 @@ private:
 	bool m_bHasNPCDlg = true;															 //是否有NPC对话框弹出 有True处理后false
 	bool m_bAutoClickNpc = false;														 //自动点击NPC
 	bool m_bAutoTalkNpcYesOrNo = true;													 //对话NPC选是或否
+	bool m_bAutoUpLoadBankData = true;													//自动上传银行信息
 	GameUpgradeCfg *m_upgradePetCfg;													 //宠物升级加点
 	GamePlayerUpgradeCfg *m_upgradePlayerCfg;											 //人物升级加点
 	QTime m_lastUpdateTeamTime;															 //获取队伍信息间隔

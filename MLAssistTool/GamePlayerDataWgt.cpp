@@ -414,6 +414,11 @@ void GamePlayerDataWgt::doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePt
 	{
 		baseNum = 100;
 	}
+	qDebug() << "PetSize:"<<pRole->_petPosForPet.size();
+	for (auto it=pRole->_petPosForPet.begin();it!=pRole->_petPosForPet.end();++it)
+	{
+		qDebug() << it.key();
+	}
 	for (size_t i = baseNum; i < 5 + baseNum; i++)
 	{
 		auto pPet = pRole->_petPosForPet.value(i);
@@ -475,6 +480,7 @@ void GamePlayerDataWgt::doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePt
 			}
 			state = "";// m_petState.value(pPet->battle_flags);
 		}
+		pos = pos - baseNum;
 		setItemText(pTable, 0, pos, name, QColor("blue"));
 		setItemText(pTable, 1, pos, szHp, QColor("red"));
 		setItemText(pTable, 2, pos, szMp, QColor("blue"));

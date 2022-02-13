@@ -1,6 +1,7 @@
 #include "GameSysCfgWgt.h"
 #include "CGFunction.h"
 #include "CustomQuickKeyDlg.h"
+#include "GameCtrl.h"
 GameSysCfgWgt::GameSysCfgWgt(QWidget *parent) :
 		QWidget(parent)
 {
@@ -44,6 +45,40 @@ bool GameSysCfgWgt::GetInputKey(QString &inputKey)
 		return true;
 	}
 	return false;
+}
+
+void GameSysCfgWgt::doLoadUserConfig(QSettings &iniFile)
+{
+	iniFile.beginGroup("SysConfig");
+	ui.checkBox_autoSaveBank->setChecked(iniFile.value("uploadBankData").toBool());
+	int quickCount = iniFile.value("keyCount").toInt();
+	for (int i=0;i<quickCount;++i)
+	{
+	 	int type=iniFile.value(QString("keyType-%1").arg(i+1)).toInt();
+		QString key= iniFile.value(QString("keyVal-%1").arg(i + 1)).toString();
+		g_pGameCtrl->SetQuickKey(type, key);
+
+	}
+	iniFile.endGroup();
+}
+
+void GameSysCfgWgt::doSaveUserConfig(QSettings &iniFile)
+{
+	iniFile.beginGroup("SysConfig");
+	iniFile.setValue("uploadBankData", ui.checkBox_autoSaveBank->isChecked());
+
+	auto quickKey = g_pGameCtrl->GetQuickKeyMap();
+	int nCount = 0;
+	iniFile.setValue("keyCount", quickKey.size());
+	for (auto it = quickKey.begin(); it != quickKey.end(); ++it)
+	{
+		nCount++;
+		int type = it.key();
+		QString shortKey = QKeySequence(g_pGameCtrl->qNativeKeycode(it.value())).toString();
+		iniFile.setValue(QString("keyType-%1").arg(nCount), type);
+		iniFile.setValue(QString("keyVal-%1").arg(nCount), shortKey);
+	}
+	iniFile.endGroup();
 }
 
 void GameSysCfgWgt::on_pushButton_fetchItem_clicked()
@@ -344,4 +379,9 @@ void GameSysCfgWgt::on_pushButton_sortBag_clicked()
 void GameSysCfgWgt::on_pushButton_sortBank_clicked()
 {
 	g_pGameFun->SortBankItems();
+}
+
+void GameSysCfgWgt::on_checkBox_autoSaveBank_stateChanged(int state)
+{
+	g_pGameCtrl->OnSetAutoUploadBankData(state);
 }

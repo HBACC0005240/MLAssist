@@ -171,7 +171,7 @@ public:
 	bool WithdrawItemAllEx();
 
 	void SortBagItems(bool bFront = false);
-	void SortBankItems(bool bFront = true);
+	void SortBankItems(bool bFront = false);
 
 	//获取料理item
 	GameItemList GetMagicFoodItems();

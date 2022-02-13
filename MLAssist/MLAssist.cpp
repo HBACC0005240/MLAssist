@@ -301,6 +301,7 @@ void MLAssist::on_load_config(const QString &sPath)
 	//	g_pGameCtrl->LoadConfig(path);
 	QSettings iniFile(sCfgPath, QSettings::IniFormat);
 	iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
+	ui.attachedWindget->doLoadUserConfig(iniFile);
 	ui.gameChatWgt->doLoadUserConfig(iniFile);
 	ui.gameDataWgt->doLoadUserConfig(iniFile);
 	ui.gameBattleWgt->doLoadUserConfig(iniFile);
@@ -317,6 +318,7 @@ void MLAssist::on_save_config(const QString &sPath)
 	qDebug() << "Save Config" << sPath;
 	QSettings iniFile(sPath, QSettings::IniFormat);
 	iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
+	ui.attachedWindget->doSaveUserConfig(iniFile);
 	ui.gameChatWgt->doSaveUserConfig(iniFile);
 	ui.gameDataWgt->doSaveUserConfig(iniFile);
 	ui.gameBattleWgt->doSaveUserConfig(iniFile);

@@ -174,6 +174,16 @@ bool AttachGameWnd::ReadSharedData(quint32 ProcessId, int &port, quint32 &hWnd)
 	return bSuccess;
 }
 
+void AttachGameWnd::doLoadUserConfig(QSettings &iniFile)
+{
+	ui.sysCfgWgt->doLoadUserConfig(iniFile);
+}
+
+void AttachGameWnd::doSaveUserConfig(QSettings &iniFile)
+{
+	ui.sysCfgWgt->doSaveUserConfig(iniFile);
+}
+
 void AttachGameWnd::on_pushButton_logback()
 {
 	g_CGAInterface->LogBack();

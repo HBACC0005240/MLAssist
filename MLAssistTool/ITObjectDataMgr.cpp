@@ -91,18 +91,18 @@ bool ITObjectDataMgr::Fini()
 //没有加类型判断 需要的话 加一个
 QString ITObjectDataMgr::FindItemCodeName(int nCode)
 {
-	for (auto pObj : m_pObjectList)
+	for (auto it=m_pObjectList.begin();it!=m_pObjectList.end();++it)
 	{
-		if (pObj->getObjectCode() == nCode)
+		if (it.value()->getObjectCode() == nCode)
 		{
-			return pObj->getObjectName();
+			return it.value()->getObjectName();
 		}
 	}
-	for (auto pObj : m_pAddObjectList)
+	for (auto it = m_pAddObjectList.begin(); it != m_pAddObjectList.end(); ++it)
 	{
-		if (pObj->getObjectCode() == nCode)
+		if (it.value()->getObjectCode() == nCode)
 		{
-			return pObj->getObjectName();
+			return it.value()->getObjectName();
 		}
 	}
 }
@@ -265,18 +265,18 @@ bool ITObjectDataMgr::FindTargetNavigationEx(ITGameGateMapPtr cRoute, int tgtInd
 ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType)
 {
 	ITObjectList pSelectObjs;
-	for (auto pObj : m_pObjectList)
+	for (auto it=m_pObjectList.begin();it!=m_pObjectList.end();++it)
 	{
-		if (pObj->getObjectType() == objType)
+		if (it.value()->getObjectType() == objType)
 		{
-			pSelectObjs.append(pObj);
+			pSelectObjs.append(it.value());
 		}
 	}
-	for (auto pObj : m_pAddObjectList)
+	for (auto it = m_pAddObjectList.begin(); it != m_pAddObjectList.end(); ++it)
 	{
-		if (pObj->getObjectType() == objType)
+		if (it.value()->getObjectType() == objType)
 		{
-			pSelectObjs.append(pObj);
+			pSelectObjs.append(it.value());
 		}
 	}
 	//
@@ -285,19 +285,13 @@ ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType)
 
 ITObjectPtr ITObjectDataMgr::FindObject(quint64 objid)
 {
-	for (int i = 0; i < m_pObjectList.size(); ++i)
+	if (m_pObjectList.contains(objid))
 	{
-		if (m_pObjectList[i]->getObjectID() == objid)
-		{
-			return m_pObjectList[i];
-		}
+		return m_pObjectList.value(objid);
 	}
-	for (int i = 0; i < m_pAddObjectList.size(); ++i)
+	if (m_pAddObjectList.contains(objid))
 	{
-		if (m_pAddObjectList[i]->getObjectID() == objid)
-		{
-			return m_pAddObjectList[i];
-		}
+		return m_pAddObjectList.value(objid);
 	}
 	return nullptr;
 }
@@ -427,7 +421,7 @@ ITObjectPtr ITObjectDataMgr::newOneObject(int nObjType, ITObjectPtr pOwn /*= NUL
 	{
 		pNewObj->setAddStatus();
 		QMutexLocker locker(&m_objMutex);
-		m_pAddObjectList.append(pNewObj);
+		m_pAddObjectList.insert(uNewID,pNewObj);
 	}
 	return pNewObj;
 }
@@ -457,14 +451,14 @@ bool ITObjectDataMgr::deleteOneObject(ITObjectPtr pObj)
 	if (nstatus == TStatus_Add)
 	{
 		pObj->setDelStatus();
-		m_pAddObjectList.removeOne(pObj);
+		m_pAddObjectList.remove(pObj->getObjectID());
 	}
 	else
 	{
 		pObj->setDelStatus();
-		m_pObjectList.removeOne(pObj);
-		if (!m_pDelObjectList.contains(pObj))
-			m_pDelObjectList.append(pObj);
+		m_pObjectList.remove(pObj->getObjectID());
+		if (!m_pDelObjectList.contains(pObj->getObjectID()))
+			m_pDelObjectList.insert(pObj->getObjectID(),pObj);
 	}
 	return true;
 }
@@ -481,9 +475,9 @@ bool ITObjectDataMgr::isNeedSaveData()
 
 	if (m_pAddObjectList.size() > 0)
 		return true;
-	for (int i = 0; i < m_pObjectList.size(); ++i)
+	for (auto it=m_pObjectList.begin();it!=m_pObjectList.end();++it)
 	{
-		if (m_pObjectList[i]->getStatus() != TStatus_Normal)
+		if (it.value()->getStatus() != TStatus_Normal)
 		{
 			return true;
 		}
@@ -547,7 +541,7 @@ bool ITObjectDataMgr::LoadIdentification()
 				pObj->setObjectDsec(sDesc);
 
 				pObj->setObjectID(nID);
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
 			}
 		}
 		return true;
@@ -579,7 +573,7 @@ bool ITObjectDataMgr::LoadAccount()
 				pObj->setObjectName(user);
 				pObj->setObjectDsec(sDesc);
 				pObj->setObjectID(nID);
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
 			}
 		}
 		return true;
@@ -614,7 +608,7 @@ bool ITObjectDataMgr::LoadAccountGid()
 					pAccountObj->addChildObj(pObj);
 					pObj->setObjectParent(pAccountObj);
 				}
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
 				m_idForAccountGid.insert(gid, pObj);
 			}
 		}
@@ -703,7 +697,7 @@ bool ITObjectDataMgr::LoadAccountRole()
 				pCharacter->_element_wind = recordset->getIntValue("element_wind");
 				pCharacter->_points_remain = recordset->getIntValue("points_remain");
 				pCharacter->setObjectName(sName);
-				m_pObjectList.append(pCharacter);
+				m_pObjectList.insert(nID, pCharacter);
 				m_idForAccountRole.insert(sGid + sName, pCharacter);
 			}
 		}
@@ -746,7 +740,7 @@ bool ITObjectDataMgr::LoadGidItems()
 				//pItem->setObjectDsec(sDesc);
 				pItem->setObjectCode(item_id);
 				pItem->setObjectID(nID);
-				m_pObjectList.append(pItem);
+				m_pObjectList.insert(nID, pItem);
 			}
 		}
 		return true;
@@ -826,7 +820,8 @@ bool ITObjectDataMgr::LoadGidPets()
 					pGidRole->addChildObj(pObj);
 				}
 
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
+
 			}
 		}
 		return true;
@@ -882,7 +877,7 @@ bool ITObjectDataMgr::LoadGidSkills()
 				//pItem->setObjectDsec(sDesc);
 				pObj->setObjectCode(skillid);
 				pObj->setObjectID(nID);
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
 			}
 		}
 		return true;
@@ -922,7 +917,7 @@ bool ITObjectDataMgr::LoadItems()
 				pItem->setObjectName(sName);
 				pItem->setObjectDsec(sDesc);
 				pItem->setObjectCode(nCode);
-				m_pObjectList.append(pItem);
+				m_pObjectList.insert(nID, pItem);
 				m_codeForGameItem.insert(nCode, pItem);
 			}
 		}
@@ -987,7 +982,7 @@ bool ITObjectDataMgr::LoadPets()
 				pObj->setObjectName(sName);
 				pObj->setObjectDsec(sDesc);
 				pObj->setObjectCode(nCode);
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
 				m_numberForPet.insert(petNumber, pObj);
 			}
 		}
@@ -1044,8 +1039,9 @@ bool ITObjectDataMgr::LoadGateMaps()
 				pObj->_npcSelect = npcSelect.split(";");
 				pObj->setObjectName(sName);
 				pObj->setObjectDsec(sDesc);
-				//pItem->setObjectCode(nCode);
-				m_pObjectList.append(pObj);
+				pObj->setObjectCode(mapNumber);
+				m_pObjectList.insert(nID, pObj);
+				m_numberForGateMap.insert(mapNumber, pObj);
 				auto pMapObj = m_numberForGameMap.value(mapNumber);
 				if (pMapObj)
 				{
@@ -1096,7 +1092,7 @@ bool ITObjectDataMgr::LoadMaps()
 				pObj->_oftenMap = isOften;
 				pObj->setObjectName(sName);
 				pObj->setObjectDsec(sDesc);
-				m_pObjectList.append(pObj);
+				m_pObjectList.insert(nID, pObj);
 				m_numberForGameMap.insert(number, pObj);
 			}
 		}
@@ -1156,27 +1152,27 @@ bool ITObjectDataMgr::insertNewDataToDB()
 	ITObjectList tempSuccessList; ///把成功的删除，不重复增加，修改和删除不做处理了
 	bool bSucc = true;
 	auto pTempObjList = m_pAddObjectList;
-	for (int i = 0; i < pTempObjList.size(); i++)
+	for (auto it = pTempObjList.begin();it!=pTempObjList.end();++it)
 	{
 		//recordLog(m_addlist[i]);
-		if (!insertOneDeviceToDB(pTempObjList[i]))
+		if (!insertOneDeviceToDB(it.value()))
 		{
 			bSucc = false;
 			break;
 		}
-		tempSuccessList.append(pTempObjList[i]);
+		tempSuccessList.append(it.value());
 
-		pTempObjList[i]->setNomalStatus();
-		m_pObjectList.append(pTempObjList[i]);
+		it.value()->setNomalStatus();
+		m_pObjectList.insert(it.value()->getObjectID(), it.value());
 	}
 	QMutexLocker locker(&m_objMutex);
 	if (!bSucc)
 	{ ///删除成功写入数据库的项
 		foreach(auto pDev, tempSuccessList)
 		{
-			if (m_pAddObjectList.contains(pDev))
+			if (m_pAddObjectList.contains(pDev->getObjectID()))
 			{
-				m_pAddObjectList.removeOne(pDev);
+				m_pAddObjectList.remove(pDev->getObjectID());
 			}
 		}
 		return false;
@@ -1187,13 +1183,13 @@ bool ITObjectDataMgr::insertNewDataToDB()
 
 bool ITObjectDataMgr::updateDataForDB()
 {
-	for (int i = 0; i < m_pObjectList.size(); ++i)
+	for (auto it = m_pObjectList.begin(); it != m_pObjectList.end(); ++it)
 	{
-		if (m_pObjectList[i]->getStatus() != TStatus_Normal)
+		if (it.value()->getStatus() != TStatus_Normal)
 		{
-			if (!updateOneDeviceToDB(m_pObjectList[i]))
+			if (!updateOneDeviceToDB(it.value()))
 				return false;
-			m_pObjectList[i]->setNomalStatus();
+			it.value()->setNomalStatus();
 		}
 	}
 	return true;
@@ -1201,9 +1197,9 @@ bool ITObjectDataMgr::updateDataForDB()
 bool ITObjectDataMgr::deleteDataFromDB()
 {
 	bool bRet = true;
-	for (int i = 0; i < m_pDelObjectList.size(); i++)
+	for (auto it = m_pDelObjectList.begin(); it != m_pDelObjectList.end(); ++it)
 	{
-		if (!deleteOneDeviceFromDB(m_pDelObjectList[i]))
+		if (!deleteOneDeviceFromDB(it.value()))
 		{
 			bRet = false;
 			return bRet;
@@ -1907,6 +1903,9 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	if (!request)
 		return;
 	QString sGid = QString::fromStdString(request->gid());
+	if (sGid.isEmpty())
+		return;
+	
 	QString sID = sGid + QString::fromStdString(request->character_name());
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
@@ -2119,6 +2118,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			petPtr->_grade = reqPet.grade();
 			petPtr->_lossMinGrade = reqPet.lossmingrade();
 			petPtr->_lossMaxGrade = reqPet.lossmaxgrade();
+			petPtr->_pos = reqPet.index();
 
 
 			petPtr->_points_remain = reqPet.detail().points_remain();
@@ -2214,7 +2214,11 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 {
 	if (!request)
 		return;
-	QString sID = QString::fromStdString(request->gid()) + QString::fromStdString(request->character_name());
+	QString sGid = QString::fromStdString(request->gid());
+	if (sGid.isEmpty())
+		return;
+	
+	QString sID = sGid + QString::fromStdString(request->character_name());
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
@@ -2298,6 +2302,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			petPtr->_grade = reqPet.grade();
 			petPtr->_lossMinGrade = reqPet.lossmingrade();
 			petPtr->_lossMaxGrade = reqPet.lossmaxgrade();
+			petPtr->_pos = reqPet.index();
 
 
 			petPtr->_points_remain = reqPet.detail().points_remain();
