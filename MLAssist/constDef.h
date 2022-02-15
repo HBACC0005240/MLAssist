@@ -458,6 +458,7 @@ enum TReturnGameData
 	TRet_Game_Sex,		  //性别
 	TRet_Game_ImageID,	  //图片id
 	TRet_Game_PlayerRank, //阶级  1 -5 转
+	TRet_Game_Gid, //阶级  1 -5 转
 };
 //自定义快捷键
 enum TDefQuickKey

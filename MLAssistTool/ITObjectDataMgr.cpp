@@ -1905,16 +1905,6 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	QString sGid = QString::fromStdString(request->gid());
 	if (sGid.isEmpty())
 		return;
-	
-	QString sID = sGid + QString::fromStdString(request->character_name());
-	auto pCharacter = m_idForAccountRole.value(sID);
-	if (!pCharacter)
-	{
-		pCharacter = newOneObject(TObject_GidRole).dynamicCast<ITGidRole>();;
-		m_idForAccountRole.insert(sID, pCharacter);
-	}
-	else
-		pCharacter->setEditStatus();
 	//附带生成一个gid
 	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 	if (pGid == nullptr)
@@ -1926,11 +1916,19 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			if (pGid)
 			{
 				m_idForAccountGid.insert(sGid, pGid);
-				pGid->addChildObj(pCharacter);
-				pCharacter->setObjectParent(pGid);
 			}
 		}
 	}
+	QString sID = sGid + QString::fromStdString(request->character_name());
+	auto pCharacter = m_idForAccountRole.value(sID);
+	if (!pCharacter)
+	{
+		pCharacter = newOneObject(TObject_GidRole, pGid).dynamicCast<ITGidRole>();;
+		m_idForAccountRole.insert(sID, pCharacter);
+	}
+	else
+		pCharacter->setEditStatus();
+	
 
 	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
 	pCharacter->_gid = QString::fromStdString(request->gid());

@@ -1465,6 +1465,7 @@ int CGLuaFun::Lua_GetPlayerAllData(LuaState *L)
 	CGA::cga_player_info_t info;
 	if (g_CGAInterface->GetPlayerInfo(info))
 	{
+		tableObj.SetString("gid", info.gid.c_str());
 		tableObj.SetString("name", info.name.c_str());
 		tableObj.SetString("job", info.job.c_str());
 		tableObj.SetInteger("level", info.level);

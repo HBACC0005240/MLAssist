@@ -92,6 +92,7 @@ CGFunction::CGFunction()
 	m_sysConfigMap.insert("移动速度", TSysConfigSet_MoveSpeed);
 	m_sysConfigMap.insert("人物称号", TSysConfigSet_PlayerTitle);
 
+	m_returnGameDataHash.insert("gid", TRet_Game_Gid);
 	m_returnGameDataHash.insert("hp", TRet_Game_Hp);
 	m_returnGameDataHash.insert("血", TRet_Game_Hp);
 	m_returnGameDataHash.insert("mp", TRet_Game_Mp);
@@ -681,6 +682,7 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 	int nType = m_returnGameDataHash.value(sLower);
 	switch (nType)
 	{
+		case TRet_Game_Gid: return QString::fromStdString(playerinfo.gid);
 		case TRet_Game_Hp: return playerinfo.hp;
 		case TRet_Game_Mp: return playerinfo.mp;
 		case TRet_Game_MaxHp: return playerinfo.maxhp;
@@ -1053,9 +1055,9 @@ GamePetList CGFunction::GetGamePets()
 		{
 			const CGA::cga_pet_info_t &petinfo = petsinfo.at(i);
 			auto pet = GamePetPtr(new GamePet);
-			if (pet->level == 1)
+			if (petinfo.level == 1)
 			{
-				QStringList inputData = g_pGameFun->GetPetCalcBpData(pet);
+				QStringList inputData = g_pGameFun->GetPetCalcBpData(petinfo);
 				auto pCalcData = g_pGamePetCalc->ParseLine(inputData);
 				if (pCalcData)
 				{
