@@ -90,6 +90,8 @@ public:
 
 	void AddNewSubscribe(const QStringList &subscribe);
 	void PublishOneTopic(const QString &topic, const QString &msg);
+	QStringList GetLastPublishMsg();
+
 
 protected:
 	bool LoadItems();
@@ -115,6 +117,8 @@ protected:
 	ITRouteNodePtr BackMapTraceRouteNode(ITRouteNodePtr node);
 	QPoint GetRandomSpaceOffLine(int mapIndex, int x, int y, int distance /*= 1*/);
 	QMap<QString, QSharedPointer<CGPetPictorialBook> > LoadPetBook();
+
+	static void NormalThread(ITObjectDataMgr* pThis);
 
 signals:
 	void signal_loadDataFini();
@@ -166,5 +170,7 @@ private:
 	QStringList m_subscribeList;							//软件自身 订阅列表 每次连接断开后，订阅会清空，此处记录所有订阅，等下次连接成功，重新订阅
 	QStringList m_customSubscribeList;						//脚本 订阅列表 每次连接断开后，订阅会清空，此处记录所有订阅，等下次连接成功，重新订阅
 	QStringList m_retrySubscribes;							//连接成功后，重新订阅列表
+	QMutex m_mqttMutex;										//mqtt信号量
+	QList<QPair<quint64, QStringList > > m_recvPublishMsgCache; //收到的发布消息缓存
 };
 #endif

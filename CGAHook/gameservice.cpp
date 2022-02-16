@@ -3976,6 +3976,7 @@ void CGAService::WM_GetPlayerInfo(cga_player_info_t* info)
 	info->usingpunchclock = (*g_playerBase)->using_punchclock ? true : false;
 	if (m_game_type == cg_item_6000 && *g_pet_riding_stru)
 		info->petriding = (*(DWORD*)(*(DWORD*)(*(DWORD*)g_pet_riding_stru + 0xC) + 0x38)) ? true : false;
+	info->player_index = *g_local_player_index;
 	info->name = boost::locale::conv::to_utf<char>(g_player_name, "GBK");
 	info->gid = boost::locale::conv::to_utf<char>(g_player_gid, "GBK");
 	info->job = boost::locale::conv::to_utf<char>(g_job_name, "GBK");

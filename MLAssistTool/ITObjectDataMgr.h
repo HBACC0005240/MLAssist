@@ -74,6 +74,9 @@ public:
 	void StoreServerMapData(const QString& mapName, int mapNumber);
 	void StoreUploadGidData(const ::CGData::UploadGidDataRequest* request);
 	void StoreUploadGidBankData(const ::CGData::UploadGidBankDataRequest* request);
+	//辅助查询接口
+	Status SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
+
 
 	static void loadDataBaseInfo(ITObjectDataMgr* pThis);
 	static void SaveDataThread(ITObjectDataMgr* pThis);

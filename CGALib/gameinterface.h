@@ -202,7 +202,7 @@ namespace CGA
 			int a11, int a12, int a13, int a14, int a15, int a16, int a17, int a18, int a19, int a20,
 			int a21, int a22, int a23, int a24,
 			bool a25, bool a26,
-			std::string& a27, std::string& a28, std::string& a29, const cga_playerpet_detail_info_t& a30, std::string& a31)
+			std::string& a27, std::string& a28, std::string& a29, const cga_playerpet_detail_info_t& a30, std::string& a31,int a32)
 			:
 			hp(a1), maxhp(a2), mp(a3), maxmp(a4), xp(a5), maxxp(a6),
 			health(a7), souls(a8), level(a9), gold(a10), score(a11), skillslots(a12), use_title(a13),
@@ -211,7 +211,7 @@ namespace CGA
 			manu_endurance(a21), manu_skillful(a22), manu_intelligence(a23), value_charisma(a24),
 
 			usingpunchclock(a25), petriding(a26),
-			name(a27), job(a28), nick(a29), detail(a30), gid(a31)
+			name(a27), job(a28), nick(a29), detail(a30), gid(a31),player_index(a32)
 		{
 
 		}
@@ -253,6 +253,7 @@ namespace CGA
 		std::vector<std::string> titles;
 		cga_pers_desc_t persdesc;
 		std::string gid;
+		int player_index;
 	}cga_player_info_t;
 
 	typedef struct cga_pet_info_s

@@ -213,6 +213,7 @@ bool ITObjectDataMgr::init()
 			QtConcurrent::run(SaveDataThread, this);
 		}
 	}
+	QtConcurrent::run(NormalThread,this);
 	return true;
 }
 
@@ -1534,7 +1535,44 @@ void ITObjectDataMgr::OnRecvMessage(const QByteArray &message, const QMqttTopicN
 	const QString content = QDateTime::currentDateTime().toString() + QLatin1String(" Received Topic: ") + topic.name() + QLatin1String(" Message: ") + message + QLatin1Char('\n');
 
 	//qDebug() << content;
+	QMutexLocker locker(&m_mqttMutex);
+	m_recvPublishMsgCache.push_back(qMakePair(GetTickCount(), QStringList() << topic.name() << message));
 	emit signal_mqttMsg(topic.name(), message);
+}
+QStringList ITObjectDataMgr::GetLastPublishMsg()
+{
+	if (m_recvPublishMsgCache.size() < 1)
+		return QStringList();
+	QMutexLocker locker(&m_mqttMutex);
+	auto lastData = m_recvPublishMsgCache.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return QStringList();
+	else
+		return lastData.second;
+}
+
+void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)
+{
+	if (!pThis)
+		return;
+	int ingame = 0;
+	while (!g_pGameCtrl->GetExitGame())
+	{
+		{		
+			QMutexLocker locker(&pThis->m_mqttMutex);
+			quint64 curTime = GetTickCount();
+			for (auto it = pThis->m_recvPublishMsgCache.begin(); it != pThis->m_recvPublishMsgCache.end();)
+			{
+				if ((curTime - it->first) > 30000)
+				{
+					it = pThis->m_recvPublishMsgCache.erase(it);
+				}
+				else
+					++it;
+			}
+		}
+		
+	}
 }
 
 void ITObjectDataMgr::OnCheckConnectMqtt()

@@ -13,7 +13,7 @@ namespace msgpack {
 			struct convert<cga_player_info_t> {
 				msgpack::object const& operator()(msgpack::object const& o, cga_player_info_t& v) const {
 					if (o.type != msgpack::type::ARRAY) throw msgpack::type_error();
-					if (o.via.array.size != 33) throw msgpack::type_error();
+					if (o.via.array.size != 34) throw msgpack::type_error();
 
 					v.hp = o.via.array.ptr[0].as<int>();
 					v.maxhp = o.via.array.ptr[1].as<int>();
@@ -53,6 +53,7 @@ namespace msgpack {
 					v.titles = o.via.array.ptr[30].as<std::vector<std::string>>();
 					v.persdesc = o.via.array.ptr[31].as<cga_pers_desc_t>();
 					v.gid = o.via.array.ptr[32].as<std::string>();
+					v.player_index = o.via.array.ptr[33].as<int>();
 					return o;
 				}
 			};
@@ -62,7 +63,7 @@ namespace msgpack {
 				template <typename Stream>
 				packer<Stream>& operator()(msgpack::packer<Stream>& o, cga_player_info_t const& v) const {
 					// packing member variables as an array.
-					o.pack_array(33);
+					o.pack_array(34);
 					o.pack(v.hp);
 					o.pack(v.maxhp);
 					o.pack(v.mp);
@@ -102,6 +103,7 @@ namespace msgpack {
 					o.pack(v.titles);
 					o.pack(v.persdesc);
 					o.pack(v.gid);
+					o.pack(v.player_index);
 					return o;
 				}
 			};
@@ -110,7 +112,7 @@ namespace msgpack {
 			struct object_with_zone<cga_player_info_t> {
 				void operator()(msgpack::object::with_zone& o, cga_player_info_t const& v) const {
 					o.type = type::ARRAY;
-					o.via.array.size = 33;
+					o.via.array.size = 34;
 					o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object) * o.via.array.size));
 
 					o.via.array.ptr[0] = msgpack::object(v.hp, o.zone);
@@ -152,6 +154,7 @@ namespace msgpack {
 					o.via.array.ptr[30] = msgpack::object(v.titles, o.zone);
 					o.via.array.ptr[31] = msgpack::object(v.persdesc, o.zone);
 					o.via.array.ptr[32] = msgpack::object(v.gid, o.zone);
+					o.via.array.ptr[33] = msgpack::object(v.player_index, o.zone);
 				}
 			};
 

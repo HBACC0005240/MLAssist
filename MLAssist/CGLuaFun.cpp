@@ -2895,7 +2895,12 @@ int CGLuaFun::Lua_GetDetailAllChatMsg(LuaState *L)
 
 int CGLuaFun::Lua_GetLastChatMsg(LuaState *L)
 {
-	QString sMsg = g_pGameFun->GetLastChatMsg();
+	auto sLastMsg = g_pGameFun->GetLastChatMsg();
+	QString sMsg;
+	if (sLastMsg.size() >= 2)
+	{
+		sMsg = sLastMsg[1];
+	}
 	L->PushString(sMsg.toStdString().c_str());
 	return 1;
 }

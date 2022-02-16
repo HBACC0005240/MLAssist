@@ -46,7 +46,7 @@ struct TableStruct_CGData_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[31]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[35]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -132,6 +132,18 @@ extern CGSysTimeResponseDefaultTypeInternal _CGSysTimeResponse_default_instance_
 class CGVoidData;
 struct CGVoidDataDefaultTypeInternal;
 extern CGVoidDataDefaultTypeInternal _CGVoidData_default_instance_;
+class SelectAccountGidDataRequest;
+struct SelectAccountGidDataRequestDefaultTypeInternal;
+extern SelectAccountGidDataRequestDefaultTypeInternal _SelectAccountGidDataRequest_default_instance_;
+class SelectAccountGidDataResponse;
+struct SelectAccountGidDataResponseDefaultTypeInternal;
+extern SelectAccountGidDataResponseDefaultTypeInternal _SelectAccountGidDataResponse_default_instance_;
+class SelectGidDataRequest;
+struct SelectGidDataRequestDefaultTypeInternal;
+extern SelectGidDataRequestDefaultTypeInternal _SelectGidDataRequest_default_instance_;
+class SelectGidDataResponse;
+struct SelectGidDataResponseDefaultTypeInternal;
+extern SelectGidDataResponseDefaultTypeInternal _SelectGidDataResponse_default_instance_;
 class StringPub;
 struct StringPubDefaultTypeInternal;
 extern StringPubDefaultTypeInternal _StringPub_default_instance_;
@@ -175,6 +187,10 @@ template<> ::CGData::CGStoreMapRequest* Arena::CreateMaybeMessage<::CGData::CGSt
 template<> ::CGData::CGStoreMapResponse* Arena::CreateMaybeMessage<::CGData::CGStoreMapResponse>(Arena*);
 template<> ::CGData::CGSysTimeResponse* Arena::CreateMaybeMessage<::CGData::CGSysTimeResponse>(Arena*);
 template<> ::CGData::CGVoidData* Arena::CreateMaybeMessage<::CGData::CGVoidData>(Arena*);
+template<> ::CGData::SelectAccountGidDataRequest* Arena::CreateMaybeMessage<::CGData::SelectAccountGidDataRequest>(Arena*);
+template<> ::CGData::SelectAccountGidDataResponse* Arena::CreateMaybeMessage<::CGData::SelectAccountGidDataResponse>(Arena*);
+template<> ::CGData::SelectGidDataRequest* Arena::CreateMaybeMessage<::CGData::SelectGidDataRequest>(Arena*);
+template<> ::CGData::SelectGidDataResponse* Arena::CreateMaybeMessage<::CGData::SelectGidDataResponse>(Arena*);
 template<> ::CGData::StringPub* Arena::CreateMaybeMessage<::CGData::StringPub>(Arena*);
 template<> ::CGData::UploadGidBankDataRequest* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataRequest>(Arena*);
 template<> ::CGData::UploadGidBankDataResponse* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataResponse>(Arena*);
@@ -588,6 +604,7 @@ class UploadGidBankDataRequest final :
     kGidFieldNumber = 1,
     kCharacterNameFieldNumber = 2,
     kGoldFieldNumber = 3,
+    kRoleTypeFieldNumber = 6,
   };
   // repeated .CGData.CGPetData pet_data = 4;
   int pet_data_size() const;
@@ -662,6 +679,15 @@ class UploadGidBankDataRequest final :
   void _internal_set_gold(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 role_type = 6;
+  void clear_role_type();
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type() const;
+  void set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_role_type() const;
+  void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.UploadGidBankDataRequest)
  private:
   class _Internal;
@@ -674,6 +700,7 @@ class UploadGidBankDataRequest final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
   ::PROTOBUF_NAMESPACE_ID::int32 gold_;
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -1003,6 +1030,7 @@ class UploadGidDataRequest final :
     kGidFieldNumber = 1,
     kCharacterNameFieldNumber = 2,
     kCharacterDataFieldNumber = 3,
+    kRoleTypeFieldNumber = 6,
   };
   // repeated .CGData.CGPetData pet_data = 4;
   int pet_data_size() const;
@@ -1086,6 +1114,15 @@ class UploadGidDataRequest final :
       ::CGData::CGCharacterData* character_data);
   ::CGData::CGCharacterData* unsafe_arena_release_character_data();
 
+  // int32 role_type = 6;
+  void clear_role_type();
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type() const;
+  void set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_role_type() const;
+  void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.UploadGidDataRequest)
  private:
   class _Internal;
@@ -1098,6 +1135,685 @@ class UploadGidDataRequest final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
   ::CGData::CGCharacterData* character_data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectAccountGidDataRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectAccountGidDataRequest) */ {
+ public:
+  inline SelectAccountGidDataRequest() : SelectAccountGidDataRequest(nullptr) {}
+  ~SelectAccountGidDataRequest() override;
+  explicit constexpr SelectAccountGidDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectAccountGidDataRequest(const SelectAccountGidDataRequest& from);
+  SelectAccountGidDataRequest(SelectAccountGidDataRequest&& from) noexcept
+    : SelectAccountGidDataRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectAccountGidDataRequest& operator=(const SelectAccountGidDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectAccountGidDataRequest& operator=(SelectAccountGidDataRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectAccountGidDataRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectAccountGidDataRequest* internal_default_instance() {
+    return reinterpret_cast<const SelectAccountGidDataRequest*>(
+               &_SelectAccountGidDataRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(SelectAccountGidDataRequest& a, SelectAccountGidDataRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectAccountGidDataRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectAccountGidDataRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectAccountGidDataRequest* New() const final {
+    return new SelectAccountGidDataRequest();
+  }
+
+  SelectAccountGidDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectAccountGidDataRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectAccountGidDataRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectAccountGidDataRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectAccountGidDataRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectAccountGidDataRequest";
+  }
+  protected:
+  explicit SelectAccountGidDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAccountFieldNumber = 1,
+  };
+  // string account = 1;
+  void clear_account();
+  const std::string& account() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_account(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_account();
+  PROTOBUF_MUST_USE_RESULT std::string* release_account();
+  void set_allocated_account(std::string* account);
+  private:
+  const std::string& _internal_account() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_account(const std::string& value);
+  std::string* _internal_mutable_account();
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectAccountGidDataRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr account_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectGidDataRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectGidDataRequest) */ {
+ public:
+  inline SelectGidDataRequest() : SelectGidDataRequest(nullptr) {}
+  ~SelectGidDataRequest() override;
+  explicit constexpr SelectGidDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectGidDataRequest(const SelectGidDataRequest& from);
+  SelectGidDataRequest(SelectGidDataRequest&& from) noexcept
+    : SelectGidDataRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectGidDataRequest& operator=(const SelectGidDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectGidDataRequest& operator=(SelectGidDataRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectGidDataRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectGidDataRequest* internal_default_instance() {
+    return reinterpret_cast<const SelectGidDataRequest*>(
+               &_SelectGidDataRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(SelectGidDataRequest& a, SelectGidDataRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectGidDataRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectGidDataRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectGidDataRequest* New() const final {
+    return new SelectGidDataRequest();
+  }
+
+  SelectGidDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectGidDataRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectGidDataRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectGidDataRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectGidDataRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectGidDataRequest";
+  }
+  protected:
+  explicit SelectGidDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGidFieldNumber = 1,
+    kRoleTypeFieldNumber = 2,
+  };
+  // string gid = 1;
+  void clear_gid();
+  const std::string& gid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_gid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_gid();
+  PROTOBUF_MUST_USE_RESULT std::string* release_gid();
+  void set_allocated_gid(std::string* gid);
+  private:
+  const std::string& _internal_gid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_gid(const std::string& value);
+  std::string* _internal_mutable_gid();
+  public:
+
+  // int32 role_type = 2;
+  void clear_role_type();
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type() const;
+  void set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_role_type() const;
+  void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectGidDataRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectAccountGidDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectAccountGidDataResponse) */ {
+ public:
+  inline SelectAccountGidDataResponse() : SelectAccountGidDataResponse(nullptr) {}
+  ~SelectAccountGidDataResponse() override;
+  explicit constexpr SelectAccountGidDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectAccountGidDataResponse(const SelectAccountGidDataResponse& from);
+  SelectAccountGidDataResponse(SelectAccountGidDataResponse&& from) noexcept
+    : SelectAccountGidDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectAccountGidDataResponse& operator=(const SelectAccountGidDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectAccountGidDataResponse& operator=(SelectAccountGidDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectAccountGidDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectAccountGidDataResponse* internal_default_instance() {
+    return reinterpret_cast<const SelectAccountGidDataResponse*>(
+               &_SelectAccountGidDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(SelectAccountGidDataResponse& a, SelectAccountGidDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectAccountGidDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectAccountGidDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectAccountGidDataResponse* New() const final {
+    return new SelectAccountGidDataResponse();
+  }
+
+  SelectAccountGidDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectAccountGidDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectAccountGidDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectAccountGidDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectAccountGidDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectAccountGidDataResponse";
+  }
+  protected:
+  explicit SelectAccountGidDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGidDataFieldNumber = 1,
+  };
+  // repeated .CGData.SelectGidDataResponse gidData = 1;
+  int giddata_size() const;
+  private:
+  int _internal_giddata_size() const;
+  public:
+  void clear_giddata();
+  ::CGData::SelectGidDataResponse* mutable_giddata(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::SelectGidDataResponse >*
+      mutable_giddata();
+  private:
+  const ::CGData::SelectGidDataResponse& _internal_giddata(int index) const;
+  ::CGData::SelectGidDataResponse* _internal_add_giddata();
+  public:
+  const ::CGData::SelectGidDataResponse& giddata(int index) const;
+  ::CGData::SelectGidDataResponse* add_giddata();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::SelectGidDataResponse >&
+      giddata() const;
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectAccountGidDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::SelectGidDataResponse > giddata_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectGidDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectGidDataResponse) */ {
+ public:
+  inline SelectGidDataResponse() : SelectGidDataResponse(nullptr) {}
+  ~SelectGidDataResponse() override;
+  explicit constexpr SelectGidDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectGidDataResponse(const SelectGidDataResponse& from);
+  SelectGidDataResponse(SelectGidDataResponse&& from) noexcept
+    : SelectGidDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectGidDataResponse& operator=(const SelectGidDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectGidDataResponse& operator=(SelectGidDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectGidDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectGidDataResponse* internal_default_instance() {
+    return reinterpret_cast<const SelectGidDataResponse*>(
+               &_SelectGidDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(SelectGidDataResponse& a, SelectGidDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectGidDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectGidDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectGidDataResponse* New() const final {
+    return new SelectGidDataResponse();
+  }
+
+  SelectGidDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectGidDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectGidDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectGidDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectGidDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectGidDataResponse";
+  }
+  protected:
+  explicit SelectGidDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPetDataFieldNumber = 5,
+    kItemsFieldNumber = 6,
+    kGidFieldNumber = 1,
+    kCharacterNameFieldNumber = 3,
+    kCharacterDataFieldNumber = 4,
+    kRoleTypeFieldNumber = 2,
+  };
+  // repeated .CGData.CGPetData pet_data = 5;
+  int pet_data_size() const;
+  private:
+  int _internal_pet_data_size() const;
+  public:
+  void clear_pet_data();
+  ::CGData::CGPetData* mutable_pet_data(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
+      mutable_pet_data();
+  private:
+  const ::CGData::CGPetData& _internal_pet_data(int index) const;
+  ::CGData::CGPetData* _internal_add_pet_data();
+  public:
+  const ::CGData::CGPetData& pet_data(int index) const;
+  ::CGData::CGPetData* add_pet_data();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
+      pet_data() const;
+
+  // repeated .CGData.CGItemData items = 6;
+  int items_size() const;
+  private:
+  int _internal_items_size() const;
+  public:
+  void clear_items();
+  ::CGData::CGItemData* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
+      mutable_items();
+  private:
+  const ::CGData::CGItemData& _internal_items(int index) const;
+  ::CGData::CGItemData* _internal_add_items();
+  public:
+  const ::CGData::CGItemData& items(int index) const;
+  ::CGData::CGItemData* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
+      items() const;
+
+  // string gid = 1;
+  void clear_gid();
+  const std::string& gid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_gid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_gid();
+  PROTOBUF_MUST_USE_RESULT std::string* release_gid();
+  void set_allocated_gid(std::string* gid);
+  private:
+  const std::string& _internal_gid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_gid(const std::string& value);
+  std::string* _internal_mutable_gid();
+  public:
+
+  // string character_name = 3;
+  void clear_character_name();
+  const std::string& character_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_character_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_character_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_character_name();
+  void set_allocated_character_name(std::string* character_name);
+  private:
+  const std::string& _internal_character_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_character_name(const std::string& value);
+  std::string* _internal_mutable_character_name();
+  public:
+
+  // .CGData.CGCharacterData character_data = 4;
+  bool has_character_data() const;
+  private:
+  bool _internal_has_character_data() const;
+  public:
+  void clear_character_data();
+  const ::CGData::CGCharacterData& character_data() const;
+  PROTOBUF_MUST_USE_RESULT ::CGData::CGCharacterData* release_character_data();
+  ::CGData::CGCharacterData* mutable_character_data();
+  void set_allocated_character_data(::CGData::CGCharacterData* character_data);
+  private:
+  const ::CGData::CGCharacterData& _internal_character_data() const;
+  ::CGData::CGCharacterData* _internal_mutable_character_data();
+  public:
+  void unsafe_arena_set_allocated_character_data(
+      ::CGData::CGCharacterData* character_data);
+  ::CGData::CGCharacterData* unsafe_arena_release_character_data();
+
+  // int32 role_type = 2;
+  void clear_role_type();
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type() const;
+  void set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_role_type() const;
+  void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectGidDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData > pet_data_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData > items_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
+  ::CGData::CGCharacterData* character_data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -1147,7 +1863,7 @@ class CGBaseData final :
                &_CGBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    9;
 
   friend void swap(CGBaseData& a, CGBaseData& b) {
     a.Swap(&b);
@@ -1379,7 +2095,7 @@ class CGSkillBaseData final :
                &_CGSkillBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    10;
 
   friend void swap(CGSkillBaseData& a, CGSkillBaseData& b) {
     a.Swap(&b);
@@ -1658,7 +2374,7 @@ class CGAttrBaseData final :
                &_CGAttrBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    11;
 
   friend void swap(CGAttrBaseData& a, CGAttrBaseData& b) {
     a.Swap(&b);
@@ -2061,7 +2777,7 @@ class CGCharacterPersDesc final :
                &_CGCharacterPersDesc_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    12;
 
   friend void swap(CGCharacterPersDesc& a, CGCharacterPersDesc& b) {
     a.Swap(&b);
@@ -2297,7 +3013,7 @@ class CGCharacterData final :
                &_CGCharacterData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    13;
 
   friend void swap(CGCharacterData& a, CGCharacterData& b) {
     a.Swap(&b);
@@ -2832,7 +3548,7 @@ class CGPetData final :
                &_CGPetData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    14;
 
   friend void swap(CGPetData& a, CGPetData& b) {
     a.Swap(&b);
@@ -3157,7 +3873,7 @@ class CGItemData final :
                &_CGItemData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    15;
 
   friend void swap(CGItemData& a, CGItemData& b) {
     a.Swap(&b);
@@ -3410,7 +4126,7 @@ class UploadGidDataResponse final :
                &_UploadGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    16;
 
   friend void swap(UploadGidDataResponse& a, UploadGidDataResponse& b) {
     a.Swap(&b);
@@ -3536,7 +4252,7 @@ class UploadGidBankDataResponse final :
                &_UploadGidBankDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    17;
 
   friend void swap(UploadGidBankDataResponse& a, UploadGidBankDataResponse& b) {
     a.Swap(&b);
@@ -3662,7 +4378,7 @@ class CGStoreMapRequest final :
                &_CGStoreMapRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    18;
 
   friend void swap(CGStoreMapRequest& a, CGStoreMapRequest& b) {
     a.Swap(&b);
@@ -3817,7 +4533,7 @@ class CGStoreMapResponse final :
                &_CGStoreMapResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    19;
 
   friend void swap(CGStoreMapResponse& a, CGStoreMapResponse& b) {
     a.Swap(&b);
@@ -3943,7 +4659,7 @@ class CGMapDataRequest final :
                &_CGMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    20;
 
   friend void swap(CGMapDataRequest& a, CGMapDataRequest& b) {
     a.Swap(&b);
@@ -4069,7 +4785,7 @@ class CGMapDataResponse final :
                &_CGMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    21;
 
   friend void swap(CGMapDataResponse& a, CGMapDataResponse& b) {
     a.Swap(&b);
@@ -4217,7 +4933,7 @@ class CGMapData final :
                &_CGMapData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    22;
 
   friend void swap(CGMapData& a, CGMapData& b) {
     a.Swap(&b);
@@ -4410,7 +5126,7 @@ class CGPetGradeCalcRequest final :
                &_CGPetGradeCalcRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    23;
 
   friend void swap(CGPetGradeCalcRequest& a, CGPetGradeCalcRequest& b) {
     a.Swap(&b);
@@ -4536,7 +5252,7 @@ class CGPetGradeCalcResponse final :
                &_CGPetGradeCalcResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    24;
 
   friend void swap(CGPetGradeCalcResponse& a, CGPetGradeCalcResponse& b) {
     a.Swap(&b);
@@ -4684,7 +5400,7 @@ class CGPetGradeCalcData final :
                &_CGPetGradeCalcData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    25;
 
   friend void swap(CGPetGradeCalcData& a, CGPetGradeCalcData& b) {
     a.Swap(&b);
@@ -5066,7 +5782,7 @@ class CGItemRequest final :
                &_CGItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    26;
 
   friend void swap(CGItemRequest& a, CGItemRequest& b) {
     a.Swap(&b);
@@ -5205,7 +5921,7 @@ class CGItemResponse final :
                &_CGItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    27;
 
   friend void swap(CGItemResponse& a, CGItemResponse& b) {
     a.Swap(&b);
@@ -5469,7 +6185,7 @@ class CGStoreItemRequest final :
                &_CGStoreItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    28;
 
   friend void swap(CGStoreItemRequest& a, CGStoreItemRequest& b) {
     a.Swap(&b);
@@ -5722,7 +6438,7 @@ class CGStoreItemResponse final :
                &_CGStoreItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    29;
 
   friend void swap(CGStoreItemResponse& a, CGStoreItemResponse& b) {
     a.Swap(&b);
@@ -5877,7 +6593,7 @@ class CGVoidData final :
                &_CGVoidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    30;
 
   friend void swap(CGVoidData& a, CGVoidData& b) {
     a.Swap(&b);
@@ -6003,7 +6719,7 @@ class CGBoolData final :
                &_CGBoolData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    31;
 
   friend void swap(CGBoolData& a, CGBoolData& b) {
     a.Swap(&b);
@@ -6142,7 +6858,7 @@ class CGIntData final :
                &_CGIntData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    32;
 
   friend void swap(CGIntData& a, CGIntData& b) {
     a.Swap(&b);
@@ -6281,7 +6997,7 @@ class CGSysTimeResponse final :
                &_CGSysTimeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    33;
 
   friend void swap(CGSysTimeResponse& a, CGSysTimeResponse& b) {
     a.Swap(&b);
@@ -6497,7 +7213,7 @@ class CGPlayerFlagEnabledData final :
                &_CGPlayerFlagEnabledData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    34;
 
   friend void swap(CGPlayerFlagEnabledData& a, CGPlayerFlagEnabledData& b) {
     a.Swap(&b);
@@ -6876,6 +7592,26 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
 UploadGidBankDataRequest::items() const {
   // @@protoc_insertion_point(field_list:CGData.UploadGidBankDataRequest.items)
   return items_;
+}
+
+// int32 role_type = 6;
+inline void UploadGidBankDataRequest::clear_role_type() {
+  role_type_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidBankDataRequest::_internal_role_type() const {
+  return role_type_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidBankDataRequest::role_type() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidBankDataRequest.role_type)
+  return _internal_role_type();
+}
+inline void UploadGidBankDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  role_type_ = value;
+}
+inline void UploadGidBankDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_role_type(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadGidBankDataRequest.role_type)
 }
 
 // -------------------------------------------------------------------
@@ -7317,6 +8053,476 @@ inline ::CGData::CGItemData* UploadGidDataRequest::add_items() {
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
 UploadGidDataRequest::items() const {
   // @@protoc_insertion_point(field_list:CGData.UploadGidDataRequest.items)
+  return items_;
+}
+
+// int32 role_type = 6;
+inline void UploadGidDataRequest::clear_role_type() {
+  role_type_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::_internal_role_type() const {
+  return role_type_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::role_type() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.role_type)
+  return _internal_role_type();
+}
+inline void UploadGidDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  role_type_ = value;
+}
+inline void UploadGidDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_role_type(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.role_type)
+}
+
+// -------------------------------------------------------------------
+
+// SelectAccountGidDataRequest
+
+// string account = 1;
+inline void SelectAccountGidDataRequest::clear_account() {
+  account_.ClearToEmpty();
+}
+inline const std::string& SelectAccountGidDataRequest::account() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectAccountGidDataRequest.account)
+  return _internal_account();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectAccountGidDataRequest::set_account(ArgT0&& arg0, ArgT... args) {
+ 
+ account_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectAccountGidDataRequest.account)
+}
+inline std::string* SelectAccountGidDataRequest::mutable_account() {
+  std::string* _s = _internal_mutable_account();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectAccountGidDataRequest.account)
+  return _s;
+}
+inline const std::string& SelectAccountGidDataRequest::_internal_account() const {
+  return account_.Get();
+}
+inline void SelectAccountGidDataRequest::_internal_set_account(const std::string& value) {
+  
+  account_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectAccountGidDataRequest::_internal_mutable_account() {
+  
+  return account_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectAccountGidDataRequest::release_account() {
+  // @@protoc_insertion_point(field_release:CGData.SelectAccountGidDataRequest.account)
+  return account_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectAccountGidDataRequest::set_allocated_account(std::string* account) {
+  if (account != nullptr) {
+    
+  } else {
+    
+  }
+  account_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), account,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectAccountGidDataRequest.account)
+}
+
+// -------------------------------------------------------------------
+
+// SelectGidDataRequest
+
+// string gid = 1;
+inline void SelectGidDataRequest::clear_gid() {
+  gid_.ClearToEmpty();
+}
+inline const std::string& SelectGidDataRequest::gid() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataRequest.gid)
+  return _internal_gid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectGidDataRequest::set_gid(ArgT0&& arg0, ArgT... args) {
+ 
+ gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataRequest.gid)
+}
+inline std::string* SelectGidDataRequest::mutable_gid() {
+  std::string* _s = _internal_mutable_gid();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectGidDataRequest.gid)
+  return _s;
+}
+inline const std::string& SelectGidDataRequest::_internal_gid() const {
+  return gid_.Get();
+}
+inline void SelectGidDataRequest::_internal_set_gid(const std::string& value) {
+  
+  gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectGidDataRequest::_internal_mutable_gid() {
+  
+  return gid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectGidDataRequest::release_gid() {
+  // @@protoc_insertion_point(field_release:CGData.SelectGidDataRequest.gid)
+  return gid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectGidDataRequest::set_allocated_gid(std::string* gid) {
+  if (gid != nullptr) {
+    
+  } else {
+    
+  }
+  gid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), gid,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectGidDataRequest.gid)
+}
+
+// int32 role_type = 2;
+inline void SelectGidDataRequest::clear_role_type() {
+  role_type_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataRequest::_internal_role_type() const {
+  return role_type_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataRequest::role_type() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataRequest.role_type)
+  return _internal_role_type();
+}
+inline void SelectGidDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  role_type_ = value;
+}
+inline void SelectGidDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_role_type(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataRequest.role_type)
+}
+
+// -------------------------------------------------------------------
+
+// SelectAccountGidDataResponse
+
+// repeated .CGData.SelectGidDataResponse gidData = 1;
+inline int SelectAccountGidDataResponse::_internal_giddata_size() const {
+  return giddata_.size();
+}
+inline int SelectAccountGidDataResponse::giddata_size() const {
+  return _internal_giddata_size();
+}
+inline void SelectAccountGidDataResponse::clear_giddata() {
+  giddata_.Clear();
+}
+inline ::CGData::SelectGidDataResponse* SelectAccountGidDataResponse::mutable_giddata(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.SelectAccountGidDataResponse.gidData)
+  return giddata_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::SelectGidDataResponse >*
+SelectAccountGidDataResponse::mutable_giddata() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.SelectAccountGidDataResponse.gidData)
+  return &giddata_;
+}
+inline const ::CGData::SelectGidDataResponse& SelectAccountGidDataResponse::_internal_giddata(int index) const {
+  return giddata_.Get(index);
+}
+inline const ::CGData::SelectGidDataResponse& SelectAccountGidDataResponse::giddata(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.SelectAccountGidDataResponse.gidData)
+  return _internal_giddata(index);
+}
+inline ::CGData::SelectGidDataResponse* SelectAccountGidDataResponse::_internal_add_giddata() {
+  return giddata_.Add();
+}
+inline ::CGData::SelectGidDataResponse* SelectAccountGidDataResponse::add_giddata() {
+  ::CGData::SelectGidDataResponse* _add = _internal_add_giddata();
+  // @@protoc_insertion_point(field_add:CGData.SelectAccountGidDataResponse.gidData)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::SelectGidDataResponse >&
+SelectAccountGidDataResponse::giddata() const {
+  // @@protoc_insertion_point(field_list:CGData.SelectAccountGidDataResponse.gidData)
+  return giddata_;
+}
+
+// -------------------------------------------------------------------
+
+// SelectGidDataResponse
+
+// string gid = 1;
+inline void SelectGidDataResponse::clear_gid() {
+  gid_.ClearToEmpty();
+}
+inline const std::string& SelectGidDataResponse::gid() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.gid)
+  return _internal_gid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectGidDataResponse::set_gid(ArgT0&& arg0, ArgT... args) {
+ 
+ gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataResponse.gid)
+}
+inline std::string* SelectGidDataResponse::mutable_gid() {
+  std::string* _s = _internal_mutable_gid();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectGidDataResponse.gid)
+  return _s;
+}
+inline const std::string& SelectGidDataResponse::_internal_gid() const {
+  return gid_.Get();
+}
+inline void SelectGidDataResponse::_internal_set_gid(const std::string& value) {
+  
+  gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectGidDataResponse::_internal_mutable_gid() {
+  
+  return gid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectGidDataResponse::release_gid() {
+  // @@protoc_insertion_point(field_release:CGData.SelectGidDataResponse.gid)
+  return gid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectGidDataResponse::set_allocated_gid(std::string* gid) {
+  if (gid != nullptr) {
+    
+  } else {
+    
+  }
+  gid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), gid,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectGidDataResponse.gid)
+}
+
+// int32 role_type = 2;
+inline void SelectGidDataResponse::clear_role_type() {
+  role_type_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataResponse::_internal_role_type() const {
+  return role_type_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataResponse::role_type() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.role_type)
+  return _internal_role_type();
+}
+inline void SelectGidDataResponse::_internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  role_type_ = value;
+}
+inline void SelectGidDataResponse::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_role_type(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataResponse.role_type)
+}
+
+// string character_name = 3;
+inline void SelectGidDataResponse::clear_character_name() {
+  character_name_.ClearToEmpty();
+}
+inline const std::string& SelectGidDataResponse::character_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.character_name)
+  return _internal_character_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectGidDataResponse::set_character_name(ArgT0&& arg0, ArgT... args) {
+ 
+ character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataResponse.character_name)
+}
+inline std::string* SelectGidDataResponse::mutable_character_name() {
+  std::string* _s = _internal_mutable_character_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectGidDataResponse.character_name)
+  return _s;
+}
+inline const std::string& SelectGidDataResponse::_internal_character_name() const {
+  return character_name_.Get();
+}
+inline void SelectGidDataResponse::_internal_set_character_name(const std::string& value) {
+  
+  character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectGidDataResponse::_internal_mutable_character_name() {
+  
+  return character_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectGidDataResponse::release_character_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectGidDataResponse.character_name)
+  return character_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectGidDataResponse::set_allocated_character_name(std::string* character_name) {
+  if (character_name != nullptr) {
+    
+  } else {
+    
+  }
+  character_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), character_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectGidDataResponse.character_name)
+}
+
+// .CGData.CGCharacterData character_data = 4;
+inline bool SelectGidDataResponse::_internal_has_character_data() const {
+  return this != internal_default_instance() && character_data_ != nullptr;
+}
+inline bool SelectGidDataResponse::has_character_data() const {
+  return _internal_has_character_data();
+}
+inline void SelectGidDataResponse::clear_character_data() {
+  if (GetArenaForAllocation() == nullptr && character_data_ != nullptr) {
+    delete character_data_;
+  }
+  character_data_ = nullptr;
+}
+inline const ::CGData::CGCharacterData& SelectGidDataResponse::_internal_character_data() const {
+  const ::CGData::CGCharacterData* p = character_data_;
+  return p != nullptr ? *p : reinterpret_cast<const ::CGData::CGCharacterData&>(
+      ::CGData::_CGCharacterData_default_instance_);
+}
+inline const ::CGData::CGCharacterData& SelectGidDataResponse::character_data() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.character_data)
+  return _internal_character_data();
+}
+inline void SelectGidDataResponse::unsafe_arena_set_allocated_character_data(
+    ::CGData::CGCharacterData* character_data) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(character_data_);
+  }
+  character_data_ = character_data;
+  if (character_data) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:CGData.SelectGidDataResponse.character_data)
+}
+inline ::CGData::CGCharacterData* SelectGidDataResponse::release_character_data() {
+  
+  ::CGData::CGCharacterData* temp = character_data_;
+  character_data_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::CGData::CGCharacterData* SelectGidDataResponse::unsafe_arena_release_character_data() {
+  // @@protoc_insertion_point(field_release:CGData.SelectGidDataResponse.character_data)
+  
+  ::CGData::CGCharacterData* temp = character_data_;
+  character_data_ = nullptr;
+  return temp;
+}
+inline ::CGData::CGCharacterData* SelectGidDataResponse::_internal_mutable_character_data() {
+  
+  if (character_data_ == nullptr) {
+    auto* p = CreateMaybeMessage<::CGData::CGCharacterData>(GetArenaForAllocation());
+    character_data_ = p;
+  }
+  return character_data_;
+}
+inline ::CGData::CGCharacterData* SelectGidDataResponse::mutable_character_data() {
+  ::CGData::CGCharacterData* _msg = _internal_mutable_character_data();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectGidDataResponse.character_data)
+  return _msg;
+}
+inline void SelectGidDataResponse::set_allocated_character_data(::CGData::CGCharacterData* character_data) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete character_data_;
+  }
+  if (character_data) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::CGData::CGCharacterData>::GetOwningArena(character_data);
+    if (message_arena != submessage_arena) {
+      character_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, character_data, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  character_data_ = character_data;
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectGidDataResponse.character_data)
+}
+
+// repeated .CGData.CGPetData pet_data = 5;
+inline int SelectGidDataResponse::_internal_pet_data_size() const {
+  return pet_data_.size();
+}
+inline int SelectGidDataResponse::pet_data_size() const {
+  return _internal_pet_data_size();
+}
+inline void SelectGidDataResponse::clear_pet_data() {
+  pet_data_.Clear();
+}
+inline ::CGData::CGPetData* SelectGidDataResponse::mutable_pet_data(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.SelectGidDataResponse.pet_data)
+  return pet_data_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
+SelectGidDataResponse::mutable_pet_data() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.SelectGidDataResponse.pet_data)
+  return &pet_data_;
+}
+inline const ::CGData::CGPetData& SelectGidDataResponse::_internal_pet_data(int index) const {
+  return pet_data_.Get(index);
+}
+inline const ::CGData::CGPetData& SelectGidDataResponse::pet_data(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.pet_data)
+  return _internal_pet_data(index);
+}
+inline ::CGData::CGPetData* SelectGidDataResponse::_internal_add_pet_data() {
+  return pet_data_.Add();
+}
+inline ::CGData::CGPetData* SelectGidDataResponse::add_pet_data() {
+  ::CGData::CGPetData* _add = _internal_add_pet_data();
+  // @@protoc_insertion_point(field_add:CGData.SelectGidDataResponse.pet_data)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
+SelectGidDataResponse::pet_data() const {
+  // @@protoc_insertion_point(field_list:CGData.SelectGidDataResponse.pet_data)
+  return pet_data_;
+}
+
+// repeated .CGData.CGItemData items = 6;
+inline int SelectGidDataResponse::_internal_items_size() const {
+  return items_.size();
+}
+inline int SelectGidDataResponse::items_size() const {
+  return _internal_items_size();
+}
+inline void SelectGidDataResponse::clear_items() {
+  items_.Clear();
+}
+inline ::CGData::CGItemData* SelectGidDataResponse::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.SelectGidDataResponse.items)
+  return items_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
+SelectGidDataResponse::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.SelectGidDataResponse.items)
+  return &items_;
+}
+inline const ::CGData::CGItemData& SelectGidDataResponse::_internal_items(int index) const {
+  return items_.Get(index);
+}
+inline const ::CGData::CGItemData& SelectGidDataResponse::items(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.items)
+  return _internal_items(index);
+}
+inline ::CGData::CGItemData* SelectGidDataResponse::_internal_add_items() {
+  return items_.Add();
+}
+inline ::CGData::CGItemData* SelectGidDataResponse::add_items() {
+  ::CGData::CGItemData* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:CGData.SelectGidDataResponse.items)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
+SelectGidDataResponse::items() const {
+  // @@protoc_insertion_point(field_list:CGData.SelectGidDataResponse.items)
   return items_;
 }
 
@@ -12155,6 +13361,14 @@ inline void CGPlayerFlagEnabledData::set_enable(bool value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

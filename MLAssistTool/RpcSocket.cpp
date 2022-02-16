@@ -108,6 +108,17 @@ Status GGRpcServiceImpl::UploadGidBankData(::grpc::ServerContext* context, const
 	return Status::OK;
 }
 
+Status GGRpcServiceImpl::SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)
+{
+	return ITObjectDataMgr::getInstance().SelectGidData(request, response);
+}
+
+Status GGRpcServiceImpl::SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response)
+{
+	return Status::OK;
+
+}
+
 Status GGRpcServiceImpl::GetPetGradeCalcData(::grpc::ServerContext* context, const ::CGData::CGPetGradeCalcRequest* request, ::CGData::CGPetGradeCalcResponse* response)
 {
 	auto pObjectList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_PetBook);

@@ -3,6 +3,7 @@ syntax = "proto3";
 
 package CGData;
 
+//HookDll用来通信，暂时不启用
 service MLRpcService
 {
 	rpc Initialize(CGGmeTypeRequest) returns (CGVoidData);
@@ -15,10 +16,8 @@ service MLRpcService
 	rpc GetPlayerInfo(CGVoidData) returns (CGCharacterData);
 	rpc SetPlayerFlagEnabled(CGPlayerFlagEnabledData) returns (CGVoidData);
 }
-message CGGmeTypeRequest
-{
-	int32 type=1;		// 0 1 2 3
-}
+
+//辅助和服务端通信用
 service CGRpcService {
 	// 根据item的id，获取item信息
 	rpc GetCGItemData (CGItemRequest) returns (CGItemResponse);
@@ -47,12 +46,16 @@ service CGRpcService {
 
 	/******************客户端查询数据接口**************/
 	//查询指定账号下各GID的角色数据
-	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};				
+	rpc SelectAccountGidData (SelectAccountGidDataRequest) returns (SelectAccountGidDataResponse){};				
+	rpc SelectGidData (SelectGidDataRequest) returns (SelectGidDataResponse){};				
 	//查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
-	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};				
+	rpc SelectDstTypeGidData (SelectGidDataRequest) returns (SelectAccountGidDataResponse){};				
 
 }
-
+message CGGmeTypeRequest
+{
+	int32 type=1;		// 0 1 2 3
+}
 message StringPub
 {
   string value =1;
@@ -64,6 +67,8 @@ message UploadGidBankDataRequest
 	int32 gold=3;				
 	repeated CGPetData pet_data=4;
 	repeated CGItemData items=5;
+	int32 role_type=6;	
+
 	//银行的 单独上传
 }
 message CGAccountGidData
@@ -83,6 +88,33 @@ message UploadGidDataRequest
 	CGCharacterData character_data=3;
 	repeated CGPetData pet_data=4;
 	repeated CGItemData items=5;
+	int32 role_type=6;	
+}
+//查询账号下所有gid数据
+message SelectAccountGidDataRequest
+{
+	string account=1;
+}
+//查询游戏gid数据
+message SelectGidDataRequest
+{
+	string gid=1;				//游戏Gid
+	int32 role_type=2;			//角色类型 左右角色？
+}
+//账号下所有gid账号数据
+message SelectAccountGidDataResponse
+{
+	repeated SelectGidDataResponse gidData=1;
+}
+//gid数据
+message SelectGidDataResponse
+{
+	string gid=1;
+	int32 role_type=2;
+	string character_name=3;		//游戏人物名称
+	CGCharacterData character_data=4;
+	repeated CGPetData pet_data=5;
+	repeated CGItemData items=6;
 }
 message CGBaseData
 {

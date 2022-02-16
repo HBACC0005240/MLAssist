@@ -2821,6 +2821,7 @@ void GameCtrl::OnGetCharacterData()
 			pNewChar->sGid = QString::fromStdString(info.gid);
 			pNewChar->job = QString::fromStdString(info.job);
 			pNewChar->level = info.level;
+			pNewChar->player_index = info.player_index;
 			pNewChar->gold = info.gold;
 			pNewChar->petid = info.petid;
 			if (pNewChar->hp == 0)

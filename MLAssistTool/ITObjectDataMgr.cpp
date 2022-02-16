@@ -1920,10 +1920,19 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		}
 	}
 	QString sID = sGid + QString::fromStdString(request->character_name());
+	int roleType = request->role_type();
+	int roleObjectType = TObject_GidRole;
+	if (roleType == 0)
+	{
+		roleObjectType = TObject_GidRoleLeft;
+	}else if (roleType == 1)
+	{
+		roleObjectType = TObject_GidRoleRight;
+	}
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
-		pCharacter = newOneObject(TObject_GidRole, pGid).dynamicCast<ITGidRole>();;
+		pCharacter = newOneObject(roleObjectType, pGid).dynamicCast<ITGidRole>();;
 		m_idForAccountRole.insert(sID, pCharacter);
 	}
 	else
@@ -2383,4 +2392,46 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			}
 		}
 	}
+}
+
+Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)
+{
+	QString sGid = QString::fromStdString(request->gid());
+	int nRoleType = request->role_type();
+	if (sGid.isEmpty())
+	{
+		return Status::OK;
+	}
+	int roleObjType = TObject_GidRoleLeft;
+	if (nRoleType == 1)
+	{
+		roleObjType = TObject_GidRoleLeft;
+	}
+	else
+		roleObjType = TObject_GidRoleRight;
+	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
+	if (pGid)
+	{
+		response->set_gid(pGid->_userGid.toStdString());
+		response->set_character_name(pGid->getObjectName().toStdString());
+		ITGidRolePtr pRole = nullptr;
+		for (auto pTmpRole : pGid->_roleList)
+		{
+			if (pTmpRole->getObjectType() == roleObjType)
+			{
+				pRole = pTmpRole;
+				break;
+			}
+		}
+		if (pRole)
+		{
+			auto pChar = response->character_data();
+			pChar.set_souls(pRole->_souls);
+			pChar.set_level(pRole->_level);
+			pChar.set_gold(pRole->_gold);
+
+		}	
+	}
+	return Status::OK;
+
 }

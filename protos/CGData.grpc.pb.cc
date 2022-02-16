@@ -429,6 +429,9 @@ static const char* CGRpcService_method_names[] = {
   "/CGData.CGRpcService/UploadGidBankData",
   "/CGData.CGRpcService/Publish",
   "/CGData.CGRpcService/Subscribe",
+  "/CGData.CGRpcService/SelectAccountGidData",
+  "/CGData.CGRpcService/SelectGidData",
+  "/CGData.CGRpcService/SelectDstTypeGidData",
 };
 
 std::unique_ptr< CGRpcService::Stub> CGRpcService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -448,6 +451,9 @@ CGRpcService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chann
   , rpcmethod_UploadGidBankData_(CGRpcService_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_Publish_(CGRpcService_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_Subscribe_(CGRpcService_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_SelectAccountGidData_(CGRpcService_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SelectGidData_(CGRpcService_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SelectDstTypeGidData_(CGRpcService_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CGRpcService::Stub::GetCGItemData(::grpc::ClientContext* context, const ::CGData::CGItemRequest& request, ::CGData::CGItemResponse* response) {
@@ -673,6 +679,75 @@ void CGRpcService::Stub::async::Subscribe(::grpc::ClientContext* context, const 
   return ::grpc::internal::ClientAsyncReaderFactory< ::CGData::StringPub>::Create(channel_.get(), cq, rpcmethod_Subscribe_, context, request, false, nullptr);
 }
 
+::grpc::Status CGRpcService::Stub::SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::CGData::SelectAccountGidDataResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SelectAccountGidData_, context, request, response);
+}
+
+void CGRpcService::Stub::async::SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SelectAccountGidData_, context, request, response, std::move(f));
+}
+
+void CGRpcService::Stub::async::SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SelectAccountGidData_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* CGRpcService::Stub::PrepareAsyncSelectAccountGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::CGData::SelectAccountGidDataResponse, ::CGData::SelectAccountGidDataRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SelectAccountGidData_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* CGRpcService::Stub::AsyncSelectAccountGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncSelectAccountGidDataRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status CGRpcService::Stub::SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::CGData::SelectGidDataResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SelectGidData_, context, request, response);
+}
+
+void CGRpcService::Stub::async::SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SelectGidData_, context, request, response, std::move(f));
+}
+
+void CGRpcService::Stub::async::SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SelectGidData_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>* CGRpcService::Stub::PrepareAsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::CGData::SelectGidDataResponse, ::CGData::SelectGidDataRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SelectGidData_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>* CGRpcService::Stub::AsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncSelectGidDataRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status CGRpcService::Stub::SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::CGData::SelectAccountGidDataResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SelectDstTypeGidData_, context, request, response);
+}
+
+void CGRpcService::Stub::async::SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SelectDstTypeGidData_, context, request, response, std::move(f));
+}
+
+void CGRpcService::Stub::async::SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SelectDstTypeGidData_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* CGRpcService::Stub::PrepareAsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::CGData::SelectAccountGidDataResponse, ::CGData::SelectGidDataRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SelectDstTypeGidData_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* CGRpcService::Stub::AsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncSelectDstTypeGidDataRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 CGRpcService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CGRpcService_method_names[0],
@@ -774,6 +849,36 @@ CGRpcService::Service::Service() {
              ::grpc::ServerWriter<::CGData::StringPub>* writer) {
                return service->Subscribe(ctx, req, writer);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CGRpcService_method_names[10],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CGRpcService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::CGData::SelectAccountGidDataRequest* req,
+             ::CGData::SelectAccountGidDataResponse* resp) {
+               return service->SelectAccountGidData(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CGRpcService_method_names[11],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CGRpcService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::CGData::SelectGidDataRequest* req,
+             ::CGData::SelectGidDataResponse* resp) {
+               return service->SelectGidData(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CGRpcService_method_names[12],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CGRpcService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::CGData::SelectGidDataRequest* req,
+             ::CGData::SelectAccountGidDataResponse* resp) {
+               return service->SelectDstTypeGidData(ctx, req, resp);
+             }, this)));
 }
 
 CGRpcService::Service::~Service() {
@@ -846,6 +951,27 @@ CGRpcService::Service::~Service() {
   (void) context;
   (void) request;
   (void) writer;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CGRpcService::Service::SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CGRpcService::Service::SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CGRpcService::Service::SelectDstTypeGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 

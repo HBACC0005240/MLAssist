@@ -27,6 +27,7 @@
 
 namespace CGData {
 
+// HookDll用来通信，暂时不启用
 class MLRpcService final {
  public:
   static constexpr char const* service_full_name() {
@@ -1490,6 +1491,7 @@ class MLRpcService final {
   typedef WithStreamedUnaryMethod_Initialize<WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_IsInGame<WithStreamedUnaryMethod_GetWorldStatus<WithStreamedUnaryMethod_GetGameStatus<WithStreamedUnaryMethod_GetBGMIndex<WithStreamedUnaryMethod_GetSysTime<WithStreamedUnaryMethod_GetPlayerInfo<WithStreamedUnaryMethod_SetPlayerFlagEnabled<Service > > > > > > > > > StreamedService;
 };
 
+// 辅助和服务端通信用
 class CGRpcService final {
  public:
   static constexpr char const* service_full_name() {
@@ -1578,6 +1580,31 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::StringPub>> PrepareAsyncSubscribe(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::StringPub>>(PrepareAsyncSubscribeRaw(context, request, cq));
     }
+    // *****************客户端查询数据接口*************
+    //
+    // 查询指定账号下各GID的角色数据
+    virtual ::grpc::Status SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::CGData::SelectAccountGidDataResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>> AsyncSelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>>(AsyncSelectAccountGidDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>> PrepareAsyncSelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>>(PrepareAsyncSelectAccountGidDataRaw(context, request, cq));
+    }
+    virtual ::grpc::Status SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::CGData::SelectGidDataResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>> AsyncSelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>>(AsyncSelectGidDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>> PrepareAsyncSelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>>(PrepareAsyncSelectGidDataRaw(context, request, cq));
+    }
+    // 查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
+    virtual ::grpc::Status SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::CGData::SelectAccountGidDataResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>> AsyncSelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>>(AsyncSelectDstTypeGidDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>> PrepareAsyncSelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>>(PrepareAsyncSelectDstTypeGidDataRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -1608,6 +1635,16 @@ class CGRpcService final {
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       // 订阅则是一个单向的流服务，服务端返回的数据可能很大
       virtual void Subscribe(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::grpc::ClientReadReactor< ::CGData::StringPub>* reactor) = 0;
+      // *****************客户端查询数据接口*************
+      //
+      // 查询指定账号下各GID的角色数据
+      virtual void SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // 查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
+      virtual void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -1634,6 +1671,12 @@ class CGRpcService final {
     virtual ::grpc::ClientReaderInterface< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::CGData::StringPub>* AsyncSubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::CGData::StringPub>* PrepareAsyncSubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>* AsyncSelectAccountGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>* PrepareAsyncSelectAccountGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>* AsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>* PrepareAsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>* AsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>* PrepareAsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -1710,6 +1753,27 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::StringPub>> PrepareAsyncSubscribe(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::StringPub>>(PrepareAsyncSubscribeRaw(context, request, cq));
     }
+    ::grpc::Status SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::CGData::SelectAccountGidDataResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>> AsyncSelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>>(AsyncSelectAccountGidDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>> PrepareAsyncSelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>>(PrepareAsyncSelectAccountGidDataRaw(context, request, cq));
+    }
+    ::grpc::Status SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::CGData::SelectGidDataResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>> AsyncSelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>>(AsyncSelectGidDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>> PrepareAsyncSelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>>(PrepareAsyncSelectGidDataRaw(context, request, cq));
+    }
+    ::grpc::Status SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::CGData::SelectAccountGidDataResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>> AsyncSelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>>(AsyncSelectDstTypeGidDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>> PrepareAsyncSelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>>(PrepareAsyncSelectDstTypeGidDataRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -1732,6 +1796,12 @@ class CGRpcService final {
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Subscribe(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::grpc::ClientReadReactor< ::CGData::StringPub>* reactor) override;
+      void SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)>) override;
+      void SelectAccountGidData(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, std::function<void(::grpc::Status)>) override;
+      void SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)>) override;
+      void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1764,6 +1834,12 @@ class CGRpcService final {
     ::grpc::ClientReader< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) override;
     ::grpc::ClientAsyncReader< ::CGData::StringPub>* AsyncSubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReader< ::CGData::StringPub>* PrepareAsyncSubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* AsyncSelectAccountGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* PrepareAsyncSelectAccountGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectAccountGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>* AsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>* PrepareAsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* AsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* PrepareAsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_GetCGItemData_;
     const ::grpc::internal::RpcMethod rpcmethod_GetConnectState_;
     const ::grpc::internal::RpcMethod rpcmethod_GetPetGradeCalcData_;
@@ -1774,6 +1850,9 @@ class CGRpcService final {
     const ::grpc::internal::RpcMethod rpcmethod_UploadGidBankData_;
     const ::grpc::internal::RpcMethod rpcmethod_Publish_;
     const ::grpc::internal::RpcMethod rpcmethod_Subscribe_;
+    const ::grpc::internal::RpcMethod rpcmethod_SelectAccountGidData_;
+    const ::grpc::internal::RpcMethod rpcmethod_SelectGidData_;
+    const ::grpc::internal::RpcMethod rpcmethod_SelectDstTypeGidData_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -1799,6 +1878,13 @@ class CGRpcService final {
     virtual ::grpc::Status Publish(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response);
     // 订阅则是一个单向的流服务，服务端返回的数据可能很大
     virtual ::grpc::Status Subscribe(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::grpc::ServerWriter< ::CGData::StringPub>* writer);
+    // *****************客户端查询数据接口*************
+    //
+    // 查询指定账号下各GID的角色数据
+    virtual ::grpc::Status SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response);
+    virtual ::grpc::Status SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
+    // 查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
+    virtual ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_GetCGItemData : public BaseClass {
@@ -2000,7 +2086,67 @@ class CGRpcService final {
       ::grpc::Service::RequestAsyncServerStreaming(9, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GetCGItemData<WithAsyncMethod_GetConnectState<WithAsyncMethod_GetPetGradeCalcData<WithAsyncMethod_GetServerStoreMapData<WithAsyncMethod_StoreCGItemData<WithAsyncMethod_StoreCGMapData<WithAsyncMethod_UploadGidData<WithAsyncMethod_UploadGidBankData<WithAsyncMethod_Publish<WithAsyncMethod_Subscribe<Service > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_SelectAccountGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SelectAccountGidData() {
+      ::grpc::Service::MarkMethodAsync(10);
+    }
+    ~WithAsyncMethod_SelectAccountGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectAccountGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectAccountGidData(::grpc::ServerContext* context, ::CGData::SelectAccountGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectAccountGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_SelectGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SelectGidData() {
+      ::grpc::Service::MarkMethodAsync(11);
+    }
+    ~WithAsyncMethod_SelectGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectGidData(::grpc::ServerContext* context, ::CGData::SelectGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_SelectDstTypeGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SelectDstTypeGidData() {
+      ::grpc::Service::MarkMethodAsync(12);
+    }
+    ~WithAsyncMethod_SelectDstTypeGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectDstTypeGidData(::grpc::ServerContext* context, ::CGData::SelectGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectAccountGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_GetCGItemData<WithAsyncMethod_GetConnectState<WithAsyncMethod_GetPetGradeCalcData<WithAsyncMethod_GetServerStoreMapData<WithAsyncMethod_StoreCGItemData<WithAsyncMethod_StoreCGMapData<WithAsyncMethod_UploadGidData<WithAsyncMethod_UploadGidBankData<WithAsyncMethod_Publish<WithAsyncMethod_Subscribe<WithAsyncMethod_SelectAccountGidData<WithAsyncMethod_SelectGidData<WithAsyncMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_GetCGItemData : public BaseClass {
    private:
@@ -2266,7 +2412,88 @@ class CGRpcService final {
     virtual ::grpc::ServerWriteReactor< ::CGData::StringPub>* Subscribe(
       ::grpc::CallbackServerContext* /*context*/, const ::CGData::StringPub* /*request*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_GetCGItemData<WithCallbackMethod_GetConnectState<WithCallbackMethod_GetPetGradeCalcData<WithCallbackMethod_GetServerStoreMapData<WithCallbackMethod_StoreCGItemData<WithCallbackMethod_StoreCGMapData<WithCallbackMethod_UploadGidData<WithCallbackMethod_UploadGidBankData<WithCallbackMethod_Publish<WithCallbackMethod_Subscribe<Service > > > > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_SelectAccountGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SelectAccountGidData() {
+      ::grpc::Service::MarkMethodCallback(10,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) { return this->SelectAccountGidData(context, request, response); }));}
+    void SetMessageAllocatorFor_SelectAccountGidData(
+        ::grpc::MessageAllocator< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SelectAccountGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectAccountGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectAccountGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_SelectGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SelectGidData() {
+      ::grpc::Service::MarkMethodCallback(11,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response) { return this->SelectGidData(context, request, response); }));}
+    void SetMessageAllocatorFor_SelectGidData(
+        ::grpc::MessageAllocator< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(11);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SelectGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_SelectDstTypeGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SelectDstTypeGidData() {
+      ::grpc::Service::MarkMethodCallback(12,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) { return this->SelectDstTypeGidData(context, request, response); }));}
+    void SetMessageAllocatorFor_SelectDstTypeGidData(
+        ::grpc::MessageAllocator< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SelectDstTypeGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectDstTypeGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_GetCGItemData<WithCallbackMethod_GetConnectState<WithCallbackMethod_GetPetGradeCalcData<WithCallbackMethod_GetServerStoreMapData<WithCallbackMethod_StoreCGItemData<WithCallbackMethod_StoreCGMapData<WithCallbackMethod_UploadGidData<WithCallbackMethod_UploadGidBankData<WithCallbackMethod_Publish<WithCallbackMethod_Subscribe<WithCallbackMethod_SelectAccountGidData<WithCallbackMethod_SelectGidData<WithCallbackMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GetCGItemData : public BaseClass {
@@ -2434,6 +2661,57 @@ class CGRpcService final {
     }
     // disable synchronous version of this method
     ::grpc::Status Subscribe(::grpc::ServerContext* /*context*/, const ::CGData::StringPub* /*request*/, ::grpc::ServerWriter< ::CGData::StringPub>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SelectAccountGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SelectAccountGidData() {
+      ::grpc::Service::MarkMethodGeneric(10);
+    }
+    ~WithGenericMethod_SelectAccountGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectAccountGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SelectGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SelectGidData() {
+      ::grpc::Service::MarkMethodGeneric(11);
+    }
+    ~WithGenericMethod_SelectGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SelectDstTypeGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SelectDstTypeGidData() {
+      ::grpc::Service::MarkMethodGeneric(12);
+    }
+    ~WithGenericMethod_SelectDstTypeGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2636,6 +2914,66 @@ class CGRpcService final {
     }
     void RequestSubscribe(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncWriter< ::grpc::ByteBuffer>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncServerStreaming(9, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SelectAccountGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SelectAccountGidData() {
+      ::grpc::Service::MarkMethodRaw(10);
+    }
+    ~WithRawMethod_SelectAccountGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectAccountGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectAccountGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SelectGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SelectGidData() {
+      ::grpc::Service::MarkMethodRaw(11);
+    }
+    ~WithRawMethod_SelectGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SelectDstTypeGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SelectDstTypeGidData() {
+      ::grpc::Service::MarkMethodRaw(12);
+    }
+    ~WithRawMethod_SelectDstTypeGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectDstTypeGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2857,6 +3195,72 @@ class CGRpcService final {
     }
     virtual ::grpc::ServerWriteReactor< ::grpc::ByteBuffer>* Subscribe(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SelectAccountGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SelectAccountGidData() {
+      ::grpc::Service::MarkMethodRawCallback(10,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectAccountGidData(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SelectAccountGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectAccountGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectAccountGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SelectGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SelectGidData() {
+      ::grpc::Service::MarkMethodRawCallback(11,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectGidData(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SelectGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SelectDstTypeGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SelectDstTypeGidData() {
+      ::grpc::Service::MarkMethodRawCallback(12,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectDstTypeGidData(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SelectDstTypeGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectDstTypeGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetCGItemData : public BaseClass {
@@ -3101,7 +3505,88 @@ class CGRpcService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPublish(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::StringPub,::CGData::StringPub>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<Service > > > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SelectAccountGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SelectAccountGidData() {
+      ::grpc::Service::MarkMethodStreamed(10,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>* streamer) {
+                       return this->StreamedSelectAccountGidData(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SelectAccountGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SelectAccountGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectAccountGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSelectAccountGidData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectAccountGidDataRequest,::CGData::SelectAccountGidDataResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SelectGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SelectGidData() {
+      ::grpc::Service::MarkMethodStreamed(11,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>* streamer) {
+                       return this->StreamedSelectGidData(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SelectGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SelectGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSelectGidData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectGidDataRequest,::CGData::SelectGidDataResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SelectDstTypeGidData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SelectDstTypeGidData() {
+      ::grpc::Service::MarkMethodStreamed(12,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>* streamer) {
+                       return this->StreamedSelectDstTypeGidData(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SelectDstTypeGidData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSelectDstTypeGidData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectGidDataRequest,::CGData::SelectAccountGidDataResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > StreamedUnaryService;
   template <class BaseClass>
   class WithSplitStreamingMethod_Subscribe : public BaseClass {
    private:
@@ -3130,7 +3615,7 @@ class CGRpcService final {
     virtual ::grpc::Status StreamedSubscribe(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::CGData::StringPub,::CGData::StringPub>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_Subscribe<Service > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<WithSplitStreamingMethod_Subscribe<Service > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<WithSplitStreamingMethod_Subscribe<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace CGData

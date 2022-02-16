@@ -244,6 +244,7 @@ struct Character : public GameInfo
 								  //QString mapName;  //地图名称
 								  //int mapIndex = 0; //地图index
 	QString sGid;				  //游戏id
+	int player_index = 0;			//左右角色
 	PlayerDesc persdesc;
 };
 

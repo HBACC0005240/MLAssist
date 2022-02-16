@@ -548,7 +548,8 @@ public:
 	QString GetAllChatMsg(int count = 0);
 	QList<QPair<int, QString> > GetDetailAllChatMsg(int count = 0);
 	//获取最新聊天消息
-	QString GetLastChatMsg();
+	QStringList GetLastChatMsg();
+
 
 	//设置人物开关 队战聊名易家
 	bool SetCharacterSwitch(int nType, bool bState);
@@ -695,6 +696,7 @@ public:
 	QHash<QString, int> m_playerActionHash; //pk 加队 交易 摆摊映射
 	QStringList m_sPrestigeList;			//玩家声望称号列表
 
+
 protected:
 	bool InternalAutoNavigator();
 	bool readCreateRandomNameJson();
@@ -721,7 +723,7 @@ private:
 	int m_nAutoEncounterEnemyInterval = 800;			 //自动遇敌间隔200-800
 	bool m_bIsShowAutoEncounterEnemy = false;			 //自动遇敌是否显示移动
 	QStringList m_systemCueList;						 //系统消息列表
-	QList<QPair<int, QString> > m_chatMsgList;			 //聊天信息列表
+	QList<QPair<quint64, QStringList> > m_chatMsgList;	 //聊天信息列表
 	int m_nWaitRecvType;								 //等待服务器返回value1指定的头才进行下一句。
 	bool m_bWorking = false;							 //生产工作中
 	int m_nCurrentWorkType = TWork_None;				 //当前工作类型
