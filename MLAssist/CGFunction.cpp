@@ -3950,6 +3950,7 @@ CharacterPtr CGFunction::GetGameCharacter()
 	CGA::cga_player_info_t info;
 	if (g_CGAInterface->GetPlayerInfo(info))
 	{
+		pNewChar->player_index = info.player_index;
 		pNewChar->name = QString::fromStdString(info.name);
 		pNewChar->job = QString::fromStdString(info.job);
 		pNewChar->level = info.level;

@@ -631,6 +631,11 @@ bool ITObjectDataMgr::LoadAccountRole()
 			quint64 nID = (quint64)recordset->getIntValue("id");
 			QString sGid = recordset->getStrValue("gid");
 			QString sName = recordset->getStrValue("name");
+			int objType = recordset->getIntValue("role_type");
+			if (objType == 0 )
+			{
+				objType = TObject_GidRole;
+			}
 			ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 			if (pGid == nullptr)
 			{
@@ -641,7 +646,7 @@ bool ITObjectDataMgr::LoadAccountRole()
 				pGid->_userGid = sGid;
 				m_idForAccountGid.insert(sGid, pGid);
 			}
-			ITGidRolePtr pCharacter = newOneObject(TObject_GidRole, nID).dynamicCast<ITGidRole>();
+			ITGidRolePtr pCharacter = newOneObject(objType, nID).dynamicCast<ITGidRole>();
 			if (pCharacter)
 			{
 				if (pGid)
@@ -1236,7 +1241,7 @@ bool ITObjectDataMgr::deleteOneDeviceFromDB(ITObjectPtr pObj)
 		strSql = QString("DELETE FROM gateMap WHERE id=%1").arg((int)pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (objType == TObject_GidRole)
+	else if (GETDEVCLASS(objType) == TObject_GidRole)
 	{
 		strSql = QString("DELETE FROM character WHERE id=%1").arg((int)pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -1462,7 +1467,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (objType == TObject_GidRole)
+	else if (GETDEVCLASS(objType) == TObject_GidRole)
 	{
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGidRole>();
@@ -1472,9 +1477,9 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 			"manu_intelligence,value_charisma,points_endurance,points_strength,points_defense,points_agility,"
 			"points_magical,value_attack,value_defensive,value_agility,value_spirit,value_recovery,resist_poison,"
 			"resist_sleep,resist_medusa,resist_drunk,resist_chaos,resist_forget,fix_critical,fix_strikeback,fix_accurancy,"
-			"fix_dodge,element_earth,element_water,element_fire,element_wind,points_remain,id)"
+			"fix_dodge,element_earth,element_water,element_fire,element_wind,points_remain,id,role_type)"
 			" VALUES('%1',%2,'%3',%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,'%16',%17,'%18',"
-			"%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31,%32,%33,%34,%35,%36,%37,%38,%39,%40,%41,%42,%43,%44,%45,%46,%47,%48,%49)")
+			"%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31,%32,%33,%34,%35,%36,%37,%38,%39,%40,%41,%42,%43,%44,%45,%46,%47,%48,%49,%50)")
 			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_level).arg(tmpObj->_imageid).arg(tmpObj->_sex)
 			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_xp).arg(tmpObj->_maxxp).arg(tmpObj->_hp).arg(tmpObj->_maxhp).arg(tmpObj->_mp)\
 			.arg(tmpObj->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_skillslots)\
@@ -1484,7 +1489,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_resist_sleep).arg(tmpObj->_resist_medusa).arg(tmpObj->_resist_drunk).arg(tmpObj->_resist_chaos).arg(tmpObj->_resist_forget)\
 			.arg(tmpObj->_fix_critical).arg(tmpObj->_fix_strikeback).arg(tmpObj->_fix_accurancy).arg(tmpObj->_fix_dodge)
 			.arg(tmpObj->_element_earth).arg(tmpObj->_element_water).arg(tmpObj->_element_fire).arg(tmpObj->_element_wind).arg(tmpObj->_points_remain)
-			.arg((int)tmpObj->getObjectID());
+			.arg((int)tmpObj->getObjectID()).arg(tmpObj->getObjectType());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -1684,7 +1689,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (objType == TObject_GidRole)
+	else if (GETDEVCLASS(objType) == TObject_GidRole)
 	{
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGidRole>();
@@ -1696,7 +1701,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 				points_defense=%26,points_agility=%27,points_magical=%28,value_attack=%29,value_defensive=%30,value_agility=%31,value_spirit=%32,\
 				value_recovery=%33,resist_poison=%34,resist_sleep=%35,resist_medusa=%36,resist_drunk=%37,resist_chaos=%38,resist_forget=%39,\
 				fix_critical=%40,fix_strikeback=%41,fix_accurancy=%42,fix_dodge=%43,element_earth=%44,element_water=%45,element_fire=%46,\
-				element_wind=%47,points_remain=%48   WHERE id=%49")
+				element_wind=%47,points_remain=%48,role_type=%49   WHERE id=%50")
 			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_level).arg(tmpObj->_imageid).arg(tmpObj->_sex)
 			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_xp).arg(tmpObj->_maxxp).arg(tmpObj->_hp).arg(tmpObj->_maxhp).arg(tmpObj->_mp)\
 			.arg(tmpObj->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_skillslots)\
@@ -1706,6 +1711,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_resist_sleep).arg(tmpObj->_resist_medusa).arg(tmpObj->_resist_drunk).arg(tmpObj->_resist_chaos).arg(tmpObj->_resist_forget)\
 			.arg(tmpObj->_fix_critical).arg(tmpObj->_fix_strikeback).arg(tmpObj->_fix_accurancy).arg(tmpObj->_fix_dodge)
 			.arg(tmpObj->_element_earth).arg(tmpObj->_element_water).arg(tmpObj->_element_fire).arg(tmpObj->_element_wind).arg(tmpObj->_points_remain)
+			.arg(tmpObj->getObjectType())
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
@@ -1938,7 +1944,11 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	else
 		pCharacter->setEditStatus();
 	
-
+	if (pCharacter->getObjectType() != roleObjectType)
+	{
+		pCharacter->setObjectType(roleObjectType);
+		pCharacter->setEditStatus();
+	}
 	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
 	pCharacter->_gid = QString::fromStdString(request->gid());
 	pCharacter->_level = request->character_data().base_data().level();
@@ -2224,12 +2234,21 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	QString sGid = QString::fromStdString(request->gid());
 	if (sGid.isEmpty())
 		return;
-	
+	int roleType = request->role_type();
+	int roleObjectType = TObject_GidRole;
+	if (roleType == 0)
+	{
+		roleObjectType = TObject_GidRoleLeft;
+	}
+	else if (roleType == 1)
+	{
+		roleObjectType = TObject_GidRoleRight;
+	}
 	QString sID = sGid + QString::fromStdString(request->character_name());
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
-		pCharacter = newOneObject(TObject_GidRole).dynamicCast<ITGidRole>();;
+		pCharacter = newOneObject(roleObjectType).dynamicCast<ITGidRole>();;
 		m_idForAccountRole.insert(sID, pCharacter);
 	}
 	else

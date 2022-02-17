@@ -4,10 +4,10 @@ enum TObjectType
 	TObject_None = 0,				//空
 	TObject_AccountIdentity = 0x100, //账号集合 某个人证件
 	TObject_Account = 0x110,		 //账号
-	TObject_AccountGid = 0x111,		 //账号子ID
-	TObject_GidRole = 0x112,		 //账号子ID角色 左右角色
-	TObject_GidRoleLeft = 0x113,	 //账号子ID角色 左右角色
-	TObject_GidRoleRight = 0x114,	 //账号子ID角色 左右角色
+	TObject_AccountGid = 0x211,		 //账号子ID
+	TObject_GidRole = 0x300,		 //账号子ID角色 左右角色
+	TObject_GidRoleLeft = 0x301,	 //账号子ID角色 左右角色
+	TObject_GidRoleRight = 0x302,	 //账号子ID角色 左右角色
 	TObject_CGPet = 0x1000,			//宠物
 	TObject_Pet = 0x1001,			 //宠物
 	TObject_BankPet = 0x1002,		//银行宠物
