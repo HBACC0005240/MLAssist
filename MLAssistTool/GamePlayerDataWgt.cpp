@@ -252,7 +252,7 @@ void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 			return;
 		qDebug() << m_curSelectObj;
 
-		if (m_curSelectObj->getObjectType() != TObject_GidRole)
+		if (GETDEVCLASS( m_curSelectObj->getObjectType()) != TObject_GidRole)
 			return;
 		ITGidRolePtr pRole = qSharedPointerCast<ITGidRole>(m_curSelectObj);
 		ui.lineEdit_gold->setText(QString::number(pRole->_gold));
