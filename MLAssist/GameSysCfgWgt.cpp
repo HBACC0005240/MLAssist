@@ -378,7 +378,7 @@ void GameSysCfgWgt::on_pushButton_sortBag_clicked()
 
 void GameSysCfgWgt::on_pushButton_sortBank_clicked()
 {
-	g_pGameFun->SortBankItems();
+	g_pGameFun->SortBankItems(true);
 }
 
 void GameSysCfgWgt::on_checkBox_autoSaveBank_stateChanged(int state)

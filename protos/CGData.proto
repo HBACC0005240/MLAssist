@@ -215,6 +215,7 @@ message CGCharacterData
 	string nick=29;
 	CGCharacterPersDesc pers_desc=30;
 	int32 battle_position=31;
+	int32 bank_gold=32;
 }
 message CGPetData
 {

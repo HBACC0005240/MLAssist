@@ -3115,6 +3115,7 @@ class CGCharacterData final :
     kMapNumberFieldNumber = 25,
     kServerLineFieldNumber = 26,
     kBattlePositionFieldNumber = 31,
+    kBankGoldFieldNumber = 32,
   };
   // repeated string titles = 17;
   int titles_size() const;
@@ -3461,6 +3462,15 @@ class CGCharacterData final :
   void _internal_set_battle_position(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 bank_gold = 32;
+  void clear_bank_gold();
+  ::PROTOBUF_NAMESPACE_ID::int32 bank_gold() const;
+  void set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_bank_gold() const;
+  void _internal_set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.CGCharacterData)
  private:
   class _Internal;
@@ -3499,6 +3509,7 @@ class CGCharacterData final :
   ::PROTOBUF_NAMESPACE_ID::int32 map_number_;
   ::PROTOBUF_NAMESPACE_ID::int32 server_line_;
   ::PROTOBUF_NAMESPACE_ID::int32 battle_position_;
+  ::PROTOBUF_NAMESPACE_ID::int32 bank_gold_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -10809,6 +10820,26 @@ inline void CGCharacterData::_internal_set_battle_position(::PROTOBUF_NAMESPACE_
 inline void CGCharacterData::set_battle_position(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_battle_position(value);
   // @@protoc_insertion_point(field_set:CGData.CGCharacterData.battle_position)
+}
+
+// int32 bank_gold = 32;
+inline void CGCharacterData::clear_bank_gold() {
+  bank_gold_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_bank_gold() const {
+  return bank_gold_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::bank_gold() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.bank_gold)
+  return _internal_bank_gold();
+}
+inline void CGCharacterData::_internal_set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  bank_gold_ = value;
+}
+inline void CGCharacterData::set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_bank_gold(value);
+  // @@protoc_insertion_point(field_set:CGData.CGCharacterData.bank_gold)
 }
 
 // -------------------------------------------------------------------

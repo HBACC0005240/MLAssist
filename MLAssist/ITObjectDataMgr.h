@@ -35,6 +35,10 @@ public:
 
 	~ITObjectDataMgr(void);
 
+		//是否退出游戏
+	void SetExitGame(bool bRet) { m_bExit = bRet; }
+	bool GetExitGame() { return m_bExit; }
+
 	bool init();
 	bool Fini();
 	//查找部分
@@ -141,6 +145,7 @@ public slots:
 
 private:
 	ITDataBaseConnPtr m_dbconn;								//数据库连接对象
+	bool m_bExit=false;										//退出游戏
 	QTimer m_mqttTimer;										//定时检查发布订阅客户端状态
 	QMutex m_storeItemMutex;								//item缓存
 	QMutex m_storeMapMutex;									//地图缓存锁

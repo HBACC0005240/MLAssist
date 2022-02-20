@@ -15,6 +15,7 @@
 #include <QSystemTrayIcon>
 #include <QToolButton>
 #include <QtConcurrent>
+#include "ITObjectDataMgr.h"
 MLAssist::MLAssist(QWidget *parent) :
 		QWidget(parent)
 {
@@ -211,8 +212,10 @@ void MLAssist::doIconActivated(QSystemTrayIcon::ActivationReason reason)
 void MLAssist::quitAndDeleteAllInfo()
 {
 	killProcess();
+	ITObjectDataMgr::getInstance().SetExitGame(true);
 	g_pGameCtrl->SetExitGame(true);
 	g_pGameCtrl->StopUpdateTimer();
+
 	m_funThread.quit();
 	m_funThread.wait();
 	m_gameCtrlThread.quit();

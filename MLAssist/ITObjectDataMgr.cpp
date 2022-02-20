@@ -1073,7 +1073,7 @@ void ITObjectDataMgr::SaveDataThread(ITObjectDataMgr *pThis)
 {
 	if (!pThis)
 		return;
-	while (!g_pGameCtrl->GetExitGame())
+	while (!pThis->m_bExit)
 	{
 		if (pThis->isNeedSaveData())
 			pThis->saveAllData();
@@ -1556,7 +1556,7 @@ void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)
 	if (!pThis)
 		return;
 	int ingame = 0;
-	while (!g_pGameCtrl->GetExitGame())
+	while (!pThis->m_bExit)
 	{
 		{		
 			QMutexLocker locker(&pThis->m_mqttMutex);
@@ -1571,7 +1571,7 @@ void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)
 					++it;
 			}
 		}
-		
+		QThread::msleep(10000);
 	}
 }
 

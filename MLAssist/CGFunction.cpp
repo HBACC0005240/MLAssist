@@ -3740,7 +3740,7 @@ void CGFunction::SortBankItems(bool bFront /*= false*/)
 		}
 	}
 	qSort(sortIdList.begin(), sortIdList.end(), [&](const QString &a, const QString &b)
-			{ return a > b; });
+			{ return a < b; });
 	if (bFront)
 	{
 		QList<int> itemIndexMgr; //空位列表

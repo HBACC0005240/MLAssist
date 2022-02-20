@@ -265,14 +265,25 @@ bool ITObjectDataMgr::FindTargetNavigationEx(ITGameGateMapPtr cRoute, int tgtInd
 ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType)
 {
 	ITObjectList pSelectObjs;
-	for (auto it=m_pObjectList.begin();it!=m_pObjectList.end();++it)
+
+	QHash<quint64, ITObjectPtr> tmpObjList;
+	
+	{
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pObjectList;
+	}
+	for (auto it= tmpObjList.begin();it!= tmpObjList.end();++it)
 	{
 		if (it.value()->getObjectType() == objType)
 		{
 			pSelectObjs.append(it.value());
 		}
 	}
-	for (auto it = m_pAddObjectList.begin(); it != m_pAddObjectList.end(); ++it)
+	{
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pAddObjectList;
+	}
+	for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
 	{
 		if (it.value()->getObjectType() == objType)
 		{
@@ -595,6 +606,10 @@ bool ITObjectDataMgr::LoadAccountGid()
 			QString gid = recordset->getStrValue("gid");
 			quint64 aid = (quint64)recordset->getIntValue("aid");
 			QString sDesc = recordset->getStrValue("desc");	//详细信息 从item表拿
+			if (gid.isEmpty())
+			{
+				continue;
+			}
 			auto pAccountObj = FindObject(aid).dynamicCast<ITAccount>();
 			ITAccountGidPtr pObj = newOneObject(TObject_AccountGid, nID).dynamicCast<ITAccountGid>();
 			if (pObj)
@@ -632,6 +647,10 @@ bool ITObjectDataMgr::LoadAccountRole()
 			QString sGid = recordset->getStrValue("gid");
 			QString sName = recordset->getStrValue("name");
 			int objType = recordset->getIntValue("role_type");
+			if (sGid.isEmpty())
+			{
+				continue;
+			}
 			if (objType == 0 )
 			{
 				objType = TObject_GidRole;
@@ -2421,34 +2440,167 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 	{
 		return Status::OK;
 	}
-	int roleObjType = TObject_GidRoleLeft;
+	int roleObjType = TObject_GidRole;
 	if (nRoleType == 1)
 	{
-		roleObjType = TObject_GidRoleLeft;
+		roleObjType = TObject_GidRoleRight;
 	}
 	else
-		roleObjType = TObject_GidRoleRight;
+		roleObjType = TObject_GidRoleLeft;
 	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 	if (pGid)
 	{
 		response->set_gid(pGid->_userGid.toStdString());
-		response->set_character_name(pGid->getObjectName().toStdString());
 		ITGidRolePtr pRole = nullptr;
-		for (auto pTmpRole : pGid->_roleList)
+		for (auto pTmpRole : pGid->GetAllChildObj())
 		{
 			if (pTmpRole->getObjectType() == roleObjType)
 			{
-				pRole = pTmpRole;
+				pRole =qSharedPointerDynamicCast<ITGidRole>(pTmpRole);
 				break;
+			}
+		}
+		if (pRole == nullptr)
+		{
+			roleObjType = TObject_GidRole;
+			for (auto pTmpRole : pGid->GetAllChildObj())
+			{
+				if (pTmpRole->getObjectType() == roleObjType)
+				{
+					pRole = qSharedPointerDynamicCast<ITGidRole>(pTmpRole);
+					break;
+				}
 			}
 		}
 		if (pRole)
 		{
 			auto pChar = response->character_data();
+			response->set_character_name(pRole->getObjectName().toStdString());
 			pChar.set_souls(pRole->_souls);
 			pChar.set_level(pRole->_level);
 			pChar.set_gold(pRole->_gold);
+			pChar.set_map_name(pRole->_map_name.toStdString());
+			pChar.set_map_number(pRole->_map_number);
+			pChar.set_job(pRole->_job.toStdString());
+			pChar.set_nick(pRole->_nickName.toStdString());
+			pChar.set_bank_gold(pRole->_bankgold);
+			pChar.set_image_id(pRole->_imageid);
+			pChar.set_score(pRole->_score);
+			pChar.set_skillslots(pRole->_skillslots);
+			pChar.set_use_title(pRole->_useTitle);
+			pChar.set_avatar_id(pRole->_avatar_id);
+			pChar.set_unitid(pRole->_unitid);
+			pChar.set_petid(pRole->_petid);
+			pChar.set_petriding(pRole->_petriding);
+			pChar.set_direction(pRole->_direction);
+			pChar.set_punchclock(pRole->_punchclock);
+			pChar.set_usingpunchclock(pRole->_usingpunchclock);
+			for (auto tTitle : pRole->_titles)
+			{
+				pChar.add_titles(tTitle.toStdString());
+			}
+			pChar.set_manu_endurance(pRole->_manu_endurance);
+			pChar.set_manu_skillful(pRole->_manu_skillful);
+			pChar.set_manu_intelligence(pRole->_manu_intelligence);
+			pChar.set_value_charisma(pRole->_value_charisma);
+			pChar.set_x(pRole->_x);
+			pChar.set_y(pRole->_y);
+			pChar.set_server_line(pRole->_server_line);
+			//pChar.set_battle_position(pRole->_battle_position);
+			//pChar.set_battle_position(pRole->_battle_position);
+			auto detailData = pChar.detail();
+			detailData.set_points_remain(pRole->_points_remain);
+			detailData.set_points_endurance(pRole->_points_endurance);
+			detailData.set_points_strength(pRole->_points_strength);
+			detailData.set_points_defense(pRole->_points_defense);
+			detailData.set_points_agility(pRole->_points_agility);
+			detailData.set_points_magical(pRole->_points_magical);
+			detailData.set_value_attack(pRole->_value_attack);
+			detailData.set_value_defensive(pRole->_value_defensive);
+			detailData.set_value_agility(pRole->_value_agility);
+			detailData.set_value_spirit(pRole->_value_spirit);
+			detailData.set_value_recovery(pRole->_value_recovery);
+			detailData.set_resist_poison(pRole->_resist_poison);
+			detailData.set_resist_sleep(pRole->_resist_sleep);
+			detailData.set_resist_medusa(pRole->_resist_medusa);
+			detailData.set_resist_drunk(pRole->_resist_drunk);
+			detailData.set_resist_chaos(pRole->_resist_chaos);
+			detailData.set_resist_forget(pRole->_resist_forget);
+			detailData.set_fix_critical(pRole->_fix_critical);
+			detailData.set_fix_strikeback(pRole->_fix_strikeback);
+			detailData.set_fix_accurancy(pRole->_fix_accurancy);
+			detailData.set_fix_dodge(pRole->_fix_dodge);
+			detailData.set_element_earth(pRole->_element_earth);
+			detailData.set_element_water(pRole->_element_water);
+			detailData.set_element_fire(pRole->_element_fire);
+			detailData.set_element_wind(pRole->_element_wind);
 
+			{
+				auto pBaseData = pChar.base_data();
+				pBaseData.set_hp(pRole->_hp);
+				pBaseData.set_mp(pRole->_mp);
+				pBaseData.set_name(pRole->getObjectName().toStdString());
+				pBaseData.set_maxhp(pRole->_maxhp);
+				pBaseData.set_maxmp(pRole->_maxmp);
+				pBaseData.set_level(pRole->_level);
+				pBaseData.set_xp(pRole->_xp);
+				pBaseData.set_maxxp(pRole->_maxxp);
+				pBaseData.set_health(pRole->_health);
+			}
+			auto persDescData = pChar.pers_desc();
+			//persDescData.set_buyicon(pRole->bu)
+
+			for (auto it=pRole->_petPosForPet.begin();it!=pRole->_petPosForPet.end();++it)
+			{
+				if (!it.value()->_bExist)
+				{
+					continue;
+				}
+				auto petData = response->add_pet_data();
+				auto pBaseData = petData->base_data();
+				pBaseData.set_hp(it.value()->_hp);
+				pBaseData.set_mp(it.value()->_mp);
+				pBaseData.set_name(it.value()->getObjectName().toStdString());
+				pBaseData.set_maxhp(it.value()->_maxhp);
+				pBaseData.set_maxmp(it.value()->_maxmp);
+				pBaseData.set_level(it.value()->_level);
+				pBaseData.set_xp(it.value()->_xp);
+				pBaseData.set_maxxp(it.value()->_maxxp);
+				pBaseData.set_health(it.value()->_health);
+				petData->set_index(it.key());
+				//petData->set_flags(it.value()->_fl);
+				petData->set_grade(it.value()->_grade);
+				petData->set_loyality(it.value()->_loyality);
+				//petData->set_default_battle(it.value()->_loyality);
+				petData->set_state(it.value()->_state);
+				petData->set_lossmingrade(it.value()->_lossMinGrade);
+				petData->set_lossmaxgrade(it.value()->_lossMaxGrade);
+				petData->set_real_name(it.value()->_realName.toStdString());
+				petData->set_race(it.value()->_race);
+				petData->set_skillslots(it.value()->_skillslots);
+			}
+			for (auto it = pRole->_itemPosForPtr.begin(); it != pRole->_itemPosForPtr.end(); ++it)
+			{
+				if (!it.value()->_bExist)
+				{
+					continue;
+				}
+				auto itemData = response->add_items();
+				//一些数据需要从item表查数据返回 这里不需要关注这些
+				//itemData->set_image_id(it.value()->_itemAttr);
+				itemData->set_count(it.value()->_itemCount);
+				itemData->set_type(it.value()->_itemType);
+				/*itemData->set_image_id(it.value()->_itemPrice);
+				itemData->set_image_id(it.value()->_itemPile);
+				itemData->set_image_id(it.value()->_itemLevel);
+				itemData->set_image_id(it.value()->_sellMinCount);*/
+				itemData->set_pos(it.value()->_itemPos);
+				// itemData->set_level(it.value()->_itemPos);
+				itemData->set_attr(it.value()->_itemAttr.toStdString());
+				//itemData->set_info(it.value()->_itemAttr.toStdString());
+				itemData->set_item_id(it.value()->getObjectCode());
+				itemData->set_name(it.value()->getObjectName().toStdString());
+			}
 		}	
 	}
 	return Status::OK;

@@ -204,7 +204,7 @@ public:
 	bool _bExist = true;	//是否存在
 
 	ITGameSkillList _skillList;
-	QHash<int, ITGameSkillPtr> _skillPosForSkill;
+	QMap<int, ITGameSkillPtr> _skillPosForSkill;
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGamePet)
 
@@ -341,6 +341,7 @@ public:
 	int _souls = 0;
 	int _score = 0;
 	QString	_job;
+	QString _nickName;
 	int _useTitle = 0;
 	QStringList	_titles;
 	int _skillslots = 0;
@@ -364,12 +365,12 @@ public:
 	ITGamePetList _petList;	  //所有宠物信息
 	ITGameItemList _itemList; //所有道具信息
 	ITGameSkillList _skillList;
-	QHash<int, ITGamePetPtr> _petPosForPet;//宠物位置和指针映射
-	QHash<int, ITGameSkillPtr> _skillPosForSkill;
+	QMap<int, ITGamePetPtr> _petPosForPet;//宠物位置和指针映射
+	QMap<int, ITGameSkillPtr> _skillPosForSkill;
 
 
-	QHash<int, ITGameItemPtr> _itemPosForPtr;//物品id和物品指针映射
-	QHash<QString, ITGameItemPtr> _bankItemNameForPtr;//银行物品名称和物品指针映射
+	QMap<int, ITGameItemPtr> _itemPosForPtr;//物品id和物品指针映射
+	QMap<QString, ITGameItemPtr> _bankItemNameForPtr;//银行物品名称和物品指针映射
 	QMutex _mutex;
 };
 

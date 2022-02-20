@@ -3,6 +3,7 @@
 #include "ITObjectDataMgr.h"
 #include <windows.h>
 #include <QApplication>
+#include "RpcSocketClient.h"
 CGLuaFun::CGLuaFun()
 {
 	//m_pLuaState = luaL_newstate();
@@ -4598,6 +4599,197 @@ int CGLuaFun::Lua_SetWorkDelay(LuaState *L)
 		return 0;
 	int delay = args[1].GetInteger();
 	g_CGAInterface->SetWorkDelay(delay);
+	return 0;
+}
+
+int CGLuaFun::Lua_SelectGidData(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	QString sGid = args[1].GetString();
+	int roleIndex = args[2].GetInteger();
+	if (sGid.isEmpty())
+		return 0;
+	CGData::SelectGidDataResponse reply;
+	bool bRet = RpcSocketClient::getInstance().SelectGidData(sGid, roleIndex, reply);
+	if (bRet)
+	{
+		LuaObject tableObj(L);
+		tableObj.AssignNewTable();
+		auto info = reply.character_data();
+		{
+			tableObj.SetString("gid", reply.gid().c_str());
+			tableObj.SetString("name", reply.character_name().c_str());
+			tableObj.SetString("job", info.job().c_str());
+			tableObj.SetInteger("level", info.level());
+			tableObj.SetInteger("gold", info.gold());
+			tableObj.SetInteger("bankgold", info.bank_gold());
+			tableObj.SetInteger("hp", info.base_data().hp());
+			tableObj.SetInteger("maxhp", info.base_data().maxhp());
+			tableObj.SetInteger("mp", info.base_data().mp());
+			tableObj.SetInteger("maxmp", info.base_data().maxmp());
+			tableObj.SetInteger("xp", info.base_data().xp());
+			tableObj.SetInteger("maxxp", info.base_data().maxxp());
+			tableObj.SetInteger("petid", info.petid());
+			tableObj.SetInteger("unitid", info.unitid());
+			tableObj.SetInteger("punchclock", info.punchclock());
+			tableObj.SetInteger("usingpunchclock", info.usingpunchclock());
+			tableObj.SetInteger("health", info.base_data().health());
+			tableObj.SetInteger("souls", info.souls());
+			tableObj.SetInteger("direction", info.direction());
+			tableObj.SetInteger("manu_endurance", info.manu_endurance());
+			tableObj.SetInteger("manu_skillful", info.manu_skillful());
+			tableObj.SetInteger("manu_intelligence", info.manu_intelligence());
+			tableObj.SetInteger("value_charisma", info.value_charisma());
+			LuaObject titleObj(L);
+			titleObj.AssignNewTable();
+			for (size_t i = 0; i < info.titles_size(); ++i)
+			{
+				std::string sTitle = info.titles().at(i);
+				LuaObject subObj(L);
+				subObj.AssignNewTable();
+				subObj.SetString("name", sTitle.c_str());
+				titleObj.SetObject(i + 1, subObj);
+			}
+			tableObj.SetObject("titles", titleObj);
+			tableObj.SetInteger("titlescount", info.titles_size());
+			LuaObject subObj(L);
+			subObj.AssignNewTable();
+			subObj.SetInteger("points_remain", info.detail().points_remain());
+			subObj.SetInteger("points_endurance", info.detail().points_endurance());
+			subObj.SetInteger("points_strength", info.detail().points_strength());
+			subObj.SetInteger("points_defense", info.detail().points_defense());
+			subObj.SetInteger("points_agility", info.detail().points_agility());
+			subObj.SetInteger("points_magical", info.detail().points_magical());
+			subObj.SetInteger("value_attack", info.detail().value_attack());
+			subObj.SetInteger("value_defensive", info.detail().value_defensive());
+			subObj.SetInteger("value_agility", info.detail().value_agility());
+			subObj.SetInteger("value_spirit", info.detail().value_spirit());
+			subObj.SetInteger("value_recovery", info.detail().value_recovery());
+			subObj.SetInteger("resist_poison", info.detail().resist_poison());
+			subObj.SetInteger("resist_sleep", info.detail().resist_sleep());
+			subObj.SetInteger("resist_medusa", info.detail().resist_medusa());
+			subObj.SetInteger("resist_drunk", info.detail().resist_drunk());
+			subObj.SetInteger("resist_chaos", info.detail().resist_chaos());
+			subObj.SetInteger("resist_forget", info.detail().resist_forget());
+			subObj.SetInteger("fix_critical", info.detail().fix_critical());
+			subObj.SetInteger("fix_strikeback", info.detail().fix_strikeback());
+			subObj.SetInteger("fix_accurancy", info.detail().fix_accurancy());
+			subObj.SetInteger("fix_dodge", info.detail().fix_dodge());
+			subObj.SetInteger("element_earth", info.detail().element_earth());
+			subObj.SetInteger("element_water", info.detail().element_water());
+			subObj.SetInteger("element_fire", info.detail().element_fire());
+			subObj.SetInteger("element_wind", info.detail().element_wind());
+			tableObj.SetObject("detail", subObj);
+			LuaObject descObj(L);
+			descObj.AssignNewTable();
+			descObj.SetInteger("changeBits", info.pers_desc().changebits());
+			descObj.SetInteger("sellIcon", info.pers_desc().sellicon());
+			descObj.SetString("sellString", info.pers_desc().sellstring().c_str());
+			descObj.SetInteger("buyIcon", info.pers_desc().buyicon());
+			descObj.SetString("buyString", info.pers_desc().buystring().c_str());
+			descObj.SetInteger("wantIcon", info.pers_desc().wanticon());
+			descObj.SetString("wantString", info.pers_desc().wantstring().c_str());
+			descObj.SetString("descString", info.pers_desc().descstring().c_str());
+			tableObj.SetObject("persdesc", descObj);
+
+			LuaObject itemsObj(L);
+			itemsObj.AssignNewTable();
+			for (size_t i = 0; i < reply.items_size(); ++i)
+			{
+				auto tItem = reply.items().at(i);
+				LuaObject subObj(L);
+				subObj.AssignNewTable();
+				subObj.SetString("name", tItem.name().c_str());
+				subObj.SetString("attr", tItem.attr().c_str());
+				subObj.SetInteger("count", tItem.count());
+				subObj.SetInteger("itemid", tItem.item_id());
+				subObj.SetInteger("pos", tItem.pos());
+				subObj.SetInteger("type", tItem.type());
+				itemsObj.SetObject(i + 1, subObj);
+			}
+			tableObj.SetObject("items", itemsObj);
+			tableObj.SetInteger("itemscount", reply.items_size());
+			LuaObject petsObj(L);
+			petsObj.AssignNewTable();
+			for (size_t i = 0; i < reply.pet_data_size(); ++i)
+			{
+				auto tPet = reply.pet_data().at(i);
+				LuaObject subObj(L);
+				subObj.AssignNewTable();
+				subObj.SetString("name", tPet.base_data().name().c_str());
+				subObj.SetString("realname", tPet.real_name().c_str());
+				subObj.SetInteger("hp", tPet.base_data().hp());
+				subObj.SetInteger("maxhp", tPet.base_data().maxhp());
+				subObj.SetInteger("mp", tPet.base_data().mp());
+				subObj.SetInteger("maxmp", tPet.base_data().maxmp());
+				subObj.SetInteger("level", tPet.base_data().level());
+				subObj.SetInteger("xp", tPet.base_data().xp());
+				subObj.SetInteger("maxxp", tPet.base_data().maxxp());
+				subObj.SetInteger("health", tPet.base_data().health());
+				subObj.SetInteger("grade", tPet.grade());
+				subObj.SetInteger("index", tPet.index());
+				subObj.SetInteger("loyality", tPet.loyality());
+				subObj.SetInteger("state", tPet.state());
+				subObj.SetInteger("lossmingrade", tPet.lossmingrade());
+				subObj.SetInteger("lossmaxgrade", tPet.lossmaxgrade());
+				subObj.SetInteger("skillslots", tPet.skillslots());
+				subObj.SetInteger("race", tPet.race());
+				petsObj.SetObject(i + 1, subObj);
+			}
+			tableObj.SetObject("pets", petsObj);
+			tableObj.SetInteger("petscount", reply.pet_data_size());
+		}
+		//LuaObject skillObj(L);
+		//skillObj.AssignNewTable();
+		//CGA::cga_skills_info_t skillsinfo;
+		//if (g_CGAInterface->GetSkillsInfo(skillsinfo))
+		//{
+		//	for (size_t i = 0; i < skillsinfo.size(); ++i)
+		//	{
+		//		const CGA::cga_skill_info_t &skinfo = skillsinfo.at(i);
+		//		LuaObject subObj(L);
+		//		subObj.AssignNewTable();
+		//		subObj.SetString("name", skinfo.name.c_str());
+		//		subObj.SetInteger("index", skinfo.index);
+		//		subObj.SetInteger("lv", skinfo.lv);
+		//		subObj.SetInteger("maxlv", skinfo.maxlv);
+		//		subObj.SetInteger("xp", skinfo.xp);
+		//		subObj.SetInteger("maxxp", skinfo.maxxp);
+		//		subObj.SetInteger("pos", skinfo.pos);
+
+		//		CGA::cga_subskills_info_t subskillsinfo;
+		//		LuaObject subSkillObj(L);
+		//		subSkillObj.AssignNewTable();
+		//		//获取合成物品信息
+		//		CGA::cga_craft_info_t craftInfo;
+		//		if (g_CGAInterface->GetSubSkillsInfo(skinfo.index, subskillsinfo))
+		//		{
+		//			for (size_t j = 0; j < subskillsinfo.size(); ++j)
+		//			{
+		//				const CGA::cga_subskill_info_t &subskinfo = subskillsinfo.at(j);
+
+		//				LuaObject subTbObj(L);
+		//				subTbObj.AssignNewTable();
+		//				subTbObj.SetString("name", subskinfo.name.c_str());
+		//				subTbObj.SetString("info", subskinfo.info.c_str());
+		//				subTbObj.SetInteger("level", subskinfo.level);
+		//				subTbObj.SetInteger("cost", subskinfo.cost);
+		//				subTbObj.SetInteger("flags", subskinfo.flags);
+		//				subTbObj.SetBoolean("available", subskinfo.available);
+		//				subSkillObj.SetObject(j + 1, subTbObj);
+		//			}
+		//		}
+		//		subObj.SetObject("subskill", subSkillObj);
+
+		//		skillObj.SetObject(i + 1, subObj);
+		//	}
+		//}
+		//tableObj.SetObject("skill", skillObj);
+		tableObj.Push(L);
+		return 1;
+	}
 	return 0;
 }
 

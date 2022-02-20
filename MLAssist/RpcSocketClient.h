@@ -71,6 +71,8 @@ public:
 	void GetServerStoreMapData();
 	void UploadGidData();
 	void UploadGidBankData();
+	bool SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply);
+
 
 	bool GetConnectState();
 	void StoreCGItemData(GameItemPtr pItem);

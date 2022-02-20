@@ -569,6 +569,29 @@ void RpcSocketClient::UploadGidBankData()
 	}
 }
 
+bool RpcSocketClient::SelectGidData(const QString &gid,int roleIndex, CGData::SelectGidDataResponse& reply)
+{
+	if (!isConnected())
+		return false;
+	CGData::SelectGidDataRequest request;
+	request.set_gid(gid.toStdString());
+	request.set_role_type(roleIndex);
+	ClientContext context;
+	Status status = _stub->SelectGidData(&context, request, &reply);
+	if (status.ok())
+	{
+	/*	auto repChara= reply.character_data();
+		CharacterPtr charaData = CharacterPtr(new Character);
+		charaData->name = QString::fromStdString(reply.character_name());*/
+		return true;
+	}
+	else
+	{
+		qDebug() << status.error_code() << ": " << status.error_message().c_str();
+		return false;
+	}
+}
+
 bool RpcSocketClient::GetConnectState()
 {
 	if (!isConnected())

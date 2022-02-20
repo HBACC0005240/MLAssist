@@ -550,6 +550,10 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
 	objGlobal.Register("自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
 
+
+	objGlobal.Register("查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
+
+
 	objGlobal.Register("GetMapName", m_luaFun, &CGLuaFun::Lua_GetMapName);
 	objGlobal.Register("GetGameStatus", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
 	objGlobal.Register("GetWorldStatus", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);

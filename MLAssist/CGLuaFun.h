@@ -481,6 +481,10 @@ public:
 	int Lua_SetBattleEndTick(LuaState *L);
 	int Lua_SetWorkDelay(LuaState *L);
 
+	//Rpc
+	//查询gid数据
+	int Lua_SelectGidData(LuaState* L);
+
 	void PauseScript();
 	void ResumeScript();
 

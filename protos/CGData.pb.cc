@@ -276,7 +276,8 @@ constexpr CGCharacterData::CGCharacterData(
   , y_(0)
   , map_number_(0)
   , server_line_(0)
-  , battle_position_(0){}
+  , battle_position_(0)
+  , bank_gold_(0){}
 struct CGCharacterDataDefaultTypeInternal {
   constexpr CGCharacterDataDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -799,6 +800,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, nick_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, pers_desc_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, battle_position_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, bank_gold_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::CGPetData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1011,27 +1013,27 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 106, -1, sizeof(::CGData::CGAttrBaseData)},
   { 136, -1, sizeof(::CGData::CGCharacterPersDesc)},
   { 149, -1, sizeof(::CGData::CGCharacterData)},
-  { 185, -1, sizeof(::CGData::CGPetData)},
-  { 205, -1, sizeof(::CGData::CGItemData)},
-  { 220, -1, sizeof(::CGData::UploadGidDataResponse)},
-  { 225, -1, sizeof(::CGData::UploadGidBankDataResponse)},
-  { 230, -1, sizeof(::CGData::CGStoreMapRequest)},
-  { 237, -1, sizeof(::CGData::CGStoreMapResponse)},
-  { 242, -1, sizeof(::CGData::CGMapDataRequest)},
-  { 247, -1, sizeof(::CGData::CGMapDataResponse)},
-  { 253, -1, sizeof(::CGData::CGMapData)},
-  { 263, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
-  { 268, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
-  { 274, -1, sizeof(::CGData::CGPetGradeCalcData)},
-  { 300, -1, sizeof(::CGData::CGItemRequest)},
-  { 306, -1, sizeof(::CGData::CGItemResponse)},
-  { 322, -1, sizeof(::CGData::CGStoreItemRequest)},
-  { 337, -1, sizeof(::CGData::CGStoreItemResponse)},
-  { 344, -1, sizeof(::CGData::CGVoidData)},
-  { 349, -1, sizeof(::CGData::CGBoolData)},
-  { 355, -1, sizeof(::CGData::CGIntData)},
-  { 361, -1, sizeof(::CGData::CGSysTimeResponse)},
-  { 374, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
+  { 186, -1, sizeof(::CGData::CGPetData)},
+  { 206, -1, sizeof(::CGData::CGItemData)},
+  { 221, -1, sizeof(::CGData::UploadGidDataResponse)},
+  { 226, -1, sizeof(::CGData::UploadGidBankDataResponse)},
+  { 231, -1, sizeof(::CGData::CGStoreMapRequest)},
+  { 238, -1, sizeof(::CGData::CGStoreMapResponse)},
+  { 243, -1, sizeof(::CGData::CGMapDataRequest)},
+  { 248, -1, sizeof(::CGData::CGMapDataResponse)},
+  { 254, -1, sizeof(::CGData::CGMapData)},
+  { 264, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
+  { 269, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
+  { 275, -1, sizeof(::CGData::CGPetGradeCalcData)},
+  { 301, -1, sizeof(::CGData::CGItemRequest)},
+  { 307, -1, sizeof(::CGData::CGItemResponse)},
+  { 323, -1, sizeof(::CGData::CGStoreItemRequest)},
+  { 338, -1, sizeof(::CGData::CGStoreItemResponse)},
+  { 345, -1, sizeof(::CGData::CGVoidData)},
+  { 350, -1, sizeof(::CGData::CGBoolData)},
+  { 356, -1, sizeof(::CGData::CGIntData)},
+  { 362, -1, sizeof(::CGData::CGSysTimeResponse)},
+  { 375, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1125,7 +1127,7 @@ const char descriptor_table_protodef_CGData_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "\022\n\nchangeBits\030\001 \001(\005\022\020\n\010sellIcon\030\002 \001(\005\022\022\n"
   "\nsellString\030\003 \001(\t\022\017\n\007buyIcon\030\004 \001(\005\022\021\n\tbu"
   "yString\030\005 \001(\t\022\020\n\010wantIcon\030\006 \001(\005\022\022\n\nwantS"
-  "tring\030\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\250\005\n\017CGCh"
+  "tring\030\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\273\005\n\017CGCh"
   "aracterData\022%\n\tbase_data\030\001 \001(\0132\022.CGData."
   "CGBaseData\022\r\n\005souls\030\002 \001(\005\022\r\n\005level\030\003 \001(\005"
   "\022\014\n\004gold\030\004 \001(\005\022\020\n\010image_id\030\005 \001(\005\022\r\n\005scor"
@@ -1142,103 +1144,104 @@ const char descriptor_table_protodef_CGData_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "\001(\0132\026.CGData.CGAttrBaseData\022&\n\005skill\030\034 \003"
   "(\0132\027.CGData.CGSkillBaseData\022\014\n\004nick\030\035 \001("
   "\t\022.\n\tpers_desc\030\036 \001(\0132\033.CGData.CGCharacte"
-  "rPersDesc\022\027\n\017battle_position\030\037 \001(\005\"\337\002\n\tC"
-  "GPetData\022%\n\tbase_data\030\001 \001(\0132\022.CGData.CGB"
-  "aseData\022\r\n\005index\030\002 \001(\005\022\r\n\005flags\030\003 \001(\005\022\024\n"
-  "\014battle_flags\030\004 \001(\005\022\020\n\010loyality\030\005 \001(\005\022\026\n"
-  "\016default_battle\030\006 \001(\010\022\r\n\005state\030\007 \001(\005\022\r\n\005"
-  "grade\030\010 \001(\005\022\024\n\014lossMinGrade\030\t \001(\005\022\024\n\014los"
-  "sMaxGrade\030\n \001(\005\022&\n\005skill\030\013 \003(\0132\027.CGData."
-  "CGSkillBaseData\022&\n\006detail\030\014 \001(\0132\026.CGData"
-  ".CGAttrBaseData\022\021\n\treal_name\030\r \001(\t\022\014\n\004ra"
-  "ce\030\016 \001(\005\022\022\n\nskillslots\030\017 \001(\005\"\244\001\n\nCGItemD"
-  "ata\022\020\n\010image_id\030\001 \001(\005\022\017\n\007item_id\030\002 \001(\005\022\014"
-  "\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005level\030\005 \001("
-  "\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004info\030\007 \001(\t\022\013\n\003pos\030\010 \001"
-  "(\005\022\020\n\010assessed\030\t \001(\010\022\r\n\005count\030\n \001(\005\"\027\n\025U"
-  "ploadGidDataResponse\"\033\n\031UploadGidBankDat"
-  "aResponse\"9\n\021CGStoreMapRequest\022\022\n\nmap_nu"
-  "mber\030\001 \001(\005\022\020\n\010map_name\030\002 \001(\t\"\024\n\022CGStoreM"
-  "apResponse\"\022\n\020CGMapDataRequest\"4\n\021CGMapD"
-  "ataResponse\022\037\n\004maps\030\001 \003(\0132\021.CGData.CGMap"
-  "Data\"Z\n\tCGMapData\022\n\n\002id\030\001 \001(\004\022\022\n\nmap_num"
-  "ber\030\002 \001(\005\022\020\n\010map_name\030\003 \001(\t\022\014\n\004desc\030\004 \001("
-  "\t\022\r\n\005often\030\005 \001(\005\"\027\n\025CGPetGradeCalcReques"
-  "t\"A\n\026CGPetGradeCalcResponse\022\'\n\003pet\030\001 \003(\013"
-  "2\032.CGData.CGPetGradeCalcData\"\267\003\n\022CGPetGr"
-  "adeCalcData\022\n\n\002id\030\001 \001(\004\022\016\n\006number\030\002 \001(\005\022"
-  "\014\n\004name\030\003 \001(\t\022\020\n\010raceType\030\004 \001(\005\022\024\n\014raceT"
-  "ypeName\030\005 \001(\t\022\016\n\006baseBP\030\006 \001(\001\022\022\n\ntotalGr"
-  "ade\030\007 \001(\005\022\023\n\013bestBPGrade\030\010 \003(\001\022\021\n\tcan_ca"
-  "tch\030\t \001(\005\022\021\n\tcard_type\030\n \001(\005\022\020\n\010image_id"
-  "\030\013 \001(\005\022\026\n\016rate_endurance\030\014 \001(\005\022\025\n\rrate_s"
-  "trength\030\r \001(\005\022\024\n\014rate_defense\030\016 \001(\005\022\024\n\014r"
-  "ate_agility\030\017 \001(\005\022\024\n\014rate_magical\030\020 \001(\005\022"
-  "\025\n\relement_earth\030\021 \001(\005\022\025\n\relement_water\030"
-  "\022 \001(\005\022\024\n\014element_fire\030\023 \001(\005\022\024\n\014element_w"
-  "ind\030\024 \001(\005\022\023\n\013skill_slots\030\025 \001(\005\" \n\rCGItem"
-  "Request\022\017\n\007item_id\030\001 \001(\005\"\300\001\n\016CGItemRespo"
-  "nse\022\n\n\002id\030\001 \001(\004\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name"
-  "\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005price\030\005 \001(\005\022\017\n\007m"
-  "axpile\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\026\n\016sellLimit"
-  "Count\030\010 \001(\005\022\021\n\tattribute\030\t \001(\t\022\014\n\004desc\030\n"
-  " \001(\t\022\r\n\005exist\030\013 \001(\010\"\273\001\n\022CGStoreItemReque"
-  "st\022\017\n\007item_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004typ"
-  "e\030\003 \001(\005\022\r\n\005price\030\004 \001(\005\022\017\n\007maxpile\030\005 \001(\005\022"
-  "\r\n\005level\030\006 \001(\005\022\026\n\016sellLimitCount\030\007 \001(\005\022\021"
-  "\n\tattribute\030\010 \001(\t\022\014\n\004desc\030\t \001(\t\022\020\n\010asses"
-  "sed\030\n \001(\010\"4\n\023CGStoreItemResponse\022\n\n\002id\030\001"
-  " \001(\005\022\021\n\tmaybeName\030\002 \001(\t\"\014\n\nCGVoidData\"\031\n"
-  "\nCGBoolData\022\013\n\003val\030\001 \001(\010\"\030\n\tCGIntData\022\013\n"
-  "\003val\030\001 \001(\005\"\223\001\n\021CGSysTimeResponse\022\r\n\005year"
-  "s\030\001 \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004days\030\003 \001(\005\022\r\n\005"
-  "hours\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004secs\030\006 \001(\005\022"
-  "\022\n\nlocal_time\030\007 \001(\005\022\023\n\013server_time\030\010 \001(\005"
-  "\"8\n\027CGPlayerFlagEnabledData\022\r\n\005index\030\001 \001"
-  "(\005\022\016\n\006enable\030\002 \001(\0102\237\004\n\014MLRpcService\022:\n\nI"
-  "nitialize\022\030.CGData.CGGmeTypeRequest\032\022.CG"
-  "Data.CGVoidData\0221\n\007Connect\022\022.CGData.CGVo"
-  "idData\032\022.CGData.CGBoolData\0221\n\010IsInGame\022\022"
-  ".CGData.CGVoidData\032\021.CGData.CGIntData\0227\n"
-  "\016GetWorldStatus\022\022.CGData.CGVoidData\032\021.CG"
-  "Data.CGIntData\0226\n\rGetGameStatus\022\022.CGData"
-  ".CGVoidData\032\021.CGData.CGIntData\0224\n\013GetBGM"
-  "Index\022\022.CGData.CGVoidData\032\021.CGData.CGInt"
-  "Data\022;\n\nGetSysTime\022\022.CGData.CGVoidData\032\031"
-  ".CGData.CGSysTimeResponse\022<\n\rGetPlayerIn"
-  "fo\022\022.CGData.CGVoidData\032\027.CGData.CGCharac"
-  "terData\022K\n\024SetPlayerFlagEnabled\022\037.CGData"
-  ".CGPlayerFlagEnabledData\032\022.CGData.CGVoid"
-  "Data2\357\007\n\014CGRpcService\022>\n\rGetCGItemData\022\025"
-  ".CGData.CGItemRequest\032\026.CGData.CGItemRes"
-  "ponse\0229\n\017GetConnectState\022\022.CGData.CGVoid"
-  "Data\032\022.CGData.CGVoidData\022V\n\023GetPetGradeC"
-  "alcData\022\035.CGData.CGPetGradeCalcRequest\032\036"
-  ".CGData.CGPetGradeCalcResponse\"\000\022N\n\025GetS"
-  "erverStoreMapData\022\030.CGData.CGMapDataRequ"
-  "est\032\031.CGData.CGMapDataResponse\"\000\022L\n\017Stor"
-  "eCGItemData\022\032.CGData.CGStoreItemRequest\032"
-  "\033.CGData.CGStoreItemResponse\"\000\022I\n\016StoreC"
-  "GMapData\022\031.CGData.CGStoreMapRequest\032\032.CG"
-  "Data.CGStoreMapResponse\"\000\022N\n\rUploadGidDa"
-  "ta\022\034.CGData.UploadGidDataRequest\032\035.CGDat"
-  "a.UploadGidDataResponse\"\000\022Z\n\021UploadGidBa"
-  "nkData\022 .CGData.UploadGidBankDataRequest"
-  "\032!.CGData.UploadGidBankDataResponse\"\000\022/\n"
-  "\007Publish\022\021.CGData.StringPub\032\021.CGData.Str"
-  "ingPub\0223\n\tSubscribe\022\021.CGData.StringPub\032\021"
-  ".CGData.StringPub0\001\022c\n\024SelectAccountGidD"
-  "ata\022#.CGData.SelectAccountGidDataRequest"
-  "\032$.CGData.SelectAccountGidDataResponse\"\000"
-  "\022N\n\rSelectGidData\022\034.CGData.SelectGidData"
-  "Request\032\035.CGData.SelectGidDataResponse\"\000"
-  "\022\\\n\024SelectDstTypeGidData\022\034.CGData.Select"
-  "GidDataRequest\032$.CGData.SelectAccountGid"
-  "DataResponse\"\000b\006proto3"
+  "rPersDesc\022\027\n\017battle_position\030\037 \001(\005\022\021\n\tba"
+  "nk_gold\030  \001(\005\"\337\002\n\tCGPetData\022%\n\tbase_data"
+  "\030\001 \001(\0132\022.CGData.CGBaseData\022\r\n\005index\030\002 \001("
+  "\005\022\r\n\005flags\030\003 \001(\005\022\024\n\014battle_flags\030\004 \001(\005\022\020"
+  "\n\010loyality\030\005 \001(\005\022\026\n\016default_battle\030\006 \001(\010"
+  "\022\r\n\005state\030\007 \001(\005\022\r\n\005grade\030\010 \001(\005\022\024\n\014lossMi"
+  "nGrade\030\t \001(\005\022\024\n\014lossMaxGrade\030\n \001(\005\022&\n\005sk"
+  "ill\030\013 \003(\0132\027.CGData.CGSkillBaseData\022&\n\006de"
+  "tail\030\014 \001(\0132\026.CGData.CGAttrBaseData\022\021\n\tre"
+  "al_name\030\r \001(\t\022\014\n\004race\030\016 \001(\005\022\022\n\nskillslot"
+  "s\030\017 \001(\005\"\244\001\n\nCGItemData\022\020\n\010image_id\030\001 \001(\005"
+  "\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030"
+  "\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004in"
+  "fo\030\007 \001(\t\022\013\n\003pos\030\010 \001(\005\022\020\n\010assessed\030\t \001(\010\022"
+  "\r\n\005count\030\n \001(\005\"\027\n\025UploadGidDataResponse\""
+  "\033\n\031UploadGidBankDataResponse\"9\n\021CGStoreM"
+  "apRequest\022\022\n\nmap_number\030\001 \001(\005\022\020\n\010map_nam"
+  "e\030\002 \001(\t\"\024\n\022CGStoreMapResponse\"\022\n\020CGMapDa"
+  "taRequest\"4\n\021CGMapDataResponse\022\037\n\004maps\030\001"
+  " \003(\0132\021.CGData.CGMapData\"Z\n\tCGMapData\022\n\n\002"
+  "id\030\001 \001(\004\022\022\n\nmap_number\030\002 \001(\005\022\020\n\010map_name"
+  "\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\r\n\005often\030\005 \001(\005\"\027\n\025C"
+  "GPetGradeCalcRequest\"A\n\026CGPetGradeCalcRe"
+  "sponse\022\'\n\003pet\030\001 \003(\0132\032.CGData.CGPetGradeC"
+  "alcData\"\267\003\n\022CGPetGradeCalcData\022\n\n\002id\030\001 \001"
+  "(\004\022\016\n\006number\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\020\n\010race"
+  "Type\030\004 \001(\005\022\024\n\014raceTypeName\030\005 \001(\t\022\016\n\006base"
+  "BP\030\006 \001(\001\022\022\n\ntotalGrade\030\007 \001(\005\022\023\n\013bestBPGr"
+  "ade\030\010 \003(\001\022\021\n\tcan_catch\030\t \001(\005\022\021\n\tcard_typ"
+  "e\030\n \001(\005\022\020\n\010image_id\030\013 \001(\005\022\026\n\016rate_endura"
+  "nce\030\014 \001(\005\022\025\n\rrate_strength\030\r \001(\005\022\024\n\014rate"
+  "_defense\030\016 \001(\005\022\024\n\014rate_agility\030\017 \001(\005\022\024\n\014"
+  "rate_magical\030\020 \001(\005\022\025\n\relement_earth\030\021 \001("
+  "\005\022\025\n\relement_water\030\022 \001(\005\022\024\n\014element_fire"
+  "\030\023 \001(\005\022\024\n\014element_wind\030\024 \001(\005\022\023\n\013skill_sl"
+  "ots\030\025 \001(\005\" \n\rCGItemRequest\022\017\n\007item_id\030\001 "
+  "\001(\005\"\300\001\n\016CGItemResponse\022\n\n\002id\030\001 \001(\004\022\017\n\007it"
+  "em_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022"
+  "\r\n\005price\030\005 \001(\005\022\017\n\007maxpile\030\006 \001(\005\022\r\n\005level"
+  "\030\007 \001(\005\022\026\n\016sellLimitCount\030\010 \001(\005\022\021\n\tattrib"
+  "ute\030\t \001(\t\022\014\n\004desc\030\n \001(\t\022\r\n\005exist\030\013 \001(\010\"\273"
+  "\001\n\022CGStoreItemRequest\022\017\n\007item_id\030\001 \001(\005\022\014"
+  "\n\004name\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\r\n\005price\030\004 \001("
+  "\005\022\017\n\007maxpile\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\026\n\016sel"
+  "lLimitCount\030\007 \001(\005\022\021\n\tattribute\030\010 \001(\t\022\014\n\004"
+  "desc\030\t \001(\t\022\020\n\010assessed\030\n \001(\010\"4\n\023CGStoreI"
+  "temResponse\022\n\n\002id\030\001 \001(\005\022\021\n\tmaybeName\030\002 \001"
+  "(\t\"\014\n\nCGVoidData\"\031\n\nCGBoolData\022\013\n\003val\030\001 "
+  "\001(\010\"\030\n\tCGIntData\022\013\n\003val\030\001 \001(\005\"\223\001\n\021CGSysT"
+  "imeResponse\022\r\n\005years\030\001 \001(\005\022\r\n\005month\030\002 \001("
+  "\005\022\014\n\004days\030\003 \001(\005\022\r\n\005hours\030\004 \001(\005\022\014\n\004mins\030\005"
+  " \001(\005\022\014\n\004secs\030\006 \001(\005\022\022\n\nlocal_time\030\007 \001(\005\022\023"
+  "\n\013server_time\030\010 \001(\005\"8\n\027CGPlayerFlagEnabl"
+  "edData\022\r\n\005index\030\001 \001(\005\022\016\n\006enable\030\002 \001(\0102\237\004"
+  "\n\014MLRpcService\022:\n\nInitialize\022\030.CGData.CG"
+  "GmeTypeRequest\032\022.CGData.CGVoidData\0221\n\007Co"
+  "nnect\022\022.CGData.CGVoidData\032\022.CGData.CGBoo"
+  "lData\0221\n\010IsInGame\022\022.CGData.CGVoidData\032\021."
+  "CGData.CGIntData\0227\n\016GetWorldStatus\022\022.CGD"
+  "ata.CGVoidData\032\021.CGData.CGIntData\0226\n\rGet"
+  "GameStatus\022\022.CGData.CGVoidData\032\021.CGData."
+  "CGIntData\0224\n\013GetBGMIndex\022\022.CGData.CGVoid"
+  "Data\032\021.CGData.CGIntData\022;\n\nGetSysTime\022\022."
+  "CGData.CGVoidData\032\031.CGData.CGSysTimeResp"
+  "onse\022<\n\rGetPlayerInfo\022\022.CGData.CGVoidDat"
+  "a\032\027.CGData.CGCharacterData\022K\n\024SetPlayerF"
+  "lagEnabled\022\037.CGData.CGPlayerFlagEnabledD"
+  "ata\032\022.CGData.CGVoidData2\357\007\n\014CGRpcService"
+  "\022>\n\rGetCGItemData\022\025.CGData.CGItemRequest"
+  "\032\026.CGData.CGItemResponse\0229\n\017GetConnectSt"
+  "ate\022\022.CGData.CGVoidData\032\022.CGData.CGVoidD"
+  "ata\022V\n\023GetPetGradeCalcData\022\035.CGData.CGPe"
+  "tGradeCalcRequest\032\036.CGData.CGPetGradeCal"
+  "cResponse\"\000\022N\n\025GetServerStoreMapData\022\030.C"
+  "GData.CGMapDataRequest\032\031.CGData.CGMapDat"
+  "aResponse\"\000\022L\n\017StoreCGItemData\022\032.CGData."
+  "CGStoreItemRequest\032\033.CGData.CGStoreItemR"
+  "esponse\"\000\022I\n\016StoreCGMapData\022\031.CGData.CGS"
+  "toreMapRequest\032\032.CGData.CGStoreMapRespon"
+  "se\"\000\022N\n\rUploadGidData\022\034.CGData.UploadGid"
+  "DataRequest\032\035.CGData.UploadGidDataRespon"
+  "se\"\000\022Z\n\021UploadGidBankData\022 .CGData.Uploa"
+  "dGidBankDataRequest\032!.CGData.UploadGidBa"
+  "nkDataResponse\"\000\022/\n\007Publish\022\021.CGData.Str"
+  "ingPub\032\021.CGData.StringPub\0223\n\tSubscribe\022\021"
+  ".CGData.StringPub\032\021.CGData.StringPub0\001\022c"
+  "\n\024SelectAccountGidData\022#.CGData.SelectAc"
+  "countGidDataRequest\032$.CGData.SelectAccou"
+  "ntGidDataResponse\"\000\022N\n\rSelectGidData\022\034.C"
+  "GData.SelectGidDataRequest\032\035.CGData.Sele"
+  "ctGidDataResponse\"\000\022\\\n\024SelectDstTypeGidD"
+  "ata\022\034.CGData.SelectGidDataRequest\032$.CGDa"
+  "ta.SelectAccountGidDataResponse\"\000b\006proto"
+  "3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_CGData_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_CGData_2eproto = {
-  false, false, 6462, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
+  false, false, 6481, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
   &descriptor_table_CGData_2eproto_once, nullptr, 0, 35,
   schemas, file_default_instances, TableStruct_CGData_2eproto::offsets,
   file_level_metadata_CGData_2eproto, file_level_enum_descriptors_CGData_2eproto, file_level_service_descriptors_CGData_2eproto,
@@ -5879,8 +5882,8 @@ CGCharacterData::CGCharacterData(const CGCharacterData& from)
     pers_desc_ = nullptr;
   }
   ::memcpy(&souls_, &from.souls_,
-    static_cast<size_t>(reinterpret_cast<char*>(&battle_position_) -
-    reinterpret_cast<char*>(&souls_)) + sizeof(battle_position_));
+    static_cast<size_t>(reinterpret_cast<char*>(&bank_gold_) -
+    reinterpret_cast<char*>(&souls_)) + sizeof(bank_gold_));
   // @@protoc_insertion_point(copy_constructor:CGData.CGCharacterData)
 }
 
@@ -5890,8 +5893,8 @@ map_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlr
 nick_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&base_data_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&battle_position_) -
-    reinterpret_cast<char*>(&base_data_)) + sizeof(battle_position_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&bank_gold_) -
+    reinterpret_cast<char*>(&base_data_)) + sizeof(bank_gold_));
 }
 
 CGCharacterData::~CGCharacterData() {
@@ -5945,8 +5948,8 @@ void CGCharacterData::Clear() {
   }
   pers_desc_ = nullptr;
   ::memset(&souls_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&battle_position_) -
-      reinterpret_cast<char*>(&souls_)) + sizeof(battle_position_));
+      reinterpret_cast<char*>(&bank_gold_) -
+      reinterpret_cast<char*>(&souls_)) + sizeof(bank_gold_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -6191,6 +6194,13 @@ const char* CGCharacterData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // int32 bank_gold = 32;
+      case 32:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 0)) {
+          bank_gold_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -6430,6 +6440,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(31, this->_internal_battle_position(), target);
   }
 
+  // int32 bank_gold = 32;
+  if (this->_internal_bank_gold() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(32, this->_internal_bank_gold(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6660,6 +6676,13 @@ size_t CGCharacterData::ByteSizeLong() const {
         this->_internal_battle_position());
   }
 
+  // int32 bank_gold = 32;
+  if (this->_internal_bank_gold() != 0) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_bank_gold());
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -6777,6 +6800,9 @@ void CGCharacterData::MergeFrom(const CGCharacterData& from) {
   if (from._internal_battle_position() != 0) {
     _internal_set_battle_position(from._internal_battle_position());
   }
+  if (from._internal_bank_gold() != 0) {
+    _internal_set_bank_gold(from._internal_bank_gold());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -6812,8 +6838,8 @@ void CGCharacterData::InternalSwap(CGCharacterData* other) {
       &other->nick_, other->GetArenaForAllocation()
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CGCharacterData, battle_position_)
-      + sizeof(CGCharacterData::battle_position_)
+      PROTOBUF_FIELD_OFFSET(CGCharacterData, bank_gold_)
+      + sizeof(CGCharacterData::bank_gold_)
       - PROTOBUF_FIELD_OFFSET(CGCharacterData, base_data_)>(
           reinterpret_cast<char*>(&base_data_),
           reinterpret_cast<char*>(&other->base_data_));
