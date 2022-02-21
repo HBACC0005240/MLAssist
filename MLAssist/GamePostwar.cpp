@@ -475,47 +475,78 @@ void GamePostwar::doAddRenItemScript(QString name, bool bChecked)
 {
 	if (name.isEmpty())
 		return;
-	QString sToolTip = name;
-	auto pFindItem = ui.listWidget_ren->findItems(name, Qt::MatchExactly);
-	if (pFindItem.size() > 0)
+	
+	auto addRenItemFun = [&](const QString &sName, bool bChecked) 
 	{
-		pFindItem.at(0)->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
-		return;
+		QString sToolTip = sName;
+		auto pFindItem = ui.listWidget_ren->findItems(sName, Qt::MatchExactly);
+		if (pFindItem.size() > 0)
+		{
+			pFindItem.at(0)->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
+			return;
+		}
+		QListWidgetItem *pTableItem = new QListWidgetItem(sName);
+		pTableItem->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
+		ui.listWidget_ren->addItem(pTableItem);
+		pTableItem->setToolTip(sToolTip);
+		g_pGameCtrl->setRenItemIsChecked(sName, bChecked);
+	};
+	if (name.contains("|"))
+	{
+		QStringList sRenItems = name.split("|");
+		for (auto tItem : sRenItems)
+		{
+			addRenItemFun(tItem, bChecked);
+		}
 	}
-	QListWidgetItem *pTableItem = new QListWidgetItem(name);
-	pTableItem->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
-	ui.listWidget_ren->addItem(pTableItem);
-	pTableItem->setToolTip(sToolTip);
-	g_pGameCtrl->setRenItemIsChecked(name, bChecked);
+	else
+		addRenItemFun(name, bChecked);
 }
 
 void GamePostwar::doAddDieItemScript(QString name, bool bChecked)
 {
 	if (name.isEmpty())
 		return;
-	QString sToolTip = name;
-	auto pFindItem = ui.listWidget_die->findItems(name, Qt::MatchExactly);
-	if (pFindItem.size() > 0)
+
+	auto addDieItemFun = [&](const QString &sName, bool bChecked)
 	{
-		pFindItem.at(0)->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
-		return;
-	}
-	QString dieName = name;
-	int nDieCount = -1;
-	if (name.contains("&"))
+		QString sToolTip = sName;
+		auto pFindItem = ui.listWidget_die->findItems(sName, Qt::MatchExactly);
+		if (pFindItem.size() > 0)
+		{
+			pFindItem.at(0)->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
+			return;
+		}
+		QString dieName = sName;
+		int nDieCount = -1;
+		if (sName.contains("&"))
+		{
+			QStringList splitText = sName.split("&");
+			nDieCount = splitText.at(1).toInt();
+			dieName = splitText.at(0);
+		}
+		QListWidgetItem *pItem = new QListWidgetItem(sName);
+		pItem->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
+		pItem->setData(Qt::UserRole, dieName);
+		ui.listWidget_die->addItem(pItem);
+		pItem->setToolTip(pItem->text());
+		GameItemPtr pDieItem = g_pGameCtrl->setDieItemIsChecked(dieName, bChecked);
+		if (pDieItem && nDieCount != -1)
+			pDieItem->maxCount = nDieCount;
+	};
+	if (name.contains("|"))
 	{
-		QStringList splitText = name.split("&");
-		nDieCount = splitText.at(1).toInt();
-		dieName = splitText.at(0);
+		QStringList sRenItems = name.split("|");
+		for (auto tItem : sRenItems)
+		{
+			addDieItemFun(tItem, bChecked);
+		}
 	}
-	QListWidgetItem *pItem = new QListWidgetItem(name);
-	pItem->setCheckState(bChecked ? Qt::Checked : Qt::Unchecked);
-	pItem->setData(Qt::UserRole, dieName);
-	ui.listWidget_die->addItem(pItem);
-	pItem->setToolTip(pItem->text());
-	GameItemPtr pDieItem = g_pGameCtrl->setDieItemIsChecked(dieName, bChecked);
-	if (pDieItem && nDieCount != -1)
-		pDieItem->maxCount = nDieCount;
+	else
+		addDieItemFun(name, bChecked);
+
+
+	
 }
 
 void GamePostwar::doAddRenItem(GameItemPtr pItem, bool bCode)

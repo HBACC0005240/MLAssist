@@ -562,6 +562,11 @@ color: rgb(255, 255, 255);</string>
         <string>角色信息</string>
        </attribute>
       </widget>
+      <widget class="MLDebugWgt" name="mlDebugWgt">
+       <attribute name="title">
+        <string>调试</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -598,6 +603,12 @@ color: rgb(255, 255, 255);</string>
    <class>GamePlayerDataWgt</class>
    <extends>QWidget</extends>
    <header>GamePlayerDataWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MLDebugWgt</class>
+   <extends>QWidget</extends>
+   <header>MLDebugWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

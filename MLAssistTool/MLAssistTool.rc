@@ -78,7 +78,7 @@ BEGIN
         BLOCK "080404b0"
         BEGIN
             VALUE "CompanyName", "qq:274100927"
-            VALUE "FileDescription", "MLAssist管理程序"
+            VALUE "FileDescription", "MLAssist-管理程序"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "MLAssistTool.exe"
             VALUE "LegalCopyright", "Copyright (C) 2021"

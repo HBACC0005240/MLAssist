@@ -77,13 +77,13 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "TODO: <公司名>"
-            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "CompanyName", "qq:274100927"
+            VALUE "FileDescription", "MLAssist-魔力辅助"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "MLAssist.exe"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "MLAssist.exe"
-            VALUE "ProductName", "TODO: <产品名>"
+            VALUE "ProductName", "qq:274100927"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END
