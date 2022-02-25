@@ -35,7 +35,7 @@ public:
 
 	~ITObjectDataMgr(void);
 
-		//是否退出游戏
+	//是否退出游戏
 	void SetExitGame(bool bRet) { m_bExit = bRet; }
 	bool GetExitGame() { return m_bExit; }
 
@@ -96,7 +96,6 @@ public:
 	void PublishOneTopic(const QString &topic, const QString &msg);
 	QStringList GetLastPublishMsg();
 
-
 protected:
 	bool LoadItems();
 	bool LoadPets();
@@ -122,13 +121,12 @@ protected:
 	QPoint GetRandomSpaceOffLine(int mapIndex, int x, int y, int distance /*= 1*/);
 	QMap<QString, QSharedPointer<CGPetPictorialBook> > LoadPetBook();
 
-	static void NormalThread(ITObjectDataMgr* pThis);
+	static void NormalThread(ITObjectDataMgr *pThis);
 
 signals:
 	void signal_loadDataFini();
 	void signal_mqttMsg(const QString &, const QString &);
 	void signal_publishMqttMsg(const QString &, const QString &);
-	
 
 public slots:
 	void doLoadDBInfoOver();
@@ -144,38 +142,39 @@ public slots:
 	void on_publishMqttMsg(const QString &, const QString &);
 
 private:
-	ITDataBaseConnPtr m_dbconn;								//数据库连接对象
-	bool m_bExit=false;										//退出游戏
-	QTimer m_mqttTimer;										//定时检查发布订阅客户端状态
-	QMutex m_storeItemMutex;								//item缓存
-	QMutex m_storeMapMutex;									//地图缓存锁
-	bool m_bIsLoading = false;								//是否加载数据中
-	bool m_bDBConnState;									//数据库连接状态  是否已连接数据库
-	QString m_strDBName;									//当前数据库名称
-	QString m_strDBIp;										//当前数据库连接地址
-	QString m_strDBType;									//当前数据库类型
-	QString m_strDBUser;									//当前数据库用户名
-	QString m_strDBPwd;										//当前数据库密码
-	ITObjectList m_pObjectList;								//所有数据
-	ITObjectList m_pAddObjectList;							//新增数据
-	ITObjectList m_pDelObjectList;							//删除数据
-	tMapHead _mapHead;										//地图结构体
-	QMap<int, QImage> m_mapIndexForData;					//地图index和数据映射
-	std::vector<int> _vTileData;							//暂不使用 解析原dat地图数据用 地表信息
-	std::map<int, int> _mapTileMap;							//地表数字映射，映射为tiled map中tile层的新id
-	std::vector<int> _vObjectData;							//实际就是第二个tiled层
-	std::map<int, int> _mapObjectMap;						//物件数字映射，映射为tiled map中object层的新id
-	QHash<QString, QHash<int, ITObjectPtr> > m_tableForObj; //加速查询
-	QHash<int, ITGameItemPtr> m_codeForGameItem;			//代码和道具映射
-	QMap<int, ITGameMapPtr> m_numberForGameMap;				//地图编码和地图对象映射
-	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
-	QHash<int, ITGamePetPtr> m_numberForPet;				//编号映射宠物
-	ITRouteNodeList m_reachableRouteList;					//路由列表
-	QMqttClient *m_client = nullptr;						//发布订阅客户端
-	QStringList m_subscribeList;							//软件自身 订阅列表 每次连接断开后，订阅会清空，此处记录所有订阅，等下次连接成功，重新订阅
-	QStringList m_customSubscribeList;						//脚本 订阅列表 每次连接断开后，订阅会清空，此处记录所有订阅，等下次连接成功，重新订阅
-	QStringList m_retrySubscribes;							//连接成功后，重新订阅列表
-	QMutex m_mqttMutex;										//mqtt信号量
-	QList<QPair<quint64, QStringList > > m_recvPublishMsgCache; //收到的发布消息缓存
+	ITDataBaseConnPtr m_dbconn;								   //数据库连接对象
+	bool m_bExit = false;									   //退出游戏
+	QTimer m_mqttTimer;										   //定时检查发布订阅客户端状态
+	QMutex m_storeItemMutex;								   //item缓存
+	QMutex m_storeMapMutex;									   //地图缓存锁
+	bool m_bIsLoading = false;								   //是否加载数据中
+	bool m_bDBConnState;									   //数据库连接状态  是否已连接数据库
+	QString m_strDBName;									   //当前数据库名称
+	QString m_strDBIp;										   //当前数据库连接地址
+	QString m_strDBType;									   //当前数据库类型
+	QString m_strDBUser;									   //当前数据库用户名
+	QString m_strDBPwd;										   //当前数据库密码
+	ITObjectList m_pObjectList;								   //所有数据
+	ITObjectList m_pAddObjectList;							   //新增数据
+	ITObjectList m_pDelObjectList;							   //删除数据
+	tMapHead _mapHead;										   //地图结构体
+	QMap<int, QImage> m_mapIndexForData;					   //地图index和数据映射
+	std::vector<int> _vTileData;							   //暂不使用 解析原dat地图数据用 地表信息
+	std::map<int, int> _mapTileMap;							   //地表数字映射，映射为tiled map中tile层的新id
+	std::vector<int> _vObjectData;							   //实际就是第二个tiled层
+	std::map<int, int> _mapObjectMap;						   //物件数字映射，映射为tiled map中object层的新id
+	QHash<QString, QHash<int, ITObjectPtr> > m_tableForObj;	   //加速查询
+	QHash<int, ITGameItemPtr> m_codeForGameItem;			   //代码和道具映射
+	QMap<int, ITGameMapPtr> m_numberForGameMap;				   //地图编码和地图对象映射
+	QHash<int, QList<int> > m_warpHash;						   //地图以及可到达目标
+	QHash<int, ITGamePetPtr> m_numberForPet;				   //编号映射宠物
+	ITRouteNodeList m_reachableRouteList;					   //路由列表
+	QMqttClient *m_client = nullptr;						   //发布订阅客户端
+	QStringList m_subscribeList;							   //软件自身 订阅列表 每次连接断开后，订阅会清空，此处记录所有订阅，等下次连接成功，重新订阅
+	QStringList m_customSubscribeList;						   //脚本 订阅列表 每次连接断开后，订阅会清空，此处记录所有订阅，等下次连接成功，重新订阅
+	QStringList m_retrySubscribes;							   //连接成功后，重新订阅列表
+	QMutex m_mqttMutex;										   //mqtt信号量
+	QList<QPair<quint64, QStringList> > m_recvPublishMsgCache; //收到的发布消息缓存
+	QString m_sMQTTCode;
 };
 #endif

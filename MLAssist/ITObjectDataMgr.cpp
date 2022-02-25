@@ -91,6 +91,7 @@ bool ITObjectDataMgr::init()
 
 	QString sMQTTServerIp = iniFile.value("server/mqttIP", "www.luguo666.com").toString();
 	int nMQTTServerPort = iniFile.value("game/mqttPort", 1883).toInt();
+	m_sMQTTCode = iniFile.value("game/mqttcode", "").toString();
 
 	m_client = new QMqttClient;
 	m_client->setHostname(sMQTTServerIp);
@@ -213,7 +214,7 @@ bool ITObjectDataMgr::init()
 			QtConcurrent::run(SaveDataThread, this);
 		}
 	}
-	QtConcurrent::run(NormalThread,this);
+	QtConcurrent::run(NormalThread, this);
 	return true;
 }
 
@@ -355,7 +356,7 @@ void ITObjectDataMgr::AddNewSubscribe(const QStringList &subscribe)
 		//连接状态 进行订阅 不是连接 也就没有订阅
 		for (auto oldSub : m_customSubscribeList)
 		{
-			if (!subscribe.contains(oldSub))
+			if (!subscribe.contains(/*m_sMQTTCode + */ oldSub))
 			{
 				m_client->unsubscribe(oldSub);
 			}
@@ -1558,7 +1559,7 @@ void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)
 	int ingame = 0;
 	while (!pThis->m_bExit)
 	{
-		{		
+		{
 			QMutexLocker locker(&pThis->m_mqttMutex);
 			quint64 curTime = GetTickCount();
 			for (auto it = pThis->m_recvPublishMsgCache.begin(); it != pThis->m_recvPublishMsgCache.end();)
