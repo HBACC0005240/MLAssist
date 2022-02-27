@@ -20,3 +20,7 @@ ThirdPartÏÂÓĞ2¸ö£¬Ò»¸ölibxl£¬ºóĞøÓÃÓÚµ¼³ö²Ö¿âĞÅÏ¢excel±íÓÃ£¬ÁíÒ»¸öÊÇqmqtt£¬ÊÇÓÃÓ
 NodeJS v14+ (32Î» »ò 64Î» ¾ù¿É)
 
 node-gyp (½¨Òé¸úËæ https://www.npmjs.com/package/node-gyp µÄÖ¸Ê¾À´°²×° node-gyp)
+°²×°nodeºó
+ÔÚÃüÁîĞĞ½çÃæÌîĞ´
+npm install -g node-gyp
+npm install --global --production windows-build-tools

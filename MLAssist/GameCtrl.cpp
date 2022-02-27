@@ -2817,6 +2817,7 @@ void GameCtrl::OnGetCharacterData()
 		CGA::cga_player_info_t info;
 		if (g_CGAInterface->GetPlayerInfo(info))
 		{
+		
 			pNewChar->name = QString::fromStdString(info.name);
 			pNewChar->sGid = QString::fromStdString(info.gid);
 			pNewChar->job = QString::fromStdString(info.job);
@@ -3025,18 +3026,18 @@ void GameCtrl::OnGetCharacterData()
 			}
 			m_pCompoundList = newCompoundList;
 		}
+		m_pGameCharacter = pNewChar;	//在线才更新 以便缓存最后一次的玩家名 和gid
 	}
-	m_pGameCharacter = pNewChar;
 
 	if (ingame)
 		emit signal_updateTrayToolTip(QString("%1 %2线").arg(m_pGameCharacter->name).arg(g_pGameFun->GetGameServerLine()));
 	else
 		emit signal_updateTrayToolTip(QString("%1 离线").arg(m_pGameCharacter->name));
-	emit NotifyGameCharacterInfo(pNewChar);
+	emit NotifyGameCharacterInfo(m_pGameCharacter);
 	//emit NotifyGameItemsInfo(new);
-	emit NotifyGamePetsInfo(newPetList);
-	emit NotifyGameSkillsInfo(newSkillList);
-	emit NotifyGameCompoundInfo(newCompoundList);
+	emit NotifyGamePetsInfo(m_pGamePets);
+	emit NotifyGameSkillsInfo(m_pGameSkills);
+	emit NotifyGameCompoundInfo(m_pCompoundList);
 }
 
 void GameCtrl::OnGetTeamData()
@@ -3146,7 +3147,7 @@ void GameCtrl::OnNotifyBattleAction(int flags)
 		return;
 
 	GetBattleUnits();
-	//CBattleWorker::getInstace()->OnNotifyGetBattleInfo(pBattleUnits); //更新战斗单位信息
+	
 	//CBattleWorker::getInstace()->OnNotifyGetSkillsInfo(m_pGameSkills);	//更新技能信息 平常不进行更新
 	//CBattleWorker::getInstace()->OnNotifyGetPetsInfo(m_pGamePets);		//更新技能信息 平常不进行更新
 	//CBattleWorker::getInstace()->OnNotifyGetItemsInfo(m_pGameItems);	//更新技能信息 平常不进行更新
@@ -4018,6 +4019,8 @@ void GameCtrl::GetBattleUnits()
 			m_lastBattleAvgTeamPetLv = nLv / nCount;
 		}
 	}
+	//这里战斗实时同步，防止战斗判断失效
+	CBattleWorker::getInstace()->OnNotifyGetBattleInfo(pBattleUnits); //更新战斗单位信息
 	emit NotifyGameBattlesInfo(pBattleUnits);
 }
 

@@ -86,6 +86,9 @@ bool ITObjectDataMgr::init()
 	QString sServerPort = iniFile.value("server/port", "50051").toString();
 	int startHide = iniFile.value("game/startHide", 0).toInt();
 	int followPos = iniFile.value("game/followPos", 0).toInt();
+	int mazeWaitTime = iniFile.value("game/mazeWaitTime", 5000).toInt();
+	bool repeatedGidExit = iniFile.value("game/repeatedGidExit", true).toBool();
+	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
 
@@ -362,7 +365,12 @@ void ITObjectDataMgr::AddNewSubscribe(const QStringList &subscribe)
 			}
 		}
 	}
-	m_customSubscribeList = subscribe;
+	QStringList newSubscribeList;
+	for (QString tSubscribe:subscribe)
+	{
+		newSubscribeList.append(m_sMQTTCode + tSubscribe);
+	}
+	m_customSubscribeList = newSubscribeList;
 	m_retrySubscribes = m_customSubscribeList;
 }
 
@@ -684,6 +692,13 @@ ITGameGateMapList ITObjectDataMgr::FindTargetNavigation(int tgtIndex, QPoint tgt
 	//筛选真的能到的线路 以及最近的线路
 	return bestRouteList;
 }
+
+void ITObjectDataMgr::ReloadCalcPetData()
+{
+	auto petData = RpcSocketClient::getInstance().GetPetGradeCalcData(); //这个是图鉴部分  和ITGamePet还不一样
+	g_pGamePetCalc->setCaclPetData(petData);
+}
+
 bool ITObjectDataMgr::FindTargetNavigationEx(ITGameGateMapPtr cRoute, int tgtIndex, QList<int> traceRouteList)
 {
 	if (cRoute == nullptr)

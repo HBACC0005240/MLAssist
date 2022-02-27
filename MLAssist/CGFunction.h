@@ -695,7 +695,8 @@ public:
 
 	QHash<QString, int> m_playerActionHash; //pk 加队 交易 摆摊映射
 	QStringList m_sPrestigeList;			//玩家声望称号列表
-
+	void SetMazeChangedMapWaitTime(int time) { m_mazeWaitTime = time; }
+	int GetMazeChangedMapWaitTime() { return m_mazeWaitTime; }
 
 protected:
 	bool InternalAutoNavigator();
@@ -749,5 +750,6 @@ private:
 	QMutex m_charMutex;									 //人物聊天信息锁
 	QMutex m_topicMutex;								 //订阅信息锁
 	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息
+	int m_mazeWaitTime=5000;							//迷宫切图等待时间
 };
 #define g_pGameFun CGFunction::GetInstance()

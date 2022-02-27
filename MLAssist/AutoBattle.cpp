@@ -13,7 +13,7 @@ CBattleWorker::CBattleWorker()
 	connect(g_pGameCtrl, &GameCtrl::NotifyGameSkillsInfo, this, &CBattleWorker::OnNotifyGetSkillsInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGameItemsInfo, this, &CBattleWorker::OnNotifyGetItemsInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGamePetsInfo, this, &CBattleWorker::OnNotifyGetPetsInfo, Qt::ConnectionType::QueuedConnection);
-	connect(g_pGameCtrl, &GameCtrl::NotifyGameBattlesInfo, this, &CBattleWorker::OnNotifyGetBattleInfo, Qt::ConnectionType::QueuedConnection);
+	//connect(g_pGameCtrl, &GameCtrl::NotifyGameBattlesInfo, this, &CBattleWorker::OnNotifyGetBattleInfo, Qt::ConnectionType::QueuedConnection);//其他可以队列获取 这个必须实时
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnLockCountdown()));
 	timer->start(500);

@@ -139,7 +139,8 @@ void GetPlayerInfo(const Nan::FunctionCallbackInfo<v8::Value>& info)
 	obj->Set(context, String::NewFromUtf8(isolate, "name").ToLocalChecked(), Nan::New(myinfo.name).ToLocalChecked());
 	obj->Set(context, String::NewFromUtf8(isolate, "job").ToLocalChecked(), Nan::New(myinfo.job).ToLocalChecked());
 	obj->Set(context, String::NewFromUtf8(isolate, "nick").ToLocalChecked(), Nan::New(myinfo.nick).ToLocalChecked());
-	
+	obj->Set(context, String::NewFromUtf8(isolate, "gid").ToLocalChecked(), Nan::New(myinfo.gid).ToLocalChecked());
+	obj->Set(context, String::NewFromUtf8(isolate, "player_index").ToLocalChecked(), Integer::New(isolate, myinfo.player_index));
 	Local<Array> arr = Array::New(isolate);
 	for (size_t i = 0; i < myinfo.titles.size(); ++i)
 	{

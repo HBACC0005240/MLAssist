@@ -332,9 +332,12 @@ bool AccountForm::QueryAttachGameWnd()
 							{
 								if (pid != g_pGameCtrl->getGamePID())
 								{
-									qDebug() << "该ID已附加，退出！";
-									qApp->exit(0);
-									return true;
+									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
+									{
+										qDebug() << "该ID已附加，退出！";
+										qApp->exit(0);
+										return true;
+									}						
 								}
 							}
 						}
@@ -371,9 +374,12 @@ bool AccountForm::QueryAttachGameWnd()
 
 					if (wnd->m_ProcessId != g_pGameCtrl->getGamePID())
 					{
-						qDebug() << "该ID已附加，退出！";
-						qApp->exit(0);
-						return true;
+						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
+						{
+							qDebug() << "该ID已附加，退出！";
+							qApp->exit(0);
+							return true;
+						}						
 					}
 				}
 			}

@@ -5,6 +5,7 @@
 #include "RpcSocket.h"
 #include "ITDebugDump.h"
 #include "ITSignalProxy.h"
+#include "MApplication.h"
 
 extern CGA::CGAInterface* g_CGAInterface;
 
@@ -56,7 +57,7 @@ void outputMessage(QtMsgType type, const QMessageLogContext& context, const QStr
 }
 int main(int argc, char* argv[])
 {
-	QApplication a(argc, argv);
+	MApplication a(argc, argv);
 	SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 	gDefaultHandler = qInstallMessageHandler(outputMessage);
 	g_CGAInterface = CGA::CreateInterface();

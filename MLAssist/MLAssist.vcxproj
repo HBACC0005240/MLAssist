@@ -169,7 +169,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>J:\Environment\boost\boost_1_75_0\stage/lib;..\lib;../lib/python;..\lib\opencv453;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>L:\Environment\boost\boost_1_75_0\stage/lib;..\lib;../lib/python;..\lib\opencv453;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Lua.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>

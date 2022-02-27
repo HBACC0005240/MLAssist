@@ -50,9 +50,11 @@ public slots:
 	void on_burstAddPointDefence_clicked(bool checked);
 	void on_burstAddPointAgility_clicked(bool checked);
 	void on_burstAddPointMp_clicked(bool checked);
+	void on_pushButton_reloadCalc_clicked();
 
 private:
 	Ui::GamePetWgt ui;
+	QPushButton *m_pCalcPetBtn;
 	QMap<int, QObject *> m_pDropCheckBoxMap;
 	QMap<int, QObject *> m_pDropLineEditMap;
 	QMap<int, QString> m_petState;

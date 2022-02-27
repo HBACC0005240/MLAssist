@@ -311,6 +311,7 @@ void ITObjectDataMgr::loadDataBaseInfo(ITObjectDataMgr* pThis)
 {
 	if (!pThis)
 		return;
+	//QMutexLocker locker(&pThis->m_objMutex);
 	//基础数据
 	pThis->LoadItems();
 	pThis->LoadPets();
@@ -1187,6 +1188,7 @@ bool ITObjectDataMgr::insertNewDataToDB()
 		tempSuccessList.append(it.value());
 
 		it.value()->setNomalStatus();
+		QMutexLocker locker(&m_objMutex);
 		m_pObjectList.insert(it.value()->getObjectID(), it.value());
 	}
 	QMutexLocker locker(&m_objMutex);
@@ -1229,6 +1231,7 @@ bool ITObjectDataMgr::deleteDataFromDB()
 			return bRet;
 		}
 	}
+	QMutexLocker locker(&m_objMutex);
 	m_pDelObjectList.clear();
 	return bRet;
 }
@@ -2191,7 +2194,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 				QVector<int> posExist;
 				for (int i = 0; i < reqPet.skill_size(); ++i)
 				{
-					auto reqSkill = request->character_data().skill(i);
+					auto reqSkill = reqPet.skill(i);
 					auto skillPtr = petPtr->_skillPosForSkill.value(reqSkill.index());
 					if (!skillPtr)
 					{

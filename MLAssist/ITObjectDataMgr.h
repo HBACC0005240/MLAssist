@@ -52,6 +52,7 @@ public:
 	//查找到到目的地的路由 测试，暂时用地图名寻
 	ITGameGateMapList FindTargetNavigation(int tgtIndex, QPoint tgtPos);
 
+	void ReloadCalcPetData();
 	ITObjectList GetDstObjTypeList(int objType);
 	//查找 缓存游戏道具信息
 	void StoreServerItemData(GameItemPtr pItem);

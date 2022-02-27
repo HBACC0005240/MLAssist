@@ -4,10 +4,23 @@
 #include "GameCtrl.h"
 #include "constDef.h"
 #include "stdafx.h"
+#include "ITObjectDataMgr.h"
 GamePetWgt::GamePetWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
+
+	auto pTabBar = ui.tabWidget->tabBar();
+
+	m_pCalcPetBtn = new QPushButton("重载算档", this);
+	connect(m_pCalcPetBtn, SIGNAL(clicked()), this, SLOT(on_pushButton_reloadCalc_clicked()));
+	m_pCalcPetBtn->setMaximumWidth(80);
+	QWidget *pWidget = new QWidget(this);
+	QHBoxLayout *pHLayout = new QHBoxLayout(pWidget);
+	pHLayout->addWidget(m_pCalcPetBtn);
+	pHLayout->setContentsMargins(0, 0, 0, 0);
+	ui.tabWidget->setCornerWidget(pWidget);
+
 	for (int i = 0; i < 12; ++i)
 	{
 		for (size_t n = 0; n < 5; n++)
@@ -595,6 +608,11 @@ void GamePetWgt::on_burstAddPointMp_clicked(bool checked)
 	{
 		petCfg->unnormalCfg.addBpType = TPET_POINT_TYPE_Magical;
 	}
+}
+
+void GamePetWgt::on_pushButton_reloadCalc_clicked()
+{
+	ITObjectDataMgr::getInstance().ReloadCalcPetData();
 }
 
 void GamePetWgt::setItemText(int row, int col, const QString &szText, const QColor &szColor, const QColor &backColor)

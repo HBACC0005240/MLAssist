@@ -1322,12 +1322,10 @@ void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int n
 					qDebug() << "鉴定" << pItem->name << pItem->level << pItem->pos;
 					if (GetCharacterData("mp") >= (pItem->level * 10) && g_CGAInterface->AssessItem(pSkill->index, pItem->pos, bResult))
 					{
-						//int nTimeOut = nDelayTime >= 0 ? nDelayTime : (assessedOnce ? 2000 : 20000);
 						int nTimeOut = assessedOnce ? 1000 : nDelayTime >= 0 ? nDelayTime :
 																				 20000;
 						WaitRecvWorkResult(nTimeOut);
-						if (assessedOnce) g_CGAInterface->SetImmediateDoneWork(true);
-						assessedOnce = true;
+						if (!assessedOnce) assessedOnce = true;
 					}
 					Sleep(20);
 				}
@@ -1474,7 +1472,7 @@ void CGFunction::StopWork()
 	//g_CGAInterface->SetImmediateDoneWork(true);	//这个是立即完成工作 打开瞬间工作完成
 	m_bWorking = false;
 	g_pGameFun->StopFun();
-	g_CGAInterface->SetImmediateDoneWork(false); //关掉立即结束工作
+	//g_CGAInterface->SetImmediateDoneWork(false); //关掉立即结束工作
 }
 
 void CGFunction::Compound(const QString &itemName, int nVal /*=0*/)
@@ -1748,7 +1746,7 @@ QMap<QString, QVariant> CGFunction::ParseBuyStoreMsg(QString msg)
 
 void CGFunction::WorkThread(CGFunction *pThis)
 {
-	g_CGAInterface->SetImmediateDoneWork(false);
+	//g_CGAInterface->SetImmediateDoneWork(false);
 	if (pThis->m_nCurrentWorkType == TWork_Identify) //鉴定all
 	{
 		auto pSkill = pThis->FindPlayerSkillEx("鉴定");
@@ -1777,12 +1775,12 @@ void CGFunction::WorkThread(CGFunction *pThis)
 				//pThis->Work(pSkill->id, 0);
 				if (pThis->GetCharacterData("mp") >= (pItem->level * 10) && g_CGAInterface->AssessItem(pSkill->index, pItem->pos, bResult))
 				{
-					int nTimeOut = assessedOnce ? 1000 : 30000;
+					int nTimeOut = assessedOnce ? 2000 : 30000;
 					auto workState = pThis->WaitRecvWorkResult(nTimeOut);
 					if (!assessedOnce && workState && workState->success)
 					{
 						assessedOnce = true;
-						g_CGAInterface->SetImmediateDoneWork(true);
+						//g_CGAInterface->SetImmediateDoneWork(true);
 					}
 				}
 				else
@@ -1838,9 +1836,11 @@ void CGFunction::WorkThread(CGFunction *pThis)
 				if (pThis->GetCharacterData("mp") >= (pItem->level * 10) && g_CGAInterface->AssessItem(pSkill->index, pItem->pos, bResult))
 				{
 					int nTimeOut = assessedOnce ? 2000 : 9000;
-					pThis->WaitRecvWorkResult(nTimeOut); //不设置等待时间
-					assessedOnce = true;				 //不判断了，第一次后，后续都1秒出
-					g_CGAInterface->SetImmediateDoneWork(true);
+					auto workState = pThis->WaitRecvWorkResult(nTimeOut); //不设置等待时间
+					if (!assessedOnce && workState && workState->success)
+					{
+						assessedOnce = true;
+					}
 				}
 				emit pThis->signal_workEnd();
 				Sleep(200);
@@ -4380,6 +4380,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 				else
 				{
 					qDebug() << "地图更改，寻路结束！";
+					Sleep(m_mazeWaitTime);
 					return false;
 				}
 			}
@@ -4473,6 +4474,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							{
 								qDebug() << "当前地图更改，寻路结束！";
 								WaitInNormalState();
+								Sleep(m_mazeWaitTime);
 								return true;
 							}
 							else if (curMapIndex == GetMapIndex() && curMapName == GetMapName() && (curX != tarX || curY != tarY)) //好多图 名字一样
@@ -4531,6 +4533,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							{
 								qDebug() << "当前地图更改，寻路结束！";
 								WaitInNormalState();
+								Sleep(m_mazeWaitTime);
 								return true;
 							}
 							else if (curMapIndex == GetMapIndex() && curMapName == GetMapName() && (curX != tarX || curY != tarY)) //好多图 名字一样

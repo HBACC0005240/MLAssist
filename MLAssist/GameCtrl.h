@@ -166,6 +166,9 @@ public:
 	void SetFollowGamePos(int val) { m_followGamePos = val; }
 	int GetFollowGamePos() { return m_followGamePos; }
 
+	void SetStartGameRepeatedGidExit(bool val) { m_repeatedGidExit = val; }
+	bool GetStartGameRepeatedGidExit() { return m_repeatedGidExit; }
+
 	//地图是否可见-
 	void SetMapIsVisible(bool bvisible) { m_bMapIsVisible = bvisible; } //地图是否可见 不可见时 不刷新地图 降低cpu 内存
 	quint32 nativeKeycode(Qt::Key key);									//windows快捷键值转qt
@@ -426,5 +429,6 @@ private:
 	QMutex m_npcDlgMutex;
 	QMutex m_tradeDlgMutex;
 	QMutex m_workResMutex;
+	bool m_repeatedGidExit = true;
 };
 #define g_pGameCtrl GameCtrl::getInstace()
