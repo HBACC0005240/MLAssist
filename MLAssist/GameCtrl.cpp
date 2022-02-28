@@ -3736,6 +3736,7 @@ void GameCtrl::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 				if (pItem->exist && pItem->pos >= 8 && pItem->id == 18526)
 				{
 					bool bRes = false;
+					g_pGameFun->WaitInNormalState();
 					g_CGAInterface->UseItem(pItem->pos, bRes);
 					m_uLastUseItemTime.restart();
 					break;
