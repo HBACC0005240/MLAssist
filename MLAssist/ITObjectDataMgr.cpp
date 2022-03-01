@@ -91,6 +91,7 @@ bool ITObjectDataMgr::init()
 	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
+	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
 
 	QString sMQTTServerIp = iniFile.value("server/mqttIP", "www.luguo666.com").toString();
 	int nMQTTServerPort = iniFile.value("game/mqttPort", 1883).toInt();
@@ -366,7 +367,7 @@ void ITObjectDataMgr::AddNewSubscribe(const QStringList &subscribe)
 		}
 	}
 	QStringList newSubscribeList;
-	for (QString tSubscribe:subscribe)
+	for (QString tSubscribe : subscribe)
 	{
 		newSubscribeList.append(m_sMQTTCode + tSubscribe);
 	}
