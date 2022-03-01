@@ -3181,12 +3181,14 @@ void GameCtrl::OnNotifyConnectionState(int state, QString msg)
 	if ((state == 10000 || state == 0) && !msg.isEmpty())
 	{
 		if (msg.contains("角色数据读取失败")) //这个id跳过
-			"角色数据读取失败，其他窗口已登录！";
+			qDebug() << "角色数据读取失败，其他窗口已登录！";
+		m_isInBattle = false;
 	}
 	else if (state == 1 || state == 2)
 	{
 		//登录成功
 		qDebug() << "登录成功";
+		m_isInBattle = false;
 	}
 	else if (state == 3)
 	{
