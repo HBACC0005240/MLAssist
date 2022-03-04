@@ -548,8 +548,8 @@ public:
 	QString GetAllChatMsg(int count = 0);
 	QList<QPair<int, QString> > GetDetailAllChatMsg(int count = 0);
 	//获取最新聊天消息
-	QStringList GetLastChatMsg();
-
+	QStringList GetJustChatMsg();
+	QStringList GetJustSysChatMsg();
 
 	//设置人物开关 队战聊名易家
 	bool SetCharacterSwitch(int nType, bool bState);
@@ -750,6 +750,6 @@ private:
 	QMutex m_charMutex;									 //人物聊天信息锁
 	QMutex m_topicMutex;								 //订阅信息锁
 	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息
-	int m_mazeWaitTime=5000;							//迷宫切图等待时间
+	int m_mazeWaitTime = 5000;							 //迷宫切图等待时间
 };
 #define g_pGameFun CGFunction::GetInstance()

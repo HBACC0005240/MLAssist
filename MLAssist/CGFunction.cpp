@@ -275,7 +275,7 @@ void CGFunction::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 	{
 		m_chatMsgList = m_chatMsgList.mid(m_chatMsgList.size() - 100);
 	}
-	m_chatMsgList.append(qMakePair(GetTickCount(),QStringList() << QString::number(unitid) << msg));
+	m_chatMsgList.append(qMakePair(GetTickCount(), QStringList() << QString::number(unitid) << msg));
 }
 
 void CGFunction::OnRecvTopicMsg(const QString &topicName, const QString &msg)
@@ -7596,6 +7596,31 @@ bool CGFunction::NeedSale()
 	return true;
 }
 
+QStringList CGFunction::GetJustSysChatMsg()
+{
+	QList<QPair<quint64, QStringList> > detailMsg;
+	{
+		QMutexLocker locker(&m_charMutex);
+		detailMsg = m_chatMsgList.mid(m_chatMsgList.size() - 5);
+	}
+	if (detailMsg.size() < 1)
+		return QStringList();
+	auto nowTick = GetTickCount();
+	for (auto it : detailMsg)
+	{
+		if ((nowTick - it.first) > 3000)
+		{
+			continue;
+		}
+		if (it.second[0].toInt() != -1)
+		{
+			continue;
+		}
+		return it.second;
+	}
+	return QStringList();
+}
+
 bool CGFunction::SetCharacterSwitch(int nType, bool bState)
 {
 	bool bRet = false;
@@ -9557,28 +9582,20 @@ bool CGFunction::TalkNpcClicked(QSharedPointer<CGA_NPCDialog_t> dlg, int selectV
 
 std::tuple<int, QString> CGFunction::WaitSysMsg(int timeout)
 {
-	QMutex mutex;
 	QString sysMsg;
 	int retunitid = 0;
 	QEventLoop loop;
 	if (timeout > 0) //有超时就指定时间超时 否则一直等在这
 		QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, [&](int unitid, QString msg, int size, int color)
-			{
-				if (unitid != -1) //不是系统消息 不返回
-				{
-					return;
-				}
-				QMutexLocker locker(&mutex);
-				retunitid = unitid;
-				sysMsg = msg;
-				if (loop.isRunning())
-					loop.quit();
-			});
+	connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, &loop, &QEventLoop::quit);
 	loop.exec();
-	QMutexLocker locker(&mutex);
-	QObject::disconnect(connection); //利用Connection 断开lambda的连接
+	auto retMsg = g_pGameFun->GetJustChatMsg();
+	if (retMsg.size() >= 2)
+	{
+		retunitid = retMsg[0].toInt();
+		sysMsg = retMsg[1];
+	}
 	return std::make_tuple(retunitid, sysMsg);
 }
 
@@ -9591,21 +9608,14 @@ std::tuple<int, QString> CGFunction::WaitChatMsg(int timeout /*= 5000*/)
 	if (timeout > 0) //有超时就指定时间超时 否则一直等在这
 		QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, [&](int unitid, QString msg, int size, int color)
-			{
-				if (unitid == -1) //不是系统消息 不返回
-				{
-					return;
-				}
-				QMutexLocker locker(&mutex);
-				retunitid = unitid;
-				sysMsg = msg;
-				if (loop.isRunning())
-					loop.quit();
-			});
+	connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, &loop, &QEventLoop::quit);
 	loop.exec();
-	QMutexLocker locker(&mutex);
-	QObject::disconnect(connection); //利用Connection 断开lambda的连接
+	auto retMsg = g_pGameFun->GetJustChatMsg();
+	if (retMsg.size() >= 2)
+	{
+		retunitid = retMsg[0].toInt();
+		sysMsg = retMsg[1];
+	}
 	return std::make_tuple(retunitid, sysMsg);
 }
 
@@ -9617,13 +9627,13 @@ std::tuple<int, QString> CGFunction::WaitSysAndChatMsg(int timeout /*= 5000*/)
 	if (timeout > 0) //有超时就指定时间超时 否则一直等在这
 		QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg,&loop, &QEventLoop::quit);			
+	connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, &loop, &QEventLoop::quit);
 	loop.exec();
-	auto retMsg = g_pGameFun->GetLastChatMsg();
+	auto retMsg = g_pGameFun->GetJustChatMsg();
 	if (retMsg.size() >= 2)
 	{
-		retunitid=retMsg[0].toInt();
-		sysMsg=retMsg[1];
+		retunitid = retMsg[0].toInt();
+		sysMsg = retMsg[1];
 	}
 	return std::make_tuple(retunitid, sysMsg);
 }
@@ -9727,13 +9737,13 @@ QList<QPair<int, QString> > CGFunction::GetDetailAllChatMsg(int count /*= 0*/)
 		int i = m_chatMsgList.size() - tmpCount;
 		for (; i < m_chatMsgList.size(); ++i)
 		{
-			detailMsg.append(qMakePair<int,QString>(m_chatMsgList[i].second[0].toInt(),m_chatMsgList[i].second[1]));
+			detailMsg.append(qMakePair<int, QString>(m_chatMsgList[i].second[0].toInt(), m_chatMsgList[i].second[1]));
 		}
 		return detailMsg;
 	}
 }
 
-QStringList CGFunction::GetLastChatMsg()
+QStringList CGFunction::GetJustChatMsg()
 {
 	if (m_chatMsgList.size() < 1)
 		return QStringList();

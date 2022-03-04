@@ -1,9 +1,9 @@
 #include "CGLuaFun.h"
 #include "GameCtrl.h"
 #include "ITObjectDataMgr.h"
+#include "RpcSocketClient.h"
 #include <windows.h>
 #include <QApplication>
-#include "RpcSocketClient.h"
 CGLuaFun::CGLuaFun()
 {
 	//m_pLuaState = luaL_newstate();
@@ -2896,7 +2896,7 @@ int CGLuaFun::Lua_GetDetailAllChatMsg(LuaState *L)
 
 int CGLuaFun::Lua_GetLastChatMsg(LuaState *L)
 {
-	auto sLastMsg = g_pGameFun->GetLastChatMsg();
+	auto sLastMsg = g_pGameFun->GetJustChatMsg();
 	QString sMsg;
 	if (sLastMsg.size() >= 2)
 	{
@@ -3217,7 +3217,7 @@ int CGLuaFun::Lua_IsSkillValid(LuaState *L)
 	}
 	int skillid = args[1].GetInteger();
 	bool valid = false;
-	g_CGAInterface->IsSkillValid(skillid,valid);
+	g_CGAInterface->IsSkillValid(skillid, valid);
 	L->PushBoolean(valid);
 	return 1;
 }
@@ -3226,13 +3226,13 @@ int CGLuaFun::Lua_GetSkillInfo(LuaState *L)
 {
 	LuaStack args(L);
 	if (args.Count() < 1)
-	{		
+	{
 		return 0;
 	}
-	
+
 	int skillid = args[1].GetInteger();
 	CGA::cga_skill_info_t skill;
-	g_CGAInterface->GetSkillInfo(skillid,skill);
+	g_CGAInterface->GetSkillInfo(skillid, skill);
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
 	tableObj.SetString("name", skill.name.c_str());
@@ -3337,7 +3337,7 @@ int CGLuaFun::Lua_GetSubSkillsInfo(LuaState *L)
 	g_CGAInterface->GetSubSkillsInfo(skillid, skills);
 	LuaObject skillObj(L);
 	skillObj.AssignNewTable();
-	for (int i = 0; i < skills.size();++i)
+	for (int i = 0; i < skills.size(); ++i)
 	{
 		const CGA::cga_subskill_info_t &skill = skills[i];
 		LuaObject tableObj(L);
@@ -3349,7 +3349,7 @@ int CGLuaFun::Lua_GetSubSkillsInfo(LuaState *L)
 		tableObj.SetInteger("level", skill.level);
 		tableObj.SetBoolean("available", skill.available);
 		skillObj.SetObject(i + 1, tableObj);
-	}	
+	}
 	skillObj.Push(L);
 	return 1;
 }
@@ -3364,7 +3364,7 @@ int CGLuaFun::Lua_IsPetValid(LuaState *L)
 	int petid = args[1].GetInteger();
 
 	bool avid = false;
-	g_CGAInterface->IsPetValid(petid,avid);
+	g_CGAInterface->IsPetValid(petid, avid);
 	L->PushBoolean(avid);
 	return 1;
 }
@@ -3437,9 +3437,9 @@ int CGLuaFun::Lua_GetBankPetsInfo(LuaState *L)
 	g_CGAInterface->GetBankPetsInfo(pets);
 	LuaObject allPetObj(L);
 	allPetObj.AssignNewTable();
-	for (int i=0;i<pets.size();++i)
+	for (int i = 0; i < pets.size(); ++i)
 	{
-		const CGA::cga_pet_info_t petdata=pets[i];
+		const CGA::cga_pet_info_t petdata = pets[i];
 		LuaObject tableObj(L);
 		tableObj.AssignNewTable();
 		tableObj.SetString("name", petdata.name.c_str());
@@ -3505,7 +3505,7 @@ int CGLuaFun::Lua_IsPetSkillValid(LuaState *L)
 	int petid = args[1].GetInteger();
 	int skillid = args[2].GetInteger();
 	bool avoid = false;
-	g_CGAInterface->IsPetSkillValid(petid,skillid,avoid);
+	g_CGAInterface->IsPetSkillValid(petid, skillid, avoid);
 	L->PushBoolean(avoid);
 	return 1;
 }
@@ -3541,10 +3541,10 @@ int CGLuaFun::Lua_GetPetSkillsInfo(LuaState *L)
 	}
 	int petid = args[1].GetInteger();
 	CGA::cga_pet_skills_info_t skills;
-	g_CGAInterface->GetPetSkillsInfo(petid,  skills);
+	g_CGAInterface->GetPetSkillsInfo(petid, skills);
 	LuaObject skillObj(L);
 	skillObj.AssignNewTable();
-	for (int i=0;i<skills.size();++i)
+	for (int i = 0; i < skills.size(); ++i)
 	{
 		const CGA::cga_pet_skill_info_t skill = skills[i];
 		LuaObject tableObj(L);
@@ -3767,9 +3767,9 @@ int CGLuaFun::Lua_GetCardsInfo(LuaState *L)
 	g_CGAInterface->GetCardsInfo(cards);
 	LuaObject cardsObj(L);
 	cardsObj.AssignNewTable();
-	for (int i=0;i<cards.size();++i)
+	for (int i = 0; i < cards.size(); ++i)
 	{
-		CGA::cga_card_info_t card=cards[i];
+		CGA::cga_card_info_t card = cards[i];
 		LuaObject tblObj(L);
 		tblObj.AssignNewTable();
 		tblObj.SetString("name", card.name.c_str());
@@ -3800,7 +3800,7 @@ int CGLuaFun::Lua_GetCardsRecvMsg(LuaState *L)
 		tblObj.SetInteger("index", card.index);
 		LuaObject allMsgObj(L);
 		allMsgObj.AssignNewTable();
-		for (int n=0;n<10;++n)
+		for (int n = 0; n < 10; ++n)
 		{
 			LuaObject msgObj(L);
 			msgObj.AssignNewTable();
@@ -3822,7 +3822,7 @@ int CGLuaFun::Lua_GetPicBooksInfo(LuaState *L)
 	g_CGAInterface->GetPicBooksInfo(books);
 	LuaObject tblObj(L);
 	tblObj.AssignNewTable();
-	for (int i=0;i<books.size();++i)
+	for (int i = 0; i < books.size(); ++i)
 	{
 		LuaObject subObj(L);
 		subObj.AssignNewTable();
@@ -3875,7 +3875,7 @@ int CGLuaFun::Lua_GetItemInfo(LuaState *L)
 	g_CGAInterface->GetItemInfo(pos, iteminfo);
 	LuaObject tblObj(L);
 	tblObj.AssignNewTable();
-	tblObj.SetString("name",iteminfo.name.c_str());
+	tblObj.SetString("name", iteminfo.name.c_str());
 	tblObj.SetString("attr", iteminfo.attr.c_str());
 	tblObj.SetString("info", iteminfo.info.c_str());
 	tblObj.SetInteger("itemid", iteminfo.itemid);
@@ -3897,9 +3897,9 @@ int CGLuaFun::Lua_GetItemsInfo(LuaState *L)
 	g_CGAInterface->GetItemsInfo(iteminfos);
 	LuaObject allTblObj(L);
 	allTblObj.AssignNewTable();
-	for (int i=0;i<iteminfos.size();++i)
+	for (int i = 0; i < iteminfos.size(); ++i)
 	{
-		const CGA::cga_item_info_t iteminfo=iteminfos[i];
+		const CGA::cga_item_info_t iteminfo = iteminfos[i];
 		LuaObject tblObj(L);
 		tblObj.AssignNewTable();
 		tblObj.SetString("name", iteminfo.name.c_str());
@@ -4118,7 +4118,7 @@ int CGLuaFun::Lua_GetCraftInfo(LuaState *L)
 	tableObj.SetString("name", craft.name.c_str());
 	tableObj.SetString("info", craft.info.c_str());
 	tableObj.SetBoolean("available", craft.available);
-	
+
 	LuaObject subTableObj(L);
 	subTableObj.AssignNewTable();
 	for (int i = 0; i < 5; ++i)
@@ -4145,7 +4145,7 @@ int CGLuaFun::Lua_GetCraftsInfo(LuaState *L)
 	g_CGAInterface->GetCraftsInfo(index, crafts);
 	LuaObject allTableObj(L);
 	allTableObj.AssignNewTable();
-	for (int n=0;n<crafts.size();++n)
+	for (int n = 0; n < crafts.size(); ++n)
 	{
 		const CGA::cga_craft_info_t &craft = crafts[n];
 		LuaObject tableObj(L);
@@ -4172,8 +4172,8 @@ int CGLuaFun::Lua_GetCraftsInfo(LuaState *L)
 		}
 		tableObj.SetObject("materials", subTableObj);
 		allTableObj.SetObject(n + 1, tableObj);
-	}	
-	allTableObj.Push(L); 
+	}
+	allTableObj.Push(L);
 	return 1;
 }
 
@@ -4195,7 +4195,7 @@ int CGLuaFun::Lua_DoRequest(LuaState *L)
 	}
 	int type = args[1].GetInteger();
 	bool bRes = false;
-	g_CGAInterface->DoRequest(type,bRes);
+	g_CGAInterface->DoRequest(type, bRes);
 	L->PushBoolean(bRes);
 	return 1;
 }
@@ -4233,7 +4233,7 @@ int CGLuaFun::Lua_GetTeamPlayerInfo(LuaState *L)
 	g_CGAInterface->GetTeamPlayerInfo(teams);
 	LuaObject tblObj(L);
 	tblObj.AssignNewTable();
-	for (int i=0;i<teams.size();++i)
+	for (int i = 0; i < teams.size(); ++i)
 	{
 		CGA::cga_team_player_t team = teams[i];
 		LuaObject subTblObj(L);
@@ -4293,7 +4293,7 @@ int CGLuaFun::Lua_EnableFlags(LuaState *L)
 	int type = args[1].GetInteger();
 	bool state = args[2].GetBoolean();
 	bool bRes = false;
-	g_CGAInterface->EnableFlags(type,state,bRes);
+	g_CGAInterface->EnableFlags(type, state, bRes);
 	L->PushBoolean(bRes);
 	return 1;
 }
@@ -4307,7 +4307,7 @@ int CGLuaFun::Lua_SetWindowResolution(LuaState *L)
 	}
 	int w = args[1].GetInteger();
 	int h = args[2].GetInteger();
-	g_CGAInterface->SetWindowResolution(w,h);
+	g_CGAInterface->SetWindowResolution(w, h);
 	return 0;
 }
 
@@ -4323,7 +4323,7 @@ int CGLuaFun::Lua_RequestDownloadMap(LuaState *L)
 	int xsize = args[3].GetInteger();
 	int ysize = args[4].GetInteger();
 
-	g_CGAInterface->RequestDownloadMap(xbottom,ybottom,xsize,ysize);
+	g_CGAInterface->RequestDownloadMap(xbottom, ybottom, xsize, ysize);
 	return 0;
 }
 
@@ -4345,7 +4345,7 @@ int CGLuaFun::Lua_IsBattleUnitValid(LuaState *L)
 	}
 	int tgtpos = args[1].GetInteger();
 	bool bRes = false;
-	g_CGAInterface->IsBattleUnitValid(tgtpos,bRes);
+	g_CGAInterface->IsBattleUnitValid(tgtpos, bRes);
 	L->PushBoolean(bRes);
 	return 1;
 }
@@ -4359,7 +4359,7 @@ int CGLuaFun::Lua_GetBattleUnit(LuaState *L)
 	}
 	int tgtpos = args[1].GetInteger();
 	CGA::cga_battle_unit_t unit;
-	g_CGAInterface->GetBattleUnit(tgtpos,unit);
+	g_CGAInterface->GetBattleUnit(tgtpos, unit);
 	LuaObject subTblObj(L);
 	subTblObj.AssignNewTable();
 	subTblObj.SetString("name", unit.name.c_str());
@@ -4382,7 +4382,7 @@ int CGLuaFun::Lua_GetBattleUnits(LuaState *L)
 	g_CGAInterface->GetBattleUnits(battleUnits);
 	LuaObject tblObj(L);
 	tblObj.AssignNewTable();
-	for (int i=0;i<battleUnits.size();++i)
+	for (int i = 0; i < battleUnits.size(); ++i)
 	{
 		const CGA::cga_battle_unit_t &unit = battleUnits[i];
 		LuaObject subTblObj(L);
@@ -4432,7 +4432,7 @@ int CGLuaFun::Lua_BattleNormalAttack(LuaState *L)
 	}
 	int tgtpos = args[1].GetInteger();
 	bool bRet = false;
-	g_CGAInterface->BattleNormalAttack( tgtpos,bRet);
+	g_CGAInterface->BattleNormalAttack(tgtpos, bRet);
 	L->PushBoolean(bRet);
 	return 1;
 }
@@ -4451,7 +4451,7 @@ int CGLuaFun::Lua_BattleSkillAttack(LuaState *L)
 	int tgtpos = args[3].GetInteger();
 	bool packet = args[4].GetBoolean();
 	bool bRet = false;
-	g_CGAInterface->BattleSkillAttack(pos,lv,tgtpos,packet,bRet);
+	g_CGAInterface->BattleSkillAttack(pos, lv, tgtpos, packet, bRet);
 	L->PushBoolean(bRet);
 	return 1;
 }
@@ -4489,9 +4489,9 @@ int CGLuaFun::Lua_BattleExchangePosition(LuaState *L)
 }
 
 int CGLuaFun::Lua_BattleDoNothing(LuaState *L)
-{	
+{
 	bool bRet = false;
-	g_CGAInterface->BattleDoNothing( bRet);
+	g_CGAInterface->BattleDoNothing(bRet);
 	L->PushBoolean(bRet);
 	return 1;
 }
@@ -4506,7 +4506,7 @@ int CGLuaFun::Lua_BattleChangePet(LuaState *L)
 	}
 	int pos = args[1].GetInteger();
 	bool bRet = false;
-	g_CGAInterface->BattleChangePet(pos,bRet);
+	g_CGAInterface->BattleChangePet(pos, bRet);
 	L->PushBoolean(bRet);
 	return 1;
 }
@@ -4522,7 +4522,7 @@ int CGLuaFun::Lua_BattleUseItem(LuaState *L)
 	int pos = args[1].GetInteger();
 	int tgtpos = args[2].GetInteger();
 	bool bRet = false;
-	g_CGAInterface->BattleUseItem(pos, tgtpos,  bRet);
+	g_CGAInterface->BattleUseItem(pos, tgtpos, bRet);
 	L->PushBoolean(bRet);
 	return 1;
 }
@@ -4539,7 +4539,7 @@ int CGLuaFun::Lua_BattlePetSkillAttack(LuaState *L)
 	int tgtpos = args[2].GetInteger();
 	bool bPack = args[3].GetBoolean();
 	bool bRet = false;
-	g_CGAInterface->BattlePetSkillAttack(skillpos,tgtpos,bPack,bRet);
+	g_CGAInterface->BattlePetSkillAttack(skillpos, tgtpos, bPack, bRet);
 	L->PushBoolean(bRet);
 	return 1;
 }
