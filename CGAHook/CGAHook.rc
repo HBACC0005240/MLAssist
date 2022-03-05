@@ -47,16 +47,6 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_ICON1               ICON                    "Resources\\logo.ico"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Version
 //
 
@@ -70,7 +60,7 @@ VS_VERSION_INFO VERSIONINFO
  FILEFLAGS 0x0L
 #endif
  FILEOS 0x40004L
- FILETYPE 0x1L
+ FILETYPE 0x2L
  FILESUBTYPE 0x0L
 BEGIN
     BLOCK "StringFileInfo"
@@ -78,11 +68,11 @@ BEGIN
         BLOCK "080404b0"
         BEGIN
             VALUE "CompanyName", "qq:274100927"
-            VALUE "FileDescription", "MLAssist-管理程序"
+            VALUE "FileDescription", "TODO: <文件说明>"
             VALUE "FileVersion", "1.0.22.305"
-            VALUE "InternalName", "MLAssistTool.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2021"
-            VALUE "OriginalFilename", "MLAssistTool.exe"
+            VALUE "InternalName", "CGAHook.dll"
+            VALUE "LegalCopyright", "Copyright (C) 2022"
+            VALUE "OriginalFilename", "CGAHook.dll"
             VALUE "ProductName", "qq:274100927"
             VALUE "ProductVersion", "1.0.22.305"
         END

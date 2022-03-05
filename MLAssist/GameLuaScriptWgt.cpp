@@ -1122,13 +1122,14 @@ void GameLuaScriptWgt::OnAutoRestart()
 								RestartScript();
 								return;
 							}
-						}else if (ui.checkBox_noMove_logOut->isChecked())
+						}
+						if (ui.checkBox_noMove_logOut->isChecked())
 						{
 							if (m_LastMapChange2.elapsed() > m_noMoveLogOutTime * 1000)
 							{
 								m_LastMapChange2 = QTime::currentTime();
 								qDebug() << m_noMoveLogOutTime << "秒坐标未动，登出！";
-								
+								g_pGameFun->LogoutServer();
 								return;
 							}							
 						}					
