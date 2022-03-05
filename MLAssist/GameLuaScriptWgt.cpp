@@ -768,9 +768,18 @@ void GameLuaScriptWgt::on_checkBox_noMove_stateChanged(int state)
 {
 }
 
+void GameLuaScriptWgt::on_checkBox_noMove_logOut_stateChanged(int state)
+{
+}
+
 void GameLuaScriptWgt::on_lineEdit_noMoveTime_editingFinished()
 {
 	m_noMoveTime = ui.lineEdit_noMoveTime->text().toInt();
+}
+
+void GameLuaScriptWgt::on_lineEdit_noMoveTime_logOut_editingFinished()
+{
+	m_noMoveLogOutTime = ui.lineEdit_noMoveTime_logOut->text().toInt();
 }
 
 void GameLuaScriptWgt::on_lineEdit_scriptRestart_editingFinished()
@@ -1087,7 +1096,8 @@ void GameLuaScriptWgt::OnAutoRestart()
 		int ingame = 0;
 		if (g_CGAInterface->IsInGame(ingame) && ingame)
 		{
-			if (ui.checkBox_noMove->isChecked() /*&& !g_pGameFun->isEncounter()*/) //不在自动遇敌中
+			//if (ui.checkBox_noMove->isChecked() /*&& !g_pGameFun->isEncounter()*/) //不在自动遇敌中
+			if (ui.checkBox_noMove->isChecked() || ui.checkBox_noMove_logOut->isChecked()) 
 			{
 				int x, y, index1, index2, index3;
 				std::string filemap;
@@ -1096,25 +1106,39 @@ void GameLuaScriptWgt::OnAutoRestart()
 					if (x != m_LastMapX || y != m_LastMapY || index3 != m_LastMapIndex)
 					{
 						m_LastMapChange = QTime::currentTime();
+						m_LastMapChange2 = QTime::currentTime();
 						m_LastMapX = x;
 						m_LastMapY = y;
 						m_LastMapIndex = index3;
 					}
 					else
 					{
-						if (m_LastMapChange.elapsed() > m_noMoveTime * 1000)
+						if (ui.checkBox_noMove->isChecked())
 						{
-							m_LastMapChange = QTime::currentTime();
-							qDebug() << m_noMoveTime << "秒坐标未动，重启脚本！";
-							RestartScript();
-							return;
-						}
+							if (m_LastMapChange.elapsed() > m_noMoveTime * 1000)
+							{
+								m_LastMapChange = QTime::currentTime();
+								qDebug() << m_noMoveTime << "秒坐标未动，重启脚本！";
+								RestartScript();
+								return;
+							}
+						}else if (ui.checkBox_noMove_logOut->isChecked())
+						{
+							if (m_LastMapChange2.elapsed() > m_noMoveLogOutTime * 1000)
+							{
+								m_LastMapChange2 = QTime::currentTime();
+								qDebug() << m_noMoveLogOutTime << "秒坐标未动，登出！";
+								
+								return;
+							}							
+						}					
 					}
 				}
 			}
 			else
 			{
 				m_LastMapChange = QTime::currentTime();
+				m_LastMapChange2 = QTime::currentTime();
 			}
 
 			if (ui.checkBox_scriptRestart->isChecked() && g_pGameCtrl->GetScriptRunState() == SCRIPT_CTRL_STOP && !m_scriptPath.isEmpty())
@@ -1152,6 +1176,7 @@ void GameLuaScriptWgt::doLoadUserConfig(QSettings &iniFile)
 	iniFile.beginGroup("Script");
 	m_restartScriptTime = iniFile.value("ScriptNoRunTime").toInt();
 	m_noMoveTime = iniFile.value("PlayerNoMoveTime").toInt();
+	m_noMoveLogOutTime = iniFile.value("PlayerNoMoveLogoutTime").toInt();
 	ui.lineEdit_noMoveTime->setText(QString::number(m_noMoveTime));
 	ui.lineEdit_scriptRestart->setText(QString::number(m_restartScriptTime));
 	ui.checkBox_scriptRestart->setChecked(iniFile.value("ScriptNoRunChecked").toBool());
@@ -1167,6 +1192,7 @@ void GameLuaScriptWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.beginGroup("Script");
 	iniFile.setValue("ScriptNoRunTime", m_restartScriptTime);
 	iniFile.setValue("PlayerNoMoveTime", m_noMoveTime);
+	iniFile.setValue("PlayerNoMoveLogoutTime", m_noMoveLogOutTime);
 	iniFile.setValue("ScriptNoRunChecked", ui.checkBox_scriptRestart->isChecked());
 	iniFile.setValue("PlayerNoMoveChecked", ui.checkBox_noMove->isChecked());
 	iniFile.setValue("RestartLogback", ui.checkBox_logBack->isChecked());

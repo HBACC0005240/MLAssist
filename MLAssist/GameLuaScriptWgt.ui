@@ -13,6 +13,23 @@
   <property name="windowTitle">
    <string>GameLuaScriptWgt</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QHeaderView::section 
+{
+	background-color: rgb(166,202,240);
+	color: black;	
+	border-right: 1px solid rgb(0, 0, 0);
+}
+QTableCornerButton::section{
+	background-color:rgb(166,202,240);
+}
+QTableWidget
+{
+	selection-background-color:lightblue;
+	selection-color:Black;
+	background-color: rgb(255, 255, 225);
+}</string>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout_8">
    <property name="spacing">
     <number>0</number>
@@ -417,6 +434,63 @@ p, li { white-space: pre-wrap; }
               <number>0</number>
              </property>
             </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="checkBox_noMove_logOut">
+               <property name="maximumSize">
+                <size>
+                 <width>43</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>静止</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_noMoveTime_logOut">
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>60</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>秒登出</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>

@@ -355,6 +355,11 @@ QMap<QString, QSharedPointer<CGPetPictorialBook> > ITObjectDataMgr::LoadPetBook(
 
 void ITObjectDataMgr::AddNewSubscribe(const QStringList &subscribe)
 {
+	if (m_sMQTTCode.isEmpty())
+	{
+		qDebug() << "没有设置mqttCode，不能使用此功能!";
+		return;
+	}
 	if (m_client && m_client->state() == QMqttClient::Connected)
 	{
 		//连接状态 进行订阅 不是连接 也就没有订阅

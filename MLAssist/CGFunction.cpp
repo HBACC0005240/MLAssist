@@ -7086,7 +7086,7 @@ void CGFunction::AutoEncounterEnemyThread(CGFunction *pThis)
 	emit pThis->signal_startAutoEncounterEnemySucess();
 	while (pThis->m_bAutoEncounterEnemy)
 	{
-		//if (pThis->IsInNormalState())	//这里不判断了，ForceMoveTo里面已经判断了
+//		if (pThis->IsInNormalState())	//这里不判断了，ForceMoveTo里面已经判断了
 		{
 			if (pThis->IsNeedStopEncounter()) //内置停止保护 只会停止遇敌线程 不会和脚本交互，需要脚本自己判断
 			{

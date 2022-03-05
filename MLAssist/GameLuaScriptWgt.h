@@ -39,7 +39,9 @@ protected:
 public slots:
 	void on_pushButton_reloadCommon_clicked();
 	void on_checkBox_noMove_stateChanged(int state);
+	void on_checkBox_noMove_logOut_stateChanged(int state);
 	void on_lineEdit_noMoveTime_editingFinished();
+	void on_lineEdit_noMoveTime_logOut_editingFinished();
 	void on_lineEdit_scriptRestart_editingFinished();
 	void on_checkBox_UserInput_stateChanged(int state);
 	void on_pushButton_pause_clicked();
@@ -92,8 +94,10 @@ private:
 	int m_LastMapY;
 	int m_LastMapIndex;
 	QTime m_LastMapChange;
+	QTime m_LastMapChange2;
 	QTime m_nLastStopScriptTime; //脚本停止时间
 	int m_noMoveTime = 60;
+	int m_noMoveLogOutTime = 60;
 	int m_restartScriptTime = 160;
 	int m_scriptLogMaxLine = 100; //默认100行
 };
