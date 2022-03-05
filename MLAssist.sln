@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaPlus", "LuaPlus\LuaPlus.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua", "Lua\Lua.vcxproj", "{689A8A67-6D0F-4D01-9CDE-AA0E69689E5C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FZScriptTrans", "FZScriptTrans\FZScriptTrans.vcxproj", "{2575B175-5BF3-47C6-A4E2-48F9567E3449}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -76,6 +78,12 @@ Global
 		{689A8A67-6D0F-4D01-9CDE-AA0E69689E5C}.Release|x64.Build.0 = Release|x64
 		{689A8A67-6D0F-4D01-9CDE-AA0E69689E5C}.Release|x86.ActiveCfg = Release|Win32
 		{689A8A67-6D0F-4D01-9CDE-AA0E69689E5C}.Release|x86.Build.0 = Release|Win32
+		{2575B175-5BF3-47C6-A4E2-48F9567E3449}.Debug|x64.ActiveCfg = Debug|Win32
+		{2575B175-5BF3-47C6-A4E2-48F9567E3449}.Debug|x86.ActiveCfg = Debug|Win32
+		{2575B175-5BF3-47C6-A4E2-48F9567E3449}.Debug|x86.Build.0 = Debug|Win32
+		{2575B175-5BF3-47C6-A4E2-48F9567E3449}.Release|x64.ActiveCfg = Release|Win32
+		{2575B175-5BF3-47C6-A4E2-48F9567E3449}.Release|x86.ActiveCfg = Release|Win32
+		{2575B175-5BF3-47C6-A4E2-48F9567E3449}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
