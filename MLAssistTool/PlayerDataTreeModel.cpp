@@ -7,7 +7,7 @@ PlayerDataTreeModel::PlayerDataTreeModel(QObject* parent)
 {
 	m_columnCnt = 1;
 	m_rootItem = new TreeItem("根节点");
-	SetupModelData();
+	//SetupModelData();
 }
 
 QVariant PlayerDataTreeModel::data(const QModelIndex& index, int role) const
@@ -56,9 +56,12 @@ QVariant PlayerDataTreeModel::headerData(int section, Qt::Orientation orientatio
 	return QVariant();
 }
 
-void PlayerDataTreeModel::SetupModelData()
+void PlayerDataTreeModel::SetupModelData( ITObjectList pObjList)
 {
-	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+	if (pObjList.size() < 1)
+		return;
+	
+//	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
 
 	qSort(pObjList.begin(), pObjList.end(), [&](ITObjectPtr& a, ITObjectPtr& b)
 	{

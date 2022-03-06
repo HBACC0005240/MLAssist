@@ -23,13 +23,15 @@ GamePlayerDataWgt::~GamePlayerDataWgt()
 void GamePlayerDataWgt::init()
 {
 	m_pPlayerDataTreeModel = new PlayerDataTreeModel(this);
+	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+	m_pPlayerDataTreeModel->SetupModelData(pObjList);
 	ui.treeView->setModel(NULL);
 	ui.treeView->setModel(m_pPlayerDataTreeModel);
 	ui.treeView->expandAll();
 	ui.treeView->collapseAll();
 	ui.treeView->setContextMenuPolicy(Qt::CustomContextMenu);      //TreeView启用右键菜单信号
 
-	//connect(ui.treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(on_treeView_customContextMenuRequested(const QPoint&)));
+	connect(ui.treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(on_treeView_customContextMenuRequested(const QPoint&)));
 	connect(ui.treeView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(doTreeViewClicked(const QModelIndex&)));
 
 	initTable(ui.tableWidget_item, 20);
@@ -77,7 +79,7 @@ void GamePlayerDataWgt::initTable(QTableWidget* pTable, int nCount/*=20*/, int h
 	}
 }
 
-void GamePlayerDataWgt::resetModel()
+void GamePlayerDataWgt::resetModel(ITObjectList pObjList)
 {
 	if (m_pPlayerDataTreeModel)
 	{
@@ -85,6 +87,7 @@ void GamePlayerDataWgt::resetModel()
 		m_pPlayerDataTreeModel = nullptr;
 	}
 	m_pPlayerDataTreeModel = new PlayerDataTreeModel(this);
+	m_pPlayerDataTreeModel->SetupModelData(pObjList);
 	ui.treeView->setModel(NULL);
 	ui.treeView->setModel(m_pPlayerDataTreeModel);
 	ui.treeView->expandAll();
@@ -138,7 +141,8 @@ void GamePlayerDataWgt::on_treeView_customContextMenuRequested(const QPoint& pos
 		menu.setStyleSheet(QString("QMenu{background:rgb(0,95,91);border-radius:3px;color:rgb(255,255,255);}\
 				QMenu::item{ background - color:transparent; }\
 				QMenu::item:selected{ background - color:rgb(0,62,59); color:rgb(0,255,242); }"));
-		menu.addAction(QString("增加证件"), this, SLOT(doAddAccountAssemble()));
+		menu.addAction(QString("全部展开"), [&]() {ui.treeView->expandAll(); });
+		menu.addAction(QString("全部折叠"), [&]() {ui.treeView->collapseAll(); });
 		menu.exec(QCursor::pos());
 	}
 	else
@@ -147,26 +151,23 @@ void GamePlayerDataWgt::on_treeView_customContextMenuRequested(const QPoint& pos
 		m_curSelectObj = ITObjectDataMgr::getInstance().FindObject(objid);
 		if (m_curSelectObj)
 		{
+			QMenu menu(this);
+			menu.setStyleSheet(QString("QMenu{background:rgb(0,95,91);border-radius:3px;color:rgb(255,255,255);}\
+				QMenu::item{ background - color:transparent; }\
+				QMenu::item:selected{ background - color:rgb(0,62,59); color:rgb(0,255,242); }"));
+			menu.addAction(QString("全部展开"), [&]() {ui.treeView->expandAll(); });
+			menu.addAction(QString("全部折叠"), [&]() {ui.treeView->collapseAll(); });
+
 			int devtype = m_curSelectObj->getObjectType();
 			if (devtype == TObject_AccountIdentity)
-			{
-				QMenu menu(this);
-				menu.setStyleSheet(QString("QMenu{background:rgb(0,95,91);border-radius:3px;color:rgb(255,255,255);}\
-				QMenu::item{ background - color:transparent; }\
-				QMenu::item:selected{ background - color:rgb(0,62,59); color:rgb(0,255,242); }"));
+			{				
 				menu.addAction(QString("增加账号"), this, SLOT(doAddAccount()));
-				menu.exec(QCursor::pos());
 			}
 			else if (devtype == TObject_Account)
-			{
-				QMenu menu(this);
-				menu.setStyleSheet(QString("QMenu{background:rgb(0,95,91);border-radius:3px;color:rgb(255,255,255);}\
-				QMenu::item{ background - color:transparent; }\
-				QMenu::item:selected{ background - color:rgb(0,62,59); color:rgb(0,255,242); }"));
+			{				
 				menu.addAction(QString("增加游戏ID"), this, SLOT(doAddAccountGid()));
-				menu.exec(QCursor::pos());
-
-			}
+			}			
+			menu.exec(QCursor::pos());
 		}
 	}
 
@@ -206,7 +207,8 @@ void GamePlayerDataWgt::doAddAccountAssemble()
 		if (pAcctountAsse)
 		{
 			pAcctountAsse->setObjectName(strCurName);
-			resetModel();
+			auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+			resetModel(pObjList);
 		}
 	}
 }
@@ -217,7 +219,8 @@ void GamePlayerDataWgt::doAddAccount()
 	dlg.SetAccountAssemblePtr(qSharedPointerCast<ITAccountIdentity>(m_curSelectObj));
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		resetModel();
+		auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+		resetModel(pObjList);
 	}
 }
 
@@ -235,7 +238,8 @@ void GamePlayerDataWgt::doAddAccountGid()
 	if (pGid)
 	{
 		pGid->setObjectName(sText);
-		resetModel();
+		auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+		resetModel(pObjList);
 	}
 }
 
@@ -509,5 +513,38 @@ void GamePlayerDataWgt::setItemText(QTableWidget* pTable, int row, int col, cons
 }
 void GamePlayerDataWgt::on_pushButton_refreshModel_clicked()
 {
-	resetModel();
+	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+	resetModel(pObjList);
+}
+
+void GamePlayerDataWgt::on_pushButton_search_clicked()
+{
+	QString sName = ui.lineEdit_search->text();
+	if (sName.isEmpty())
+		return;
+	QString sType = ui.comboBox_type->currentText();
+	ITObjectList pObjList;
+	if (sType == "物品")
+	{
+		pObjList = ITObjectDataMgr::getInstance().FindData(TObject_CharItem, sName);
+	}else if (sType == "宠物")
+	{
+		pObjList = ITObjectDataMgr::getInstance().FindData(TObject_CharPet, sName);
+	}
+	else if (sType == "金币")
+	{
+		pObjList = ITObjectDataMgr::getInstance().FindData(TObject_CharGold, sName);
+	}
+	qDebug() << "查询数量：" << pObjList.size();
+	if (pObjList.size()< 1)
+	{
+		pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+	}
+	resetModel(pObjList);
+
+}
+
+void GamePlayerDataWgt::on_lineEdit_search_returnPressed()
+{
+	on_pushButton_search_clicked();
 }

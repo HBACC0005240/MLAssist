@@ -77,6 +77,8 @@ public:
 	//辅助查询接口
 	Status SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
 
+	//数据库查询接口
+	ITObjectList FindData(int nType,const QString& sName);
 
 	static void loadDataBaseInfo(ITObjectDataMgr* pThis);
 	static void SaveDataThread(ITObjectDataMgr* pThis);

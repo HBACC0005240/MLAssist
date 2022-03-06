@@ -15,7 +15,7 @@ public:
 	void init();
 	void initTable(QTableWidget* pTable,int nCount=20, int height=40);
 protected:
-	void resetModel();
+	void resetModel(ITObjectList pObjList);
 	QString DisplayInputDlg(const QString& title, const QString& labelName);
 	void GetRowColFromItemPos(int itempos, int& row, int& col);
 	void setItemText(QTableWidget* pTable, int row, int col, const QString& szText, const QColor& szColor = QColor("black"), const QColor& backColor = QColor("white"));
@@ -30,7 +30,8 @@ public slots:
 	void doUpdateBankItemTableWidget(ITGidRolePtr pRole);
 	void doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePtr pRole);
 	void on_pushButton_refreshModel_clicked();
-
+	void on_pushButton_search_clicked();
+	void on_lineEdit_search_returnPressed();
 
 private:
 	Ui::GamePlayerDataWgt ui;

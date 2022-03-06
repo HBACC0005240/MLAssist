@@ -94,8 +94,8 @@ bool ITObjectDataMgr::init()
 	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
 
 	QString sMQTTServerIp = iniFile.value("server/mqttIP", "www.luguo666.com").toString();
-	int nMQTTServerPort = iniFile.value("game/mqttPort", 1883).toInt();
-	m_sMQTTCode = iniFile.value("game/mqttcode", "").toString();
+	int nMQTTServerPort = iniFile.value("server/mqttPort", 1883).toInt();
+	m_sMQTTCode = iniFile.value("server/mqttcode", "").toString();
 
 	m_client = new QMqttClient;
 	m_client->setHostname(sMQTTServerIp);
@@ -384,7 +384,7 @@ void ITObjectDataMgr::PublishOneTopic(const QString &topic, const QString &msg)
 {
 	if (!m_client)
 		return;
-	m_client->publish(topic, msg.toUtf8());
+	m_client->publish(m_sMQTTCode + topic, msg.toUtf8());
 }
 
 void ITObjectDataMgr::DebugNavigationRoute(ITGameGateMapPtr pRoute, int nRoute, int &nTotalCost)
@@ -1554,12 +1554,16 @@ void ITObjectDataMgr::brokerDisconnected()
 
 void ITObjectDataMgr::OnRecvMessage(const QByteArray &message, const QMqttTopicName &topic)
 {
-	const QString content = QDateTime::currentDateTime().toString() + QLatin1String(" Received Topic: ") + topic.name() + QLatin1String(" Message: ") + message + QLatin1Char('\n');
-
+	//const QString content = QDateTime::currentDateTime().toString() + QLatin1String(" Received Topic: ") + topic.name() + QLatin1String(" Message: ") + message + QLatin1Char('\n');
 	//qDebug() << content;
+	QString tmpTopic=topic.name();
+	if (tmpTopic.startsWith(m_sMQTTCode))
+	{
+		tmpTopic = tmpTopic.mid(m_sMQTTCode.size());
+	}
 	QMutexLocker locker(&m_mqttMutex);
-	m_recvPublishMsgCache.push_back(qMakePair(GetTickCount(), QStringList() << topic.name() << message));
-	emit signal_mqttMsg(topic.name(), message);
+	m_recvPublishMsgCache.push_back(qMakePair(GetTickCount(), QStringList() << tmpTopic << message));
+	emit signal_mqttMsg(tmpTopic, message);
 }
 QStringList ITObjectDataMgr::GetLastPublishMsg()
 {

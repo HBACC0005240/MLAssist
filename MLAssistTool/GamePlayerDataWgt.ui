@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>GamePlayerDataWgt</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_5">
+  <layout class="QHBoxLayout" name="horizontalLayout_6">
    <item>
     <widget class="QFrame" name="frame">
      <property name="maximumSize">
@@ -51,17 +51,31 @@
           <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>搜索</string>
+             <string>筛选：</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_search">
+           <widget class="QLineEdit" name="lineEdit_filter">
             <property name="maximumSize">
              <size>
               <width>160</width>
               <height>16777215</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_filterGid">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="MLAssistTool.qrc">
+              <normaloff>:/MLAssistTool/Resources/SearchHover.png</normaloff>:/MLAssistTool/Resources/SearchHover.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -96,199 +110,486 @@
     </widget>
    </item>
    <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="tabPosition">
-      <enum>QTabWidget::South</enum>
-     </property>
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>物品</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
+    <layout class="QVBoxLayout" name="verticalLayout_10">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>搜索：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_type">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="text">
+           <string>物品</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>宠物</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>金币</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_search"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_search">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="MLAssistTool.qrc">
+           <normaloff>:/MLAssistTool/Resources/SearchHover.png</normaloff>:/MLAssistTool/Resources/SearchHover.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabPosition">
+        <enum>QTabWidget::South</enum>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>物品</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>金币：</string>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>金币：</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_gold"/>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_gold"/>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QLabel" name="label_2">
+                 <property name="text">
+                  <string>金币：</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_bankGold"/>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>金币：</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="lineEdit_bankGold"/>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="QSplitter" name="splitter">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>包裹</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_item">
+                 <attribute name="horizontalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>银行</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_2">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_bankItem">
+                 <attribute name="horizontalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <row>
+                  <property name="text">
+                   <string>新建行</string>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新建列</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
            </item>
           </layout>
          </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>宠物</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
-          <widget class="QSplitter" name="splitter">
+          <widget class="QSplitter" name="splitter_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <widget class="QGroupBox" name="groupBox">
+           <widget class="QGroupBox" name="groupBox_3">
             <property name="title">
              <string>包裹</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout">
+            <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
-              <widget class="QTableWidget" name="tableWidget_item">
-               <attribute name="horizontalHeaderVisible">
-                <bool>false</bool>
-               </attribute>
-               <attribute name="horizontalHeaderStretchLastSection">
-                <bool>false</bool>
-               </attribute>
-               <attribute name="verticalHeaderVisible">
-                <bool>false</bool>
-               </attribute>
-               <attribute name="verticalHeaderStretchLastSection">
-                <bool>false</bool>
-               </attribute>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <column>
-                <property name="text">
-                 <string>新建列</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>新建列</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>新建列</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>新建列</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>新建列</string>
-                </property>
-               </column>
+              <widget class="QSplitter" name="splitter_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="QTableWidget" name="tableWidget_pet">
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>新建行</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>新建列</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>新建列</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>新建列</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>新建列</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>新建列</string>
+                 </property>
+                </column>
+               </widget>
               </widget>
              </item>
             </layout>
            </widget>
-           <widget class="QGroupBox" name="groupBox_2">
+           <widget class="QGroupBox" name="groupBox_4">
             <property name="title">
              <string>银行</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
+            <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QTableWidget" name="tableWidget_bankItem">
-               <attribute name="horizontalHeaderVisible">
-                <bool>false</bool>
-               </attribute>
-               <attribute name="verticalHeaderVisible">
-                <bool>false</bool>
-               </attribute>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>新建行</string>
-                </property>
-               </row>
+              <widget class="QTableWidget" name="tableWidget_bankPet">
                <row>
                 <property name="text">
                  <string>新建行</string>
@@ -381,240 +682,16 @@
           </widget>
          </item>
         </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>宠物</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QSplitter" name="splitter_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>包裹</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <item>
-            <widget class="QSplitter" name="splitter_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <widget class="QTableWidget" name="tableWidget_pet">
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>新建行</string>
-               </property>
-              </row>
-              <column>
-               <property name="text">
-                <string>新建列</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>新建列</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>新建列</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>新建列</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>新建列</string>
-               </property>
-              </column>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="title">
-           <string>银行</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="QTableWidget" name="tableWidget_bankPet">
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>新建行</string>
-              </property>
-             </row>
-             <column>
-              <property name="text">
-               <string>新建列</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>新建列</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>新建列</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>新建列</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>新建列</string>
-              </property>
-             </column>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="MLAssistTool.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -18,6 +18,9 @@ enum TObjectType
 	TObject_CharItem = 0x1110,		//角色道具信息
 	TObject_CharBankItem = 0x1111,	//银行道具	
 
+	TObject_CharGold = 0x1150,		//金币	
+	TObject_CharBankGold = 0x1151,	//银行金币	
+
 	TObject_CGSkill = 0x1200,		
 	TObject_CharSkill = 0x1201,		
 	TObject_CharPetSkill = 0x1202,		

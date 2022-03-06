@@ -2609,3 +2609,67 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 	return Status::OK;
 
 }
+
+ITObjectList ITObjectDataMgr::FindData(int nType, const QString& sName)
+{
+	ITObjectList pGidList;
+	switch (nType)
+	{
+	case TObject_CGItem:
+	case TObject_Item:
+	case TObject_CharItem:
+	case TObject_CharBankItem:
+	{
+		for (auto it = m_idForAccountRole.begin(); it != m_idForAccountRole.end(); ++it)
+		{
+			auto pItems = it.value()->_itemPosForPtr;
+			for (auto tmpItem=pItems.begin();tmpItem!=pItems.end();++tmpItem)
+			{
+				if (tmpItem.value()->getObjectName().contains(sName))
+				{
+					//没有类型判断 
+					pGidList.append(it.value()->getObjectParent());
+					break;
+				}
+			}
+		}
+		break;
+	}
+	case TObject_CGPet:
+	case TObject_Pet:
+	case TObject_BankPet:
+	case TObject_CharPet:
+	{
+		for (auto it = m_idForAccountRole.begin(); it != m_idForAccountRole.end(); ++it)
+		{
+			auto pPets = it.value()->_petPosForPet;
+			for (auto tmpPet = pPets.begin(); tmpPet != pPets.end(); ++tmpPet)
+			{
+				if (tmpPet.value()->getObjectName().contains(sName) || tmpPet.value()->_realName.contains(sName))
+				{
+					//没有类型判断 
+					pGidList.append(it.value()->getObjectParent().dynamicCast<ITAccountGid>());
+					break;
+				}
+			}
+		}
+		break;
+	}
+	case TObject_CharGold:
+	case TObject_CharBankGold:
+	{
+		for (auto it = m_idForAccountRole.begin(); it != m_idForAccountRole.end(); ++it)
+		{
+			if (it.value()->_gold == sName.toInt()|| it.value()->_bankgold == sName.toInt())
+			{	//没有类型判断 
+				pGidList.append(it.value()->getObjectParent().dynamicCast<ITAccountGid>());
+				break;
+			}		
+		}
+		break;
+	}
+	default:
+		break;
+	}
+	return pGidList;
+}

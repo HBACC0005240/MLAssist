@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="MLAssistTool">
+    <qresource prefix="/MLAssistTool">
+        <file>Resources/SearchHover.png</file>
     </qresource>
 </RCC>
