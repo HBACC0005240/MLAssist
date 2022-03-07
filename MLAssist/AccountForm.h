@@ -100,6 +100,7 @@ private:
 	QTime m_attachExistGameWndTime;	 //附加已有窗口
 	bool m_bFindNormalWnd = false;
 	QMap<int, int> m_roleMapSex; //人物角色和性别对应  后面有几个没单独处理
+	int m_loginInterval = 0;
 };
 
 #endif // ACCOUNTFORM_H

@@ -54,6 +54,7 @@ AccountForm::AccountForm(QWidget *parent) :
 	m_attachExistGameWndTime = QTime::currentTime();
 	m_glt_lock = NULL;
 	m_glt_map = NULL;
+	m_loginInterval = g_pGameCtrl->GetAutoLoginInterval();
 	m_POLCN = new QProcess();
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 	m_POLCN->setProcessEnvironment(env);
@@ -496,6 +497,13 @@ void AccountForm::OnAutoLogin()
 						qDebug() << "300秒登录失败，干掉游戏窗口，重新加载！";
 						emit g_pGameCtrl->NotifyKillProcess();
 					}
+					//增加等待
+					if (m_loginInterval>0)
+					{
+						QEventLoop loop;
+						QTimer::singleShot(m_loginInterval, &loop, SLOT(quit()));
+						loop.exec();
+					}					
 					on_pushButton_logingame_clicked();
 					return;
 				}

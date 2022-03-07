@@ -168,6 +168,8 @@ public:
 
 	void SetStartGameRepeatedGidExit(bool val) { m_repeatedGidExit = val; }
 	bool GetStartGameRepeatedGidExit() { return m_repeatedGidExit; }
+	void SetAutoLoginInterval(int timeout) { m_loginWaitInterval = timeout; }
+	int GetAutoLoginInterval() { return m_loginWaitInterval; }
 
 	//地图是否可见-
 	void SetMapIsVisible(bool bvisible) { m_bMapIsVisible = bvisible; } //地图是否可见 不可见时 不刷新地图 降低cpu 内存
@@ -430,5 +432,6 @@ private:
 	QMutex m_tradeDlgMutex;
 	QMutex m_workResMutex;
 	bool m_repeatedGidExit = true;
+	int m_loginWaitInterval=3000;	//自动登录间隔
 };
 #define g_pGameCtrl GameCtrl::getInstace()

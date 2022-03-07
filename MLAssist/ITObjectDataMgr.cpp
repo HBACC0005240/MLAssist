@@ -87,6 +87,12 @@ bool ITObjectDataMgr::init()
 	int startHide = iniFile.value("game/startHide", 0).toInt();
 	int followPos = iniFile.value("game/followPos", 0).toInt();
 	int mazeWaitTime = iniFile.value("game/mazeWaitTime", 5000).toInt();
+	int loginWaitTime = iniFile.value("game/loginIntervalTime", 3000).toInt();//登录间隔
+	if (loginWaitTime < 0)
+	{
+		loginWaitTime = 0;
+	}
+	g_pGameCtrl->SetAutoLoginInterval(loginWaitTime);
 	bool repeatedGidExit = iniFile.value("game/repeatedGidExit", true).toBool();
 	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
 	g_pGameCtrl->SetStartGameHide(startHide);
