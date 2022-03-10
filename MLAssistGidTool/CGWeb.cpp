@@ -17,7 +17,23 @@ CGWeb::CGWeb(QWidget* parent)
 	ui.setupUi(this);
 	progress = 0;
 
-
+	m_gameTypeForUrl.insert(13,QStringList() << "https://www.polchina.com.cn/register/?type=creategid&game=ItemSales");
+	m_gameTypeForUrl.insert(14,QStringList() << "https://www.polchina.com.cn/register/?type=creategid&game=ItemSales");
+	m_gameTypeForUrl.insert(1,QStringList() << "https://www.polchina.com.cn/register/?type=creategid&game=PUK2");
+	m_gameTypeForUrl.insert(23,QStringList() << "https://www.polchina.com.cn/register/?type=creategid&game=cg_old");
+	m_gameTypeForUrl.insert(24,QStringList() << "https://www.polchina.com.cn/register/?type=creategid&game=cg_old");
+	ui.comboBox_type->clear();
+	QMap<QString, int> gameTypeMap;
+	gameTypeMap.insert("道具电信", 13);
+	gameTypeMap.insert("道具网通", 14);
+	gameTypeMap.insert("时长", 1);
+	gameTypeMap.insert("怀旧牧羊双子", 23);
+	gameTypeMap.insert("怀旧金牛", 24);
+	for (auto it= gameTypeMap.begin();it!= gameTypeMap.end();++it)
+	{
+		ui.comboBox_type->addItem(it.key(),it.value());
+	}
+	ui.comboBox_type->setCurrentIndex(ui.comboBox_type->findData(13));
 	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
 	QSettings iniFile(iniPath, QSettings::IniFormat);
 
@@ -53,16 +69,23 @@ void CGWeb::finishLoading(bool)
 	ui.webEngineView->page()->runJavaScript(jQuery, [](const QVariant& v) { qDebug() << v.toString(); });
 	//rotateImages(true);
 	QString sCurUrl = ui.webEngineView->page()->url().url();
+
+	QString sCretaeGidUrl = m_gameTypeForUrl.value(m_nGameType)[0];//创建游戏ID界面
+
 	if (sCurUrl == "https://www.polchina.com.cn/user/bodymember.php" && m_bCreateGid)//进去后界面，跳转创建用户id界面
-		ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
+	{
+		ui.webEngineView->load(QUrl(sCretaeGidUrl));	
+	}
 	else if (sCurUrl.contains("https://www.polchina.com.cn/register/?type=creategid_ok&gid") && m_bCreateGid)
 	{
+		//https://www.polchina.com.cn/register/?type=creategid_ok&gid=123456789&region=23  前置一样 
+
 		m_lastCreateGidTime.restart();
 		m_nBeginNum++;
 		qDebug() << "GidNum:" << m_nBeginNum;
-		ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
+		ui.webEngineView->load(QUrl(sCretaeGidUrl));
 	}
-	else if (sCurUrl == "https://www.polchina.com.cn/register/?type=creategid&game=ItemSales" && m_bCreateGid)
+	else if (sCurUrl == sCretaeGidUrl&& m_bCreateGid)	//"https://www.polchina.com.cn/register/?type=creategid&game=ItemSales" 
 	{
 		m_lastCreateGidTime.restart();
 		Sleep(1000);	//休息2秒 防止过快 503 貌似 多块都一样
@@ -72,16 +95,39 @@ void CGWeb::finishLoading(bool)
 		qDebug() << "CreateNewGidNum:" << sGid;
 		QString sIDName = "gid_13";
 		QString sClickCode = "qt.jQuery('.b form:first').submit()";
-		if (m_bTele)
+		switch (m_nGameType)
+		{
+		case 1:		//时长
+		{	
+			sIDName = "gid_1";
+			sClickCode = "qt.jQuery('.b form:first').submit()";
+			break;
+		}	
+		case 13:	//道具电信
 		{
 			sIDName = "gid_13";
 			sClickCode = "qt.jQuery('.b form:first').submit()";
+			break;
 		}
-		else
-		{
+		case 14:	//道具网通
+		{	
 			sIDName = "gid_14";
-			sClickCode = "qt.jQuery('.b form:eq(2)').submit()";
+			sClickCode = "qt.jQuery('.b form:eq(1)').submit()";
+			break;
+		}case 23:	//怀旧牧羊双子
+		{	
+			sIDName = "gid_23";
+			sClickCode = "qt.jQuery('.b form:first').submit()";
+			break;
+		}case 24:	//怀旧金牛
+		{	
+			sIDName = "gid_24";
+			sClickCode = "qt.jQuery('.b form:eq(1)').submit()";
+			break;
 		}
+		default:
+			break;
+		}	
 		QString sNewGid = QString("qt.jQuery('#%1').val('%2')\n").arg(sIDName).arg(sGid);
 		QString sScriptCode;
 		sScriptCode += sNewGid;
@@ -128,33 +174,43 @@ void CGWeb::on_pushButton_2_clicked()
 {
 	m_bCreateGid = true;
 	m_bCreateAccount = false;
-	ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
+	QString sCretaeGidUrl = m_gameTypeForUrl.value(m_nGameType)[0];//创建游戏ID界面
+
+	ui.webEngineView->load(QUrl(sCretaeGidUrl));	//道具服务器
+	//ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
 
 
 	QString sGid = ui.lineEdit_gid->text();
 	m_nBeginNum = ui.lineEdit_beginNum->text().toInt();
 	m_createGidTimer.start(1000);
 	return;
-	QString sNewGidNum = QString("%1").arg(m_nBeginNum, m_precisionNum, 10, QLatin1Char('0'));
+	/*QString sNewGidNum = QString("%1").arg(m_nBeginNum, m_precisionNum, 10, QLatin1Char('0'));
 	sGid += sNewGidNum;
 
 	QString sIDName = "gid_13";
 	QString sClickCode = "qt.jQuery('.b form:first').submit()";
-	if (m_bTele)
+
+	switch (m_nGameType)
+	{
+	case 13:
 	{
 		sIDName = "gid_13";
 		sClickCode = "qt.jQuery('.b form:first').submit()";
+		break;
 	}
-	else
-	{
+	case 14: {
 		sIDName = "gid_14";
 		sClickCode = "qt.jQuery('.b form:eq(2)').submit()";
+		break;
 	}
+	default:
+		break;
+	}	
 	QString sNewGid = QString("qt.jQuery('#%1').val('%2')\n").arg(sIDName).arg(sGid);
 	QString sScriptCode;
 	sScriptCode += sNewGid;
 	sScriptCode += sClickCode;
-	ui.webEngineView->page()->runJavaScript(sScriptCode, [](const QVariant& v) { qDebug() << v.toString(); });
+	ui.webEngineView->page()->runJavaScript(sScriptCode, [](const QVariant& v) { qDebug() << v.toString(); });*/
 }
 
 void CGWeb::replyFinished(QNetworkReply* reply)
@@ -186,7 +242,10 @@ void CGWeb::onUrlChanged(const QUrl& url)
 	if (sCurUrl == "https://www.polchina.com.cn/user/bodymember.php" ||
 		sCurUrl.contains("https://www.polchina.com.cn/register/?type=creategid_ok&gid"))//进去后界面，跳转创建用户id界面
 	{
-		ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
+		QString sCretaeGidUrl = m_gameTypeForUrl.value(m_nGameType)[0];//创建游戏ID界面
+
+		ui.webEngineView->load(QUrl(sCretaeGidUrl));	//道具服务器
+//		ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
 	}
 
 
@@ -198,13 +257,28 @@ void CGWeb::onCheckCreateGid()
 	{
 		if (m_lastCreateGidTime.elapsed() < 10000)	//10秒检测  卡了重置
 			return;
-		ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
+		QString sCretaeGidUrl = m_gameTypeForUrl.value(m_nGameType)[0];//创建游戏ID界面
+		ui.webEngineView->load(QUrl(sCretaeGidUrl));	//道具服务器
+		//ui.webEngineView->load(QUrl("https://www.polchina.com.cn/register/?type=creategid&game=ItemSales"));	//道具服务器
 		m_lastCreateGidTime.restart();
 	}
 }
 
 
+void CGWeb::on_comboBox_type_currentIndexChanged(int index)
+{
+	m_nGameType = ui.comboBox_type->currentData().toInt();
+}
+
 void MyPage::javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& msg, int lineNumber, const QString& srcID)
 {
 	qDebug() << msg;
+}
+
+
+void CGWeb::on_pushButton_myScript_clicked()
+{
+	//尝试自定义脚本
+	/*QString sCode = ui.textEdit->toPlainText();
+	ui.webEngineView->page()->runJavaScript(sCode, [](const QVariant& v) { qDebug() << v.toString(); });*/
 }

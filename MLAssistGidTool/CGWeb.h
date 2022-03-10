@@ -30,8 +30,8 @@ public slots:
 	void replyFinished(QNetworkReply*);
 	void onUrlChanged(const QUrl& url);
 	void onCheckCreateGid();
-
-
+	void on_comboBox_type_currentIndexChanged(int index);
+	void on_pushButton_myScript_clicked();
 private:
 	Ui::CGWeb ui;
 	QTimer m_createGidTimer;
@@ -45,4 +45,6 @@ private:
 	bool m_bTele = true;			//电信
 	bool m_bCreateGid = false;		//生成账号游戏id
 	bool m_bCreateAccount = false;	//生成账号
+	int m_nGameType = 13;
+	QMap<int, QStringList> m_gameTypeForUrl;	//区服和链接
 };

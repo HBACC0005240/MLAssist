@@ -54,6 +54,33 @@
       </spacer>
      </item>
      <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>类型：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_type">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>电信</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>网通</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>游戏ID前缀:</string>
@@ -114,11 +141,11 @@
       <string notr="true">color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
-      <string>只做了电信的批量注册，怕盗号的，生成完成关闭软件，去网页改密码，bug联系274100927
-手动登录，填写游戏id前缀 和起始序号  
-默认会拼接 
+      <string>游戏ID批量注册，卡了导致名称重复的，去网页手动删除不连续GID
+怕盗号的，生成完成关闭软件，去网页改密码，bug联系QQ:274100927
+用法：手动登录，填写游戏id前缀 和起始序号,默认会拼接 
 例如：游戏id前缀  aaa  起始序号是0
-生产的gid就是  aaa000  到  aaa031</string>
+生成的gid就是  aaa000  到  aaa031</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
