@@ -56,6 +56,17 @@ void TestAStar();
 void TestCompressed();
 int main(int argc, char *argv[])
 {
+	//高分辨率适配
+	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	qreal cx = GetSystemMetrics(SM_CXSCREEN);
+	qreal scale = cx / 1920;
+	if (scale < 1)
+	{
+		scale = 1;
+	}
+	qputenv("QT_SCALE_FACTOR", QString::number(scale).toLatin1());
+
 	MApplication a(argc, argv);
 	SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 	qDebug() << "线程池最大线程个数：" << QThreadPool::globalInstance()->maxThreadCount();

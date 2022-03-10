@@ -262,11 +262,12 @@ void CGFunction::OnPopupUserComboBoxDialog(const QString &sMsg, const QStringLis
 
 void CGFunction::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 {
+	
+	QMutexLocker lock(&m_charMutex);
 	if (unitid == -1) //<0系统  >0自己或其他人
 	{
 		m_systemCueList.append(msg);
 	}
-	QMutexLocker lock(&m_charMutex);
 	if (m_systemCueList.size() > 100)
 	{
 		m_systemCueList = m_systemCueList.mid(m_systemCueList.size() - 100);
@@ -9671,6 +9672,7 @@ bool CGFunction::ContainChatMsg(const QString &cue)
 
 QString CGFunction::GetSysChatMsg()
 {
+	QMutexLocker lock(&m_charMutex);
 	if (m_systemCueList.size() > 0)
 		return m_systemCueList.join(";");
 	return "";
@@ -9678,6 +9680,7 @@ QString CGFunction::GetSysChatMsg()
 
 QString CGFunction::GetLastSysChatMsg()
 {
+	QMutexLocker lock(&m_charMutex);
 	if (m_systemCueList.size() > 0)
 		return m_systemCueList.last();
 	return "";
