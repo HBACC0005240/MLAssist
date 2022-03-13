@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
 	g_pGameCtrl->InitCmdParse(); //先于ITObjectDataMgr调用 否则线程中调用后 信号会失效
 	ITObjectDataMgr::getInstance().init();
 	MLAssist w;
+	a.setWindowInstance(&w);
 	a.installEventFilter(&w);
 	w.show();
 	g_pGameCtrl->RunParseCmd();

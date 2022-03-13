@@ -321,7 +321,9 @@ public:
 	//解析购买列表
 	int Lua_ParseBuyStoreMsg(LuaState *L);
 	//卖东西
-	int Lua_Sale(LuaState *L);
+	int Lua_Sale(LuaState *L);	
+	//卖东西
+	int Lua_Sale2(LuaState *L);
 	//卖东西
 	int Lua_SaleEx(LuaState *L);
 	//鉴定东西

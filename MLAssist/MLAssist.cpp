@@ -154,7 +154,8 @@ void MLAssist::on_ctrl_app(int val)
 		}
 		case 3:
 		{
-			if (this->isHidden())
+			//if (this->isHidden())
+			if (this->isMinimized())
 			{
 				//	qDebug() << "show";
 				HWND hwnd = g_pGameCtrl->getGameHwnd();
@@ -183,7 +184,8 @@ void MLAssist::on_ctrl_app(int val)
 			else
 			{
 				//		qDebug() << "hide";
-				this->setVisible(false);
+				//this->setVisible(false);
+				this->showMinimized();
 			}
 			break;
 		}

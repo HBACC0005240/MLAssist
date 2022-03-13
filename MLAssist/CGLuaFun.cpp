@@ -2409,6 +2409,35 @@ int CGLuaFun::Lua_Sale(LuaState *L)
 	return 0;
 }
 
+int CGLuaFun::Lua_Sale2(LuaState *L)
+{
+	/*LuaStack args(L);
+	if (args.Count() >= 4)
+	{
+		int x = args[1].GetInteger();
+		int y = args[2].GetInteger();
+		QString itemName = L->IsString(3) ? args[3].GetString() : "";
+		int count = args[4].GetInteger();
+
+		g_pGameFun->Sale(x, y, itemName);
+	}
+	else
+	{
+		QString itemName = L->IsString(2) ? args[2].GetString() : "";
+		if (L->IsInteger(1))
+		{
+			int nDir = args[1].GetInteger();
+			g_pGameFun->SaleEx(nDir, itemName);
+		}
+		else if (L->IsString(1))
+		{
+			QString sDir = args[1].GetString();
+			g_pGameFun->SaleEx2(sDir, itemName);
+		}
+	}*/
+	return 0;
+}
+
 int CGLuaFun::Lua_SaleEx(LuaState *L)
 {
 	LuaStack args(L);

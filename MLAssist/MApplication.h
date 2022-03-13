@@ -30,7 +30,7 @@ private:
 	unsigned int m_uiDragSizeMode;
 	bool _bEnableDragSize = false;
 	bool m_bStartDragSize;
-	QWidget *m_pMainWindow; //保存一个你窗体的指针
+	QWidget *m_pMainWindow=nullptr; //保存一个你窗体的指针
 };
 
 #endif // MApplication_H

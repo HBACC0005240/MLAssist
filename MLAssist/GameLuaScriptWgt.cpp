@@ -469,6 +469,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("买", m_luaFun, &CGLuaFun::Lua_Shopping);
 	objGlobal.Register("解析购买列表", m_luaFun, &CGLuaFun::Lua_ParseBuyStoreMsg);
 	objGlobal.Register("卖", m_luaFun, &CGLuaFun::Lua_Sale);
+	objGlobal.Register("出售", m_luaFun, &CGLuaFun::Lua_Sale);
 	objGlobal.Register("saleEx", m_luaFun, &CGLuaFun::Lua_SaleEx);
 	objGlobal.Register("商店鉴定", m_luaFun, &CGLuaFun::Lua_IdentifyItem);
 	objGlobal.Register("saleEx", m_luaFun, &CGLuaFun::Lua_IdentifyItemEx);
@@ -766,10 +767,14 @@ void GameLuaScriptWgt::on_pushButton_reloadCommon_clicked()
 
 void GameLuaScriptWgt::on_checkBox_noMove_stateChanged(int state)
 {
+	if (state == Qt::Checked)
+		on_lineEdit_noMoveTime_editingFinished();
 }
 
 void GameLuaScriptWgt::on_checkBox_noMove_logOut_stateChanged(int state)
 {
+	if (state == Qt::Checked)
+		on_lineEdit_noMoveTime_logOut_editingFinished();
 }
 
 void GameLuaScriptWgt::on_lineEdit_noMoveTime_editingFinished()

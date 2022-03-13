@@ -91,6 +91,12 @@ CGFunction::CGFunction()
 	m_sysConfigMap.insert("人物开关", TSysConfigSet_CharacterSwitch);
 	m_sysConfigMap.insert("移动速度", TSysConfigSet_MoveSpeed);
 	m_sysConfigMap.insert("人物称号", TSysConfigSet_PlayerTitle);
+	m_sysConfigMap.insert("自动吃深蓝", TSysConfigSet_AutoEatDeepBlue);
+	m_sysConfigMap.insert("自动吃狗粮", TSysConfigSet_AutoEatDogFood);
+	m_sysConfigMap.insert("自动吃时水", TSysConfigSet_AutoEatTimeCrystal);
+	m_sysConfigMap.insert("装备保护", TSysConfigSet_EquipProtect);
+	m_sysConfigMap.insert("自动治疗", TSysConfigSet_AutoCure);
+	m_sysConfigMap.insert("自动急救", TSysConfigSet_AutoFirstAid);
 
 	m_returnGameDataHash.insert("gid", TRet_Game_Gid);
 	m_returnGameDataHash.insert("hp", TRet_Game_Hp);

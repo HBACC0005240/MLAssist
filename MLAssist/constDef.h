@@ -369,6 +369,12 @@ enum TSysConfigSet
 	TSysConfigSet_NoPetAttack,		  //不带宠二动攻击
 	TSysConfigSet_NoPetGuard,		  //不带宠二动防御
 	TSysConfigSet_PlayerTitle,		  //设置人物称号
+	TSysConfigSet_AutoEatDeepBlue,	  //自动吃深蓝
+	TSysConfigSet_AutoEatDogFood,	  //自动吃狗粮
+	TSysConfigSet_AutoEatTimeCrystal, //自动吃时水
+	TSysConfigSet_EquipProtect,		  //装备保护
+	TSysConfigSet_AutoCure,			  //自动治疗
+	TSysConfigSet_AutoFirstAid,		  //自动急救
 
 };
 //命令行参数解析

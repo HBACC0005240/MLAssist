@@ -116,15 +116,35 @@ bool MApplication::notify(QObject *pObj, QEvent *ev)
 				if (event->key() == Qt::Key_F8)
 				{
 				}
+				else if (event->key() == Qt::Key_Insert)
+				{
+					HWND gameHwnd = g_pGameCtrl->getGameHwnd();
+					if (gameHwnd)
+					{
+						long szLng = GetWindowLong(gameHwnd, GWL_STYLE); //    '取的窗口原先的样式
+						if (szLng & WS_MINIMIZE && szLng & WS_VISIBLE)
+						{
+							YunLai::SetWindowVal(gameHwnd, SW_RESTORE);
+							SetForegroundWindow((HWND)m_pMainWindow->winId());						
+						}						
+						else
+						{
+							YunLai::SetWindowVal(gameHwnd, SW_SHOWMINIMIZED);
+							SetForegroundWindow((HWND)m_pMainWindow->winId());
+						}
+						return true;
+					}				
+					
+				}
 				else if (event->key() == Qt::Key_F9)
 				{
-					QString path = qApp->applicationDirPath() + "\\Error\\Sync\\";
+					/*QString path = qApp->applicationDirPath() + "\\Error\\Sync\\";
 					QString errorFile = path + QDate::currentDate().toString(Qt::ISODate) + ".txt";
 					if (QFile::exists(errorFile))
 					{
 						QDesktopServices::openUrl(QUrl::fromLocalFile(errorFile));
 						return true;
-					}
+					}*/
 				}
 				//保存工程快捷键
 				else if ((event->modifiers() == Qt::ControlModifier) && (event->key() == Qt::Key_S))
