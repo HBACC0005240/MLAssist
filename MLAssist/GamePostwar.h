@@ -65,6 +65,8 @@ public slots:
 	void on_checkBox_eatGouLiang_stateChanged(int state);
 	void updateEquipProtect();
 	void syncUiData();
+	void doSwitchAutoEatUi(int, bool);
+	void doSwitchAutoCureUi(bool, bool, bool, int, int);
 
 private:
 	Ui::GamePostwar ui;

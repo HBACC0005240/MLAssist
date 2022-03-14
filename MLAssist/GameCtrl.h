@@ -230,6 +230,8 @@ signals:
 	void signal_switchNoLvlEncounterEscapeUI(bool);					   //打开关闭无1级全跑
 	void signal_switchNoPetDoubleActionUI(bool);					   //打开关闭无宠二动
 	void signal_switchNoPetActionUI(int, bool);						   //设置无宠二动选项
+	void signal_switchAutoEatUi(int, bool);							   //设置自动吃 深蓝、狗粮、时水
+	void signal_switchAutoUseSkillUi(int, bool);						//设置自动治疗 自动急救 装备保护
 	void signal_setMoveSpeedUI(int);								   //设置高速走路速度
 	void signal_addRenItemScript(QString name, bool bChecked = false); //增加自动扔物品项
 	void signal_addDieItemScript(QString name, bool bChecked = false); //增加自动叠加物品项
@@ -333,7 +335,7 @@ private:
 	QMutex m_gidMutex;
 	QString m_sGid;																		 //gid
 	HANDLE m_hGameMutex;																 //CGA附加到游戏上的锁
-	DWORD m_gameProcessID;																 //游戏进程
+	DWORD m_gameProcessID = 0;															 //游戏进程
 	HWND m_gameHwnd;																	 //游戏窗口句柄
 	ULONG m_gameBaseAddr;																 //游戏基址
 	int m_nGamePort;																	 //注册dll通讯端口
@@ -383,7 +385,7 @@ private:
 	bool m_bHasNPCDlg = true;															 //是否有NPC对话框弹出 有True处理后false
 	bool m_bAutoClickNpc = false;														 //自动点击NPC
 	bool m_bAutoTalkNpcYesOrNo = true;													 //对话NPC选是或否
-	bool m_bAutoUpLoadBankData = true;													//自动上传银行信息
+	bool m_bAutoUpLoadBankData = true;													 //自动上传银行信息
 	GameUpgradeCfg *m_upgradePetCfg;													 //宠物升级加点
 	GamePlayerUpgradeCfg *m_upgradePlayerCfg;											 //人物升级加点
 	QTime m_lastUpdateTeamTime;															 //获取队伍信息间隔
@@ -432,6 +434,6 @@ private:
 	QMutex m_tradeDlgMutex;
 	QMutex m_workResMutex;
 	bool m_repeatedGidExit = true;
-	int m_loginWaitInterval=3000;	//自动登录间隔
+	int m_loginWaitInterval = 3000; //自动登录间隔
 };
 #define g_pGameCtrl GameCtrl::getInstace()

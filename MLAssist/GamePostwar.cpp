@@ -12,6 +12,8 @@ GamePostwar::GamePostwar(QWidget *parent) :
 
 	connect(g_pGameCtrl, SIGNAL(signal_addRenItemScript(QString, bool)), this, SLOT(doAddRenItemScript(QString, bool)));
 	connect(g_pGameCtrl, SIGNAL(signal_addDieItemScript(QString, bool)), this, SLOT(doAddDieItemScript(QString, bool)));
+	connect(g_pGameCtrl, SIGNAL(signal_switchAutoEatUi(int, bool)), this, SLOT(doSwitchAutoEatUi(int, bool)));
+	connect(g_pGameCtrl, SIGNAL(signal_switchAutoCureUi(bool, bool, bool, int, int)), this, SLOT(doSwitchAutoCureUi(bool, bool, bool, int, int)));
 
 	connect(g_pGameCtrl, SIGNAL(signal_switchAutoDrop(int)), this, SLOT(doSwitchAutoDrop(int)));
 	connect(g_pGameCtrl, SIGNAL(signal_switchAutoPile(int)), this, SLOT(doSwitchAutoPile(int)));
@@ -160,13 +162,13 @@ void GamePostwar::doLoadJsConfig(QJsonObject &obj)
 					if (!line.isEmpty())
 					{
 						QListWidgetItem *pItem = new QListWidgetItem(line.remove("#"));
-						pItem->setCheckState(Qt::Checked);						
+						pItem->setCheckState(Qt::Checked);
 						pItem->setToolTip(pItem->text());
 						ui.listWidget_ren->addItem(pItem);
 					}
 				}
 				++itor;
-			}			
+			}
 		}
 	}
 	if (obj.contains("itemtweaklist"))
@@ -183,7 +185,7 @@ void GamePostwar::doLoadJsConfig(QJsonObject &obj)
 				{
 					QString line = (*itor).toString();
 					if (!line.isEmpty())
-					{			
+					{
 						auto strip = line.indexOf("|");
 						if (strip <= 0)
 							continue;
@@ -199,22 +201,22 @@ void GamePostwar::doLoadJsConfig(QJsonObject &obj)
 							{
 								szName = QString("%1&%2").arg(value).arg(maxcount);
 							}
-						}else
+						}
+						else
 						{
 							szName = QString("%1&%2").arg(line.mid(0, strip)).arg(maxcount);
-						}											
-						QListWidgetItem *pItem = new QListWidgetItem(szName);						
-						pItem->setCheckState(Qt::Checked);						
+						}
+						QListWidgetItem *pItem = new QListWidgetItem(szName);
+						pItem->setCheckState(Qt::Checked);
 						pItem->setData(Qt::UserRole, szName);
 						pItem->setToolTip(pItem->text());
-						ui.listWidget_die->addItem(pItem);	
+						ui.listWidget_die->addItem(pItem);
 					}
 				}
 				++itor;
 			}
 		}
 	}
-
 }
 
 void GamePostwar::doSaveJsConfig(QJsonObject &obj)
@@ -475,8 +477,8 @@ void GamePostwar::doAddRenItemScript(QString name, bool bChecked)
 {
 	if (name.isEmpty())
 		return;
-	
-	auto addRenItemFun = [&](const QString &sName, bool bChecked) 
+
+	auto addRenItemFun = [&](const QString &sName, bool bChecked)
 	{
 		QString sToolTip = sName;
 		auto pFindItem = ui.listWidget_ren->findItems(sName, Qt::MatchExactly);
@@ -544,9 +546,6 @@ void GamePostwar::doAddDieItemScript(QString name, bool bChecked)
 	}
 	else
 		addDieItemFun(name, bChecked);
-
-
-	
 }
 
 void GamePostwar::doAddRenItem(GameItemPtr pItem, bool bCode)
@@ -924,4 +923,40 @@ void GamePostwar::syncUiData()
 	on_lineEdit_playerEatMagic_editingFinished();
 	on_lineEdit_petEatMedicament_editingFinished();
 	on_lineEdit_petEatMagic_editingFinished();
+}
+
+void GamePostwar::doSwitchAutoEatUi(int type, bool bChecked)
+{
+	switch (type)
+	{
+		case TSysConfigSet_AutoEatDeepBlue:
+		{
+			ui.checkBox_eatShenLan->setChecked(bChecked);
+			on_checkBox_eatShenLan_stateChanged(ui.checkBox_eatShenLan->checkState());
+			break;
+		}
+		case TSysConfigSet_AutoEatDogFood:
+		{
+			ui.checkBox_eatGouLiang->setChecked(bChecked);
+			on_checkBox_eatGouLiang_stateChanged(ui.checkBox_eatGouLiang->checkState());
+			break;
+		}
+		case TSysConfigSet_AutoEatTimeCrystal:
+		{
+			ui.checkBox_eatTime->setChecked(bChecked);
+			on_checkBox_eatTime_stateChanged(ui.checkBox_eatTime->checkState());
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+void GamePostwar::doSwitchAutoCureUi(bool v1, bool v2, bool v3, int v4, int v5)
+{
+	ui.groupBox_AutoHeal->setChecked(v1);
+	ui.checkBox_HealPet->setChecked(v2);
+	ui.checkBox_HealTeammate->setChecked(v3);
+	ui.comboBox_HurtLv->setCurrentIndex(v4);
+	ui.comboBox_HealLv->setCurrentIndex(v5);
 }

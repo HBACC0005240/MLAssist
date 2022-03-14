@@ -268,7 +268,7 @@ void CGFunction::OnPopupUserComboBoxDialog(const QString &sMsg, const QStringLis
 
 void CGFunction::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 {
-	
+
 	QMutexLocker lock(&m_charMutex);
 	if (unitid == -1) //<0系统  >0自己或其他人
 	{
@@ -2014,6 +2014,13 @@ QString CGFunction::GetMapFilePath()
 	std::string filemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
 	return QString::fromStdString(filemap);
+}
+
+bool CGFunction::IsInRandomMap()
+{
+	if (GetMapFilePath().contains("map\\0"))
+		return false;
+	return true;
 }
 
 int CGFunction::GetMapIndex()
@@ -4387,7 +4394,8 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 				else
 				{
 					qDebug() << "地图更改，寻路结束！";
-					Sleep(m_mazeWaitTime);
+					if (IsInRandomMap())
+						Sleep(m_mazeWaitTime);
 					return false;
 				}
 			}
@@ -4481,7 +4489,8 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							{
 								qDebug() << "当前地图更改，寻路结束！";
 								WaitInNormalState();
-								Sleep(m_mazeWaitTime);
+								if (IsInRandomMap())
+									Sleep(m_mazeWaitTime);
 								return true;
 							}
 							else if (curMapIndex == GetMapIndex() && curMapName == GetMapName() && (curX != tarX || curY != tarY)) //好多图 名字一样
@@ -4540,7 +4549,8 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							{
 								qDebug() << "当前地图更改，寻路结束！";
 								WaitInNormalState();
-								Sleep(m_mazeWaitTime);
+								if (IsInRandomMap())
+									Sleep(m_mazeWaitTime);
 								return true;
 							}
 							else if (curMapIndex == GetMapIndex() && curMapName == GetMapName() && (curX != tarX || curY != tarY)) //好多图 名字一样
@@ -7093,7 +7103,7 @@ void CGFunction::AutoEncounterEnemyThread(CGFunction *pThis)
 	emit pThis->signal_startAutoEncounterEnemySucess();
 	while (pThis->m_bAutoEncounterEnemy)
 	{
-//		if (pThis->IsInNormalState())	//这里不判断了，ForceMoveTo里面已经判断了
+		//		if (pThis->IsInNormalState())	//这里不判断了，ForceMoveTo里面已经判断了
 		{
 			if (pThis->IsNeedStopEncounter()) //内置停止保护 只会停止遇敌线程 不会和脚本交互，需要脚本自己判断
 			{
@@ -7782,6 +7792,13 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 					emit g_pGameCtrl->signal_switchNoPetActionUI(0, data1.toBool());
 					break;
 				}
+				case TSysConfigSet_AutoEatDeepBlue:
+				case TSysConfigSet_AutoEatDogFood:
+				case TSysConfigSet_AutoEatTimeCrystal:
+				{
+					emit g_pGameCtrl->signal_switchAutoEatUi(nAutoType, data1.toBool());
+					break;
+				}				
 				case TSysConfigSet_PlayerTitle:
 				{
 					bool bRet = false;
@@ -7809,6 +7826,7 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 					g_CGAInterface->ChangeTitleName(nTitleIndex, bRet);
 					break;
 				}
+
 				case TSysConfigSet_CharacterSwitch:
 				{
 					if (data1.type() == QVariant::Int)

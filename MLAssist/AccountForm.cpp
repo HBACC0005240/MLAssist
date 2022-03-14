@@ -240,7 +240,7 @@ bool AccountForm::IsGltExpired()
 	if (m_glt.isEmpty())
 		return true;
 
-	if (m_loginresult.elapsed() > 1000 * 60 ) 
+	if (m_loginresult.elapsed() > 1000 * 60)
 		return true;
 	if (m_lastGameAccount != ui->lineEdit_account->text())
 		return true;
@@ -331,14 +331,15 @@ bool AccountForm::QueryAttachGameWnd()
 							}
 							else
 							{
-								if (pid != g_pGameCtrl->getGamePID())
+								auto attachPid = g_pGameCtrl->getGamePID();
+								if (attachPid != 0 && pid != attachPid)
 								{
 									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 									{
 										qDebug() << "该ID已附加，退出！";
 										qApp->exit(0);
 										return true;
-									}						
+									}
 								}
 							}
 						}
@@ -373,14 +374,15 @@ bool AccountForm::QueryAttachGameWnd()
 				else
 				{
 
-					if (wnd->m_ProcessId != g_pGameCtrl->getGamePID())
+					auto attachPid = g_pGameCtrl->getGamePID();
+					if (attachPid != 0 && wnd->m_ProcessId != attachPid)
 					{
 						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 						{
 							qDebug() << "该ID已附加，退出！";
 							qApp->exit(0);
 							return true;
-						}						
+						}
 					}
 				}
 			}
@@ -498,12 +500,12 @@ void AccountForm::OnAutoLogin()
 						emit g_pGameCtrl->NotifyKillProcess();
 					}
 					//增加等待
-					if (m_loginInterval>0)
+					if (m_loginInterval > 0)
 					{
 						QEventLoop loop;
 						QTimer::singleShot(m_loginInterval, &loop, SLOT(quit()));
 						loop.exec();
-					}					
+					}
 					on_pushButton_logingame_clicked();
 					return;
 				}
