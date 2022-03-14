@@ -4430,7 +4430,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 					else
 					{
 						g_CGAInterface->WalkTo(tarX, tarY);
-						Sleep(2000);
+						//Sleep(2000);
 					}
 				}
 				//判断距离 如果过长 认为切换地图 退出
