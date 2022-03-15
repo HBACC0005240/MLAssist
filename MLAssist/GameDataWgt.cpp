@@ -601,7 +601,8 @@ void GameDataWgt::doUpdateMapData(QString name, int index1, int index2, int inde
 	setItemText(2, 0, name);
 	setItemText(3, 0, QString("东%1 南%2").arg(x).arg(y));
 	setItemText(5, 0, QString("%1").arg(index3));
-	setItemText(6, 0, g_pGameCtrl->getGameState());
+	QString state = g_pGameCtrl->getGameState();
+	setItemText(6, 0, state);
 }
 
 void GameDataWgt::doUpdateBattleHpMp(int hp, int maxhp, int mp, int maxmp)
