@@ -447,6 +447,18 @@ void GameMapWall::AutoMazeOpen(GameMapWall *pThis)
 	g_pGameFun->MakeMapOpenContainNextEntrance(1);
 }
 
+void GameMapWall::ResetMapInfo()
+{
+	m_pixels = nullptr;
+	m_pixels2 = nullptr;
+	m_collision = nullptr;
+	m_objects = nullptr;
+	m_units = nullptr;
+	m_pixelwidth = 0;
+	m_pixelheight = 0;
+	m_mapindex = 0;
+}
+
 bool GameMapWall::IsDisplayMap()
 {
 	return m_bDisplayMap;

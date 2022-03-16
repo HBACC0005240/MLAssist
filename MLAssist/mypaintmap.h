@@ -20,6 +20,8 @@ public:
 	void ShowNavError(QString err);
 	virtual void keyPressEvent(QKeyEvent *event);
 	static void RunNavigator(MyPaintMap *pThis, int x, int y, int enter, QString *result);
+	void ResetMapInfo();
+
 signals:
 	void updateMousePosition(int x, int y);
 	void runNavigatorScript(int x, int y, int enter, QString *result);
@@ -60,6 +62,7 @@ public:
 	bool m_bMoveCamera;
 
 private:
+	QMutex m_mapMutex;
 	QSharedPointer<QRgb> m_pixels;
 	QSharedPointer<QRgb> m_pixels2;
 	size_t m_pixelwidth;

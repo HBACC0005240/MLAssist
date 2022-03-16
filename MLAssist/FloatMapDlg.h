@@ -19,6 +19,10 @@ public:
 
 signals:
 	void signal_checkCross(bool);
+
+protected:
+	void hideEvent(QHideEvent *event);
+
 public slots:
 	void updateeUiMsg(const QString &sMsg);
 	void UpdateMousePosition(int x, int y);

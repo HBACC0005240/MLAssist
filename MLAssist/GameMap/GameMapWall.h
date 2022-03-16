@@ -44,6 +44,7 @@ public:
 
 	static void SearchThread(GameMapWall *pThis);
 	static void AutoMazeOpen(GameMapWall *pThis);
+	void ResetMapInfo();
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);

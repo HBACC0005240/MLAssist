@@ -53,6 +53,11 @@ void FloatMapDlg::SetCrosshair(bool bFlag)
 	m_pGameMapWallItem->m_bShowCrosshair = bFlag;
 }
 
+void FloatMapDlg::hideEvent(QHideEvent *event)
+{
+	m_pGameMapWallItem->ResetMapInfo();
+}
+
 void FloatMapDlg::updateeUiMsg(const QString &sMsg)
 {
 	ui.textEdit->clear();

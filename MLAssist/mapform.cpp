@@ -47,6 +47,8 @@ void MapForm::hideEvent(QHideEvent *event)
 	//	qDebug() << "hideEvent";
 	if (m_pFloatMapDlg->isHidden()) //当前界面隐藏，并且浮动地图窗口也是隐藏，则通知地图下载部分不要下载了
 		g_pGameCtrl->SetMapIsVisible(false);
+	m_collision = nullptr;
+	ui.widget_paintmap->ResetMapInfo();
 }
 
 void MapForm::AutoMazeThread(MapForm *pThis)
@@ -148,7 +150,9 @@ void MapForm::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QSh
 			m_pFloatMapDlg->LoadMapCellInfo(coll, obj, units);
 	}
 	if (!this->isVisible())
+	{
 		return;
+	}
 	ui.widget_paintmap->m_bShowCrosshair = ui.checkBox_showcrosshair->isChecked();
 	m_pFloatMapDlg->SetCrosshair(ui.checkBox_showcrosshair->isChecked());
 	if (coll && coll->xsize && coll->ysize)
@@ -165,7 +169,9 @@ void MapForm::OnNotifyGetMapInfo(QString name, int index1, int index2, int index
 		m_pFloatMapDlg->LoadMapInfo(name, x, y, index3);
 	}
 	if (!this->isVisible())
+	{
 		return;
+	}
 	m_pFloatMapDlg->SetCrosshair(ui.checkBox_showcrosshair->isChecked());
 	ui.widget_paintmap->m_bShowCrosshair = ui.checkBox_showcrosshair->isChecked();
 	ui.widget_paintmap->LoadMapInfo(name, x, y, index3);
