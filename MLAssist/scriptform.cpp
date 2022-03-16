@@ -38,7 +38,8 @@ ScriptForm::ScriptForm(QWidget *parent) :
 	m_bPathBegin = false;
 	m_bSuspending = false;
 	m_port = 0;
-
+	m_ConsoleMaxLines = 100;
+	m_output->setMaximumBlockCount(m_ConsoleMaxLines);
 	m_node = new QProcess(this);
 
 	connect(m_node, &QProcess::started, this, &ScriptForm::OnNodeStarted);
@@ -458,6 +459,7 @@ void ScriptForm::RunNavigatorScript(int x, int y, int enter, QString *result)
 		env.insert("CGA_GAME_PORT", qgetenv("CGA_GAME_PORT"));
 		env.insert("CGA_GUI_PORT", qgetenv("CGA_GUI_PORT"));
 		env.insert("CGA_DIR_PATH", qgetenv("CGA_DIR_PATH"));
+		env.insert("CGA_DIR_PATH_UTF8", qgetenv("CGA_DIR_PATH_UTF8"));
 		env.insert("CGA_GUI_PID", QString("%1").arg(GetCurrentProcessId()));
 		env.insert("NODE_SKIP_PLATFORM_CHECK", "1");
 		m_node->setProcessEnvironment(env);
@@ -504,6 +506,7 @@ void ScriptForm::on_pushButton_debug_clicked()
 		env.insert("CGA_GAME_PORT", qgetenv("CGA_GAME_PORT"));
 		env.insert("CGA_GUI_PORT", qgetenv("CGA_GUI_PORT"));
 		env.insert("CGA_DIR_PATH", qgetenv("CGA_DIR_PATH"));
+		env.insert("CGA_DIR_PATH_UTF8", qgetenv("CGA_DIR_PATH_UTF8"));
 		env.insert("CGA_GUI_PID", QString("%1").arg(GetCurrentProcessId()));
 		env.insert("NODE_SKIP_PLATFORM_CHECK", "1");
 		m_node->setProcessEnvironment(env);

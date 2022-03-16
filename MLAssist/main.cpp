@@ -68,6 +68,11 @@ int main(int argc, char *argv[])
 	qputenv("QT_SCALE_FACTOR", QString::number(scale).toLatin1());
 
 	MApplication a(argc, argv);
+	qputenv("CGA_DIR_PATH", QCoreApplication::applicationDirPath().toLocal8Bit());
+	qputenv("CGA_DIR_PATH_UTF8", QCoreApplication::applicationDirPath().toUtf8());
+	qputenv("CGA_GAME_PORT", "");
+	qputenv("CGA_GUI_PORT", "");
+
 	SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 	qDebug() << "线程池最大线程个数：" << QThreadPool::globalInstance()->maxThreadCount();
 	//当前活动的线程个数
