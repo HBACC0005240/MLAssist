@@ -88,7 +88,7 @@ private:
 	CGLuaFun m_luaFun;				  //lua脚本对象
 	QStringList m_scriptLineDataList; //脚本数据
 	QString m_scriptData;
-	LuaStateOwner *pState;		  //初始化lua的基本库，才能调用lua函数
+	LuaStateOwner *m_pLuaState;		  //初始化lua的基本库，才能调用lua函数
 	QFuture<void> m_scriptFuture; //获取人物信息线程
 	int m_LastMapX;
 	int m_LastMapY;

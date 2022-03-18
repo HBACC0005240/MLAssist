@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QWidget>
 #include "ui_GameSysCfgWgt.h"
 #include <QKeySequence>
 #include <QSettings>
+#include <QWidget>
 class GameSysCfgWgt : public QWidget
 {
 	Q_OBJECT
@@ -15,7 +15,7 @@ public:
 	void init();
 
 protected:
-	bool GetInputKey(QString& inputKey);
+	bool GetInputKey(QString &inputKey);
 
 public slots:
 	void doLoadUserConfig(QSettings &iniFile);
@@ -26,6 +26,8 @@ public slots:
 	void on_pushButton_savePet_clicked();
 	void on_pushButton_fetchGold_clicked();
 	void on_pushButton_saveGold_clicked();
+	void on_pushButton_dropGold_clicked();
+
 	void on_toolButton_logBack_clicked();
 	void on_toolButton_logOut_clicked();
 	void on_toolButton_cross_clicked();

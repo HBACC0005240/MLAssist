@@ -52,12 +52,11 @@ void GameSysCfgWgt::doLoadUserConfig(QSettings &iniFile)
 	iniFile.beginGroup("SysConfig");
 	ui.checkBox_autoSaveBank->setChecked(iniFile.value("uploadBankData").toBool());
 	int quickCount = iniFile.value("keyCount").toInt();
-	for (int i=0;i<quickCount;++i)
+	for (int i = 0; i < quickCount; ++i)
 	{
-	 	int type=iniFile.value(QString("keyType-%1").arg(i+1)).toInt();
-		QString key= iniFile.value(QString("keyVal-%1").arg(i + 1)).toString();
+		int type = iniFile.value(QString("keyType-%1").arg(i + 1)).toInt();
+		QString key = iniFile.value(QString("keyVal-%1").arg(i + 1)).toString();
 		g_pGameCtrl->SetQuickKey(type, key);
-
 	}
 	iniFile.endGroup();
 }
@@ -114,7 +113,8 @@ void GameSysCfgWgt::on_pushButton_fetchItem_clicked()
 				}
 			}
 		}
-	}else
+	}
+	else
 	{
 		for (auto sItem : sItemList)
 		{
@@ -126,9 +126,9 @@ void GameSysCfgWgt::on_pushButton_fetchItem_clicked()
 					filterBankInfos.push_back(itemInfo);
 				}
 			}
-		}		
+		}
 	}
-	
+
 	//找到指定物品 取出
 	if (filterBankInfos.size() > 0)
 	{
@@ -207,13 +207,14 @@ void GameSysCfgWgt::on_pushButton_saveItem_clicked()
 				for (size_t i = 0; i < itemsinfo.size(); ++i)
 				{
 					const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-					if (iteminfo.pos > 7 && (iteminfo.assess_flags & 1) == 1 && (sItem.toStdString() == iteminfo.name || sItem.toInt() == iteminfo.itemid))
+					if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assessed == 24) && (sItem.toStdString() == iteminfo.name || sItem.toInt() == iteminfo.itemid))
 					{
 						bagItemPosList.append(iteminfo.pos);
 					}
 				}
 			}
-		}else
+		}
+		else
 		{
 
 			for (auto sItem : sItemList) //要存的物品位置拿出来
@@ -221,14 +222,14 @@ void GameSysCfgWgt::on_pushButton_saveItem_clicked()
 				for (size_t i = 0; i < itemsinfo.size(); ++i)
 				{
 					const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-					if (iteminfo.pos > 7 && (iteminfo.assess_flags & 1) == 1 && (QString::fromStdString(iteminfo.name).contains(sItem) || sItem.toInt() == iteminfo.itemid))
+					if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assessed == 24) && (QString::fromStdString(iteminfo.name).contains(sItem) || sItem.toInt() == iteminfo.itemid))
 					{
 						bagItemPosList.append(iteminfo.pos);
 					}
 				}
 			}
 		}
-	
+
 		int bankIndex = 0;
 		for (int i = 0; i < bagItemPosList.size(); ++i)
 		{
@@ -260,7 +261,6 @@ void GameSysCfgWgt::on_pushButton_fetchPet_clicked()
 	{
 		g_pGameFun->WithdrawPet(sPet, bSensitive);
 	}
-
 }
 
 void GameSysCfgWgt::on_pushButton_savePet_clicked()
@@ -292,6 +292,13 @@ void GameSysCfgWgt::on_pushButton_saveGold_clicked()
 	QString sGold = ui.lineEdit_saveGold->text();
 	int nGold = sGold.toInt();
 	g_pGameFun->DepositGold(nGold);
+}
+
+void GameSysCfgWgt::on_pushButton_dropGold_clicked()
+{
+	QString sGold = ui.lineEdit_dropGold->text();
+	int nGold = sGold.toInt();
+	g_pGameFun->DropGold(nGold);
 }
 
 void GameSysCfgWgt::on_toolButton_logBack_clicked()

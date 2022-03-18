@@ -92,9 +92,9 @@ void GameLuaScriptWgt::gotoScriptRow()
 	dlg.exec();
 	int nRow = dlg.getVal().toInt();
 	ui.tableWidget->setCurrentCell(nRow, 0);
-	//LuaObject objGlobal = (*pState)->GetGlobals(); //注册全局函数
+	//LuaObject objGlobal = (*m_pLuaState)->GetGlobals(); //注册全局函数
 	//lua_Debug *pDebug;
-	//(*pState)->GetGlobal();
+	//(*m_pLuaState)->GetGlobal();
 	//lua_getglobal(L, LUA_DEBUGGER_NAME);
 	//if (!lua_istable(L, -1))
 	//{
@@ -228,7 +228,7 @@ void GameLuaScriptWgt::AddMyLuaLoader(lua_State *pState)
 		//	if (lua_istable(pState, -5))		/*判读栈顶往下第五个是不是table*/
 		//	{
 		//		/*结果将key对应的值置为nil*/
-		//		lua_settable(pState, -5); /*pakage,loaded(table),key,value,  将栈顶两个元素作为key和value设置给table，弹出栈顶两个元素*/
+		//		lua_settable(m_pLuaState, -5); /*pakage,loaded(table),key,value,  将栈顶两个元素作为key和value设置给table，弹出栈顶两个元素*/
 		//	}
 		//}
 		lua_pop(pState, 1); /*pakage,loaded(table),key  弹出value,留下key作为下一个next*/
@@ -322,11 +322,11 @@ QString GameLuaScriptWgt::ParseScriptData(const QString &sPath)
 
 void GameLuaScriptWgt::initScriptSystem()
 {
-	pState = new LuaStateOwner(true);
-	LuaObject objGlobal = (*pState)->GetGlobals(); //注册全局函数
+	m_pLuaState = new LuaStateOwner(true);
+	LuaObject objGlobal = (*m_pLuaState)->GetGlobals(); //注册全局函数
 	auto ls = objGlobal.GetCState();
 	//require默认不识别utf8，这里把参数转为gbk
-	//overrideLuaRequire(pState);
+	//overrideLuaRequire(m_pLuaState);
 	//AddMyLuaLoader(ls);
 	QString sPath = QApplication::applicationDirPath() + "/脚本/?.lua";
 	LuaAddPath(ls, "path", sPath.replace("/", "\\"));
@@ -551,9 +551,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
 	objGlobal.Register("自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
 
-
 	objGlobal.Register("查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
-
 
 	objGlobal.Register("GetMapName", m_luaFun, &CGLuaFun::Lua_GetMapName);
 	objGlobal.Register("GetGameStatus", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
@@ -666,7 +664,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	objGlobal.Register("SendPetMail", m_luaFun, &CGLuaFun::Lua_SendPetMail);
 
 	//luaL_requiref(ls, "common", nullptr, true);
-	(*pState)->DoString("common=require(\"common\")");
+	(*m_pLuaState)->DoString("common=require(\"common\")");
 }
 
 QString GameLuaScriptWgt::GetLoginScriptData(int type)
@@ -703,7 +701,7 @@ void GameLuaScriptWgt::doRunScriptThread(GameLuaScriptWgt *pThis)
 	if (!pThis)
 		return;
 	pThis->m_sLuaScriptRunMsg.clear();
-	(*pThis->pState)->SetHook(LuaHook, LUA_MASKLINE, 0);
+	(*pThis->m_pLuaState)->SetHook(LuaHook, LUA_MASKLINE, 0);
 	g_pGameFun->RestFun();
 	g_pGameCtrl->SetScriptRunState(SCRIPT_CTRL_RUN);
 	if (setjmp(g_jmpPlace) == 0)
@@ -712,17 +710,17 @@ void GameLuaScriptWgt::doRunScriptThread(GameLuaScriptWgt *pThis)
 		//qDebug() << "doRunScriptThread Script" << pThis->m_scriptData;
 		try
 		{
-			//pThis->overrideLuaRequire(pThis->pState);
-			int runState = (*pThis->pState)->DoString(pThis->m_scriptData.toStdString().c_str());
+			//pThis->overrideLuaRequire(pThis->m_pLuaState);
+			int runState = (*pThis->m_pLuaState)->DoString(pThis->m_scriptData.toStdString().c_str());
 			if (runState != 0)
 			{
 				qDebug() << "Lua Run State" << runState;
-				int type = lua_type((*pThis->pState)->GetCState(), -1);
+				int type = lua_type((*pThis->m_pLuaState)->GetCState(), -1);
 				/*	if (type != 4)
 					return;*/
 				if (type == 4)
 				{
-					std::string error = lua_tostring((*pThis->pState)->GetCState(), -1);
+					std::string error = lua_tostring((*pThis->m_pLuaState)->GetCState(), -1);
 					qDebug() << "Run Ero String" << QString::fromStdString(error);
 					pThis->m_sLuaScriptRunMsg = QString::fromStdString(error);
 				}
@@ -747,18 +745,18 @@ void GameLuaScriptWgt::on_pushButton_reloadCommon_clicked()
 {
 	QString sPath = QApplication::applicationDirPath() + "/lua/reload.lua";
 	QString sData = ParseScriptData(sPath);
-	int runState = (*pState)->DoString(sData.toStdString().c_str());
+	int runState = (*m_pLuaState)->DoString(sData.toStdString().c_str());
 	if (runState != LUA_OK)
 	{
 		qDebug() << "Lua Reload State" << runState;
-		int type = lua_type((*pState)->GetCState(), -1);
+		int type = lua_type((*m_pLuaState)->GetCState(), -1);
 		if (type == 4)
 		{
-			std::string error = lua_tostring((*pState)->GetCState(), -1);
+			std::string error = lua_tostring((*m_pLuaState)->GetCState(), -1);
 			qDebug() << "Reload Ero String" << QString::fromStdString(error);
 		}
 	}
-	(*pState)->DoString("function reload( moduleName)\
+	(*m_pLuaState)->DoString("function reload( moduleName)\
 	package.loaded[moduleName] = nil\
 	return require(moduleName) \
 	end\
@@ -923,12 +921,12 @@ bool GameLuaScriptWgt::on_pushButton_start_clicked()
 		ui.plainTextEdit->clear();
 		ui.textEdit_log->clear();
 		m_bStopRun = false;
-		if (!pState)
+		if (!m_pLuaState)
 		{
 			initScriptSystem();
 		}
 		m_scriptFuture = QtConcurrent::run(doRunScriptThread, this);
-		//	(*pState)->DoString(m_scriptData.toStdString().c_str());
+		//	(*m_pLuaState)->DoString(m_scriptData.toStdString().c_str());
 		ui.pushButton_start->setEnabled(false);
 		return true;
 	}
@@ -955,11 +953,10 @@ void GameLuaScriptWgt::on_pushButton_stop_clicked()
 	{
 		m_scriptFuture.waitForFinished();
 	}
-	/*if (pState)
+	if (m_pLuaState)
 	{
-		delete pState;
-		pState = nullptr;
-	}*/
+		SafeDelete(m_pLuaState);
+	}
 }
 
 void GameLuaScriptWgt::on_pushButton_save_clicked()
@@ -1045,6 +1042,10 @@ void GameLuaScriptWgt::doRunScriptFini()
 		{
 			AddDebugMsg(m_sLuaScriptRunMsg);
 		}
+		if (m_pLuaState)
+		{
+			SafeDelete(m_pLuaState);
+		}
 	}
 }
 
@@ -1102,7 +1103,7 @@ void GameLuaScriptWgt::OnAutoRestart()
 		if (g_CGAInterface->IsInGame(ingame) && ingame)
 		{
 			//if (ui.checkBox_noMove->isChecked() /*&& !g_pGameFun->isEncounter()*/) //不在自动遇敌中
-			if (ui.checkBox_noMove->isChecked() || ui.checkBox_noMove_logOut->isChecked()) 
+			if (ui.checkBox_noMove->isChecked() || ui.checkBox_noMove_logOut->isChecked())
 			{
 				int x, y, index1, index2, index3;
 				std::string filemap;
@@ -1136,8 +1137,8 @@ void GameLuaScriptWgt::OnAutoRestart()
 								qDebug() << m_noMoveLogOutTime << "秒坐标未动，登出！";
 								g_pGameFun->LogoutServer();
 								return;
-							}							
-						}					
+							}
+						}
 					}
 				}
 			}
@@ -1411,7 +1412,7 @@ void GameLuaScriptWgt::DoStopScriptThread()
 {
 	if (m_scriptFuture.isRunning())
 	{
-		LuaObject objGlobal = (*pState)->GetGlobals(); //注册全局函数
+		LuaObject objGlobal = (*m_pLuaState)->GetGlobals(); //注册全局函数
 		auto ls = objGlobal.GetCState();
 		qDebug() << "辅助退出，停止脚本!";
 		luaL_error(ls, "User Stop Script");
@@ -1421,7 +1422,7 @@ void GameLuaScriptWgt::DoStopScriptThread()
 void GameLuaScriptWgt::DealMqttTopicData(const QString &topicName, const QString &msg)
 {
 	return; //调用时候，因为luaDebug缘故，会崩溃 还是改成同步把，调用wait过一段时间等待
-	LuaObject objGlobal = (*pState)->GetGlobals();
+	LuaObject objGlobal = (*m_pLuaState)->GetGlobals();
 	auto ls = objGlobal.GetState();
 	m_luaFun.CallRegisterFun(ls, topicName, msg);
 }
