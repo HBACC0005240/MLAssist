@@ -207,7 +207,7 @@ void GameSysCfgWgt::on_pushButton_saveItem_clicked()
 				for (size_t i = 0; i < itemsinfo.size(); ++i)
 				{
 					const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-					if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assessed == 24) && (sItem.toStdString() == iteminfo.name || sItem.toInt() == iteminfo.itemid))
+					if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assess_flags == 24) && (sItem.toStdString() == iteminfo.name || sItem.toInt() == iteminfo.itemid))
 					{
 						bagItemPosList.append(iteminfo.pos);
 					}
@@ -222,7 +222,7 @@ void GameSysCfgWgt::on_pushButton_saveItem_clicked()
 				for (size_t i = 0; i < itemsinfo.size(); ++i)
 				{
 					const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-					if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assessed == 24) && (QString::fromStdString(iteminfo.name).contains(sItem) || sItem.toInt() == iteminfo.itemid))
+					if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assess_flags == 24) && (QString::fromStdString(iteminfo.name).contains(sItem) || sItem.toInt() == iteminfo.itemid))
 					{
 						bagItemPosList.append(iteminfo.pos);
 					}

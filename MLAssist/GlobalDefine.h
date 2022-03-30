@@ -282,6 +282,7 @@ struct GameItem
 	int type = -1;				//物品类型
 	int level = 0;				//等级
 	bool assessed = false;		//是否已鉴定
+	short assess_flags;			//标志 可丢 可交易 可宠邮等
 	bool exist = false;			//存在
 	int maxCount = -1;			//物品堆叠上限
 	bool isDrop = false;		//是否扔

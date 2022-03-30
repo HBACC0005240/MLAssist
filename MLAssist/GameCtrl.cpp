@@ -2360,6 +2360,7 @@ void GameCtrl::OnGetItemsData()
 				item->pos = iteminfo.pos;
 				item->assessed = iteminfo.assessed;
 				item->level = iteminfo.level;
+				item->assess_flags = iteminfo.assess_flags;
 				item->exist = true;
 				g_pGameFun->ParseItemDurability(item);
 				ITObjectDataMgr::getInstance().StoreServerItemData(item);

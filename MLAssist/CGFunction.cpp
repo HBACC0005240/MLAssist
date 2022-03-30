@@ -3463,7 +3463,7 @@ bool CGFunction::SaveBagAllItemsToBank()
 		for (size_t i = 0; i < itemsinfo.size(); ++i)
 		{
 			const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-			if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assessed == 24))
+			if (iteminfo.pos > 7 && ((iteminfo.assess_flags & 1) == 1 || iteminfo.assess_flags == 24))
 			{
 				if (bankIndex > (emptyPos.size() - 1)) //没有空位
 				{

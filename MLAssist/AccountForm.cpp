@@ -51,7 +51,7 @@ AccountForm::AccountForm(QWidget *parent) :
 
 	m_polcn_lock = NULL;
 	m_polcn_map = NULL;
-	m_attachExistGameWndTime = QTime::currentTime();
+	m_attachExistGameWndTime = QTime::currentTime().addSecs(-15);
 	m_glt_lock = NULL;
 	m_glt_map = NULL;
 	m_loginInterval = g_pGameCtrl->GetAutoLoginInterval();
@@ -332,7 +332,7 @@ bool AccountForm::QueryAttachGameWnd()
 							else
 							{
 								auto attachPid = g_pGameCtrl->getGamePID();
-								if (attachPid != 0 && pid != attachPid)
+								if (pid != 0 && pid != attachPid)
 								{
 									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 									{
@@ -375,7 +375,7 @@ bool AccountForm::QueryAttachGameWnd()
 				{
 
 					auto attachPid = g_pGameCtrl->getGamePID();
-					if (attachPid != 0 && wnd->m_ProcessId != attachPid)
+					if (wnd->m_ProcessId != 0 && wnd->m_ProcessId != attachPid)
 					{
 						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 						{
