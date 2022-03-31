@@ -2811,7 +2811,7 @@ void GameCtrl::OnGetCharacterData()
 	{
 		//syncronize value
 		g_CGAInterface->SetMoveSpeed(m_nMoveSpeed);
-		g_CGAInterface->SetWorkDelay(m_nWorkDelay);
+		//g_CGAInterface->SetWorkDelay(m_nWorkDelay);
 		g_CGAInterface->SetWorkAcceleration(m_nWorkAcc);
 		//g_CGAInterface->SetNoSwitchAnim(m_bNoSwitchAnim);
 
