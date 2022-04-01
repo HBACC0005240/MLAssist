@@ -361,7 +361,7 @@ public:
 
 	//搜索地图 名称 搜索物品或者npc或者玩家 0 1 2
 	bool SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1);
-	bool SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1);
+	bool SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1, QString filterPosList = "");
 
 	//合并坐标点，坐标点列表，合并距离10
 	TSearchRectList MergePoint(QList<QPoint> posList, int nDis = 10);

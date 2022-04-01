@@ -104,8 +104,15 @@ int CGLuaFun::Lua_RegisterLuaFun(LuaState *L)
 	lua_getglobal(L->GetCState(), m_lastRegisterFunName.toStdString().c_str());
 	lua_pushstring(L->GetCState(), "TestTopic");
 	lua_pushstring(L->GetCState(), "TradeMsg");
-	lua_pcall(L->GetCState(), 2, 1, 0);
-	L->PushBoolean(true);
+	lua_pcall(L->GetCState(), 2, 1, 0); //2代表lua函数2个参数 1代表返回1个
+	LuaStack args2(L);					//这个拿不到调用函数返回值
+	qDebug() << args2[1].GetString();
+	qDebug() << lua_tostring(L->GetCState(), -1); //可以拿到调用函数返回值  这里是反着接数据的，lua最后一个 这里就是第一个
+	qDebug() << lua_tostring(L->GetCState(), -2); //可以拿到调用函数返回值
+	lua_pop(L->GetCState(), 2);					  //上面压了两个参数  这里出栈
+	L->PushString("c++ ret");					  //当前函数返回给lua 也可以拿到
+	QString sMsgData = QString("%1 %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg("Lua_RegisterLuaFun Fini");
+	qDebug() << sMsgData;
 	return 1;
 }
 

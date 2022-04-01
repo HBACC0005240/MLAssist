@@ -5830,8 +5830,17 @@ bool CGFunction::SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int s
 	return false;
 }
 
-bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType /*= 1*/)
+bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType /*= 1*/, QString filterPosList)
 {
+	//过滤点，指定点跳过
+	QStringList tmpFilterPosList = filterPosList.split(";");
+	QList<QPoint> filterPointList;
+	for (auto tmpPos : tmpFilterPosList)
+	{
+		QStringList tpXY = tmpPos.split(",");
+		if (tpXY.size() > 1)
+			filterPointList.append(QPoint(tpXY[0].toInt(), tpXY[1].toInt()));
+	}
 	int index1, index2, index3;
 	std::string filemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
