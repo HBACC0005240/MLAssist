@@ -876,11 +876,10 @@ int CGLuaFun::Lua_SearchMap(LuaState *L)
 	QString sFilterPos = args.Count() > 2 ? args[3].GetString() : "";		   //过滤点
 	QString lastRegisterFunName = args.Count() > 3 ? args[4].GetString() : ""; //回调函数名
 
-	QPoint nextPos;
-	QPoint findPos;
 	std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBackFun = [&](QPoint findPos, QPoint nextPos) -> QVariantList
 	{
 		lua_getglobal(L->GetCState(), lastRegisterFunName.toStdString().c_str());
+		qDebug() << "回调" << findPos << nextPos;
 		int lua_ret_argc = 3; //lua函数返回数量
 		lua_pushinteger(L->GetCState(), findPos.x());
 		lua_pushinteger(L->GetCState(), findPos.y());
@@ -896,7 +895,8 @@ int CGLuaFun::Lua_SearchMap(LuaState *L)
 		}
 		return QVariantList();
 	};
-
+	QPoint nextPos;
+	QPoint findPos;
 	bool bRet = g_pGameFun->SearchMapEx(sName, findPos, nextPos, searchType, sFilterPos, callBackFun);
 	L->PushBoolean(bRet);
 	L->PushInteger(findPos.x());

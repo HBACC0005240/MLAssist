@@ -361,7 +361,8 @@ public:
 
 	//搜索地图 名称 搜索物品或者npc或者玩家 0 1 2
 	bool SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1);
-	bool SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1, QString filterPosList = "",
+	//1 成功找到返回 0没有找到 2 用户中断 3固定地图 4游戏退出
+	int SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1, QString filterPosList = "",
 			std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack = nullptr);
 
 	//合并坐标点，坐标点列表，合并距离10

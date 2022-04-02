@@ -185,8 +185,7 @@ void MapForm::OnNotifyRefreshMapRegion(int xbase, int ybase, int xtop, int ytop,
 	//浮动窗体单独处理
 	if (!m_pFloatMapDlg->isHidden())
 	{
-		if (m_collision && index3 == m_collision->mapindex)
-			m_pFloatMapDlg->RepaintCollisionPixels(xbase, ybase, xtop, ytop);
+		m_pFloatMapDlg->RepaintCollisionPixels(xbase, ybase, xtop, ytop);
 	}
 	if (!this->isVisible())
 		return;
