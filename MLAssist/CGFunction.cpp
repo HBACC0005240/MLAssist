@@ -5301,7 +5301,8 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 	return false;
 }
 
-bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos, QPoint &nextPos, int searchType /*= 1*/)
+bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
+		QPoint &nextPos, int searchType, QList<QPoint> filterPosList, std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack)
 {
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return false;
@@ -5352,13 +5353,24 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 			if (findPos == QPoint(0, 0))
 			{
 				auto mapUnit = FindMapUnit(name, searchType);
-				if (mapUnit) //找到 直接前往
+				if (mapUnit && filterPosList.contains(QPoint(mapUnit->xpos, mapUnit->ypos)) == false) //找到 直接前往
 				{
 					qDebug() << "找到目标：" << name << " 坐标:" << mapUnit->xpos << mapUnit->ypos << "ModelID：" << mapUnit->model_id << " Name:" << QString::fromStdString(mapUnit->unit_name)
 							 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
 					MoveToNpcNear(mapUnit->xpos, mapUnit->ypos, 1);
 					findPos.setX(mapUnit->xpos);
 					findPos.setY(mapUnit->ypos);
+					if (callBack)
+					{
+						QVariantList luaRet = callBack(findPos, nextPos); //回调返回true 则返回 由lua判断nextPos
+						if (luaRet.size() >= 3)
+						{
+							if (luaRet[0].toBool())
+								return true;
+							findPos.setX(luaRet[1].toInt());
+							findPos.setY(luaRet[2].toInt());
+						}
+					}
 				}
 			}
 			if (nextPos == QPoint(0, 0))
@@ -5378,15 +5390,30 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 						if (tEntrance != enterPos)
 							tNextPos = tEntrance;
 					}
-					if (bReachable)			//两个出入口可达 退出 否则继续搜索
+					if (bReachable) //两个出入口可达 退出 否则继续搜索
+					{
 						nextPos = tNextPos; //不判断 直接赋值了
+						if (callBack)
+						{
+							QVariantList luaRet = callBack(findPos, nextPos); //回调返回true 则返回 由lua判断nextPos
+							if (luaRet.size() >= 3)
+							{
+								if (luaRet[0].toBool())
+									return true;
+								findPos.setX(luaRet[1].toInt());
+								findPos.setY(luaRet[2].toInt());
+							}
+						}
+					}
 				}
 			}
 			if (nextPos == QPoint(0, 0) || findPos == QPoint(0, 0))
 			{
-				if (SearchAroundMapUnit(allMoveAblePosList, name, findPos, enterPos, nextPos, searchType))
+				if (SearchAroundMapUnit(allMoveAblePosList, name, findPos, enterPos, nextPos, searchType, filterPosList, callBack))
 					return true;
 			}
+			else
+				break;
 		}
 	}
 	if (nextPos != QPoint(0, 0) && findPos != QPoint(0, 0))
@@ -5829,8 +5856,8 @@ bool CGFunction::SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int s
 	AutoMoveTo(nextMazeEntPos.x(), nextMazeEntPos.y());
 	return false;
 }
-
-bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType /*= 1*/, QString filterPosList)
+bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType, QString filterPosList,
+		std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack)
 {
 	//过滤点，指定点跳过
 	QStringList tmpFilterPosList = filterPosList.split(";");
@@ -5844,6 +5871,7 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 	int index1, index2, index3;
 	std::string filemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
+
 	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图搜索功能！";
@@ -5873,14 +5901,37 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 	}
 	QPoint tEntracePos = GetMapCoordinate();
 	QPoint tFindPos, tNextMazePos;
+	//测试回调lua函数
+	//if (callBack)
+	//{
+	//	QVariantList luaRet = callBack(tFindPos, tNextMazePos); //回调返回true 则返回 由lua判断nextPos
+	//	if (luaRet.size() >= 3)
+	//	{
+	//		if (luaRet[0].toBool())
+	//			return true;
+	//		tFindPos.setX(luaRet[1].toInt());
+	//		tFindPos.setY(luaRet[2].toInt());
+	//	}
+	//}
 	auto mapUnit = FindMapUnit(name, searchType);
-	if (mapUnit) //找到 直接前往
+	if (mapUnit && filterPointList.contains(QPoint(mapUnit->xpos, mapUnit->ypos)) == false) //找到 直接前往
 	{
 		qDebug() << "找到目标：" << name << " 坐标:" << mapUnit->xpos << mapUnit->ypos << "ModelID：" << mapUnit->model_id << " Name:" << QString::fromStdString(mapUnit->unit_name)
 				 << " Flags:" << mapUnit->flags << "Valid:" << mapUnit->valid;
 		MoveToNpcNear(mapUnit->xpos, mapUnit->ypos, 1);
 		tFindPos.setX(mapUnit->xpos);
 		tFindPos.setY(mapUnit->ypos);
+		if (callBack)
+		{
+			QVariantList luaRet = callBack(tFindPos, tNextMazePos); //回调返回true 则返回 由lua判断nextPos
+			if (luaRet.size() >= 3)
+			{
+				if (luaRet[0].toBool())
+					return true;
+				tFindPos.setX(luaRet[1].toInt());
+				tFindPos.setY(luaRet[2].toInt());
+			}
+		}
 	}
 
 	QPoint curPos = GetMapCoordinate();
@@ -5905,6 +5956,17 @@ bool CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int
 						return ad < bd;
 					});
 			tNextMazePos = entranceList[1];
+			if (callBack)
+			{
+				QVariantList luaRet = callBack(tFindPos, tNextMazePos); //回调返回true 则返回 由lua判断nextPos
+				if (luaRet.size() >= 3)
+				{
+					if (luaRet[0].toBool())
+						return true;
+					tFindPos.setX(luaRet[1].toInt());
+					tFindPos.setY(luaRet[2].toInt());
+				}
+			}
 		}
 	}
 	if (tFindPos != QPoint() && tNextMazePos != QPoint())

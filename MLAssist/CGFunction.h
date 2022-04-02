@@ -10,7 +10,6 @@
 #include <QTimer>
 #include <vector>
 using namespace std;
-
 #define A_FIND_PATH std::vector<std::pair<int, int> >
 class CGFunction : public QObject
 {
@@ -341,7 +340,8 @@ public:
 	void MakeMapOpenContainNextEntrance(int isNearFar = 1);
 	//1地图全开 2有2个迷宫出入口，并可达即可
 	bool SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type = 1);
-	bool SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos, QPoint &nextPos, int searchType = 1);
+	bool SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
+			QPoint &nextPos, int searchType = 1, QList<QPoint> filterPosList = QList<QPoint>(), std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack = nullptr);
 	//目标是否可达
 	bool IsReachableTargetEx(int sx, int sy, int tx, int ty);
 	bool IsReachableTarget(int tx, int ty);
@@ -361,7 +361,8 @@ public:
 
 	//搜索地图 名称 搜索物品或者npc或者玩家 0 1 2
 	bool SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1);
-	bool SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1, QString filterPosList = "");
+	bool SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1, QString filterPosList = "",
+			std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack = nullptr);
 
 	//合并坐标点，坐标点列表，合并距离10
 	TSearchRectList MergePoint(QList<QPoint> posList, int nDis = 10);

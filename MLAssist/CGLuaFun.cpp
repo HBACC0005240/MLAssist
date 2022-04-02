@@ -866,15 +866,38 @@ int CGLuaFun::Lua_MoveToNpcNear(LuaState *L)
 	g_pGameFun->MoveToNpcNear(x, y, d);
 	return 0;
 }
-
+//修改搜索函数 增加回调lua函数，用来判断是否中断搜索
+//目前没有太多测试数据，先打开此功能
 int CGLuaFun::Lua_SearchMap(LuaState *L)
 {
 	LuaStack args(L);
 	QString sName = args[1].GetString();
-	int searchType = args.Count() > 1 ? args[2].GetInteger() : 1; //默认搜索NPC
+	int searchType = args.Count() > 1 ? args[2].GetInteger() : 1;			   //默认搜索NPC
+	QString sFilterPos = args.Count() > 2 ? args[3].GetString() : "";		   //过滤点
+	QString lastRegisterFunName = args.Count() > 3 ? args[4].GetString() : ""; //回调函数名
+
 	QPoint nextPos;
 	QPoint findPos;
-	bool bRet = g_pGameFun->SearchMapEx(sName, findPos, nextPos, searchType);
+	std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBackFun = [&](QPoint findPos, QPoint nextPos) -> QVariantList
+	{
+		lua_getglobal(L->GetCState(), lastRegisterFunName.toStdString().c_str());
+		int lua_ret_argc = 3; //lua函数返回数量
+		lua_pushinteger(L->GetCState(), findPos.x());
+		lua_pushinteger(L->GetCState(), findPos.y());
+		lua_pushinteger(L->GetCState(), nextPos.x());
+		lua_pushinteger(L->GetCState(), nextPos.y());
+		if (lua_pcall(L->GetCState(), 4, lua_ret_argc, 0) == LUA_OK) //调用无错  则栈上拿值返回
+		{
+			bool bRet = lua_toboolean(L->GetCState(), -3);
+			int findx = lua_tointeger(L->GetCState(), -2);
+			int findy = lua_tointeger(L->GetCState(), -1);
+			lua_pop(L->GetCState(), lua_ret_argc);
+			return QVariantList() << bRet << findx << findy;
+		}
+		return QVariantList();
+	};
+
+	bool bRet = g_pGameFun->SearchMapEx(sName, findPos, nextPos, searchType, sFilterPos, callBackFun);
 	L->PushBoolean(bRet);
 	L->PushInteger(findPos.x());
 	L->PushInteger(findPos.y());
