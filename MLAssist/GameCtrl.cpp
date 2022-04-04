@@ -616,6 +616,16 @@ void GameCtrl::setRenItemIsChecked(const QString &name, int nVal)
 		GameItemPtr pItem = GameItemPtr(new GameItem);
 		pItem->name = name;
 		pItem->isDrop = nVal;
+		if (name.contains(","))
+		{
+			QStringList limitCode = name.split(",");
+			if (limitCode.size() >= 2)
+			{
+				pItem->isDropInterval = true;
+				pItem->dropMinCode = limitCode[0].toInt();
+				pItem->dropMaxCode = limitCode[1].toInt();
+			}			
+		}
 		m_pRenItemList.append(pItem);
 	}
 }
@@ -746,6 +756,7 @@ bool GameCtrl::RenItems()
 	if (m_nLastAutoRenTime.elapsed() > 3000)
 	{
 		m_nLastAutoRenTime.restart();
+		bool result = false;
 		foreach (auto pRenItem, m_pRenItemList)
 		{
 			if (pRenItem->isDrop)
@@ -753,11 +764,18 @@ bool GameCtrl::RenItems()
 				for (size_t i = 0; i < m_pGameItems.size(); i++)
 				{
 					GameItemPtr pItem = m_pGameItems.at(i);
-					if (pItem && pItem->exist && (pItem->name == pRenItem->name || QString::number(pItem->id) == pRenItem->name))
+					if (pItem && pItem->exist)
 					{
-						bool result = false;
-						if (g_CGAInterface->DropItem(pItem->pos, result) && result)
-							continue;
+						if (!pRenItem->isDropInterval && (pItem->name == pRenItem->name || QString::number(pItem->id) == pRenItem->name))
+						{
+							if (g_CGAInterface->DropItem(pItem->pos, result) && result)
+								continue;
+						}
+						else if (pRenItem->isDropInterval && (pItem->id >= pRenItem->dropMinCode && pItem->id <= pRenItem->dropMaxCode))
+						{
+							if (g_CGAInterface->DropItem(pItem->pos, result) && result)
+								continue;
+						}
 					}
 				}
 			}
@@ -2872,7 +2890,7 @@ void GameCtrl::OnGetCharacterData()
 			}
 			for (auto title : pNewChar->titles)
 			{
-				if (g_pGameFun->m_sPrestigeList.contains(title))
+				if (g_pGameFun->m_sPrestigeMap.keys().contains(title))
 				{
 					pNewChar->prestige = title;
 					break;

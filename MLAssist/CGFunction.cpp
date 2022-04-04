@@ -97,6 +97,10 @@ CGFunction::CGFunction()
 	m_sysConfigMap.insert("装备保护", TSysConfigSet_EquipProtect);
 	m_sysConfigMap.insert("自动治疗", TSysConfigSet_AutoCure);
 	m_sysConfigMap.insert("自动急救", TSysConfigSet_AutoFirstAid);
+	m_sysConfigMap.insert("脚本坐标静止重启", TSysConfigSet_ScriptStillRestart);
+	m_sysConfigMap.insert("脚本停止重启", TSysConfigSet_ScriptStopRestart);
+	m_sysConfigMap.insert("脚本停止回城重启", TSysConfigSet_ScriptStopLogbackRestart);
+	m_sysConfigMap.insert("脚本坐标静止登出", TSysConfigSet_ScriptStillLogout);
 
 	m_returnGameDataHash.insert("gid", TRet_Game_Gid);
 	m_returnGameDataHash.insert("hp", TRet_Game_Hp);
@@ -133,6 +137,8 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("称号", TRet_Game_Prestige);
 	m_returnGameDataHash.insert("prestige", TRet_Game_Prestige);
 	m_returnGameDataHash.insert("声望", TRet_Game_Prestige);
+	m_returnGameDataHash.insert("声望等级", TRet_Game_PrestigeLv);
+	m_returnGameDataHash.insert("称号等级", TRet_Game_PrestigeLv);
 	m_returnGameDataHash.insert("坐标", TRet_Game_Loc);
 	m_returnGameDataHash.insert("loc", TRet_Game_Loc);
 	m_returnGameDataHash.insert("宠物数量", TRet_Game_PetCount);
@@ -168,32 +174,33 @@ CGFunction::CGFunction()
 	m_playerActionHash.insert("停止摆摊", TCharacter_Action_REBIRTH_OFF);
 	m_playerActionHash.insert("动作", TCharacter_Action_Gesture);
 
-	m_sPrestigeList = QStringList({ "恶人",
-			"忌讳的人",
-			"受挫折的人",
-			"无名的旅人",
-			"路旁的落叶",
-			"水面上的小草",
-			"呢喃的歌声",
-			"地上的月影",
-			"奔跑的春风",
-			"苍之风云",
-			"摇曳的金星",
-			"欢喜的慈雨",
-			"蕴含的太阳",
-			"敬畏的寂静",
-			"无尽星空",
-			"迈步前进者",
-			"追求技巧的人",
-			"刻于新月之铭",
-			"掌上的明珠",
-			"敬虔的技巧",
-			"踏入神的领域",
-			"贤者",
-			"神匠",
-			"摘星的技巧",
-			"万物创造者",
-			"持石之贤者" });
+	
+	m_sPrestigeMap.insert("恶人", -3);
+	m_sPrestigeMap.insert("受忌讳的人", -2);
+	m_sPrestigeMap.insert("受挫折的人", -1);
+	m_sPrestigeMap.insert("无名的旅人", 0);
+	m_sPrestigeMap.insert("路旁的落叶", 1);
+	m_sPrestigeMap.insert("水面上的小草", 2);
+	m_sPrestigeMap.insert("呢喃的歌声", 3);
+	m_sPrestigeMap.insert("地上的月影", 4);
+	m_sPrestigeMap.insert("奔跑的春风", 5);
+	m_sPrestigeMap.insert("苍之风云", 6);
+	m_sPrestigeMap.insert("摇曳的金星", 7);
+	m_sPrestigeMap.insert("欢喜的慈雨", 8);
+	m_sPrestigeMap.insert("蕴含的太阳", 9);
+	m_sPrestigeMap.insert("敬畏的寂静", 10);
+	m_sPrestigeMap.insert("无尽星空", 11);
+	m_sPrestigeMap.insert("迈步前进者", 1);
+	m_sPrestigeMap.insert("追求技巧的人", 2);
+	m_sPrestigeMap.insert("刻于新月之铭", 3);
+	m_sPrestigeMap.insert("掌上的明珠", 4);
+	m_sPrestigeMap.insert("敬虔的技巧", 5);
+	m_sPrestigeMap.insert("踏入神的领域", 6);
+	m_sPrestigeMap.insert("贤者", 7);
+	m_sPrestigeMap.insert("神匠", 8);
+	m_sPrestigeMap.insert("摘星的技巧",9);
+	m_sPrestigeMap.insert("万物创造者", 10);
+	m_sPrestigeMap.insert("持石之贤者", 11);
 
 	//readCreateRandomNameJson();
 	readProfessionJson();
@@ -714,12 +721,24 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 			auto playerTitles = playerinfo.titles;
 			for (auto title : playerTitles)
 			{
-				if (m_sPrestigeList.contains(QString::fromStdString(title)))
+				if (m_sPrestigeMap.keys().contains(QString::fromStdString(title)))
 				{
 					return QString::fromStdString(title);
 				}
 			}
 			return "";
+		}
+		case TRet_Game_PrestigeLv:
+		{
+			auto playerTitles = playerinfo.titles;
+			for (auto title : playerTitles)
+			{
+				if (m_sPrestigeMap.keys().contains(QString::fromStdString(title)))
+				{
+					return m_sPrestigeMap.value(QString::fromStdString(title));
+				}
+			}
+			return 0;
 		}
 		case TRet_Game_Loc:
 		{
@@ -1215,7 +1234,7 @@ int CGFunction::GetBankItemCount(const QString &itemName)
 		for (size_t i = 0; i < itemsinfo.size(); ++i)
 		{
 			const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-			if (iteminfo.name == itemName.toStdString() || iteminfo.itemid == itemName.toInt())
+			if (iteminfo.name == itemName.toStdString() /*|| iteminfo.itemid == itemName.toInt()*/)
 			{
 				nCount += 1;
 			}
@@ -1233,7 +1252,7 @@ int CGFunction::GetBankItemPileCount(const QString &itemName)
 		for (size_t i = 0; i < itemsinfo.size(); ++i)
 		{
 			const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-			if (iteminfo.name == itemName.toStdString() || iteminfo.itemid == itemName.toInt())
+			if (iteminfo.name == itemName.toStdString() /*|| iteminfo.itemid == itemName.toInt()*/)//银行物品获取不到id的，这里不能通过id判断
 			{
 				nCount += iteminfo.count;
 			}
@@ -3501,11 +3520,11 @@ bool CGFunction::WithdrawItem(const QString &itemName, int count)
 	CGA::cga_items_info_t bankInfos;
 	g_CGAInterface->GetBankItemsInfo(bankInfos);
 	bool bTrans = false;
-	int nitemCode = itemName.toInt(&bTrans);
+	int nitemCode = itemName.toInt(&bTrans);//银行物品没有id  不能传id来
 	for (int i = 0; i < bankInfos.size(); i++)
 	{
 		CGA::cga_item_info_t itemInfo = bankInfos.at(i);
-		if (itemInfo.name == itemName.toStdString() || (bTrans && itemInfo.itemid == nitemCode))
+		if (itemInfo.name == itemName.toStdString() /*|| (bTrans && itemInfo.itemid == nitemCode)*/)
 		{
 			filterBankInfos.push_back(itemInfo);
 		}
@@ -3550,7 +3569,7 @@ bool CGFunction::WithdrawItemAll(const QString &itemName, int count)
 	for (int i = 0; i < bankInfos.size(); i++)
 	{
 		CGA::cga_item_info_t itemInfo = bankInfos.at(i);
-		if (itemInfo.name == itemName.toStdString() || (bTrans && itemInfo.itemid == nitemCode))
+		if (itemInfo.name == itemName.toStdString() /*|| (bTrans && itemInfo.itemid == nitemCode)*/)	//银行物品没有id
 		{
 			filterBankInfos.push_back(itemInfo);
 		}
@@ -4023,7 +4042,7 @@ CharacterPtr CGFunction::GetGameCharacter()
 		}
 		for (auto title : pNewChar->titles)
 		{
-			if (g_pGameFun->m_sPrestigeList.contains(title))
+			if (g_pGameFun->m_sPrestigeMap.keys().contains(title))
 			{
 				pNewChar->prestige = title;
 				break;
@@ -7877,6 +7896,26 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 					emit g_pGameCtrl->signal_switchAutoEatUi(nAutoType, data1.toBool());
 					break;
 				}
+				case TSysConfigSet_ScriptStillRestart:
+				{
+					emit g_pGameCtrl->signal_setScriptStillRestartUI(data1.toInt(), data2.toInt());
+					break;
+				}
+				case TSysConfigSet_ScriptStopRestart:
+				{
+					emit g_pGameCtrl->signal_setScriptStopRestartUI(data1.toInt(), data2.toInt());
+					break;
+				}
+				case TSysConfigSet_ScriptStopLogbackRestart:
+				{
+					emit g_pGameCtrl->signal_setScriptStopLogbackRestartUI(data1.toInt());
+					break;
+				}
+				case TSysConfigSet_ScriptStillLogout:
+				{
+					emit g_pGameCtrl->signal_setScriptStillLogoutUI(data1.toInt(), data2.toInt());
+					break;
+				}
 				case TSysConfigSet_PlayerTitle:
 				{
 					bool bRet = false;
@@ -7894,7 +7933,7 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 						for (int i = 0; i < playerTitles.size(); ++i)
 						{
 							auto title = playerTitles.at(i);
-							if (m_sPrestigeList.contains(QString::fromStdString(title)))
+							if (m_sPrestigeMap.keys().contains(QString::fromStdString(title)))
 							{
 								nTitleIndex = i;
 								break;

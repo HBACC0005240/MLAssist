@@ -697,7 +697,7 @@ public:
 	void ClearScriptUiSetData() { m_scriptUiSetData.clear(); }
 
 	QHash<QString, int> m_playerActionHash; //pk 加队 交易 摆摊映射
-	QStringList m_sPrestigeList;			//玩家声望称号列表
+	QMap<QString, int> m_sPrestigeMap;		//玩家声望称号列表
 	void SetMazeChangedMapWaitTime(int time) { m_mazeWaitTime = time; }
 	int GetMazeChangedMapWaitTime() { return m_mazeWaitTime; }
 

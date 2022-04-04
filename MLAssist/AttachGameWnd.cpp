@@ -739,14 +739,14 @@ void AttachGameWnd::OnKillProcess()
 
 	if (!IsWindow(attachHwnd))
 		return;
+	g_pGameCtrl->SetGamePort(0);
+	g_pGameCtrl->setGameProcess(0);
 
 	DWORD pid, tid;
 	tid = GetWindowThreadProcessId(attachHwnd, &pid);
 	if (!pid || !tid)
 	{
-		g_pGameCtrl->setGameHwnd(nullptr);
-		g_pGameCtrl->SetGamePort(0);
-		g_pGameCtrl->setGameProcess(0);
+		g_pGameCtrl->setGameHwnd(nullptr);		
 		return;
 	}
 	HANDLE ProcessHandle = OpenProcess(PROCESS_TERMINATE, FALSE, pid);

@@ -231,8 +231,12 @@ signals:
 	void signal_switchNoPetDoubleActionUI(bool);					   //打开关闭无宠二动
 	void signal_switchNoPetActionUI(int, bool);						   //设置无宠二动选项
 	void signal_switchAutoEatUi(int, bool);							   //设置自动吃 深蓝、狗粮、时水
-	void signal_switchAutoUseSkillUi(int, bool);						//设置自动治疗 自动急救 装备保护
+	void signal_switchAutoUseSkillUi(int, bool);					   //设置自动治疗 自动急救 装备保护
 	void signal_setMoveSpeedUI(int);								   //设置高速走路速度
+	void signal_setScriptStillRestartUI(int,int);					   //设置脚本坐标静止重启
+	void signal_setScriptStopRestartUI(int,int);					   //设置脚本停止重启
+	void signal_setScriptStopLogbackRestartUI(int);			   //设置脚本停止回城重启
+	void signal_setScriptStillLogoutUI(int, int);					   //设置脚本坐标静止登出
 	void signal_addRenItemScript(QString name, bool bChecked = false); //增加自动扔物品项
 	void signal_addDieItemScript(QString name, bool bChecked = false); //增加自动叠加物品项
 	void signal_addSaleItem(GameItemPtr);							   //增加自动售卖项

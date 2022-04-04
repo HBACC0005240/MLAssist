@@ -375,6 +375,10 @@ enum TSysConfigSet
 	TSysConfigSet_EquipProtect,		  //装备保护
 	TSysConfigSet_AutoCure,			  //自动治疗
 	TSysConfigSet_AutoFirstAid,		  //自动急救
+	TSysConfigSet_ScriptStillRestart, //脚本坐标静止重启
+	TSysConfigSet_ScriptStopRestart,	//脚本停止重启
+	TSysConfigSet_ScriptStopLogbackRestart, //脚本停止回城重启
+	TSysConfigSet_ScriptStillLogout, //脚本静止登出
 
 };
 //命令行参数解析
@@ -464,7 +468,8 @@ enum TReturnGameData
 	TRet_Game_Sex,		  //性别
 	TRet_Game_ImageID,	  //图片id
 	TRet_Game_PlayerRank, //阶级  1 -5 转
-	TRet_Game_Gid, //阶级  1 -5 转
+	TRet_Game_Gid,		//阶级  1 -5 转
+	TRet_Game_PrestigeLv,	  //声望等级  
 };
 //自定义快捷键
 enum TDefQuickKey

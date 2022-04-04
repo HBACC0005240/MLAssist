@@ -367,11 +367,6 @@ CGA_PID=#%1, POLCN_PID=#%2, GID=%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>正在等待其他CGA进程登录...
-CGA_PID=#%1, POLCN_PID=#%2, GID=%3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>正在等待其他CGA进程释放登录互斥锁...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -385,6 +380,23 @@ CGA_PID=#%1, POLCN_PID=#%2, GID=%3</source>
     </message>
     <message>
         <source>json解析失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>禁更新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>登出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>回城</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>正在等待其他CGA进程登录...
+MLAssist_PID=#%1, POLCN_PID=#%2, GID=%3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -440,6 +452,10 @@ CGA_PID=#%1, POLCN_PID=#%2, GID=%3</source>
     </message>
     <message>
         <source>InjectByMsgHook failed with PostMessageW, errorCode: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>配置</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -876,13 +892,6 @@ meet BOSS</source>
     </message>
 </context>
 <context>
-    <name>BattleRoundSetDlg</name>
-    <message>
-        <source>BattleRoundSetDlg</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>BattleSetDlg</name>
     <message>
         <source>战斗设置</source>
@@ -1102,6 +1111,25 @@ Chat database will not work properly.</source>
     </message>
 </context>
 <context>
+    <name>CustomQuickKeyDlg</name>
+    <message>
+        <source>CustomQuickKeyDlg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>输入快捷键</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>确定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>取消</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FloatMapDlg</name>
     <message>
         <source>地图</source>
@@ -1160,10 +1188,6 @@ Chat database will not work properly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>下载地图</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>搜索迷宫：</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1185,6 +1209,22 @@ Chat database will not work properly.</source>
     </message>
     <message>
         <source>过滤</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>名称：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>编号：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>下载</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>自动开图</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1311,6 +1351,10 @@ Chat database will not work properly.</source>
     </message>
     <message>
         <source>面朝第一人</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>自动骑乘</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1644,6 +1688,46 @@ Chat database will not work properly.</source>
         <source>自定义设置</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>战斗延迟</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠二动设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>清除</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>逃跑</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>第1动使用</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>云服务器获取不到声卡，此功能失效</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>战斗设置(2)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GameChatWgt</name>
@@ -1718,6 +1802,13 @@ Chat database will not work properly.</source>
     <message>
         <source>家庭名片</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameCtrl</name>
+    <message>
+        <source>not attached to any game process yet.</source>
+        <translation type="unfinished">未附加到任何游戏。</translation>
     </message>
 </context>
 <context>
@@ -1806,6 +1897,14 @@ Chat database will not work properly.</source>
         <source>Lv %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>宠物名称: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>无宠物</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GameDataWgt</name>
@@ -1889,6 +1988,10 @@ Chat database will not work properly.</source>
         <source>指定加点</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>人物装备</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GameDebugWgt</name>
@@ -1898,6 +2001,33 @@ Chat database will not work properly.</source>
     </message>
     <message>
         <source>启用</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameEquipWgt</name>
+    <message>
+        <source>GameEquipWgt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>人物装备</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>实时刷新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>控制</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>登出服务器</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>回城</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1959,13 +2089,6 @@ Chat database will not work properly.</source>
     </message>
 </context>
 <context>
-    <name>GameLuaScriptLogWgt</name>
-    <message>
-        <source>GameLuaScriptLogWgt</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>GameLuaScriptWgt</name>
     <message>
         <source>GameLuaScriptWgt</source>
@@ -2002,14 +2125,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>暂停</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;微软雅黑&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;脚本统计&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2054,6 +2169,54 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>脚本日志</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>密文</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>保存</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>脚本统计</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重新加载公共脚本库，修改common等公共脚本后，可以在这重新加载</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重载</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>秒登出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>js</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>脚本停止</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>普通</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>加密</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>保存文件路径</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>./</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2637,6 +2800,14 @@ p, li { white-space: pre-wrap; }
         <source>自动吃时水</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>自动吃深蓝</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>自动吃狗粮</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GamePythonScriptWgt</name>
@@ -2660,11 +2831,66 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>内置项</source>
+        <source>百分比</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>人补血：</source>
+        <source>脚本可获取输入项</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>队长名称</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>刷新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>队员列表</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>队伍人数</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>人补血</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>人补魔</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠补血</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠补魔</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>配置文件读取项</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameScriptStopWgt</name>
+    <message>
+        <source>GameScriptStopWgt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>输入项为空，则不进行判断</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>停止脚本</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>人补血</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2672,31 +2898,19 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>人补魔：</source>
+        <source>人补魔</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>宠补血：</source>
+        <source>宠补血</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>宠补魔：</source>
+        <source>宠补魔</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>队人数：</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>队长名称：</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>用户输入项</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>停止脚本</source>
+        <source>队人数</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2740,6 +2954,133 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>行走速度</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameSysCfgWgt</name>
+    <message>
+        <source>GameSysCfgWgt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>快捷键</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>回城按键：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>登出按键：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>穿越按键：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>取出全部物品，并确认</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一键交易：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>取出全部物品，但不确认</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一键交易2：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>全存按键：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>全取按键：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>内置Insert键呼入呼出辅助</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>银行</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>物品名</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>物品1|物品2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>精确匹配</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一键取出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一键存储</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠物名</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠物1|宠物2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>金币</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>金额</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>取出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>存储</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>丢弃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>上传</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>银行数据</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>功能</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>整理银行</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>整理包裹</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2926,6 +3267,13 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>MLAssist</name>
+    <message>
+        <source>json parse error</source>
+        <translation type="unfinished">json解析失败</translation>
+    </message>
+</context>
+<context>
     <name>MLAssistClass</name>
     <message>
         <source>MLAssist</source>
@@ -3090,10 +3438,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>下载地图</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>鼠标点击坐标(%1, %2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3103,6 +3447,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>地图编号 : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>东</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>南</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>前往</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>自动开图</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3127,6 +3487,45 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>format: 123, 456 or 123 456</source>
         <translation type="vanished">格式: 123, 456 或 123 456</translation>
+    </message>
+</context>
+<context>
+    <name>PetDoubleActionSetDlg</name>
+    <message>
+        <source>宠物二动设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠物二动</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>第1攻和第二攻默认，则使用其他配置项的宠物技能，不默认的话，此处设置会替换其他项的宠物设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>第1攻默认</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>第1攻设定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>第2攻默认</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>第2攻设定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>确定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>取消</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3868,118 +4267,6 @@ error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>巴乌</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>卡兹</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>辛</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>托布</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>凯</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>菲特</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>伯克</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>乌噜</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>萌子</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>阿咪</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>梅古</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>丽</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>卡伊</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>艾露</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>谢堤</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>彼特</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>左藏</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>尼尔森</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>贝堤特</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>兰斯洛特</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>威斯凯尔</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>莎拉</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>绫女</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>福尔蒂雅</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>夏菈</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>萍萍</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>葛蕾丝</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>荷蜜</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Enemy HP %1%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4089,11 +4376,11 @@ error: %1</source>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>暂停</translation>
+        <translation type="vanished">暂停</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation>恢复</translation>
+        <translation type="vanished">恢复</translation>
     </message>
     <message>
         <source>Check &quot;chrome://inspect&quot; in chrome to debug the node process.</source>
@@ -4130,7 +4417,7 @@ Check &quot;chrome://inspect&quot; in chrome to debug the node process.</source>
     </message>
     <message>
         <source>Executing: %1</source>
-        <translation type="vanished">正在执行: %1</translation>
+        <translation>正在执行: %1</translation>
     </message>
     <message>
         <source>脚本文件</source>
@@ -4176,6 +4463,37 @@ Check &quot;chrome://inspect&quot; in chrome to debug the node process.</source>
         <source>控制台/调试器</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>继续</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SendMailDlg</name>
+    <message>
+        <source>邮件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>信息：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>物品：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>宠邮：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>确定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>取消</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserDefComboBoxDlg</name>
@@ -4193,6 +4511,10 @@ Check &quot;chrome://inspect&quot; in chrome to debug the node process.</source>
     </message>
     <message>
         <source>取消</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>新建项目</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

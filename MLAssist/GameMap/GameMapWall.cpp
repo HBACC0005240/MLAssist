@@ -425,7 +425,7 @@ void GameMapWall::SearchThread(GameMapWall *pThis)
 {
 	pThis->m_bAutoMaze = true;
 	g_pGameFun->RestFun();
-	while (pThis->m_bAutoMaze)
+	/*while (pThis->m_bAutoMaze)
 	{
 		if (!g_pGameFun->IsMapDownload())
 		{
@@ -433,6 +433,17 @@ void GameMapWall::SearchThread(GameMapWall *pThis)
 		}
 		QPoint findPos, nextPos;
 		bool bFind = g_pGameFun->SearchMap(pThis->m_searchNpcName, findPos, nextPos, pThis->m_searchType);
+		if (bFind)
+		{
+			g_pGameFun->MoveToNpcNear(findPos.x(), findPos.y());
+			emit pThis->updateUIMsg(QString("找到【%1】：%2,%3").arg(pThis->m_searchNpcName).arg(findPos.x()).arg(findPos.y()));
+			break;
+		}
+	}*/
+	while (pThis->m_bAutoMaze)
+	{	
+		QPoint findPos, nextPos;
+		bool bFind = g_pGameFun->SearchMapEx(pThis->m_searchNpcName, findPos, nextPos, pThis->m_searchType);
 		if (bFind)
 		{
 			g_pGameFun->MoveToNpcNear(findPos.x(), findPos.y());

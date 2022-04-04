@@ -292,6 +292,9 @@ struct GameItem
 	int nCurDurability = 0;		//当前耐久度
 	int nMaxDurability = 0;		//最大耐久度
 	double nDurabilityRate = 0; //当前耐久率
+	bool isDropInterval = false;//是否扔区间
+	int dropMinCode = 0;		//扔区间最小值			
+	int dropMaxCode = 0;		//扔区间最大值
 
 	bool compare(GameItem *t)
 	{
@@ -322,6 +325,12 @@ struct GameItem
 		if (this->isPile != t->isPile)
 			return false;
 		if (this->isSale != t->isSale)
+			return false;
+		if (this->isDropInterval != t->isDropInterval)
+			return false;
+		if (this->dropMinCode != t->dropMinCode)
+			return false;
+		if (this->dropMaxCode != t->dropMaxCode)
 			return false;
 		return true;
 	}

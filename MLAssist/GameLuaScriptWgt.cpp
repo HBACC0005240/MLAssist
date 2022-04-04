@@ -47,6 +47,37 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	connect(g_pGameCtrl, &GameCtrl::signal_addOneLogMsg, this, &GameLuaScriptWgt::AddLogMsg, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::signal_addOneScriptLogMsg, this, &GameLuaScriptWgt::AddLogMsg, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::signal_gameIsOnline, this, &GameLuaScriptWgt::GameOnlineStateChange, Qt::ConnectionType::QueuedConnection);
+	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStillRestartUI, this, [&](int v1, int v2)
+			{ 
+				ui.checkBox_noMove->setChecked(v1); 
+				if (v2 > 0)
+				{
+					m_noMoveTime = v2;
+					ui.lineEdit_noMoveTime->setText(QString::number(v2));
+				}				
+			});
+	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStopRestartUI, this, [&](int v1, int v2)
+			{
+				ui.checkBox_scriptRestart->setChecked(v1);
+				if (v2 > 0)
+				{
+					m_restartScriptTime = v2;
+					ui.lineEdit_scriptRestart->setText(QString::number(v2));
+				}
+			});
+	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStopLogbackRestartUI, this, [&](int v1)
+			{
+				ui.checkBox_logBack->setChecked(v1);				
+			});
+	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStillLogoutUI, this, [&](int v1, int v2)
+			{
+				ui.checkBox_noMove_logOut->setChecked(v1);
+				if (v2 > 0)
+				{
+					m_noMoveLogOutTime = v2;
+					ui.lineEdit_noMoveTime_logOut->setText(QString::number(v2));
+				}
+			});
 
 	connect(this, SIGNAL(runScriptFini()), this, SLOT(doRunScriptFini()));
 	connect(this, SIGNAL(runScriptSignal()), this, SLOT(on_pushButton_start_clicked()));
