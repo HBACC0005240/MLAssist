@@ -48,13 +48,13 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	connect(g_pGameCtrl, &GameCtrl::signal_addOneScriptLogMsg, this, &GameLuaScriptWgt::AddLogMsg, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::signal_gameIsOnline, this, &GameLuaScriptWgt::GameOnlineStateChange, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStillRestartUI, this, [&](int v1, int v2)
-			{ 
-				ui.checkBox_noMove->setChecked(v1); 
+			{
+				ui.checkBox_noMove->setChecked(v1);
 				if (v2 > 0)
 				{
 					m_noMoveTime = v2;
 					ui.lineEdit_noMoveTime->setText(QString::number(v2));
-				}				
+				}
 			});
 	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStopRestartUI, this, [&](int v1, int v2)
 			{
@@ -66,9 +66,7 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 				}
 			});
 	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStopLogbackRestartUI, this, [&](int v1)
-			{
-				ui.checkBox_logBack->setChecked(v1);				
-			});
+			{ ui.checkBox_logBack->setChecked(v1); });
 	connect(g_pGameCtrl, &GameCtrl::signal_setScriptStillLogoutUI, this, [&](int v1, int v2)
 			{
 				ui.checkBox_noMove_logOut->setChecked(v1);
@@ -1216,9 +1214,11 @@ void GameLuaScriptWgt::doLoadUserConfig(QSettings &iniFile)
 	m_noMoveTime = iniFile.value("PlayerNoMoveTime").toInt();
 	m_noMoveLogOutTime = iniFile.value("PlayerNoMoveLogoutTime").toInt();
 	ui.lineEdit_noMoveTime->setText(QString::number(m_noMoveTime));
+	ui.lineEdit_noMoveTime_logOut->setText(QString::number(m_noMoveLogOutTime));
 	ui.lineEdit_scriptRestart->setText(QString::number(m_restartScriptTime));
 	ui.checkBox_scriptRestart->setChecked(iniFile.value("ScriptNoRunChecked").toBool());
 	ui.checkBox_noMove->setChecked(iniFile.value("PlayerNoMoveChecked").toBool());
+	ui.checkBox_noMove_logOut->setChecked(iniFile.value("PlayerNoMoveLogoutChecked").toBool());
 	ui.checkBox_logBack->setChecked(iniFile.value("RestartLogback").toBool());
 	ui.checkBox_UserInput->setChecked(iniFile.value("TransUserInput").toBool());
 	iniFile.endGroup();
@@ -1233,6 +1233,7 @@ void GameLuaScriptWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("PlayerNoMoveLogoutTime", m_noMoveLogOutTime);
 	iniFile.setValue("ScriptNoRunChecked", ui.checkBox_scriptRestart->isChecked());
 	iniFile.setValue("PlayerNoMoveChecked", ui.checkBox_noMove->isChecked());
+	iniFile.setValue("PlayerNoMoveLogoutChecked", ui.checkBox_noMove_logOut->isChecked());
 	iniFile.setValue("RestartLogback", ui.checkBox_logBack->isChecked());
 	iniFile.setValue("TransUserInput", ui.checkBox_UserInput->isChecked());
 	iniFile.endGroup();
