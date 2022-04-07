@@ -174,7 +174,6 @@ CGFunction::CGFunction()
 	m_playerActionHash.insert("停止摆摊", TCharacter_Action_REBIRTH_OFF);
 	m_playerActionHash.insert("动作", TCharacter_Action_Gesture);
 
-	
 	m_sPrestigeMap.insert("恶人", -3);
 	m_sPrestigeMap.insert("受忌讳的人", -2);
 	m_sPrestigeMap.insert("受挫折的人", -1);
@@ -198,7 +197,7 @@ CGFunction::CGFunction()
 	m_sPrestigeMap.insert("踏入神的领域", 6);
 	m_sPrestigeMap.insert("贤者", 7);
 	m_sPrestigeMap.insert("神匠", 8);
-	m_sPrestigeMap.insert("摘星的技巧",9);
+	m_sPrestigeMap.insert("摘星的技巧", 9);
 	m_sPrestigeMap.insert("万物创造者", 10);
 	m_sPrestigeMap.insert("持石之贤者", 11);
 
@@ -1252,7 +1251,7 @@ int CGFunction::GetBankItemPileCount(const QString &itemName)
 		for (size_t i = 0; i < itemsinfo.size(); ++i)
 		{
 			const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
-			if (iteminfo.name == itemName.toStdString() /*|| iteminfo.itemid == itemName.toInt()*/)//银行物品获取不到id的，这里不能通过id判断
+			if (iteminfo.name == itemName.toStdString() /*|| iteminfo.itemid == itemName.toInt()*/) //银行物品获取不到id的，这里不能通过id判断
 			{
 				nCount += iteminfo.count;
 			}
@@ -3520,7 +3519,7 @@ bool CGFunction::WithdrawItem(const QString &itemName, int count)
 	CGA::cga_items_info_t bankInfos;
 	g_CGAInterface->GetBankItemsInfo(bankInfos);
 	bool bTrans = false;
-	int nitemCode = itemName.toInt(&bTrans);//银行物品没有id  不能传id来
+	int nitemCode = itemName.toInt(&bTrans); //银行物品没有id  不能传id来
 	for (int i = 0; i < bankInfos.size(); i++)
 	{
 		CGA::cga_item_info_t itemInfo = bankInfos.at(i);
@@ -3569,7 +3568,7 @@ bool CGFunction::WithdrawItemAll(const QString &itemName, int count)
 	for (int i = 0; i < bankInfos.size(); i++)
 	{
 		CGA::cga_item_info_t itemInfo = bankInfos.at(i);
-		if (itemInfo.name == itemName.toStdString() /*|| (bTrans && itemInfo.itemid == nitemCode)*/)	//银行物品没有id
+		if (itemInfo.name == itemName.toStdString() /*|| (bTrans && itemInfo.itemid == nitemCode)*/) //银行物品没有id
 		{
 			filterBankInfos.push_back(itemInfo);
 		}
@@ -5039,7 +5038,7 @@ QList<QPoint> CGFunction::FindRandomSearchPath(int tx, int ty)
 QList<QPoint> CGFunction::MakeMapOpen()
 {
 	QList<QPoint> searchPath;
-	if (GetMapFilePath().contains("map\\0")) //固定地图 退出
+	if (IsInRandomMap() == false) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图全开！";
 		return searchPath;
@@ -5165,7 +5164,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	int index1, index2, index3;
 	std::string filemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
-	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+	if (IsInRandomMap() == false) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图全开！";
 		return;
@@ -5245,7 +5244,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 {
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return false;
-	if (GetMapFilePath().contains("map\\0")) //固定地图 退出
+	if (IsInRandomMap() == false) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图全开！";
 		return false;
@@ -5331,7 +5330,7 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 {
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return 4;
-	if (GetMapFilePath().contains("map\\0")) //固定地图 退出
+	if (IsInRandomMap() == false) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图全开！";
 		return 3;
@@ -5894,11 +5893,7 @@ int CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int 
 		if (tpXY.size() > 1)
 			filterPointList.append(QPoint(tpXY[0].toInt(), tpXY[1].toInt()));
 	}
-	int index1, index2, index3;
-	std::string filemap;
-	g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
-
-	if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+	if (IsInRandomMap() == false) //固定地图 退出
 	{
 		qDebug() << "当前是固定地图，不进行地图搜索功能！";
 		return 3;
@@ -6007,7 +6002,7 @@ int CGFunction::SearchMapEx(QString name, QPoint &findPos, QPoint &nextPos, int 
 		return 1;
 	}
 	QList<QPoint> allMoveAblePosList;
-	if (SearchAroundMapUnit(allMoveAblePosList, name, tFindPos, tEntracePos, tNextMazePos, searchType, filterPointList,callBack) == 1)
+	if (SearchAroundMapUnit(allMoveAblePosList, name, tFindPos, tEntracePos, tNextMazePos, searchType, filterPointList, callBack) == 1)
 	{
 		qDebug() << "找到目标和下层坐标：" << name << " 目标坐标:" << findPos << "下层坐标：" << nextPos << "当前层：" << GetMapName();
 		findPos.setX(tFindPos.x());
@@ -6919,11 +6914,8 @@ bool CGFunction::AutoWalkRandomMazeEx()
 	while (!m_bStop && !g_pGameCtrl->GetExitGame())
 	{
 		QString curMapName = GetMapName();
-		//int curMapNum = GetMapIndex();
-		int index1, index2, curMapNum;
-		std::string filemap;
-		g_CGAInterface->GetMapIndex(index1, index2, curMapNum, filemap);
-		if (QString::fromStdString(filemap).contains("map\\0")) //固定地图 退出
+		int curMapNum = GetMapIndex();
+		if (IsInRandomMap() == false) //固定地图 退出
 		{
 			qDebug() << "当前是固定地图，不进行自动走迷宫！";
 			return false;
