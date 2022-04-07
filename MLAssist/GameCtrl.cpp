@@ -581,7 +581,14 @@ void GameCtrl::StopUpdateTimer()
 {
 	m_bExit = true; //退出线程
 	g_pGameFun->StopFun();
+	m_gameProcessID = 0;
+	m_gameHwnd = nullptr;
+	m_hGameHwnd = nullptr;
+	m_nGamePort = 0;
+	m_nGameThreadID = 0;
+	m_gameBaseAddr = 0;
 
+	m_hGameMutex = nullptr;
 	m_updateTimer.stop();	 //更新定时器
 	m_characterTimer.stop(); //人物定时器
 	m_mapTimer.stop();		 //地图定时器
