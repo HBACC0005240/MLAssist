@@ -631,7 +631,7 @@ void GameCtrl::setRenItemIsChecked(const QString &name, int nVal)
 				pItem->isDropInterval = true;
 				pItem->dropMinCode = limitCode[0].toInt();
 				pItem->dropMaxCode = limitCode[1].toInt();
-			}			
+			}
 		}
 		m_pRenItemList.append(pItem);
 	}
@@ -2843,7 +2843,7 @@ void GameCtrl::OnGetCharacterData()
 		CGA::cga_player_info_t info;
 		if (g_CGAInterface->GetPlayerInfo(info))
 		{
-		
+
 			pNewChar->name = QString::fromStdString(info.name);
 			pNewChar->sGid = QString::fromStdString(info.gid);
 			pNewChar->job = QString::fromStdString(info.job);
@@ -3052,7 +3052,7 @@ void GameCtrl::OnGetCharacterData()
 			}
 			m_pCompoundList = newCompoundList;
 		}
-		m_pGameCharacter = pNewChar;	//在线才更新 以便缓存最后一次的玩家名 和gid
+		m_pGameCharacter = pNewChar; //在线才更新 以便缓存最后一次的玩家名 和gid
 	}
 
 	if (ingame)
@@ -3093,8 +3093,7 @@ void GameCtrl::OnGetMapData()
 
 		//放入下面 同步 否则地图编号和名称不同步 一直刷新数据库
 		g_CGAInterface->GetMapName(mapName);
-		QString fileMapPath = QString::fromStdString(filemap);
-		if (g_pGameFun->IsInNormalState() && fileMapPath.contains("map\\0")) //0下面地图 才进行缓存 迷宫不缓存
+		if (g_pGameFun->IsInNormalState() && index1 == 0) //0下面地图 才进行缓存 迷宫不缓存
 		{
 			ITObjectDataMgr::getInstance().StoreServerMapData(QString::fromStdString(mapName), mapIndex);
 		}
@@ -3173,7 +3172,7 @@ void GameCtrl::OnNotifyBattleAction(int flags)
 		return;
 
 	GetBattleUnits();
-	
+
 	//CBattleWorker::getInstace()->OnNotifyGetSkillsInfo(m_pGameSkills);	//更新技能信息 平常不进行更新
 	//CBattleWorker::getInstace()->OnNotifyGetPetsInfo(m_pGamePets);		//更新技能信息 平常不进行更新
 	//CBattleWorker::getInstace()->OnNotifyGetItemsInfo(m_pGameItems);	//更新技能信息 平常不进行更新
@@ -3578,7 +3577,7 @@ void GameCtrl::OnNotifyNPCDialog(const QSharedPointer<CGA_NPCDialog_t> &dlg)
 			default: break;
 		}
 	}
-	if (dlg->type == 23 && m_bAutoUpLoadBankData)//上传银行数据
+	if (dlg->type == 23 && m_bAutoUpLoadBankData) //上传银行数据
 	{
 		RpcSocketClient::getInstance().UploadGidBankData();
 	}

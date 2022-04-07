@@ -399,7 +399,7 @@ void GameMapWall::DownLoadMap()
 	std::string filemap;
 	if (g_CGAInterface->GetMapIndex(index1, index2, mapIndex, filemap))
 	{
-		if (QString::fromStdString(filemap).contains("map\\0")) //0下面地图 才进行缓存 迷宫不缓存
+		if (index1 == 0) //0下面地图 才进行缓存 迷宫不缓存
 		{
 			qDebug() << "只有迷宫才能开图！";
 			return;
@@ -441,7 +441,7 @@ void GameMapWall::SearchThread(GameMapWall *pThis)
 		}
 	}*/
 	while (pThis->m_bAutoMaze)
-	{	
+	{
 		QPoint findPos, nextPos;
 		bool bFind = g_pGameFun->SearchMapEx(pThis->m_searchNpcName, findPos, nextPos, pThis->m_searchType);
 		if (bFind)
