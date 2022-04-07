@@ -3056,10 +3056,16 @@ void GameCtrl::OnGetCharacterData()
 	}
 
 	if (ingame)
+	{
+		emit NotifyGameCharacterInfo(pNewChar);
 		emit signal_updateTrayToolTip(QString("%1 %2线").arg(m_pGameCharacter->name).arg(g_pGameFun->GetGameServerLine()));
+	}
 	else
+	{
+		emit NotifyGameCharacterInfo(m_pGameCharacter);
 		emit signal_updateTrayToolTip(QString("%1 离线").arg(m_pGameCharacter->name));
-	emit NotifyGameCharacterInfo(m_pGameCharacter);
+	}
+	
 	//emit NotifyGameItemsInfo(new);
 	emit NotifyGamePetsInfo(m_pGamePets);
 	emit NotifyGameSkillsInfo(m_pGameSkills);
