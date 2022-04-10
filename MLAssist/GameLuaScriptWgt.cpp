@@ -8,11 +8,21 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QTableWidgetItem>
+#include "LuaCodeHighLighter.h"
 jmp_buf g_jmpPlace;
 GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
+	ui.pushButton_openEncrypt->hide();
+	ui.pushButton_save->hide();
+	m_pLuaCodeEditor = new LuaCodeEditorDlg;
+	m_pLuaCodeEditor->setMinimumSize(400, 300);
+	m_pLuaCodeEditor->GetLuaCodeEditor()->setMode(EditorMode::EDIT);
+	//m_pLuaCodeEditor->setPlainText("int function()\n{\n--[[te\nst]]\nint a = a + b;\n\treturn 0;\n}");
+
+	m_pLuaCodeHighLighter = new LuaCodeHighLighter();
+	m_pLuaCodeHighLighter->setDocument(m_pLuaCodeEditor->GetLuaCodeEditor()->document());
 	QMenu *saveMenu = new QMenu;
 	saveMenu->setMinimumWidth(125);
 	saveMenu->addAction(tr("普通"), this, [&]()
@@ -93,7 +103,9 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	//luaL_openlibs(pLuaState);
 	//RegisterFun(pLuaState);
 	//m_luaFun.setLuaState(pLuaState);
-	//luabridge::setGlobal(pLuaState,&m_luaFun, "cg");//注册test_lua对象到lua
+	//luabridge::setGlobal(pLuaState,&m_luaFun, "cg");//注册test_lua对象到lua	
+
+
 }
 
 GameLuaScriptWgt::~GameLuaScriptWgt()
@@ -360,340 +372,346 @@ void GameLuaScriptWgt::initScriptSystem()
 	QString sPath = QApplication::applicationDirPath() + "/脚本/?.lua";
 	LuaAddPath(ls, "path", sPath.replace("/", "\\"));
 	//CMeLua* MeLua = new CMeLua;//注册对象
-	objGlobal.Register("测试", m_luaFun, &CGLuaFun::Lua_Test);
-	objGlobal.Register("字符串转换", m_luaFun, &CGLuaFun::Lua_Translate);
-	objGlobal.Register("注册函数", m_luaFun, &CGLuaFun::Lua_RegisterLuaFun);
-	objGlobal.Register("utf8ToGbk", m_luaFun, &CGLuaFun::Lua_Translate);
-	objGlobal.Register("取当前坐标", m_luaFun, &CGLuaFun::GetMapPos);
-	objGlobal.Register("取当前地图名", m_luaFun, &CGLuaFun::Lua_GetMapName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "测试", m_luaFun ,& CGLuaFun::Lua_Test);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "字符串转换", m_luaFun, &CGLuaFun::Lua_Translate);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "注册函数", m_luaFun, &CGLuaFun::Lua_RegisterLuaFun);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "utf8ToGbk", m_luaFun, &CGLuaFun::Lua_Translate);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取当前坐标", m_luaFun, &CGLuaFun::GetMapPos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取当前地图名", m_luaFun, &CGLuaFun::Lua_GetMapName);
 
-	objGlobal.Register("取当前地图编号", m_luaFun, &CGLuaFun::Lua_GetMapNumber);
-	objGlobal.Register("取当前地图数据", m_luaFun, &CGLuaFun::Lua_GetMapData);
-	objGlobal.Register("取当前楼层", m_luaFun, &CGLuaFun::Lua_GetMapFloorNumberFromName);
-	objGlobal.Register("取字符串中数字", m_luaFun, &CGLuaFun::Lua_GetNumberFromName);
-	objGlobal.Register("取程序路径", m_luaFun, &CGLuaFun::Lua_GetAppRunPath);
-	objGlobal.Register("取物品数量", m_luaFun, &CGLuaFun::Lua_GetItemCount);
-	objGlobal.Register("取物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetItemPileCount);
-	objGlobal.Register("取银行物品数量", m_luaFun, &CGLuaFun::Lua_GetBankItemCount);
-	objGlobal.Register("取银行物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetBankItemPileCount);
-	objGlobal.Register("取包裹物品数量", m_luaFun, &CGLuaFun::Lua_GetItemCount);
-	objGlobal.Register("取包裹物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetItemPileCount);
-	objGlobal.Register("取所有物品数量", m_luaFun, &CGLuaFun::Lua_GetAllItemCount);
-	objGlobal.Register("取所有物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetAllItemPileCount);
-	objGlobal.Register("取队伍人数", m_luaFun, &CGLuaFun::Lua_GetTeammatesCount);
-	objGlobal.Register("取包裹空格", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpaceCount);
-	objGlobal.Register("取已用格", m_luaFun, &CGLuaFun::Lua_GetBagUsedItemCount);
-	objGlobal.Register("取好友名片", m_luaFun, &CGLuaFun::Lua_GetFriendCard);
-	objGlobal.Register("取脚本界面数据", m_luaFun, &CGLuaFun::Lua_GetScriptUISetData);
-	objGlobal.Register("取队伍宠物平均等级", m_luaFun, &CGLuaFun::Lua_GetTeamPetAvgLv);
-	objGlobal.Register("取队伍宠物等级", m_luaFun, &CGLuaFun::Lua_GetTeamPetLv);
-	objGlobal.Register("取迷宫出入口", m_luaFun, &CGLuaFun::Lua_GetAllMazeWarpList);
-	objGlobal.Register("取迷宫远近坐标", m_luaFun, &CGLuaFun::Lua_GetNextMazeWarp);
-	objGlobal.Register("取搜索路径", m_luaFun, &CGLuaFun::Lua_FindRandomSearchPath);
-	objGlobal.Register("取周围信息", m_luaFun, &CGLuaFun::Lua_GetMapUnits);
-	objGlobal.Register("取队长等待坐标", m_luaFun, &CGLuaFun::Lua_GetUnmannedMapUnitPosList);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取当前地图编号", m_luaFun, &CGLuaFun::Lua_GetMapNumber);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取当前地图数据", m_luaFun, &CGLuaFun::Lua_GetMapData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取当前楼层", m_luaFun, &CGLuaFun::Lua_GetMapFloorNumberFromName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取字符串中数字", m_luaFun, &CGLuaFun::Lua_GetNumberFromName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取程序路径", m_luaFun, &CGLuaFun::Lua_GetAppRunPath);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取物品数量", m_luaFun, &CGLuaFun::Lua_GetItemCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetItemPileCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取银行物品数量", m_luaFun, &CGLuaFun::Lua_GetBankItemCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取银行物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetBankItemPileCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹物品数量", m_luaFun, &CGLuaFun::Lua_GetItemCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetItemPileCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取所有物品数量", m_luaFun, &CGLuaFun::Lua_GetAllItemCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取所有物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetAllItemPileCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队伍人数", m_luaFun, &CGLuaFun::Lua_GetTeammatesCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹空格", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpaceCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取已用格", m_luaFun, &CGLuaFun::Lua_GetBagUsedItemCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取好友名片", m_luaFun, &CGLuaFun::Lua_GetFriendCard);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取脚本界面数据", m_luaFun, &CGLuaFun::Lua_GetScriptUISetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队伍宠物平均等级", m_luaFun, &CGLuaFun::Lua_GetTeamPetAvgLv);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队伍宠物等级", m_luaFun, &CGLuaFun::Lua_GetTeamPetLv);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取迷宫出入口", m_luaFun, &CGLuaFun::Lua_GetAllMazeWarpList);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取迷宫远近坐标", m_luaFun, &CGLuaFun::Lua_GetNextMazeWarp);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取搜索路径", m_luaFun, &CGLuaFun::Lua_FindRandomSearchPath);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取周围信息", m_luaFun, &CGLuaFun::Lua_GetMapUnits);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队长等待坐标", m_luaFun, &CGLuaFun::Lua_GetUnmannedMapUnitPosList);
 
-	objGlobal.Register("取周围空地", m_luaFun, &CGLuaFun::Lua_GetRandomSpace);
-	objGlobal.Register("查周围信息", m_luaFun, &CGLuaFun::Lua_FindMapUnit);
-	objGlobal.Register("目标是否可达", m_luaFun, &CGLuaFun::Lua_IsReachableTarget);
-	objGlobal.Register("设置个人简介", m_luaFun, &CGLuaFun::Lua_SetPlayerInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取周围空地", m_luaFun, &CGLuaFun::Lua_GetRandomSpace);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查周围信息", m_luaFun, &CGLuaFun::Lua_FindMapUnit);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "目标是否可达", m_luaFun, &CGLuaFun::Lua_IsReachableTarget);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置个人简介", m_luaFun, &CGLuaFun::Lua_SetPlayerInfo);
 
-	objGlobal.Register("世界状态", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "世界状态", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);
 
-	objGlobal.Register("游戏状态", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
-	objGlobal.Register("游戏时间", m_luaFun, &CGLuaFun::Lua_GetSysTimeEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "游戏状态", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "游戏时间", m_luaFun, &CGLuaFun::Lua_GetSysTimeEx);
 
-	objGlobal.Register("游戏窗口状态", m_luaFun, &CGLuaFun::Lua_GetConnectGameWndStatus);
-	objGlobal.Register("打开游戏窗口", m_luaFun, &CGLuaFun::Lua_RunGameWnd);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "游戏窗口状态", m_luaFun, &CGLuaFun::Lua_GetConnectGameWndStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "打开游戏窗口", m_luaFun, &CGLuaFun::Lua_RunGameWnd);
 
-	//objGlobal.Register("取银行空格", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpaceCount);//不知道银行格数 除非80
+	//this->RegisterLuaFun<CGLuaFun>(objGlobal,"取银行空格", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpaceCount);//不知道银行格数 除非80
 
-	objGlobal.Register("是否队长", m_luaFun, &CGLuaFun::Lua_IsTeamLeader);
-	objGlobal.Register("加入队伍", m_luaFun, &CGLuaFun::Lua_AddTeammate);
-	objGlobal.Register("离开队伍", m_luaFun, &CGLuaFun::Lua_LeaveTeammate);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "是否队长", m_luaFun, &CGLuaFun::Lua_IsTeamLeader);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "加入队伍", m_luaFun, &CGLuaFun::Lua_AddTeammate);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "离开队伍", m_luaFun, &CGLuaFun::Lua_LeaveTeammate);
 
-	objGlobal.Register("人物动作", m_luaFun, &CGLuaFun::Lua_DoCharacterAction);
-	objGlobal.Register("删除技能", m_luaFun, &CGLuaFun::Lua_DeleteSkill);
-	objGlobal.Register("技能是否有效", m_luaFun, &CGLuaFun::Lua_IsSkillValid);
-	objGlobal.Register("取合成信息", m_luaFun, &CGLuaFun::Lua_GetCraftInfo);
-	objGlobal.Register("取所有合成信息", m_luaFun, &CGLuaFun::Lua_GetCraftsInfo);
-	objGlobal.Register("取合成状态", m_luaFun, &CGLuaFun::Lua_GetCraftStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "人物动作", m_luaFun, &CGLuaFun::Lua_DoCharacterAction);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "删除技能", m_luaFun, &CGLuaFun::Lua_DeleteSkill);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "技能是否有效", m_luaFun, &CGLuaFun::Lua_IsSkillValid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取合成信息", m_luaFun, &CGLuaFun::Lua_GetCraftInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取所有合成信息", m_luaFun, &CGLuaFun::Lua_GetCraftsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取合成状态", m_luaFun, &CGLuaFun::Lua_GetCraftStatus);
 
-	objGlobal.Register("等待入队", m_luaFun, &CGLuaFun::Lua_WaitTeammatesEx);
-	objGlobal.Register("等待指定入队", m_luaFun, &CGLuaFun::Lua_WaitTeammates);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待入队", m_luaFun, &CGLuaFun::Lua_WaitTeammatesEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待指定入队", m_luaFun, &CGLuaFun::Lua_WaitTeammates);
 
-	objGlobal.Register("自动寻路", m_luaFun, &CGLuaFun::Lua_AutoMove);
-	objGlobal.Register("移动", m_luaFun, &CGLuaFun::Lua_AutoMove);
-	objGlobal.Register("移动一格", m_luaFun, &CGLuaFun::Lua_MoveGo);
-	objGlobal.Register("moveGo", m_luaFun, &CGLuaFun::Lua_MoveGo);
-	objGlobal.Register("搜索地图", m_luaFun, &CGLuaFun::Lua_SearchMap);
-	objGlobal.Register("搜索范围迷宫", m_luaFun, &CGLuaFun::Lua_FindToRandomEntry);
-	objGlobal.Register("移动到目标附近", m_luaFun, &CGLuaFun::Lua_MoveToNpcNear);
-	objGlobal.Register("下载地图", m_luaFun, &CGLuaFun::Lua_DownloadMap);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动寻路", m_luaFun, &CGLuaFun::Lua_AutoMove);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动", m_luaFun, &CGLuaFun::Lua_AutoMove);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动一格", m_luaFun, &CGLuaFun::Lua_MoveGo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "moveGo", m_luaFun, &CGLuaFun::Lua_MoveGo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "搜索地图", m_luaFun, &CGLuaFun::Lua_SearchMap);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "搜索范围迷宫", m_luaFun, &CGLuaFun::Lua_FindToRandomEntry);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动到目标附近", m_luaFun, &CGLuaFun::Lua_MoveToNpcNear);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下载地图", m_luaFun, &CGLuaFun::Lua_DownloadMap);
 
-	objGlobal.Register("停止脚本", m_luaFun, &CGLuaFun::Lua_StopScript);
-	objGlobal.Register("加载脚本", m_luaFun, &CGLuaFun::Lua_LoadScript);
-	objGlobal.Register("切换脚本", m_luaFun, &CGLuaFun::Lua_SwitchScript);
-	objGlobal.Register("导入脚本", m_luaFun, &CGLuaFun::Lua_ImportScript);
-	objGlobal.Register("执行脚本", m_luaFun, &CGLuaFun::Lua_ExecScript);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "停止脚本", m_luaFun, &CGLuaFun::Lua_StopScript);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "加载脚本", m_luaFun, &CGLuaFun::Lua_LoadScript);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "切换脚本", m_luaFun, &CGLuaFun::Lua_SwitchScript);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "导入脚本", m_luaFun, &CGLuaFun::Lua_ImportScript);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "执行脚本", m_luaFun, &CGLuaFun::Lua_ExecScript);
 
-	objGlobal.Register("设置脚本简介", m_luaFun, &CGLuaFun::Lua_SetUIScriptDesc);
-	objGlobal.Register("开关", m_luaFun, &CGLuaFun::Lua_SetCharacterSwitch);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置脚本简介", m_luaFun, &CGLuaFun::Lua_SetUIScriptDesc);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "开关", m_luaFun, &CGLuaFun::Lua_SetCharacterSwitch);
 
-	objGlobal.Register("清除系统消息", m_luaFun, &CGLuaFun::Lua_ClearSysCue);
-	objGlobal.Register("系统消息", m_luaFun, &CGLuaFun::Lua_GetSysChatMsg);
-	objGlobal.Register("最新系统消息", m_luaFun, &CGLuaFun::Lua_GetLastSysChatMsg);
-	objGlobal.Register("聊天", m_luaFun, &CGLuaFun::Lua_GetAllChatMsg);
-	objGlobal.Register("聊天信息", m_luaFun, &CGLuaFun::Lua_GetDetailAllChatMsg); //带unit
-	objGlobal.Register("最新聊天", m_luaFun, &CGLuaFun::Lua_GetLastChatMsg);
-	objGlobal.Register("等待系统消息", m_luaFun, &CGLuaFun::Lua_WaitSysMsg);
-	objGlobal.Register("等待聊天消息", m_luaFun, &CGLuaFun::Lua_WaitChatMsg);
-	objGlobal.Register("等待最新消息", m_luaFun, &CGLuaFun::Lua_WaitSysAndChatMsg);
-	objGlobal.Register("等待订阅消息", m_luaFun, &CGLuaFun::Lua_WaitSubscribeMsg);
-	objGlobal.Register("订阅消息", m_luaFun, &CGLuaFun::Lua_SubscribeMsg);
-	objGlobal.Register("发布消息", m_luaFun, &CGLuaFun::Lua_PublishMsg);
-	objGlobal.Register("已接收订阅消息", m_luaFun, &CGLuaFun::Lua_GetTopicMsgList);
-	objGlobal.Register("已接收最新订阅消息", m_luaFun, &CGLuaFun::Lua_GetLastTopicMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除系统消息", m_luaFun, &CGLuaFun::Lua_ClearSysCue);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "系统消息", m_luaFun, &CGLuaFun::Lua_GetSysChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "最新系统消息", m_luaFun, &CGLuaFun::Lua_GetLastSysChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天", m_luaFun, &CGLuaFun::Lua_GetAllChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天信息", m_luaFun, &CGLuaFun::Lua_GetDetailAllChatMsg); //带unit
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "最新聊天", m_luaFun, &CGLuaFun::Lua_GetLastChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待系统消息", m_luaFun, &CGLuaFun::Lua_WaitSysMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待聊天消息", m_luaFun, &CGLuaFun::Lua_WaitChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待最新消息", m_luaFun, &CGLuaFun::Lua_WaitSysAndChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待订阅消息", m_luaFun, &CGLuaFun::Lua_WaitSubscribeMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "订阅消息", m_luaFun, &CGLuaFun::Lua_SubscribeMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发布消息", m_luaFun, &CGLuaFun::Lua_PublishMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收订阅消息", m_luaFun, &CGLuaFun::Lua_GetTopicMsgList);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收最新订阅消息", m_luaFun, &CGLuaFun::Lua_GetLastTopicMsg);
 
-	objGlobal.Register("debugMsg", m_luaFun, &CGLuaFun::Lua_DebugMessage);
-	objGlobal.Register("用户输入框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
-	objGlobal.Register("用户下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
-	objGlobal.Register("读取配置", m_luaFun, &CGLuaFun::Lua_LoadUserConfig);
-	objGlobal.Register("保存配置", m_luaFun, &CGLuaFun::Lua_SaveUserConfig);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "debugMsg", m_luaFun, &CGLuaFun::Lua_DebugMessage);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户输入框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "读取配置", m_luaFun, &CGLuaFun::Lua_LoadUserConfig);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存配置", m_luaFun, &CGLuaFun::Lua_SaveUserConfig);
 
-	objGlobal.Register("获取仓库信息", m_luaFun, &CGLuaFun::Lua_GatherAccountInfo);
-	objGlobal.Register("保存仓库信息", m_luaFun, &CGLuaFun::Lua_SaveGatherAccountInfos);
-	objGlobal.Register("登出服务器", m_luaFun, &CGLuaFun::Lua_LogoutServer);
-	objGlobal.Register("获取游戏子账户", m_luaFun, &CGLuaFun::Lua_GetAccountGids);
-	objGlobal.Register("保存图鉴信息", m_luaFun, &CGLuaFun::Lua_SavePetPictorialBookToHtml);
-	objGlobal.Register("设置登录子账号", m_luaFun, &CGLuaFun::Lua_SetUIAccountGid);
-	objGlobal.Register("设置登录角色", m_luaFun, &CGLuaFun::Lua_SetUICharacter);
-	objGlobal.Register("设置创建角色信息", m_luaFun, &CGLuaFun::Lua_SetUICreateCharacterInfo);
-	objGlobal.Register("登录游戏", m_luaFun, &CGLuaFun::Lua_LoginGame);
-	objGlobal.Register("重置登录状态", m_luaFun, &CGLuaFun::Lua_ResetLoginGameConnectState);
-	objGlobal.Register("取登录状态", m_luaFun, &CGLuaFun::Lua_GetLoginGameConnectState);
-	objGlobal.Register("回到选择线路", m_luaFun, &CGLuaFun::Lua_BackSelectGameLine);
-	objGlobal.Register("切换登录信息", m_luaFun, &CGLuaFun::Lua_SwitchLoginData);
-	objGlobal.Register("获取随机名称", m_luaFun, &CGLuaFun::Lua_CreateRandomRoleName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "获取仓库信息", m_luaFun, &CGLuaFun::Lua_GatherAccountInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存仓库信息", m_luaFun, &CGLuaFun::Lua_SaveGatherAccountInfos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "登出服务器", m_luaFun, &CGLuaFun::Lua_LogoutServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "获取游戏子账户", m_luaFun, &CGLuaFun::Lua_GetAccountGids);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存图鉴信息", m_luaFun, &CGLuaFun::Lua_SavePetPictorialBookToHtml);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置登录子账号", m_luaFun, &CGLuaFun::Lua_SetUIAccountGid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置登录角色", m_luaFun, &CGLuaFun::Lua_SetUICharacter);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置创建角色信息", m_luaFun, &CGLuaFun::Lua_SetUICreateCharacterInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "登录游戏", m_luaFun, &CGLuaFun::Lua_LoginGame);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "重置登录状态", m_luaFun, &CGLuaFun::Lua_ResetLoginGameConnectState);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取登录状态", m_luaFun, &CGLuaFun::Lua_GetLoginGameConnectState);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "回到选择线路", m_luaFun, &CGLuaFun::Lua_BackSelectGameLine);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "切换登录信息", m_luaFun, &CGLuaFun::Lua_SwitchLoginData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "获取随机名称", m_luaFun, &CGLuaFun::Lua_CreateRandomRoleName);
 
-	objGlobal.Register("使用物品", m_luaFun, &CGLuaFun::Lua_UseItem);
-	objGlobal.Register("整理包裹", m_luaFun, &CGLuaFun::Lua_SortBagItems);
-	objGlobal.Register("整理银行", m_luaFun, &CGLuaFun::Lua_SortBankItems);
-	objGlobal.Register("交易", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
-	objGlobal.Register("等待交易", m_luaFun, &CGLuaFun::Lua_WaitTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "使用物品", m_luaFun, &CGLuaFun::Lua_UseItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "整理包裹", m_luaFun, &CGLuaFun::Lua_SortBagItems);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "整理银行", m_luaFun, &CGLuaFun::Lua_SortBankItems);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待交易", m_luaFun, &CGLuaFun::Lua_WaitTrade);
 
-	objGlobal.Register("发起交易", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
-	objGlobal.Register("等待交易对话框", m_luaFun, &CGLuaFun::Lua_WaitTradeDlg);
-	objGlobal.Register("添加交易信息", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
-	objGlobal.Register("等待对方交易信息", m_luaFun, &CGLuaFun::Lua_WaitTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发起交易", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待交易对话框", m_luaFun, &CGLuaFun::Lua_WaitTradeDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "添加交易信息", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待对方交易信息", m_luaFun, &CGLuaFun::Lua_WaitTrade);
 
-	objGlobal.Register("交易金币", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
-	objGlobal.Register("交易物品", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
-	objGlobal.Register("交易宠物", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
-	objGlobal.Register("扔", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
-	objGlobal.Register("丢", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
-	objGlobal.Register("捡", m_luaFun, &CGLuaFun::Lua_PickupItem);
-	objGlobal.Register("扔叠加物", m_luaFun, &CGLuaFun::Lua_ThrowNoFullItemName);
-	objGlobal.Register("叠", m_luaFun, &CGLuaFun::Lua_PileItem);
-	objGlobal.Register("买", m_luaFun, &CGLuaFun::Lua_Shopping);
-	objGlobal.Register("解析购买列表", m_luaFun, &CGLuaFun::Lua_ParseBuyStoreMsg);
-	objGlobal.Register("卖", m_luaFun, &CGLuaFun::Lua_Sale);
-	objGlobal.Register("出售", m_luaFun, &CGLuaFun::Lua_Sale);
-	objGlobal.Register("saleEx", m_luaFun, &CGLuaFun::Lua_SaleEx);
-	objGlobal.Register("商店鉴定", m_luaFun, &CGLuaFun::Lua_IdentifyItem);
-	objGlobal.Register("saleEx", m_luaFun, &CGLuaFun::Lua_IdentifyItemEx);
-	//objGlobal.Register("存钱", m_luaFun, &CGLuaFun::Lua_DepositGold);
-	//objGlobal.Register("取钱", m_luaFun, &CGLuaFun::Lua_WithdrawGold);
-	objGlobal.Register("扔钱", m_luaFun, &CGLuaFun::Lua_DropGold);
-	/*objGlobal.Register("存物", m_luaFun, &CGLuaFun::Lua_SaveToBankOnce);
-	objGlobal.Register("全存", m_luaFun, &CGLuaFun::Lua_SaveToBankAll);
-	objGlobal.Register("全取", m_luaFun, &CGLuaFun::Lua_WithdrawAllItem);
-	objGlobal.Register("取物", m_luaFun, &CGLuaFun::Lua_WithdrawItem);*/
-	objGlobal.Register("扔宠", m_luaFun, &CGLuaFun::Lua_DropPet);
-	/*objGlobal.Register("存宠", m_luaFun, &CGLuaFun::Lua_DepositPet);
-	objGlobal.Register("取宠", m_luaFun, &CGLuaFun::Lua_WithdrawPet);*/
-	objGlobal.Register("银行", m_luaFun, &CGLuaFun::Lua_BankOperation);
-	objGlobal.Register("耐久", m_luaFun, &CGLuaFun::Lua_GetItemDurability);
-	objGlobal.Register("交换物品", m_luaFun, &CGLuaFun::Lua_SwitchItem);
-	objGlobal.Register("移动物品", m_luaFun, &CGLuaFun::Lua_SwitchItem);
-	objGlobal.Register("装备物品", m_luaFun, &CGLuaFun::Lua_EquipItem);
-	objGlobal.Register("装备代码物品", m_luaFun, &CGLuaFun::Lua_EquipItemEx);
-	objGlobal.Register("取下装备", m_luaFun, &CGLuaFun::Lua_UnEquipItem);
-	objGlobal.Register("取下代码装备", m_luaFun, &CGLuaFun::Lua_UnEquipItemEx);
-	objGlobal.Register("开始遇敌", m_luaFun, &CGLuaFun::Lua_BeginAutoAction);
-	objGlobal.Register("停止遇敌", m_luaFun, &CGLuaFun::Lua_EndAutoAction);
-	objGlobal.Register("等待", m_luaFun, &CGLuaFun::Lua_WaitTime);
-	objGlobal.Register("回城", m_luaFun, &CGLuaFun::Lua_TownPortalScroll);
-	objGlobal.Register("转向", m_luaFun, &CGLuaFun::Lua_TurnAbout);
-	objGlobal.Register("面向", m_luaFun, &CGLuaFun::Lua_TurnAboutEx2);
-	objGlobal.Register("转向坐标", m_luaFun, &CGLuaFun::Lua_TurnAboutEx);
-	objGlobal.Register("转坐标方向", m_luaFun, &CGLuaFun::Lua_TurnAboutPointDir);
-	objGlobal.Register("对话", m_luaFun, &CGLuaFun::Lua_TalkNpc);
-	objGlobal.Register("对话选择", m_luaFun, &CGLuaFun::Lua_Npc);
-	objGlobal.Register("对话选是", m_luaFun, &CGLuaFun::Lua_TalkNpcSelectYes);
-	objGlobal.Register("对话坐标选是", m_luaFun, &CGLuaFun::Lua_TalkNpcPosSelectYes);
-	objGlobal.Register("对话选否", m_luaFun, &CGLuaFun::Lua_TalkNpcSelectNo);
-	objGlobal.Register("对话坐标选否", m_luaFun, &CGLuaFun::Lua_TalkNpcPosSelectNo);
-	objGlobal.Register("菜单选择", m_luaFun, &CGLuaFun::Lua_PlayerMenuSelect);
-	objGlobal.Register("菜单项选择", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
-	objGlobal.Register("回复", m_luaFun, &CGLuaFun::Lua_Renew);
-	objGlobal.Register("renew", m_luaFun, &CGLuaFun::Lua_Renew);
-	objGlobal.Register("人物", m_luaFun, &CGLuaFun::Lua_GetPlayerData);
-	objGlobal.Register("人物信息", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
-	objGlobal.Register("下级称号数据", m_luaFun, &CGLuaFun::Lua_GetNextTitleData);
-	objGlobal.Register("宠物信息", m_luaFun, &CGLuaFun::Lua_GetPetData);
-	objGlobal.Register("物品信息", m_luaFun, &CGLuaFun::Lua_GetAllItemData);
-	objGlobal.Register("全部宠物信息", m_luaFun, &CGLuaFun::Lua_GetAllPetData);
-	objGlobal.Register("装备信息", m_luaFun, &CGLuaFun::Lua_GetPlayereEquipData);
-	objGlobal.Register("装备耐久", m_luaFun, &CGLuaFun::Lua_ParseEquipData);
-	objGlobal.Register("宠物", m_luaFun, &CGLuaFun::Lua_GetBattlePetData);
-	objGlobal.Register("队伍", m_luaFun, &CGLuaFun::Lua_GetTeamData);
-	objGlobal.Register("队伍信息", m_luaFun, &CGLuaFun::Lua_GetAllTeammateData);
-	objGlobal.Register("宠物更改", m_luaFun, &CGLuaFun::Lua_SetPetData);
-	objGlobal.Register("等待服务器返回", m_luaFun, &CGLuaFun::Lua_WaitRecvHead);
-	objGlobal.Register("等待菜单返回", m_luaFun, &CGLuaFun::Lua_WaitRecvPlayerMenu);
-	objGlobal.Register("等待菜单项返回", m_luaFun, &CGLuaFun::Lua_WaitRecvPlayerMenuUnit);
-	objGlobal.Register("等待回补", m_luaFun, &CGLuaFun::Lua_WaitSupplyFini);
-	objGlobal.Register("等待空闲", m_luaFun, &CGLuaFun::Lua_WaitNormal);
-	objGlobal.Register("等待战斗结束", m_luaFun, &CGLuaFun::Lua_WaitBattleEnd);
-	objGlobal.Register("等待按键返回", m_luaFun, &CGLuaFun::Lua_WaitRecvGameWndKeyDown);
-	objGlobal.Register("等待战斗返回", m_luaFun, &CGLuaFun::Lua_WaitRecvBattleAction);
-	objGlobal.Register("nop", m_luaFun, &CGLuaFun::Lua_WaitNormal);
-	objGlobal.Register("是否战斗中", m_luaFun, &CGLuaFun::Lua_IsInBattle);
-	objGlobal.Register("是否空闲中", m_luaFun, &CGLuaFun::Lua_IsInNormalState);
-	objGlobal.Register("设置", m_luaFun, &CGLuaFun::Lua_SysConfig);
-	objGlobal.Register("等待到指定地图", m_luaFun, &CGLuaFun::Lua_Nowhile);
-	objGlobal.Register("调试", m_luaFun, &CGLuaFun::Lua_DebugMessage);
-	objGlobal.Register("日志", m_luaFun, &CGLuaFun::Lua_LogMessage);
-	objGlobal.Register("log", m_luaFun, &CGLuaFun::Lua_ScriptLogMessage);
-	objGlobal.Register("脚本日志", m_luaFun, &CGLuaFun::Lua_ScriptLogMessage);
-	objGlobal.Register("喊话", m_luaFun, &CGLuaFun::Lua_Chat);
-	objGlobal.Register("工作", m_luaFun, &CGLuaFun::Lua_Work);
-	objGlobal.Register("等待工作返回", m_luaFun, &CGLuaFun::Lua_WaitRecvWorkResult);
-	objGlobal.Register("合成", m_luaFun, &CGLuaFun::Lua_AllCompound);
-	objGlobal.Register("AllCompound", m_luaFun, &CGLuaFun::Lua_AllCompound);
-	objGlobal.Register("压矿", m_luaFun, &CGLuaFun::Lua_Exchange);
-	objGlobal.Register("穿墙", m_luaFun, &CGLuaFun::Lua_ThroughWall);
-	objGlobal.Register("切图", m_luaFun, &CGLuaFun::Lua_ThroughWall);
-	objGlobal.Register("方向穿墙", m_luaFun, &CGLuaFun::Lua_ThroughWallEx);
-	objGlobal.Register("是否目标附近", m_luaFun, &CGLuaFun::Lua_IsNearTarget);
-	objGlobal.Register("自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
-	objGlobal.Register("自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易金币", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易物品", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易宠物", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "丢", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "捡", m_luaFun, &CGLuaFun::Lua_PickupItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔叠加物", m_luaFun, &CGLuaFun::Lua_ThrowNoFullItemName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "叠", m_luaFun, &CGLuaFun::Lua_PileItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "买", m_luaFun, &CGLuaFun::Lua_Shopping);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "解析购买列表", m_luaFun, &CGLuaFun::Lua_ParseBuyStoreMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "卖", m_luaFun, &CGLuaFun::Lua_Sale);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "出售", m_luaFun, &CGLuaFun::Lua_Sale);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "saleEx", m_luaFun, &CGLuaFun::Lua_SaleEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "商店鉴定", m_luaFun, &CGLuaFun::Lua_IdentifyItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "saleEx", m_luaFun, &CGLuaFun::Lua_IdentifyItemEx);
+	//this->RegisterLuaFun<CGLuaFun>(objGlobal,"存钱", m_luaFun, &CGLuaFun::Lua_DepositGold);
+	//this->RegisterLuaFun<CGLuaFun>(objGlobal,"取钱", m_luaFun, &CGLuaFun::Lua_WithdrawGold);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔钱", m_luaFun, &CGLuaFun::Lua_DropGold);
+	/*this->RegisterLuaFun<CGLuaFun>(objGlobal,"存物", m_luaFun, &CGLuaFun::Lua_SaveToBankOnce);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal,"全存", m_luaFun, &CGLuaFun::Lua_SaveToBankAll);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal,"全取", m_luaFun, &CGLuaFun::Lua_WithdrawAllItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal,"取物", m_luaFun, &CGLuaFun::Lua_WithdrawItem);*/
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔宠", m_luaFun, &CGLuaFun::Lua_DropPet);
+	/*this->RegisterLuaFun<CGLuaFun>(objGlobal,"存宠", m_luaFun, &CGLuaFun::Lua_DepositPet);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal,"取宠", m_luaFun, &CGLuaFun::Lua_WithdrawPet);*/
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "银行", m_luaFun, &CGLuaFun::Lua_BankOperation);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "耐久", m_luaFun, &CGLuaFun::Lua_GetItemDurability);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交换物品", m_luaFun, &CGLuaFun::Lua_SwitchItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动物品", m_luaFun, &CGLuaFun::Lua_SwitchItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "装备物品", m_luaFun, &CGLuaFun::Lua_EquipItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "装备代码物品", m_luaFun, &CGLuaFun::Lua_EquipItemEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取下装备", m_luaFun, &CGLuaFun::Lua_UnEquipItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取下代码装备", m_luaFun, &CGLuaFun::Lua_UnEquipItemEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "开始遇敌", m_luaFun, &CGLuaFun::Lua_BeginAutoAction);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "停止遇敌", m_luaFun, &CGLuaFun::Lua_EndAutoAction);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待", m_luaFun, &CGLuaFun::Lua_WaitTime);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "回城", m_luaFun, &CGLuaFun::Lua_TownPortalScroll);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "转向", m_luaFun, &CGLuaFun::Lua_TurnAbout);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "面向", m_luaFun, &CGLuaFun::Lua_TurnAboutEx2);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "转向坐标", m_luaFun, &CGLuaFun::Lua_TurnAboutEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "转坐标方向", m_luaFun, &CGLuaFun::Lua_TurnAboutPointDir);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "对话", m_luaFun, &CGLuaFun::Lua_TalkNpc);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "对话选择", m_luaFun, &CGLuaFun::Lua_Npc);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "对话选是", m_luaFun, &CGLuaFun::Lua_TalkNpcSelectYes);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "对话坐标选是", m_luaFun, &CGLuaFun::Lua_TalkNpcPosSelectYes);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "对话选否", m_luaFun, &CGLuaFun::Lua_TalkNpcSelectNo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "对话坐标选否", m_luaFun, &CGLuaFun::Lua_TalkNpcPosSelectNo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "菜单选择", m_luaFun, &CGLuaFun::Lua_PlayerMenuSelect);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "菜单项选择", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "回复", m_luaFun, &CGLuaFun::Lua_Renew);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "renew", m_luaFun, &CGLuaFun::Lua_Renew);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "人物", m_luaFun, &CGLuaFun::Lua_GetPlayerData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "人物信息", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下级称号数据", m_luaFun, &CGLuaFun::Lua_GetNextTitleData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "宠物信息", m_luaFun, &CGLuaFun::Lua_GetPetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "物品信息", m_luaFun, &CGLuaFun::Lua_GetAllItemData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "全部宠物信息", m_luaFun, &CGLuaFun::Lua_GetAllPetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "装备信息", m_luaFun, &CGLuaFun::Lua_GetPlayereEquipData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "装备耐久", m_luaFun, &CGLuaFun::Lua_ParseEquipData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "宠物", m_luaFun, &CGLuaFun::Lua_GetBattlePetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "队伍", m_luaFun, &CGLuaFun::Lua_GetTeamData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "队伍信息", m_luaFun, &CGLuaFun::Lua_GetAllTeammateData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "宠物更改", m_luaFun, &CGLuaFun::Lua_SetPetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待服务器返回", m_luaFun, &CGLuaFun::Lua_WaitRecvHead);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待菜单返回", m_luaFun, &CGLuaFun::Lua_WaitRecvPlayerMenu);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待菜单项返回", m_luaFun, &CGLuaFun::Lua_WaitRecvPlayerMenuUnit);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待回补", m_luaFun, &CGLuaFun::Lua_WaitSupplyFini);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待空闲", m_luaFun, &CGLuaFun::Lua_WaitNormal);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待战斗结束", m_luaFun, &CGLuaFun::Lua_WaitBattleEnd);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待按键返回", m_luaFun, &CGLuaFun::Lua_WaitRecvGameWndKeyDown);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待战斗返回", m_luaFun, &CGLuaFun::Lua_WaitRecvBattleAction);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "nop", m_luaFun, &CGLuaFun::Lua_WaitNormal);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "是否战斗中", m_luaFun, &CGLuaFun::Lua_IsInBattle);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "是否空闲中", m_luaFun, &CGLuaFun::Lua_IsInNormalState);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置", m_luaFun, &CGLuaFun::Lua_SysConfig);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待到指定地图", m_luaFun, &CGLuaFun::Lua_Nowhile);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "调试", m_luaFun, &CGLuaFun::Lua_DebugMessage);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "日志", m_luaFun, &CGLuaFun::Lua_LogMessage);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "log", m_luaFun, &CGLuaFun::Lua_ScriptLogMessage);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "脚本日志", m_luaFun, &CGLuaFun::Lua_ScriptLogMessage);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "喊话", m_luaFun, &CGLuaFun::Lua_Chat);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "工作", m_luaFun, &CGLuaFun::Lua_Work);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待工作返回", m_luaFun, &CGLuaFun::Lua_WaitRecvWorkResult);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "合成", m_luaFun, &CGLuaFun::Lua_AllCompound);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "AllCompound", m_luaFun, &CGLuaFun::Lua_AllCompound);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "压矿", m_luaFun, &CGLuaFun::Lua_Exchange);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "穿墙", m_luaFun, &CGLuaFun::Lua_ThroughWall);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "切图", m_luaFun, &CGLuaFun::Lua_ThroughWall);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "方向穿墙", m_luaFun, &CGLuaFun::Lua_ThroughWallEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "是否目标附近", m_luaFun, &CGLuaFun::Lua_IsNearTarget);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
 
-	objGlobal.Register("查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
 
-	objGlobal.Register("GetMapName", m_luaFun, &CGLuaFun::Lua_GetMapName);
-	objGlobal.Register("GetGameStatus", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
-	objGlobal.Register("GetWorldStatus", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);
-	objGlobal.Register("GetSysTime", m_luaFun, &CGLuaFun::Lua_GetSysTimeEx);
-	objGlobal.Register("GetBGMIndex", m_luaFun, &CGLuaFun::Lua_GetBGMIndex);
-	objGlobal.Register("GetPlayerInfo", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
-	objGlobal.Register("GetPetsInfo", m_luaFun, &CGLuaFun::Lua_GetPetData);
-	objGlobal.Register("GetMapPos", m_luaFun, &CGLuaFun::GetMapPos);
-	objGlobal.Register("SetPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_SetPlayerFlagEnabled);
-	objGlobal.Register("IsPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_IsPlayerFlagEnabled);
-	objGlobal.Register("IsSkillValid", m_luaFun, &CGLuaFun::Lua_IsSkillValid);
-	objGlobal.Register("GetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSkillInfo);
-	objGlobal.Register("GetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSkillsInfo);
-	objGlobal.Register("GetSubSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillInfo);
-	objGlobal.Register("GetSubSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillsInfo);
-	objGlobal.Register("IsPetValid", m_luaFun, &CGLuaFun::Lua_IsPetValid);
-	objGlobal.Register("GetPetInfo", m_luaFun, &CGLuaFun::Lua_GetPetInfo);
-	objGlobal.Register("GetBankPetsInfo", m_luaFun, &CGLuaFun::Lua_GetBankPetsInfo);
-	objGlobal.Register("IsPetSkillValid", m_luaFun, &CGLuaFun::Lua_IsPetSkillValid);
-	objGlobal.Register("GetPetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillInfo);
-	objGlobal.Register("GetPetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillsInfo);
-	objGlobal.Register("GetMapIndex", m_luaFun, &CGLuaFun::Lua_GetMapIndex);
-	objGlobal.Register("GetMoveSpeed", m_luaFun, &CGLuaFun::Lua_GetMoveSpeed);
-	objGlobal.Register("GetMouseXY", m_luaFun, &CGLuaFun::Lua_GetMouseXY);
-	objGlobal.Register("GetMouseOrientation", m_luaFun, &CGLuaFun::Lua_GetMouseOrientation);
-	objGlobal.Register("WalkTo", m_luaFun, &CGLuaFun::Lua_WalkTo);
-	objGlobal.Register("TurnTo", m_luaFun, &CGLuaFun::Lua_TurnTo);
-	objGlobal.Register("SetMoveSpeed", m_luaFun, &CGLuaFun::Lua_SetMoveSpeed);
-	objGlobal.Register("ForceMove", m_luaFun, &CGLuaFun::Lua_ForceMove);
-	objGlobal.Register("ForceMoveTo", m_luaFun, &CGLuaFun::Lua_ForceMoveTo);
-	objGlobal.Register("IsMapCellPassable", m_luaFun, &CGLuaFun::Lua_IsMapCellPassable);
-	objGlobal.Register("LogBack", m_luaFun, &CGLuaFun::Lua_LogBack);
-	objGlobal.Register("LogOut", m_luaFun, &CGLuaFun::Lua_LogOut);
-	objGlobal.Register("BackSelectServer", m_luaFun, &CGLuaFun::Lua_BackSelectServer);
-	objGlobal.Register("SayWords", m_luaFun, &CGLuaFun::Lua_Chat);
-	objGlobal.Register("ChangeNickName", m_luaFun, &CGLuaFun::Lua_ChangeNickName);
-	objGlobal.Register("ChangeTitleName", m_luaFun, &CGLuaFun::Lua_ChangeTitleName);
-	objGlobal.Register("ChangePersDesc", m_luaFun, &CGLuaFun::Lua_ChangePersDesc);
-	objGlobal.Register("ChangePetName", m_luaFun, &CGLuaFun::Lua_ChangePetName);
-	objGlobal.Register("GetCardsInfo", m_luaFun, &CGLuaFun::Lua_GetCardsInfo);
-	objGlobal.Register("GetCardsRecvMsg", m_luaFun, &CGLuaFun::Lua_GetCardsRecvMsg);
-	objGlobal.Register("GetPicBooksInfo", m_luaFun, &CGLuaFun::Lua_GetPicBooksInfo);
-	objGlobal.Register("IsItemValid", m_luaFun, &CGLuaFun::Lua_IsItemValid);
-	objGlobal.Register("GetItemInfo", m_luaFun, &CGLuaFun::Lua_GetItemInfo);
-	objGlobal.Register("GetItemsInfo", m_luaFun, &CGLuaFun::Lua_GetItemsInfo);
-	objGlobal.Register("GetBankItemsInfo", m_luaFun, &CGLuaFun::Lua_GetBankItemsInfo);
-	objGlobal.Register("GetBankGold", m_luaFun, &CGLuaFun::Lua_GetBankGold);
-	objGlobal.Register("UseItem", m_luaFun, &CGLuaFun::Lua_UseItem);
-	objGlobal.Register("MoveItem", m_luaFun, &CGLuaFun::Lua_MoveItem);
-	objGlobal.Register("MovePet", m_luaFun, &CGLuaFun::Lua_MovePet);
-	objGlobal.Register("MoveGold", m_luaFun, &CGLuaFun::Lua_MoveGold);
-	objGlobal.Register("DropItem", m_luaFun, &CGLuaFun::Lua_DropItem);
-	objGlobal.Register("DropPet", m_luaFun, &CGLuaFun::Lua_DropPet);
-	objGlobal.Register("ChangePetState", m_luaFun, &CGLuaFun::Lua_ChangePetState);
-	objGlobal.Register("ClickNPCDialog", m_luaFun, &CGLuaFun::Lua_Npc);
-	objGlobal.Register("SellNPCStore", m_luaFun, &CGLuaFun::Lua_SellNPCStore);
-	objGlobal.Register("BuyNPCStore", m_luaFun, &CGLuaFun::Lua_BuyNPCStore);
-	objGlobal.Register("PlayerMenuSelect", m_luaFun, &CGLuaFun::Lua_PlayerMenuSelect);
-	objGlobal.Register("UnitMenuSelect", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
-	objGlobal.Register("UpgradePlayer", m_luaFun, &CGLuaFun::Lua_UpgradePlayer);
-	objGlobal.Register("UpgradePet", m_luaFun, &CGLuaFun::Lua_UpgradePet);
-	objGlobal.Register("IsBattleUnitValid", m_luaFun, &CGLuaFun::Lua_IsBattleUnitValid);
-	objGlobal.Register("GetBattleUnit", m_luaFun, &CGLuaFun::Lua_GetBattleUnit);
-	objGlobal.Register("GetBattleUnits", m_luaFun, &CGLuaFun::Lua_GetBattleUnits);
-	objGlobal.Register("GetBattleContext", m_luaFun, &CGLuaFun::Lua_GetBattleContext);
-	objGlobal.Register("BattleNormalAttack", m_luaFun, &CGLuaFun::Lua_BattleNormalAttack);
-	objGlobal.Register("BattleSkillAttack", m_luaFun, &CGLuaFun::Lua_BattleSkillAttack);
-	objGlobal.Register("BattleRebirth", m_luaFun, &CGLuaFun::Lua_BattleRebirth);
-	objGlobal.Register("BattleGuard", m_luaFun, &CGLuaFun::Lua_BattleGuard);
-	objGlobal.Register("BattleEscape", m_luaFun, &CGLuaFun::Lua_BattleEscape);
-	objGlobal.Register("BattleExchangePosition", m_luaFun, &CGLuaFun::Lua_BattleExchangePosition);
-	objGlobal.Register("BattleDoNothing", m_luaFun, &CGLuaFun::Lua_BattleDoNothing);
-	objGlobal.Register("BattleChangePet", m_luaFun, &CGLuaFun::Lua_BattleChangePet);
-	objGlobal.Register("BattleUseItem", m_luaFun, &CGLuaFun::Lua_BattleUseItem);
-	objGlobal.Register("BattlePetSkillAttack", m_luaFun, &CGLuaFun::Lua_BattlePetSkillAttack);
-	objGlobal.Register("BattleSetHighSpeedEnabled", m_luaFun, &CGLuaFun::Lua_BattleSetHighSpeedEnabled);
-	objGlobal.Register("SetGameTextUIEnabled", m_luaFun, &CGLuaFun::Lua_SetGameTextUIEnabled);
-	objGlobal.Register("SetGameTextUICurrentScript", m_luaFun, &CGLuaFun::Lua_SetGameTextUICurrentScript);
-	objGlobal.Register("GetBattleEndTick", m_luaFun, &CGLuaFun::Lua_GetBattleEndTick);
-	objGlobal.Register("SetBattleEndTick", m_luaFun, &CGLuaFun::Lua_SetBattleEndTick);
-	objGlobal.Register("SetWorkDelay", m_luaFun, &CGLuaFun::Lua_SetWorkDelay);
-	objGlobal.Register("StartWork", m_luaFun, &CGLuaFun::Lua_StartWork);
-	objGlobal.Register("SetWorkAcceleration", m_luaFun, &CGLuaFun::Lua_SetWorkAcceleration);
-	objGlobal.Register("SetImmediateDoneWork", m_luaFun, &CGLuaFun::Lua_SetImmediateDoneWork);
-	objGlobal.Register("GetImmediateDoneWorkState", m_luaFun, &CGLuaFun::Lua_GetImmediateDoneWorkState);
-	objGlobal.Register("CraftItem", m_luaFun, &CGLuaFun::Lua_CraftItem);
-	objGlobal.Register("AssessItem", m_luaFun, &CGLuaFun::Lua_AssessItem);
-	objGlobal.Register("GetCraftInfo", m_luaFun, &CGLuaFun::Lua_GetCraftInfo);
-	objGlobal.Register("GetCraftsInfo", m_luaFun, &CGLuaFun::Lua_GetCraftsInfo);
-	objGlobal.Register("GetCraftStatus", m_luaFun, &CGLuaFun::Lua_GetCraftStatus);
-	objGlobal.Register("DoRequest", m_luaFun, &CGLuaFun::Lua_DoRequest);
-	objGlobal.Register("TradeAddStuffs", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
-	objGlobal.Register("AddAllTradeItems", m_luaFun, &CGLuaFun::Lua_AddAllTradeItems);
-	objGlobal.Register("IsUIDialogPresent", m_luaFun, &CGLuaFun::Lua_IsUIDialogPresent);
-	objGlobal.Register("GetTeamPlayerInfo", m_luaFun, &CGLuaFun::Lua_GetTeamPlayerInfo);
-	objGlobal.Register("FixMapWarpStuck", m_luaFun, &CGLuaFun::Lua_FixMapWarpStuck);
-	objGlobal.Register("SetNoSwitchAnim", m_luaFun, &CGLuaFun::Lua_SetNoSwitchAnim);
-	objGlobal.Register("GetMoveHistory", m_luaFun, &CGLuaFun::Lua_GetMoveHistory);
-	objGlobal.Register("EnableFlags", m_luaFun, &CGLuaFun::Lua_EnableFlags);
-	objGlobal.Register("SetWindowResolution", m_luaFun, &CGLuaFun::Lua_SetWindowResolution);
-	objGlobal.Register("RequestDownloadMap", m_luaFun, &CGLuaFun::Lua_RequestDownloadMap);
-	objGlobal.Register("GetNextAnimTickCount", m_luaFun, &CGLuaFun::Lua_GetNextAnimTickCount);
-	objGlobal.Register("LoginGameServer", m_luaFun, &CGLuaFun::Lua_LoginGameServer);
-	objGlobal.Register("CreateCharacter", m_luaFun, &CGLuaFun::Lua_CreateCharacter);
-	objGlobal.Register("PlayGesture", m_luaFun, &CGLuaFun::Lua_PlayGesture);
-	objGlobal.Register("DeleteCard", m_luaFun, &CGLuaFun::Lua_DeleteCard);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMapName", m_luaFun, &CGLuaFun::Lua_GetMapName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetGameStatus", m_luaFun, &CGLuaFun::Lua_GetGameStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetWorldStatus", m_luaFun, &CGLuaFun::Lua_GetWorldStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetSysTime", m_luaFun, &CGLuaFun::Lua_GetSysTimeEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBGMIndex", m_luaFun, &CGLuaFun::Lua_GetBGMIndex);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetPlayerInfo", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetPetsInfo", m_luaFun, &CGLuaFun::Lua_GetPetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMapPos", m_luaFun, &CGLuaFun::GetMapPos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_SetPlayerFlagEnabled);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsPlayerFlagEnabled", m_luaFun, &CGLuaFun::Lua_IsPlayerFlagEnabled);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsSkillValid", m_luaFun, &CGLuaFun::Lua_IsSkillValid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSkillInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSkillsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetSubSkillInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetSubSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetSubSkillsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsPetValid", m_luaFun, &CGLuaFun::Lua_IsPetValid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetPetInfo", m_luaFun, &CGLuaFun::Lua_GetPetInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBankPetsInfo", m_luaFun, &CGLuaFun::Lua_GetBankPetsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsPetSkillValid", m_luaFun, &CGLuaFun::Lua_IsPetSkillValid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetPetSkillInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetPetSkillsInfo", m_luaFun, &CGLuaFun::Lua_GetPetSkillsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMapIndex", m_luaFun, &CGLuaFun::Lua_GetMapIndex);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMoveSpeed", m_luaFun, &CGLuaFun::Lua_GetMoveSpeed);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMouseXY", m_luaFun, &CGLuaFun::Lua_GetMouseXY);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMouseOrientation", m_luaFun, &CGLuaFun::Lua_GetMouseOrientation);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "WalkTo", m_luaFun, &CGLuaFun::Lua_WalkTo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "TurnTo", m_luaFun, &CGLuaFun::Lua_TurnTo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetMoveSpeed", m_luaFun, &CGLuaFun::Lua_SetMoveSpeed);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ForceMove", m_luaFun, &CGLuaFun::Lua_ForceMove);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ForceMoveTo", m_luaFun, &CGLuaFun::Lua_ForceMoveTo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsMapCellPassable", m_luaFun, &CGLuaFun::Lua_IsMapCellPassable);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "LogBack", m_luaFun, &CGLuaFun::Lua_LogBack);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "LogOut", m_luaFun, &CGLuaFun::Lua_LogOut);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BackSelectServer", m_luaFun, &CGLuaFun::Lua_BackSelectServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SayWords", m_luaFun, &CGLuaFun::Lua_Chat);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ChangeNickName", m_luaFun, &CGLuaFun::Lua_ChangeNickName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ChangeTitleName", m_luaFun, &CGLuaFun::Lua_ChangeTitleName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ChangePersDesc", m_luaFun, &CGLuaFun::Lua_ChangePersDesc);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ChangePetName", m_luaFun, &CGLuaFun::Lua_ChangePetName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetCardsInfo", m_luaFun, &CGLuaFun::Lua_GetCardsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetCardsRecvMsg", m_luaFun, &CGLuaFun::Lua_GetCardsRecvMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetPicBooksInfo", m_luaFun, &CGLuaFun::Lua_GetPicBooksInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsItemValid", m_luaFun, &CGLuaFun::Lua_IsItemValid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetItemInfo", m_luaFun, &CGLuaFun::Lua_GetItemInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetItemsInfo", m_luaFun, &CGLuaFun::Lua_GetItemsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBankItemsInfo", m_luaFun, &CGLuaFun::Lua_GetBankItemsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBankGold", m_luaFun, &CGLuaFun::Lua_GetBankGold);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "UseItem", m_luaFun, &CGLuaFun::Lua_UseItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "MoveItem", m_luaFun, &CGLuaFun::Lua_MoveItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "MovePet", m_luaFun, &CGLuaFun::Lua_MovePet);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "MoveGold", m_luaFun, &CGLuaFun::Lua_MoveGold);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "DropItem", m_luaFun, &CGLuaFun::Lua_DropItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "DropPet", m_luaFun, &CGLuaFun::Lua_DropPet);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ChangePetState", m_luaFun, &CGLuaFun::Lua_ChangePetState);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "ClickNPCDialog", m_luaFun, &CGLuaFun::Lua_Npc);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SellNPCStore", m_luaFun, &CGLuaFun::Lua_SellNPCStore);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BuyNPCStore", m_luaFun, &CGLuaFun::Lua_BuyNPCStore);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "PlayerMenuSelect", m_luaFun, &CGLuaFun::Lua_PlayerMenuSelect);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "UnitMenuSelect", m_luaFun, &CGLuaFun::Lua_UnitMenuSelect);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "UpgradePlayer", m_luaFun, &CGLuaFun::Lua_UpgradePlayer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "UpgradePet", m_luaFun, &CGLuaFun::Lua_UpgradePet);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsBattleUnitValid", m_luaFun, &CGLuaFun::Lua_IsBattleUnitValid);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBattleUnit", m_luaFun, &CGLuaFun::Lua_GetBattleUnit);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBattleUnits", m_luaFun, &CGLuaFun::Lua_GetBattleUnits);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBattleContext", m_luaFun, &CGLuaFun::Lua_GetBattleContext);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleNormalAttack", m_luaFun, &CGLuaFun::Lua_BattleNormalAttack);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleSkillAttack", m_luaFun, &CGLuaFun::Lua_BattleSkillAttack);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleRebirth", m_luaFun, &CGLuaFun::Lua_BattleRebirth);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleGuard", m_luaFun, &CGLuaFun::Lua_BattleGuard);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleEscape", m_luaFun, &CGLuaFun::Lua_BattleEscape);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleExchangePosition", m_luaFun, &CGLuaFun::Lua_BattleExchangePosition);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleDoNothing", m_luaFun, &CGLuaFun::Lua_BattleDoNothing);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleChangePet", m_luaFun, &CGLuaFun::Lua_BattleChangePet);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleUseItem", m_luaFun, &CGLuaFun::Lua_BattleUseItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattlePetSkillAttack", m_luaFun, &CGLuaFun::Lua_BattlePetSkillAttack);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "BattleSetHighSpeedEnabled", m_luaFun, &CGLuaFun::Lua_BattleSetHighSpeedEnabled);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetGameTextUIEnabled", m_luaFun, &CGLuaFun::Lua_SetGameTextUIEnabled);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetGameTextUICurrentScript", m_luaFun, &CGLuaFun::Lua_SetGameTextUICurrentScript);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetBattleEndTick", m_luaFun, &CGLuaFun::Lua_GetBattleEndTick);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetBattleEndTick", m_luaFun, &CGLuaFun::Lua_SetBattleEndTick);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetWorkDelay", m_luaFun, &CGLuaFun::Lua_SetWorkDelay);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "StartWork", m_luaFun, &CGLuaFun::Lua_StartWork);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetWorkAcceleration", m_luaFun, &CGLuaFun::Lua_SetWorkAcceleration);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetImmediateDoneWork", m_luaFun, &CGLuaFun::Lua_SetImmediateDoneWork);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetImmediateDoneWorkState", m_luaFun, &CGLuaFun::Lua_GetImmediateDoneWorkState);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "CraftItem", m_luaFun, &CGLuaFun::Lua_CraftItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "AssessItem", m_luaFun, &CGLuaFun::Lua_AssessItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetCraftInfo", m_luaFun, &CGLuaFun::Lua_GetCraftInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetCraftsInfo", m_luaFun, &CGLuaFun::Lua_GetCraftsInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetCraftStatus", m_luaFun, &CGLuaFun::Lua_GetCraftStatus);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "DoRequest", m_luaFun, &CGLuaFun::Lua_DoRequest);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "TradeAddStuffs", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "AddAllTradeItems", m_luaFun, &CGLuaFun::Lua_AddAllTradeItems);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "IsUIDialogPresent", m_luaFun, &CGLuaFun::Lua_IsUIDialogPresent);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetTeamPlayerInfo", m_luaFun, &CGLuaFun::Lua_GetTeamPlayerInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "FixMapWarpStuck", m_luaFun, &CGLuaFun::Lua_FixMapWarpStuck);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetNoSwitchAnim", m_luaFun, &CGLuaFun::Lua_SetNoSwitchAnim);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetMoveHistory", m_luaFun, &CGLuaFun::Lua_GetMoveHistory);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "EnableFlags", m_luaFun, &CGLuaFun::Lua_EnableFlags);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SetWindowResolution", m_luaFun, &CGLuaFun::Lua_SetWindowResolution);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "RequestDownloadMap", m_luaFun, &CGLuaFun::Lua_RequestDownloadMap);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "GetNextAnimTickCount", m_luaFun, &CGLuaFun::Lua_GetNextAnimTickCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "LoginGameServer", m_luaFun, &CGLuaFun::Lua_LoginGameServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "CreateCharacter", m_luaFun, &CGLuaFun::Lua_CreateCharacter);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "PlayGesture", m_luaFun, &CGLuaFun::Lua_PlayGesture);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "DeleteCard", m_luaFun, &CGLuaFun::Lua_DeleteCard);
 	;
-	objGlobal.Register("SendMail", m_luaFun, &CGLuaFun::Lua_SendMail);
-	objGlobal.Register("SendPetMail", m_luaFun, &CGLuaFun::Lua_SendPetMail);
-
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SendMail", m_luaFun, &CGLuaFun::Lua_SendMail);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SendPetMail", m_luaFun, &CGLuaFun::Lua_SendPetMail);
+	m_pLuaCodeHighLighter->initHighLighterRule();
 	//luaL_requiref(ls, "common", nullptr, true);
 	(*m_pLuaState)->DoString("common=require(\"common\")");
+}
+template <class Callee>
+void GameLuaScriptWgt::RegisterLuaFun(LuaObject &objGlobal, const char *funcName, const Callee &callee, int (Callee::*func)(LuaState *), int nupvalues /*= 0*/)
+{
+	objGlobal.Register(funcName, callee, func);
+	m_pLuaCodeHighLighter->appendHighLightingFun(funcName);
 }
 
 QString GameLuaScriptWgt::GetLoginScriptData(int type)
@@ -846,15 +864,7 @@ void GameLuaScriptWgt::on_pushButton_open_clicked()
 	QString szPath = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开"), m_scriptPath, "*.lua"); //*.script;
 	if (szPath.isEmpty())
 		return;
-	m_scriptPath = szPath;
-	ui.pushButton_start->setEnabled(true);
-	ui.pushButton_pause->setText("暂停");
-	if (szPath.endsWith(".lua"))
-	{
-		ParseGameScript(szPath);
-		initTableWidget();
-		ui.tableWidget->selectRow(ui.tableWidget->rowCount() - 1); //跳到最后一行
-	}
+	openScript(szPath);
 }
 
 void GameLuaScriptWgt::ParseGameScript(const QString &szPath)
@@ -873,6 +883,7 @@ void GameLuaScriptWgt::ParseGameScript(const QString &szPath)
 	QByteArray firstLine = file.readLine();
 	setUiScriptDesc(firstLine);
 	setUiScriptPath(szPath);
+	m_scriptLineDataList.append(firstLine);
 
 	while (!file.atEnd())
 	{
@@ -947,6 +958,9 @@ bool GameLuaScriptWgt::on_pushButton_start_clicked()
 	if (m_scriptFuture.isFinished())
 	{
 		//m_luaFun.LoadScript(m_scriptPath);
+		if (m_scriptPath.isEmpty())
+			return false;
+		openScript(m_scriptPath);
 		ui.plainTextEdit->clear();
 		ui.textEdit_log->clear();
 		m_bStopRun = false;
@@ -990,6 +1004,13 @@ void GameLuaScriptWgt::on_pushButton_stop_clicked()
 
 void GameLuaScriptWgt::on_pushButton_save_clicked()
 {
+}
+
+void GameLuaScriptWgt::on_pushButton_edit_clicked()
+{	
+	//m_pLuaCodeEditor->GetLuaCodeEditor()->setPlainText(m_scriptData);
+	m_pLuaCodeEditor->SetOpenLuaScriptPath(m_scriptPath);
+	m_pLuaCodeEditor->show();
 }
 
 void GameLuaScriptWgt::on_save_script()
@@ -1362,7 +1383,7 @@ void GameLuaScriptWgt::LuaHook(lua_State *L, lua_Debug *ar)
 	QMutexLocker locker(&g_luaHookMutex);
 	if (ar->currentline > 10000)
 		return;
-	emit g_pGameCtrl->signal_updateScriptRunLine(ar->currentline);
+	emit g_pGameCtrl->signal_updateScriptRunLine(ar->currentline + 1);	//第一条注释
 	int nScriptRunState = g_pGameCtrl->GetScriptRunState();
 	if (nScriptRunState == SCRIPT_CTRL_STOP)
 	{
@@ -1480,5 +1501,18 @@ void GameLuaScriptWgt::RestartScript()
 			g_CGAInterface->LogBack(); //强制回城重启脚本 还不行就登出
 			on_pushButton_start_clicked();
 		}
+	}
+}
+
+void GameLuaScriptWgt::openScript(const QString &sPath)
+{
+	m_scriptPath = sPath;
+	ui.pushButton_start->setEnabled(true);
+	ui.pushButton_pause->setText("暂停");
+	if (sPath.endsWith(".lua"))
+	{
+		ParseGameScript(sPath);
+		initTableWidget();
+		ui.tableWidget->selectRow(ui.tableWidget->rowCount() - 1); //跳到最后一行
 	}
 }

@@ -875,20 +875,21 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 			on_pushButton_getgid_clicked();
 		}
 		m_login_failure++;
-		if (m_login_failure > 10)
+		if (m_login_failure > 30 && ui->checkBox_autoKillGame->isChecked())
 		{
 			qDebug() << "登录失败次数超10次，干掉游戏窗口，重新加载！";
 			emit g_pGameCtrl->NotifyKillProcess();
 			m_login_failure = 0;
 			//YunLai::KillProcess(g_pGameCtrl->getGameHwnd());
 			//10次以后，再进行换线操作，否则太频繁
-			if (ui->checkBox_autoChangeServer->isChecked() && ui->checkBox_autoLogin->isChecked())
-			{
-				if (ui->comboBox_server->currentIndex() + 1 >= 10)
-					ui->comboBox_server->setCurrentIndex(0);
-				else
-					ui->comboBox_server->setCurrentIndex(ui->comboBox_server->currentIndex() + 1);
-			}
+			
+		}
+		if (ui->checkBox_autoChangeServer->isChecked() && ui->checkBox_autoLogin->isChecked())
+		{
+			if (ui->comboBox_server->currentIndex() + 1 >= 10)
+				ui->comboBox_server->setCurrentIndex(0);
+			else
+				ui->comboBox_server->setCurrentIndex(ui->comboBox_server->currentIndex() + 1);
 		}
 	}
 	else if (state == 1 || state == 2)
@@ -956,6 +957,8 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 			ui->lineEdit_CharaName->setText(QString("%1%2").arg(srcName).arg(endNum));
 		}
 	}
+	m_loginFailureState = state;
+	m_loginFailureMsg = msg;
 }
 //切换游戏账号
 bool AccountForm::IsFetchGameData()
@@ -1082,7 +1085,7 @@ QString AccountForm::GetLoginArgs()
 						.arg(ui->checkBox_autoLogin->isChecked())
 						.arg(ui->checkBox_disableUpdater->isChecked())
 						.arg(ui->checkBox_autoChangeServer->isChecked())
-						.arg(true) //killGame
+						.arg(ui->checkBox_autoKillGame->isChecked()) //killGame
 						.arg(ui->groupBox_createChara->isChecked())
 						.arg(ui->comboBox_Chara->currentIndex() + 1)
 						.arg(ui->comboBox_CharaEye->currentIndex() + 1)
@@ -1174,8 +1177,8 @@ void AccountForm::OnNotifyFillAutoLogin(int game, QString user, QString pwd, QSt
 
 	if (autochangeserver)
 		ui->checkBox_autoChangeServer->setChecked(true);
-	/*if (autokillgame)
-		ui->checkBox_autoKillGame->setChecked(true);*/
+	if (autokillgame)
+		ui->checkBox_autoKillGame->setChecked(true);
 	if (create_chara)
 	{
 		ui->groupBox_createChara->setChecked(true);

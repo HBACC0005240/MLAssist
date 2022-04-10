@@ -101,6 +101,10 @@ private:
 	bool m_bFindNormalWnd = false;
 	QMap<int, int> m_roleMapSex; //人物角色和性别对应  后面有几个没单独处理
 	int m_loginInterval = 0;
+	//先不启用 登录失败消息是一直返回的，所以会很快超过10次 关闭游戏窗口
+	QTime m_loginFailureTime; //登录失败定时器 30秒 
+	QString m_loginFailureMsg;
+	int m_loginFailureState = 0;
 };
 
 #endif // ACCOUNTFORM_H

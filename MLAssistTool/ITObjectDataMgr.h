@@ -54,7 +54,8 @@ public:
 	ITObjectList GetDstObjTypeList(int objType);
 	ITObjectPtr FindObject(quint64 objid);
 	///数据库连接判断
-	bool connectToDB(const QString& strDBType, const QString& strHostName, const QString& strDBName, const QString& strUser, const QString& strPwd);
+	bool connectToDB(const QString& strDBType, const QString& strHostName, const QString& strDBName,\
+		const QString& strUser, const QString& strPwd,int nport=0);
 	bool getDBConnectState();
 	bool refreshConnectToDB();
 	///数据库操作部分
@@ -126,7 +127,7 @@ public slots:
 	void doLoadDBInfoOver();
 
 private:
-	ITDataBaseConnPtr m_dbconn;
+	ITDataBaseConnPtr m_dbconn=nullptr;
 	bool m_bDBConnState;		   //数据库连接状态  是否已连接数据库
 	QString m_strDBName;		   //当前数据库名称
 	QString m_strDBIp;			   //当前数据库连接地址

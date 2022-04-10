@@ -14,6 +14,9 @@
         <file>Resources/logo.ico</file>
         <file>Resources/min.png</file>
         <file>Resources/map-export.png</file>
+        <file>Resources/editor/OpenFile(32).png</file>
+        <file>Resources/editor/SaveAs(32).png</file>
+        <file>Resources/editor/SaveFile(32).png</file>
     </qresource>
     <qresource prefix="/Config">
         <file>Resources/config/name.json</file>

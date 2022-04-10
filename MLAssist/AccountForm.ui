@@ -369,6 +369,9 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QCheckBox" name="checkBox_autoLogin">
             <property name="sizePolicy">
@@ -795,6 +798,16 @@ QListView::item{
        </property>
        <property name="text">
         <string>禁更新</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_autoKillGame">
+       <property name="toolTip">
+        <string>多次登录失败，退出游戏重进</string>
+       </property>
+       <property name="text">
+        <string>失败关闭</string>
        </property>
       </widget>
      </item>

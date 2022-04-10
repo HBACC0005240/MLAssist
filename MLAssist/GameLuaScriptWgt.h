@@ -4,6 +4,9 @@
 #include "ui_GameLuaScriptWgt.h"
 #include <QMutex>
 #include <QWidget>
+#include "LuaCodeEditorDlg.h"
+#include "LuaCodeEditor.h"
+#include "LuaCodeHighLighter.h"
 static QMutex g_luaHookMutex;
 
 class GameLuaScriptWgt : public QWidget
@@ -16,6 +19,8 @@ public:
 
 	void initTableWidget();
 	void initScriptSystem();
+	template <class Callee>
+	void RegisterLuaFun(LuaObject &objGlobal, const char *funcName, const Callee &callee, int (Callee::*func)(LuaState *), int nupvalues = 0);
 	QString GetLoginScriptData(int type = 0);
 	static void doRunScriptThread(GameLuaScriptWgt *pThis);
 	static void LuaHook(lua_State *L, lua_Debug *ar);
@@ -35,6 +40,7 @@ protected:
 	bool overrideLuaRequire(LuaStateOwner *pOwner);
 	QString ParseScriptData(const QString &sPath);
 	void RestartScript();
+	void openScript(const QString &sPath);
 
 public slots:
 	void on_pushButton_reloadCommon_clicked();
@@ -50,6 +56,7 @@ public slots:
 	bool on_pushButton_start_clicked();
 	void on_pushButton_stop_clicked();
 	void on_pushButton_save_clicked();
+	void on_pushButton_edit_clicked();
 	void on_save_script();
 	void on_save_encryptscript();
 	void on_customContextMenu(const QPoint &pos);
@@ -100,4 +107,6 @@ private:
 	int m_noMoveLogOutTime = 60;
 	int m_restartScriptTime = 160;
 	int m_scriptLogMaxLine = 100; //默认100行
+	LuaCodeEditorDlg *m_pLuaCodeEditor = nullptr;
+	LuaCodeHighLighter *m_pLuaCodeHighLighter;
 };

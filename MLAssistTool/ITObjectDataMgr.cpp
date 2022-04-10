@@ -115,10 +115,19 @@ ITObjectDataMgr& ITObjectDataMgr::getInstance(void)
 
 bool ITObjectDataMgr::init()
 {
-	QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
+	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
+	QSettings ini(iniPath, QSettings::IniFormat);
+	QString  strProvider = ini.value("dbconn/ConnType", "SQLSERVER").toString();
+	QString	strHostName = ini.value("dbconn/DataSource", "127.0.0.1").toString();
+	QString strDBName = ini.value("dbconn/Catalog", "cg").toString();
+	QString strUserName = ini.value("dbconn/UserID", "sa").toString();
+	QString strPassWord = ini.value("dbconn/password", "123").toString();
+	int nPort = ini.value("dbconn/Port", "3306").toInt();
+
+	//QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
 	bool bRet = false;
-	m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITE"));
-	if (connectToDB("SQLITE", "CG", sDBPath, "admin", "123456"))
+	//if (connectToDB("SQLITE", "CG", sDBPath, "admin", "123456"))
+	if (connectToDB(strProvider,strHostName,strDBName, strUserName, strPassWord, nPort))
 	{
 		qDebug() << "打开数据库成功！";
 		//		QtConcurrent::run(loadDataBaseInfo, this);
@@ -340,7 +349,8 @@ void ITObjectDataMgr::SaveDataThread(ITObjectDataMgr* pThis)
 	}
 }
 
-bool ITObjectDataMgr::connectToDB(const QString& strDBType, const QString& strHostName, const QString& strDBName, const QString& strUser, const QString& strPwd)
+bool ITObjectDataMgr::connectToDB(const QString& strDBType, const QString& strHostName, const QString& strDBName, \
+	const QString& strUser, const QString& strPwd, int nport)
 {
 	if (m_dbconn)
 	{
@@ -353,7 +363,7 @@ bool ITObjectDataMgr::connectToDB(const QString& strDBType, const QString& strHo
 		m_strDBPwd.clear();
 	}
 	m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn(strDBType));
-	if (m_dbconn->openDataBase(strDBName, strHostName, strUser, strPwd))
+	if (m_dbconn->openDataBase(strDBName, strHostName, strUser, strPwd, nport))
 	{
 		m_strDBName = strDBName;
 		m_strDBIp = strHostName;
@@ -477,7 +487,8 @@ bool ITObjectDataMgr::deleteOneObject(ITObjectPtr pObj)
 
 quint64 ITObjectDataMgr::getNewObjectID()
 {
-	return ITObjectID::NewID();
+	//return ITObjectID::NewID();
+	return ITObjectID::NewID32();
 }
 
 bool ITObjectDataMgr::isNeedSaveData()
@@ -752,20 +763,26 @@ bool ITObjectDataMgr::LoadGidItems()
 			ITGameItemPtr pItem = newOneObject(devType, nID).dynamicCast<ITGameItem>();
 			if (pItem)
 			{
-				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
-				if (pGidRole)
-				{
-					pGidRole->_itemPosForPtr.insert(item_pos, pItem);
-					pItem->setObjectParent(pGidRole);
-					pGidRole->addChildObj(pItem);
-				}
 				pItem->_itemCount = count;
 				pItem->_itemPos = item_pos;
 				pItem->setObjectName(sName);
 				//pItem->setObjectDsec(sDesc);
 				pItem->setObjectCode(item_id);
 				pItem->setObjectID(nID);
-				m_pObjectList.insert(nID, pItem);
+
+				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
+				if (!pGidRole)
+				{
+					if (!m_pDelObjectList.contains(nID))
+						m_pDelObjectList.insert(nID, pItem);
+				}
+				else
+				{
+					pGidRole->_itemPosForPtr.insert(item_pos, pItem);
+					pItem->setObjectParent(pGidRole);
+					pGidRole->addChildObj(pItem);
+					m_pObjectList.insert(nID, pItem);
+				}	
 			}
 		}
 		return true;
@@ -1931,7 +1948,8 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	if (!request)
 		return;
 	QString sGid = QString::fromStdString(request->gid());
-	if (sGid.isEmpty())
+	QString sCharacterName = QString::fromStdString(request->character_name());
+	if (sGid.isEmpty() || sCharacterName.isEmpty())
 		return;
 	//附带生成一个gid
 	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
@@ -1947,7 +1965,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			}
 		}
 	}
-	QString sID = sGid + QString::fromStdString(request->character_name());
+	QString sID = sGid + sCharacterName;
 	int roleType = request->role_type();
 	int roleObjectType = TObject_GidRole;
 	if (roleType == 0)
@@ -1971,7 +1989,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		pCharacter->setObjectType(roleObjectType);
 		pCharacter->setEditStatus();
 	}
-	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
+	pCharacter->setObjectName(sCharacterName);
 	pCharacter->_gid = QString::fromStdString(request->gid());
 	pCharacter->_level = request->character_data().base_data().level();
 	pCharacter->_hp = request->character_data().base_data().hp();
@@ -2254,7 +2272,8 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	if (!request)
 		return;
 	QString sGid = QString::fromStdString(request->gid());
-	if (sGid.isEmpty())
+	QString sCharacterName = QString::fromStdString(request->character_name());
+	if (sGid.isEmpty() || sCharacterName.isEmpty())
 		return;
 	int roleType = request->role_type();
 	int roleObjectType = TObject_GidRole;
@@ -2266,7 +2285,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	{
 		roleObjectType = TObject_GidRoleRight;
 	}
-	QString sID = sGid + QString::fromStdString(request->character_name());
+	QString sID = sGid + sCharacterName;
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
@@ -2276,7 +2295,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	else
 		pCharacter->setEditStatus();
 
-	pCharacter->setObjectName(QString::fromStdString(request->character_name()));
+	pCharacter->setObjectName(sCharacterName);
 	pCharacter->_gid = QString::fromStdString(request->gid());
 	pCharacter->_bankgold = request->gold();
 
