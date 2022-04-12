@@ -438,6 +438,11 @@ public:
 	int Lua_GetBankItemsInfo(LuaState *L);
 	int Lua_SendMail(LuaState *L);
 	int Lua_SendPetMail(LuaState *L);
+	int Lua_RecvMail(LuaState *L);
+	int Lua_SetMailState(LuaState *L);
+	int Lua_RecvMailEx(LuaState *L);
+	int Lua_RecvAllMail(LuaState *L);
+
 	int Lua_DeleteCard(LuaState *L);
 	int Lua_PlayGesture(LuaState *L);
 	int Lua_CreateCharacter(LuaState *L);

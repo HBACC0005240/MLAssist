@@ -631,6 +631,7 @@ namespace CGA
 		virtual cga_picbooks_info_t GetPicBooksInfo();
 		virtual cga_cards_info_t GetCardsInfo();
 		virtual cga_cards_recv_msg_t GetCardsRecvMsg();
+		virtual bool SetCardRecvMsgState(int index, int item, int state);
 		virtual bool IsPetValid(int petid);
 		virtual cga_pet_info_t GetPetInfo(int index);
 		virtual cga_pets_info_t GetPetsInfo();

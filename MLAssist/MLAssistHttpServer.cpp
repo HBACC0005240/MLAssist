@@ -35,67 +35,88 @@ void MLAssistHttpServer::deal_new_request(QHttpRequest *req, QHttpResponse *res)
 	req->collectData();
 	req->end();
 	res->addHeader("connection", "close");
-	if (req->method() == qhttp::THttpMethod::EHTTP_GET)
+	switch (req->method())
 	{
-		auto path = req->url().path();
-		if (path.indexOf("/cga/") == 0)
+		case qhttp::THttpMethod::EHTTP_GET:
 		{
-			auto subreq = path.mid(sizeof("/cga/") - 1);
-			if (0 == subreq.compare("GetGameProcInfo"))
-			{
-				QJsonDocument doc;
-				g_pGameCtrl->HttpGetGameProcInfo(&doc);
-				res->setStatusCode(qhttp::ESTATUS_OK);
-				res->end(doc.toJson());
-				return;
-			}
-			else if (0 == subreq.compare("GetSettings"))
-			{
-				QJsonDocument doc;
-				g_pGameCtrl->HttpGetSettings(doc);
-				res->setStatusCode(qhttp::ESTATUS_OK);
-				res->end(doc.toJson());
-				return;
-			}
+			deal_get_request(req, res);		
+			break;
+		}
+		case qhttp::THttpMethod::EHTTP_POST:
+		{
+			deal_post_request(req, res);
+			break;
+		}
+		default:
+			break;
+	}	
+}
+
+void MLAssistHttpServer::deal_get_request(QHttpRequest *req, QHttpResponse *res)
+{
+	auto path = req->url().path();
+	if (path.startsWith("/cga/"))
+	{
+		auto subreq = path.mid(sizeof("/cga/") - 1);
+		if (0 == subreq.compare("GetGameProcInfo"))
+		{
+			QJsonDocument doc;
+			g_pGameCtrl->HttpGetGameProcInfo(&doc);
+			res->setStatusCode(qhttp::ESTATUS_OK);
+			res->end(doc.toJson());
+			return;
+		}
+		else if (0 == subreq.compare("GetSettings"))
+		{
+			QJsonDocument doc;
+			g_pGameCtrl->HttpGetSettings(doc);
+			res->setStatusCode(qhttp::ESTATUS_OK);
+			res->end(doc.toJson());
+			return;
 		}
 	}
-	else if (req->method() == qhttp::THttpMethod::EHTTP_POST)
+	else if (path.startsWith("/ml/"))
 	{
-		auto path = req->url().path();
-		if (path.indexOf("/cga/") == 0)
-		{
-			auto subreq = path.mid(sizeof("/cga/") - 1);
-			if (0 == subreq.compare("LoadSettings"))
-			{
-				auto reqData = req->collectedData();
-				QJsonDocument doc;
-				g_pGameCtrl->HttpLoadSettings(req->url().query(), reqData, &doc);
-				res->setStatusCode(qhttp::ESTATUS_OK);
-				res->end(doc.toJson());
-				return;
-			}
-			else if (0 == subreq.compare("LoadScript"))
-			{
-				auto reqData = req->collectedData();
-				QJsonDocument doc;
-				g_pGameCtrl->HttpLoadScript(req->url().query(), reqData, &doc);
-				res->setStatusCode(qhttp::ESTATUS_OK);
-				res->end(doc.toJson());
-				return;
-			}
-			else if (0 == subreq.compare("LoadAccount"))
-			{
-				auto reqData = req->collectedData();
+	}
+	res->setStatusCode(qhttp::ESTATUS_BAD_REQUEST);
+	res->end(QByteArray("invalid request"));
+}
 
-				QJsonDocument doc;
-				g_pGameCtrl->HttpLoadAccount(req->url().query(), reqData, &doc);
-				res->setStatusCode(qhttp::ESTATUS_OK);
-				res->end(doc.toJson());
-				return;
-			}
+void MLAssistHttpServer::deal_post_request(QHttpRequest *req, QHttpResponse *res)
+{
+	auto path = req->url().path();
+	if (path.indexOf("/cga/") == 0)
+	{
+		auto subreq = path.mid(sizeof("/cga/") - 1);
+		if (0 == subreq.compare("LoadSettings"))
+		{
+			auto reqData = req->collectedData();
+			QJsonDocument doc;
+			g_pGameCtrl->HttpLoadSettings(req->url().query(), reqData, &doc);
+			res->setStatusCode(qhttp::ESTATUS_OK);
+			res->end(doc.toJson());
+			return;
+		}
+		else if (0 == subreq.compare("LoadScript"))
+		{
+			auto reqData = req->collectedData();
+			QJsonDocument doc;
+			g_pGameCtrl->HttpLoadScript(req->url().query(), reqData, &doc);
+			res->setStatusCode(qhttp::ESTATUS_OK);
+			res->end(doc.toJson());
+			return;
+		}
+		else if (0 == subreq.compare("LoadAccount"))
+		{
+			auto reqData = req->collectedData();
+
+			QJsonDocument doc;
+			g_pGameCtrl->HttpLoadAccount(req->url().query(), reqData, &doc);
+			res->setStatusCode(qhttp::ESTATUS_OK);
+			res->end(doc.toJson());
+			return;
 		}
 	}
-
 	res->setStatusCode(qhttp::ESTATUS_BAD_REQUEST);
 	res->end(QByteArray("invalid request"));
 }

@@ -20,6 +20,10 @@ public:
 public slots:
 	void deal_new_request(QHttpRequest *request, QHttpResponse *response);
 
+protected:
+	void deal_get_request(QHttpRequest *request, QHttpResponse *response);
+	void deal_post_request(QHttpRequest *request, QHttpResponse *response);
+
 private:
 	QHttpServer _httpServer;
 };

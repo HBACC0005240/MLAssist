@@ -597,6 +597,11 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "是否目标附近", m_luaFun, &CGLuaFun::Lua_IsNearTarget);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送邮件", m_luaFun, &CGLuaFun::Lua_SendMail);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收邮件", m_luaFun, &CGLuaFun::Lua_RecvMail);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查看邮件", m_luaFun, &CGLuaFun::Lua_RecvMailEx);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查看所有邮件", m_luaFun, &CGLuaFun::Lua_RecvAllMail);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "更新邮件状态", m_luaFun, &CGLuaFun::Lua_SetMailState);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
 

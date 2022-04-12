@@ -4275,6 +4275,23 @@ cga_cards_recv_msg_t CGAService::GetCardsRecvMsg()
 
 	return info;
 }
+bool CGAService::SetCardRecvMsgState(int index,int item,int state)
+{
+	if (!IsInGame())
+		return false;
+	if (index >= 60 || index < 0)
+		return false;
+	if (item >= 10 || item < 0)
+		return false;
+
+	
+	if (g_card_info[index].valid)
+	{	
+		CGA::card_recv_msg_t& card_rcv_msg = g_card_recv_msg[index * 10 + item];
+		card_rcv_msg.state = state;	
+	}	
+	return true;
+}
 
 bool CGAService::IsPetValid(int petid)
 {
