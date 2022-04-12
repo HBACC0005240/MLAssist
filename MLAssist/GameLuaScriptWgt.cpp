@@ -1,6 +1,7 @@
 #include "GameLuaScriptWgt.h"
 #include "GameCtrl.h"
 #include "ITObjectDataMgr.h"
+#include "LuaCodeHighLighter.h"
 #include "QAESEncryption.h"
 #include "UserDefDialog.h"
 #include <setjmp.h>
@@ -8,7 +9,6 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include "LuaCodeHighLighter.h"
 jmp_buf g_jmpPlace;
 GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 		QWidget(parent)
@@ -103,9 +103,7 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	//luaL_openlibs(pLuaState);
 	//RegisterFun(pLuaState);
 	//m_luaFun.setLuaState(pLuaState);
-	//luabridge::setGlobal(pLuaState,&m_luaFun, "cg");//注册test_lua对象到lua	
-
-
+	//luabridge::setGlobal(pLuaState,&m_luaFun, "cg");//注册test_lua对象到lua
 }
 
 GameLuaScriptWgt::~GameLuaScriptWgt()
@@ -219,7 +217,7 @@ void GameLuaScriptWgt::LuaAddPath(lua_State *ls, QString pathName, QString addVa
 	sLuaModulePath += ";";
 	sLuaModulePath += addVal;
 	lua_pop(ls, 1);
-	lua_pushstring(ls, sLuaModulePath.toUtf8()); //local8bit StdString都试过了
+	lua_pushstring(ls, sLuaModulePath.toStdString().c_str()); //.toUtf8()); //local8bit StdString都试过了
 	lua_setfield(ls, -2, pathName.toStdString().c_str());
 	lua_pop(ls, 1);
 }
@@ -369,10 +367,18 @@ void GameLuaScriptWgt::initScriptSystem()
 	//require默认不识别utf8，这里把参数转为gbk
 	//overrideLuaRequire(m_pLuaState);
 	//AddMyLuaLoader(ls);
-	QString sPath = QApplication::applicationDirPath() + "/脚本/?.lua";
-	LuaAddPath(ls, "path", sPath.replace("/", "\\"));
+	//QString sPath = QApplication::applicationDirPath() + "/脚本/?.lua";
+	//qDebug() << sPath;
+	//qDebug() << sPath.toUtf8();
+	/*QTextCodec *tc = QTextCodec::codecForName("GBK");
+	sPath = tc->fromUnicode(sPath);
+	qDebug() << sPath;*/
+	//LuaAddPath(ls, "path", sPath.replace("/", "\\"));
+	//sPath = QApplication::applicationDirPath() + "/lua/?.lua";
+	//LuaAddPath(ls, "path", sPath.replace("/", "\\"));
+
 	//CMeLua* MeLua = new CMeLua;//注册对象
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "测试", m_luaFun ,& CGLuaFun::Lua_Test);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "测试", m_luaFun, &CGLuaFun::Lua_Test);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "字符串转换", m_luaFun, &CGLuaFun::Lua_Translate);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "注册函数", m_luaFun, &CGLuaFun::Lua_RegisterLuaFun);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "utf8ToGbk", m_luaFun, &CGLuaFun::Lua_Translate);
@@ -1007,7 +1013,7 @@ void GameLuaScriptWgt::on_pushButton_save_clicked()
 }
 
 void GameLuaScriptWgt::on_pushButton_edit_clicked()
-{	
+{
 	//m_pLuaCodeEditor->GetLuaCodeEditor()->setPlainText(m_scriptData);
 	m_pLuaCodeEditor->SetOpenLuaScriptPath(m_scriptPath);
 	m_pLuaCodeEditor->show();
@@ -1383,7 +1389,7 @@ void GameLuaScriptWgt::LuaHook(lua_State *L, lua_Debug *ar)
 	QMutexLocker locker(&g_luaHookMutex);
 	if (ar->currentline > 10000)
 		return;
-	emit g_pGameCtrl->signal_updateScriptRunLine(ar->currentline + 1);	//第一条注释
+	emit g_pGameCtrl->signal_updateScriptRunLine(ar->currentline + 1); //第一条注释
 	int nScriptRunState = g_pGameCtrl->GetScriptRunState();
 	if (nScriptRunState == SCRIPT_CTRL_STOP)
 	{

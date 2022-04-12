@@ -43,6 +43,7 @@ public:
 	void SetGamePort(int port) { m_nGamePort = port; }
 	void SetGameThreadID(quint32 thID) { m_nGameThreadID = thID; }
 	void SetGameCGAMutex(HANDLE mutex) { m_hGameMutex = mutex; }
+	void SetSelfHttpServerPort(int port) { m_nSelfHttpServerPort = port; }
 
 	quint32 GetGameThreadID() { return m_nGameThreadID; }
 	int GetGamePort() { return m_nGamePort; }
@@ -50,6 +51,7 @@ public:
 	HWND getGameHwnd() { return m_gameHwnd; }
 	ULONG getGameBaseAddr() { return m_gameBaseAddr; }
 	HANDLE GetGameCGAMutex() { return m_hGameMutex; }
+	int GetSelfHttpServerPort() { return m_nSelfHttpServerPort; }
 
 	void SetGameGid(const QString &gid);
 	QString GetGameGid();
@@ -233,9 +235,9 @@ signals:
 	void signal_switchAutoEatUi(int, bool);							   //设置自动吃 深蓝、狗粮、时水
 	void signal_switchAutoUseSkillUi(int, bool);					   //设置自动治疗 自动急救 装备保护
 	void signal_setMoveSpeedUI(int);								   //设置高速走路速度
-	void signal_setScriptStillRestartUI(int,int);					   //设置脚本坐标静止重启
-	void signal_setScriptStopRestartUI(int,int);					   //设置脚本停止重启
-	void signal_setScriptStopLogbackRestartUI(int);			   //设置脚本停止回城重启
+	void signal_setScriptStillRestartUI(int, int);					   //设置脚本坐标静止重启
+	void signal_setScriptStopRestartUI(int, int);					   //设置脚本停止重启
+	void signal_setScriptStopLogbackRestartUI(int);					   //设置脚本停止回城重启
 	void signal_setScriptStillLogoutUI(int, int);					   //设置脚本坐标静止登出
 	void signal_addRenItemScript(QString name, bool bChecked = false); //增加自动扔物品项
 	void signal_addDieItemScript(QString name, bool bChecked = false); //增加自动叠加物品项
@@ -342,7 +344,8 @@ private:
 	DWORD m_gameProcessID = 0;															 //游戏进程
 	HWND m_gameHwnd;																	 //游戏窗口句柄
 	ULONG m_gameBaseAddr;																 //游戏基址
-	int m_nGamePort;																	 //注册dll通讯端口
+	int m_nGamePort = 0;																 //注册dll通讯端口
+	int m_nSelfHttpServerPort = 0;														 //自身http服务通讯端口
 	quint32 m_nGameThreadID;															 //线程ID
 	bool m_bExit;																		 //退出游戏
 	QTimer m_updateTimer;																 //定时更新定时器

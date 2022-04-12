@@ -18,13 +18,13 @@ MLAssistHttpServer *MLAssistHttpServer::getInstace()
 
 void MLAssistHttpServer::init()
 {
-
 	for (unsigned int qport = 14396; qport < 14396 + 1000; ++qport)
 	{
 		if (_httpServer.listen(QHostAddress::LocalHost, qport))
 		{
 			QByteArray qportString = QString("%1").arg(qport).toLocal8Bit();
 			qputenv("CGA_GUI_PORT", qportString);
+			g_pGameCtrl->SetSelfHttpServerPort(qport);
 			break;
 		}
 	}
