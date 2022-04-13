@@ -278,7 +278,7 @@ void CGFunction::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 	QMutexLocker lock(&m_charMutex);
 	if (unitid == -1) //<0系统  >0自己或其他人
 	{
-		m_systemCueList.append(msg);
+		m_systemCueList.append(qMakePair(GetTickCount(), msg));
 	}
 	if (m_systemCueList.size() > 100)
 	{
@@ -7704,29 +7704,17 @@ bool CGFunction::NeedSale()
 	return true;
 }
 
-QStringList CGFunction::GetJustSysChatMsg()
+QString CGFunction::GetJustSysChatMsg()
 {
-	QList<QPair<quint64, QStringList> > detailMsg;
-	{
-		QMutexLocker locker(&m_charMutex);
-		detailMsg = m_chatMsgList.mid(m_chatMsgList.size() - 5);
-	}
-	if (detailMsg.size() < 1)
-		return QStringList();
-	auto nowTick = GetTickCount();
-	for (auto it : detailMsg)
-	{
-		if ((nowTick - it.first) > 3000)
-		{
-			continue;
-		}
-		if (it.second[0].toInt() != -1)
-		{
-			continue;
-		}
-		return it.second;
-	}
-	return QStringList();
+	if (m_systemCueList.size() < 1)
+		return QString();
+	QMutexLocker locker(&m_charMutex);
+	auto lastData = m_systemCueList.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return QString();
+	else
+		return lastData.second;
+	return m_systemCueList.last().second;
 }
 
 bool CGFunction::SetCharacterSwitch(int nType, bool bState)
@@ -9804,12 +9792,20 @@ bool CGFunction::ContainChatMsg(const QString &cue)
 	}
 	return false;
 }
-
+//获取所有系统消息
 QString CGFunction::GetSysChatMsg()
 {
-	QMutexLocker lock(&m_charMutex);
 	if (m_systemCueList.size() > 0)
-		return m_systemCueList.join(";");
+	{
+		QString sMsg;
+		QMutexLocker locker(&m_charMutex);
+		for (int i = 0; i < m_systemCueList.size(); ++i)
+		{
+			sMsg.append(m_systemCueList[i].second[1]);
+			sMsg += ";";
+		}
+		return sMsg;
+	}
 	return "";
 }
 
@@ -9817,7 +9813,7 @@ QString CGFunction::GetLastSysChatMsg()
 {
 	QMutexLocker lock(&m_charMutex);
 	if (m_systemCueList.size() > 0)
-		return m_systemCueList.last();
+		return m_systemCueList.last().second;
 	return "";
 }
 
@@ -9886,12 +9882,23 @@ QStringList CGFunction::GetJustChatMsg()
 	if (m_chatMsgList.size() < 1)
 		return QStringList();
 	QMutexLocker locker(&m_charMutex);
-	auto lastData = m_chatMsgList.last();
+	for (int i = m_chatMsgList.size(); i > 0; i--)
+	{
+		auto lastData = m_chatMsgList[i];
+		if ((GetTickCount() - lastData.first) > 3000)
+			return QStringList();
+		if (lastData.second[0] == -1) //系统消息 跳过
+			continue;
+		else
+			return lastData.second;
+	}
+	return QStringList();
+	/*auto lastData = m_chatMsgList.last();
 	if ((GetTickCount() - lastData.first) > 3000)
 		return QStringList();
 	else
 		return lastData.second;
-	return m_chatMsgList.last().second;
+	return m_chatMsgList.last().second;*/
 }
 
 QSharedPointer<CGA_NPCDialog_t> CGFunction::WaitRecvNpcDialog(int timeout /*=5000*/)

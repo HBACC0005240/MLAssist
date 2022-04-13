@@ -540,7 +540,7 @@ public:
 	QList<QPair<QString, QString> > GetTopicMsgList() { return m_topicMsg; }
 	QPair<QString, QString> GetLastTopicMsgList() { return m_topicMsg.last(); }
 	//判断最后一个系统消息是否包含指定信息
-	bool ContainSysCue(const QString &cue) { return m_systemCueList.last().contains(cue); }
+	bool ContainSysCue(const QString &cue) { return m_systemCueList.last().second.contains(cue); }
 	//判断聊天内容包含指定消息
 	bool ContainChatMsg(const QString &cue);
 
@@ -552,7 +552,7 @@ public:
 	QList<QPair<int, QString> > GetDetailAllChatMsg(int count = 0);
 	//获取最新聊天消息
 	QStringList GetJustChatMsg();
-	QStringList GetJustSysChatMsg();
+	QString GetJustSysChatMsg();
 
 	//设置人物开关 队战聊名易家
 	bool SetCharacterSwitch(int nType, bool bState);
@@ -726,7 +726,7 @@ private:
 	uint64_t m_uLastUseItemTime;						 //最后一次使用物品时间
 	int m_nAutoEncounterEnemyInterval = 800;			 //自动遇敌间隔200-800
 	bool m_bIsShowAutoEncounterEnemy = false;			 //自动遇敌是否显示移动
-	QStringList m_systemCueList;						 //系统消息列表
+	QList<QPair<quint64, QString> > m_systemCueList;	 //系统消息列表
 	QList<QPair<quint64, QStringList> > m_chatMsgList;	 //聊天信息列表
 	int m_nWaitRecvType;								 //等待服务器返回value1指定的头才进行下一句。
 	bool m_bWorking = false;							 //生产工作中

@@ -458,15 +458,16 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置脚本简介", m_luaFun, &CGLuaFun::Lua_SetUIScriptDesc);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "开关", m_luaFun, &CGLuaFun::Lua_SetCharacterSwitch);
 
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除系统消息", m_luaFun, &CGLuaFun::Lua_ClearSysCue);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "系统消息", m_luaFun, &CGLuaFun::Lua_GetSysChatMsg);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "最新系统消息", m_luaFun, &CGLuaFun::Lua_GetLastSysChatMsg);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天", m_luaFun, &CGLuaFun::Lua_GetAllChatMsg);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天信息", m_luaFun, &CGLuaFun::Lua_GetDetailAllChatMsg); //带unit
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "最新聊天", m_luaFun, &CGLuaFun::Lua_GetLastChatMsg);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待系统消息", m_luaFun, &CGLuaFun::Lua_WaitSysMsg);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待聊天消息", m_luaFun, &CGLuaFun::Lua_WaitChatMsg);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待最新消息", m_luaFun, &CGLuaFun::Lua_WaitSysAndChatMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除系统消息", m_luaFun, &CGLuaFun::Lua_ClearSysCue);	 //所有消息 都会清除
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "系统消息", m_luaFun, &CGLuaFun::Lua_GetSysChatMsg);		 //不调用清除接口 则返回是接收的所有系统消息 ;分割
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天", m_luaFun, &CGLuaFun::Lua_GetAllChatMsg);			 //不调用清除接口 则返回是接收的所有消息 ;分割
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天信息", m_luaFun, &CGLuaFun::Lua_GetDetailAllChatMsg); //返回所有消息 带unit 以table形式返回
+
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "最新系统消息", m_luaFun, &CGLuaFun::Lua_GetLastSysChatMsg); //3秒内系统消息 不包括聊天消息
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "最新聊天", m_luaFun, &CGLuaFun::Lua_GetLastChatMsg);		   //3秒内聊天消息 不包括系统消息
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待系统消息", m_luaFun, &CGLuaFun::Lua_WaitSysMsg);		   //等待收到的最新消息 只是系统消息
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待聊天消息", m_luaFun, &CGLuaFun::Lua_WaitChatMsg);	   //等待收到的最新消息 只是聊天 不包括系统消息
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待最新消息", m_luaFun, &CGLuaFun::Lua_WaitSysAndChatMsg); //等待收到的最新消息 包括系统和聊天
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待订阅消息", m_luaFun, &CGLuaFun::Lua_WaitSubscribeMsg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "订阅消息", m_luaFun, &CGLuaFun::Lua_SubscribeMsg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发布消息", m_luaFun, &CGLuaFun::Lua_PublishMsg);

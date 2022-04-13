@@ -2921,7 +2921,7 @@ int CGLuaFun::Lua_GetSysChatMsg(LuaState *L)
 
 int CGLuaFun::Lua_GetLastSysChatMsg(LuaState *L)
 {
-	QString sMsg = g_pGameFun->GetLastSysChatMsg();
+	QString sMsg = g_pGameFun->GetJustSysChatMsg();
 	L->PushString(sMsg.toStdString().c_str());
 	return 1;
 }
@@ -4014,7 +4014,7 @@ int CGLuaFun::Lua_SendMail(LuaState *L)
 	int index = -1;
 	if (args[1].IsString())
 	{
-		QString friendName =  args[1].GetString();
+		QString friendName = args[1].GetString();
 		CGA::cga_cards_info_t cards;
 		g_CGAInterface->GetCardsInfo(cards);
 		if (!friendName.isEmpty())
@@ -4028,7 +4028,8 @@ int CGLuaFun::Lua_SendMail(LuaState *L)
 				}
 			}
 		}
-	}else
+	}
+	else
 	{
 		index = args[1].GetInteger();
 	}
@@ -4061,7 +4062,7 @@ int CGLuaFun::Lua_RecvMail(LuaState *L)
 	QString friendName;
 	if (args[1].IsString())
 	{
-		friendName = args[1].GetString();		
+		friendName = args[1].GetString();
 	}
 	else
 	{
@@ -4072,8 +4073,8 @@ int CGLuaFun::Lua_RecvMail(LuaState *L)
 	for (int i = 0; i < recv_msgs.size(); ++i)
 	{
 		if (recv_msgs[i].index == index || recv_msgs[i].name == friendName.toStdString())
-		{			
-			for (int n=9;n>=0;--n)
+		{
+			for (int n = 9; n >= 0; --n)
 			{
 				if (recv_msgs[i].msgs[n].state)
 				{
@@ -4085,9 +4086,9 @@ int CGLuaFun::Lua_RecvMail(LuaState *L)
 					tblObj.SetString("date", recv_msgs[i].msgs[n].date.c_str());
 					tblObj.SetInteger("state", recv_msgs[i].msgs[n].state);
 					tblObj.Push(L);
-					g_CGAInterface->SetCardRecvMsgState(recv_msgs[i].index, n, 0);	
+					g_CGAInterface->SetCardRecvMsgState(recv_msgs[i].index, n, 0);
 					return 1;
-				}				
+				}
 			}
 			//都读了 默认返回第一条
 			LuaObject tblObj(L);
@@ -4099,7 +4100,6 @@ int CGLuaFun::Lua_RecvMail(LuaState *L)
 			tblObj.SetInteger("state", recv_msgs[i].msgs[0].state);
 			tblObj.Push(L);
 			return 1;
-			
 		}
 	}
 	return 0;
@@ -4135,7 +4135,7 @@ int CGLuaFun::Lua_SetMailState(LuaState *L)
 	}
 	int item = args[2].GetInteger();
 	int state = args[3].GetInteger();
-	g_CGAInterface->SetCardRecvMsgState(index,item,state);	
+	g_CGAInterface->SetCardRecvMsgState(index, item, state);
 	return 0;
 }
 
@@ -4204,7 +4204,7 @@ int CGLuaFun::Lua_RecvAllMail(LuaState *L)
 			allTblObj.SetInteger("index", recv_msgs[i].index);
 			LuaObject allMsgObj(L);
 			allMsgObj.AssignNewTable();
-			for (int n=0;n<10;++n)
+			for (int n = 0; n < 10; ++n)
 			{
 				LuaObject tblObj(L);
 				tblObj.AssignNewTable();
@@ -4213,11 +4213,11 @@ int CGLuaFun::Lua_RecvAllMail(LuaState *L)
 				tblObj.SetInteger("state", recv_msgs[i].msgs[n].state);
 				tblObj.Push(L);
 				allMsgObj.SetObject(n + 1, tblObj);
-			}			
+			}
 			allTblObj.SetObject("msgs", allMsgObj);
 			allTblObj.Push(L);
 			return 1;
-		}		
+		}
 	}
 	return 0;
 }
