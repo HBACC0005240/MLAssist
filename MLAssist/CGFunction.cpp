@@ -3131,9 +3131,8 @@ bool CGFunction::DepositGold(int nVal)
 {
 	auto pCharacter = g_pGameFun->GetGameCharacter();
 	int realGold = nVal; //实际存入钱
-	if (realGold > pCharacter->gold)
-		realGold = pCharacter->gold;
-	else if (realGold < 0)
+	
+	if (realGold < 0)
 	{
 		if (pCharacter->gold > std::abs(realGold))
 		{
@@ -3145,6 +3144,8 @@ bool CGFunction::DepositGold(int nVal)
 			return false;
 		}
 	}
+	if (realGold > pCharacter->gold)
+		realGold = pCharacter->gold;
 	//存储不判断银行金额 因为有些大客户可以存1000 万
 	bool bRes = false;
 	g_CGAInterface->MoveGold(realGold, 1, bRes);
@@ -3263,9 +3264,8 @@ bool CGFunction::WithdrawGold(int nVal)
 	}
 	auto pCharacter = g_pGameFun->GetGameCharacter();
 	int realGold = nVal; //实际取钱数
-	if (realGold > bankGold)
-		realGold = bankGold;
-	else if (realGold < 0)
+	
+	if (realGold < 0)
 	{
 		if (std::abs(realGold) >= pCharacter->gold)
 		{
@@ -3281,6 +3281,8 @@ bool CGFunction::WithdrawGold(int nVal)
 	{
 		realGold = (1000000 - pCharacter->gold);
 	}
+	if (realGold > bankGold)
+		realGold = bankGold;
 	bool bRes = false;
 	g_CGAInterface->MoveGold(realGold, 2, bRes);
 	return bRes;
