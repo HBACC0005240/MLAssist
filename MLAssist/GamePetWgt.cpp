@@ -59,6 +59,7 @@ void GamePetWgt::doLoadUserConfig(QSettings &iniFile)
 	ui.checkBox_spirit->setChecked(iniFile.value("autoDropSpirit").toBool());
 	ui.checkBox_recovery->setChecked(iniFile.value("autoDropRecovery").toBool());
 	ui.checkBox_grade->setChecked(iniFile.value("autoDropGrade").toBool());
+	ui.checkBox_realName->setChecked(iniFile.value("autoDropRealName").toBool());
 
 	ui.lineEdit_DropLv->setText(iniFile.value("autoDropLevelVal").toString());
 	ui.lineEdit_DropHp->setText(iniFile.value("autoDropHpVal").toString());
@@ -74,6 +75,7 @@ void GamePetWgt::doLoadUserConfig(QSettings &iniFile)
 	ui.lineEdit_spirit->setText(iniFile.value("autoDropSpiritVal").toString());
 	ui.lineEdit_recovery->setText(iniFile.value("autoDropRecoveryVal").toString());
 	ui.lineEdit_grade->setText(iniFile.value("autoDropGradeVal").toString());
+	ui.lineEdit_realName->setText(iniFile.value("autoDropRealNameVal").toString());
 	//lineEdit需要手动调用下才能设置好值
 	for (auto it = m_pDropLineEditMap.begin(); it != m_pDropLineEditMap.end(); ++it)
 	{
@@ -146,6 +148,7 @@ void GamePetWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("autoDropSpirit", ui.checkBox_spirit->isChecked());		   //自动扔宠精神判断
 	iniFile.setValue("autoDropRecovery", ui.checkBox_recovery->isChecked());	   //自动扔宠回复判断
 	iniFile.setValue("autoDropGrade", ui.checkBox_grade->isChecked());			   //自动扔宠档次判断
+	iniFile.setValue("autoDropRealName", ui.checkBox_realName->isChecked());	   //自动扔宠档次判断
 	iniFile.setValue("autoDropLevelVal", ui.lineEdit_DropLv->text());			   //自动扔宠等级判断
 	iniFile.setValue("autoDropHpVal", ui.lineEdit_DropHp->text());				   //自动扔宠等级判断
 	iniFile.setValue("autoDropMpVal", ui.lineEdit_DropMp->text());				   //自动扔宠等级判断
@@ -160,6 +163,7 @@ void GamePetWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("autoDropSpiritVal", ui.lineEdit_spirit->text());			   //自动扔宠精神判断
 	iniFile.setValue("autoDropRecoveryVal", ui.lineEdit_recovery->text());		   //自动扔宠回复判断
 	iniFile.setValue("autoDropGradeVal", ui.lineEdit_grade->text());			   //自动扔宠档次判断
+	iniFile.setValue("autoDropRealNameVal", ui.lineEdit_realName->text());		   //自动扔宠真实名称判断
 
 	iniFile.setValue("recallLoyalty", ui.checkBox_RecallLoyalty->isChecked()); //是否打开召回指定忠诚
 	iniFile.setValue("recallMp", ui.checkBox_RecallMp->isChecked());		   //是否打开召回指定魔
@@ -208,6 +212,7 @@ void GamePetWgt::init()
 	m_pDropCheckBoxMap.insert(TDropPetType_VSpirit, ui.checkBox_spirit);
 	m_pDropCheckBoxMap.insert(TDropPetType_VRecovery, ui.checkBox_recovery);
 	m_pDropCheckBoxMap.insert(TDropPetType_Grade, ui.checkBox_grade);
+	m_pDropCheckBoxMap.insert(TDropPetType_RealName, ui.checkBox_realName);
 
 	m_pDropLineEditMap.insert(TDropPetType_PLevel, ui.lineEdit_DropLv);
 	m_pDropLineEditMap.insert(TDropPetType_PHp, ui.lineEdit_DropHp);
@@ -223,6 +228,7 @@ void GamePetWgt::init()
 	m_pDropLineEditMap.insert(TDropPetType_VSpirit, ui.lineEdit_spirit);
 	m_pDropLineEditMap.insert(TDropPetType_VRecovery, ui.lineEdit_recovery);
 	m_pDropLineEditMap.insert(TDropPetType_Grade, ui.lineEdit_grade);
+	m_pDropLineEditMap.insert(TDropPetType_RealName, ui.lineEdit_realName);
 	m_petState.insert(TPET_STATE_READY, "待命");
 	m_petState.insert(TPET_STATE_BATTLE, "战斗");
 	m_petState.insert(TPET_STATE_REST, "休息");

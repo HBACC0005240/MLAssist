@@ -493,12 +493,20 @@ quint64 ITObjectDataMgr::getNewObjectID()
 
 bool ITObjectDataMgr::isNeedSaveData()
 {
-	if (m_pDelObjectList.size() > 0)
-		return true;
-
-	if (m_pAddObjectList.size() > 0)
-		return true;
-	for (auto it=m_pObjectList.begin();it!=m_pObjectList.end();++it)
+	QHash<quint64, ITObjectPtr> tmpObjList;	
+	{
+		QMutexLocker locker(&m_objMutex);
+		if (m_pDelObjectList.size() > 0)
+			return true;
+		if (m_pAddObjectList.size() > 0)
+			return true;
+		
+	}
+	{
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pObjectList;
+	}
+	for (auto it= tmpObjList.begin();it!= tmpObjList.end();++it)
 	{
 		if (it.value()->getStatus() != TStatus_Normal)
 		{
@@ -1193,26 +1201,27 @@ bool ITObjectDataMgr::insertNewDataToDB()
 {
 	ITObjectList tempSuccessList; ///把成功的删除，不重复增加，修改和删除不做处理了
 	bool bSucc = true;
-	auto pTempObjList = m_pAddObjectList;
-	for (auto it = pTempObjList.begin();it!=pTempObjList.end();++it)
+	QHash<quint64, ITObjectPtr> tmpObjList;
 	{
-		//recordLog(m_addlist[i]);
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pAddObjectList;
+	}
+	for (auto it = tmpObjList.begin();it!= tmpObjList.end();++it)
+	{
 		if (!insertOneDeviceToDB(it.value()))
 		{
 			bSucc = false;
 			break;
 		}
 		tempSuccessList.append(it.value());
-
-		it.value()->setNomalStatus();
-		QMutexLocker locker(&m_objMutex);
-		m_pObjectList.insert(it.value()->getObjectID(), it.value());
+		it.value()->setNomalStatus();		
 	}
 	QMutexLocker locker(&m_objMutex);
 	if (!bSucc)
 	{ ///删除成功写入数据库的项
 		foreach(auto pDev, tempSuccessList)
 		{
+			m_pObjectList.insert(pDev->getObjectID(), pDev);
 			if (m_pAddObjectList.contains(pDev->getObjectID()))
 			{
 				m_pAddObjectList.remove(pDev->getObjectID());
@@ -1226,7 +1235,12 @@ bool ITObjectDataMgr::insertNewDataToDB()
 
 bool ITObjectDataMgr::updateDataForDB()
 {
-	for (auto it = m_pObjectList.begin(); it != m_pObjectList.end(); ++it)
+	QHash<quint64, ITObjectPtr> tmpObjList;
+	{
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pObjectList;
+	}
+	for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
 	{
 		if (it.value()->getStatus() != TStatus_Normal)
 		{
@@ -1240,7 +1254,12 @@ bool ITObjectDataMgr::updateDataForDB()
 bool ITObjectDataMgr::deleteDataFromDB()
 {
 	bool bRet = true;
-	for (auto it = m_pDelObjectList.begin(); it != m_pDelObjectList.end(); ++it)
+	QHash<quint64, ITObjectPtr> tmpObjList;
+	{
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pDelObjectList;
+	}
+	for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
 	{
 		if (!deleteOneDeviceFromDB(it.value()))
 		{
@@ -1249,7 +1268,10 @@ bool ITObjectDataMgr::deleteDataFromDB()
 		}
 	}
 	QMutexLocker locker(&m_objMutex);
-	m_pDelObjectList.clear();
+	for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
+	{
+		m_pDelObjectList.remove(it.key());
+	}	
 	return bRet;
 }
 

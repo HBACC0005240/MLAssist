@@ -365,6 +365,9 @@ enum TSysConfigSet
 	TSysConfigSet_MoveSpeed,		  //行走速度
 	TSysConfigSet_FollowPickItem,	  //跟随捡物
 	TSysConfigSet_NoLv1Escape,		  //无1级逃跑
+	TSysConfigSet_EnemyAvgLvEscape,	  //敌人平均等级<逃跑
+	TSysConfigSet_EnemyCountEscape,	  //敌人数量>逃跑
+	TSysConfigSet_TeamCountEscape,	  //队伍人数<逃跑
 	TSysConfigSet_NoPetDoubleAction,  //不带宠二动
 	TSysConfigSet_NoPetAttack,		  //不带宠二动攻击
 	TSysConfigSet_NoPetGuard,		  //不带宠二动防御

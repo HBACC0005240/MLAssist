@@ -85,6 +85,9 @@ CGFunction::CGFunction()
 	m_sysConfigMap.insert("战斗延时", TSysConfigSet_BattleDelay);
 	m_sysConfigMap.insert("遇敌全跑", TSysConfigSet_AllEncounterEscape);
 	m_sysConfigMap.insert("无一级逃跑", TSysConfigSet_NoLv1Escape);
+	m_sysConfigMap.insert("敌平均级小于逃跑", TSysConfigSet_EnemyAvgLvEscape);
+	m_sysConfigMap.insert("敌个数大于逃跑", TSysConfigSet_EnemyCountEscape);
+	m_sysConfigMap.insert("队人数小于逃跑", TSysConfigSet_TeamCountEscape);
 	m_sysConfigMap.insert("不带宠二动", TSysConfigSet_NoPetDoubleAction);
 	m_sysConfigMap.insert("二动攻击", TSysConfigSet_NoPetAttack);
 	m_sysConfigMap.insert("二动防御", TSysConfigSet_NoPetGuard);
@@ -1941,12 +1944,12 @@ bool CGFunction::ForgetPlayerSkill(int x, int y, QString skillName)
 	int count = 0; //10次
 	while (dlg && count < 10)
 	{
-		if (dlg->type == 16)
+		if (dlg &&  dlg->type == 16)
 		{
 			g_CGAInterface->ClickNPCDialog(-1, 1, bResult);
 			dlg = WaitRecvNpcDialog();
 		}
-		if (dlg->type == 18)
+		if (dlg && dlg->type == 18)
 		{
 			CGA::cga_skills_info_t skillsinfo;
 			g_CGAInterface->GetSkillsInfo(skillsinfo);
@@ -1970,12 +1973,12 @@ bool CGFunction::ForgetPlayerSkill(int x, int y, QString skillName)
 			g_CGAInterface->ClickNPCDialog(0, index, bResult);
 			dlg = WaitRecvNpcDialog();
 		}
-		if (dlg->options == 12)
+		if (dlg && dlg->options == 12)
 		{
 			g_CGAInterface->ClickNPCDialog(4, -1, bResult);
 			dlg = WaitRecvNpcDialog();
 		}
-		if (dlg->message.contains("已经删除"))
+		if (dlg && dlg->message.contains("已经删除"))
 		{
 			TurnAboutEx(x, y);
 			WaitRecvNpcDialog();
@@ -7856,6 +7859,21 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 					emit g_pGameCtrl->signal_switchNoLvlEncounterEscapeUI(data1.toBool());
 					break;
 				}
+				case TSysConfigSet_EnemyAvgLvEscape:
+				{
+					emit g_pGameCtrl->signal_switchEscapeUI(nAutoType, data1.toBool(),data2.toString());
+					break;
+				}
+				case TSysConfigSet_EnemyCountEscape:
+				{
+					emit g_pGameCtrl->signal_switchEscapeUI(nAutoType, data1.toBool(), data2.toString());
+					break;
+				}
+				case TSysConfigSet_TeamCountEscape:
+				{
+					emit g_pGameCtrl->signal_switchEscapeUI(nAutoType, data1.toBool(), data2.toString());
+					break;
+				}
 				case TSysConfigSet_NoPetDoubleAction:
 				{
 					emit g_pGameCtrl->signal_switchNoPetDoubleActionUI(data1.toBool());
@@ -9882,7 +9900,7 @@ QStringList CGFunction::GetJustChatMsg()
 	if (m_chatMsgList.size() < 1)
 		return QStringList();
 	QMutexLocker locker(&m_charMutex);
-	for (int i = m_chatMsgList.size(); i > 0; i--)
+	for (int i = (m_chatMsgList.size()-1); i > 0; i--)
 	{
 		auto lastData = m_chatMsgList[i];
 		if ((GetTickCount() - lastData.first) > 3000)

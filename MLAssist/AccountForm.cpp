@@ -435,7 +435,6 @@ void AccountForm::OnAutoLogin()
 	//需要自动登录 先获取账号 再挂接游戏  最后登录游戏
 	if (g_CGAInterface->IsConnected()) //如果已经连接
 	{
-		m_bFindNormalWnd = false;
 		int ingame = 0;
 		if (g_CGAInterface->IsInGame(ingame) && ingame == 1)
 		{
@@ -518,12 +517,7 @@ void AccountForm::OnAutoLogin()
 		//附加失败 以及游戏尚未启动 走这个
 
 		////先屏蔽下面重复附加判断代码;
-		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加
-		if (m_bFindNormalWnd)
-		{
-			//			qDebug() << "附加成功 15秒内 返回";
-			return;
-		}
+		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加	
 		if (m_attachExistGameWndTime.elapsed() < 15 * 1000)
 			return;
 		//上次找到指定窗口 或没找到  时间也超过15秒 则重新进行操作
@@ -532,7 +526,6 @@ void AccountForm::OnAutoLogin()
 		{
 			qDebug() << "存在空闲窗口，进行附加！";
 			m_attachExistGameWndTime.start();
-			m_bFindNormalWnd = true;
 		}
 		else
 		{

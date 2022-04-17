@@ -1553,14 +1553,19 @@ bool GameCtrl::AutoDropPet()
 	CGA::cga_pets_info_t petsinfo;
 	if (!g_CGAInterface->GetPetsInfo(petsinfo))
 		return false;
+	bool bCheckRealName = m_bDropPetCheckItem.value(TDropPetType_RealName);
+	QString sPetRealName = m_nDropPetCheckVal.value(TDropPetType_RealName).toString();
 	for (auto it = m_bDropPetCheckItem.begin(); it != m_bDropPetCheckItem.end(); ++it)
 	{
-		if (it.value()) //勾选 判断
-		{
+		if (it.value() && it.key() != TDropPetType_RealName) //勾选 判断  如果是名称 不判断
+		{			
 			for (size_t i = 0; i < petsinfo.size(); ++i)
 			{
+				CGA::cga_pet_info_t pet = petsinfo.at(i);				
+				if (bCheckRealName && pet.realname != sPetRealName.toStdString())				
+					continue;
 				int nVal = m_nDropPetCheckVal.value(it.key()).toInt();
-				CGA::cga_pet_info_t pet = petsinfo.at(i);
+				
 				//			qDebug() << QString("%1 %2 %3 %4 %5 %6").arg(i).arg(pet.flags).arg(pet.battle_flags).arg(QString::fromStdString(pet.name)).arg(pet.maxhp).arg(pet.index);
 
 				bool bDrop = false;

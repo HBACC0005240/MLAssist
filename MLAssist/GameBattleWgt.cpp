@@ -47,6 +47,32 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 			{ ui.checkBox_allEscape->setChecked(bFlag); });
 	connect(g_pGameCtrl, &GameCtrl::signal_switchNoLvlEncounterEscapeUI, this, [&](bool bFlag)
 			{ ui.checkBox_NoLv1Escape->setChecked(bFlag); });
+	connect(g_pGameCtrl, &GameCtrl::signal_switchEscapeUI, this, [&](int type,bool bFlag,QString sText)
+			{ 
+				switch (type)
+				{
+					case TSysConfigSet_EnemyAvgLvEscape:
+					{
+						ui.checkBox_EnemyAvgLv->setChecked(bFlag); 
+						ui.lineEdit_EnemyAvgLv->setText(sText);
+						break;
+					}
+					case TSysConfigSet_EnemyCountEscape:
+					{
+						ui.checkBox_EnemyCount->setChecked(bFlag);
+						ui.lineEdit_EnemyCount->setText(sText);
+						break;
+					}
+					case TSysConfigSet_TeamCountEscape:
+					{
+						ui.checkBox_TeamCount->setChecked(bFlag);
+						ui.lineEdit_TeamCount->setText(sText);
+						break;
+					}
+					default: break;
+				}
+				
+			});
 	connect(g_pGameCtrl, &GameCtrl::signal_setMoveSpeedUI, this, [&](int speed)
 			{ ui.horizontalSlider_moveSpeed->setValue(speed); });
 
@@ -1238,18 +1264,19 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 		m_pEscapeSetting = CBattleSettingPtr(new CBattleSetting(pCondition, pCondition2, pPlayerAction, nullptr, m_pEscapePetAction, m_pEscapePetTarget));
 	}
 
-	ui.checkBox_allEscape->setChecked(iniFile.value("IsAllEscape").toBool());
-	ui.checkBox_NoLv1Escape->setChecked(iniFile.value("IsNoLv1").toBool());
-	ui.checkBox_noBossEscape->setChecked(iniFile.value("IsNoBoss").toBool()); //无Boss怪逃跑
-
-	ui.groupBox_SpecialEnemyEscape->setChecked(iniFile.value("IsSpecialEnemy").toBool());
+	ui.checkBox_allEscape->setChecked(iniFile.value("IsAllEscape").toBool());	//全跑
+	ui.checkBox_NoLv1Escape->setChecked(iniFile.value("IsNoLv1").toBool());		//无1级怪逃跑
+	ui.checkBox_noBossEscape->setChecked(iniFile.value("IsNoBoss").toBool());	//非Boss战逃跑
+	ui.groupBox_SpecialEnemyEscape->setChecked(iniFile.value("IsSpecialEnemy").toBool());	//指定敌人逃跑
 	/*ui.radioButton_EscapeAttack->setChecked(iniFile.value("PetAttack").toBool());
 	ui.radioButton_EscapeGuard->setChecked(iniFile.value("PetGuard").toBool());
 	ui.radioButton_EscapeNothing->setChecked(iniFile.value("PetNothing").toBool());*/
-	ui.checkBox_EnemyAvgLv->setChecked(iniFile.value("IsEnemyAvgLv").toBool());
-	ui.checkBox_EnemyCount->setChecked(iniFile.value("IsEnemyCount").toBool());
+	ui.checkBox_EnemyAvgLv->setChecked(iniFile.value("IsEnemyAvgLv").toBool());	//敌人平均等级逃跑
+	ui.checkBox_EnemyCount->setChecked(iniFile.value("IsEnemyCount").toBool());	//敌人数量逃跑
+	ui.checkBox_TeamCount->setChecked(iniFile.value("IsTeamCount").toBool());	//队伍人数逃跑
 	ui.lineEdit_EnemyAvgLv->setText(iniFile.value("EnemyAvgLv").toString());
 	ui.lineEdit_EnemyCount->setText(iniFile.value("EnemyCount").toString());
+	ui.lineEdit_TeamCount->setText(iniFile.value("TeamCount").toString());
 
 	int ncount = iniFile.value("SpecialEnemyCount").toInt();
 	bool bChecked = false;
@@ -1512,8 +1539,10 @@ void GameBattleWgt::doSaveUserConfig(QSettings &iniFile)
 	//iniFile.setValue("PetNothing", ui.radioButton_EscapeNothing->isChecked());
 	iniFile.setValue("IsEnemyAvgLv", ui.checkBox_EnemyAvgLv->isChecked());
 	iniFile.setValue("IsEnemyCount", ui.checkBox_EnemyCount->isChecked());
+	iniFile.setValue("IsTeamCount", ui.checkBox_TeamCount->isChecked());
 	iniFile.setValue("EnemyAvgLv", ui.lineEdit_EnemyAvgLv->text());
 	iniFile.setValue("EnemyCount", ui.lineEdit_EnemyCount->text());
+	iniFile.setValue("TeamCount", ui.lineEdit_TeamCount->text());
 	if (ui.groupBox_SpecialEnemyEscape->isChecked())
 	{
 		int ncount = ui.listWidget_SpecialEnemy->count();

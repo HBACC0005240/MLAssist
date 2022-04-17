@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>568</width>
-    <height>265</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -734,6 +734,9 @@ QTableView
                </property>
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_35">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
                  <item>
                   <widget class="QCheckBox" name="checkBox_grade">
                    <property name="minimumSize">
@@ -744,6 +747,9 @@ QTableView
                    </property>
                    <property name="text">
                     <string>档次&gt;</string>
+                   </property>
+                   <property name="tristate">
+                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -763,6 +769,24 @@ QTableView
                    </property>
                   </widget>
                  </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_realName">
+                   <property name="text">
+                    <string>真名</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="lineEdit_realName">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
                  <item>
                   <spacer name="horizontalSpacer_4">
                    <property name="orientation">
@@ -770,7 +794,7 @@ QTableView
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
-                     <width>200</width>
+                     <width>0</width>
                      <height>20</height>
                     </size>
                    </property>

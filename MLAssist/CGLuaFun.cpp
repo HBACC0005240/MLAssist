@@ -4,6 +4,7 @@
 #include "RpcSocketClient.h"
 #include <windows.h>
 #include <QApplication>
+#include "GPCalc.h"
 CGLuaFun::CGLuaFun()
 {
 	//m_pLuaState = luaL_newstate();
@@ -1679,8 +1680,9 @@ int CGLuaFun::Lua_GetNextTitleData(LuaState *L)
 int CGLuaFun::Lua_GetPetData(LuaState *L)
 {
 	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
 	int petId = args.Count() > 0 ? args[1].GetInteger() : 0;
-
 	CGA::cga_pet_info_t info;
 	if (g_CGAInterface->GetPetInfo(petId, info))
 	{
@@ -1702,6 +1704,16 @@ int CGLuaFun::Lua_GetPetData(LuaState *L)
 		tableObj.SetInteger("battle_flags", info.battle_flags);
 		tableObj.SetInteger("state", info.state);
 		tableObj.SetInteger("index", info.index);
+		if (info.level == 1)//暂时只有1级 有档次计算
+		{
+			auto pCalcData = g_pGamePetCalc->ParseLine(g_pGameFun->GetPetCalcBpData(info));
+			if (pCalcData)
+			{
+				tableObj.SetInteger("grade", pCalcData->lossMin);
+				tableObj.SetInteger("minGrade", pCalcData->lossMin);
+				tableObj.SetInteger("maxGrade", pCalcData->lossMax);
+			}		
+		}		
 		tableObj.Push(L);
 		return 1;
 	}
@@ -1736,6 +1748,16 @@ int CGLuaFun::Lua_GetAllPetData(LuaState *L)
 			subObj.SetInteger("battle_flags", info.battle_flags);
 			subObj.SetInteger("state", info.state);
 			subObj.SetInteger("index", info.index);
+			if (info.level == 1) //暂时只有1级 有档次计算
+			{
+				auto pCalcData = g_pGamePetCalc->ParseLine(g_pGameFun->GetPetCalcBpData(info));
+				if (pCalcData)
+				{
+					subObj.SetInteger("grade", pCalcData->lossMin);
+					subObj.SetInteger("minGrade", pCalcData->lossMin);
+					subObj.SetInteger("maxGrade", pCalcData->lossMax);
+				}
+			}
 			tableObj.SetObject(i + 1, subObj);
 		}
 	}
@@ -2596,17 +2618,17 @@ int CGLuaFun::Lua_WithdrawGold(LuaState *L)
 int CGLuaFun::Lua_DropPet(LuaState *L)
 {
 	LuaStack args(L);
-	if (args.Count() > 0 && args[1].IsString())
+	if (args.Count() > 0 && args[1].IsInteger())
 	{
-		QString sPet = args[1].GetString();
-		bool bRet = g_pGameFun->DropPet(sPet);
+		int nPos = args.Count() > 0 ? args[1].GetInteger() : -1;
+		bool bRet = g_pGameFun->DropPetEx(nPos);
 		L->PushBoolean(bRet);
 		return 1;
 	}
-	else if (args.Count() > 0 && args[1].IsInteger())
+	else if(args.Count() > 0 && args[1].IsString())
 	{
-		int nPos = args.Count() > 0 ? args[1].GetInteger() : 0;
-		bool bRet = g_pGameFun->DropPetEx(nPos);
+		QString sPet = args[1].GetString();
+		bool bRet = g_pGameFun->DropPet(sPet);
 		L->PushBoolean(bRet);
 		return 1;
 	}
@@ -4033,7 +4055,7 @@ int CGLuaFun::Lua_SendMail(LuaState *L)
 	{
 		index = args[1].GetInteger();
 	}
-	std::string msg = args[2].GetString();
+	std::string msg = args[2].GetString();	
 	bool bRet = false;
 	g_CGAInterface->SendMail(index, msg, bRet);
 	return 0;
@@ -4112,7 +4134,11 @@ int CGLuaFun::Lua_SetMailState(LuaState *L)
 		return 0;
 	int index = -1;
 	QString friendName;
-	if (args[1].IsString())
+	if (args[1].IsInteger())
+	{
+		index = args[1].GetInteger();		
+	}
+	else if (args[1].IsString())
 	{
 		QString friendName = args[1].GetString();
 		CGA::cga_cards_info_t cards;
@@ -4129,10 +4155,6 @@ int CGLuaFun::Lua_SetMailState(LuaState *L)
 			}
 		}
 	}
-	else
-	{
-		index = args[1].GetInteger();
-	}
 	int item = args[2].GetInteger();
 	int state = args[3].GetInteger();
 	g_CGAInterface->SetCardRecvMsgState(index, item, state);
@@ -4145,7 +4167,7 @@ int CGLuaFun::Lua_RecvMailEx(LuaState *L)
 	if (args.Count() < 2)
 		return 0;
 	int index = -1;
-	int mailNum = args[1].GetInteger(); //查看第几个邮件 0-9
+	int mailNum = args[2].GetInteger(); //查看第几个邮件 0-9
 	QString friendName;
 	if (args[1].IsString())
 	{

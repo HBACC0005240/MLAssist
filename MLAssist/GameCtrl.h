@@ -230,6 +230,7 @@ signals:
 	void signal_setBattleDelayUI(int);								   //设置战斗延时
 	void signal_switchAllEncounterEscapeUI(bool);					   //打开关闭遇敌全跑
 	void signal_switchNoLvlEncounterEscapeUI(bool);					   //打开关闭无1级全跑
+	void signal_switchEscapeUI(int,bool,QString);					   //打开关闭逃跑项
 	void signal_switchNoPetDoubleActionUI(bool);					   //打开关闭无宠二动
 	void signal_switchNoPetActionUI(int, bool);						   //设置无宠二动选项
 	void signal_switchAutoEatUi(int, bool);							   //设置自动吃 深蓝、狗粮、时水
