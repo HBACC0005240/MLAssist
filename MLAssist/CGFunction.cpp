@@ -4622,23 +4622,25 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 					if (dwCurTime - dwLastTime > 10000) //10秒短路径寻路
 					{
 						dwTimeoutTryCount++;
-						if (dwTimeoutTryCount >= 10)
+						if (dwTimeoutTryCount >= 3)
 						{
-							qDebug() << "短坐标自动寻路次数超10次，返回！" << tarX << tarY;
+							qDebug() << "短坐标自动寻路次数超3次，返回！" << tarX << tarY;
 							return false;
 						}
 						dwLastTime = dwCurTime;
 						qDebug() << "卡墙，短坐标自动寻路！" << tarX << tarY;
-						g_CGAInterface->FixMapWarpStuck(1); //会切回上个图
+						//g_CGAInterface->FixMapWarpStuck(1); //会切回上个图
 						WaitInNormalState();
 						QPoint curPos = GetMapCoordinate();
 						auto findPath = CalculatePath(curPos.x(), curPos.y(), tarX, tarY);
 						if (findPath.size() == 1 || !isLoop)
 						{
+							qDebug() << "卡墙：WalkTo" << tarX << tarY;
 							g_CGAInterface->WalkTo(tarX, tarY); //重新执行一次移动
 						}
 						else if (findPath.size() > 1 && isLoop)
 						{
+							qDebug() << "卡墙：AutoMoveInternal" << tarX << tarY;
 							AutoMoveInternal(tarX, tarY, false);
 						}
 						else
