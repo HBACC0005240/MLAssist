@@ -2101,46 +2101,11 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>战斗设置(2)</string>
-      </attribute>
-     </widget>
-     <widget class="GameCustomBattleWgt" name="customBattleWgt">
-      <attribute name="title">
-       <string>自定义设置</string>
-      </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_26">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>GameCustomBattleWgt</class>
-   <extends>QWidget</extends>
-   <header>GameCustomBattleWgt.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

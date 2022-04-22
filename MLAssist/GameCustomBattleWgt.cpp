@@ -1,6 +1,7 @@
 #include "GameCustomBattleWgt.h"
 #include <QFontMetrics>
 #include <QListView>
+#include <QMenu>
 #include <QPainter>
 #include <QToolTip>
 Q_DECLARE_METATYPE(CBattleSettingList)
@@ -136,6 +137,8 @@ void GameCustomBattleWgt::init()
 	ui.tableView_settings->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeMode::Stretch);
 	ui.tableView_settings->horizontalHeader()->setSectionResizeMode(5, QHeaderView::ResizeMode::Stretch);
 
+	ui.tableView_settings->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui.tableView_settings, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_table_customContextMenu(const QPoint &)));
 	connect(m_model, SIGNAL(syncList(CBattleSettingList)), g_pAutoBattleCtrl, SLOT(OnSyncList(CBattleSettingList)), Qt::ConnectionType::QueuedConnection);
 	ui.tableView_settings->setMouseTracking(true);
 	connect(ui.tableView_settings, SIGNAL(entered(const QModelIndex &)), this, SLOT(showToolTip(const QModelIndex &)));
@@ -1149,6 +1152,19 @@ void GameCustomBattleWgt::on_pushButton_moveDown_clicked()
 	}
 }
 
+void GameCustomBattleWgt::on_table_customContextMenu(const QPoint &pos)
+{
+	auto modelIndex = ui.tableView_settings->indexAt(pos);
+	if (modelIndex.isValid())
+	{
+		QMenu menu;
+		menu.addAction(QString("上移"), this, SLOT(on_pushButton_moveUp_clicked()));
+		menu.addAction(QString("下移"), this, SLOT(on_pushButton_moveDown_clicked()));
+		menu.addAction(QString("删除"), this, SLOT(on_pushButton_del_clicked()));
+		menu.exec(QCursor::pos());
+	}
+}
+
 bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 {
 	if (!val.isObject())
@@ -1284,7 +1300,7 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 		}
 	}
 
-	//SyncAutoBattleWorker(); 
+	//SyncAutoBattleWorker();
 	return true;
 }
 
@@ -1425,6 +1441,11 @@ void GameCustomBattleWgt::OnNotifyGetPetsInfo(GamePetList pets)
 	if (str != ui.label_petSkillsFrom->text())
 		ui.label_petSkillsFrom->setText(str);
 	m_pets = pets;
+}
+
+void GameCustomBattleWgt::on_pushButton_float_clicked()
+{
+	emit signal_float_window();
 }
 
 void GameCustomBattleWgt::doLoadUserConfig(QSettings &iniFile)
@@ -1592,6 +1613,12 @@ int GameCustomBattleWgt::calcTextRow(QFont &font, QString sText, int totalWidth)
 	else
 		return pixWidth / totalWidth + 1;
 }
+
+void GameCustomBattleWgt::showEvent(QShowEvent *event)
+{
+	ui.tableView_settings->resizeRowsToContents();
+}
+
 void GameCustomBattleWgt::doSaveUserConfig(QSettings &iniFile)
 {
 	auto SaveOneSettingFun = [&](CBattleSettingPtr pSetting, int index)

@@ -17,6 +17,10 @@ public:
 
 protected:
 	int calcTextRow(QFont &font, QString sText, int totalWidth);
+	void showEvent(QShowEvent *event);
+
+signals:
+	void signal_float_window();
 
 private slots:
 	void OnCloseWindow();
@@ -30,6 +34,7 @@ private slots:
 	void on_pushButton_del_clicked();
 	void on_pushButton_moveUp_clicked();
 	void on_pushButton_moveDown_clicked();
+	void on_table_customContextMenu(const QPoint &pos);
 
 public slots:
 	void doLoadUserConfig(QSettings &iniFile);
@@ -40,6 +45,7 @@ public slots:
 	void OnNotifyGetSkillsInfo(GameSkillList skills);
 	void OnNotifyGetItemsInfo(GameItemList items);
 	void OnNotifyGetPetsInfo(GamePetList pets);
+	void on_pushButton_float_clicked();
 
 private:
 	Ui::GameCustomBattleWgt ui;

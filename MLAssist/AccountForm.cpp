@@ -336,7 +336,7 @@ bool AccountForm::QueryAttachGameWnd()
 								{
 									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 									{
-										qDebug() << "该ID已附加，退出！";
+										qDebug() << "该ID已附加，退出！" << pid << attachPid;
 										qApp->exit(0);
 										return true;
 									}
@@ -379,7 +379,7 @@ bool AccountForm::QueryAttachGameWnd()
 					{
 						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 						{
-							qDebug() << "该ID已附加，退出！";
+							qDebug() << "该ID已附加，退出！" << wnd->m_ProcessId << attachPid;
 							qApp->exit(0);
 							return true;
 						}
@@ -517,7 +517,7 @@ void AccountForm::OnAutoLogin()
 		//附加失败 以及游戏尚未启动 走这个
 
 		////先屏蔽下面重复附加判断代码;
-		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加	
+		//上次找到指定窗口 并且时间在5秒内  则不进行重新附加
 		if (m_attachExistGameWndTime.elapsed() < 15 * 1000)
 			return;
 		//上次找到指定窗口 或没找到  时间也超过15秒 则重新进行操作
@@ -875,7 +875,6 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 			m_login_failure = 0;
 			//YunLai::KillProcess(g_pGameCtrl->getGameHwnd());
 			//10次以后，再进行换线操作，否则太频繁
-			
 		}
 		if (ui->checkBox_autoChangeServer->isChecked() && ui->checkBox_autoLogin->isChecked())
 		{

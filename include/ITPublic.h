@@ -41,3 +41,28 @@ static std::string UTF82GBK(std::string& str)
 	std::string ret = temp.toLocal8Bit().data();
 	return ret;
 }
+static QString ConvertFileName(const QString& sFileName)
+{
+	QString sNewFileName = sFileName;
+	QHash<QString, QString> mapEscape;
+	mapEscape.insert("\\", "%5C");
+	mapEscape.insert("/", "%2F");
+	mapEscape.insert(":", "%3A");
+	mapEscape.insert("*", "%2A");
+	mapEscape.insert("?", "%3F");
+	mapEscape.insert("\"", "%22");
+	mapEscape.insert("<", "%3C");
+	mapEscape.insert(">", "%3E");
+	mapEscape.insert("|", "%7C");
+	//把不符合要求的以其他替换掉  %22123%2A45%7C67%3E8%3C9%3F10%7C11%3A12
+	for (auto it = mapEscape.begin(); it != mapEscape.end(); ++it)
+	{
+		sNewFileName = sNewFileName.replace(it.key(), it.value());
+	}
+	////这个是还原 还原完  "123*45|67>8<9?10|11:12
+	//for (auto it = mapEscape.begin(); it != mapEscape.end(); ++it)
+	//{
+	//	name = name.replace(it.value(), it.key());
+	//}
+	return sNewFileName;
+}

@@ -1,6 +1,7 @@
 #include "ITObjectDataMgr.h"
 #include "./Astar/AStarUtil.h"
 #include "GPCalc.h"
+#include "ITLog.h"
 #include "ITObjectID.h"
 #include "RpcSocketClient.h"
 #include "StdAfx.h"
@@ -87,7 +88,7 @@ bool ITObjectDataMgr::init()
 	int startHide = iniFile.value("game/startHide", 0).toInt();
 	int followPos = iniFile.value("game/followPos", 0).toInt();
 	int mazeWaitTime = iniFile.value("game/mazeWaitTime", 5000).toInt();
-	int loginWaitTime = iniFile.value("game/loginIntervalTime", 3000).toInt();//登录间隔
+	int loginWaitTime = iniFile.value("game/loginIntervalTime", 3000).toInt(); //登录间隔
 	if (loginWaitTime < 0)
 	{
 		loginWaitTime = 0;
@@ -102,6 +103,15 @@ bool ITObjectDataMgr::init()
 	QString sMQTTServerIp = iniFile.value("server/mqttIP", "www.luguo666.com").toString();
 	int nMQTTServerPort = iniFile.value("server/mqttPort", 1883).toInt();
 	m_sMQTTCode = iniFile.value("server/mqttcode", "").toString();
+	//日志配置
+	QString logPath = QApplication::applicationDirPath() + "\\Log";
+	QDir logDir;
+	if (!logDir.exists(logPath)) logDir.mkdir(logPath);
+	LOGGER->setStrBaseDir(logPath.toStdWString());
+	LOGGER->setTelnetLogPort(iniFile.value("Log/LogPort").toInt());
+	LOGGER->setLogLevel(iniFile.value("Log/LogLevel").toInt());
+	g_pGameCtrl->SetCreateLog(iniFile.value("Log/Open").toBool());
+	//LOGGER->open();
 
 	m_client = new QMqttClient;
 	m_client->setHostname(sMQTTServerIp);
@@ -1562,7 +1572,7 @@ void ITObjectDataMgr::OnRecvMessage(const QByteArray &message, const QMqttTopicN
 {
 	//const QString content = QDateTime::currentDateTime().toString() + QLatin1String(" Received Topic: ") + topic.name() + QLatin1String(" Message: ") + message + QLatin1Char('\n');
 	//qDebug() << content;
-	QString tmpTopic=topic.name();
+	QString tmpTopic = topic.name();
 	if (tmpTopic.startsWith(m_sMQTTCode))
 	{
 		tmpTopic = tmpTopic.mid(m_sMQTTCode.size());

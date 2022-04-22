@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AutoBattle.h"
+#include "GameCustomBattleWgt.h"
 #include "ui_GameBattleWgt.h"
 #include <QSound>
 #include <QWidget>
@@ -111,8 +112,13 @@ public slots:
 
 	void on_pushButton_petDoubleAction_clicked();
 
+	void deal_float_customBattleWgt();
+
 private:
 	Ui::GameBattleWgt ui;
+	QDialog *m_pFloatCustomBattleDlg;
+	QVBoxLayout *m_pVBoxLayout;
+	GameCustomBattleWgt *m_pCustomBattleWgt;
 	//逃跑时候宠物默认动作和目标
 	//懒得写对话框了 这里加个配置，直接复用对话框
 	CBattleSettingPtr m_pEscapeSetting;

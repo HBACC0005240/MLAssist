@@ -6,6 +6,7 @@
 #include "../include/qxtglobalshortcut5/QxtGlobalShortcut.h"
 #include "FZParseScript.h"
 #include "GameCtrl.h"
+#include "ITObjectDataMgr.h"
 #include <math.h>
 #include <QAction>
 #include <QDebug>
@@ -15,7 +16,6 @@
 #include <QSystemTrayIcon>
 #include <QToolButton>
 #include <QtConcurrent>
-#include "ITObjectDataMgr.h"
 MLAssist::MLAssist(QWidget *parent) :
 		QWidget(parent)
 {
@@ -421,7 +421,7 @@ void MLAssist::SaveLoginBat(int type)
 	{
 		dir.mkdir(saveDir);
 	}
-	QString savePath = QString("%1\\%2.bat").arg(saveDir).arg(g_pGameCtrl->getGameCharacter()->name);
+	QString savePath = QString("%1\\%2.bat").arg(saveDir).arg(ConvertFileName(g_pGameCtrl->getGameCharacter()->name));
 
 	QString path = QFileDialog::getSaveFileName(this, "保存启动批处理", savePath, "*.bat");
 	if (path.isEmpty())
@@ -507,7 +507,7 @@ bool MLAssist::eventFilter(QObject *obj, QEvent *event)
 void MLAssist::OnNotifyLoginProgressStart()
 {
 	m_bIsInLoginProgress = true;
-	auto pChar=g_pGameCtrl->getGameCharacter();
+	auto pChar = g_pGameCtrl->getGameCharacter();
 	if (g_pGameFun->IsOnline())
 		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(pChar->name).arg(g_pGameFun->GetGameServerLine()));
 	else

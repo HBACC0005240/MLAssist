@@ -16,6 +16,21 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 	m_pSoundAlarm = new QSound(QApplication::applicationDirPath() + "//ALARM.wav");
 	ui.tabWidget->setStyle(new ITTabBarStyle);
 
+	m_pCustomBattleWgt = new GameCustomBattleWgt;
+	m_pFloatCustomBattleDlg = new QDialog;
+	m_pFloatCustomBattleDlg->setMinimumSize(640, 600);
+	m_pFloatCustomBattleDlg->setWindowFlags(m_pFloatCustomBattleDlg->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	m_pFloatCustomBattleDlg->setWindowTitle("自定义配置");
+	m_pVBoxLayout = new QVBoxLayout(m_pFloatCustomBattleDlg);
+	m_pFloatCustomBattleDlg->setLayout(m_pVBoxLayout);
+	connect(m_pFloatCustomBattleDlg, &QDialog::finished, this, [&](int code)
+			{
+				ui.tabWidget->addTab(m_pCustomBattleWgt, "自定义设置");
+				ui.tabWidget->setCurrentWidget(m_pCustomBattleWgt);
+			});
+
+	connect(m_pCustomBattleWgt, SIGNAL(signal_float_window()), this, SLOT(deal_float_customBattleWgt()));
+	ui.tabWidget->addTab(m_pCustomBattleWgt, "自定义设置");
 	//Setting主要是用来复用对话框，宠物部分有用，其他设置无实际意义
 	CBattleCondition_EnemyType *pCondition = (CBattleCondition_EnemyType *)g_battleModuleReg.CreateNewBattleObj(dtCondition_EnemyType);
 	CBattleCondition *pCondition2 = new CBattleCondition_Ignore();
@@ -47,13 +62,13 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 			{ ui.checkBox_allEscape->setChecked(bFlag); });
 	connect(g_pGameCtrl, &GameCtrl::signal_switchNoLvlEncounterEscapeUI, this, [&](bool bFlag)
 			{ ui.checkBox_NoLv1Escape->setChecked(bFlag); });
-	connect(g_pGameCtrl, &GameCtrl::signal_switchEscapeUI, this, [&](int type,bool bFlag,QString sText)
-			{ 
+	connect(g_pGameCtrl, &GameCtrl::signal_switchEscapeUI, this, [&](int type, bool bFlag, QString sText)
+			{
 				switch (type)
 				{
 					case TSysConfigSet_EnemyAvgLvEscape:
 					{
-						ui.checkBox_EnemyAvgLv->setChecked(bFlag); 
+						ui.checkBox_EnemyAvgLv->setChecked(bFlag);
 						ui.lineEdit_EnemyAvgLv->setText(sText);
 						break;
 					}
@@ -71,7 +86,6 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 					}
 					default: break;
 				}
-				
 			});
 	connect(g_pGameCtrl, &GameCtrl::signal_setMoveSpeedUI, this, [&](int speed)
 			{ ui.horizontalSlider_moveSpeed->setValue(speed); });
@@ -185,9 +199,9 @@ void GameBattleWgt::doLoadJsConfig(QJsonObject &obj)
 			ui.checkBox_OverTimeT->setChecked(playerobj.take("antiafkkick").toBool());
 
 		if (playerobj.contains("movespd"))
-			ui.horizontalSlider_moveSpeed->setValue(playerobj.take("movespd").toInt());		
+			ui.horizontalSlider_moveSpeed->setValue(playerobj.take("movespd").toInt());
 	}
-	ui.customBattleWgt->ParseBattleSettings(obj.take("battle"));
+	m_pCustomBattleWgt->ParseBattleSettings(obj.take("battle"));
 }
 
 void GameBattleWgt::doSaveJsConfig(QJsonObject &obj)
@@ -219,7 +233,7 @@ void GameBattleWgt::doSaveJsConfig(QJsonObject &obj)
 	battle.insert("delayto", delayVal);
 
 	QJsonArray list;
-	ui.customBattleWgt->SaveBattleSettings(battle);
+	m_pCustomBattleWgt->SaveBattleSettings(battle);
 	obj.insert("battle", battle);
 }
 
@@ -429,9 +443,10 @@ void GameBattleWgt::on_comboBox_battleDelay_currentIndexChanged(int index)
 	int nDelayTime = ui.comboBox_battleDelay->currentData().toInt();
 	if (nDelayTime == 0)
 	{
-		g_pAutoBattleCtrl->SetBattleDelay(false,0);
-	}else
-		g_pAutoBattleCtrl->SetBattleDelay(true,nDelayTime);
+		g_pAutoBattleCtrl->SetBattleDelay(false, 0);
+	}
+	else
+		g_pAutoBattleCtrl->SetBattleDelay(true, nDelayTime);
 }
 
 void GameBattleWgt::on_pushButton_TroopHp_clicked()
@@ -1025,7 +1040,7 @@ void GameBattleWgt::on_lineEdit_EnemyAvgLv_editingFinished()
 
 void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 {
-	ui.customBattleWgt->doLoadUserConfig(iniFile);
+	m_pCustomBattleWgt->doLoadUserConfig(iniFile);
 	//战斗设置读取
 	iniFile.beginGroup("BattleSet");
 	ui.checkBox_auto->setChecked(iniFile.value("AutoBattle").toBool());
@@ -1264,15 +1279,15 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 		m_pEscapeSetting = CBattleSettingPtr(new CBattleSetting(pCondition, pCondition2, pPlayerAction, nullptr, m_pEscapePetAction, m_pEscapePetTarget));
 	}
 
-	ui.checkBox_allEscape->setChecked(iniFile.value("IsAllEscape").toBool());	//全跑
-	ui.checkBox_NoLv1Escape->setChecked(iniFile.value("IsNoLv1").toBool());		//无1级怪逃跑
-	ui.checkBox_noBossEscape->setChecked(iniFile.value("IsNoBoss").toBool());	//非Boss战逃跑
-	ui.groupBox_SpecialEnemyEscape->setChecked(iniFile.value("IsSpecialEnemy").toBool());	//指定敌人逃跑
+	ui.checkBox_allEscape->setChecked(iniFile.value("IsAllEscape").toBool());			  //全跑
+	ui.checkBox_NoLv1Escape->setChecked(iniFile.value("IsNoLv1").toBool());				  //无1级怪逃跑
+	ui.checkBox_noBossEscape->setChecked(iniFile.value("IsNoBoss").toBool());			  //非Boss战逃跑
+	ui.groupBox_SpecialEnemyEscape->setChecked(iniFile.value("IsSpecialEnemy").toBool()); //指定敌人逃跑
 	/*ui.radioButton_EscapeAttack->setChecked(iniFile.value("PetAttack").toBool());
 	ui.radioButton_EscapeGuard->setChecked(iniFile.value("PetGuard").toBool());
 	ui.radioButton_EscapeNothing->setChecked(iniFile.value("PetNothing").toBool());*/
-	ui.checkBox_EnemyAvgLv->setChecked(iniFile.value("IsEnemyAvgLv").toBool());	//敌人平均等级逃跑
-	ui.checkBox_EnemyCount->setChecked(iniFile.value("IsEnemyCount").toBool());	//敌人数量逃跑
+	ui.checkBox_EnemyAvgLv->setChecked(iniFile.value("IsEnemyAvgLv").toBool()); //敌人平均等级逃跑
+	ui.checkBox_EnemyCount->setChecked(iniFile.value("IsEnemyCount").toBool()); //敌人数量逃跑
 	ui.checkBox_TeamCount->setChecked(iniFile.value("IsTeamCount").toBool());	//队伍人数逃跑
 	ui.lineEdit_EnemyAvgLv->setText(iniFile.value("EnemyAvgLv").toString());
 	ui.lineEdit_EnemyCount->setText(iniFile.value("EnemyCount").toString());
@@ -1409,7 +1424,7 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 
 void GameBattleWgt::doSaveUserConfig(QSettings &iniFile)
 {
-	ui.customBattleWgt->doSaveUserConfig(iniFile);
+	m_pCustomBattleWgt->doSaveUserConfig(iniFile);
 
 	//战斗部分  应该用界面的  懒得改 后面有时间改
 	iniFile.beginGroup("BattleSet");
@@ -1417,7 +1432,7 @@ void GameBattleWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("HighSpeed", g_pAutoBattleCtrl->m_bHighSpeed);										//是否高速战斗
 																										//	iniFile.setValue("HightSpeedDelay", g_pAutoBattleCtrl->m_nHightSpeedDelay);		//延时
 	iniFile.setValue("HightSpeedDelay", ui.comboBox_highSpeedDelay->currentData(Qt::UserRole).toInt()); //延时
-	iniFile.setValue("BattleDelay", ui.comboBox_battleDelay->currentData(Qt::UserRole).toInt());	//延时
+	iniFile.setValue("BattleDelay", ui.comboBox_battleDelay->currentData(Qt::UserRole).toInt());		//延时
 	iniFile.setValue("FirstRoundNoDelay", g_pAutoBattleCtrl->m_bFirstRoundNoDelay);						//第一回合加速
 	iniFile.setValue("BossProtect", g_pAutoBattleCtrl->m_bBOSSProtect);									//Boss战停止
 	iniFile.setValue("Lv1Protect", g_pAutoBattleCtrl->m_bLevelOneProtect);								//1级怪停止
@@ -1857,4 +1872,21 @@ void GameBattleWgt::on_pushButton_petDoubleAction_clicked()
 {
 	PetDoubleActionSetDlg dlg;
 	dlg.exec();
+}
+
+void GameBattleWgt::deal_float_customBattleWgt()
+{
+	if (ui.tabWidget->count() >= 2)
+	{
+		ui.tabWidget->removeTab(1);
+		m_pVBoxLayout->addWidget(m_pCustomBattleWgt);
+		m_pCustomBattleWgt->show();
+		m_pFloatCustomBattleDlg->show();
+	}
+	else
+	{
+		m_pFloatCustomBattleDlg->hide();
+		ui.tabWidget->addTab(m_pCustomBattleWgt, "自定义设置");
+		ui.tabWidget->setCurrentWidget(m_pCustomBattleWgt);
+	}
 }

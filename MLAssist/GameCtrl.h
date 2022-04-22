@@ -44,6 +44,7 @@ public:
 	void SetGameThreadID(quint32 thID) { m_nGameThreadID = thID; }
 	void SetGameCGAMutex(HANDLE mutex) { m_hGameMutex = mutex; }
 	void SetSelfHttpServerPort(int port) { m_nSelfHttpServerPort = port; }
+	void SetCreateLog(bool bFlag) { m_bCreateLog = bFlag; }
 
 	quint32 GetGameThreadID() { return m_nGameThreadID; }
 	int GetGamePort() { return m_nGamePort; }
@@ -52,6 +53,7 @@ public:
 	ULONG getGameBaseAddr() { return m_gameBaseAddr; }
 	HANDLE GetGameCGAMutex() { return m_hGameMutex; }
 	int GetSelfHttpServerPort() { return m_nSelfHttpServerPort; }
+	bool GetCreateLog() { return m_bCreateLog; }
 
 	void SetGameGid(const QString &gid);
 	QString GetGameGid();
@@ -230,7 +232,7 @@ signals:
 	void signal_setBattleDelayUI(int);								   //设置战斗延时
 	void signal_switchAllEncounterEscapeUI(bool);					   //打开关闭遇敌全跑
 	void signal_switchNoLvlEncounterEscapeUI(bool);					   //打开关闭无1级全跑
-	void signal_switchEscapeUI(int,bool,QString);					   //打开关闭逃跑项
+	void signal_switchEscapeUI(int, bool, QString);					   //打开关闭逃跑项
 	void signal_switchNoPetDoubleActionUI(bool);					   //打开关闭无宠二动
 	void signal_switchNoPetActionUI(int, bool);						   //设置无宠二动选项
 	void signal_switchAutoEatUi(int, bool);							   //设置自动吃 深蓝、狗粮、时水
@@ -438,10 +440,11 @@ private:
 	QVector<QPair<quint64, QSharedPointer<CGA_NPCDialog_t> > > m_npcDlgCache;			 //对话框缓存
 	QVector<QPair<quint64, QSharedPointer<CGA::cga_working_result_t> > > m_workResCache; //工作缓存
 	QVector<QPair<quint64, QSharedPointer<CGA::cga_trade_dialog_t> > > m_tradeDlgCache;	 //交易对话框缓存
-	QMutex m_npcDlgMutex;
-	QMutex m_tradeDlgMutex;
-	QMutex m_workResMutex;
-	bool m_repeatedGidExit = true;
-	int m_loginWaitInterval = 3000; //自动登录间隔
+	QMutex m_npcDlgMutex;																 //npc对话框锁
+	QMutex m_tradeDlgMutex;																 //交易对话框锁
+	QMutex m_workResMutex;																 //工作返回锁
+	bool m_repeatedGidExit = true;														 //重复挂接是否退出
+	int m_loginWaitInterval = 3000;														 //自动登录间隔
+	bool m_bCreateLog = false;															 //日志开关
 };
 #define g_pGameCtrl GameCtrl::getInstace()

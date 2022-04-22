@@ -2,6 +2,7 @@
 #include "../include/ITPublic.h"
 #include "CGFunction.h"
 #include "GPCalc.h"
+#include "ITLog.h"
 #include "ITObjectDataMgr.h"
 #include "RpcSocketClient.h"
 #include "YunLai.h"
@@ -575,6 +576,19 @@ void GameCtrl::StartUpdateTimer()
 							  //QThreadPool::globalInstance()->setMaxThreadCount(100);
 							  //qDebug() << "线程池最大线程个数：" << QThreadPool::globalInstance()->maxThreadCount();
 	g_pGameFun->RestFun();
+	{
+		if (m_bCreateLog)
+		{
+			QString sLogFileName;
+			void *pBaseAddr = YunLai::GetProcessImageBase1(m_gameProcessID);
+			QString sUserName = QString(" [%1] ").arg(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(m_gameProcessID, (ULONG_PTR)pBaseAddr + 0xE12D30, 17))));
+			QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(m_gameProcessID, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
+			sLogFileName = szLoginUserID + sUserName;
+			sLogFileName = ConvertFileName(sLogFileName);
+			LOGGER->setLogFileName(sLogFileName.toStdWString());
+			LOGGER->open();
+		}
+	}
 }
 
 void GameCtrl::StopUpdateTimer()
@@ -592,6 +606,8 @@ void GameCtrl::StopUpdateTimer()
 	m_updateTimer.stop();	 //更新定时器
 	m_characterTimer.stop(); //人物定时器
 	m_mapTimer.stop();		 //地图定时器
+	if (m_bCreateLog)
+		LOGGER->close();
 }
 
 void GameCtrl::ResetGameConnectState()
@@ -1558,14 +1574,14 @@ bool GameCtrl::AutoDropPet()
 	for (auto it = m_bDropPetCheckItem.begin(); it != m_bDropPetCheckItem.end(); ++it)
 	{
 		if (it.value() && it.key() != TDropPetType_RealName) //勾选 判断  如果是名称 不判断
-		{			
+		{
 			for (size_t i = 0; i < petsinfo.size(); ++i)
 			{
-				CGA::cga_pet_info_t pet = petsinfo.at(i);				
-				if (bCheckRealName && pet.realname != sPetRealName.toStdString())				
+				CGA::cga_pet_info_t pet = petsinfo.at(i);
+				if (bCheckRealName && pet.realname != sPetRealName.toStdString())
 					continue;
 				int nVal = m_nDropPetCheckVal.value(it.key()).toInt();
-				
+
 				//			qDebug() << QString("%1 %2 %3 %4 %5 %6").arg(i).arg(pet.flags).arg(pet.battle_flags).arg(QString::fromStdString(pet.name)).arg(pet.maxhp).arg(pet.index);
 
 				bool bDrop = false;
@@ -3070,7 +3086,7 @@ void GameCtrl::OnGetCharacterData()
 		emit NotifyGameCharacterInfo(m_pGameCharacter);
 		emit signal_updateTrayToolTip(QString("%1 离线").arg(m_pGameCharacter->name));
 	}
-	
+
 	//emit NotifyGameItemsInfo(new);
 	emit NotifyGamePetsInfo(m_pGamePets);
 	emit NotifyGameSkillsInfo(m_pGameSkills);
