@@ -127,6 +127,7 @@ void MLAssist::closeEvent(QCloseEvent *event)
 {
 	if (QMessageBox::information(this, "提示：", "是否关闭辅助？", "是", "否") == QString("是").toInt())
 	{
+		qDebug() << "程序退出";
 		event->accept();
 	}
 	else
@@ -213,6 +214,7 @@ void MLAssist::doIconActivated(QSystemTrayIcon::ActivationReason reason)
 }
 void MLAssist::quitAndDeleteAllInfo()
 {
+	qDebug() << "quitAndDeleteAllInfo 程序退出";
 	killProcess();
 	ITObjectDataMgr::getInstance().SetExitGame(true);
 	g_pGameCtrl->SetExitGame(true);

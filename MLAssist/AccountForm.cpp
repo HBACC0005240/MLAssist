@@ -332,7 +332,7 @@ bool AccountForm::QueryAttachGameWnd()
 							else
 							{
 								auto attachPid = g_pGameCtrl->getGamePID();
-								if (pid != 0 && pid != attachPid)
+								if (pid != 0 && attachPid != 0 && pid != attachPid)
 								{
 									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 									{
@@ -375,11 +375,11 @@ bool AccountForm::QueryAttachGameWnd()
 				{
 
 					auto attachPid = g_pGameCtrl->getGamePID();
-					if (wnd->m_ProcessId != 0 && wnd->m_ProcessId != attachPid)
+					if (wnd->m_ProcessId != 0 && attachPid != 0 && wnd->m_ProcessId != attachPid)
 					{
 						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 						{
-							qDebug() << "该ID已附加，退出！" << wnd->m_ProcessId << attachPid;
+							qDebug() << "wnd->m_ProcessId 该ID已附加，退出！" << wnd->m_ProcessId << attachPid;
 							qApp->exit(0);
 							return true;
 						}
