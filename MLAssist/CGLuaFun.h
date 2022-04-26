@@ -12,6 +12,9 @@ using namespace LuaPlus;
 
 #include "../CGALib/gameinterface.h"
 #include "CGFunction.h"
+#include "ITNetAgent.h"
+#include "ITTcpServer.h"
+#include "ITTcpSocket.h"
 
 extern CGA::CGAInterface *g_CGAInterface;
 #include <QString>
@@ -321,7 +324,7 @@ public:
 	//解析购买列表
 	int Lua_ParseBuyStoreMsg(LuaState *L);
 	//卖东西
-	int Lua_Sale(LuaState *L);	
+	int Lua_Sale(LuaState *L);
 	//卖东西
 	int Lua_Sale2(LuaState *L);
 	//卖东西
@@ -490,7 +493,7 @@ public:
 
 	//Rpc
 	//查询gid数据
-	int Lua_SelectGidData(LuaState* L);
+	int Lua_SelectGidData(LuaState *L);
 
 	void PauseScript();
 	void ResumeScript();
@@ -512,6 +515,19 @@ public:
 	void ClearRegisterFun() { m_lastRegisterFunName.clear(); }
 	void CallRegisterFun(LuaState *L, const QString &topic, const QString &msg);
 
+	//网络部分，不使用lua库，用qt部分实现，内置缓存功能
+
+	//创建本地TCP服务器
+	int Lua_CreateTcpServer(LuaState *L);
+	//创建tcp客户端 并连接至目标服务器
+	int Lua_ConnectTcpServer(LuaState *L);
+	int Lua_CloseTcpServer(LuaState *L);
+	int Lua_CloseTcpClient(LuaState *L);
+	int Lua_SendDataToServer(LuaState *L);
+	int Lua_RecvDataFromServer(LuaState *L);
+	int Lua_SendDataToAllClient(LuaState *L);
+	int Lua_RecvDataFromAllClient(LuaState *L);
+
 private:
 	//QVariant转换为lua 错误默认push 0
 	void TransVariantToLua(LuaState *L, QVariant &val, bool bTransToInt = true);
@@ -519,6 +535,8 @@ private:
 	lua_State *m_pLuaState = nullptr;
 	QString m_lastScriptPath;
 	QString m_lastRegisterFunName;
+	QSet<ITTcpServer *> m_pTcpServers;
+	QSet<ITNetAgent *> m_pTcpAgents;
 };
 //
 //static void RegisterFun(lua_State* pState)

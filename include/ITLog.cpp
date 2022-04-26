@@ -28,7 +28,7 @@ ITLog* ITLog::instance()
 bool ITLog::open()
 {
 	std::wstring strLog = m_strBaseDir + LOG4CPLUS_STRING_TO_TSTRING("\\") + m_strBaseFileName + LOG4CPLUS_STRING_TO_TSTRING(".txt");// LOG4CPLUS_STRING_TO_TSTRING("\\log.txt");
-	SharedAppenderPtr _append(new RollingFileAppender((strLog), 10 * 1024 * 1024, 10));
+	SharedAppenderPtr _append(new RollingFileAppender((strLog), 10 * 1024 * 1024, 2));
 	_append->setName(LOG4CPLUS_TEXT("File Append"));
 
 	SharedObjectPtr<Appender> _append2(new ConsoleAppender());

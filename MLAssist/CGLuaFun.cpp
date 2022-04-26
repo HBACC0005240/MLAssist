@@ -1,10 +1,10 @@
 #include "CGLuaFun.h"
+#include "GPCalc.h"
 #include "GameCtrl.h"
 #include "ITObjectDataMgr.h"
 #include "RpcSocketClient.h"
 #include <windows.h>
 #include <QApplication>
-#include "GPCalc.h"
 CGLuaFun::CGLuaFun()
 {
 	//m_pLuaState = luaL_newstate();
@@ -1704,7 +1704,7 @@ int CGLuaFun::Lua_GetPetData(LuaState *L)
 		tableObj.SetInteger("battle_flags", info.battle_flags);
 		tableObj.SetInteger("state", info.state);
 		tableObj.SetInteger("index", info.index);
-		if (info.level == 1)//暂时只有1级 有档次计算
+		if (info.level == 1) //暂时只有1级 有档次计算
 		{
 			auto pCalcData = g_pGamePetCalc->ParseLine(g_pGameFun->GetPetCalcBpData(info));
 			if (pCalcData)
@@ -1712,8 +1712,8 @@ int CGLuaFun::Lua_GetPetData(LuaState *L)
 				tableObj.SetInteger("grade", pCalcData->lossMin);
 				tableObj.SetInteger("minGrade", pCalcData->lossMin);
 				tableObj.SetInteger("maxGrade", pCalcData->lossMax);
-			}		
-		}		
+			}
+		}
 		tableObj.Push(L);
 		return 1;
 	}
@@ -2625,7 +2625,7 @@ int CGLuaFun::Lua_DropPet(LuaState *L)
 		L->PushBoolean(bRet);
 		return 1;
 	}
-	else if(args.Count() > 0 && args[1].IsString())
+	else if (args.Count() > 0 && args[1].IsString())
 	{
 		QString sPet = args[1].GetString();
 		bool bRet = g_pGameFun->DropPet(sPet);
@@ -4055,7 +4055,7 @@ int CGLuaFun::Lua_SendMail(LuaState *L)
 	{
 		index = args[1].GetInteger();
 	}
-	std::string msg = args[2].GetString();	
+	std::string msg = args[2].GetString();
 	bool bRet = false;
 	g_CGAInterface->SendMail(index, msg, bRet);
 	return 0;
@@ -4136,7 +4136,7 @@ int CGLuaFun::Lua_SetMailState(LuaState *L)
 	QString friendName;
 	if (args[1].IsInteger())
 	{
-		index = args[1].GetInteger();		
+		index = args[1].GetInteger();
 	}
 	else if (args[1].IsString())
 	{
@@ -5186,6 +5186,112 @@ void CGLuaFun::CallRegisterFun(LuaState *L, const QString &topic, const QString 
 	lua_pushstring(L->GetCState(), msg.toStdString().c_str());
 	lua_pcall(L->GetCState(), 2, 1, 0);
 	lua_pop(L->GetCState(), 1);
+}
+
+int CGLuaFun::Lua_CreateTcpServer(LuaState *L)
+{
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		tblObj.SetBoolean("state", false);
+		tblObj.SetString("msg", "未指定端口号");
+		tblObj.SetInteger("id", -1);
+		tblObj.Push(L);
+		return 1;
+	}
+	int nPort = args[1].GetInteger();
+	ITTcpServer *pTcpServer = new ITTcpServer;
+	bool bRet = pTcpServer->listen(QHostAddress::Any, nPort);
+	if (!bRet)
+	{
+		SafeDelete(pTcpServer);
+		tblObj.SetBoolean("state", false);
+		tblObj.SetString("msg", "指定端口监听失败，请查看端口是否已被占用!");
+		tblObj.SetInteger("id", -1);
+		tblObj.Push(L);
+		return 1;
+	}
+	m_pTcpServers.insert(pTcpServer);
+	tblObj.SetBoolean("state", true);
+	tblObj.SetString("msg", "创建Tcp网络服务成功!");
+	tblObj.SetInteger("id", (int)pTcpServer);
+	tblObj.Push(L);
+	return 1;
+}
+
+int CGLuaFun::Lua_ConnectTcpServer(LuaState *L)
+{
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	LuaStack args(L);
+	if (args.Count() < 2)
+	{
+		tblObj.SetBoolean("state", false);
+		tblObj.SetString("msg", "未指定IP地址和端口号");
+		tblObj.SetInteger("id", -1);
+		tblObj.Push(L);
+		return 1;
+	}
+	QString sName = args[3].GetString();
+	QString sIp = args[1].GetString();
+	if (sIp.isEmpty())
+		sIp = "127.0.0.1";
+	int nPort = args[2].GetInteger();
+	ITNetAgent *pNetAgent = new ITNetAgent;
+	pNetAgent->SetServerName(sName);
+	pNetAgent->SetServerAddr(sIp, nPort);
+	pNetAgent->startThread();
+	m_pTcpAgents.insert(pNetAgent);
+	tblObj.SetBoolean("state", true);
+	tblObj.SetString("msg", "创建Tcp客户端成功!");
+	tblObj.SetInteger("id", (int)pNetAgent);
+	tblObj.Push(L);
+	return 1;
+}
+
+int CGLuaFun::Lua_CloseTcpServer(LuaState *L)
+{
+	for (auto tmpServer : m_pTcpServers)
+	{
+		tmpServer->shutdown();
+		SafeDelete(tmpServer);
+	}
+	m_pTcpServers.clear();
+	return 0;
+}
+
+int CGLuaFun::Lua_CloseTcpClient(LuaState *L)
+{
+	for (auto tmpClient : m_pTcpAgents)
+	{
+		tmpClient->stopThread();
+		SafeDelete(tmpClient);
+	}
+	m_pTcpAgents.clear();
+	return 0;
+}
+
+int CGLuaFun::Lua_SendDataToServer(LuaState *L)
+{
+	return 0;
+}
+
+int CGLuaFun::Lua_RecvDataFromServer(LuaState *L)
+{
+	return 0;
+}
+
+int CGLuaFun::Lua_SendDataToAllClient(LuaState *L)
+{
+	return 0;
+}
+
+int CGLuaFun::Lua_RecvDataFromAllClient(LuaState *L)
+{
+	return 0;
 }
 
 void CGLuaFun::TransVariantToLua(LuaState *L, QVariant &val, bool bTransToInt /*=true*/)
