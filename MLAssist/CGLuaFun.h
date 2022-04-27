@@ -522,7 +522,9 @@ public:
 	//创建tcp客户端 并连接至目标服务器
 	int Lua_ConnectTcpServer(LuaState *L);
 	int Lua_CloseTcpServer(LuaState *L);
+	int Lua_CloseAllTcpServer(LuaState *L);
 	int Lua_CloseTcpClient(LuaState *L);
+	int Lua_CloseAllTcpClient(LuaState *L);
 	int Lua_SendDataToServer(LuaState *L);
 	int Lua_RecvDataFromServer(LuaState *L);
 	int Lua_SendDataToAllClient(LuaState *L);
@@ -535,8 +537,6 @@ private:
 	lua_State *m_pLuaState = nullptr;
 	QString m_lastScriptPath;
 	QString m_lastRegisterFunName;
-	QSet<ITTcpServer *> m_pTcpServers;
-	QSet<ITNetAgent *> m_pTcpAgents;
 };
 //
 //static void RegisterFun(lua_State* pState)

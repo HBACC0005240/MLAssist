@@ -1,6 +1,7 @@
 #include "CGLuaFun.h"
 #include "GPCalc.h"
 #include "GameCtrl.h"
+#include "ITNetworkFactory.h"
 #include "ITObjectDataMgr.h"
 #include "RpcSocketClient.h"
 #include <windows.h>
@@ -5203,18 +5204,22 @@ int CGLuaFun::Lua_CreateTcpServer(LuaState *L)
 		return 1;
 	}
 	int nPort = args[1].GetInteger();
-	ITTcpServer *pTcpServer = new ITTcpServer;
-	bool bRet = pTcpServer->listen(QHostAddress::Any, nPort);
+	//ITTcpServer *pTcpServer = g_pNetworkFactory->CreateNewTcpServer(nPort);
+	auto tmpRetServ = g_pNetworkFactory->CreateNewTcpServer(nPort);
+	ITTcpServer *pTcpServer = std::get<0>(tmpRetServ);
+	bool tRetSate = std::get<1>(tmpRetServ);
+	QString tRetMsg = std::get<2>(tmpRetServ);
+	qDebug() << pTcpServer << tRetSate << tRetMsg;
+	bool bRet = tRetSate;
+	//pTcpServer->listen(QHostAddress::Any, nPort);
 	if (!bRet)
 	{
-		SafeDelete(pTcpServer);
 		tblObj.SetBoolean("state", false);
 		tblObj.SetString("msg", "指定端口监听失败，请查看端口是否已被占用!");
 		tblObj.SetInteger("id", -1);
 		tblObj.Push(L);
 		return 1;
 	}
-	m_pTcpServers.insert(pTcpServer);
 	tblObj.SetBoolean("state", true);
 	tblObj.SetString("msg", "创建Tcp网络服务成功!");
 	tblObj.SetInteger("id", (int)pTcpServer);
@@ -5240,11 +5245,20 @@ int CGLuaFun::Lua_ConnectTcpServer(LuaState *L)
 	if (sIp.isEmpty())
 		sIp = "127.0.0.1";
 	int nPort = args[2].GetInteger();
-	ITNetAgent *pNetAgent = new ITNetAgent;
-	pNetAgent->SetServerName(sName);
-	pNetAgent->SetServerAddr(sIp, nPort);
-	pNetAgent->startThread();
-	m_pTcpAgents.insert(pNetAgent);
+	auto tmpRetClent = g_pNetworkFactory->CreateNewTcpClient(sIp, nPort, sName);
+
+	ITNetAgent *pNetAgent = std::get<0>(tmpRetClent);
+	bool tRetSate = std::get<1>(tmpRetClent);
+	QString tRetMsg = std::get<2>(tmpRetClent);
+	qDebug() << pNetAgent << tRetSate << tRetMsg;
+	if (!tRetSate)
+	{
+		tblObj.SetBoolean("state", false);
+		tblObj.SetString("msg", "创建TCP客户端失败!");
+		tblObj.SetInteger("id", -1);
+		tblObj.Push(L);
+		return 1;
+	}
 	tblObj.SetBoolean("state", true);
 	tblObj.SetString("msg", "创建Tcp客户端成功!");
 	tblObj.SetInteger("id", (int)pNetAgent);
@@ -5254,23 +5268,25 @@ int CGLuaFun::Lua_ConnectTcpServer(LuaState *L)
 
 int CGLuaFun::Lua_CloseTcpServer(LuaState *L)
 {
-	for (auto tmpServer : m_pTcpServers)
-	{
-		tmpServer->shutdown();
-		SafeDelete(tmpServer);
-	}
-	m_pTcpServers.clear();
+	g_pNetworkFactory->CloseAllTcpServer();
+	return 0;
+}
+
+int CGLuaFun::Lua_CloseAllTcpServer(LuaState *L)
+{
+	g_pNetworkFactory->CloseAllTcpServer();
 	return 0;
 }
 
 int CGLuaFun::Lua_CloseTcpClient(LuaState *L)
 {
-	for (auto tmpClient : m_pTcpAgents)
-	{
-		tmpClient->stopThread();
-		SafeDelete(tmpClient);
-	}
-	m_pTcpAgents.clear();
+	g_pNetworkFactory->CloseAllTcpClient();
+	return 0;
+}
+
+int CGLuaFun::Lua_CloseAllTcpClient(LuaState *L)
+{
+	g_pNetworkFactory->CloseAllTcpClient();
 	return 0;
 }
 
@@ -5287,6 +5303,11 @@ int CGLuaFun::Lua_SendDataToServer(LuaState *L)
 		if (args.Count() < 2)
 			break;
 		int clientID = args[1].GetInteger();
+		if (clientID == -1)
+		{
+			tblObj.SetString("msg", "客户端ID错误");
+			break;
+		}
 		QString sData = args[2].GetString();
 		ITNetAgent *pNetAgent = (ITNetAgent *)clientID;
 		if (!pNetAgent)
@@ -5310,19 +5331,26 @@ int CGLuaFun::Lua_RecvDataFromServer(LuaState *L)
 	tblObj.SetBoolean("state", false);
 	tblObj.SetString("msg", "参数错误");
 	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
 	LuaStack args(L);
 	do
 	{
 		if (args.Count() < 1)
 			break;
 		int clientID = args[1].GetInteger();
+		if (clientID == -1)
+		{
+			tblObj.SetString("msg", "客户端ID错误");
+			break;
+		}
 		ITNetAgent *pNetAgent = (ITNetAgent *)clientID;
 		if (!pNetAgent)
 		{
 			tblObj.SetString("msg", "客户端ID错误");
 			break;
 		}
-		pNetAgent->AddToSendQ(sData.toLatin1());
+		QString recvData = pNetAgent->ReadNextRecvData();
+		tblObj.SetString("data", recvData.toStdString().c_str());
 	} while (0);
 	tblObj.Push(L);
 	return 1;
@@ -5330,12 +5358,72 @@ int CGLuaFun::Lua_RecvDataFromServer(LuaState *L)
 
 int CGLuaFun::Lua_SendDataToAllClient(LuaState *L)
 {
-	return 0;
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	tblObj.SetBoolean("state", false);
+	tblObj.SetString("msg", "参数错误");
+	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
+	LuaStack args(L);
+	do
+	{
+		if (args.Count() < 2)
+			break;
+		int serverID = args[1].GetInteger();
+		if (serverID == -1)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		QByteArray tmpSendData = args[2].GetString();
+		ITTcpServer *pNetServer = (ITTcpServer *)serverID;
+		if (!pNetServer)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		pNetServer->sendDataToAllClients(tmpSendData, tmpSendData.size());
+		tblObj.SetBoolean("state", true);
+
+	} while (0);
+	tblObj.Push(L);
+	return 1;
 }
 
 int CGLuaFun::Lua_RecvDataFromAllClient(LuaState *L)
 {
-	return 0;
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	tblObj.SetBoolean("state", false);
+	tblObj.SetString("msg", "参数错误");
+	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
+	LuaStack args(L);
+	do
+	{
+		if (args.Count() < 1)
+			break;
+		int serverID = args[1].GetInteger();
+		if (serverID == -1)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		ITTcpServer *pNetServer = (ITTcpServer *)serverID;
+		if (!pNetServer)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		int clientHandle = 0;
+		QString recvData = pNetServer->ReadNextRecvData(clientHandle);
+		if (recvData.size() > 0)
+			tblObj.SetBoolean("state", true);
+		tblObj.SetInteger("id", clientHandle);
+		tblObj.SetString("data", recvData.toStdString().c_str());
+	} while (0);
+	tblObj.Push(L);
+	return 1;
 }
 
 void CGLuaFun::TransVariantToLua(LuaState *L, QVariant &val, bool bTransToInt /*=true*/)

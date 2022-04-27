@@ -123,7 +123,7 @@ void ITTcpServer::threadRunCB(void* param)
 				pThis->m_sendmsglist.pop_front();
 			}
 		}
-		QThread::sleep(100);
+		QThread::msleep(100);
 	}
 }
 
@@ -144,6 +144,8 @@ void ITTcpServer::SendDataToDstClient(int handle, const QByteArray& data, const 
 
 QByteArray ITTcpServer::ReadNextRecvData(int& handle)
 {
+	QMutexLocker locker(&m_callPDataCBLock);
+
 	if (m_recvDatas.size() > 0)
 	{
 		auto tData = m_recvDatas.takeFirst();

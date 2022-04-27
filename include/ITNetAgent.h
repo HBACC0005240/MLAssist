@@ -31,11 +31,14 @@ public:
 	///设置数据回调函数，当收到一行完整数据时，回调此函数
 	void			SetDataCB(PDataCB DataCB, void* pContext);
 
+	//读取缓存队列里的客户端数据
+	QByteArray ReadNextRecvData();
+
 	///设置要连接的服务器地址和信息
 	void			SetServerAddr(const QString& szServerAddr, int nPort);
 	QString			getServerIpAddr() { return m_stream->peerAddress().toString(); }
 	int				getServerPort() { return m_stream->peerPort(); }
-	void			SetServerName(QString& name) { m_sServerName = name; }
+	void			SetServerName(const QString& name) { m_sServerName = name; }
 	QString			GetServerName() { return m_sServerName; }
 	bool			isConnecte() { return m_bConnected; }	//连接状态判断
 	int				DoRecv();								//处理接收数据的函数	
@@ -59,4 +62,6 @@ private:
 	QList<QByteArray> m_recvMsgList;		///接收数据队列		
 	QMutex			m_recvMsgListLock;		///接收数据队列锁
 	QMutex			m_callPDataCBLock;		///回调函数锁		
+	int m_maxBufferCount = 100;	//最大缓存数 
+
 };

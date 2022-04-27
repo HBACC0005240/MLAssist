@@ -1,5 +1,6 @@
 #include "GameLuaScriptWgt.h"
 #include "GameCtrl.h"
+#include "ITNetworkFactory.h"
 #include "ITObjectDataMgr.h"
 #include "LuaCodeHighLighter.h"
 #include "QAESEncryption.h"
@@ -607,7 +608,8 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "创建网络服务", m_luaFun, &CGLuaFun::Lua_CreateTcpServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "连接目标服务", m_luaFun, &CGLuaFun::Lua_ConnectTcpServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络服务", m_luaFun, &CGLuaFun::Lua_CloseTcpServer);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭所有网络服务", m_luaFun, &CGLuaFun::Lua_CloseTcpServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭所有网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标服务", m_luaFun, &CGLuaFun::Lua_SendDataToServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收目标服务数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下发数据到所有客户端", m_luaFun, &CGLuaFun::Lua_SendDataToAllClient);
@@ -1022,6 +1024,8 @@ void GameLuaScriptWgt::on_pushButton_stop_clicked()
 		m_scriptFuture.waitForFinished();
 	}
 	SafeDelete(m_pLuaState);
+	g_pNetworkFactory->CloseAllTcpServer();
+	g_pNetworkFactory->CloseAllTcpClient();
 }
 
 void GameLuaScriptWgt::on_pushButton_save_clicked()

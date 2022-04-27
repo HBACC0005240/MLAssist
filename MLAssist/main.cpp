@@ -4,6 +4,7 @@
 #include "GameCtrl.h"
 #include "ITDebugDump.h"
 #include "ITLog.h"
+#include "ITNetworkFactory.h"
 #include "ITObjectDataMgr.h"
 #include "MApplication.h"
 #include "MLAssist.h"
@@ -88,6 +89,7 @@ int main(int argc, char *argv[])
 		a.installTranslator(&translator);
 	g_pGameCtrl->InitCmdParse(); //先于ITObjectDataMgr调用 否则线程中调用后 信号会失效
 	ITObjectDataMgr::getInstance().init();
+	ITNetworkFactory::getInstace();
 	MLAssist w;
 	a.setWindowInstance(&w);
 	a.installEventFilter(&w);

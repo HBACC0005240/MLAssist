@@ -72,8 +72,8 @@ int ITNetAgent::DoRecv()
 	int nRet = 0;
 	if (m_stream->waitForReadyRead(200))	///接收超时200毫秒
 	{
-		QByteArray bytearray = m_stream->readAll();
-
+		//QByteArray bytearray = m_stream->readAll();
+		doRecvNewData();
 	}
 	if (m_stream->state() != QAbstractSocket::ConnectedState)
 	{
@@ -172,6 +172,19 @@ void ITNetAgent::SetDataCB(PDataCB DataCB, void* pContext)
 	m_pContext = pContext;
 
 }
+
+QByteArray ITNetAgent::ReadNextRecvData()
+{
+	QMutexLocker locker(&m_recvMsgListLock);
+
+	if (m_recvMsgList.size() > 0)
+	{
+		auto tData = m_recvMsgList.takeFirst();
+		return tData;
+	}
+	return QByteArray();
+}
+
 //************************************
 //函数名:  SetServerAddr(const QString& szServerAddr,int nPort)
 //描述：设置服务器地址信息
@@ -211,5 +224,10 @@ void ITNetAgent::doRecvNewData()
 		return;
 	QMutexLocker locker(&m_recvMsgListLock);
 	QByteArray bytearray = m_stream->readAll();
+	while (m_recvMsgList.size() > m_maxBufferCount)
+	{
+		auto tData = m_recvMsgList.takeFirst();
+		tData.clear();
+	}
 	m_recvMsgList.append(bytearray);
 }
