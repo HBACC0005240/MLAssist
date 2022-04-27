@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CGLuaFun.h"
+#include "LuaCodeEditor.h"
+#include "LuaCodeEditorDlg.h"
+#include "LuaCodeHighLighter.h"
 #include "ui_GameLuaScriptWgt.h"
 #include <QMutex>
 #include <QWidget>
-#include "LuaCodeEditorDlg.h"
-#include "LuaCodeEditor.h"
-#include "LuaCodeHighLighter.h"
 static QMutex g_luaHookMutex;
 
 class GameLuaScriptWgt : public QWidget
@@ -94,9 +94,9 @@ private:
 	int m_currentRow;				  //当前行
 	CGLuaFun m_luaFun;				  //lua脚本对象
 	QStringList m_scriptLineDataList; //脚本数据
-	QString m_scriptData;
+	QString m_scriptData;			  //脚本数据
 	LuaStateOwner *m_pLuaState;		  //初始化lua的基本库，才能调用lua函数
-	QFuture<void> m_scriptFuture; //获取人物信息线程
+	QFuture<void> m_scriptFuture;	  //获取人物信息线程
 	int m_LastMapX;
 	int m_LastMapY;
 	int m_LastMapIndex;
@@ -109,4 +109,5 @@ private:
 	int m_scriptLogMaxLine = 100; //默认100行
 	LuaCodeEditorDlg *m_pLuaCodeEditor = nullptr;
 	LuaCodeHighLighter *m_pLuaCodeHighLighter;
+	bool m_bLuaCodeEditorInit = false;
 };

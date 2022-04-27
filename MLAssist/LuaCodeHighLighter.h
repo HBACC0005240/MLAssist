@@ -3,6 +3,11 @@
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include <QTextDocument>
+struct HighlightingRule
+{
+	QRegExp pattern;
+	QTextCharFormat format;
+};
 class LuaCodeHighLighter : public QSyntaxHighlighter
 {
 	Q_OBJECT
@@ -13,18 +18,14 @@ public:
 
 	void appendHighLightingFun(const QString &keywords);
 	void initHighLighterRule();
+	QVector<HighlightingRule> GetHightLightRules() { return highlightingRules; }
 
 protected:
 	void highlightBlock(const QString &text) override;
 
 private:
-	struct HighlightingRule
-	{
-		QRegExp pattern;
-		QTextCharFormat format;
-	};
 	QVector<HighlightingRule> highlightingRules;
-
+	QStringList _keywordList;		//防止重复附加
 	QRegExp commentStartExpression; //多行注释开始标识符
 	QRegExp commentEndExpression;	//多行注释结束标识符
 
@@ -36,6 +37,5 @@ private:
 	QTextCharFormat multiLineCommentFormat;	 //多行注释
 	QTextCharFormat quotationFormat;		 //字符串标识符
 	QTextCharFormat functionFormat;			 //方法标识符
-	QTextCharFormat customFunFormat;		//自定义标识符
-	
+	QTextCharFormat customFunFormat;		 //自定义标识符
 };

@@ -4,7 +4,6 @@
 LuaCodeHighLighter::LuaCodeHighLighter(QTextDocument *parent) :
 		QSyntaxHighlighter(parent)
 {
-
 	//对于下面正则表达式，标记为紫色，类名称
 	classFormat.setFontWeight(QFont::Bold);
 	//classFormat.setForeground(Qt::darkMagenta);
@@ -13,35 +12,34 @@ LuaCodeHighLighter::LuaCodeHighLighter(QTextDocument *parent) :
 	//函数标记为斜体蓝色
 	//functionFormat.setFontItalic(true);
 	functionFormat.setForeground(Qt::blue);
-	customFunFormat.setForeground(Qt::darkCyan);//QColor(140,5,38));
+	customFunFormat.setForeground(Qt::darkCyan); //QColor(140,5,38));
 	//customFunFormat.setForeground(Qt::darkBlue);//QColor(140,5,38));
 	//customFunFormat.setForeground(Qt::cyan);//QColor(140,5,38));
 
-
 	//字符串，标记深红色
 	quotationFormat.setForeground(Qt::darkRed);
-	
-		//对于下面关键字部分，标记为深蓝色
+
+	//对于下面关键字部分，标记为深蓝色
 	keywordFormat.setForeground(Qt::blue);
 	//keywordFormat.setForeground(QColor(143, 8, 196));
 	keywordFormat.setFontWeight(QFont::Bold);
 
-		//对于下面正则表达式，单行注释标记为绿色
+	//对于下面正则表达式，单行注释标记为绿色
 	singleLineCommentFormat.setForeground(Qt::darkGreen);
 	//singleLineCommentFormat.setFontItalic(true);
-
 }
 
 LuaCodeHighLighter::~LuaCodeHighLighter()
 {
 }
 
-	
-
 void LuaCodeHighLighter::appendHighLightingFun(const QString &keywords)
 {
+	if (_keywordList.contains(keywords))
+		return;
+	_keywordList.append(keywords);
 	//单独颜色 170 57 107
-	QString pattern = keywords	+"\\(";
+	QString pattern = keywords + "\\(";
 	HighlightingRule rule;
 	rule.pattern = QRegExp(pattern);
 	rule.format = customFunFormat;
@@ -51,8 +49,6 @@ void LuaCodeHighLighter::appendHighLightingFun(const QString &keywords)
 void LuaCodeHighLighter::initHighLighterRule()
 {
 	HighlightingRule rule;
-
-
 	rule.pattern = QRegExp("\\b[A-Za-z]+:\\b");
 	rule.format = classFormat;
 	highlightingRules.append(rule);
@@ -61,7 +57,6 @@ void LuaCodeHighLighter::initHighLighterRule()
 	rule.format = classFormat;
 	highlightingRules.append(rule);
 
-	
 	rule.pattern = QRegExp("\".*\"");
 	rule.format = quotationFormat;
 	highlightingRules.append(rule);
@@ -69,7 +64,6 @@ void LuaCodeHighLighter::initHighLighterRule()
 	rule.format = quotationFormat;
 	highlightingRules.append(rule);
 
-	
 	//rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
 	//rule.format = functionFormat;
 	//highlightingRules.append(rule);
@@ -89,8 +83,6 @@ void LuaCodeHighLighter::initHighLighterRule()
 		rule.format = keywordFormat;
 		highlightingRules.append(rule);
 	}
-
-
 	//rule.pattern = QRegExp("//[^\n]*");
 	rule.pattern = QRegExp("--[^\n]*");
 	rule.format = singleLineCommentFormat;

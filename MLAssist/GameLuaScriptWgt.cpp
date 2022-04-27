@@ -603,6 +603,15 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查看邮件", m_luaFun, &CGLuaFun::Lua_RecvMailEx);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查看所有邮件", m_luaFun, &CGLuaFun::Lua_RecvAllMail);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "更新邮件状态", m_luaFun, &CGLuaFun::Lua_SetMailState);
+	//网络部分
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "创建网络服务", m_luaFun, &CGLuaFun::Lua_CreateTcpServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "连接目标服务", m_luaFun, &CGLuaFun::Lua_ConnectTcpServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络服务", m_luaFun, &CGLuaFun::Lua_CloseTcpServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标服务", m_luaFun, &CGLuaFun::Lua_SendDataToServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收目标服务数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下发数据到所有客户端", m_luaFun, &CGLuaFun::Lua_SendDataToAllClient);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收所有客户端数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromAllClient);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
 
@@ -712,10 +721,13 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "CreateCharacter", m_luaFun, &CGLuaFun::Lua_CreateCharacter);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "PlayGesture", m_luaFun, &CGLuaFun::Lua_PlayGesture);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "DeleteCard", m_luaFun, &CGLuaFun::Lua_DeleteCard);
-	;
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SendMail", m_luaFun, &CGLuaFun::Lua_SendMail);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "SendPetMail", m_luaFun, &CGLuaFun::Lua_SendPetMail);
-	m_pLuaCodeHighLighter->initHighLighterRule();
+	if (!m_bLuaCodeEditorInit)
+	{
+		m_bLuaCodeEditorInit = true;
+		m_pLuaCodeHighLighter->initHighLighterRule();
+	}
 	//luaL_requiref(ls, "common", nullptr, true);
 	(*m_pLuaState)->DoString("common=require(\"common\")");
 }
@@ -723,7 +735,8 @@ template <class Callee>
 void GameLuaScriptWgt::RegisterLuaFun(LuaObject &objGlobal, const char *funcName, const Callee &callee, int (Callee::*func)(LuaState *), int nupvalues /*= 0*/)
 {
 	objGlobal.Register(funcName, callee, func);
-	m_pLuaCodeHighLighter->appendHighLightingFun(funcName);
+	if (!m_bLuaCodeEditorInit)
+		m_pLuaCodeHighLighter->appendHighLightingFun(funcName);
 }
 
 QString GameLuaScriptWgt::GetLoginScriptData(int type)
@@ -1008,10 +1021,7 @@ void GameLuaScriptWgt::on_pushButton_stop_clicked()
 	{
 		m_scriptFuture.waitForFinished();
 	}
-	if (m_pLuaState)
-	{
-		SafeDelete(m_pLuaState);
-	}
+	SafeDelete(m_pLuaState);
 }
 
 void GameLuaScriptWgt::on_pushButton_save_clicked()

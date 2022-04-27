@@ -466,7 +466,7 @@ void AccountForm::OnAutoLogin()
 		int worldStatus = 0;
 		if (g_CGAInterface->GetGameStatus(gameStatus) && g_CGAInterface->GetWorldStatus(worldStatus))
 		{
-			if ((worldStatus == 2 && gameStatus == 1) || (worldStatus == 3 && gameStatus == 11))
+			if ((worldStatus == 2 && gameStatus == 1) || ((worldStatus == 3 || worldStatus == 2) && gameStatus == 11))
 			{
 				qDebug() << "AutoLogin 状态！" << worldStatus << " " << gameStatus;
 
