@@ -7,8 +7,6 @@ ITNetworkFactory *ITNetworkFactory::getInstace()
 }
 std::tuple<ITTcpServer *, bool, QString> ITNetworkFactory::CreateNewTcpServer(int nPort)
 {
-	emit g_pNetworkFactory->signal_createTcpServer(nPort);
-	Sleep(1000);
 	int ptrVal = 0;
 	bool retState = false;
 	QString retMsg = "";
@@ -24,6 +22,7 @@ std::tuple<ITTcpServer *, bool, QString> ITNetworkFactory::CreateNewTcpServer(in
 				if (loop.isRunning())
 					loop.quit(); //放到后面，否则 loop.exec()执行完成，会直接返回了 再调用崩溃
 			});
+	emit g_pNetworkFactory->signal_createTcpServer(nPort);
 	loop.exec();
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	qDebug() << "CreateNewTcpServer Succe" << ptrVal;
@@ -34,8 +33,6 @@ std::tuple<ITTcpServer *, bool, QString> ITNetworkFactory::CreateNewTcpServer(in
 
 std::tuple<ITNetAgent *, bool, QString> ITNetworkFactory::CreateNewTcpClient(const QString &sIP, int nPort, const QString &sName)
 {
-	emit g_pNetworkFactory->signal_createTcpClient(sIP, nPort, sName);
-	Sleep(1000);
 	int ptrVal = 0;
 	bool retState = false;
 	QString retMsg = "";
@@ -51,6 +48,7 @@ std::tuple<ITNetAgent *, bool, QString> ITNetworkFactory::CreateNewTcpClient(con
 				if (loop.isRunning())
 					loop.quit(); //放到后面，否则 loop.exec()执行完成，会直接返回了 再调用崩溃
 			});
+	emit g_pNetworkFactory->signal_createTcpClient(sIP, nPort, sName);
 	loop.exec();
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	qDebug() << "CreateNewTcpClient Succe" << ptrVal;
@@ -64,7 +62,8 @@ void ITNetworkFactory::slot_createTcpServer(int nPort)
 	if (!bRet)
 	{
 		SafeDelete(pTcpServer);
-	}else
+	}
+	else
 		m_pTcpServers.insert(pTcpServer);
 
 	emit signal_returnCreateTcpServer(int(pTcpServer), bRet, "");
@@ -87,7 +86,6 @@ ITNetworkFactory::ITNetworkFactory()
 	connect(this, SIGNAL(signal_createTcpClient(const QString &, int, const QString &)), this, SLOT(slot_createTcpClient(const QString &, int, const QString &)));
 }
 
-
 void ITNetworkFactory::CloseAllTcpServer()
 {
 	for (auto tmpServer : m_pTcpServers)
@@ -106,4 +104,30 @@ void ITNetworkFactory::CloseAllTcpClient()
 		SafeDelete(tmpClient);
 	}
 	m_pTcpAgents.clear();
+}
+
+void ITNetworkFactory::CloseClient(ITNetAgent *pAgent)
+{
+	if (!pAgent)
+		return;
+
+	if (m_pTcpAgents.contains(pAgent))
+	{
+		m_pTcpAgents.remove(pAgent);
+		pAgent->stopThread();
+		SafeDelete(pAgent);
+	}
+}
+
+void ITNetworkFactory::CloseServer(ITTcpServer *pServer)
+{
+	if (!pServer)
+		return;
+
+	if (m_pTcpServers.contains(pServer))
+	{
+		m_pTcpServers.remove(pServer);
+		pServer->shutdown();
+		SafeDelete(pServer);
+	}
 }

@@ -526,6 +526,7 @@ public:
 	int Lua_CloseTcpClient(LuaState *L);
 	int Lua_CloseAllTcpClient(LuaState *L);
 	int Lua_SendDataToServer(LuaState *L);
+	int Lua_SendDataToClient(LuaState *L);
 	int Lua_RecvDataFromServer(LuaState *L);
 	int Lua_SendDataToAllClient(LuaState *L);
 	int Lua_RecvDataFromAllClient(LuaState *L);

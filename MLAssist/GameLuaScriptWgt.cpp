@@ -606,11 +606,13 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "更新邮件状态", m_luaFun, &CGLuaFun::Lua_SetMailState);
 	//网络部分
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "创建网络服务", m_luaFun, &CGLuaFun::Lua_CreateTcpServer);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "连接目标服务", m_luaFun, &CGLuaFun::Lua_ConnectTcpServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "创建网络客户端", m_luaFun, &CGLuaFun::Lua_ConnectTcpServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络服务", m_luaFun, &CGLuaFun::Lua_CloseTcpServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭所有网络服务", m_luaFun, &CGLuaFun::Lua_CloseTcpServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭所有网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标服务", m_luaFun, &CGLuaFun::Lua_SendDataToServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标客户端", m_luaFun, &CGLuaFun::Lua_SendDataToServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收目标服务数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下发数据到所有客户端", m_luaFun, &CGLuaFun::Lua_SendDataToAllClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收所有客户端数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromAllClient);

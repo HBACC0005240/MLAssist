@@ -1,6 +1,7 @@
 #include "ITTcpServer.h"
 #include "ITTcpSocket.h"
 #include "ITThread.h"
+#include <QApplication>
 
 ITTcpServer::ITTcpServer(QObject* parent)
 	: QTcpServer(parent)
@@ -35,9 +36,11 @@ void ITTcpServer::incomingConnection(qintptr handle)
 	ITTcpSocket* tcpsocket = new ITTcpSocket(handle);
 	QThread* thread = new QThread(tcpsocket);
 	connect(this, SIGNAL(sendMsg(const QByteArray&, const int)), tcpsocket, SLOT(sendData(const QByteArray&, const int)));
-	connect(tcpsocket, SIGNAL(disconnected()), thread, SLOT(quit()));
+	//connect(tcpsocket, SIGNAL(disconnected()), thread, SLOT(quit()));
 	connect(tcpsocket, SIGNAL(sockDisConnect(int, QString, int)), this, SLOT(doSockDisconnect(int, QString, int)));
 	connect(tcpsocket, SIGNAL(readAllData(int, QString, int, const QByteArray&)), this, SLOT(doReadAllData(int, QString, int, const QByteArray&)));
+	//connect(thread, &QThread::finished, tcpsocket, &ITTcpSocket::deleteLater);
+	//connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
 	tcpsocket->moveToThread(thread);
 	thread->start();
@@ -161,13 +164,24 @@ void ITTcpServer::shutdown()
 	m_bThreadRun = false;
 	if (m_thread != NULL)
 		m_thread->stopThread();
+	this->close();
 	ITTcpSocket* pTcpSocket = NULL;
 	for (auto it = m_newconnects.begin(); it != m_newconnects.end(); ++it)
 	{
 		pTcpSocket = it.value();
 		if (pTcpSocket)
 		{
+			pTcpSocket->disconnectFromHost();
 			pTcpSocket->close();
+			auto linkThread = pTcpSocket->thread();
+			if (linkThread)
+			{
+				linkThread->quit();
+				linkThread->wait();
+				linkThread->deleteLater();
+			}
+			pTcpSocket->deleteLater();
+
 		}
 	}
 	m_newconnects.clear();

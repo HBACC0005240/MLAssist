@@ -15,6 +15,9 @@ public:
 	void CloseAllTcpServer();
 	void CloseAllTcpClient();
 
+	void CloseClient(ITNetAgent *pAgent);
+	void CloseServer(ITTcpServer *pServer);
+
 signals:
 	void signal_createTcpServer(int nPort);
 	void signal_createTcpClient(const QString &sIP, int nPort, const QString &sName);
