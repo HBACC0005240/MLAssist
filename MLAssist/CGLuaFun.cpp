@@ -2191,19 +2191,23 @@ int CGLuaFun::Lua_WaitTeammatesEx(LuaState *L)
 int CGLuaFun::Lua_WaitRecvHead(LuaState *L)
 {
 	auto dlg = g_pGameFun->WaitRecvHead();
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
+	tableObj.SetInteger("type", 0);
+	tableObj.SetInteger("options", 0);
+	tableObj.SetInteger("dialog_id", 0);
+	tableObj.SetInteger("npc_id", 0);
+	tableObj.SetString("message", "");		
 	if (dlg)
-	{
-		LuaObject tableObj(L);
-		tableObj.AssignNewTable();
+	{		
 		tableObj.SetInteger("type", dlg->type);
 		tableObj.SetInteger("options", dlg->options);
 		tableObj.SetInteger("dialog_id", dlg->dialog_id);
 		tableObj.SetInteger("npc_id", dlg->npc_id);
-		tableObj.SetString("message", dlg->message.toStdString().c_str());
-		tableObj.Push(L);
-		return 1;
+		tableObj.SetString("message", dlg->message.toStdString().c_str());		
 	}
-	return 0;
+	tableObj.Push(L);
+	return 1;
 }
 
 int CGLuaFun::Lua_WaitRecvWorkResult(LuaState *L)
@@ -2211,17 +2215,19 @@ int CGLuaFun::Lua_WaitRecvWorkResult(LuaState *L)
 	LuaStack args(L);
 	int timeout = args.Count() > 0 ? args[1].GetInteger() : 90000;
 	auto result = g_pGameFun->WaitRecvWorkResult(timeout);
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
+	tableObj.SetInteger("type", 0);
+	tableObj.SetString("name", "");
+	tableObj.SetBoolean("success", false);
 	if (result)
-	{
-		LuaObject tableObj(L);
-		tableObj.AssignNewTable();
+	{		
 		tableObj.SetInteger("type", result->type);
 		tableObj.SetString("name", result->name.c_str());
-		tableObj.SetBoolean("success", result->success);
-		tableObj.Push(L);
-		return 1;
+		tableObj.SetBoolean("success", result->success);		
 	}
-	return 0;
+	tableObj.Push(L);
+	return 1;
 }
 
 int CGLuaFun::Lua_WaitRecvPlayerMenu(LuaState *L)
@@ -2229,10 +2235,10 @@ int CGLuaFun::Lua_WaitRecvPlayerMenu(LuaState *L)
 	LuaStack args(L);
 	int timeout = args.Count() > 0 ? args[1].GetInteger() : 5000;
 	auto result = g_pGameFun->WaitRecvPlayerMenu(timeout);
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
 	if (result)
-	{
-		LuaObject tableObj(L);
-		tableObj.AssignNewTable();
+	{		
 		for (int i = 0; i < result->size(); ++i)
 		{
 			auto menu = result->at(i);
@@ -2242,11 +2248,10 @@ int CGLuaFun::Lua_WaitRecvPlayerMenu(LuaState *L)
 			subTbl.SetInteger("index", menu.index);
 			subTbl.SetString("name", menu.name.c_str());
 			tableObj.SetObject(i + 1, subTbl);
-		}
-		tableObj.Push(L);
-		return 1;
+		}		
 	}
-	return 0;
+	tableObj.Push(L);
+	return 1;
 }
 
 int CGLuaFun::Lua_WaitRecvPlayerMenuUnit(LuaState *L)
@@ -2254,10 +2259,10 @@ int CGLuaFun::Lua_WaitRecvPlayerMenuUnit(LuaState *L)
 	LuaStack args(L);
 	int timeout = args.Count() > 0 ? args[1].GetInteger() : 5000;
 	auto result = g_pGameFun->WaitRecvPlayerMenuUnit(timeout);
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
 	if (result)
-	{
-		LuaObject tableObj(L);
-		tableObj.AssignNewTable();
+	{		
 		for (int i = 0; i < result->size(); ++i)
 		{
 			auto menu = result->at(i);
@@ -2273,11 +2278,10 @@ int CGLuaFun::Lua_WaitRecvPlayerMenuUnit(LuaState *L)
 			subTbl.SetInteger("index", menu.index);
 			subTbl.SetString("name", menu.name.c_str());
 			tableObj.SetObject(i + 1, subTbl);
-		}
-		tableObj.Push(L);
-		return 1;
+		}		
 	}
-	return 0;
+	tableObj.Push(L);
+	return 1;
 }
 
 int CGLuaFun::Lua_WaitSupplyFini(LuaState *L)
