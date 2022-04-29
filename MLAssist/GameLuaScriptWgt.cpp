@@ -477,7 +477,9 @@ void GameLuaScriptWgt::initScriptSystem()
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "debugMsg", m_luaFun, &CGLuaFun::Lua_DebugMessage);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户输入框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "编辑框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "读取配置", m_luaFun, &CGLuaFun::Lua_LoadUserConfig);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存配置", m_luaFun, &CGLuaFun::Lua_SaveUserConfig);
 
@@ -1417,7 +1419,7 @@ void GameLuaScriptWgt::LuaHook(lua_State *L, lua_Debug *ar)
 	{
 		qDebug() << "LuaHook 停止脚本";
 		//		longjmp(g_jmpPlace, 1);  //跳转到位置并传递1 退出当前脚本
-		luaL_error(L, "User Stop Script");
+		luaL_error(L, "用户停止脚本");
 	}
 	else if (nScriptRunState == SCRIPT_CTRL_PAUSE) //先不用lua自身暂停
 	{
