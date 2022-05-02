@@ -530,6 +530,10 @@ public:
 	int Lua_RecvDataFromServer(LuaState *L);
 	int Lua_SendDataToAllClient(LuaState *L);
 	int Lua_RecvDataFromAllClient(LuaState *L);
+	int Lua_ClearServerRecvBuffer(LuaState *L);
+	int Lua_ClearServerSendBuffer(LuaState *L);	
+	int Lua_ClearClientRecvBuffer(LuaState *L);
+	int Lua_ClearClientSendBuffer(LuaState *L);
 
 private:
 	//QVariant转换为lua 错误默认push 0

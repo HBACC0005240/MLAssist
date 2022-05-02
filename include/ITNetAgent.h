@@ -34,6 +34,10 @@ public:
 	//读取缓存队列里的客户端数据
 	QByteArray ReadNextRecvData();
 
+	//清除数据缓冲区
+	void ClearRecvBuffer();
+	void ClearSendBuffer();
+
 	///设置要连接的服务器地址和信息
 	void			SetServerAddr(const QString& szServerAddr, int nPort);
 	QString			getServerIpAddr() { return m_stream->peerAddress().toString(); }

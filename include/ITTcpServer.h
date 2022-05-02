@@ -23,6 +23,10 @@ public:
 	//读取缓存队列里的客户端数据
 	QByteArray ReadNextRecvData(int& handle);
 
+	//清除数据缓冲区
+	void ClearRecvBuffer();
+	void ClearSendBuffer();
+
 	///线程执行函数
 	static void threadRunCB(void* param);
 	void shutdown();

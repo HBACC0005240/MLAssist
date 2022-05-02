@@ -547,6 +547,10 @@ void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool fre
 		return;
 	if (!path.isEmpty())
 	{
+		if (QFile::exists(path) == false)
+		{
+			path = QApplication::applicationDirPath() + "//" + path;
+		}
 		QFile file(path);
 		if (file.exists())
 		{

@@ -27,7 +27,7 @@ QTableWidget
 {
 	selection-background-color:lightblue;
 	selection-color:Black;
-	background-color: rgb(255, 255, 225);
+	
 }</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -84,7 +84,7 @@ QTableWidget
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>230</width>
            <height>16777215</height>
           </size>
          </property>
@@ -256,7 +256,10 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QTabWidget" name="tabWidget">
+        <widget class="QTabWidget" name="tabWidget_luaTab">
+         <property name="tabPosition">
+          <enum>QTabWidget::West</enum>
+         </property>
          <property name="currentIndex">
           <number>0</number>
          </property>
@@ -346,7 +349,49 @@ p, li { white-space: pre-wrap; }
               </layout>
              </item>
              <item>
-              <widget class="QTableWidget" name="tableWidget"/>
+              <widget class="QTableWidget" name="tableWidget">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QScrollBar::vertical{width:7px;}
+QScrollBar::horizontal{height:7px;}
+
+QHeaderView::section 
+{
+	background-color: rgb(166,202,240);
+	color: black;	
+	border-right: 1px solid rgb(0, 0, 0);
+}
+QTableCornerButton::section{
+	background-color:rgb(166,202,240);
+}
+QTableView
+{
+	selection-background-color:lightblue;
+	selection-color:Black;
+	background-color: rgb(255, 255, 225);
+}
+</string>
+               </property>
+               <attribute name="horizontalHeaderVisible">
+                <bool>false</bool>
+               </attribute>
+               <attribute name="horizontalHeaderMinimumSectionSize">
+                <number>10</number>
+               </attribute>
+               <attribute name="verticalHeaderVisible">
+                <bool>false</bool>
+               </attribute>
+               <attribute name="verticalHeaderMinimumSectionSize">
+                <number>10</number>
+               </attribute>
+               <attribute name="verticalHeaderDefaultSectionSize">
+                <number>20</number>
+               </attribute>
+              </widget>
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -566,8 +611,8 @@ p, li { white-space: pre-wrap; }
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>335</width>
-                <height>173</height>
+                <width>368</width>
+                <height>192</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout">

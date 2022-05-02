@@ -786,10 +786,20 @@ bool ITObjectDataMgr::LoadGidItems()
 				}
 				else
 				{
-					pGidRole->_itemPosForPtr.insert(item_pos, pItem);
 					pItem->setObjectParent(pGidRole);
 					pGidRole->addChildObj(pItem);
 					m_pObjectList.insert(nID, pItem);
+					//重复 删除老的 插入新的
+					auto oldItem = pGidRole->_itemPosForPtr.value(item_pos);
+					if (oldItem != nullptr)
+					{							
+						if (!m_pDelObjectList.contains(oldItem->getObjectID()))
+						{
+							m_pDelObjectList.insert(oldItem->getObjectID(), oldItem);
+							m_pObjectList.remove(oldItem->getObjectID());
+						}						
+					}		
+					pGidRole->_itemPosForPtr.insert(item_pos, pItem);//替换新的
 				}	
 			}
 		}
@@ -863,15 +873,28 @@ bool ITObjectDataMgr::LoadGidPets()
 				//	pObj->setObjectCode(nCode);
 				pObj->setObjectID(nID);
 				ITGidRolePtr pGidRole = FindObject(character_id).dynamicCast<ITGidRole>();
-				if (pGidRole)
+				if (!pGidRole)
 				{
-					pGidRole->_petPosForPet.insert(pObj->_pos, pObj);
+					if (!m_pDelObjectList.contains(nID))
+						m_pDelObjectList.insert(nID, pObj);
+				}
+				else
+				{						
 					pObj->setObjectParent(pGidRole);
 					pGidRole->addChildObj(pObj);
+					m_pObjectList.insert(nID, pObj);
+					//重复 删除老的 插入新的
+					auto pOldObj = pGidRole->_petPosForPet.value(pObj->_pos);
+					if (pOldObj != nullptr)
+					{
+						if (!m_pDelObjectList.contains(pOldObj->getObjectID()))
+						{
+							m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
+							m_pObjectList.remove(pOldObj->getObjectID());
+						}						
+					}
+					pGidRole->_petPosForPet.insert(pObj->_pos, pObj);					
 				}
-
-				m_pObjectList.insert(nID, pObj);
-
 			}
 		}
 		return true;
@@ -905,14 +928,7 @@ bool ITObjectDataMgr::LoadGidSkills()
 			int flags = recordset->getIntValue("flags");
 			ITGameSkillPtr pObj = newOneObject(objtype, nID).dynamicCast<ITGameSkill>();
 			if (pObj)
-			{
-				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
-				if (pGidRole)
-				{
-					pGidRole->_skillPosForSkill.insert(index, pObj);
-					pObj->setObjectParent(pGidRole);
-					pGidRole->addChildObj(pObj);
-				}
+			{				
 				pObj->_info = sInfo;
 				pObj->_index = index;
 				pObj->_level = level;
@@ -927,7 +943,30 @@ bool ITObjectDataMgr::LoadGidSkills()
 				//pItem->setObjectDsec(sDesc);
 				pObj->setObjectCode(skillid);
 				pObj->setObjectID(nID);
-				m_pObjectList.insert(nID, pObj);
+
+				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
+				if (!pGidRole)
+				{
+					if (!m_pDelObjectList.contains(nID))
+						m_pDelObjectList.insert(nID, pObj);
+				}
+				else
+				{
+					pObj->setObjectParent(pGidRole);
+					pGidRole->addChildObj(pObj);
+					m_pObjectList.insert(nID, pObj);
+					//重复 删除老的 插入新的
+					auto pOldObj = pGidRole->_skillPosForSkill.value(index);
+					if (pOldObj != nullptr)
+					{
+						if (!m_pDelObjectList.contains(pOldObj->getObjectID()))
+						{
+							m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
+							m_pObjectList.remove(pOldObj->getObjectID());
+						}
+					}
+					pGidRole->_skillPosForSkill.insert(index, pObj);
+				}				
 			}
 		}
 		return true;
@@ -1264,7 +1303,7 @@ bool ITObjectDataMgr::deleteDataFromDB()
 		if (!deleteOneDeviceFromDB(it.value()))
 		{
 			bRet = false;
-			return bRet;
+			//return bRet;
 		}
 	}
 	QMutexLocker locker(&m_objMutex);

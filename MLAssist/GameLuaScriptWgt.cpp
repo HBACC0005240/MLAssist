@@ -10,11 +10,14 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QTableWidgetItem>
+#include "ITTabBarStyle.h"
+
 jmp_buf g_jmpPlace;
 GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
+	ui.tabWidget_luaTab->setStyle(new ITTabBarStyle);
 	ui.pushButton_openEncrypt->hide();
 	ui.pushButton_save->hide();
 	m_pLuaCodeEditor = new LuaCodeEditorDlg;
@@ -614,10 +617,14 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭所有网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "关闭网络客户端", m_luaFun, &CGLuaFun::Lua_CloseTcpClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标服务", m_luaFun, &CGLuaFun::Lua_SendDataToServer);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标客户端", m_luaFun, &CGLuaFun::Lua_SendDataToServer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送数据到目标客户端", m_luaFun, &CGLuaFun::Lua_SendDataToClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收目标服务数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下发数据到所有客户端", m_luaFun, &CGLuaFun::Lua_SendDataToAllClient);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收所有客户端数据", m_luaFun, &CGLuaFun::Lua_RecvDataFromAllClient);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除服务端接收缓冲区", m_luaFun, &CGLuaFun::Lua_ClearServerRecvBuffer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除服务端发送缓冲区", m_luaFun, &CGLuaFun::Lua_ClearServerSendBuffer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除客户端接收缓冲区", m_luaFun, &CGLuaFun::Lua_ClearClientRecvBuffer);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除客户端发送缓冲区", m_luaFun, &CGLuaFun::Lua_ClearClientSendBuffer);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查询数据", m_luaFun, &CGLuaFun::Lua_SelectGidData);
 

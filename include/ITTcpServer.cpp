@@ -151,7 +151,7 @@ QByteArray ITTcpServer::ReadNextRecvData(int& handle)
 
 	if (m_recvDatas.size() > 0)
 	{
-		auto tData = m_recvDatas.takeFirst();
+		auto tData = m_recvDatas.takeLast();
 		handle = tData.first;
 		return tData.second;
 	}
@@ -185,4 +185,17 @@ void ITTcpServer::shutdown()
 		}
 	}
 	m_newconnects.clear();
+}
+
+
+void ITTcpServer::ClearRecvBuffer()
+{
+	QMutexLocker locker(&m_callPDataCBLock);
+	m_recvDatas.clear();
+}
+
+void ITTcpServer::ClearSendBuffer()
+{
+	QMutexLocker locker(&m_msglistlock);
+	m_sendmsglist.clear();
 }

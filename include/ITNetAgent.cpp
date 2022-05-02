@@ -179,10 +179,22 @@ QByteArray ITNetAgent::ReadNextRecvData()
 
 	if (m_recvMsgList.size() > 0)
 	{
-		auto tData = m_recvMsgList.takeFirst();
+		auto tData = m_recvMsgList.takeLast();
 		return tData;
 	}
 	return QByteArray();
+}
+
+void ITNetAgent::ClearRecvBuffer()
+{
+	QMutexLocker locker(&m_recvMsgListLock);
+	m_recvMsgList.clear();
+}
+
+void ITNetAgent::ClearSendBuffer()
+{
+	QMutexLocker locker(&m_sendMsgListLock);
+	m_sendMsgList.clear();
 }
 
 //************************************

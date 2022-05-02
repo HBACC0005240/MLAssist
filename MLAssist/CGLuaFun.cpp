@@ -5366,14 +5366,14 @@ int CGLuaFun::Lua_SendDataToServer(LuaState *L)
 			tblObj.SetString("msg", "客户端ID错误");
 			break;
 		}
-		QString sData = args[2].GetString();
+		QByteArray sData = args[2].GetString();
 		ITNetAgent *pNetAgent = (ITNetAgent *)clientID;
 		if (!pNetAgent)
 		{
 			tblObj.SetString("msg", "客户端ID错误");
 			break;
 		}
-		pNetAgent->AddToSendQ(sData.toLatin1());
+		pNetAgent->AddToSendQ(sData);
 		tblObj.SetBoolean("state", true);
 		tblObj.SetString("msg", "已加入发送队列");
 		tblObj.SetInteger("id", clientID);
@@ -5414,7 +5414,7 @@ int CGLuaFun::Lua_SendDataToClient(LuaState *L)
 			tblObj.SetString("msg", "服务端ID错误");
 			break;
 		}
-		pNetServer->sendDataToAllClients(tmpSendData, tmpSendData.size());
+		pNetServer->SendDataToDstClient(clientID,tmpSendData, tmpSendData.size());
 		tblObj.SetBoolean("state", true);
 
 	} while (0);
@@ -5448,7 +5448,13 @@ int CGLuaFun::Lua_RecvDataFromServer(LuaState *L)
 			break;
 		}
 		QString recvData = pNetAgent->ReadNextRecvData();
-		tblObj.SetString("data", recvData.toStdString().c_str());
+		if (recvData.size() > 0)
+		{
+			tblObj.SetString("data", recvData.toStdString().c_str());
+			tblObj.SetBoolean("state", true);
+			tblObj.SetString("msg", "接收数据成功");
+			tblObj.SetInteger("id", clientID);			
+		}
 	} while (0);
 	tblObj.Push(L);
 	return 1;
@@ -5519,6 +5525,140 @@ int CGLuaFun::Lua_RecvDataFromAllClient(LuaState *L)
 			tblObj.SetBoolean("state", true);
 		tblObj.SetInteger("id", clientHandle);
 		tblObj.SetString("data", recvData.toStdString().c_str());
+	} while (0);
+	tblObj.Push(L);
+	return 1;
+}
+
+int CGLuaFun::Lua_ClearServerRecvBuffer(LuaState *L)
+{
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	tblObj.SetBoolean("state", false);
+	tblObj.SetString("msg", "参数错误");
+	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
+	LuaStack args(L);
+	do
+	{
+		if (args.Count() < 1)
+			break;
+		int serverID = args[1].GetInteger();
+		if (serverID == -1 || serverID==0)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		ITTcpServer *pNetServer = (ITTcpServer *)serverID;
+		if (!pNetServer)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		int clientHandle = 0;
+		pNetServer->ClearRecvBuffer();
+		tblObj.SetBoolean("state", true);
+		tblObj.SetInteger("id", clientHandle);
+		tblObj.SetString("data", "");
+	} while (0);
+	tblObj.Push(L);
+	return 1;
+}
+
+int CGLuaFun::Lua_ClearServerSendBuffer(LuaState *L)
+{
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	tblObj.SetBoolean("state", false);
+	tblObj.SetString("msg", "参数错误");
+	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
+	LuaStack args(L);
+	do
+	{
+		if (args.Count() < 1)
+			break;
+		int serverID = args[1].GetInteger();
+		if (serverID == -1 || serverID == 0)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		ITTcpServer *pNetServer = (ITTcpServer *)serverID;
+		if (!pNetServer)
+		{
+			tblObj.SetString("msg", "服务端ID错误");
+			break;
+		}
+		int clientHandle = 0;
+		pNetServer->ClearSendBuffer();
+		tblObj.SetBoolean("state", true);
+		tblObj.SetInteger("id", clientHandle);
+		tblObj.SetString("data", "");
+	} while (0);
+	tblObj.Push(L);
+	return 1;
+}
+
+int CGLuaFun::Lua_ClearClientRecvBuffer(LuaState *L)
+{
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	tblObj.SetBoolean("state", false);
+	tblObj.SetString("msg", "参数错误");
+	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
+	LuaStack args(L);
+	do
+	{
+		if (args.Count() < 1)
+			break;
+		int clientID = args[1].GetInteger();
+		if (clientID == -1)
+		{
+			tblObj.SetString("msg", "客户端ID错误");
+			break;
+		}
+		ITNetAgent *pNetAgent = (ITNetAgent *)clientID;
+		if (!pNetAgent)
+		{
+			tblObj.SetString("msg", "客户端ID错误");
+			break;
+		}
+		pNetAgent->ClearRecvBuffer();
+		tblObj.SetString("data", "");
+	} while (0);
+	tblObj.Push(L);
+	return 1;
+}
+
+int CGLuaFun::Lua_ClearClientSendBuffer(LuaState *L)
+{
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	tblObj.SetBoolean("state", false);
+	tblObj.SetString("msg", "参数错误");
+	tblObj.SetInteger("id", -1);
+	tblObj.SetString("data", "");
+	LuaStack args(L);
+	do
+	{
+		if (args.Count() < 1)
+			break;
+		int clientID = args[1].GetInteger();
+		if (clientID == -1)
+		{
+			tblObj.SetString("msg", "客户端ID错误");
+			break;
+		}
+		ITNetAgent *pNetAgent = (ITNetAgent *)clientID;
+		if (!pNetAgent)
+		{
+			tblObj.SetString("msg", "客户端ID错误");
+			break;
+		}
+		pNetAgent->ClearSendBuffer();
+		tblObj.SetString("data", "");
 	} while (0);
 	tblObj.Push(L);
 	return 1;
