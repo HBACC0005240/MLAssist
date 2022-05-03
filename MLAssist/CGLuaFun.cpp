@@ -2197,14 +2197,14 @@ int CGLuaFun::Lua_WaitRecvHead(LuaState *L)
 	tableObj.SetInteger("options", 0);
 	tableObj.SetInteger("dialog_id", 0);
 	tableObj.SetInteger("npc_id", 0);
-	tableObj.SetString("message", "");		
+	tableObj.SetString("message", "");
 	if (dlg)
-	{		
+	{
 		tableObj.SetInteger("type", dlg->type);
 		tableObj.SetInteger("options", dlg->options);
 		tableObj.SetInteger("dialog_id", dlg->dialog_id);
 		tableObj.SetInteger("npc_id", dlg->npc_id);
-		tableObj.SetString("message", dlg->message.toStdString().c_str());		
+		tableObj.SetString("message", dlg->message.toStdString().c_str());
 	}
 	tableObj.Push(L);
 	return 1;
@@ -2221,10 +2221,10 @@ int CGLuaFun::Lua_WaitRecvWorkResult(LuaState *L)
 	tableObj.SetString("name", "");
 	tableObj.SetBoolean("success", false);
 	if (result)
-	{		
+	{
 		tableObj.SetInteger("type", result->type);
 		tableObj.SetString("name", result->name.c_str());
-		tableObj.SetBoolean("success", result->success);		
+		tableObj.SetBoolean("success", result->success);
 	}
 	tableObj.Push(L);
 	return 1;
@@ -2238,7 +2238,7 @@ int CGLuaFun::Lua_WaitRecvPlayerMenu(LuaState *L)
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
 	if (result)
-	{		
+	{
 		for (int i = 0; i < result->size(); ++i)
 		{
 			auto menu = result->at(i);
@@ -2248,7 +2248,7 @@ int CGLuaFun::Lua_WaitRecvPlayerMenu(LuaState *L)
 			subTbl.SetInteger("index", menu.index);
 			subTbl.SetString("name", menu.name.c_str());
 			tableObj.SetObject(i + 1, subTbl);
-		}		
+		}
 	}
 	tableObj.Push(L);
 	return 1;
@@ -2262,7 +2262,7 @@ int CGLuaFun::Lua_WaitRecvPlayerMenuUnit(LuaState *L)
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
 	if (result)
-	{		
+	{
 		for (int i = 0; i < result->size(); ++i)
 		{
 			auto menu = result->at(i);
@@ -2278,7 +2278,7 @@ int CGLuaFun::Lua_WaitRecvPlayerMenuUnit(LuaState *L)
 			subTbl.SetInteger("index", menu.index);
 			subTbl.SetString("name", menu.name.c_str());
 			tableObj.SetObject(i + 1, subTbl);
-		}		
+		}
 	}
 	tableObj.Push(L);
 	return 1;
@@ -5414,7 +5414,7 @@ int CGLuaFun::Lua_SendDataToClient(LuaState *L)
 			tblObj.SetString("msg", "服务端ID错误");
 			break;
 		}
-		pNetServer->SendDataToDstClient(clientID,tmpSendData, tmpSendData.size());
+		pNetServer->SendDataToDstClient(clientID, tmpSendData, tmpSendData.size());
 		tblObj.SetBoolean("state", true);
 
 	} while (0);
@@ -5453,7 +5453,7 @@ int CGLuaFun::Lua_RecvDataFromServer(LuaState *L)
 			tblObj.SetString("data", recvData.toStdString().c_str());
 			tblObj.SetBoolean("state", true);
 			tblObj.SetString("msg", "接收数据成功");
-			tblObj.SetInteger("id", clientID);			
+			tblObj.SetInteger("id", clientID);
 		}
 	} while (0);
 	tblObj.Push(L);
@@ -5522,9 +5522,11 @@ int CGLuaFun::Lua_RecvDataFromAllClient(LuaState *L)
 		int clientHandle = 0;
 		QString recvData = pNetServer->ReadNextRecvData(clientHandle);
 		if (recvData.size() > 0)
+		{
+			tblObj.SetInteger("id", clientHandle);
+			tblObj.SetString("data", recvData.toStdString().c_str());
 			tblObj.SetBoolean("state", true);
-		tblObj.SetInteger("id", clientHandle);
-		tblObj.SetString("data", recvData.toStdString().c_str());
+		}
 	} while (0);
 	tblObj.Push(L);
 	return 1;
@@ -5544,7 +5546,7 @@ int CGLuaFun::Lua_ClearServerRecvBuffer(LuaState *L)
 		if (args.Count() < 1)
 			break;
 		int serverID = args[1].GetInteger();
-		if (serverID == -1 || serverID==0)
+		if (serverID == -1 || serverID == 0)
 		{
 			tblObj.SetString("msg", "服务端ID错误");
 			break;

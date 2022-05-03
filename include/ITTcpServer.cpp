@@ -70,14 +70,20 @@ void ITTcpServer::sendData(const char* senddata, const int datasize)
 //************************************
 void ITTcpServer::doSockDisconnect(int socketdescrip, QString ip, int port)
 {
-	ITTcpSocket* tcpsocket = m_newconnects.value(socketdescrip);
+	ITTcpSocket* pTcpSocket = m_newconnects.value(socketdescrip);
+	if (pTcpSocket == nullptr)
+		return;
 	m_newconnects.remove(socketdescrip);
-	QThread* thread = tcpsocket->thread();
-	if (thread != NULL)
+	pTcpSocket->close();
+	QThread* linkThread = pTcpSocket->thread();
+	if (linkThread != NULL)
 	{
-		thread->wait();
-		delete tcpsocket;
+		linkThread->quit();
+		linkThread->wait();
+		linkThread->deleteLater();
 	}
+	pTcpSocket->deleteLater();
+
 }
 
 //************************************
