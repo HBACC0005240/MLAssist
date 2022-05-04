@@ -818,13 +818,13 @@ bool GameCtrl::DieItems()
 			for (size_t i = 0; i < m_pGameItems.size(); i++)
 			{
 				GameItemPtr pItem = m_pGameItems.at(i); //最大值 到时候通过外置配置获取
-				if (pItem && pItem->exist && pItem->name == pDieItem->name && pItem->count < pDieItem->maxCount)
+				if (pItem && pItem->exist && (pItem->name == pDieItem->name || pItem->id == pDieItem->name ) && pItem->count < pDieItem->maxCount)
 				{
-
 					for (size_t n = 0; n < m_pGameItems.size(); n++)
 					{
 						GameItemPtr pOtherItem = m_pGameItems.at(n);
-						if (pOtherItem && pOtherItem->exist && pOtherItem->name == pItem->name && pOtherItem != pItem && pOtherItem->count < pDieItem->maxCount)
+						//加一个id判断
+						if (pOtherItem && pOtherItem->exist && pOtherItem->name == pItem->name && pOtherItem->id == pItem->id && pOtherItem != pItem && pOtherItem->count < pDieItem->maxCount)
 						{
 							bool result = false;
 							if (g_CGAInterface->MoveItem(pItem->pos, pOtherItem->pos, -1, result) && result)
