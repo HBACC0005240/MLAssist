@@ -4641,7 +4641,9 @@ bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
 						else if (findPath.size() > 1 && isLoop)
 						{
 							qDebug() << "卡墙：AutoMoveInternal" << tarX << tarY;
-							AutoMoveInternal(tarX, tarY, false);
+							if (AutoMoveInternal(tarX, tarY, false) == false)
+								return false;
+							dwLastTime = dwCurTime;
 						}
 						else
 						{
@@ -4740,7 +4742,7 @@ int CGFunction::AutoMoveToPath(std::vector<pair<int, int> > findPath, int timeou
 int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoop)
 {
 	if (m_navigatorLoopCount >= 20)
-		return 1;
+		return 0;
 	QPoint curPoint = GetMapCoordinate();
 	if (curPoint.x() == x && curPoint.y() == y)
 	{
@@ -4771,9 +4773,10 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 		if (findPath.size() > 0)
 			qDebug() << "离线地图查找路径成功，继续寻路";
 	}
+	bool bRet = false;
 	if (findPath.size() > 0)
 	{
-		AutoNavigator(findPath, isLoop);
+		bRet=AutoNavigator(findPath, isLoop);
 	}
 	else
 	{
@@ -4781,7 +4784,7 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 				 << curPos.y() << "目标：" << x << "," << y << "Normal " << IsInNormalState();
 	}
 	m_bMoveing = false;
-	return 1;
+	return bRet;
 }
 
 int CGFunction::AutoMoveToTgtMap(int tx, int ty, int tgtMapIndex, int timeout /*=100*/)
