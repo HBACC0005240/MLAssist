@@ -347,10 +347,16 @@ void GamePostwar::doLoadUserConfig(QSettings &iniFile)
 		pItem->setCheckState(itemVal ? Qt::Checked : Qt::Unchecked);
 	}
 	iniFile.beginGroup("AutoEat");
+	ui.lineEdit_playerEatMedicament->setText(iniFile.value("AutoHpVal").toString());
+	ui.lineEdit_playerEatMagic->setText(iniFile.value("AutoMpVal").toString());
+	ui.lineEdit_petEatMedicament->setText(iniFile.value("AutoPetHpVal").toString());
+	ui.lineEdit_petEatMagic->setText(iniFile.value("AutoPetMpVal").toString());	
+
 	ui.checkBox_playerEatMedicament->setChecked(iniFile.value("AutoHp").toBool());
 	ui.checkBox_playerEatMagic->setChecked(iniFile.value("AutoMp").toBool());
 	ui.checkBox_petEatMedicament->setChecked(iniFile.value("AutoPetHp").toBool());
 	ui.checkBox_petEatMagic->setChecked(iniFile.value("AutoPetMp").toBool());
+
 	iniFile.endGroup();
 	iniFile.beginGroup("EquipProtect");
 	ui.groupBox_equipProtect->setChecked(iniFile.value("Enable").toBool());
@@ -435,9 +441,13 @@ void GamePostwar::doSaveUserConfig(QSettings &iniFile)
 	iniFile.endGroup();
 	iniFile.beginGroup("AutoEat");
 	iniFile.setValue("AutoHp", ui.checkBox_playerEatMedicament->isChecked());
+	iniFile.setValue("AutoHpVal", ui.lineEdit_playerEatMedicament->text());
 	iniFile.setValue("AutoMp", ui.checkBox_playerEatMagic->isChecked());
+	iniFile.setValue("AutoMpVal", ui.lineEdit_playerEatMagic->text());
 	iniFile.setValue("AutoPetHp", ui.checkBox_petEatMedicament->isChecked());
+	iniFile.setValue("AutoPetHpVal", ui.lineEdit_petEatMedicament->text());
 	iniFile.setValue("AutoPetMp", ui.checkBox_petEatMagic->isChecked());
+	iniFile.setValue("AutoPetMpVal", ui.lineEdit_petEatMagic->text());
 	iniFile.endGroup();
 	iniFile.beginGroup("EquipProtect");
 	iniFile.setValue("Enable", ui.groupBox_equipProtect->isChecked());

@@ -10,6 +10,8 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QtConcurrent>
+#include "MINT.h"
+
 
 #define GAME_SKILL_NUM 16
 #define GAME_SUB_SKILL_NUM 10
@@ -296,6 +298,30 @@ void GameCtrl::RunParseCmd()
 	emit NotifyFillStaticSettings(m_cmdParser.value(*m_commandMap.value(TCmdConfig_KillFreeze)).toInt(), m_cmdParser.value(*m_commandMap.value(TCmdConfig_ChatMaxLines)).toInt());
 }
 
+void GameCtrl::Disconnect()
+{
+	//杀掉进程的话，这里进程不存在，这些数据直接还原
+	SetAttachedGameHwnd((HWND)nullptr);
+	setGameHwnd(nullptr);
+	SetGameThreadID(0);
+	setGameProcess(0);
+	SetGamePort(0);
+	setGameBaseAddr(0);
+
+	//停止相关的线程数据，需要时候再开启
+	StopUpdateTimer();
+	WaitThreadFini();
+	qDebug() << "线程结束成功，断开游戏连接";
+	g_CGAInterface->Disconnect();
+	emit signal_clearUiInfo();
+	auto mutex = GetGameCGAMutex();
+	if (mutex != NULL)
+	{
+		CloseHandle(mutex);
+	}
+	SetGameCGAMutex(nullptr);
+}
+
 void GameCtrl::SetGameGid(const QString &gid)
 {
 	if (m_sGid != gid)
@@ -329,6 +355,31 @@ void GameCtrl::HttpGetGameProcInfo(QJsonDocument *doc)
 		obj.insert("message", tr("not attached to any game process yet."));
 	}
 	doc->setObject(obj);
+}
+
+void GameCtrl::KillGameWndProcess()
+{
+	auto attachHwnd = getGameHwnd();
+	if (!attachHwnd)
+		return;
+	if (!IsWindow(attachHwnd))
+		return;
+	DWORD pid, tid;
+	tid = GetWindowThreadProcessId(attachHwnd, &pid);
+	if (!pid || !tid)
+	{
+		setGameHwnd(nullptr);
+		return;
+	}
+	HANDLE ProcessHandle = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
+	if (ProcessHandle)
+	{
+		if (STATUS_SUCCESS == NtTerminateProcess(ProcessHandle, 0))
+		{
+			Disconnect();
+		}
+		CloseHandle(ProcessHandle);
+	}
 }
 
 int GameCtrl::GetLastBattlePetAvgLv()

@@ -46,6 +46,7 @@ public:
 	void SetSelfHttpServerPort(int port) { m_nSelfHttpServerPort = port; }
 	void SetCreateLog(bool bFlag) { m_bCreateLog = bFlag; }
 
+	void Disconnect();
 	quint32 GetGameThreadID() { return m_nGameThreadID; }
 	int GetGamePort() { return m_nGamePort; }
 	DWORD getGamePID() { return m_gameProcessID; }
@@ -60,6 +61,9 @@ public:
 
 	//js脚本支持
 	void HttpGetGameProcInfo(QJsonDocument *doc);
+
+	void KillGameWndProcess();
+
 
 	//是否退出游戏
 	void SetExitGame(bool bRet) { m_bExit = bRet; }

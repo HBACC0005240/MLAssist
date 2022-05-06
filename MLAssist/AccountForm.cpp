@@ -332,7 +332,7 @@ bool AccountForm::QueryAttachGameWnd()
 							else
 							{
 								auto attachPid = g_pGameCtrl->getGamePID();
-								if (pid != 0 && attachPid != 0 && pid != attachPid)
+								if (pid != 0 && /*attachPid != 0 &&*/ pid != attachPid)
 								{
 									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 									{
@@ -375,7 +375,7 @@ bool AccountForm::QueryAttachGameWnd()
 				{
 
 					auto attachPid = g_pGameCtrl->getGamePID();
-					if (wnd->m_ProcessId != 0 && attachPid != 0 && wnd->m_ProcessId != attachPid)
+					if (wnd->m_ProcessId != 0 && /*attachPid != 0 && */wnd->m_ProcessId != attachPid)
 					{
 						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 						{
@@ -483,7 +483,7 @@ void AccountForm::OnAutoLogin()
 						if (m_gltExpiredTime.elapsed() > 10 * 60 * 1000)
 						{
 							qDebug() << "AutoLogin 10分钟持续登录过期，重新启动游戏！";
-							emit g_pGameCtrl->NotifyKillProcess();
+							g_pGameCtrl->KillGameWndProcess();
 							return;
 						}
 					}
@@ -496,7 +496,7 @@ void AccountForm::OnAutoLogin()
 					if (m_lastGameWndConnTime.elapsed() > 30 * 10000) //300秒
 					{
 						qDebug() << "300秒登录失败，干掉游戏窗口，重新加载！";
-						emit g_pGameCtrl->NotifyKillProcess();
+						g_pGameCtrl->KillGameWndProcess();
 					}
 					//增加等待
 					if (m_loginInterval > 0)
@@ -862,16 +862,12 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 				////重新登录 下次判断会跳过这个
 				//on_pushButton_logingame_clicked();
 			}
-		}
-		if (msg.contains("非法登录或登录已超时"))
-		{
-			on_pushButton_getgid_clicked();
-		}
+		}		
 		m_login_failure++;
 		if (m_login_failure > 30 && ui->checkBox_autoKillGame->isChecked())
 		{
 			qDebug() << "登录失败次数超10次，干掉游戏窗口，重新加载！";
-			emit g_pGameCtrl->NotifyKillProcess();
+			g_pGameCtrl->KillGameWndProcess();
 			m_login_failure = 0;
 			//YunLai::KillProcess(g_pGameCtrl->getGameHwnd());
 			//10次以后，再进行换线操作，否则太频繁
