@@ -371,6 +371,13 @@ void GameCtrl::KillGameWndProcess()
 		setGameHwnd(nullptr);
 		return;
 	}
+	WCHAR szMutex[32];
+	wsprintfW(szMutex, L"CGAAttachMutex_%d", pid);
+	HANDLE hAttachMutex = OpenMutexW(MUTEX_ALL_ACCESS, FALSE, szMutex);
+	if (hAttachMutex)
+	{
+		CloseHandle(hAttachMutex);
+	}
 	HANDLE ProcessHandle = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
 	if (ProcessHandle)
 	{

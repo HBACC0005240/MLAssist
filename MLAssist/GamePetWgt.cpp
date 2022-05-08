@@ -248,6 +248,8 @@ void GamePetWgt::init()
 
 void GamePetWgt::OnNotifyGetPetsInfo(GamePetList pets)
 {
+	if (!this->isVisible())
+		return;
 	ui.tableWidget->setUpdatesEnabled(false);
 	GamePetList gamePets = pets;
 	QMap<int, GamePetPtr> posMap;

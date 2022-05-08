@@ -126,9 +126,11 @@ void GameEquipWgt::on_unequip_item()
 
 void GameEquipWgt::doUpdateItemList(GameItemList pItemList)
 {
+	if (!this->isVisible())
+		return;
 	if (!m_bRealTimeUpdate)
 	{
-		if (m_lastUpdateTime.elapsed() < 10000)
+		if (m_lastUpdateTime.elapsed() < 5000)
 			return;
 		m_lastUpdateTime.restart();
 	}

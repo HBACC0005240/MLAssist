@@ -11,7 +11,6 @@ GameBattleInfoWgt::GameBattleInfoWgt(QWidget *parent) :
 	ui.tableWidget_2->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	init();
 	connect(g_pGameCtrl, &GameCtrl::NotifyGameBattlesInfo, this, &GameBattleInfoWgt::OnNotifyGetBattleInfo, Qt::ConnectionType::QueuedConnection);
-
 	connect(g_pGameCtrl, &GameCtrl::NotifyTeamInfo, this, &GameBattleInfoWgt::DoNotifyTeamInfo, Qt::QueuedConnection);
 }
 
@@ -66,6 +65,8 @@ void GameBattleInfoWgt::init()
 
 void GameBattleInfoWgt::DoNotifyTeamInfo(const QList<QSharedPointer<GameTeamPlayer> > &teamInfos)
 {
+	if (!this->isVisible())
+		return;
 	int teamCount = teamInfos.size();
 	for (int i = 0; i < 5; ++i)
 	{
@@ -83,6 +84,8 @@ void GameBattleInfoWgt::DoNotifyTeamInfo(const QList<QSharedPointer<GameTeamPlay
 
 void GameBattleInfoWgt::OnNotifyGetBattleInfo(GameBattleUnitList pBattleUs)
 {
+	if (!this->isVisible())
+		return;
 	for (int i = 0; i < pBattleUs.size(); i++)
 	{
 		auto info = pBattleUs[i];

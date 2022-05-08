@@ -207,9 +207,9 @@ public:
 	//通过好友名片，获取队长所在的游戏线路
 	int GetFriendServerLine(QString name);
 	//工作
-	void Work(int index, int nSubIndex = 0, int nDelayTime = 6000, bool bImmediate = false);
+	void Work(int index, int nSubIndex = 0, int nDelayTime = 6000, int nImmediate = 0);
 	//工作 鉴定 挖掘 伐木 狩猎  修理 这些默认根据最高等级选subIndex的
-	void WorkEx(const QString &skillName, const QString &itemName = "", int nDelayTime = 6000, bool bImmediate = false);
+	void WorkEx(const QString &skillName, const QString &itemName = "", int nDelayTime = 6000, int nImmediate = -1);
 	//合成
 	void AllCompound(QString name);
 

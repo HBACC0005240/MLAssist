@@ -208,6 +208,8 @@ void GameWorkWgt::ResetWorkUI()
 
 void GameWorkWgt::doUpdateItemList(GameItemList pItemList)
 {
+	if (!this->isVisible())
+		return;
 	int row = 0, col = 0;
 	QVector<int> itemPosList;
 	for (size_t i = 0; i < pItemList.size(); i++)
@@ -236,13 +238,20 @@ void GameWorkWgt::doUpdateItemList(GameItemList pItemList)
 				pTableItem->setToolTip(szToolTip);
 
 				pTableItem->setText(szText);
-				if (pItem->assessed)
-					pTableItem->setTextColor(QColor(0, 0, 0));
-				else
-					pTableItem->setTextColor(QColor(0, 0, 255));
+				
 				pTableItem->setData(Qt::UserRole, QVariant::fromValue(pItem));
 				//	qDebug() << "Exist Update" << pItem->name << pTableItem->text() << i << pItem->pos << pItem->attr << pItem->id;
 			}
+			if (pItem->assessed)
+			{
+				if (pTableItem->textColor() != QColor(0, 0, 0))
+					pTableItem->setTextColor(QColor(0, 0, 0));
+			}
+			else
+			{
+				if (pTableItem->textColor() != QColor(0, 0, 255))
+					pTableItem->setTextColor(QColor(0, 0, 255));
+			}			
 		}
 		else
 		{

@@ -382,6 +382,8 @@ void GameDataWgt::doClearUiInfo()
 //qfmoli.exe+A2A414  人物等级地址  可以此为基址 初始化结构体获取人物信息 人物信息后面跟着是人物物品信息类
 void GameDataWgt::OnNotifyGameCharacterInfo(CharacterPtr char_info)
 {
+	if (!this->isVisible())
+		return;
 	ui.tableWidget->setUpdatesEnabled(false);
 	auto gamePlayer = char_info;
 	//0xE8FECA  E21C4A这两个应该是环境变量，周围有其他信息，不是太准
@@ -518,6 +520,8 @@ void GameDataWgt::OnNotifyGameCharacterInfo(CharacterPtr char_info)
 
 void GameDataWgt::OnNotifyGetSkillsInfo(GameSkillList skills)
 {
+	if (!this->isVisible())
+		return;
 	GameSkillList gameSkills = skills;
 	for (int i = 0; i < gameSkills.size(); ++i)
 	{
@@ -538,6 +542,8 @@ void GameDataWgt::OnNotifyGetSkillsInfo(GameSkillList skills)
 
 void GameDataWgt::OnNotifyGetPetsInfo(GamePetList pets)
 {
+	if (!this->isVisible())
+		return;
 	GamePetPtr battlePet = nullptr;
 	for (auto pet : pets)
 	{
@@ -598,6 +604,8 @@ void GameDataWgt::OnNotifyGetPetsInfo(GamePetList pets)
 //半秒更新一次坐标
 void GameDataWgt::doUpdateMapData(QString name, int index1, int index2, int index3, int x, int y)
 {
+	if (!this->isVisible())
+		return;
 	setItemText(2, 0, name);
 	setItemText(3, 0, QString("东%1 南%2").arg(x).arg(y));
 	setItemText(5, 0, QString("%1").arg(index3));
@@ -607,6 +615,8 @@ void GameDataWgt::doUpdateMapData(QString name, int index1, int index2, int inde
 
 void GameDataWgt::doUpdateBattleHpMp(int hp, int maxhp, int mp, int maxmp)
 {
+	if (!this->isVisible())
+		return;
 	QString szHp = QString("HP:%1/%2").arg(hp).arg(maxhp);
 	QString szMp = QString("MP:%1/%2").arg(mp).arg(maxmp);
 	setItemText(0, 1, szHp, QColor("red"));

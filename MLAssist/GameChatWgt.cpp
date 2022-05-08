@@ -22,7 +22,7 @@ GameChatWgt::GameChatWgt(QWidget *parent) :
 	connect(ui.checkBox_timer, SIGNAL(stateChanged(int)), this, SLOT(OnCtrlTimer(int)), Qt::ConnectionType::QueuedConnection);
 	connect(&m_timer, SIGNAL(timeout()), this, SLOT(OnTimeChat()));
 	connect(&m_friendCardTimer, SIGNAL(timeout()), this, SLOT(OnUpdateFriendCard()));
-	m_friendCardTimer.start(100000); //100秒刷一次
+	m_friendCardTimer.start(10000); //100秒刷一次
 	connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(doItemDoubleClicked(QListWidgetItem *)));
 }
 
@@ -151,6 +151,8 @@ void GameChatWgt::on_radioButton_small_toggled(bool checked)
 
 void GameChatWgt::OnUpdateFriendCard()
 {
+	if (!this->isVisible())
+		return;
 	if (!g_pGameFun->IsOnline())
 		return;
 

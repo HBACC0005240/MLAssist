@@ -2350,7 +2350,7 @@ int CGLuaFun::Lua_Work(LuaState *L)
 	LuaStack args(L);
 	QString skillname = args[1].GetString();
 	int ntimeout = args.Count() > 2 ? args[3].GetInteger() : 6000;
-	bool isImmediate = args.Count() > 3 ? args[4].GetBoolean() : false;
+	int isImmediate = args.Count() > 3 ? args[4].GetBoolean() : -1;
 	if (args[2].IsString())
 	{
 		QString itemName = args[2].IsString() ? args[2].GetString() : "";

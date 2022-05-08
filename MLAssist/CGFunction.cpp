@@ -1299,10 +1299,11 @@ int CGFunction::GetAllItemPileCount(const QString &itemName)
 	return nCount;
 }
 
-void CGFunction::Work(int index, int nSubIndex /*=0*/, int nDelayTime /*= 6000*/, bool bImmediate)
+void CGFunction::Work(int index, int nSubIndex /*=0*/, int nDelayTime /*= 6000*/, int nImmediate)
 {
 	bool bResult = false;
-	g_CGAInterface->SetImmediateDoneWork(bImmediate); //关掉立即结束工作
+	if (nImmediate >=0)
+		g_CGAInterface->SetImmediateDoneWork(nImmediate); //关掉立即结束工作
 	g_CGAInterface->SetWorkDelay(nDelayTime);		  //生成延时
 	qDebug() << "工作延时时间:" << nDelayTime;
 	//	g_CGAInterface->SetWorkAcceleration(100);	//生成加速
@@ -1311,7 +1312,7 @@ void CGFunction::Work(int index, int nSubIndex /*=0*/, int nDelayTime /*= 6000*/
 }
 
 //给脚本用的 需要阻塞
-void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int nDelayTime /*= 6000*/, bool bImmediate)
+void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int nDelayTime /*= 6000*/, int nImmediate)
 {
 	auto pSkill = g_pGameFun->FindPlayerSkillEx(skillName);
 	if (!pSkill)
@@ -1328,7 +1329,8 @@ void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int n
 	}
 	if (skillName == "鉴定")
 	{
-		g_CGAInterface->SetImmediateDoneWork(bImmediate);
+		if (nImmediate >= 0)
+			g_CGAInterface->SetImmediateDoneWork(nImmediate);
 
 		auto pSkill = FindPlayerSkillEx("鉴定");
 		if (!pSkill)
@@ -1353,7 +1355,11 @@ void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int n
 						int nTimeOut = assessedOnce ? 1000 : nDelayTime >= 0 ? nDelayTime :
 																				 20000;
 						WaitRecvWorkResult(nTimeOut);
-						if (!assessedOnce) assessedOnce = true;
+						if (!assessedOnce)
+						{
+							assessedOnce = true;
+							g_CGAInterface->SetImmediateDoneWork(true);
+						}
 					}
 					Sleep(20);
 				}
@@ -1370,12 +1376,17 @@ void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int n
 					g_CGAInterface->StartWork(pSkill->index, 0, bResult);
 					qDebug() << "鉴定" << pItem->name << pSkill->id << pSkill->index << pItem->level << pItem->pos;
 					if (GetCharacterData("mp") >= (pItem->level * 10) && g_CGAInterface->AssessItem(pSkill->index, pItem->pos, bResult))
-					{
-						/*int nTimeOut = nDelayTime >= 0 ? nDelayTime : (assessedOnce ? 2000 : 9000);
+					{					
+						int nTimeOut = assessedOnce ? 1000 : nDelayTime >= 0 ? nDelayTime :
+																				 20000;
 						WaitRecvWorkResult(nTimeOut);
-						assessedOnce = true;*/
+						if (!assessedOnce)
+						{
+							assessedOnce = true;
+							g_CGAInterface->SetImmediateDoneWork(true);
+						}
 					}
-					Sleep(200);
+					Sleep(20);
 					break;
 				}
 			}
@@ -1787,7 +1798,7 @@ void CGFunction::WorkThread(CGFunction *pThis)
 		bool bResult = false;
 		bool assessedOnce = false;
 		auto pItemList = pThis->GetGameItems();
-		g_CGAInterface->SetWorkDelay(8000);
+		//g_CGAInterface->SetWorkDelay(8000);
 		g_CGAInterface->SetWorkAcceleration(100);
 		for (auto pItem : pItemList)
 		{
@@ -1803,12 +1814,12 @@ void CGFunction::WorkThread(CGFunction *pThis)
 				//pThis->Work(pSkill->id, 0);
 				if (pThis->GetCharacterData("mp") >= (pItem->level * 10) && g_CGAInterface->AssessItem(pSkill->index, pItem->pos, bResult))
 				{
-					int nTimeOut = assessedOnce ? 2000 : 30000;
+					int nTimeOut = assessedOnce ? 1000 : 30000;
 					auto workState = pThis->WaitRecvWorkResult(nTimeOut);
 					if (!assessedOnce && workState && workState->success)
 					{
 						assessedOnce = true;
-						//g_CGAInterface->SetImmediateDoneWork(true);
+						g_CGAInterface->SetImmediateDoneWork(true);
 					}
 				}
 				else
@@ -1868,6 +1879,7 @@ void CGFunction::WorkThread(CGFunction *pThis)
 					if (!assessedOnce && workState && workState->success)
 					{
 						assessedOnce = true;
+						g_CGAInterface->SetImmediateDoneWork(true);
 					}
 				}
 				emit pThis->signal_workEnd();
