@@ -123,13 +123,16 @@ protected:
 	QMap<QString, QSharedPointer<CGPetPictorialBook> > LoadPetBook();
 
 	static void NormalThread(ITObjectDataMgr *pThis);
+	static void LoadPetDataThread(ITObjectDataMgr *pThis,bool,bool);
 
 signals:
 	void signal_loadDataFini();
 	void signal_mqttMsg(const QString &, const QString &);
 	void signal_publishMqttMsg(const QString &, const QString &);
+	void signal_loadPetData(bool, bool);
 
 public slots:
+	void doLoadPetData(bool,bool);
 	void doLoadDBInfoOver();
 	void on_attachGame_sucess();
 	void OnNotifyGetItemsInfo(GameItemList items);

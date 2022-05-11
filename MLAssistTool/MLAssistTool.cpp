@@ -398,6 +398,8 @@ void MLAssistTool::on_pushButton_closeCur_clicked()
 		{
 			YunLai::KillProcessEx(item->m_ProcessId);
 		}
+		onRefreshFzData();
+
 	}
 	else if (tabIndex == 1) //ML
 	{
@@ -407,6 +409,8 @@ void MLAssistTool::on_pushButton_closeCur_clicked()
 		{
 			YunLai::KillProcessEx(item->m_ProcessId);
 		}
+		onRefreshFzData();
+
 	}
 
 }

@@ -70,6 +70,7 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Item, NEW_MODULE_FACTORY(ITGameItem));
 	connect(this, SIGNAL(signal_loadDataFini()), this, SLOT(doLoadDBInfoOver())); //这个是加载数据库完成
 	connect(this, &ITObjectDataMgr::signal_publishMqttMsg, this, &ITObjectDataMgr::on_publishMqttMsg, Qt::ConnectionType::QueuedConnection);
+	connect(this, &ITObjectDataMgr::signal_loadPetData, this, &ITObjectDataMgr::doLoadPetData, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, SIGNAL(signal_attachGame()), this, SLOT(on_attachGame_sucess()));
 	/*connect(g_pGameCtrl, &GameCtrl::NotifyGameItemsInfo, this, &ITObjectDataMgr::OnNotifyGetItemsInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGamePetsInfo, this, &ITObjectDataMgr::OnNotifyGetPetsInfo, Qt::ConnectionType::QueuedConnection);*/
@@ -154,87 +155,14 @@ bool ITObjectDataMgr::init()
 	//	qDebug() << QLatin1String("Could not subscribe. Is there a valid connection?");
 	//}
 	bool isLoadPetCalcData = iniFile.value("db/loadPetCalcData", false).toBool();
+	bool isLoadOfflineDb = iniFile.value("db/loadOfflineDB", false).toBool();
 
 	RpcSocketClient::getInstance().setServerIp(sServerIp);
 	RpcSocketClient::getInstance().setServerPort(sServerPort);
-	RpcSocketClient::getInstance().init();
-	if (RpcSocketClient::getInstance().isConnected() && RpcSocketClient::getInstance().GetConnectState()) //貌似不能用这个判断 服务端如果没启动 这边还是返回true
-	{
-		//服务端数据
-		//连接成功后
-		//1、获取宠物数据用于算档
-		//2、获取地图数据用户通知服务器对比更新
-		//3、item实时通信获取但不获取所有，获取当前包裹的，并本地缓存，发现获取的服务器数据不是最新，则发通知服务器更新
-		if (isLoadPetCalcData)
-		{
-			auto petData = RpcSocketClient::getInstance().GetPetGradeCalcData(); //这个是图鉴部分  和ITGamePet还不一样
-			g_pGamePetCalc->setCaclPetData(petData);
-			if (petData.size() > 0)
-			{
-				for (auto it = petData.begin(); it != petData.end(); ++it)
-				{
-					auto petBook = it.value();
-					ITGamePetPtr pObj = newOneObject(TObject_Pet).dynamicCast<ITGamePet>();
-					if (pObj)
-					{
-						pObj->_petNumber = petBook->number;
-						pObj->_petRaceType = petBook->raceType;
-						pObj->_petRace = petBook->raceTypeName;
-						pObj->_petBaseBp = petBook->baseBP;
-						pObj->_growVigor = petBook->bestBPGrade[0];
-						pObj->_growStrength = petBook->bestBPGrade[1];
-						pObj->_growDefense = petBook->bestBPGrade[2];
-						pObj->_growAgility = petBook->bestBPGrade[3];
-						pObj->_growMagic = petBook->bestBPGrade[4];
-						pObj->_canCatch = petBook->can_catch;
-						pObj->_cardType = petBook->card_type;
-						pObj->_imageId = petBook->image_id;
-						pObj->_skillCount = petBook->skill_slots;
-						pObj->_elementEarth = petBook->element_earth;
-						pObj->_elementWater = petBook->element_water;
-						pObj->_elementFire = petBook->element_fire;
-						pObj->_elementWind = petBook->element_wind;
-						pObj->setObjectName(petBook->name);
-						//pObj->setObjectDsec(sDesc);
-						//pObj->setObjectCode(nCode);
-					}
-					m_numberForPet.insert(petBook->number, pObj);
-				}
-			}
-		}
-		RpcSocketClient::getInstance().GetServerStoreMapData();
-	}
-	else
-	{ //离线时候 算档数据同步过去
-		bool isLoadOfflineDb = iniFile.value("db/loadOfflineDB", false).toBool();
-		if (isLoadOfflineDb)
-		{
-			QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
-			bool bRet = false;
-			m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITECIPHER"));
-			if (connectToDB("SQLITECIPHER", "CG", sDBPath, "admin", "123456"))
-			{
-				qDebug() << "打开数据库成功！";
-				//		QtConcurrent::run(loadDataBaseInfo, this);
-				loadDataBaseInfo(this);
-				if (isLoadPetCalcData)
-				{
-					auto petData = LoadPetBook();
-					g_pGamePetCalc->setCaclPetData(petData);
-				}
-				bRet = true;
-			}
-			else
-			{
-				if (m_dbconn)
-					qDebug() << m_dbconn->getLastError();
-				bRet = false;
-				qDebug() << "打开数据库错误！";
-			}
-			QtConcurrent::run(SaveDataThread, this);
-		}
-	}
+	RpcSocketClient::getInstance().init();	
 	QtConcurrent::run(NormalThread, this);
+	QtConcurrent::run(LoadPetDataThread, this,isLoadPetCalcData,isLoadOfflineDb);
+	//emit signal_loadPetData(isLoadPetCalcData, isLoadOfflineDb);
 	return true;
 }
 
@@ -1531,6 +1459,85 @@ bool ITObjectDataMgr::isLoading()
 	return m_bIsLoading;
 }
 
+void ITObjectDataMgr::doLoadPetData(bool isLoadPetCalcData, bool isLoadOfflineDb)
+{
+	if (RpcSocketClient::getInstance().isConnected() && RpcSocketClient::getInstance().GetConnectState()) //貌似不能用这个判断 服务端如果没启动 这边还是返回true
+	{
+		//服务端数据
+		//连接成功后
+		//1、获取宠物数据用于算档
+		//2、获取地图数据用户通知服务器对比更新
+		//3、item实时通信获取但不获取所有，获取当前包裹的，并本地缓存，发现获取的服务器数据不是最新，则发通知服务器更新
+		if (isLoadPetCalcData)
+		{
+			auto petData = RpcSocketClient::getInstance().GetPetGradeCalcData(); //这个是图鉴部分  和ITGamePet还不一样
+			g_pGamePetCalc->setCaclPetData(petData);
+			if (petData.size() > 0)
+			{
+				for (auto it = petData.begin(); it != petData.end(); ++it)
+				{
+					auto petBook = it.value();
+					ITGamePetPtr pObj = newOneObject(TObject_Pet).dynamicCast<ITGamePet>();
+					if (pObj)
+					{
+						pObj->_petNumber = petBook->number;
+						pObj->_petRaceType = petBook->raceType;
+						pObj->_petRace = petBook->raceTypeName;
+						pObj->_petBaseBp = petBook->baseBP;
+						pObj->_growVigor = petBook->bestBPGrade[0];
+						pObj->_growStrength = petBook->bestBPGrade[1];
+						pObj->_growDefense = petBook->bestBPGrade[2];
+						pObj->_growAgility = petBook->bestBPGrade[3];
+						pObj->_growMagic = petBook->bestBPGrade[4];
+						pObj->_canCatch = petBook->can_catch;
+						pObj->_cardType = petBook->card_type;
+						pObj->_imageId = petBook->image_id;
+						pObj->_skillCount = petBook->skill_slots;
+						pObj->_elementEarth = petBook->element_earth;
+						pObj->_elementWater = petBook->element_water;
+						pObj->_elementFire = petBook->element_fire;
+						pObj->_elementWind = petBook->element_wind;
+						pObj->setObjectName(petBook->name);
+						//pObj->setObjectDsec(sDesc);
+						//pObj->setObjectCode(nCode);
+					}
+					m_numberForPet.insert(petBook->number, pObj);
+				}
+			}
+		}
+		RpcSocketClient::getInstance().GetServerStoreMapData();
+	}
+	else
+	{ //离线时候 算档数据同步过去
+		if (isLoadOfflineDb)
+		{
+			QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
+			bool bRet = false;
+			m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITECIPHER"));
+			if (connectToDB("SQLITECIPHER", "CG", sDBPath, "admin", "123456"))
+			{
+				qDebug() << "打开数据库成功！";
+				//		QtConcurrent::run(loadDataBaseInfo, this);
+				loadDataBaseInfo(this);
+				if (isLoadPetCalcData)
+				{
+					auto petData = LoadPetBook();
+					g_pGamePetCalc->setCaclPetData(petData);
+				}
+				bRet = true;
+			}
+			else
+			{
+				if (m_dbconn)
+					qDebug() << m_dbconn->getLastError();
+				bRet = false;
+				qDebug() << "打开数据库错误！";
+			}
+			QtConcurrent::run(SaveDataThread, this);
+		}
+	}
+}
+
 void ITObjectDataMgr::doLoadDBInfoOver()
 {
 }
@@ -1614,6 +1621,86 @@ void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)
 			}
 		}
 		QThread::msleep(10000);
+	}
+}
+
+void ITObjectDataMgr::LoadPetDataThread(ITObjectDataMgr *pThis, bool isLoadPetCalcData, bool isLoadOfflineDb)
+{
+	if (RpcSocketClient::getInstance().isConnected() && RpcSocketClient::getInstance().GetConnectState()) //貌似不能用这个判断 服务端如果没启动 这边还是返回true
+	{
+		//服务端数据
+		//连接成功后
+		//1、获取宠物数据用于算档
+		//2、获取地图数据用户通知服务器对比更新
+		//3、item实时通信获取但不获取所有，获取当前包裹的，并本地缓存，发现获取的服务器数据不是最新，则发通知服务器更新
+		if (isLoadPetCalcData)
+		{
+			auto petData = RpcSocketClient::getInstance().GetPetGradeCalcData(); //这个是图鉴部分  和ITGamePet还不一样
+			g_pGamePetCalc->setCaclPetData(petData);
+			if (petData.size() > 0)
+			{
+				for (auto it = petData.begin(); it != petData.end(); ++it)
+				{
+					auto petBook = it.value();
+					ITGamePetPtr pObj = pThis->newOneObject(TObject_Pet).dynamicCast<ITGamePet>();
+					if (pObj)
+					{
+						pObj->_petNumber = petBook->number;
+						pObj->_petRaceType = petBook->raceType;
+						pObj->_petRace = petBook->raceTypeName;
+						pObj->_petBaseBp = petBook->baseBP;
+						pObj->_growVigor = petBook->bestBPGrade[0];
+						pObj->_growStrength = petBook->bestBPGrade[1];
+						pObj->_growDefense = petBook->bestBPGrade[2];
+						pObj->_growAgility = petBook->bestBPGrade[3];
+						pObj->_growMagic = petBook->bestBPGrade[4];
+						pObj->_canCatch = petBook->can_catch;
+						pObj->_cardType = petBook->card_type;
+						pObj->_imageId = petBook->image_id;
+						pObj->_skillCount = petBook->skill_slots;
+						pObj->_elementEarth = petBook->element_earth;
+						pObj->_elementWater = petBook->element_water;
+						pObj->_elementFire = petBook->element_fire;
+						pObj->_elementWind = petBook->element_wind;
+						pObj->setObjectName(petBook->name);
+						//pObj->setObjectDsec(sDesc);
+						//pObj->setObjectCode(nCode);
+					}
+					pThis->m_numberForPet.insert(petBook->number, pObj);
+				}
+			}
+		}
+		RpcSocketClient::getInstance().GetServerStoreMapData();
+	}
+	else
+	{ //离线时候 算档数据同步过去
+		if (isLoadOfflineDb)
+		{
+			QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
+			bool bRet = false;
+			pThis->m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITECIPHER"));
+			if (pThis->connectToDB("SQLITECIPHER", "CG", sDBPath, "admin", "123456"))
+			{
+				qDebug() << "打开数据库成功！";
+				//		QtConcurrent::run(loadDataBaseInfo, this);
+				pThis->loadDataBaseInfo(pThis);
+				if (isLoadPetCalcData)
+				{
+					auto petData = pThis->LoadPetBook();
+					g_pGamePetCalc->setCaclPetData(petData);
+				}
+				bRet = true;
+			}
+			else
+			{
+				if (pThis->m_dbconn)
+					qDebug() << pThis->m_dbconn->getLastError();
+				bRet = false;
+				qDebug() << "打开数据库错误！";
+			}
+			SaveDataThread(pThis);
+//			QtConcurrent::run(SaveDataThread, this);
+		}
 	}
 }
 
