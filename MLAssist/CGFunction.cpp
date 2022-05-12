@@ -9836,7 +9836,7 @@ QString CGFunction::GetSysChatMsg()
 		QMutexLocker locker(&m_charMutex);
 		for (int i = 0; i < m_systemCueList.size(); ++i)
 		{
-			sMsg.append(m_systemCueList[i].second[1]);
+			sMsg.append(m_systemCueList[i].second);
 			sMsg += ";";
 		}
 		return sMsg;
@@ -9867,14 +9867,13 @@ QString CGFunction::GetAllChatMsg(int count)
 			sMsg += ";";
 		}
 		return sMsg;
-		//		return m_chatMsgList.join(";");
 	}
 	else
 	{
 		int tmpCount = count;
 		QString sMsg;
 		if (m_chatMsgList.size() < tmpCount)
-			tmpCount = 0;
+			tmpCount = m_chatMsgList.size();
 		QMutexLocker locker(&m_charMutex);
 		int i = m_chatMsgList.size() - tmpCount;
 		for (; i < m_chatMsgList.size(); ++i)
@@ -9883,7 +9882,6 @@ QString CGFunction::GetAllChatMsg(int count)
 			sMsg += ";";
 		}
 		return sMsg;
-		//return m_chatMsgList.mid(m_chatMsgList.size() - count).join(";");
 	}
 }
 
@@ -9902,7 +9900,7 @@ QList<QPair<int, QString> > CGFunction::GetDetailAllChatMsg(int count /*= 0*/)
 		QMutexLocker locker(&m_charMutex);
 		int tmpCount = count;
 		if (m_chatMsgList.size() < tmpCount)
-			tmpCount = 0;
+			tmpCount = m_chatMsgList.size();
 		int i = m_chatMsgList.size() - tmpCount;
 		for (; i < m_chatMsgList.size(); ++i)
 		{
@@ -9927,13 +9925,7 @@ QStringList CGFunction::GetJustChatMsg()
 		else
 			return lastData.second;
 	}
-	return QStringList();
-	/*auto lastData = m_chatMsgList.last();
-	if ((GetTickCount() - lastData.first) > 3000)
-		return QStringList();
-	else
-		return lastData.second;
-	return m_chatMsgList.last().second;*/
+	return QStringList();	
 }
 
 QSharedPointer<CGA_NPCDialog_t> CGFunction::WaitRecvNpcDialog(int timeout /*=5000*/)
