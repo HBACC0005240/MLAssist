@@ -65,8 +65,8 @@ void AttachGameWnd::OnAutoAttachProcess(quint32 ProcessId, quint32 ThreadId)
 void AttachGameWnd::OnQueueQueryProcess()
 {
 	CProcessItemList list;
-	if (g_pGameCtrl->getGameHwnd() != nullptr) //已附加的 不刷新了 打开的话，后面的附加列没更新，其他打开是已更新的
-		return;
+	//if (g_pGameCtrl->getGameHwnd() != nullptr) //已附加的 不刷新了 打开的话，后面的附加列没更新，其他打开是已更新的
+	//	return;
 	const wchar_t szFindGameClass[] = { 39764, 21147, 23453, 36125, 0 };
 
 	HWND hWnd = NULL;
