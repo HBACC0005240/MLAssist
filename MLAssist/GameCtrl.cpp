@@ -300,26 +300,12 @@ void GameCtrl::RunParseCmd()
 
 void GameCtrl::Disconnect()
 {
-	//杀掉进程的话，这里进程不存在，这些数据直接还原
-	SetAttachedGameHwnd((HWND)nullptr);
-	setGameHwnd(nullptr);
-	SetGameThreadID(0);
-	setGameProcess(0);
-	SetGamePort(0);
-	setGameBaseAddr(0);
-
 	//停止相关的线程数据，需要时候再开启
 	StopUpdateTimer();
 	WaitThreadFini();
 	qDebug() << "线程结束成功，断开游戏连接";
 	g_CGAInterface->Disconnect();
 	emit signal_clearUiInfo();
-	auto mutex = GetGameCGAMutex();
-	if (mutex != NULL)
-	{
-		CloseHandle(mutex);
-	}
-	SetGameCGAMutex(nullptr);
 }
 
 void GameCtrl::SetGameGid(const QString &gid)
@@ -655,11 +641,13 @@ void GameCtrl::StopUpdateTimer()
 	g_pGameFun->StopFun();
 	m_gameProcessID = 0;
 	m_gameHwnd = nullptr;
-	m_hGameHwnd = nullptr;
 	m_nGamePort = 0;
 	m_nGameThreadID = 0;
 	m_gameBaseAddr = 0;
-
+	if (m_hGameMutex != NULL)
+	{
+		CloseHandle(m_hGameMutex);
+	}
 	m_hGameMutex = nullptr;
 	m_updateTimer.stop();	 //更新定时器
 	m_characterTimer.stop(); //人物定时器
@@ -3387,7 +3375,7 @@ void GameCtrl::NotifyWorkingResultCallback(CGA::cga_working_result_t msg)
 void GameCtrl::NotifyServerShutdown(int port)
 {
 	qDebug() << "NotifyServerShutdown" << port;
-	g_pGameCtrl->StopUpdateTimer();
+	Disconnect();
 }
 
 void GameCtrl::NotifyTradeStuffsCallback(CGA::cga_trade_stuff_info_t tradeInfo)
@@ -3911,11 +3899,11 @@ void GameCtrl::OnSyncGameWindow(bool bShow)
 	{
 		if (bShow)
 		{
-			ShowWindow(m_hGameHwnd, SW_SHOWNORMAL);
+			ShowWindow(m_gameHwnd, SW_SHOWNORMAL);
 		}
 		else
 		{
-			ShowWindow(m_hGameHwnd, SW_MINIMIZE);
+			ShowWindow(m_gameHwnd, SW_MINIMIZE);
 		}
 	}
 }

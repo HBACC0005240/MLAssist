@@ -260,7 +260,6 @@ void AttachGameWnd::ConnectToServer(quint32 ProcessId, quint32 ThreadId, int por
 	if (g_CGAInterface->Connect(port))
 	{
 		emit g_pGameCtrl->NotifyAttachProcessOk(ProcessId, ThreadId, port, hwnd);
-		g_pGameCtrl->SetAttachedGameHwnd((HWND)hwnd);
 		g_pGameCtrl->SetGameThreadID(ThreadId);
 		void *pBaseAddr = YunLai::GetProcessImageBase1(ProcessId);
 		qDebug() << pBaseAddr;
@@ -621,26 +620,12 @@ bool AttachGameWnd::IsProcessAttached(quint32 ProcessId)
 
 void AttachGameWnd::Disconnect()
 {
-	//杀掉进程的话，这里进程不存在，这些数据直接还原
-	g_pGameCtrl->SetAttachedGameHwnd((HWND)nullptr);
-	g_pGameCtrl->setGameHwnd(nullptr);
-	g_pGameCtrl->SetGameThreadID(0);
-	g_pGameCtrl->setGameProcess(0);
-	g_pGameCtrl->SetGamePort(0);
-	g_pGameCtrl->setGameBaseAddr(0);
-
 	//停止相关的线程数据，需要时候再开启
 	g_pGameCtrl->StopUpdateTimer();
 	g_pGameCtrl->WaitThreadFini();
 	qDebug() << "线程结束成功，断开游戏连接";
 	g_CGAInterface->Disconnect();
 	emit g_pGameCtrl->signal_clearUiInfo();
-	auto mutex = g_pGameCtrl->GetGameCGAMutex();
-	if (mutex != NULL)
-	{
-		CloseHandle(mutex);
-	}
-	g_pGameCtrl->SetGameCGAMutex(nullptr);
 }
 
 void AttachGameWnd::OnCheckFreezeProcess()

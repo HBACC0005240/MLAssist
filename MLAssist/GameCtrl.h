@@ -98,8 +98,6 @@ public:
 	int GetPetPosition(int playerPos);
 
 	//附加窗口句柄
-	void SetAttachedGameHwnd(HWND wnd) { m_hGameHwnd = wnd; }
-	HWND GetAttachedGameHwnd() { return m_hGameHwnd; }
 	bool getGameConnectState(); //获取游戏连接状态 true连接有效 false 连接断开
 	QString getGameState();		//获取游戏状态
 	void GetBattleUnits();		//获取战斗信息
@@ -358,7 +356,6 @@ private:
 	QTimer m_updateTimer;																 //定时更新定时器
 	QTimer m_characterTimer;															 //人物角色获取定时器
 	QTimer m_mapTimer;																	 //地图信息获取定时器
-	HWND m_hGameHwnd;																	 //游戏窗口句柄
 	GameItemList m_pRenItemList;														 //扔物品列表
 	GameItemList m_pPileItemList;														 //扔物品列表
 	GameSearchList m_pSearchList;														 //搜索列表
