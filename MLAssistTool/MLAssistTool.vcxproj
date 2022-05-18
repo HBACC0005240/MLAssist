@@ -68,7 +68,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>j:\Environment\boost\boost_1_75_0/stage/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Environment\boost\boost_1_75_0/stage/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
@@ -107,20 +107,27 @@
     <ClCompile Include="AddAccountDlg.cpp" />
     <ClCompile Include="FzTableModel.cpp" />
     <ClCompile Include="GameAccountWgt.cpp" />
+    <ClCompile Include="GamePlayerDataWgt.cpp" />
     <ClCompile Include="ITAccountTreeModel.cpp" />
     <ClCompile Include="ITObject.cpp" />
     <ClCompile Include="ITObjectDataMgr.cpp" />
+    <ClCompile Include="ITSignalProxy.cpp" />
+    <ClCompile Include="MApplication.cpp" />
+    <ClCompile Include="MLDebugWgt.cpp" />
     <ClCompile Include="MLWndTableModel.cpp" />
+    <ClCompile Include="PlayerDataTreeModel.cpp" />
     <ClCompile Include="RpcSocket.cpp" />
     <ClCompile Include="TreeItem.cpp" />
     <ClCompile Include="TreeModel.cpp" />
     <QtRcc Include="MLAssistTool.qrc" />
     <QtUic Include="AddAccountDlg.ui" />
     <QtUic Include="GameAccountWgt.ui" />
+    <QtUic Include="GamePlayerDataWgt.ui" />
     <QtUic Include="MLAssistTool.ui" />
     <QtMoc Include="MLAssistTool.h" />
     <ClCompile Include="MLAssistTool.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="MLDebugWgt.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\include\ITDatabaseConn.h" />
@@ -136,7 +143,12 @@
     <ClInclude Include="..\protos\CGData.grpc.pb.h" />
     <ClInclude Include="..\protos\CGData.pb.h" />
     <ClInclude Include="constDef.h" />
+    <QtMoc Include="GamePlayerDataWgt.h" />
     <ClInclude Include="ITObject.h" />
+    <QtMoc Include="MLDebugWgt.h" />
+    <QtMoc Include="ITSignalProxy.h" />
+    <QtMoc Include="MApplication.h" />
+    <QtMoc Include="PlayerDataTreeModel.h" />
     <ClInclude Include="RpcSocket.h" />
     <ClInclude Include="toolDef.h" />
     <ClInclude Include="TreeItem.h" />

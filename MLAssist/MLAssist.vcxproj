@@ -161,7 +161,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories);..\include;..\include\phnt;.\;../include/LuaBridge/Source/;./GameMap/;../include/python/;../include/pythonqt/;../LuaPlus;../LuaPlus/lua54;..\include\opencv453;../include/grpc;../ThirdPart/qmqtt/x32/release/include/;..\qhttp\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(Qt_INCLUDEPATH_);%(AdditionalIncludeDirectories);..\include;..\include\phnt;.\;../include/LuaBridge/Source/;./GameMap/;../include/python/;../include/pythonqt/;../LuaPlus;../LuaPlus/lua54;..\include\opencv453;../include/grpc;../ThirdPart/qmqtt/x32/release/include/;..\qhttp\src\;../include/log4cplus/include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -169,8 +169,8 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>L:\Environment\boost\boost_1_75_0\stage/lib;..\lib;../lib/python;..\lib\opencv453;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Lua.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Environment\boost\boost_1_75_0\stage/lib;..\lib;../lib/python;..\lib\opencv453;../lib/log4cplus/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Lua.lib;$(Qt_LIBS_);log4cplusU.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -179,7 +179,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\ITDatabaseConn.cpp" />
+    <ClCompile Include="..\include\ITLog.cpp" />
+    <ClCompile Include="..\include\ITNetAgent.cpp" />
     <ClCompile Include="..\include\ITObjectID.cpp" />
+    <ClCompile Include="..\include\ITTcpServer.cpp" />
+    <ClCompile Include="..\include\ITTcpSocket.cpp" />
+    <ClCompile Include="..\include\ITThread.cpp" />
     <ClCompile Include="..\include\qxtglobalshortcut5\qxtglobal.cpp" />
     <ClCompile Include="..\include\qxtglobalshortcut5\qxtglobalshortcut.cpp" />
     <ClCompile Include="..\include\qxtglobalshortcut5\qxtglobalshortcut_win.cpp" />
@@ -238,9 +243,13 @@
     <ClCompile Include="GameWorkWgt.cpp" />
     <ClCompile Include="GPCalc.cpp" />
     <ClCompile Include="ITEventLoop.cpp" />
+    <ClCompile Include="ITNetworkFactory.cpp" />
     <ClCompile Include="ITObject.cpp" />
     <ClCompile Include="ITObjectDataMgr.cpp" />
     <ClCompile Include="ITTabBarStyle.cpp" />
+    <ClCompile Include="LuaCodeEditor.cpp" />
+    <ClCompile Include="LuaCodeEditorDlg.cpp" />
+    <ClCompile Include="LuaCodeHighLighter.cpp" />
     <ClCompile Include="main.cpp">
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditAndContinue</DebugInformationFormat>
     </ClCompile>
@@ -297,6 +306,7 @@
     <QtUic Include="GameScriptWgt.ui" />
     <QtUic Include="GameSysCfgWgt.ui" />
     <QtUic Include="GameWorkWgt.ui" />
+    <QtUic Include="LuaCodeEditorDlg.ui" />
     <QtUic Include="mapform.ui" />
     <QtUic Include="MLAssist.ui" />
     <QtUic Include="PetDoubleActionSetDlg.ui" />
@@ -320,16 +330,25 @@
     <QtMoc Include="CustomKeySequenceEdit.h" />
     <QtMoc Include="GameScriptStopWgt.h" />
     <QtMoc Include="..\include\ITDatabaseConn.h" />
+    <QtMoc Include="..\include\ITNetAgent.h" />
+    <ClInclude Include="..\include\ITLog.h" />
     <ClInclude Include="..\include\ITObjectID.h" />
+    <QtMoc Include="..\include\ITTcpServer.h" />
+    <QtMoc Include="..\include\ITTcpSocket.h" />
+    <QtMoc Include="..\include\ITThread.h" />
     <ClInclude Include="..\protos\cgdata.grpc.pb.h" />
     <ClInclude Include="..\protos\cgdata.pb.h" />
     <QtMoc Include="ITEventLoop.h" />
+    <QtMoc Include="ITNetworkFactory.h" />
     <ClInclude Include="ITObject.h" />
     <QtMoc Include="ITObjectDataMgr.h" />
     <ClInclude Include="ITTabBarStyle.h" />
     <QtMoc Include="PetDoubleActionSetDlg.h" />
     <QtMoc Include="qaesencryption.h" />
     <QtMoc Include="MLAssistHttpServer.h" />
+    <QtMoc Include="LuaCodeEditor.h" />
+    <QtMoc Include="LuaCodeEditorDlg.h" />
+    <QtMoc Include="LuaCodeHighLighter.h" />
     <ClInclude Include="RpcSocketClient.h" />
     <ClInclude Include="Tsp.h" />
     <ClInclude Include="..\include\ITDebugDump.h" />
