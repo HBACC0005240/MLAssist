@@ -91,6 +91,21 @@
     <ClCompile Include="..\protos\CGData.pb.cc">
       <Filter>protos</Filter>
     </ClCompile>
+    <ClCompile Include="GamePlayerDataWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MLDebugWgt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITSignalProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDataTreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TreeItem.h">
@@ -149,12 +164,33 @@
     <QtMoc Include="..\include\ITDatabaseConn.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="GamePlayerDataWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MLDebugWgt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ITSignalProxy.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MApplication.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PlayerDataTreeModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="GameAccountWgt.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AddAccountDlg.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GamePlayerDataWgt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="MLDebugWgt.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
