@@ -3,6 +3,7 @@
 #include "GlobalDefine.h"
 #include "UserDefComboBoxDlg.h"
 #include "UserDefDialog.h"
+#include <QCheckBox>
 #include <QFuture>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -29,7 +30,8 @@ signals:
 	void signal_startAutoEncounterEnemySucess(); //开启成功通知
 	void signal_stopAutoEncounterEnemy();		 //自动遇敌停止
 	void signal_userInputDialog(const QString &sMsg, const QString &sVal);
-	void signal_userComboBoxDialog(const QString &sMsg, const QStringList &sVal);
+	void signal_userComboBoxDialog(const QString &sMsg, const QStringList &sVal, const QString &sDefVal);
+	void signal_userCheckBoxDialog(const QString &sMsg, const QString &sVal);
 	void signal_returnUserInputVal(const QVariant &nVal);
 
 	//工作界面
@@ -50,7 +52,8 @@ public slots:
 	void StartTimer();
 	void OnStartAutoEncounterEnemyThread(); //开启自动遇敌线程
 	void OnPopupUserInputDialog(const QString &sMsg, const QString &sVal);
-	void OnPopupUserComboBoxDialog(const QString &sMsg, const QStringList &sVal);
+	void OnPopupUserCheckBoxDialog(const QString &sMsg, const QString &sVal);
+	void OnPopupUserComboBoxDialog(const QString &sMsg, const QStringList &sVal, const QString &sDefVal);
 	void OnNotifyChatMsg(int unitid, QString msg, int size, int color);
 	void OnRecvTopicMsg(const QString &topicName, const QString &msg);
 
@@ -61,7 +64,8 @@ public:
 	void LogoutServer();
 
 	QVariant UserInputDialog(QString sMsg, QString sVal);
-	QVariant UserComboBoxDialog(QString sMsg, QStringList sVal);
+	QVariant UserCheckBoxDialog(QString sMsg, QString sVal);
+	QVariant UserComboBoxDialog(QString sMsg, QStringList sVal, QString sDefVal);
 	void SetUseDefaultInput(bool bFlag) { m_bUserDlgUseDefault = bFlag; }
 
 	/*************物品相关*************/
@@ -742,17 +746,18 @@ private:
 	bool m_bUserDlgUseDefault = false;					 //脚本 是否默认转换
 	UserDefDialog *m_pUserDlg;							 //用户输入对话框
 	UserDefComboBoxDlg *m_pUserComboBoxDlg;				 //用户下拉对话框
-	QMap<QString, QVariant> m_scriptUiSetData;			 //脚本界面设置的数据
-	QHash<QString, int> m_returnGameDataHash;			 //游戏数据返回映射
-	bool m_tradeFinished = false;						 //交易状态
-	QString m_saveTradeObjName;							 //交易对象名称
-	bool m_getInTradeStuffs = false;					 //获取到交易物品
-	QHash<int, QString> m_tradeState;					 //交易状态
-	QMap<int, QVector<int> > m_boyOrGirl;				 //人物是男还是女
-	tMapHead _mapHead;									 //地图结构体
-	QMutex m_charMutex;									 //人物聊天信息锁
-	QMutex m_topicMutex;								 //订阅信息锁
-	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息
-	int m_mazeWaitTime = 5000;							 //迷宫切图等待时间
+	QCheckBox *m_pUserCheckBoxDlg;
+	QMap<QString, QVariant> m_scriptUiSetData;	//脚本界面设置的数据
+	QHash<QString, int> m_returnGameDataHash;	//游戏数据返回映射
+	bool m_tradeFinished = false;				//交易状态
+	QString m_saveTradeObjName;					//交易对象名称
+	bool m_getInTradeStuffs = false;			//获取到交易物品
+	QHash<int, QString> m_tradeState;			//交易状态
+	QMap<int, QVector<int> > m_boyOrGirl;		//人物是男还是女
+	tMapHead _mapHead;							//地图结构体
+	QMutex m_charMutex;							//人物聊天信息锁
+	QMutex m_topicMutex;						//订阅信息锁
+	QList<QPair<QString, QString> > m_topicMsg; //接收到的主题信息
+	int m_mazeWaitTime = 5000;					//迷宫切图等待时间
 };
 #define g_pGameFun CGFunction::GetInstance()

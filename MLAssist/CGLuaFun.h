@@ -112,6 +112,8 @@ public:
 	int Lua_UserDefDialog(LuaState *L);
 	//用户输入对话框  定义变量
 	int Lua_UserDefComboBoxDlg(LuaState *L);
+	//用户输入对话框  定义变量
+	int Lua_UserDefCheckBoxDlg(LuaState *L);
 	//清除系统提示
 	int Lua_ClearSysCue(LuaState *L);
 	//开始遇敌
@@ -531,7 +533,7 @@ public:
 	int Lua_SendDataToAllClient(LuaState *L);
 	int Lua_RecvDataFromAllClient(LuaState *L);
 	int Lua_ClearServerRecvBuffer(LuaState *L);
-	int Lua_ClearServerSendBuffer(LuaState *L);	
+	int Lua_ClearServerSendBuffer(LuaState *L);
 	int Lua_ClearClientRecvBuffer(LuaState *L);
 	int Lua_ClearClientSendBuffer(LuaState *L);
 

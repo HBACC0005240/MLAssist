@@ -606,7 +606,7 @@ QTableView
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents">
+             <widget class="GameLuaScriptInputValWgt" name="scrollAreaWidgetContents">
               <property name="geometry">
                <rect>
                 <x>0</x>
@@ -705,6 +705,12 @@ QTableView
    <class>ScriptForm</class>
    <extends>QWidget</extends>
    <header>ScriptForm.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameLuaScriptInputValWgt</class>
+   <extends>QWidget</extends>
+   <header>GameLuaScriptInputValWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

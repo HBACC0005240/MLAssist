@@ -42,6 +42,11 @@ void UserDefComboBoxDlg::setComboBoxItems(QMap<QString, int> sItems)
 	m_sDefaultVal = sItems.first();
 }
 
+void UserDefComboBoxDlg::setCurrentSelect(const QString &sItem)
+{
+	ui.comboBox->setCurrentIndex(ui.comboBox->findText(sItem));
+}
+
 QString UserDefComboBoxDlg::getVal()
 {
 	return ui.comboBox->currentText();

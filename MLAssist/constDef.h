@@ -347,41 +347,41 @@ enum TConditionType
 enum TSysConfigSet
 {
 	TSysConfigSet_None = 0,
-	TSysConfigSet_AutoDrop,			  //自动扔
-	TSysConfigSet_AutoPile,			  //自动叠
-	TSysConfigSet_AutoPick,			  //自动捡
-	TSysConfigSet_AutoSale,			  //自动卖
-	TSysConfigSet_AutoSupply,		  //自动加血
-	TSysConfigSet_AutoEncounter,	  //自动遇敌
-	TSysConfigSet_EncounterType,	  //自动遇敌类型
-	TSysConfigSet_EncounterSpeed,	  //自动遇敌速度
-	TSysConfigSet_Timer,			  //脚本定时器
-	TSysConfigSet_AutoBattle,		  //自动战斗
-	TSysConfigSet_HighSpeedBattle,	  //高速战斗
-	TSysConfigSet_HighSpeedDelay,	  //高速延时
-	TSysConfigSet_BattleDelay,		  //战斗延时
-	TSysConfigSet_AllEncounterEscape, //遇敌全跑
-	TSysConfigSet_CharacterSwitch,	  //人物开关
-	TSysConfigSet_MoveSpeed,		  //行走速度
-	TSysConfigSet_FollowPickItem,	  //跟随捡物
-	TSysConfigSet_NoLv1Escape,		  //无1级逃跑
-	TSysConfigSet_EnemyAvgLvEscape,	  //敌人平均等级<逃跑
-	TSysConfigSet_EnemyCountEscape,	  //敌人数量>逃跑
-	TSysConfigSet_TeamCountEscape,	  //队伍人数<逃跑
-	TSysConfigSet_NoPetDoubleAction,  //不带宠二动
-	TSysConfigSet_NoPetAttack,		  //不带宠二动攻击
-	TSysConfigSet_NoPetGuard,		  //不带宠二动防御
-	TSysConfigSet_PlayerTitle,		  //设置人物称号
-	TSysConfigSet_AutoEatDeepBlue,	  //自动吃深蓝
-	TSysConfigSet_AutoEatDogFood,	  //自动吃狗粮
-	TSysConfigSet_AutoEatTimeCrystal, //自动吃时水
-	TSysConfigSet_EquipProtect,		  //装备保护
-	TSysConfigSet_AutoCure,			  //自动治疗
-	TSysConfigSet_AutoFirstAid,		  //自动急救
-	TSysConfigSet_ScriptStillRestart, //脚本坐标静止重启
-	TSysConfigSet_ScriptStopRestart,	//脚本停止重启
+	TSysConfigSet_AutoDrop,					//自动扔
+	TSysConfigSet_AutoPile,					//自动叠
+	TSysConfigSet_AutoPick,					//自动捡
+	TSysConfigSet_AutoSale,					//自动卖
+	TSysConfigSet_AutoSupply,				//自动加血
+	TSysConfigSet_AutoEncounter,			//自动遇敌
+	TSysConfigSet_EncounterType,			//自动遇敌类型
+	TSysConfigSet_EncounterSpeed,			//自动遇敌速度
+	TSysConfigSet_Timer,					//脚本定时器
+	TSysConfigSet_AutoBattle,				//自动战斗
+	TSysConfigSet_HighSpeedBattle,			//高速战斗
+	TSysConfigSet_HighSpeedDelay,			//高速延时
+	TSysConfigSet_BattleDelay,				//战斗延时
+	TSysConfigSet_AllEncounterEscape,		//遇敌全跑
+	TSysConfigSet_CharacterSwitch,			//人物开关
+	TSysConfigSet_MoveSpeed,				//行走速度
+	TSysConfigSet_FollowPickItem,			//跟随捡物
+	TSysConfigSet_NoLv1Escape,				//无1级逃跑
+	TSysConfigSet_EnemyAvgLvEscape,			//敌人平均等级<逃跑
+	TSysConfigSet_EnemyCountEscape,			//敌人数量>逃跑
+	TSysConfigSet_TeamCountEscape,			//队伍人数<逃跑
+	TSysConfigSet_NoPetDoubleAction,		//不带宠二动
+	TSysConfigSet_NoPetAttack,				//不带宠二动攻击
+	TSysConfigSet_NoPetGuard,				//不带宠二动防御
+	TSysConfigSet_PlayerTitle,				//设置人物称号
+	TSysConfigSet_AutoEatDeepBlue,			//自动吃深蓝
+	TSysConfigSet_AutoEatDogFood,			//自动吃狗粮
+	TSysConfigSet_AutoEatTimeCrystal,		//自动吃时水
+	TSysConfigSet_EquipProtect,				//装备保护
+	TSysConfigSet_AutoCure,					//自动治疗
+	TSysConfigSet_AutoFirstAid,				//自动急救
+	TSysConfigSet_ScriptStillRestart,		//脚本坐标静止重启
+	TSysConfigSet_ScriptStopRestart,		//脚本停止重启
 	TSysConfigSet_ScriptStopLogbackRestart, //脚本停止回城重启
-	TSysConfigSet_ScriptStillLogout, //脚本静止登出
+	TSysConfigSet_ScriptStillLogout,		//脚本静止登出
 
 };
 //命令行参数解析
@@ -471,8 +471,8 @@ enum TReturnGameData
 	TRet_Game_Sex,		  //性别
 	TRet_Game_ImageID,	  //图片id
 	TRet_Game_PlayerRank, //阶级  1 -5 转
-	TRet_Game_Gid,		//阶级  1 -5 转
-	TRet_Game_PrestigeLv,	  //声望等级  
+	TRet_Game_Gid,		  //阶级  1 -5 转
+	TRet_Game_PrestigeLv, //声望等级
 };
 //自定义快捷键
 enum TDefQuickKey
@@ -547,6 +547,12 @@ enum TMsgID
 
 	msgUpdateVIRouteVersion = 0x30, //更新巡视路线
 	msgYCStateChange = 0x31,		//遥测上下值更改
+};
+enum TInputType
+{
+	TInputType_Edit = 0, //编辑框
+	TInputType_ComboBox, //下拉框
+	TInputType_CheckBox, //复选框
 };
 
 #define GETDEVSUBCLASS(n) (n & 0xfffffff0)

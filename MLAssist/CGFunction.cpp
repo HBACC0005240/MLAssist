@@ -24,17 +24,21 @@ CGFunction::CGFunction()
 {
 	m_pUserDlg = new UserDefDialog;
 	m_pUserComboBoxDlg = new UserDefComboBoxDlg;
+	m_pUserCheckBoxDlg = new QCheckBox;
 	connect(this, &CGFunction::signal_stopScript, m_pUserDlg, &QDialog::close);
 	connect(m_pUserDlg, &UserDefDialog::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
 	connect(this, &CGFunction::signal_stopScript, m_pUserComboBoxDlg, &QDialog::close);
 	connect(m_pUserComboBoxDlg, &UserDefComboBoxDlg::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
+	//connect(m_pUserCheckBoxDlg, &QCheckBox::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
 
 	m_resetTimer.setSingleShot(true);
 	connect(&m_resetTimer, SIGNAL(timeout()), this, SLOT(RestFun()));
 	connect(this, SIGNAL(signal_startTimer()), this, SLOT(StartTimer()));
 	connect(this, SIGNAL(signal_StartAutoEncounterEnemy()), this, SLOT(OnStartAutoEncounterEnemyThread()));
 	connect(this, SIGNAL(signal_userInputDialog(const QString &, const QString &)), this, SLOT(OnPopupUserInputDialog(const QString &, const QString &)));
-	connect(this, SIGNAL(signal_userComboBoxDialog(const QString &, const QStringList &)), this, SLOT(OnPopupUserComboBoxDialog(const QString &, const QStringList &)));
+	connect(this, SIGNAL(signal_userCheckBoxDialog(const QString &, const QString &)), this, SLOT(OnPopupUserCheckBoxDialog(const QString &, const QString &)));
+	connect(this, SIGNAL(signal_userComboBoxDialog(const QString &, const QStringList &, const QString &)), this,
+			SLOT(OnPopupUserComboBoxDialog(const QString &, const QStringList &, const QString &)));
 	connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, this, &CGFunction::OnNotifyChatMsg, Qt::ConnectionType::QueuedConnection);
 	m_petRaceMap.insert(0, "人形系");
 	m_petRaceMap.insert(1, "龙系");
@@ -253,31 +257,36 @@ void CGFunction::OnStartAutoEncounterEnemyThread()
 void CGFunction::OnPopupUserInputDialog(const QString &sMsg, const QString &sVal)
 {
 	m_pUserDlg->setLabelText(sMsg);
-	m_pUserDlg->setDefaultVal(sVal);
+	if (m_scriptUiSetData.contains(sMsg))
+		m_pUserDlg->setDefaultVal(m_scriptUiSetData.value(sMsg).toString());
+	else
+		m_pUserDlg->setDefaultVal(sVal);
 	m_pUserDlg->show();
-
-	/*UserDefDialog dlg;
-	dlg.setLabelText(sMsg);
-	dlg.setDefaultVal(sVal);
-	connect(g_pGameFun, &CGFunction::signal_stopScript, &dlg, &QDialog::close);
-	QVariant val = sVal;
-	if (dlg.exec() == QDialog::Accepted)
-	{
-		val = dlg.getVal();
-		emit signal_returnUserInputVal(val);
-	}*/
 }
 
-void CGFunction::OnPopupUserComboBoxDialog(const QString &sMsg, const QStringList &sVal)
+void CGFunction::OnPopupUserCheckBoxDialog(const QString &sMsg, const QString &sVal)
+{
+	m_pUserCheckBoxDlg->setText(sMsg);
+	if (m_scriptUiSetData.contains(sMsg))
+		m_pUserCheckBoxDlg->setChecked(m_scriptUiSetData.value(sMsg).toBool());
+	else
+		m_pUserCheckBoxDlg->setChecked(sVal.toInt());
+	m_pUserCheckBoxDlg->show();
+}
+
+void CGFunction::OnPopupUserComboBoxDialog(const QString &sMsg, const QStringList &sVal, const QString &sDefVal)
 {
 	m_pUserComboBoxDlg->setLabelText(sMsg);
 	m_pUserComboBoxDlg->setComboBoxItems(sVal);
+	if (m_scriptUiSetData.contains(sMsg))
+		m_pUserComboBoxDlg->setCurrentSelect(m_scriptUiSetData.value(sMsg).toString());
+	else
+		m_pUserComboBoxDlg->setCurrentSelect(sDefVal);
 	m_pUserComboBoxDlg->show();
 }
 
 void CGFunction::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 {
-
 	QMutexLocker lock(&m_charMutex);
 	if (unitid == -1) //<0系统  >0自己或其他人
 	{
@@ -346,14 +355,50 @@ QVariant CGFunction::UserInputDialog(QString sMsg, QString sVal)
 	qDebug() << "WaitUserInputDialog Succe" << nRetVal;
 	return nRetVal;
 }
-QVariant CGFunction::UserComboBoxDialog(QString sMsg, QStringList sVal)
+
+QVariant CGFunction::UserCheckBoxDialog(QString sMsg, QString sVal)
 {
 	if (m_bUserDlgUseDefault)
 	{
-		return sVal.size() > 0 ? sVal.at(0) : "";
+		return sVal; //暂时都是int
 	}
 	QMutex mutex;
-	emit g_pGameFun->signal_userComboBoxDialog(sMsg, sVal);
+	emit g_pGameFun->signal_userCheckBoxDialog(sMsg, sVal);
+	QVariant nRetVal = 0;
+	QEventLoop loop;
+	qDebug() << "WaitUserInputDialog";
+
+	QTimer::singleShot(600000, &loop, &QEventLoop::quit);
+	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
+	auto connection = connect(g_pGameFun, &CGFunction::signal_returnUserInputVal, [&](const QVariant &nVal)
+			{
+				if (mutex.tryLock())
+				{
+					nRetVal = nVal;
+					if (loop.isRunning())
+						loop.quit(); //放到后面，否则 loop.exec()执行完成，会直接返回了 再调用崩溃
+					mutex.unlock();
+				}
+			});
+	loop.exec();
+	QMutexLocker locker(&mutex);
+	QObject::disconnect(connection); //利用Connection 断开lambda的连接
+	qDebug() << "WaitUserInputDialog Succe" << nRetVal;
+	return nRetVal;
+}
+
+QVariant CGFunction::UserComboBoxDialog(QString sMsg, QStringList sVal, QString sDefVal)
+{
+	if (m_bUserDlgUseDefault)
+	{
+		//
+		if (sDefVal.isEmpty())
+			return sVal.size() > 0 ? sVal.at(0) : "";
+		else
+			return sDefVal;
+	}
+	QMutex mutex;
+	emit g_pGameFun->signal_userComboBoxDialog(sMsg, sVal, sDefVal);
 	QVariant nRetVal = 0;
 	QEventLoop loop;
 	qDebug() << "WaitUserInputDialog";
@@ -1302,9 +1347,9 @@ int CGFunction::GetAllItemPileCount(const QString &itemName)
 void CGFunction::Work(int index, int nSubIndex /*=0*/, int nDelayTime /*= 6000*/, int nImmediate)
 {
 	bool bResult = false;
-	if (nImmediate >=0)
+	if (nImmediate >= 0)
 		g_CGAInterface->SetImmediateDoneWork(nImmediate); //关掉立即结束工作
-	g_CGAInterface->SetWorkDelay(nDelayTime);		  //生成延时
+	g_CGAInterface->SetWorkDelay(nDelayTime);			  //生成延时
 	qDebug() << "工作延时时间:" << nDelayTime;
 	//	g_CGAInterface->SetWorkAcceleration(100);	//生成加速
 	g_CGAInterface->StartWork(index, nSubIndex, bResult);
@@ -1376,7 +1421,7 @@ void CGFunction::WorkEx(const QString &skillName, const QString &itemName, int n
 					g_CGAInterface->StartWork(pSkill->index, 0, bResult);
 					qDebug() << "鉴定" << pItem->name << pSkill->id << pSkill->index << pItem->level << pItem->pos;
 					if (GetCharacterData("mp") >= (pItem->level * 10) && g_CGAInterface->AssessItem(pSkill->index, pItem->pos, bResult))
-					{					
+					{
 						int nTimeOut = assessedOnce ? 1000 : nDelayTime >= 0 ? nDelayTime :
 																				 20000;
 						WaitRecvWorkResult(nTimeOut);
@@ -1956,7 +2001,7 @@ bool CGFunction::ForgetPlayerSkill(int x, int y, QString skillName)
 	int count = 0; //10次
 	while (dlg && count < 10)
 	{
-		if (dlg &&  dlg->type == 16)
+		if (dlg && dlg->type == 16)
 		{
 			g_CGAInterface->ClickNPCDialog(-1, 1, bResult);
 			dlg = WaitRecvNpcDialog();
@@ -3146,7 +3191,7 @@ bool CGFunction::DepositGold(int nVal)
 {
 	auto pCharacter = g_pGameFun->GetGameCharacter();
 	int realGold = nVal; //实际存入钱
-	
+
 	if (realGold < 0)
 	{
 		if (pCharacter->gold > std::abs(realGold))
@@ -3279,7 +3324,7 @@ bool CGFunction::WithdrawGold(int nVal)
 	}
 	auto pCharacter = g_pGameFun->GetGameCharacter();
 	int realGold = nVal; //实际取钱数
-	
+
 	if (realGold < 0)
 	{
 		if (std::abs(realGold) >= pCharacter->gold)
@@ -4788,7 +4833,7 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 	bool bRet = false;
 	if (findPath.size() > 0)
 	{
-		bRet=AutoNavigator(findPath, isLoop);
+		bRet = AutoNavigator(findPath, isLoop);
 	}
 	else
 	{
@@ -7878,7 +7923,7 @@ bool CGFunction::SysConfig(QVariant type, QVariant data1, QVariant data2)
 				}
 				case TSysConfigSet_EnemyAvgLvEscape:
 				{
-					emit g_pGameCtrl->signal_switchEscapeUI(nAutoType, data1.toBool(),data2.toString());
+					emit g_pGameCtrl->signal_switchEscapeUI(nAutoType, data1.toBool(), data2.toString());
 					break;
 				}
 				case TSysConfigSet_EnemyCountEscape:
@@ -9915,7 +9960,7 @@ QStringList CGFunction::GetJustChatMsg()
 	if (m_chatMsgList.size() < 1)
 		return QStringList();
 	QMutexLocker locker(&m_charMutex);
-	for (int i = (m_chatMsgList.size()-1); i > 0; i--)
+	for (int i = (m_chatMsgList.size() - 1); i > 0; i--)
 	{
 		auto lastData = m_chatMsgList[i];
 		if ((GetTickCount() - lastData.first) > 3000)
@@ -9925,7 +9970,7 @@ QStringList CGFunction::GetJustChatMsg()
 		else
 			return lastData.second;
 	}
-	return QStringList();	
+	return QStringList();
 }
 
 QSharedPointer<CGA_NPCDialog_t> CGFunction::WaitRecvNpcDialog(int timeout /*=5000*/)

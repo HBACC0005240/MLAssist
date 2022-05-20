@@ -64,7 +64,6 @@ public:
 
 	void KillGameWndProcess();
 
-
 	//是否退出游戏
 	void SetExitGame(bool bRet) { m_bExit = bRet; }
 	bool GetExitGame() { return m_bExit; }
@@ -193,63 +192,64 @@ public:
 private:
 	QVariant GetPetVal(CGA::cga_pet_info_t &pPet, int nVal); //获取宠物值
 signals:
-	void signal_exit();												   //退出辅助
-	void signal_ctrl_app(int);										   //控制辅助窗口状态
-	void signal_gameWndList(CProcessItemList wndList);				   //游戏窗口列表
-	void signal_gameIsOnline(int);									   //游戏状态改变
-	void signal_clearUiInfo();										   //清理界面ui信息
-	void signal_attachGame();										   //附加游戏发送 发送一次
-	void signal_compoundChanged();									   //合成物品列表更新通知
-	void signal_loadScript(const QString &sName);					   //加载脚本
-	void signal_stopScriptRun();									   //停止脚本
-	void signal_updateScriptRunLine(int num);						   //更新脚本行
-	void signal_setUiScriptDesc(const QString &sDesc);				   //设置脚本描述
-	void signal_updateTrayToolTip(const QString &text);				   //更新系统托盘提示
-	void signal_activeGameFZ();										   //激活辅助
-	void signal_loadUserConfig(const QString &path);				   //加载用户配置
-	void signal_saveUserConfig(const QString &path);				   //保存用户配置
-	void signal_addOneChat(const QString &chat);					   //增加一个聊天信息
-	void signal_addOneDebugMsg(const QString &msg);					   //调试信息
-	void signal_addOneLogMsg(const QString &msg);					   //日志信息
-	void signal_addOneScriptLogMsg(const QString &msg);				   //脚本日志信息
-	void signal_swicthAccountGid(const QString &gid);				   //切换游戏子账号
-	void signal_swicthCharacter(int);								   //切换角色 0左边 1右边
-	void signal_loginGame();										   //登录游戏
-	void signal_runGameWnd();										   //拉起游戏窗口
-	void signal_switchAutoDrop(int);								   //切换自动扔
-	void signal_switchAutoPile(int);								   //切换自动叠加
-	void signal_addRenItem(GameItemPtr, bool bCode = false);		   //添加自动扔项
-	void signal_addDieItem(GameItemPtr);							   //添加自动叠加项
-	void signal_switchAutoSupplyUI(bool);							   //打开关闭自动回复
-	void signal_switchAutoSaleUI(bool);								   //打开关闭自动卖
-	void signal_addSaleItemUI(bool, QString);						   //增加自动售出项
-	void signal_switchFoolowPickItemUI(bool);						   //打开关闭地图跟随捡物
-	void signal_switchAutoPickItemUI(bool);							   //打开关闭自动捡物
-	void signal_addPickItemUI(bool, QString);						   //添加自动捡物
-	void signal_switchAutoBattleUI(bool);							   //打开关闭自动战斗
-	void signal_switchAutoHightSpeedBattleUI(bool);					   //打开关闭高速
-	void signal_switchEncounterSpeedUI(int);						   //打开关闭高速遇敌
-	void signal_switchAutoEncounterUI(bool);						   //打开关闭自动遇敌
-	void signal_setHightSpeedBattleDelayUI(int);					   //设置高速战斗延时
-	void signal_setBattleDelayUI(int);								   //设置战斗延时
-	void signal_switchAllEncounterEscapeUI(bool);					   //打开关闭遇敌全跑
-	void signal_switchNoLvlEncounterEscapeUI(bool);					   //打开关闭无1级全跑
-	void signal_switchEscapeUI(int, bool, QString);					   //打开关闭逃跑项
-	void signal_switchNoPetDoubleActionUI(bool);					   //打开关闭无宠二动
-	void signal_switchNoPetActionUI(int, bool);						   //设置无宠二动选项
-	void signal_switchAutoEatUi(int, bool);							   //设置自动吃 深蓝、狗粮、时水
-	void signal_switchAutoUseSkillUi(int, bool);					   //设置自动治疗 自动急救 装备保护
-	void signal_setMoveSpeedUI(int);								   //设置高速走路速度
-	void signal_setScriptStillRestartUI(int, int);					   //设置脚本坐标静止重启
-	void signal_setScriptStopRestartUI(int, int);					   //设置脚本停止重启
-	void signal_setScriptStopLogbackRestartUI(int);					   //设置脚本停止回城重启
-	void signal_setScriptStillLogoutUI(int, int);					   //设置脚本坐标静止登出
-	void signal_addRenItemScript(QString name, bool bChecked = false); //增加自动扔物品项
-	void signal_addDieItemScript(QString name, bool bChecked = false); //增加自动叠加物品项
-	void signal_addSaleItem(GameItemPtr);							   //增加自动售卖项
-	void signal_moveToTarget(int x, int y);							   //移动到目的地
-	void signal_load_navpath(QVector<quint32> path);				   //加载寻路路径
-	void signal_saveLoginBat(int ntype);							   //保存登录bat
+	void signal_exit();																			 //退出辅助
+	void signal_ctrl_app(int);																	 //控制辅助窗口状态
+	void signal_gameWndList(CProcessItemList wndList);											 //游戏窗口列表
+	void signal_gameIsOnline(int);																 //游戏状态改变
+	void signal_clearUiInfo();																	 //清理界面ui信息
+	void signal_attachGame();																	 //附加游戏发送 发送一次
+	void signal_compoundChanged();																 //合成物品列表更新通知
+	void signal_loadScript(const QString &sName);												 //加载脚本
+	void signal_stopScriptRun();																 //停止脚本
+	void signal_updateScriptRunLine(int num);													 //更新脚本行
+	void signal_setUiScriptDesc(const QString &sDesc);											 //设置脚本描述
+	void signal_updateTrayToolTip(const QString &text);											 //更新系统托盘提示
+	void signal_activeGameFZ();																	 //激活辅助
+	void signal_loadUserConfig(const QString &path);											 //加载用户配置
+	void signal_saveUserConfig(const QString &path);											 //保存用户配置
+	void signal_addOneChat(const QString &chat);												 //增加一个聊天信息
+	void signal_addOneDebugMsg(const QString &msg);												 //调试信息
+	void signal_addOneLogMsg(const QString &msg);												 //日志信息
+	void signal_addOneScriptLogMsg(const QString &msg);											 //脚本日志信息
+	void signal_swicthAccountGid(const QString &gid);											 //切换游戏子账号
+	void signal_swicthCharacter(int);															 //切换角色 0左边 1右边
+	void signal_loginGame();																	 //登录游戏
+	void signal_runGameWnd();																	 //拉起游戏窗口
+	void signal_switchAutoDrop(int);															 //切换自动扔
+	void signal_switchAutoPile(int);															 //切换自动叠加
+	void signal_addRenItem(GameItemPtr, bool bCode = false);									 //添加自动扔项
+	void signal_addDieItem(GameItemPtr);														 //添加自动叠加项
+	void signal_switchAutoSupplyUI(bool);														 //打开关闭自动回复
+	void signal_switchAutoSaleUI(bool);															 //打开关闭自动卖
+	void signal_addSaleItemUI(bool, QString);													 //增加自动售出项
+	void signal_switchFoolowPickItemUI(bool);													 //打开关闭地图跟随捡物
+	void signal_switchAutoPickItemUI(bool);														 //打开关闭自动捡物
+	void signal_addPickItemUI(bool, QString);													 //添加自动捡物
+	void signal_switchAutoBattleUI(bool);														 //打开关闭自动战斗
+	void signal_switchAutoHightSpeedBattleUI(bool);												 //打开关闭高速
+	void signal_switchEncounterSpeedUI(int);													 //打开关闭高速遇敌
+	void signal_switchAutoEncounterUI(bool);													 //打开关闭自动遇敌
+	void signal_setHightSpeedBattleDelayUI(int);												 //设置高速战斗延时
+	void signal_setBattleDelayUI(int);															 //设置战斗延时
+	void signal_switchAllEncounterEscapeUI(bool);												 //打开关闭遇敌全跑
+	void signal_switchNoLvlEncounterEscapeUI(bool);												 //打开关闭无1级全跑
+	void signal_switchEscapeUI(int, bool, QString);												 //打开关闭逃跑项
+	void signal_switchNoPetDoubleActionUI(bool);												 //打开关闭无宠二动
+	void signal_switchNoPetActionUI(int, bool);													 //设置无宠二动选项
+	void signal_switchAutoEatUi(int, bool);														 //设置自动吃 深蓝、狗粮、时水
+	void signal_switchAutoUseSkillUi(int, bool);												 //设置自动治疗 自动急救 装备保护
+	void signal_setMoveSpeedUI(int);															 //设置高速走路速度
+	void signal_setScriptStillRestartUI(int, int);												 //设置脚本坐标静止重启
+	void signal_setScriptStopRestartUI(int, int);												 //设置脚本停止重启
+	void signal_setScriptStopLogbackRestartUI(int);												 //设置脚本停止回城重启
+	void signal_setScriptStillLogoutUI(int, int);												 //设置脚本坐标静止登出
+	void signal_addRenItemScript(QString name, bool bChecked = false);							 //增加自动扔物品项
+	void signal_addDieItemScript(QString name, bool bChecked = false);							 //增加自动叠加物品项
+	void signal_addSaleItem(GameItemPtr);														 //增加自动售卖项
+	void signal_moveToTarget(int x, int y);														 //移动到目的地
+	void signal_load_navpath(QVector<quint32> path);											 //加载寻路路径
+	void signal_saveLoginBat(int ntype);														 //保存登录bat
+	void signal_addOneScriptInputVar(int, const QVariant &, const QVariant &, const QVariant &); //增加脚本设置的变量
 	void signal_createCharaData(bool create_chara, int create_chara_chara, int create_chara_eye, int create_chara_mou, int create_chara_color,
 			QString create_chara_points, QString create_chara_elements, QString create_chara_name);
 	void signal_switchLoginData(QString gid = "", int servr = 0, int line = 0, int character = 0); //切换登录界面信息

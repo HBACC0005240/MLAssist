@@ -13,6 +13,7 @@ public:
 	void setLabelText(const QString &sVal);
 	void setComboBoxItems(QStringList sItems);
 	void setComboBoxItems(QMap<QString, int> tItems);
+	void setCurrentSelect(const QString &sItem);
 	QString getVal();
 signals:
 	void signal_input_val(const QVariant &sVal);

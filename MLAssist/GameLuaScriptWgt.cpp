@@ -2,6 +2,7 @@
 #include "GameCtrl.h"
 #include "ITNetworkFactory.h"
 #include "ITObjectDataMgr.h"
+#include "ITTabBarStyle.h"
 #include "LuaCodeHighLighter.h"
 #include "QAESEncryption.h"
 #include "UserDefDialog.h"
@@ -10,7 +11,6 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include "ITTabBarStyle.h"
 
 jmp_buf g_jmpPlace;
 GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
@@ -482,6 +482,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户输入框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "编辑框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户勾选框", m_luaFun, &CGLuaFun::Lua_UserDefCheckBoxDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "读取配置", m_luaFun, &CGLuaFun::Lua_LoadUserConfig);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存配置", m_luaFun, &CGLuaFun::Lua_SaveUserConfig);
@@ -1006,6 +1007,9 @@ bool GameLuaScriptWgt::on_pushButton_start_clicked()
 		{
 			initScriptSystem();
 		}
+		//清空变量界面
+		ui.scrollAreaWidgetContents->ClearAllInputWidget();
+
 		m_scriptFuture = QtConcurrent::run(doRunScriptThread, this);
 		//	(*m_pLuaState)->DoString(m_scriptData.toStdString().c_str());
 		ui.pushButton_start->setEnabled(false);
