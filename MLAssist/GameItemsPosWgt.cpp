@@ -128,6 +128,9 @@ void GameItemsPosWgt::on_customContextMenu(const QPoint &pos)
 					QTableWidgetItem *pNameItem = ui.tableWidget->item(nrow, 0);
 					if (pNameItem)
 					{
+						auto pFindItems = ui.listWidget->findItems(pNameItem->text(), Qt::MatchCaseSensitive);
+						if (pFindItems.size() > 0)
+							return;
 						QListWidgetItem *pTableItem = new QListWidgetItem(pNameItem->text());
 						pTableItem->setCheckState(Qt::Checked);
 						ui.listWidget->addItem(pTableItem);
@@ -173,6 +176,9 @@ void GameItemsPosWgt::on_pushButton_add_clicked()
 	dlg.setLabelText("名称：");
 	if (dlg.exec() == QDialog::Accepted)
 	{
+		auto pFindItems = ui.listWidget->findItems(dlg.getVal(), Qt::MatchCaseSensitive);
+		if (pFindItems.size() > 0)
+			return;
 		//m_pickNameList.append(dlg.getVal());
 		QListWidgetItem *pTableItem = new QListWidgetItem(dlg.getVal());
 		pTableItem->setCheckState(Qt::Unchecked);

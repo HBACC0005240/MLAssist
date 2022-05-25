@@ -2,12 +2,13 @@
 #include "GameCtrl.h"
 #include "constDef.h"
 #include "stdafx.h"
+#include "CGFunction.h"
 GameLuaScriptInputValWgt::GameLuaScriptInputValWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
 	m_pGridLayout = new QGridLayout;
-	setLayout(m_pGridLayout);
+	ui.widget->setLayout(m_pGridLayout);
 	connect(g_pGameCtrl, &GameCtrl::signal_addOneScriptInputVar, this, &GameLuaScriptInputValWgt::AddOneInputVar);
 }
 
@@ -26,6 +27,7 @@ void GameLuaScriptInputValWgt::ClearAllInputWidget()
 		}
 		m_pAllInputWidget.clear();
 	}
+	m_pKeyForWidget.clear();
 	m_lastRow = 0;
 	m_lastCol = 0;
 }
@@ -51,6 +53,7 @@ void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, co
 			m_pGridLayout->addWidget(pWidget, m_lastRow, m_lastCol);
 			increaseRowCol();
 			m_pAllInputWidget.append(pWidget);
+			m_pKeyForWidget.insert(sMsg, qMakePair(type, pEdit));
 			break;
 		}
 		case TInputType_ComboBox:
@@ -71,6 +74,7 @@ void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, co
 			m_pGridLayout->addWidget(pWidget, m_lastRow, m_lastCol);
 			increaseRowCol();
 			m_pAllInputWidget.append(pWidget);
+			m_pKeyForWidget.insert(sMsg, qMakePair(type, pBox));
 			break;
 		}
 		case TInputType_CheckBox:
@@ -85,10 +89,41 @@ void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, co
 			m_pGridLayout->addWidget(pWidget, m_lastRow, m_lastCol);
 			increaseRowCol();
 			m_pAllInputWidget.append(pWidget);
+			m_pKeyForWidget.insert(sMsg,qMakePair(type,pBox));
 			break;
 		}
 		default:
 			break;
+	}
+}
+
+void GameLuaScriptInputValWgt::on_pushButton_save_clicked()
+{
+	for (auto it=m_pKeyForWidget.begin();it!=m_pKeyForWidget.end();++it)
+	{
+		switch (it.value().first)
+		{
+			case TInputType_Edit:
+			{
+				QLineEdit *pEdit = (QLineEdit *)it.value().first;
+				g_pGameFun->SetScriptUiSetData(it.key().toString(), pEdit->text());
+				break;
+			}
+			case TInputType_ComboBox:
+			{
+				QComboBox *pBox = (QComboBox *)it.value().first;
+				g_pGameFun->SetScriptUiSetData(it.key().toString(), pBox->currentText());
+				break;
+			}
+			case TInputType_CheckBox:
+			{
+				QCheckBox *pBox = (QCheckBox *)it.value().first;
+				g_pGameFun->SetScriptUiSetData(it.key().toString(), pBox->isChecked());
+				break;
+			}
+			default:
+				break;
+		}
 	}
 }
 

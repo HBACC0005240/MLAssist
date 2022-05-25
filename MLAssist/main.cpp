@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 	qputenv("QT_SCALE_FACTOR", QString::number(scale).toLatin1());
 	qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()) + QCoreApplication::applicationPid());
 	MApplication a(argc, argv);
+	//QApplication a(argc, argv);
 	qputenv("CGA_DIR_PATH", QCoreApplication::applicationDirPath().toLocal8Bit());
 	qputenv("CGA_DIR_PATH_UTF8", QCoreApplication::applicationDirPath().toUtf8());
 	qputenv("CGA_GAME_PORT", "");

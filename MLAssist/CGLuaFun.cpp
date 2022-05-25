@@ -2220,6 +2220,7 @@ int CGLuaFun::Lua_WaitRecvHead(LuaState *L)
 	tableObj.SetInteger("dialog_id", 0);
 	tableObj.SetInteger("npc_id", 0);
 	tableObj.SetString("message", "");
+	tableObj.SetString("msg", "");
 	if (dlg)
 	{
 		tableObj.SetInteger("type", dlg->type);
@@ -2227,6 +2228,7 @@ int CGLuaFun::Lua_WaitRecvHead(LuaState *L)
 		tableObj.SetInteger("dialog_id", dlg->dialog_id);
 		tableObj.SetInteger("npc_id", dlg->npc_id);
 		tableObj.SetString("message", dlg->message.toStdString().c_str());
+		tableObj.SetString("msg", dlg->message.toStdString().c_str());
 	}
 	tableObj.Push(L);
 	return 1;

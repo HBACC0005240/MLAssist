@@ -234,8 +234,8 @@ bool MApplication::notify(QObject *pObj, QEvent *ev)
 			restoreOverrideCursor();
 		}
 	}
-
-	try
+	return QApplication::notify(pObj, ev);
+	/*try
 	{
 		bool result = QApplication::notify(pObj, ev);
 		return result;
@@ -244,5 +244,5 @@ bool MApplication::notify(QObject *pObj, QEvent *ev)
 	{
 		qCritical("Something really bad happened!!!!!!!!!!!!!");
 		return false;
-	}
+	}*/
 }
