@@ -81,6 +81,7 @@ void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, co
 		{
 			QWidget *pWidget = new QWidget();
 			QCheckBox *pBox = new QCheckBox(sMsg.toString(), pWidget);
+			pBox->setChecked(vData.toBool());
 			QHBoxLayout *pLayout = new QHBoxLayout(pWidget);
 			pLayout->addWidget(pBox);
 			pLayout->addStretch();

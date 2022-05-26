@@ -24,12 +24,14 @@ CGFunction::CGFunction()
 {
 	m_pUserDlg = new UserDefDialog;
 	m_pUserComboBoxDlg = new UserDefComboBoxDlg;
-	m_pUserCheckBoxDlg = new QCheckBox;
+	m_pUserCheckBoxDlg = new UserDefCheckBoxDlg;
 	connect(this, &CGFunction::signal_stopScript, m_pUserDlg, &QDialog::close);
-	connect(m_pUserDlg, &UserDefDialog::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
 	connect(this, &CGFunction::signal_stopScript, m_pUserComboBoxDlg, &QDialog::close);
+	connect(this, &CGFunction::signal_stopScript, m_pUserCheckBoxDlg, &QDialog::close);
+
+	connect(m_pUserDlg, &UserDefDialog::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
 	connect(m_pUserComboBoxDlg, &UserDefComboBoxDlg::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
-	//connect(m_pUserCheckBoxDlg, &QCheckBox::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
+	connect(m_pUserCheckBoxDlg, &UserDefCheckBoxDlg::signal_input_val, this, &CGFunction::signal_returnUserInputVal);
 
 	m_resetTimer.setSingleShot(true);
 	connect(&m_resetTimer, SIGNAL(timeout()), this, SLOT(RestFun()));
@@ -217,6 +219,7 @@ CGFunction::~CGFunction()
 {
 	SafeDelete(m_pUserComboBoxDlg);
 	SafeDelete(m_pUserDlg);
+	SafeDelete(m_pUserCheckBoxDlg);
 }
 
 void CGFunction::StopFun()
@@ -266,11 +269,11 @@ void CGFunction::OnPopupUserInputDialog(const QString &sMsg, const QString &sVal
 
 void CGFunction::OnPopupUserCheckBoxDialog(const QString &sMsg, const QString &sVal)
 {
-	m_pUserCheckBoxDlg->setText(sMsg);
+	m_pUserCheckBoxDlg->setLabelText(sMsg);
 	if (m_scriptInputVar.contains(sMsg))
-		m_pUserCheckBoxDlg->setChecked(m_scriptInputVar.value(sMsg).toBool());
+		m_pUserCheckBoxDlg->setDefaultVal(m_scriptInputVar.value(sMsg).toString());
 	else
-		m_pUserCheckBoxDlg->setChecked(sVal.toInt());
+		m_pUserCheckBoxDlg->setDefaultVal(sVal);
 	m_pUserCheckBoxDlg->show();
 }
 

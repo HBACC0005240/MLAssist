@@ -552,7 +552,8 @@ int CGLuaFun::Lua_UserDefComboBoxDlg(LuaState *L)
 	}
 	else
 	{
-		sItemList << args[2].GetString();
+		QString tmpItemList = args[2].GetString();		
+		sItemList << tmpItemList.split("|");
 	}
 	if (args.Count() >= 3)
 		sDefaultVal = args[3].GetString();

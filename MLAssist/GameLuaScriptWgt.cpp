@@ -483,6 +483,9 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "编辑框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户勾选框", m_luaFun, &CGLuaFun::Lua_UserDefCheckBoxDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户复选框", m_luaFun, &CGLuaFun::Lua_UserDefCheckBoxDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "勾选框", m_luaFun, &CGLuaFun::Lua_UserDefCheckBoxDlg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "复选框", m_luaFun, &CGLuaFun::Lua_UserDefCheckBoxDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下拉框", m_luaFun, &CGLuaFun::Lua_UserDefComboBoxDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "读取配置", m_luaFun, &CGLuaFun::Lua_LoadUserConfig);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存配置", m_luaFun, &CGLuaFun::Lua_SaveUserConfig);

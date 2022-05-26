@@ -3,6 +3,7 @@
 #include "GlobalDefine.h"
 #include "UserDefComboBoxDlg.h"
 #include "UserDefDialog.h"
+#include "UserDefCheckBoxDlg.h"
 #include <QCheckBox>
 #include <QFuture>
 #include <QJsonArray>
@@ -751,7 +752,7 @@ private:
 	bool m_bUserDlgUseDefault = false;					 //脚本 是否默认转换
 	UserDefDialog *m_pUserDlg;							 //用户输入对话框
 	UserDefComboBoxDlg *m_pUserComboBoxDlg;				 //用户下拉对话框
-	QCheckBox *m_pUserCheckBoxDlg;
+	UserDefCheckBoxDlg *m_pUserCheckBoxDlg;
 	QMap<QString, QVariant> m_scriptUiSetData;	//脚本界面设置的数据
 	QMap<QString, QVariant> m_scriptInputVar;	//脚本调用的变量接口
 	QHash<QString, int> m_returnGameDataHash;	//游戏数据返回映射
