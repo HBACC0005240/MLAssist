@@ -394,6 +394,8 @@ bool AccountForm::QueryAttachGameWnd()
 
 void AccountForm::OnAutoLogin()
 {
+	if (g_pGameCtrl->GetExitGame())//关闭游戏 不再自动登录
+		return;
 	//运行易玩通登录超时判断 超过15秒 如果还是运行中 则杀掉进程 返回，如果不是运行中进入下一步
 	if (m_loginquery.elapsed() > 15 * 1000)
 	{

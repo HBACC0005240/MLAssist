@@ -700,6 +700,11 @@ public:
 	QMap<QString, QVariant> GetScriptUiSet() { return m_scriptUiSetData; }
 	void ClearScriptUiSetData() { m_scriptUiSetData.clear(); }
 
+	QVariant GetScriptInputVarData(const QString &type) { return m_scriptInputVar.value(type); }
+	void SetScriptInputVarData(const QString &type, QVariant data) { m_scriptInputVar.insert(type, data); }
+	QMap<QString, QVariant> GetScriptInputVarMap() { return m_scriptInputVar; }
+	void ClearScriptInputVarMap() { m_scriptInputVar.clear(); }
+
 	QHash<QString, int> m_playerActionHash; //pk 加队 交易 摆摊映射
 	QMap<QString, int> m_sPrestigeMap;		//玩家声望称号列表
 	void SetMazeChangedMapWaitTime(int time) { m_mazeWaitTime = time; }
@@ -748,6 +753,7 @@ private:
 	UserDefComboBoxDlg *m_pUserComboBoxDlg;				 //用户下拉对话框
 	QCheckBox *m_pUserCheckBoxDlg;
 	QMap<QString, QVariant> m_scriptUiSetData;	//脚本界面设置的数据
+	QMap<QString, QVariant> m_scriptInputVar;	//脚本调用的变量接口
 	QHash<QString, int> m_returnGameDataHash;	//游戏数据返回映射
 	bool m_tradeFinished = false;				//交易状态
 	QString m_saveTradeObjName;					//交易对象名称

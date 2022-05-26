@@ -1,14 +1,14 @@
 #include "GameLuaScriptInputValWgt.h"
+#include "CGFunction.h"
 #include "GameCtrl.h"
 #include "constDef.h"
 #include "stdafx.h"
-#include "CGFunction.h"
 GameLuaScriptInputValWgt::GameLuaScriptInputValWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
 	m_pGridLayout = new QGridLayout;
-	ui.widget->setLayout(m_pGridLayout);
+	ui.scrollAreaWidgetContents->setLayout(m_pGridLayout);
 	connect(g_pGameCtrl, &GameCtrl::signal_addOneScriptInputVar, this, &GameLuaScriptInputValWgt::AddOneInputVar);
 }
 
@@ -89,7 +89,7 @@ void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, co
 			m_pGridLayout->addWidget(pWidget, m_lastRow, m_lastCol);
 			increaseRowCol();
 			m_pAllInputWidget.append(pWidget);
-			m_pKeyForWidget.insert(sMsg,qMakePair(type,pBox));
+			m_pKeyForWidget.insert(sMsg, qMakePair(type, pBox));
 			break;
 		}
 		default:
@@ -99,32 +99,65 @@ void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, co
 
 void GameLuaScriptInputValWgt::on_pushButton_save_clicked()
 {
-	for (auto it=m_pKeyForWidget.begin();it!=m_pKeyForWidget.end();++it)
+	for (auto it = m_pKeyForWidget.begin(); it != m_pKeyForWidget.end(); ++it)
 	{
 		switch (it.value().first)
 		{
 			case TInputType_Edit:
 			{
-				QLineEdit *pEdit = (QLineEdit *)it.value().first;
-				g_pGameFun->SetScriptUiSetData(it.key().toString(), pEdit->text());
+				QLineEdit *pEdit = dynamic_cast<QLineEdit *>(it.value().second);
+				g_pGameFun->SetScriptInputVarData(it.key().toString(), pEdit->text());
 				break;
 			}
 			case TInputType_ComboBox:
 			{
-				QComboBox *pBox = (QComboBox *)it.value().first;
-				g_pGameFun->SetScriptUiSetData(it.key().toString(), pBox->currentText());
+				QComboBox *pBox = dynamic_cast<QComboBox *>(it.value().second);
+				g_pGameFun->SetScriptInputVarData(it.key().toString(), pBox->currentText());
 				break;
 			}
 			case TInputType_CheckBox:
 			{
-				QCheckBox *pBox = (QCheckBox *)it.value().first;
-				g_pGameFun->SetScriptUiSetData(it.key().toString(), pBox->isChecked());
+				QCheckBox *pBox = dynamic_cast<QCheckBox *>(it.value().second);
+				g_pGameFun->SetScriptInputVarData(it.key().toString(), pBox->isChecked());
 				break;
 			}
 			default:
 				break;
 		}
 	}
+}
+
+void GameLuaScriptInputValWgt::doLoadUserConfig(QSettings &iniFile)
+{
+	g_pGameFun->ClearScriptInputVarMap();
+	auto inputVarMap = g_pGameFun->GetScriptInputVarMap();
+	iniFile.beginGroup("ScriptInputUi");
+	int inputCount = iniFile.value("InputCount", 0).toInt();
+	for (int i = 1; i <= inputCount; ++i)
+	{
+		QString name = iniFile.value(QString("name%1").arg(i), "").toString();
+		QVariant tmpVar = iniFile.value(QString("val%1").arg(i), "");
+		if (!name.isEmpty())
+		{
+			g_pGameFun->SetScriptInputVarData(name, tmpVar);
+		}
+	}
+	iniFile.endGroup();
+}
+
+void GameLuaScriptInputValWgt::doSaveUserConfig(QSettings &iniFile)
+{
+	auto inputVarMap = g_pGameFun->GetScriptInputVarMap();
+	iniFile.beginGroup("ScriptInputUi");
+	iniFile.setValue("InputCount", inputVarMap.size());
+	int index = 1;
+	for (auto it = inputVarMap.begin(); it != inputVarMap.end(); ++it)
+	{
+		iniFile.setValue(QString("name%1").arg(index), it.key());
+		iniFile.setValue(QString("val%1").arg(index), it.value());
+		index++;
+	}
+	iniFile.endGroup();
 }
 
 void GameLuaScriptInputValWgt::increaseRowCol()

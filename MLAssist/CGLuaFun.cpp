@@ -531,7 +531,7 @@ int CGLuaFun::Lua_UserDefDialog(LuaState *L)
 	QVariant val = g_pGameFun->UserInputDialog(sMsg, sDefaultVal);
 	bool bTrans = args.Count() >= 3 ? args[3].GetBoolean() : true;
 	TransVariantToLua(L, val, bTrans);
-	g_pGameFun->SetScriptUiSetData(sMsg, val);
+	g_pGameFun->SetScriptInputVarData(sMsg, val);
 	emit g_pGameCtrl->signal_addOneScriptInputVar(TInputType_Edit, sMsg, val, "");
 	return 1;
 }
@@ -561,7 +561,7 @@ int CGLuaFun::Lua_UserDefComboBoxDlg(LuaState *L)
 	QVariant val = g_pGameFun->UserComboBoxDialog(sMsg, sItemList, sDefaultVal);
 	bool bTrans = args.Count() >= 4 ? args[4].GetBoolean() : true;
 	TransVariantToLua(L, val, bTrans);
-	g_pGameFun->SetScriptUiSetData(sMsg, val);
+	g_pGameFun->SetScriptInputVarData(sMsg, val);
 	emit g_pGameCtrl->signal_addOneScriptInputVar(TInputType_ComboBox, sMsg, sItemList, val);
 	return 1;
 }
@@ -574,7 +574,7 @@ int CGLuaFun::Lua_UserDefCheckBoxDlg(LuaState *L)
 	QVariant val = g_pGameFun->UserCheckBoxDialog(sMsg, sDefaultVal);
 	bool bTrans = args.Count() >= 3 ? args[3].GetBoolean() : true;
 	TransVariantToLua(L, val, bTrans);
-	g_pGameFun->SetScriptUiSetData(sMsg, val);
+	g_pGameFun->SetScriptInputVarData(sMsg, val);
 	emit g_pGameCtrl->signal_addOneScriptInputVar(TInputType_CheckBox, sMsg, val, "");
 	return 1;
 }

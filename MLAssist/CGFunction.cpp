@@ -257,8 +257,8 @@ void CGFunction::OnStartAutoEncounterEnemyThread()
 void CGFunction::OnPopupUserInputDialog(const QString &sMsg, const QString &sVal)
 {
 	m_pUserDlg->setLabelText(sMsg);
-	if (m_scriptUiSetData.contains(sMsg))
-		m_pUserDlg->setDefaultVal(m_scriptUiSetData.value(sMsg).toString());
+	if (m_scriptInputVar.contains(sMsg))
+		m_pUserDlg->setDefaultVal(m_scriptInputVar.value(sMsg).toString());
 	else
 		m_pUserDlg->setDefaultVal(sVal);
 	m_pUserDlg->show();
@@ -267,8 +267,8 @@ void CGFunction::OnPopupUserInputDialog(const QString &sMsg, const QString &sVal
 void CGFunction::OnPopupUserCheckBoxDialog(const QString &sMsg, const QString &sVal)
 {
 	m_pUserCheckBoxDlg->setText(sMsg);
-	if (m_scriptUiSetData.contains(sMsg))
-		m_pUserCheckBoxDlg->setChecked(m_scriptUiSetData.value(sMsg).toBool());
+	if (m_scriptInputVar.contains(sMsg))
+		m_pUserCheckBoxDlg->setChecked(m_scriptInputVar.value(sMsg).toBool());
 	else
 		m_pUserCheckBoxDlg->setChecked(sVal.toInt());
 	m_pUserCheckBoxDlg->show();
@@ -278,8 +278,8 @@ void CGFunction::OnPopupUserComboBoxDialog(const QString &sMsg, const QStringLis
 {
 	m_pUserComboBoxDlg->setLabelText(sMsg);
 	m_pUserComboBoxDlg->setComboBoxItems(sVal);
-	if (m_scriptUiSetData.contains(sMsg))
-		m_pUserComboBoxDlg->setCurrentSelect(m_scriptUiSetData.value(sMsg).toString());
+	if (m_scriptInputVar.contains(sMsg))
+		m_pUserComboBoxDlg->setCurrentSelect(m_scriptInputVar.value(sMsg).toString());
 	else
 		m_pUserComboBoxDlg->setCurrentSelect(sDefVal);
 	m_pUserComboBoxDlg->show();
@@ -329,6 +329,8 @@ QVariant CGFunction::UserInputDialog(QString sMsg, QString sVal)
 {
 	if (m_bUserDlgUseDefault)
 	{
+		if (m_scriptInputVar.contains(sMsg))
+			return m_scriptInputVar.value(sMsg).toString();
 		return sVal; //暂时都是int
 	}
 	QMutex mutex;
@@ -360,6 +362,8 @@ QVariant CGFunction::UserCheckBoxDialog(QString sMsg, QString sVal)
 {
 	if (m_bUserDlgUseDefault)
 	{
+		if (m_scriptInputVar.contains(sMsg))
+			return m_scriptInputVar.value(sMsg).toString();
 		return sVal; //暂时都是int
 	}
 	QMutex mutex;
@@ -391,8 +395,9 @@ QVariant CGFunction::UserComboBoxDialog(QString sMsg, QStringList sVal, QString 
 {
 	if (m_bUserDlgUseDefault)
 	{
-		//
-		if (sDefVal.isEmpty())
+		if (m_scriptInputVar.contains(sMsg))
+			return m_scriptInputVar.value(sMsg).toString();
+		else if (sDefVal.isEmpty())
 			return sVal.size() > 0 ? sVal.at(0) : "";
 		else
 			return sDefVal;

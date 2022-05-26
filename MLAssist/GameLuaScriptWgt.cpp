@@ -1008,7 +1008,7 @@ bool GameLuaScriptWgt::on_pushButton_start_clicked()
 			initScriptSystem();
 		}
 		//清空变量界面
-		ui.scrollAreaWidgetContents->ClearAllInputWidget();
+		ui.luaScriptInputWgt->ClearAllInputWidget();
 
 		m_scriptFuture = QtConcurrent::run(doRunScriptThread, this);
 		//	(*m_pLuaState)->DoString(m_scriptData.toStdString().c_str());
@@ -1285,6 +1285,7 @@ void GameLuaScriptWgt::doLoadUserConfig(QSettings &iniFile)
 	ui.checkBox_UserInput->setChecked(iniFile.value("TransUserInput").toBool());
 	iniFile.endGroup();
 	ui.gameScriptSetWgt->doLoadUserConfig(iniFile);
+	ui.luaScriptInputWgt->doLoadUserConfig(iniFile);
 }
 
 void GameLuaScriptWgt::doSaveUserConfig(QSettings &iniFile)
@@ -1300,6 +1301,7 @@ void GameLuaScriptWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("TransUserInput", ui.checkBox_UserInput->isChecked());
 	iniFile.endGroup();
 	ui.gameScriptSetWgt->doSaveUserConfig(iniFile);
+	ui.luaScriptInputWgt->doSaveUserConfig(iniFile);
 }
 
 void GameLuaScriptWgt::DoLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
