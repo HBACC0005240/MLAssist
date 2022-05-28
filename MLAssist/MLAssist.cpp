@@ -215,6 +215,7 @@ void MLAssist::doIconActivated(QSystemTrayIcon::ActivationReason reason)
 void MLAssist::quitAndDeleteAllInfo()
 {
 	qDebug() << "quitAndDeleteAllInfo 程序退出";
+	emit g_pGameCtrl->signal_exit();
 	killProcess();
 	ITObjectDataMgr::getInstance().SetExitGame(true);
 	g_pGameCtrl->SetExitGame(true);
@@ -490,6 +491,7 @@ bool MLAssist::eventFilter(QObject *obj, QEvent *event)
 				m_pressedpoint = ((QMouseEvent *)event)->globalPos(); //鼠标点击桌面位置
 				m_windowspoint = this->pos();						  //界面所在桌面位置
 				m_oldmousepoint = m_pressedpoint - m_windowspoint;	  //鼠标点击位置 在界面起始点的比较
+				return true;
 			}
 		}
 		else if (event->type() == QEvent::MouseMove)
@@ -497,11 +499,13 @@ bool MLAssist::eventFilter(QObject *obj, QEvent *event)
 			if ((((QMouseEvent *)event)->buttons() == Qt::LeftButton) && m_bmove)
 			{
 				move(((QMouseEvent *)event)->globalPos() - m_oldmousepoint); //move移动的是界面坐标 新的鼠标位置减去以前鼠标在界面的位置差 就是要移动的目标点 移动的是界面的起始坐标
+				return true;
 			}
 		}
 		else if (event->type() == QEvent::MouseButtonRelease)
 		{
 			m_bmove = false;
+			return true;
 		}
 	}
 	return QWidget::eventFilter(obj, event);

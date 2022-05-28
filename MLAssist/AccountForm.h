@@ -70,6 +70,8 @@ public slots:
 	void OnRecordGameWndProcess(CProcessItemList list) { m_gameWndList = list; }
 	void on_pushButton_logout_clicked();
 	void on_pushButton_logback_clicked();
+	void on_account_changed();
+	void on_account_comboBox_changed(int index);
 
 private:
 	Ui::AccountForm *ui;

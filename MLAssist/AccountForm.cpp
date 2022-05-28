@@ -48,7 +48,7 @@ AccountForm::AccountForm(QWidget *parent) :
 		ui(new Ui::AccountForm)
 {
 	ui->setupUi(this);
-
+	ui->pushButton_Statistics->hide();
 	m_polcn_lock = NULL;
 	m_polcn_map = NULL;
 	m_attachExistGameWndTime = QTime::currentTime().addSecs(-15);
@@ -209,12 +209,17 @@ AccountForm::AccountForm(QWidget *parent) :
 	ui->comboBox_Chara->addItem(QObject::tr("荷蜜"), QVariant(14 + 13));*/
 
 	QTimer *timer = new QTimer(this);
+	connect(g_pGameCtrl, SIGNAL(signal_exit()), timer, SLOT(stop()));
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnAutoLogin()));
 	timer->start(1000);
 
 	m_game_pid = 0;
 	m_game_tid = 0;
 	m_serverid = 0;
+	connect(ui->comboBox_gid, SIGNAL(currentIndexChanged(int)), this, SLOT(on_account_comboBox_changed(int)));
+	connect(ui->comboBox_bigserver, SIGNAL(currentIndexChanged(int)), this, SLOT(on_account_comboBox_changed(int)));
+	connect(ui->comboBox_server, SIGNAL(currentIndexChanged(int)), this, SLOT(on_account_comboBox_changed(int)));
+	connect(ui->comboBox_character, SIGNAL(currentIndexChanged(int)), this, SLOT(on_account_comboBox_changed(int)));
 }
 
 AccountForm::~AccountForm()
@@ -394,8 +399,7 @@ bool AccountForm::QueryAttachGameWnd()
 
 void AccountForm::OnAutoLogin()
 {
-	if (g_pGameCtrl->GetExitGame())//关闭游戏 不再自动登录
-		return;
+
 	//运行易玩通登录超时判断 超过15秒 如果还是运行中 则杀掉进程 返回，如果不是运行中进入下一步
 	if (m_loginquery.elapsed() > 15 * 1000)
 	{
@@ -1127,6 +1131,21 @@ void AccountForm::on_pushButton_logout_clicked()
 void AccountForm::on_pushButton_logback_clicked()
 {
 	g_CGAInterface->LogBack();
+}
+
+void AccountForm::on_account_changed()
+{
+	g_CGAInterface->LoginGameServer(ui->comboBox_gid->currentText().toStdString(),
+			m_glt.toStdString(),
+			m_serverid,
+			ui->comboBox_bigserver->currentData().toInt(),
+			ui->comboBox_server->currentData().toInt(),
+			ui->comboBox_character->currentData().toInt());
+}
+
+void AccountForm::on_account_comboBox_changed(int index)
+{
+	on_account_changed();
 }
 
 void AccountForm::OnNotifyFillAutoLogin(int game, QString user, QString pwd, QString gid,
