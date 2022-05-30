@@ -473,6 +473,7 @@ enum TReturnGameData
 	TRet_Game_PlayerRank, //阶级  1 -5 转
 	TRet_Game_Gid,		  //阶级  1 -5 转
 	TRet_Game_PrestigeLv, //声望等级
+	TRet_Game_BankGold, //银行金币
 };
 //自定义快捷键
 enum TDefQuickKey

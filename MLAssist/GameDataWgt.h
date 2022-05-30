@@ -18,6 +18,7 @@ public slots:
 	void doLoadUserConfig(QSettings &iniFile);
 	void doSaveUserConfig(QSettings &iniFile);
 
+	void doUpdateAttachInfo();
 	void doClearUiInfo();
 	void OnNotifyGameCharacterInfo(CharacterPtr char_info);
 	void OnNotifyGetSkillsInfo(GameSkillList skills);

@@ -16,7 +16,7 @@ GameDataWgt::GameDataWgt(QWidget *parent) :
 	connect(g_pGameCtrl, &GameCtrl::signal_updateBattleHpMp, this, &GameDataWgt::doUpdateBattleHpMp, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGamePetsInfo, this, &GameDataWgt::OnNotifyGetPetsInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, SIGNAL(signal_clearUiInfo()), this, SLOT(doClearUiInfo()));
-	//connect(g_pGameCtrl, SIGNAL(signal_activeGameFZ()), this, SLOT(Active()));
+	connect(g_pGameCtrl, SIGNAL(signal_attachGame()), this, SLOT(doUpdateAttachInfo()));
 
 	ui.tableWidget->setRowCount(16);
 	for (int i = 0; i < 16; ++i)
@@ -364,6 +364,11 @@ void GameDataWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.endGroup();
 }
 
+void GameDataWgt::doUpdateAttachInfo()
+{
+	setItemText(12, 0, QString("进程:%1  端口:%2").arg(g_pGameCtrl->getGamePID()).arg(g_pGameCtrl->GetGamePort())); 
+}
+
 //这个不彻底清除，只显示连接断开
 void GameDataWgt::doClearUiInfo()
 {
@@ -458,6 +463,7 @@ void GameDataWgt::OnNotifyGameCharacterInfo(CharacterPtr char_info)
 	setItemText(9, 1, szAttribute);
 	setItemText(10, 1, QString("钱:%1").arg(gamePlayer->gold), QColor("#cd7f32"));
 	setItemText(11, 1, gamePlayer->prestige, QColor(0, 0, 255)); //称号
+	setItemText(12, 1, QString("银行:%1").arg(g_pGameFun->GetCharacterData("银行金币").toInt()), QColor("#cd7f32"));
 
 	/*int default_petid = gamePlayer->default_petid;
 	if (default_petid != -1)

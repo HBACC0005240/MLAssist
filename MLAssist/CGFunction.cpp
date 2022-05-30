@@ -134,6 +134,8 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("名称", TRet_Game_Name);
 	m_returnGameDataHash.insert("金币", TRet_Game_Gold);
 	m_returnGameDataHash.insert("gold", TRet_Game_Gold);
+	m_returnGameDataHash.insert("bankgold", TRet_Game_BankGold);
+	m_returnGameDataHash.insert("银行金币", TRet_Game_BankGold);
 	m_returnGameDataHash.insert("卡时", TRet_Game_Punchclock);
 	m_returnGameDataHash.insert("punchclock", TRet_Game_Punchclock);
 	m_returnGameDataHash.insert("打卡状态", TRet_Game_PunchclockState);
@@ -763,6 +765,12 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 		case TRet_Game_Soul: return playerinfo.souls;
 		case TRet_Game_Name: return QString::fromStdString(playerinfo.name);
 		case TRet_Game_Gold: return playerinfo.gold;
+		case TRet_Game_BankGold:
+		{
+			int bankGold = 0;
+			g_CGAInterface->GetBankGold(bankGold);
+			return bankGold;
+		}
 		case TRet_Game_Punchclock: return playerinfo.punchclock;
 		case TRet_Game_PunchclockState: return playerinfo.usingpunchclock;
 		case TRet_Game_Job: return GetCharacterProfession();
