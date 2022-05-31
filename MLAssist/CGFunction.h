@@ -1,9 +1,9 @@
 #pragma once
 #include "GameCtrl.h"
 #include "GlobalDefine.h"
+#include "UserDefCheckBoxDlg.h"
 #include "UserDefComboBoxDlg.h"
 #include "UserDefDialog.h"
-#include "UserDefCheckBoxDlg.h"
 #include <QCheckBox>
 #include <QFuture>
 #include <QJsonArray>
@@ -718,7 +718,7 @@ protected:
 	bool readTitleJson();
 
 private:
-	QMap<QString, QVariantList> m_createRandomName;
+	QMap<QString, QVariantList> m_createRandomName;		 //创建随机名称
 	QJsonArray m_professions;							 //职业列表
 	QJsonObject m_titles;								 //称号列表
 	QStringList m_sAccountGidList;						 //游戏id列表 如果设置自动登录后 记录下来，后续脚本用
@@ -752,19 +752,19 @@ private:
 	bool m_bUserDlgUseDefault = false;					 //脚本 是否默认转换
 	UserDefDialog *m_pUserDlg;							 //用户输入对话框
 	UserDefComboBoxDlg *m_pUserComboBoxDlg;				 //用户下拉对话框
-	UserDefCheckBoxDlg *m_pUserCheckBoxDlg;
-	QMap<QString, QVariant> m_scriptUiSetData;	//脚本界面设置的数据
-	QMap<QString, QVariant> m_scriptInputVar;	//脚本调用的变量接口
-	QHash<QString, int> m_returnGameDataHash;	//游戏数据返回映射
-	bool m_tradeFinished = false;				//交易状态
-	QString m_saveTradeObjName;					//交易对象名称
-	bool m_getInTradeStuffs = false;			//获取到交易物品
-	QHash<int, QString> m_tradeState;			//交易状态
-	QMap<int, QVector<int> > m_boyOrGirl;		//人物是男还是女
-	tMapHead _mapHead;							//地图结构体
-	QMutex m_charMutex;							//人物聊天信息锁
-	QMutex m_topicMutex;						//订阅信息锁
-	QList<QPair<QString, QString> > m_topicMsg; //接收到的主题信息
-	int m_mazeWaitTime = 5000;					//迷宫切图等待时间
+	UserDefCheckBoxDlg *m_pUserCheckBoxDlg;				 //用户勾选框
+	QMap<QString, QVariant> m_scriptUiSetData;			 //脚本界面设置的数据
+	QMap<QString, QVariant> m_scriptInputVar;			 //脚本调用的变量接口
+	QHash<QString, int> m_returnGameDataHash;			 //游戏数据返回映射
+	bool m_tradeFinished = false;						 //交易状态
+	QString m_saveTradeObjName;							 //交易对象名称
+	bool m_getInTradeStuffs = false;					 //获取到交易物品
+	QHash<int, QString> m_tradeState;					 //交易状态
+	QMap<int, QVector<int> > m_boyOrGirl;				 //人物是男还是女
+	tMapHead _mapHead;									 //地图结构体
+	QMutex m_charMutex;									 //人物聊天信息锁
+	QMutex m_topicMutex;								 //订阅信息锁
+	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息
+	int m_mazeWaitTime = 5000;							 //迷宫切图等待时间
 };
 #define g_pGameFun CGFunction::GetInstance()

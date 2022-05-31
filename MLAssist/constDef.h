@@ -17,7 +17,6 @@ enum TObjectType
 enum TBattleType
 {
 	dtNone = 0,
-
 	dtCondition = 0x1000,						//判断条件
 	dtCondition_Ignore = 0x1001,				//忽略
 	dtCondition_EnemyCount = 0x1002,			//敌人数
@@ -46,69 +45,62 @@ enum TBattleType
 	dtCondition_PlayerGold = 0x1025,			//人物金币
 	dtCondition_PlayerJob = 0x1026,				//人物职业
 	dtCondition_PlayerBGM = 0x1027,				//人物背景音乐
-
-	dtCondition_Compare = 0x1028,		//比较基类
-	dtCondition_EnemyLv1Hp = 0x1029,	//敌方1级单位个体血量
-	dtCondition_EnemyLv1MaxHp = 0x1030, //敌方1级单位个体最大血量
-	dtCondition_EnemyLv1MaxMp = 0x1031, //敌方1级单位个体最大魔量
-
-	dtCompare = 0x1100,				 //判断
-	dtCompare_Equal = 0x1101,		 //等于
-	dtCompare_NotEqual = 0x1102,	 //不等于
-	dtCompare_GreaterThan = 0x1103,	 //大于
-	dtCompare_LessThan = 0x1104,	 //小于
-	dtCompare_GreaterEqual = 0x1105, //大于等于
-	dtCompare_LessEqual = 0x1106,	 //小于等于
-	dtCompare_Contain = 0x1107,		 //包含
-	dtCompare_NotContain = 0x1108,	 //不包含
-
-	dtAction = 0x2000,
-	dtAction_Player = 0x2100,				  //动作
-	dtAction_PlayerIgnore = 0x2100,			  //人物忽略
-	dtAction_PlayerAttack = 0x2101,			  //人物攻击
-	dtAction_PlayerGuard = 0x2102,			  //人物防御
-	dtAction_PlayerEscape = 0x2103,			  //人物逃跑
-	dtAction_PlayerExchangePosition = 0x2104, //人物交换位置
-	dtAction_PlayerChangePet = 0x2105,		  //人物交换宠物
-	dtAction_PlayerSkillAttack = 0x2106,	  //人物技能攻击
-	dtAction_PlayerUseItem = 0x2107,		  //人物使用物品
-	dtAction_PlayerLogBack = 0x2108,		  //人物登出
-	dtAction_PlayerRebirth = 0x2109,		  //人物气绝 精灵变身
-	dtAction_PlayerDoNothing = 0x2110,		  //人物什么也不做
-
-	dtAction_Pet = 0x2200,			  //宠物动作
-	dtAction_PetIgnore = 0x2200,	  //宠物忽略
-	dtAction_PetDoNothing = 0x2201,	  //宠物什么也不做
-	dtAction_PetSkillAttack = 0x2202, //宠物技能攻击
-
-	dtTarget = 0x3000,			 //目标
-	dtTarget_Enemy = 0x3001,	 //敌方
-	dtTarget_Teammate = 0x3002,	 //队友
-	dtTarget_Self = 0x3003,		 //人物
-	dtTarget_Pet = 0x3004,		 //宠物
-	dtTarget_Condition = 0x3005, //条件
-
-	dtTargetCondition = 0x4000,				   //目标筛选
-	dtTargetCondition_Random = 0x4001,		   //随机
-	dtTargetCondition_Front = 0x4002,		   //前排
-	dtTargetCondition_Back = 0x4003,		   //后排
-	dtTargetCondition_LowHP = 0x4004,		   //血少优先
-	dtTargetCondition_HighHP = 0x4005,		   //血多优先
-	dtTargetCondition_LowHPPercent = 0x4006,   //低血量比例
-	dtTargetCondition_HighHPPercent = 0x4007,  //高血量比例
-	dtTargetCondition_LowLv = 0x4008,		   //级低优先
-	dtTargetCondition_HighLv = 0x4009,		   //级高优先
-	dtTargetCondition_SingleDebuff = 0x4010,   //单体异常状态
-	dtTargetCondition_MulTDebuff = 0x4011,	   //T字形异常状态
-	dtTargetCondition_Goatfarm = 0x4012,	   //砍牛
-	dtTargetCondition_Boomerang = 0x4013,	   //回力标(人多的一排)
-	dtTargetCondition_LessUnitRow = 0x4014,	   //人少的一排
-	dtTargetCondition_MultiMagic = 0x4015,	   //强力魔法
-	dtTargetCondition_AimOrderUpDown = 0x4016, //集火上到下
-	dtTargetCondition_AimOrderDownUp = 0x4017, //集火下到上
-	dtTargetCondition_AimOrderCenter = 0x4018, //集火中间
-
-	dtSettingType_NoPetDoubleAction = 0x5001, //不带宠二动
+	dtCondition_Compare = 0x1028,				//比较基类
+	dtCondition_EnemyLv1Hp = 0x1029,			//敌方1级单位个体血量
+	dtCondition_EnemyLv1MaxHp = 0x1030,			//敌方1级单位个体最大血量
+	dtCondition_EnemyLv1MaxMp = 0x1031,			//敌方1级单位个体最大魔量
+	dtCompare = 0x1100,							//判断
+	dtCompare_Equal = 0x1101,					//等于
+	dtCompare_NotEqual = 0x1102,				//不等于
+	dtCompare_GreaterThan = 0x1103,				//大于
+	dtCompare_LessThan = 0x1104,				//小于
+	dtCompare_GreaterEqual = 0x1105,			//大于等于
+	dtCompare_LessEqual = 0x1106,				//小于等于
+	dtCompare_Contain = 0x1107,					//包含
+	dtCompare_NotContain = 0x1108,				//不包含
+	dtAction = 0x2000,							//动作
+	dtAction_Player = 0x2100,					//动作
+	dtAction_PlayerIgnore = 0x2100,				//人物忽略
+	dtAction_PlayerAttack = 0x2101,				//人物攻击
+	dtAction_PlayerGuard = 0x2102,				//人物防御
+	dtAction_PlayerEscape = 0x2103,				//人物逃跑
+	dtAction_PlayerExchangePosition = 0x2104,	//人物交换位置
+	dtAction_PlayerChangePet = 0x2105,			//人物交换宠物
+	dtAction_PlayerSkillAttack = 0x2106,		//人物技能攻击
+	dtAction_PlayerUseItem = 0x2107,			//人物使用物品
+	dtAction_PlayerLogBack = 0x2108,			//人物登出
+	dtAction_PlayerRebirth = 0x2109,			//人物气绝 精灵变身
+	dtAction_PlayerDoNothing = 0x2110,			//人物什么也不做
+	dtAction_Pet = 0x2200,						//宠物动作
+	dtAction_PetIgnore = 0x2200,				//宠物忽略
+	dtAction_PetDoNothing = 0x2201,				//宠物什么也不做
+	dtAction_PetSkillAttack = 0x2202,			//宠物技能攻击
+	dtTarget = 0x3000,							//目标
+	dtTarget_Enemy = 0x3001,					//敌方
+	dtTarget_Teammate = 0x3002,					//队友
+	dtTarget_Self = 0x3003,						//人物
+	dtTarget_Pet = 0x3004,						//宠物
+	dtTarget_Condition = 0x3005,				//条件
+	dtTargetCondition = 0x4000,					//目标筛选
+	dtTargetCondition_Random = 0x4001,			//随机
+	dtTargetCondition_Front = 0x4002,			//前排
+	dtTargetCondition_Back = 0x4003,			//后排
+	dtTargetCondition_LowHP = 0x4004,			//血少优先
+	dtTargetCondition_HighHP = 0x4005,			//血多优先
+	dtTargetCondition_LowHPPercent = 0x4006,	//低血量比例
+	dtTargetCondition_HighHPPercent = 0x4007,	//高血量比例
+	dtTargetCondition_LowLv = 0x4008,			//级低优先
+	dtTargetCondition_HighLv = 0x4009,			//级高优先
+	dtTargetCondition_SingleDebuff = 0x4010,	//单体异常状态
+	dtTargetCondition_MulTDebuff = 0x4011,		//T字形异常状态
+	dtTargetCondition_Goatfarm = 0x4012,		//砍牛
+	dtTargetCondition_Boomerang = 0x4013,		//回力标(人多的一排)
+	dtTargetCondition_LessUnitRow = 0x4014,		//人少的一排
+	dtTargetCondition_MultiMagic = 0x4015,		//强力魔法
+	dtTargetCondition_AimOrderUpDown = 0x4016,	//集火上到下
+	dtTargetCondition_AimOrderDownUp = 0x4017,	//集火下到上
+	dtTargetCondition_AimOrderCenter = 0x4018,	//集火中间
+	dtSettingType_NoPetDoubleAction = 0x5001,	//不带宠二动
 
 };
 //比较级：higher
@@ -442,38 +434,40 @@ enum TPetAddPointType
 //返回人物和宠物信息的一些定义
 enum TReturnGameData
 {
-	TRet_Game_Hp = 1,
-	TRet_Game_Mp,
-	TRet_Game_MaxHp,
-	TRet_Game_MaxMp,
-	TRet_Game_Level,
-	TRet_Game_Exp,
-	TRet_Game_MaxExp,
-	TRet_Game_Health,
-	TRet_Game_Soul,
-	TRet_Game_Name,
-	TRet_Game_Gold,
-	TRet_Game_Punchclock,
-	TRet_Game_PunchclockState,
-	TRet_Game_Job,
-	TRet_Game_Profession,
-	TRet_Game_Prestige,
-	TRet_Game_Loc,
-	TRet_Game_PetCount,
-	TRet_Game_CurLine,		 //当前游戏线路
-	TRet_Game_CurServelLine, //当前游戏大线路
-	TRet_Game_Loyality,
-	TRet_Game_PetGrade,
-	TRet_Game_PetState,
-	TRet_Game_PetChangeState,
-	TRet_Game_PetChangeName,
-	TRet_Game_OathGroup,  //4转属组
-	TRet_Game_Sex,		  //性别
-	TRet_Game_ImageID,	  //图片id
-	TRet_Game_PlayerRank, //阶级  1 -5 转
-	TRet_Game_Gid,		  //阶级  1 -5 转
-	TRet_Game_PrestigeLv, //声望等级
-	TRet_Game_BankGold, //银行金币
+	TRet_Game_Hp = 1,		   //血
+	TRet_Game_Mp,			   //魔
+	TRet_Game_MaxHp,		   //最大血
+	TRet_Game_MaxMp,		   //最大魔
+	TRet_Game_Level,		   //等级
+	TRet_Game_Exp,			   //经验
+	TRet_Game_MaxExp,		   //下一级经验
+	TRet_Game_Health,		   //健康
+	TRet_Game_Soul,			   //灵魂
+	TRet_Game_Name,			   //名称
+	TRet_Game_Gold,			   //金币
+	TRet_Game_Punchclock,	   //卡时
+	TRet_Game_PunchclockState, //打卡状态
+	TRet_Game_Job,			   //职业
+	TRet_Game_Profession,	   //职称
+	TRet_Game_Prestige,		   //称号
+	TRet_Game_Loc,			   //坐标
+	TRet_Game_PetCount,		   //宠物数量
+	TRet_Game_CurLine,		   //当前游戏线路
+	TRet_Game_CurServelLine,   //当前游戏大线路
+	TRet_Game_Loyality,		   //忠诚
+	TRet_Game_PetGrade,		   //档次
+	TRet_Game_PetState,		   //宠物状态
+	TRet_Game_PetChangeState,  //改宠物状态
+	TRet_Game_PetChangeName,   //改宠物名称
+	TRet_Game_OathGroup,	   //4转属组
+	TRet_Game_Sex,			   //性别
+	TRet_Game_ImageID,		   //图片id
+	TRet_Game_PlayerRank,	   //阶级  1 -5 转
+	TRet_Game_Gid,			   //阶级  1 -5 转
+	TRet_Game_PrestigeLv,	   //声望等级
+	TRet_Game_BankGold,		   //银行金币
+	TRet_Game_GamePID,		   //游戏进程ID
+	TRet_Game_GamePort,		   //游戏端口
 };
 //自定义快捷键
 enum TDefQuickKey
@@ -526,28 +520,9 @@ enum TMsgID
 {
 	msgConnectOK = 0x01,
 	msgNotConnect = 0x02,
-
 	msgYCAlarmStart = 0x03,
 	msgYCAlarmStop = 0x04,
 	msgAlarmStart = 0x05,
-	msgAlarmStop = 0x06,
-	msgBatchDevStateChange = 0x07, //以主机为单位的批量设备状态更新
-	msgMECYCData = 0x08,
-	msgDevTreeUpdate = 0x09,
-	msgDevFault = 0x0A,
-	msgDevStateChange = 0x0B, //单个设备状态更新
-	msgDevMisReport = 0x0C,	  //设备误报消息
-	msgWFLDVCH = 0x0D,		  //五防联动信息
-	//msgYKOpen = 0x0C,
-	//msgYKClose = 0x0D,
-	msgSCADA = 0x0F, //SCADA联动
-	msgIVS = 0x10,	 //智能视频分析
-	msgIVSData = 0x11,
-
-	msgDevAlarm = 0x20,
-
-	msgUpdateVIRouteVersion = 0x30, //更新巡视路线
-	msgYCStateChange = 0x31,		//遥测上下值更改
 };
 enum TInputType
 {

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "GameCtrl.h"
 #include "ui_GamePetWgt.h"
 #include <QSettings>
 #include <QWidget>
-#include "GameCtrl.h"
 
 class GamePetWgt : public QWidget
 {
@@ -31,6 +31,7 @@ public slots:
 	void on_pushButton_saveBook_clicked();
 	void onTableCustomContextMenu(const QPoint &);
 	void doChangePetName();
+	void doChangePetNameGrade();
 	void doChangePetState();
 
 	void on_groupBox_autoAddPoint_toggled(bool checked);

@@ -171,6 +171,8 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("4转属组", TRet_Game_OathGroup);
 	m_returnGameDataHash.insert("性别", TRet_Game_Sex);
 	m_returnGameDataHash.insert("外观", TRet_Game_ImageID);
+	m_returnGameDataHash.insert("游戏进程", TRet_Game_GamePID);
+	m_returnGameDataHash.insert("游戏端口", TRet_Game_GamePort);
 
 	m_playerActionHash.insert("pk", TCharacter_Action_PK);
 	m_playerActionHash.insert("加入队伍", TCharacter_Action_JOINTEAM);
@@ -779,6 +781,8 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 		case TRet_Game_OathGroup: return GetCharacterOathGroup();
 		case TRet_Game_Sex: return GetCharacterSex(playerinfo.image_id);
 		case TRet_Game_ImageID: return playerinfo.image_id;
+		case TRet_Game_GamePID: return QVariant::fromValue(g_pGameCtrl->getGamePID());
+		case TRet_Game_GamePort: return g_pGameCtrl->GetGamePort();
 		case TRet_Game_Prestige:
 		{
 			auto playerTitles = playerinfo.titles;

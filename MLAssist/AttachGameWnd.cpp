@@ -108,6 +108,7 @@ void AttachGameWnd::OnQueueQueryProcess()
 		}
 	}
 	emit g_pGameCtrl->signal_gameWndList(list);
+	qSort(list.begin(), list.end(), [&](CProcessItemPtr p1, CProcessItemPtr p2) { return p1->m_bAttached;});
 	OnNotifyQueryProcess(list);
 }
 void AttachGameWnd::OnNotifyQueryProcess(CProcessItemList list)

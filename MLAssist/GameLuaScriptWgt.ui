@@ -611,8 +611,8 @@ QTableView
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>368</width>
-                <height>192</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout">
@@ -641,6 +641,11 @@ QTableView
      <widget class="ScriptForm" name="jsWidget">
       <attribute name="title">
        <string>js</string>
+      </attribute>
+     </widget>
+     <widget class="GamePythonScriptWgt" name="tab_5">
+      <attribute name="title">
+       <string>Python</string>
       </attribute>
      </widget>
      <widget class="GameScriptSetWgt" name="gameScriptSetWgt">
@@ -711,6 +716,12 @@ QTableView
    <class>GameLuaScriptInputValWgt</class>
    <extends>QWidget</extends>
    <header>GameLuaScriptInputValWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GamePythonScriptWgt</class>
+   <extends>QWidget</extends>
+   <header>GamePythonScriptWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

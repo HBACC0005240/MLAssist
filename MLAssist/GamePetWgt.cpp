@@ -13,6 +13,7 @@ GamePetWgt::GamePetWgt(QWidget *parent) :
 	auto pTabBar = ui.tabWidget->tabBar();
 
 	m_pCalcPetBtn = new QPushButton("重载算档", this);
+	m_pCalcPetBtn->setToolTip("会重新从管理工具那里获取宠物算档数据！");
 	connect(m_pCalcPetBtn, SIGNAL(clicked()), this, SLOT(on_pushButton_reloadCalc_clicked()));
 	m_pCalcPetBtn->setMaximumWidth(80);
 	QWidget *pWidget = new QWidget(this);
@@ -418,7 +419,10 @@ void GamePetWgt::onTableCustomContextMenu(const QPoint &pos)
 
 		QMenu menu;
 		if (nrow == 0)
+		{
 			menu.addAction("修改名称", this, SLOT(doChangePetName()));
+			menu.addAction("修改为名称档次", this, SLOT(doChangePetNameGrade()));
+		}
 		else if (nrow == 11)
 			menu.addAction("修改状态", this, SLOT(doChangePetState()));
 		menu.exec(QCursor::pos());
@@ -439,6 +443,32 @@ void GamePetWgt::doChangePetName()
 		bool bRet = false;
 		g_CGAInterface->ChangePetName(nCol, sName.toStdString(), bRet);
 	}
+}
+
+void GamePetWgt::doChangePetNameGrade()
+{
+	if (m_pCurItem == nullptr)
+		return;
+	int nCol = m_pCurItem->column();
+	CGA::cga_pet_info_t info;
+	g_CGAInterface->GetPetInfo(nCol, info);
+	if (info.level != 1)
+	{
+		qDebug() << "暂时只支持1级宠!";
+		return;
+	}
+	QString realName = QString::fromStdString(info.realname);
+	if (realName.size() > 4)
+	{
+		realName = realName.left(4);
+	}
+	auto pTableItem = ui.tableWidget->item(5, nCol);
+	if (pTableItem)
+	{
+		realName += pTableItem->text();
+	}
+	bool bRet = false;
+	g_CGAInterface->ChangePetName(nCol, realName.toStdString(), bRet);
 }
 
 void GamePetWgt::doChangePetState()
