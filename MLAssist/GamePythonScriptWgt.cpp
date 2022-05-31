@@ -1,5 +1,4 @@
 #include "GamePythonScriptWgt.h"
-//#include "python.h"
 #include "../CGALib/gameinterface.h"
 #include "CGFunction.h"
 #include "MINT.h"
@@ -84,7 +83,7 @@ void GamePythonScriptWgt::dropEvent(QDropEvent *event)
 		if (file.exists())
 		{
 			m_scriptPath = filePath;
-			m_output->appendPlainText(tr("Ready to launch"));
+			m_output->appendPlainText(tr("准备运行"));
 			ui.pushButton_run->setEnabled(true);
 			ui.pushButton_debug->setEnabled(true);
 			ui.pushButton_term->setEnabled(false);
@@ -92,7 +91,7 @@ void GamePythonScriptWgt::dropEvent(QDropEvent *event)
 		}
 		else
 		{
-			QMessageBox::critical(this, tr("Error"), tr("Failed to load script file.\nerror: %1").arg(file.errorString()), QMessageBox::Ok, 0);
+			QMessageBox::critical(this, tr("错误"), tr("加载脚本文件失败.\n错误信息: %1").arg(file.errorString()), QMessageBox::Ok, 0);
 		}
 	}
 }
@@ -101,11 +100,11 @@ void GamePythonScriptWgt::OnNodeStarted()
 {
 	if (m_bDebugging)
 	{
-		m_output->appendPlainText(tr("Debugging with pid %1...").arg(m_python->processId()));
+		m_output->appendPlainText(tr("调试进程id %1...").arg(m_python->processId()));
 	}
 	else
 	{
-		m_output->appendPlainText(tr("Running with pid %1...").arg(m_python->processId()));
+		m_output->appendPlainText(tr("运行进程id %1...").arg(m_python->processId()));
 	}
 	ui.pushButton_term->setEnabled(true);
 }
@@ -197,7 +196,7 @@ void GamePythonScriptWgt::OnNodeFinish(int exitCode, QProcess::ExitStatus exitSt
 	m_bNavigating = false;
 	m_bPathBegin = false;
 
-	m_output->appendPlainText(tr("Node finished with exitCode %1").arg(exitCode));
+	m_output->appendPlainText(tr("Python脚本退出,退出码 %1").arg(exitCode));
 
 	ui.pushButton_load->setEnabled(true);
 	ui.pushButton_run->setEnabled(true);
@@ -303,9 +302,9 @@ void GamePythonScriptWgt::OnAutoRestart()
 void GamePythonScriptWgt::on_pushButton_load_clicked()
 {
 	QFileDialog *fileDialog = new QFileDialog(this);
-	fileDialog->setWindowTitle(tr("Load Script"));
+	fileDialog->setWindowTitle(tr("加载脚本"));
 	fileDialog->setDirectory(".");
-	fileDialog->setNameFilter(tr("JavaScript Files(*.py)"));
+	fileDialog->setNameFilter(tr("Python脚本文件(*.py)"));
 	fileDialog->setFileMode(QFileDialog::ExistingFile);
 	if (fileDialog->exec() == QDialog::Accepted)
 	{
@@ -314,7 +313,7 @@ void GamePythonScriptWgt::on_pushButton_load_clicked()
 		if (file.exists())
 		{
 			m_scriptPath = filePath;
-			m_output->appendPlainText(tr("Ready to launch"));
+			m_output->appendPlainText(tr("准备运行"));
 			ui.pushButton_run->setEnabled(true);
 			ui.pushButton_debug->setEnabled(true);
 			ui.pushButton_term->setEnabled(false);
@@ -322,7 +321,7 @@ void GamePythonScriptWgt::on_pushButton_load_clicked()
 		}
 		else
 		{
-			QMessageBox::critical(this, tr("Error"), tr("Failed to load script file.\nerror: %1").arg(file.errorString()), QMessageBox::Ok, 0);
+			QMessageBox::critical(this, tr("错误"), tr("加载Python脚本错误.\n错误信息: %1").arg(file.errorString()), QMessageBox::Ok, 0);
 		}
 	}
 }
@@ -367,7 +366,7 @@ void GamePythonScriptWgt::on_pushButton_run_clicked()
 
 		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
 		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start("C:\\Users\\HBACC\\AppData\\Local\\Programs\\Python\\Python310-32\\python.exe", args);
+		m_python->start(".//python//python.exe", args);
 
 		UpdateGameTextUI(true);
 	}
@@ -466,7 +465,7 @@ void GamePythonScriptWgt::RunNavigatorScript(int x, int y, int enter, QString *r
 
 		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
 		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start("C:\\Users\\HBACC\\AppData\\Local\\Programs\\Python\\Python310-32\\python.exe", args);
+		m_python->start(".//python//python.exe", args);
 
 		UpdateGameTextUI(true);
 	}
@@ -518,7 +517,7 @@ void GamePythonScriptWgt::on_pushButton_debug_clicked()
 
 		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
 		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start("C:\\Users\\HBACC\\AppData\\Local\\Programs\\Python\\Python310-32\\python.exe", args);
+		m_python->start(".//python//python.exe", args);
 
 		UpdateGameTextUI(true);
 	}
