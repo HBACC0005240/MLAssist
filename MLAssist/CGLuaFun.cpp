@@ -573,6 +573,7 @@ int CGLuaFun::Lua_UserDefCheckBoxDlg(LuaState *L)
 	QString sMsg = args[1].GetString();
 	QString sDefaultVal = args[2].GetString();
 	QVariant val = g_pGameFun->UserCheckBoxDialog(sMsg, sDefaultVal);
+	val = val.toBool();
 	bool bTrans = args.Count() >= 3 ? args[3].GetBoolean() : true;
 	TransVariantToLua(L, val, bTrans);
 	g_pGameFun->SetScriptInputVarData(sMsg, val);

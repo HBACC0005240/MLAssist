@@ -108,7 +108,7 @@ void AttachGameWnd::OnQueueQueryProcess()
 		}
 	}
 	emit g_pGameCtrl->signal_gameWndList(list);
-	qSort(list.begin(), list.end(), [&](CProcessItemPtr p1, CProcessItemPtr p2) { return p1->m_bAttached;});
+	qSort(list.begin(), list.end(), [&](CProcessItemPtr p1, CProcessItemPtr p2) { return !p1->m_bAttached;});
 	OnNotifyQueryProcess(list);
 }
 void AttachGameWnd::OnNotifyQueryProcess(CProcessItemList list)
@@ -203,54 +203,7 @@ void AttachGameWnd::on_pushButton_attach_clicked()
 	CProcessItem *item = m_model->ItemFromIndex(ui.tableView->currentIndex());
 	if (!item)
 		return;
-
 	OnQueueAttachProcess((quint32)item->m_ProcessId, (quint32)item->m_ThreadId, (quint32)item->m_hWnd, QString("cgahook.dll"));
-
-	return;
-	//QListWidgetItem *pCurItem = ui.listWidget->currentItem();
-	//if (pCurItem == nullptr)
-	//	return;
-	//if (pCurItem->text().contains("已附加"))
-	//	return;
-
-	//QString dllName = QApplication::applicationDirPath() + "/CGAHook.dll";
-	//qDebug() << "InJectDll2" << dllName;
-	//qint64 gameProcessID = pCurItem->data(Qt::UserRole).toInt(); //ui.comboBox->currentData(Qt::UserRole).toInt();
-	//int port = 0;
-	//quint32 hwnd = 0;
-	//if (!ReadSharedData(gameProcessID, port, hwnd))
-	//{
-	//	bool bInjectSuccess = InjectByMsgHook(gameProcessID, dllName.toStdString().c_str());
-	//	if (bInjectSuccess == false)
-	//	{
-	//		QMessageBox::information(this, "提示：", "附加进程失败！", "确定");
-	//		return;
-	//	}
-	//	CRetryAttachProcessTimer *timer = new CRetryAttachProcessTimer(gameProcessID, 0, this);
-	//	connect(timer, SIGNAL(timeout()), this, SLOT(OnRetryAttachProcess()));
-	//	timer->start(500);
-	//}
-	//else
-	//{
-	//	//dll已经注入成功 直接连服务
-	//	Disconnect();
-	//	DWORD tid = GetWindowThreadProcessId((HWND)hwnd, (LPDWORD)&gameProcessID);
-	//	ConnectToServer(gameProcessID, tid, port, hwnd);
-	//}
-	//return;
-	////老版读取数据代码
-	///*************************************************/
-	//HWND gameHwnd = YunLai::FindMainWindow(gameProcessID);
-	//HDC gameHDC = GetDC(gameHwnd);
-	//void *pBaseAddr = YunLai::GetProcessImageBase1(gameProcessID);
-	//qDebug() << pBaseAddr;
-	//GameData::getInstance().setGameProcess(gameProcessID);
-	//GameData::getInstance().setGameHwnd(gameHwnd);
-	//GameData::getInstance().setGameHDC(gameHDC);
-	//GameData::getInstance().setGameBaseAddr((ULONG)pBaseAddr);
-	//GameData::getInstance().initData();
-	//emit g_pGameCtrl->signal_activeGameFZ();
-	//g_pGameCtrl->StartUpdateTimer();
 }
 
 void AttachGameWnd::ConnectToServer(quint32 ProcessId, quint32 ThreadId, int port, quint32 hwnd)

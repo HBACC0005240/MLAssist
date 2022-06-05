@@ -337,7 +337,7 @@ QVariant CGFunction::UserInputDialog(QString sMsg, QString sVal)
 	if (m_bUserDlgUseDefault)
 	{
 		if (m_scriptInputVar.contains(sMsg))
-			return m_scriptInputVar.value(sMsg).toString();
+			return m_scriptInputVar.value(sMsg);
 		return sVal; //暂时都是int
 	}
 	QMutex mutex;
@@ -370,7 +370,7 @@ QVariant CGFunction::UserCheckBoxDialog(QString sMsg, QString sVal)
 	if (m_bUserDlgUseDefault)
 	{
 		if (m_scriptInputVar.contains(sMsg))
-			return m_scriptInputVar.value(sMsg).toString();
+			return m_scriptInputVar.value(sMsg);
 		return sVal; //暂时都是int
 	}
 	QMutex mutex;
@@ -403,7 +403,7 @@ QVariant CGFunction::UserComboBoxDialog(QString sMsg, QStringList sVal, QString 
 	if (m_bUserDlgUseDefault)
 	{
 		if (m_scriptInputVar.contains(sMsg))
-			return m_scriptInputVar.value(sMsg).toString();
+			return m_scriptInputVar.value(sMsg);
 		else if (sDefVal.isEmpty())
 			return sVal.size() > 0 ? sVal.at(0) : "";
 		else

@@ -74,7 +74,6 @@ AccountForm::AccountForm(QWidget *parent) :
 	connect(g_pGameCtrl, &GameCtrl::signal_switchLoginData, this, &AccountForm::OnSwitchLoginData);
 	connect(g_pGameCtrl, &GameCtrl::signal_loginGame, this, &AccountForm::on_pushButton_logingame_clicked);
 	connect(g_pGameCtrl, &GameCtrl::signal_runGameWnd, this, &AccountForm::on_pushButton_getgid_clicked);
-	connect(g_pGameCtrl, &GameCtrl::signal_gameWndList, this, &AccountForm::OnRecordGameWndProcess);
 	connect(g_pGameCtrl, &GameCtrl::HttpLoadAccount, this, &AccountForm::OnHttpLoadAccount);
 	//connect(g_pGameCtrl, &GameCtrl::NotifyFillLoadScript, this, &AccountForm::OnNotifyFillLoadScript);
 	//connect(g_pGameCtrl, &GameCtrl::NotifyFillLoadSettings, this, &AccountForm::OnNotifyFillLoadSettings);
@@ -177,37 +176,6 @@ AccountForm::AccountForm(QWidget *parent) :
 			ui->comboBox_Chara->addItem(QIcon(sPath + QString::number(106250 + (i - 21) * 25) + ".gif"), roleName[i], i);
 		}
 	}
-
-	/*ui->comboBox_Chara->addItem(QIcon(""), QObject::tr("巴乌"), QVariant(0));
-	ui->comboBox_Chara->addItem(QObject::tr("卡兹"), QVariant(1));
-	ui->comboBox_Chara->addItem(QObject::tr("辛"), QVariant(2));
-	ui->comboBox_Chara->addItem(QObject::tr("托布"), QVariant(3));
-	ui->comboBox_Chara->addItem(QObject::tr("凯"), QVariant(4));
-	ui->comboBox_Chara->addItem(QObject::tr("菲特"), QVariant(5));
-	ui->comboBox_Chara->addItem(QObject::tr("伯克"), QVariant(6));
-	ui->comboBox_Chara->addItem(QObject::tr("乌噜"), QVariant(7));
-	ui->comboBox_Chara->addItem(QObject::tr("萌子"), QVariant(8));
-	ui->comboBox_Chara->addItem(QObject::tr("阿咪"), QVariant(9));
-	ui->comboBox_Chara->addItem(QObject::tr("梅古"), QVariant(10));
-	ui->comboBox_Chara->addItem(QObject::tr("丽"), QVariant(11));
-	ui->comboBox_Chara->addItem(QObject::tr("卡伊"), QVariant(12));
-	ui->comboBox_Chara->addItem(QObject::tr("艾露"), QVariant(13));
-
-	ui->comboBox_Chara->addItem(QObject::tr("谢堤"), QVariant(14 + 0));
-	ui->comboBox_Chara->addItem(QObject::tr("彼特"), QVariant(14 + 1));
-	ui->comboBox_Chara->addItem(QObject::tr("左藏"), QVariant(14 + 2));
-	ui->comboBox_Chara->addItem(QObject::tr("尼尔森"), QVariant(14 + 3));
-	ui->comboBox_Chara->addItem(QObject::tr("贝堤特"), QVariant(14 + 4));
-	ui->comboBox_Chara->addItem(QObject::tr("兰斯洛特"), QVariant(14 + 5));
-	ui->comboBox_Chara->addItem(QObject::tr("威斯凯尔"), QVariant(14 + 6));
-	ui->comboBox_Chara->addItem(QObject::tr("莎拉"), QVariant(14 + 7));
-	ui->comboBox_Chara->addItem(QObject::tr("绫女"), QVariant(14 + 8));
-	ui->comboBox_Chara->addItem(QObject::tr("福尔蒂雅"), QVariant(14 + 9));
-	ui->comboBox_Chara->addItem(QObject::tr("夏菈"), QVariant(14 + 10));
-	ui->comboBox_Chara->addItem(QObject::tr("萍萍"), QVariant(14 + 11));
-	ui->comboBox_Chara->addItem(QObject::tr("葛蕾丝"), QVariant(14 + 12));
-	ui->comboBox_Chara->addItem(QObject::tr("荷蜜"), QVariant(14 + 13));*/
-
 	QTimer *timer = new QTimer(this);
 	connect(g_pGameCtrl, SIGNAL(signal_exit()), timer, SLOT(stop()));
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnAutoLogin()));
@@ -292,108 +260,53 @@ bool AccountForm::QueryAttachGameWnd()
 		return false;
 	}
 	//	qDebug() << "当前游戏ID" << sGid;
-	if (m_gameWndList.size() < 1)
+
+	const wchar_t szFindGameClass[] = { 39764, 21147, 23453, 36125, 0 };
+	HWND hWnd = NULL;
+	DWORD pid, tid;
+	WCHAR szText[256];
+	while ((hWnd = FindWindowExW(NULL, hWnd, szFindGameClass, NULL)) != NULL)
 	{
-		const wchar_t szFindGameClass[] = { 39764, 21147, 23453, 36125, 0 };
-		HWND hWnd = NULL;
-		DWORD pid, tid;
-		WCHAR szText[256];
-		while ((hWnd = FindWindowExW(NULL, hWnd, szFindGameClass, NULL)) != NULL)
+		if ((tid = GetWindowThreadProcessId(hWnd, (LPDWORD)&pid)) != 0 && pid != GetCurrentProcessId())
 		{
-			if ((tid = GetWindowThreadProcessId(hWnd, (LPDWORD)&pid)) != 0 && pid != GetCurrentProcessId())
+			if (GetWindowTextW(hWnd, szText, 256))
 			{
-				if (GetWindowTextW(hWnd, szText, 256))
+				auto wndTitle = QString::fromWCharArray(szText);
+				bool attached = IsProcessAttached(pid);
+				//				qDebug() << wndTitle << "附加" << attached;
+				//if (!attached) //已经附加过 则退出当前
 				{
-					auto wndTitle = QString::fromWCharArray(szText);
-					bool attached = IsProcessAttached(pid);
-					//				qDebug() << wndTitle << "附加" << attached;
-					//if (!attached) //已经附加过 则退出当前
+					//登录成功后 读取用户账号
+					void *pBaseAddr = YunLai::GetProcessImageBase1(pid);			
+					QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
+					//这里没有附加才进行附加辅助 已经附加辅助的，直接返回
+					//					qDebug() << "Read账号" <<szLoginUserID;
+					if (szLoginUserID == sGid)
 					{
-						//登录成功后 读取用户账号
-						void *pBaseAddr = YunLai::GetProcessImageBase1(pid);
-						//	qDebug() << pBaseAddr;
-						QString sUserName = QString(" [%1] ").arg(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xE12D30, 17))));
-						wndTitle += sUserName;
-						QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
-						//这里没有附加才进行附加辅助 已经附加辅助的，直接返回
-						//					qDebug() << "Read账号" <<szLoginUserID;
-						if (szLoginUserID == sGid)
+						if (!attached) //没有附加  进行附加
 						{
-							if (!attached) //没有附加  进行附加
+							//qDebug() << "游戏状态正常，开始附加窗口";
+							emit g_pGameCtrl->NotifyAutoAttachProcess(pid, tid);
+							return true;								
+						}
+						else
+						{
+							auto attachPid = g_pGameCtrl->getGamePID();
+							if (pid != 0 && /*attachPid != 0 &&*/ pid != attachPid)
 							{
-								//					qDebug() << sGid << "找到指定id 并且空闲中";
-								void *pBaseAddr = YunLai::GetProcessImageBase1(pid);
-								//int gameStatus = YunLai::ReadMemoryIntFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xE1DFFC);	//游戏状态
-								//int worldStatus = YunLai::ReadMemoryIntFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xE1E000); //游戏状态
-								//					qDebug() << "Find状态:world:" << worldStatus << "game:" << gameStatus;
-								//	if (gameStatus == 3 && worldStatus == 9)													//状态值不对的 可以kill掉													 //游戏状态正常
+								if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 								{
-									//						qDebug() << "游戏状态正常，开始附加窗口";
-									emit g_pGameCtrl->NotifyAutoAttachProcess(pid, tid);
+									qDebug() << "该ID已附加，退出！" << pid << attachPid;
+									qApp->exit(0);
 									return true;
 								}
-								break;
-							}
-							else
-							{
-								auto attachPid = g_pGameCtrl->getGamePID();
-								if (pid != 0 && /*attachPid != 0 &&*/ pid != attachPid)
-								{
-									if (g_pGameCtrl->GetStartGameRepeatedGidExit())
-									{
-										qDebug() << "该ID已附加，退出！" << pid << attachPid;
-										qApp->exit(0);
-										return true;
-									}
-								}
 							}
 						}
 					}
 				}
 			}
 		}
-	}
-	else
-	{
-		auto wndList = m_gameWndList;
-		for (auto wnd : wndList)
-		{
-			//		qDebug() << wnd->m_sLoginUserID << "附加" << wnd->m_bAttached ;
-			//这里没有附加才进行附加辅助 已经附加辅助的，直接返回
-			if (wnd->m_sLoginUserID == sGid)
-			{
-				if (wnd->m_bAttached == false)
-				{
-					void *pBaseAddr = YunLai::GetProcessImageBase1(wnd->m_ProcessId);
-					//int gameStatus = YunLai::ReadMemoryIntFromProcessID(wnd->m_ProcessId, (ULONG_PTR)pBaseAddr + 0xE1DFFC);	 //游戏状态
-					//int worldStatus = YunLai::ReadMemoryIntFromProcessID(wnd->m_ProcessId, (ULONG_PTR)pBaseAddr + 0xE1E000); //游戏状态
-					//																										 //			qDebug() << "状态:world:" << worldStatus << "game:"<< gameStatus;
-					//if (gameStatus == 3 && worldStatus == 9)																 //游戏状态正常
-					{
-						//		qDebug() << "游戏状态正常，开始附加窗口";
-						emit g_pGameCtrl->NotifyAutoAttachProcess(wnd->m_ProcessId, wnd->m_ThreadId);
-						return true;
-					}
-					break;
-				}
-				else
-				{
-
-					auto attachPid = g_pGameCtrl->getGamePID();
-					if (wnd->m_ProcessId != 0 && /*attachPid != 0 && */wnd->m_ProcessId != attachPid)
-					{
-						if (g_pGameCtrl->GetStartGameRepeatedGidExit())
-						{
-							qDebug() << "wnd->m_ProcessId 该ID已附加，退出！" << wnd->m_ProcessId << attachPid;
-							qApp->exit(0);
-							return true;
-						}
-					}
-				}
-			}
-		}
-	}
-	//qDebug() << "没有找到指定游戏id窗口";
+	}	
 	return false;
 }
 
