@@ -97,29 +97,6 @@ int main(int argc, char *argv[])
 	w.show();
 	g_pGameCtrl->RunParseCmd();
 	g_pHttpServer->init();
-	//QStringList testPetData;
-	//testPetData << "水龙蜥" << QString::number(4666)
-	//			<< QString::number(1911)
-	//			<< QString::number(879)
-	//			<< QString::number(899)
-	//			<< QString::number(257)
-	//			<< QString::number(27)
-	//			<< QString::number(373)
-	//			<< QString::number(406)
-	//			<< QString::number(254)
-	//			<< QString::number(232)
-	//			<< QString::number(47)
-	//			<< QString::number(41);
-	//auto pCalcData = g_pGamePetCalc->ParseLine(testPetData);
-	//if (pCalcData)
-	//{
-
-	//	int grade = pCalcData->lossMin;		   //最少掉档
-	//	int lossMinGrade = pCalcData->lossMin; //最少掉档
-	//	int lossMaxGrade = pCalcData->lossMax; //最多掉档
-	//	qDebug();
-	//}
-
 	return a.exec();
 }
 

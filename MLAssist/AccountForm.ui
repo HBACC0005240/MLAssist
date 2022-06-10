@@ -921,7 +921,7 @@ QListView::item{
         <string>此功能，主要为统计通行证下所有游戏账号的道具信息，包括身上物品和银行物品信息，暂时不包括豪华屋信息</string>
        </property>
        <property name="text">
-        <string>统计道具</string>
+        <string>导出Excel</string>
        </property>
       </widget>
      </item>

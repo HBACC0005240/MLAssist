@@ -1,18 +1,24 @@
 #include "CGFunction.h"
+#include "../include/QtXlsx/xlsxcellrange.h"
+#include "../include/QtXlsx/xlsxdocument.h"
+#include "../include/QtXlsx/xlsxformat.h"
+#include "../include/QtXlsx/xlsxworksheet.h"
 #include "./AStar/AStar.h"
 #include "GPCalc.h"
 #include "GameCtrl.h"
 #include "ITObjectDataMgr.h"
-#include "Tsp.h"
-
 #include "QEventLoop.h"
+#include "Tsp.h"
 #include "stdafx.h"
 #include <QDebug>
+#pragma comment(lib, "../lib/QtXlsx/Qt5Xlsx.lib")
+
 //#include <opencv2/highgui.hpp>
 //#include <opencv2/opencv.hpp>
 
 //using namespace cv;
 using namespace std;
+using namespace QXlsx;
 //#pragma comment(lib, "../lib/opencv453/opencv_world453.lib")
 CGFunction *CGFunction::GetInstance()
 {
@@ -9075,7 +9081,6 @@ bool CGFunction::SetPileItemState(int state, QString name /*= ""*/)
 //收集当前账号信息
 QList<QStringList> CGFunction::GatherAccountInfo()
 {
-	emit signal_updateFetchGid();
 	QList<QStringList> characterInfos;
 	//先这样存吧，后面看是保存到文件还是写个软件记录
 	CGA::cga_player_info_t info;
@@ -9400,6 +9405,26 @@ bool CGFunction::SaveGatherAccountInfos()
 	if (file.open(QFile::ReadWrite))
 		file.write(sHtml.toStdString().c_str());
 	file.close();
+	return true;
+}
+
+bool CGFunction::SaveAccountInfoToExcel()
+{
+	QXlsx::Document xlsx;
+	//![0]
+
+	//![1]
+	xlsx.write("A1", "Hello Qt!");
+	xlsx.write("A2", 12345);
+	xlsx.write("A3", "=44+33");
+	xlsx.write("A4", true);
+	xlsx.write("A5", "http://qt-project.org");
+	xlsx.write("A6", QDate(2013, 12, 27));
+	xlsx.write("A7", QTime(6, 30));
+	//![1]
+
+	//![2]
+	xlsx.save();
 	return true;
 }
 

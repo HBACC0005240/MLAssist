@@ -27,8 +27,6 @@ public:
 	bool QueryAttachGameWnd();
 
 	bool IsProcessAttached(quint32 ProcessId);
-signals:
-	void FetchPlayerData();
 
 private slots:
 	void OnPOLCNReadyReadStdOut();
@@ -40,7 +38,6 @@ private slots:
 	void on_groupBox_createChara_clicked(bool bflag);
 	void on_pushButton_Statistics_clicked();
 	void OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, quint32 port, quint32 hWnd);
-	void OnFetchPlayerData();
 	void on_checkBox_randomName_stateChanged(int state);
 
 public slots:
@@ -53,9 +50,6 @@ public slots:
 			QString create_chara_points, QString create_chara_elements, QString create_chara_name);
 	void OnHttpLoadAccount(QString query, QByteArray postdata, QJsonDocument *doc);
 	void OnNotifyConnectionState(int state, QString msg);
-	bool IsFetchGameData();
-	void ResetFetchStatus();
-	GameGoodsFetchPtr GetCurrentLoginGid();
 	void OnOpenAutoLogin();
 	void OnLoginGameServerEx(QString account, QString pwd, QString gid /*= ""*/, int gametype /*= 4*/, int rungame /*= 1*/, int skipupdate /*= 1*/);
 	void on_pushButton_saveBat_clicked();
@@ -90,17 +84,14 @@ private:
 	HANDLE m_glt_map;
 	int m_login_failure = 0;
 
-	bool m_bStatistics = false; //统计中？
-	bool m_bStatisticsRunning = false;
 	QMap<QString, GameGoodsFetchList> m_gidDatas;
-	GameGoodsFetchList m_pFetchLoginList;
 	bool m_bFirstGltExpired = false; //第一次获取失败
 	QTime m_gltExpiredTime;			 //通行证一直获取失败 是卡界面了 把界面关掉重新开一个
 	QTime m_attachExistGameWndTime;	 //附加已有窗口
-	QMap<int, int> m_roleMapSex; //人物角色和性别对应  后面有几个没单独处理
+	QMap<int, int> m_roleMapSex;	 //人物角色和性别对应  后面有几个没单独处理
 	int m_loginInterval = 0;
 	//先不启用 登录失败消息是一直返回的，所以会很快超过10次 关闭游戏窗口
-	QTime m_loginFailureTime; //登录失败定时器 30秒 
+	QTime m_loginFailureTime; //登录失败定时器 30秒
 	QString m_loginFailureMsg;
 	int m_loginFailureState = 0;
 };

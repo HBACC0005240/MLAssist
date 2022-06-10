@@ -43,8 +43,7 @@ signals:
 	//跨场景寻路通知
 	void signal_crossMapFini(const QString &msg);
 	//
-	//临时用
-	void signal_updateFetchGid();
+
 	//游戏登录
 	void signal_loginGameServerEx(QString account, QString pwd, QString gid, int gametype, int rungame, int skipupdate);
 
@@ -684,6 +683,7 @@ public:
 
 	//保存信息到
 	bool SaveGatherAccountInfos();
+	bool SaveAccountInfoToExcel();
 	void GoBank();
 	QString CreateHtmlRow(QVariantList sTextList);
 	QString CreateHtmlRows(QList<QVariantList> sTextLists);

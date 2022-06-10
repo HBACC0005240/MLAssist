@@ -48,7 +48,7 @@ AccountForm::AccountForm(QWidget *parent) :
 		ui(new Ui::AccountForm)
 {
 	ui->setupUi(this);
-	ui->pushButton_Statistics->hide();
+	//ui->pushButton_Statistics->hide();
 	m_polcn_lock = NULL;
 	m_polcn_map = NULL;
 	m_attachExistGameWndTime = QTime::currentTime().addSecs(-15);
@@ -79,8 +79,6 @@ AccountForm::AccountForm(QWidget *parent) :
 	//connect(g_pGameCtrl, &GameCtrl::NotifyFillLoadSettings, this, &AccountForm::OnNotifyFillLoadSettings);
 	//connect(g_pGameCtrl, &GameCtrl::NotifyFillStaticSettings, this, &AccountForm::OnNotifyFillStaticSettings);
 
-	connect(this, SIGNAL(FetchPlayerData()), this, SLOT(OnFetchPlayerData()));
-	connect(g_pGameFun, SIGNAL(signal_updateFetchGid()), this, SLOT(OnFetchPlayerData()));
 	connect(m_POLCN, SIGNAL(started()), this, SLOT(OnPOLCNStarted()));
 	connect(m_POLCN, SIGNAL(readyReadStandardOutput()), this, SLOT(OnPOLCNReadyReadStdOut()));
 	connect(m_POLCN, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(OnPOLCNFinish(int, QProcess::ExitStatus)));
@@ -277,7 +275,7 @@ bool AccountForm::QueryAttachGameWnd()
 				//if (!attached) //已经附加过 则退出当前
 				{
 					//登录成功后 读取用户账号
-					void *pBaseAddr = YunLai::GetProcessImageBase1(pid);			
+					void *pBaseAddr = YunLai::GetProcessImageBase1(pid);
 					QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
 					//这里没有附加才进行附加辅助 已经附加辅助的，直接返回
 					//					qDebug() << "Read账号" <<szLoginUserID;
@@ -287,7 +285,7 @@ bool AccountForm::QueryAttachGameWnd()
 						{
 							//qDebug() << "游戏状态正常，开始附加窗口";
 							emit g_pGameCtrl->NotifyAutoAttachProcess(pid, tid);
-							return true;								
+							return true;
 						}
 						else
 						{
@@ -306,7 +304,7 @@ bool AccountForm::QueryAttachGameWnd()
 				}
 			}
 		}
-	}	
+	}
 	return false;
 }
 
@@ -371,11 +369,6 @@ void AccountForm::OnAutoLogin()
 			{
 				CloseHandle(m_polcn_map);
 				m_polcn_map = NULL;
-			}
-			//运行抓取判断
-			if (m_bStatistics)
-			{
-				emit FetchPlayerData();
 			}
 			emit g_pGameCtrl->NotifyLoginProgressEnd();
 			return;
@@ -491,22 +484,6 @@ void AccountForm::OnPOLCNFinish(int exitCode, QProcess::ExitStatus exitStatus)
 					auto gidName = gid_object.take("name").toString();
 					ui->comboBox_gid->addItem(gidName);
 					gidList.append(gidName);
-					if (m_bStatistics && !m_gidDatas.contains(gidName))
-					{
-						auto fetchList = m_gidDatas.value(gidName);
-
-						GameGoodsFetchPtr tmpFetch(new GameGoodsFetch);
-						tmpFetch->sGID = gidName;
-						tmpFetch->character = 0; //左边
-						GameGoodsFetchPtr tmpFetch2(new GameGoodsFetch);
-						tmpFetch2->sGID = gidName;
-						tmpFetch2->character = 1; //右边
-						fetchList.append(tmpFetch);
-						fetchList.append(tmpFetch2);
-						m_pFetchLoginList.append(fetchList);
-
-						m_gidDatas.insert(gidName, fetchList);
-					}
 				}
 				g_pGameFun->SetAccountGIDs(gidList);
 				if (!lastgid.isEmpty())
@@ -748,7 +725,6 @@ void AccountForm::on_pushButton_logingame_clicked()
 			g_CGAInterface->CreateCharacter(req);
 		}
 
-		IsFetchGameData();
 		g_CGAInterface->LoginGameServer(ui->comboBox_gid->currentText().toStdString(),
 				m_glt.toStdString(),
 				m_serverid,
@@ -763,26 +739,6 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 	qDebug() << state << msg;
 	if ((state == 10000 || state == 0) && !msg.isEmpty())
 	{ // 0 "断线后在限定时间内不能登录！"    0 "此服务器很拥挤。"  0分多种情况
-		if (m_bStatistics)
-		{
-			if (msg.contains("角色数据读取失败")) //这个id跳过
-			{
-				QString curGID = ui->comboBox_gid->currentText();
-
-				auto pGidList = m_gidDatas.value(curGID);
-				for (auto pFetchGid : pGidList)
-				{
-					if (pFetchGid)
-					{
-						pFetchGid->bFetched = true;
-						pFetchGid->erMsg = "角色数据读取失败，其他窗口已登录！";
-						qDebug() << "角色数据读取失败" << pFetchGid->sGID;
-					}
-				}
-				////重新登录 下次判断会跳过这个
-				//on_pushButton_logingame_clicked();
-			}
-		}		
 		m_login_failure++;
 		if (m_login_failure > 30 && ui->checkBox_autoKillGame->isChecked())
 		{
@@ -808,34 +764,10 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 	{
 		qDebug() << "没有游戏角色！";
 		//登录游戏判断 是否有角色，没有的话，进行切换，还要测试下没有角色时，返回到服务器接口是否好使
-		if (m_bStatistics)
-		{
-			//切换数据
-			//0左边 1右边
-			auto pFetchGid = GetCurrentLoginGid();
-			if (pFetchGid)
-			{
-				pFetchGid->bFetched = true;
-				pFetchGid->erMsg = "没有游戏角色";
-				qDebug() << "没有游戏角色" << pFetchGid->sGID;
-			}
-			//没有游戏角色 回上页按钮没找到 暂时只能抓有数据的游戏
-			g_CGAInterface->BackSelectServer();
-			//g_CGAInterface->LogOut();
-			//POINT points;
-			//points.x = 550;
-			//points.y = 450;
-			////ClientToScreen(m_gameHwnd, &points);
-			//YunLai::SetFocusToWnd(g_pGameCtrl->getGameHwnd()); //已经是焦点了 不需要
-			//LPARAM newl = MAKELPARAM(points.x, points.y);
-			//auto gameHwd = g_pGameCtrl->getGameHwnd();
-			//SendMessage(gameHwd, WM_MOUSEMOVE, WM_MOUSEMOVE, newl);
-			//SendMessage(gameHwd, WM_LBUTTONDOWN, WM_LBUTTONDOWN, newl);
-			//SendMessage(gameHwd, WM_LBUTTONUP, WM_LBUTTONUP, newl);
-			return;
-			////重新登录 下次判断会跳过这个
-			//on_pushButton_logingame_clicked();
-		}
+
+		//没有游戏角色 回上页按钮没找到 暂时只能抓有数据的游戏
+		//g_CGAInterface->BackSelectServer();
+
 		//还不知道创建人物时候 名字重复报什么错
 		if (ui->radioButton_randomName->isChecked() /*&& ui->lineEdit_CharaName->text().isEmpty()*/)
 		{
@@ -867,65 +799,6 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 	}
 	m_loginFailureState = state;
 	m_loginFailureMsg = msg;
-}
-//切换游戏账号
-bool AccountForm::IsFetchGameData()
-{
-	if (m_bStatistics)
-	{
-		//切换数据
-		//0左边 1右边
-		bool bFetchFini = true;
-		for (auto pFetchGid : m_pFetchLoginList)
-		{
-			if (pFetchGid->bFetched == false)
-			{ //登录
-
-				int nIndex = ui->comboBox_gid->findText(pFetchGid->sGID);
-				if (nIndex < 0)
-				{
-					ResetFetchStatus();
-					return false;
-				}
-				ui->comboBox_gid->setCurrentIndex(nIndex);
-				ui->comboBox_character->setCurrentIndex(pFetchGid->character);
-				bFetchFini = false;
-				return true;
-			}
-		}
-		//仓库获取完成 终止登出和脚本
-		if (m_pFetchLoginList.size() > 0 && bFetchFini)
-		{
-			g_pGameCtrl->signal_stopScriptRun();
-		}
-	}
-	return false;
-}
-
-void AccountForm::ResetFetchStatus()
-{
-	m_bStatistics = false;
-	m_bStatisticsRunning = false;
-	//m_gidDatas.clear();
-}
-
-GameGoodsFetchPtr AccountForm::GetCurrentLoginGid()
-{
-	if (m_bStatistics)
-	{
-		QString curGID = ui->comboBox_gid->currentText();
-		int nCharacter = ui->comboBox_character->currentIndex();
-		//切换数据
-		//0左边 1右边
-		for (auto pFetchGid : m_pFetchLoginList)
-		{
-			if (pFetchGid->sGID == curGID && pFetchGid->character == nCharacter)
-			{
-				return pFetchGid;
-			}
-		}
-	}
-	return nullptr;
 }
 
 void AccountForm::OnOpenAutoLogin()
@@ -1010,7 +883,6 @@ void AccountForm::OnSwitchAccountGid(const QString &gid)
 	int nIndex = ui->comboBox_gid->findText(gid);
 	if (nIndex < 0)
 	{
-		ResetFetchStatus();
 		return;
 	}
 	ui->comboBox_gid->setCurrentIndex(nIndex);
@@ -1381,41 +1253,11 @@ void AccountForm::on_groupBox_createChara_clicked(bool bflag)
 
 void AccountForm::on_pushButton_Statistics_clicked()
 {
-	/*if (m_bStatistics)
-		return;*/
-	m_bStatistics = !m_bStatistics;
-	//不用勾选自动登录？
-	//1、打开窗口后，在账号界面，用户填写账号密码，点击自动获取账号物品信息按钮
-	//2、自动获取所有子id
-	//3、登录窗口，通过账号左边人物，右边人物，依次遍历，直至结束
-	//4、每次登录成功游戏后，判断人物位置，暂定法兰和新城，运行脚本，去银行获取信息，然后把信息写到excel文件中
-	g_pGameCtrl->signal_loadScript("脚本/仓库/游戏信息存储.lua");
-	on_pushButton_getgid_clicked();
-	//	m_bStatistics = false;
 }
 
 void AccountForm::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, quint32 port, quint32 hWnd)
 {
-	if (!m_bStatistics)
-		return;
 	//附加成功后，和切换线路走一个代码
-}
-//抓取人物信息
-void AccountForm::OnFetchPlayerData()
-{
-	if (m_bStatisticsRunning)
-		return;
-	if (!g_CGAInterface->IsConnected())
-		return;
-	m_bStatisticsRunning = true;
-	qDebug() << "AutoLogin OnFetchPlayerData！";
-	auto pFetchGID = GetCurrentLoginGid();
-	if (pFetchGID && pFetchGID->bFetched == false)
-	{
-		pFetchGID->bFetched = true;
-	}
-	//登录成功后 去读取信息
-	m_bStatisticsRunning = false;
 }
 
 void AccountForm::on_checkBox_randomName_stateChanged(int state)

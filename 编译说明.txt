@@ -24,3 +24,6 @@ node-gyp (建议跟随 https://www.npmjs.com/package/node-gyp 的指示来安装 node-gyp)
 在命令行界面填写
 npm install -g node-gyp
 npm install --global --production windows-build-tools
+
+
+QtXlsx库源码地址 https://github.com/dbzhang800/QtXlsxWriter 项目只放了头文件和库，需要源码的去github自取
