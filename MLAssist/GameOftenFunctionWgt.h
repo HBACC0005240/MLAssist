@@ -17,6 +17,10 @@ public:
 	void initSearchItems(GameSearchList itemList);
 	void initSaleItems(GameItemList itemList);
 	static void SwitchMapThread(GameOftenFunctionWgt *pThis, int nDir, int nVal);
+
+protected:
+	void AppendDataToEdit(const QString &sText, const QString &sFilte);
+
 public slots:
 	void on_pushButton_addSearch_clicked();
 	void on_pushButton_addSale_clicked();

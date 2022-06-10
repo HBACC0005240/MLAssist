@@ -84,6 +84,7 @@ bool ITObjectDataMgr::init()
 {
 	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
 	QSettings iniFile(iniPath, QSettings::IniFormat);
+	bool isOpenToolNet = iniFile.value("server/openTool").toBool();
 	QString sServerIp = iniFile.value("server/ip", "www.wzqlive.com").toString();
 	QString sServerPort = iniFile.value("server/port", "50051").toString();
 	int startHide = iniFile.value("game/startHide", 0).toInt();
@@ -94,6 +95,7 @@ bool ITObjectDataMgr::init()
 	{
 		loginWaitTime = 0;
 	}
+	g_pGameCtrl->SetIsOpenNetToMLAssistTool(isOpenToolNet);
 	g_pGameCtrl->SetAutoLoginInterval(loginWaitTime);
 	bool repeatedGidExit = iniFile.value("game/repeatedGidExit", true).toBool();
 	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
@@ -159,9 +161,9 @@ bool ITObjectDataMgr::init()
 
 	RpcSocketClient::getInstance().setServerIp(sServerIp);
 	RpcSocketClient::getInstance().setServerPort(sServerPort);
-	RpcSocketClient::getInstance().init();	
+	RpcSocketClient::getInstance().init();
 	QtConcurrent::run(NormalThread, this);
-	QtConcurrent::run(LoadPetDataThread, this,isLoadPetCalcData,isLoadOfflineDb);
+	QtConcurrent::run(LoadPetDataThread, this, isLoadPetCalcData, isLoadOfflineDb);
 	//emit signal_loadPetData(isLoadPetCalcData, isLoadOfflineDb);
 	return true;
 }
@@ -1699,7 +1701,7 @@ void ITObjectDataMgr::LoadPetDataThread(ITObjectDataMgr *pThis, bool isLoadPetCa
 				qDebug() << "打开数据库错误！";
 			}
 			SaveDataThread(pThis);
-//			QtConcurrent::run(SaveDataThread, this);
+			//			QtConcurrent::run(SaveDataThread, this);
 		}
 	}
 }

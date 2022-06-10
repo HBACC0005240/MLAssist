@@ -173,6 +173,8 @@ public:
 
 	void SetStartGameRepeatedGidExit(bool val) { m_repeatedGidExit = val; }
 	bool GetStartGameRepeatedGidExit() { return m_repeatedGidExit; }
+	void SetIsOpenNetToMLAssistTool(bool val) { m_bOpenNetToMTool = val; }
+	bool GetIsOpenNetToMLAssistTool() { return m_bOpenNetToMTool; }
 	void SetAutoLoginInterval(int timeout) { m_loginWaitInterval = timeout; }
 	int GetAutoLoginInterval() { return m_loginWaitInterval; }
 
@@ -436,6 +438,7 @@ private:
 	QTime m_lastRecvNpcDlgTime;															 //判断对话框状态 防止卡主
 	bool m_isInBattle = false;															 //是否战斗中
 	QTime m_lastUploadTime;																 //最后一次上报时间
+	bool m_bNeedUploadBank = false;														 //是否需要上传银行信息
 	int m_startGameHide = 0;															 //启动游戏隐藏
 	int m_followGamePos = 0;															 //跟随游戏显示位置
 	QVector<QPair<quint64, QSharedPointer<CGA_NPCDialog_t> > > m_npcDlgCache;			 //对话框缓存
@@ -447,5 +450,6 @@ private:
 	bool m_repeatedGidExit = true;														 //重复挂接是否退出
 	int m_loginWaitInterval = 3000;														 //自动登录间隔
 	bool m_bCreateLog = false;															 //日志开关
+	bool m_bOpenNetToMTool = false;														 //是否打开和MLAssistTool通信功能
 };
 #define g_pGameCtrl GameCtrl::getInstace()

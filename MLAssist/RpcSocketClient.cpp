@@ -30,6 +30,9 @@ RpcSocketClient &RpcSocketClient::getInstance()
 
 bool RpcSocketClient::isConnected()
 {
+	//没有启用 不进行通信 不算档和查看图鉴以及上传信息
+	if (!g_pGameCtrl->GetIsOpenNetToMLAssistTool())
+		return false;
 	return _stub ? true : false;
 }
 
@@ -262,7 +265,7 @@ void RpcSocketClient::UploadGidData()
 		g_CGAInterface->GetMapName(sMapName);
 		charData->set_map_name(sMapName);
 		charData->set_map_number(g_pGameFun->GetMapIndex());
-		
+
 		charData->set_server_line(g_pGameFun->GetGameServerLine());
 		CGData::CGAttrBaseData *charDetail = new CGData::CGAttrBaseData;
 		charData->set_allocated_detail(charDetail);
@@ -384,7 +387,6 @@ void RpcSocketClient::UploadGidData()
 			charPetData->set_real_name(pPet->realname.toStdString());
 			charPetData->set_race(pPet->race);
 			charPetData->set_skillslots(pPet->skillslots);
-
 
 			auto pSkillList = pPet->skills;
 			for (int i = 0; i < pSkillList.size(); ++i)
@@ -515,12 +517,10 @@ void RpcSocketClient::UploadGidBankData()
 				charPetData->set_lossmaxgrade(pCalcData->lossMax);
 			}
 		}
-		
+
 		charPetData->set_real_name(pPet.realname);
 		charPetData->set_race(pPet.race);
 		charPetData->set_skillslots(pPet.skillslots);
-
-
 
 		/*auto pSkillList = pPet.skills;
 		for (int i = 0; i < pSkillList.size(); ++i)
@@ -569,7 +569,7 @@ void RpcSocketClient::UploadGidBankData()
 	}
 }
 
-bool RpcSocketClient::SelectGidData(const QString &gid,int roleIndex, CGData::SelectGidDataResponse& reply)
+bool RpcSocketClient::SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply)
 {
 	if (!isConnected())
 		return false;
@@ -580,7 +580,7 @@ bool RpcSocketClient::SelectGidData(const QString &gid,int roleIndex, CGData::Se
 	Status status = _stub->SelectGidData(&context, request, &reply);
 	if (status.ok())
 	{
-	/*	auto repChara= reply.character_data();
+		/*	auto repChara= reply.character_data();
 		CharacterPtr charaData = CharacterPtr(new Character);
 		charaData->name = QString::fromStdString(reply.character_name());*/
 		return true;

@@ -267,6 +267,14 @@ void GameOftenFunctionWgt::SwitchMapThread(GameOftenFunctionWgt *pThis, int nDir
 	g_pGameFun->ForceMoveToEx(nDir, nVal);
 }
 
+void GameOftenFunctionWgt::AppendDataToEdit(const QString &sText, const QString &sFilte)
+{
+	if (sFilte.contains(sText))
+		return;
+	ui.textEdit->append(sText);
+	ui.textEdit->moveCursor(QTextCursor::End);
+}
+
 void GameOftenFunctionWgt::on_pushButton_LeftUp_clicked()
 {
 	int nVal = ui.spinBox_SwitchMap->value();
@@ -346,6 +354,9 @@ void GameOftenFunctionWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData
 	if ((GetTickCount() - m_lastTime) < 2000) //2秒更新一次
 		return;
 	m_lastTime = GetTickCount();
+	QString sHistoryText = ui.textEdit->toPlainText();
+	sHistoryText = sHistoryText.right(200);
+
 	if (coll && coll->xsize && coll->ysize)
 	{
 		QPoint curPos = g_pGameFun->GetMapCoordinate();
@@ -372,8 +383,7 @@ void GameOftenFunctionWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData
 					szItemInfo = QString("%1 %2（%3,%4）").arg(szDir).arg(units->at(i).unit_name).arg(units->at(i).xpos).arg(units->at(i).ypos);
 				}
 				//		qDebug() << units->at(i).valid << units->at(i).type << units->at(i).level << units->at(i).flags << units->at(i).model_id << units->at(i).unit_id << units->at(i).unit_name << units->at(i).nick_name << units->at(i).title_name << units->at(i).item_name << units->at(i).xpos << units->at(i).ypos;
-				ui.textEdit->append(szItemInfo);
-				ui.textEdit->moveCursor(QTextCursor::End);
+				AppendDataToEdit(szItemInfo, sHistoryText);
 			}
 		}
 		else
@@ -390,8 +400,7 @@ void GameOftenFunctionWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData
 						szDir = QString("%1 %2").arg(curMapName).arg(szDir);
 
 						szItemInfo = QString("%1 %2（%3,%4）").arg(szDir).arg(units->at(i).item_name).arg(units->at(i).xpos).arg(units->at(i).ypos);
-						ui.textEdit->append(szItemInfo);
-						ui.textEdit->moveCursor(QTextCursor::End);
+						AppendDataToEdit(szItemInfo, sHistoryText);
 						continue;
 					}
 				}
@@ -404,8 +413,7 @@ void GameOftenFunctionWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData
 						szDir = QString("%1 %2").arg(curMapName).arg(szDir);
 
 						szItemInfo = QString("%1 %2（%3,%4）").arg(szDir).arg("出入口").arg(units->at(i).xpos).arg(units->at(i).ypos);
-						ui.textEdit->append(szItemInfo);
-						ui.textEdit->moveCursor(QTextCursor::End);
+						AppendDataToEdit(szItemInfo, sHistoryText);
 						continue;
 					}
 				}
@@ -426,9 +434,8 @@ void GameOftenFunctionWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData
 						{
 							szItemInfo = QString("%1 %2（%3,%4）").arg(szDir).arg(units->at(i).unit_name).arg(units->at(i).xpos).arg(units->at(i).ypos);
 						}
-						ui.textEdit->append(szItemInfo);
-						ui.textEdit->moveCursor(QTextCursor::End);
-						break;
+						AppendDataToEdit(szItemInfo, sHistoryText);
+						continue;
 					}
 				}
 				//if(!m_pSearchNameList.contains(units->at(i).unit_name) && !m_pSearchNameList.contains(units->at(i).item_name))//NPC

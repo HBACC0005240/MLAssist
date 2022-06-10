@@ -4,14 +4,13 @@
 #include "GPCalc.h"
 #include "ITLog.h"
 #include "ITObjectDataMgr.h"
+#include "MINT.h"
 #include "RpcSocketClient.h"
 #include "YunLai.h"
 #include "stdafx.h"
 #include <QSettings>
 #include <QTextCodec>
 #include <QtConcurrent>
-#include "MINT.h"
-
 
 #define GAME_SKILL_NUM 16
 #define GAME_SUB_SKILL_NUM 10
@@ -864,7 +863,7 @@ bool GameCtrl::DieItems()
 			for (size_t i = 0; i < m_pGameItems.size(); i++)
 			{
 				GameItemPtr pItem = m_pGameItems.at(i); //最大值 到时候通过外置配置获取
-				if (pItem && pItem->exist && (pItem->name == pDieItem->name || pItem->id == pDieItem->name ) && pItem->count < pDieItem->maxCount)
+				if (pItem && pItem->exist && (pItem->name == pDieItem->name || pItem->id == pDieItem->name) && pItem->count < pDieItem->maxCount)
 				{
 					for (size_t n = 0; n < m_pGameItems.size(); n++)
 					{
@@ -2179,7 +2178,11 @@ void GameCtrl::GetCharacterDataThread(GameCtrl *pThis)
 		if (pThis->m_lastUploadTime.elapsed() > 10 * 1000)
 		{
 			RpcSocketClient::getInstance().UploadGidData();
-			RpcSocketClient::getInstance().UploadGidBankData();
+			if (pThis->m_bNeedUploadBank) //对话银行人员时候更新此项，上传完后置为false
+			{
+				RpcSocketClient::getInstance().UploadGidBankData();
+				pThis->m_bNeedUploadBank = false;
+			}
 			pThis->m_lastUploadTime.restart();
 		}
 		else
@@ -3650,9 +3653,10 @@ void GameCtrl::OnNotifyNPCDialog(const QSharedPointer<CGA_NPCDialog_t> &dlg)
 			default: break;
 		}
 	}
-	if (dlg->type == 23 && m_bAutoUpLoadBankData) //上传银行数据
+	if (dlg->type == 23 /* && m_bAutoUpLoadBankData*/) //上传银行数据
 	{
-		RpcSocketClient::getInstance().UploadGidBankData();
+		m_bNeedUploadBank = true; //线程里 延迟更新
+								  //	RpcSocketClient::getInstance().UploadGidBankData();
 	}
 }
 

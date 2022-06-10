@@ -44,8 +44,6 @@ void outputMessage(QtMsgType type, const QMessageLogContext &context, const QStr
 		gDefaultHandler(type, context, msg);
 	}
 }
-void TestAStar();
-void TestCompressed();
 int main(int argc, char *argv[])
 {
 	//高分辨率适配
@@ -61,7 +59,6 @@ int main(int argc, char *argv[])
 	qputenv("QT_SCALE_FACTOR", QString::number(scale).toLatin1());
 	qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()) + QCoreApplication::applicationPid());
 	MApplication a(argc, argv);
-	//QApplication a(argc, argv);
 	qputenv("CGA_DIR_PATH", QCoreApplication::applicationDirPath().toLocal8Bit());
 	qputenv("CGA_DIR_PATH_UTF8", QCoreApplication::applicationDirPath().toUtf8());
 	qputenv("CGA_GAME_PORT", "");
@@ -98,62 +95,4 @@ int main(int argc, char *argv[])
 	g_pGameCtrl->RunParseCmd();
 	g_pHttpServer->init();
 	return a.exec();
-}
-
-void TestCompressed()
-{
-	vector<pair<int, int> > path;
-	path.push_back(std::make_pair(1, 1));
-	path.push_back(std::make_pair(1, 5));
-	path.push_back(std::make_pair(1, 7));
-	path.push_back(std::make_pair(1, 10));
-	path.push_back(std::make_pair(1, 15));
-	path.push_back(std::make_pair(1, 20));
-	path.push_back(std::make_pair(1, 25));
-	path.push_back(std::make_pair(1, 28));
-	path.push_back(std::make_pair(1, 30));
-	auto newPath = AStarUtil::compressPath(path);
-	//	auto nPath = AStarUtil::expandPath(newPath);
-	qDebug() << newPath;
-	//qDebug() << nPath;
-}
-void TestAStar()
-{
-
-	AStar findPath(true, true);
-	//x是列  y是行
-	//竖着的  Y
-#define ROWS 11
-//横着的  X
-#define COLS 12
-	AStarGrid grid(COLS, ROWS);
-	int map[ROWS][COLS] = {
-		{ 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }
-	};
-	QString szDebug;
-	for (int tmpx = 0; tmpx < ROWS; ++tmpx)
-	{
-		szDebug.clear();
-		for (int tmpy = 0; tmpy < COLS; ++tmpy)
-		{
-			grid.SetWalkableAt(tmpy, tmpx, !map[tmpx][tmpy]); //灰色 不可行
-			szDebug += QString("%1 ").arg(!map[tmpx][tmpy]);
-		}
-		qDebug() << szDebug;
-	}
-	QPoint frompos(1, 1);
-	QPoint topos(8, 10);
-
-	auto path = findPath.FindPath(frompos.x(), frompos.y(), topos.x(), topos.y(), &grid);
-	qDebug() << path.size() << path << "frompos" << frompos << "targetpos" << topos;
 }
