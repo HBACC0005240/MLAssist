@@ -180,6 +180,8 @@ void MLAssistTool::onRefreshFzData()
 			memset(szText, 0, 256);
 			pid = it.key();
 			hWnd = YunLai::FindMainWindow(pid);
+		//	GetClassNameW(hWnd, szText, 256);
+		//	qDebug() << QString::fromWCharArray(szText);
 			if (GetWindowTextW(hWnd, szText, 256))
 			{
 				/*		WINDOWPLACEMENT wp;
@@ -231,6 +233,8 @@ void MLAssistTool::onRefreshFzData()
 	{
 		if ((tid = GetWindowThreadProcessId(hWnd, (LPDWORD)&pid)) != 0 && pid != GetCurrentProcessId())
 		{
+	//		GetClassNameW(hWnd, szText, 256);
+	//		qDebug() << QString::fromWCharArray(szText);
 			if (GetWindowTextW(hWnd, szText, 256))
 			{
 				bool bHung = IsHungAppWindow(hWnd);

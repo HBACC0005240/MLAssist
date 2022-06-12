@@ -1165,6 +1165,118 @@ void GameCustomBattleWgt::on_table_customContextMenu(const QPoint &pos)
 	}
 }
 
+int GameCustomBattleWgt::transConditionCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtCondition_Ignore);
+	actionMap.insert(1, dtCondition_PlayerHp);
+	actionMap.insert(2, dtCondition_PlayerMp);
+	actionMap.insert(3, dtCondition_PetHp);
+	actionMap.insert(4, dtCondition_PetMp);
+	actionMap.insert(5, dtCondition_TeammateHp);
+	actionMap.insert(6, dtCondition_TeammateMp);
+	actionMap.insert(7, dtCondition_TeammateDebuff);
+	actionMap.insert(8, dtCondition_TeammateMultiTargetHp);
+	actionMap.insert(9, dtCondition_TeammateAllHp);
+	actionMap.insert(10, dtCondition_EnemyCount);
+	actionMap.insert(11, dtCondition_EnemySingleRowCount);
+	actionMap.insert(12, dtCondition_EnemyUnit);
+	actionMap.insert(13, dtCondition_EnemyLevel);
+	actionMap.insert(14, dtCondition_EnemyAvgLevel);
+	actionMap.insert(15, dtCondition_EnemyMultiTargetHp);
+	actionMap.insert(16, dtCondition_EnemyAllHp);
+	actionMap.insert(17, dtCondition_Round);
+	actionMap.insert(18, dtCondition_DoubleAction);
+	actionMap.insert(19, dtCondition_InventoryItem);
+	actionMap.insert(20, dtCondition_TeammateCount);
+	actionMap.insert(21, dtCondition_TeammateUnit);
+	actionMap.insert(22, dtCondition_PlayerName);
+	actionMap.insert(23, dtCondition_PlayerJob);
+	actionMap.insert(24, dtCondition_PlayerGold);
+	actionMap.insert(25, dtCondition_PlayerBGM);
+	return actionMap.value(nval);
+}
+
+int GameCustomBattleWgt::transActionCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtAction_PlayerIgnore);
+	actionMap.insert(1, dtAction_PlayerAttack);
+	actionMap.insert(2, dtAction_PlayerGuard);
+	actionMap.insert(3, dtAction_PlayerEscape);
+	actionMap.insert(4, dtAction_PlayerExchangePosition);
+	actionMap.insert(5, dtAction_PlayerChangePet);
+	actionMap.insert(6, dtAction_PlayerUseItem);
+	actionMap.insert(7, dtAction_PlayerLogBack);
+	actionMap.insert(8, dtAction_PlayerRebirth);
+	actionMap.insert(9, dtAction_PlayerDoNothing);
+	actionMap.insert(10, dtAction_PlayerIgnore);
+	actionMap.insert(100, dtAction_PlayerSkillAttack);
+	return actionMap.value(nval);
+}
+
+int GameCustomBattleWgt::transPetActionCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtAction_PetIgnore);
+	actionMap.insert(1, dtAction_PetDoNothing);
+	actionMap.insert(100, dtAction_PetSkillAttack);
+	return actionMap.value(nval);
+}
+
+int GameCustomBattleWgt::transTargetCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtTarget_Enemy);
+	actionMap.insert(1, dtTarget_Teammate);
+	actionMap.insert(2, dtTarget_Self);
+	actionMap.insert(3, dtTarget_Pet);
+	actionMap.insert(4, dtTarget_Condition);	
+	return actionMap.value(nval);
+}
+
+int GameCustomBattleWgt::transTargetSlectCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtTargetCondition_Random);
+	actionMap.insert(1, dtTargetCondition_Front);
+	actionMap.insert(2, dtTargetCondition_Back);
+	actionMap.insert(3, dtTargetCondition_LowHP);
+	actionMap.insert(4, dtTargetCondition_HighHP);
+	actionMap.insert(5, dtTargetCondition_LowHPPercent);
+	actionMap.insert(6, dtTargetCondition_HighHPPercent);
+	actionMap.insert(7, dtTargetCondition_LowLv);
+	actionMap.insert(8, dtTargetCondition_HighLv);
+	actionMap.insert(9, dtTargetCondition_SingleDebuff);
+	actionMap.insert(10, dtTargetCondition_MulTDebuff);
+	actionMap.insert(11, dtTargetCondition_Goatfarm);
+	actionMap.insert(12, dtTargetCondition_Boomerang);
+	actionMap.insert(13, dtTargetCondition_LessUnitRow);
+	actionMap.insert(14, dtTargetCondition_MultiMagic);
+	return actionMap.value(nval);
+}
+
+int GameCustomBattleWgt::transConNumRelCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtCompare_GreaterEqual);
+	actionMap.insert(1, dtCompare_GreaterThan);
+	actionMap.insert(2, dtCompare_LessEqual);
+	actionMap.insert(3, dtCompare_LessThan);
+	actionMap.insert(4, dtCompare_Equal);
+	actionMap.insert(5, dtCompare_NotEqual);
+	return actionMap.value(nval);
+}
+
+int GameCustomBattleWgt::transConStrRelCGAValToLocal(int nval)
+{
+	QMap<int, int> actionMap;
+	actionMap.insert(0, dtCompare_Contain);
+	actionMap.insert(1, dtCompare_NotContain);
+	return actionMap.value(nval);
+}
+
+//这部分解析 还得写个转换 把CGA值 转devtype
 bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 {
 	if (!val.isObject())
@@ -1184,12 +1296,12 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 				auto setting = arr[i].toObject();
 
 				{
-					auto conditionTypeId = setting.take("condition").toInt();
-					auto conditionRelId = setting.take("conditionrel").toInt();
+					auto conditionTypeId = transConditionCGAValToLocal(setting.take("condition").toInt());
+					auto conditionRelId = transConNumRelCGAValToLocal(setting.take("conditionrel").toInt());
 					auto conditionValue = setting.take("conditionval").toString();
-					ui.comboBox_condition_type->setCurrentIndex(conditionTypeId);
+					ui.comboBox_condition_type->setCurrentIndex(ui.comboBox_condition_type->findData(conditionTypeId));
 					on_comboBox_condition_type_currentIndexChanged(ui.comboBox_condition_type->currentIndex());
-					ui.comboBox_condition_relation->setCurrentIndex(conditionRelId);
+					ui.comboBox_condition_relation->setCurrentIndex(ui.comboBox_condition_relation->findData(conditionRelId));
 
 					ui.comboBox_condition_value->setCurrentText(conditionValue);
 					if (ui.comboBox_condition_type->currentIndex() == dtCondition_TeammateDebuff)
@@ -1214,12 +1326,12 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 
 				if (setting.find("condition2") != setting.end())
 				{
-					auto condition2TypeId = setting.take("condition2").toInt();
-					auto condition2RelId = setting.take("condition2rel").toInt();
+					auto condition2TypeId = transConditionCGAValToLocal(setting.take("condition2").toInt());
+					auto condition2RelId = transConNumRelCGAValToLocal(setting.take("condition2rel").toInt());
 					auto condition2Value = setting.take("condition2val").toString();
-					ui.comboBox_condition2_type->setCurrentIndex(condition2TypeId);
+					ui.comboBox_condition2_type->setCurrentIndex(ui.comboBox_condition_type->findData(condition2TypeId));
 					on_comboBox_condition2_type_currentIndexChanged(ui.comboBox_condition2_type->currentIndex());
-					ui.comboBox_condition2_relation->setCurrentIndex(condition2RelId);
+					ui.comboBox_condition2_relation->setCurrentIndex(ui.comboBox_condition2_relation->findData(condition2RelId));
 
 					ui.comboBox_condition2_value->setCurrentText(condition2Value);
 					if (ui.comboBox_condition2_type->currentIndex() == dtCondition_TeammateDebuff)
@@ -1242,11 +1354,11 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 					}
 				}
 
-				auto playerActionId = setting.take("playeraction").toInt();
+				auto playerActionId = transActionCGAValToLocal(setting.take("playeraction").toInt());
 
 				if (playerActionId == dtAction_PlayerChangePet || playerActionId == dtAction_PlayerUseItem)
 				{
-					ui.comboBox_playerAction->setCurrentIndex(playerActionId);
+					ui.comboBox_playerAction->setCurrentIndex(ui.comboBox_playerAction->findData(playerActionId));
 					on_comboBox_playerAction_currentIndexChanged(ui.comboBox_playerAction->currentIndex());
 					auto playerActionValue = setting.take("playeractionval").toString();
 					ui.comboBox_playerActionValue->setCurrentText(playerActionValue);
@@ -1269,19 +1381,19 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 					on_comboBox_playerAction_currentIndexChanged(ui.comboBox_playerAction->currentIndex());
 				}
 
-				auto playerTargetId = setting.take("playertarget").toInt();
-				auto playerTargetSel = setting.take("playertargetsel").toInt();
-				ui.comboBox_playerTarget->setCurrentIndex(playerTargetId);
+				auto playerTargetId = transTargetCGAValToLocal(setting.take("playertarget").toInt());
+				auto playerTargetSel = transTargetSlectCGAValToLocal(setting.take("playertargetsel").toInt());
+				ui.comboBox_playerTarget->setCurrentIndex(ui.comboBox_playerTarget->findData(playerTargetId));
 				on_comboBox_playerTarget_currentIndexChanged(ui.comboBox_playerTarget->currentIndex());
-				ui.comboBox_playerTargetSelect->setCurrentIndex(playerTargetSel);
+				ui.comboBox_playerTargetSelect->setCurrentIndex(ui.comboBox_playerTargetSelect->findData(playerTargetSel));
 
-				auto petActionId = setting.take("petaction").toInt();
+				auto petActionId = transPetActionCGAValToLocal(setting.take("petaction").toInt());
 
 				if (petActionId == dtAction_PetSkillAttack)
 				{
 					auto petSkillName = setting.take("petskillname").toString();
 					ui.comboBox_petAction->setCurrentText(petSkillName);
-					on_comboBox_petAction_currentIndexChanged(dtAction_PetSkillAttack);
+					//on_comboBox_petAction_currentIndexChanged(dtAction_PetSkillAttack);
 				}
 				else
 				{
@@ -1289,11 +1401,11 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 					on_comboBox_petAction_currentIndexChanged(ui.comboBox_petAction->currentIndex());
 				}
 
-				auto petTargetId = setting.take("pettarget").toInt();
-				auto petTargetSel = setting.take("pettargetsel").toInt();
-				ui.comboBox_petTarget->setCurrentIndex(petTargetId);
+				auto petTargetId = transTargetCGAValToLocal(setting.take("pettarget").toInt());
+				auto petTargetSel = transTargetSlectCGAValToLocal(setting.take("pettargetsel").toInt());
+				ui.comboBox_petTarget->setCurrentIndex(ui.comboBox_petTarget->findData(petTargetId));
 				on_comboBox_petTarget_currentIndexChanged(ui.comboBox_petTarget->currentIndex());
-				ui.comboBox_petTargetSelect->setCurrentIndex(petTargetSel);
+				ui.comboBox_petTargetSelect->setCurrentIndex(ui.comboBox_petTargetSelect->findData(petTargetSel));
 
 				ui.pushButton_add->click();
 			}

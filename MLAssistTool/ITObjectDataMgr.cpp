@@ -2121,9 +2121,9 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	pCharacter->_element_wind = request->character_data().detail().element_wind();
 	pCharacter->_element_water = request->character_data().detail().element_water();
 	pCharacter->_element_fire = request->character_data().detail().element_fire();
+	QVector<int> posExist;
 	if (request->character_data().skill_size() > 0)
 	{
-		QVector<int> posExist;
 		for (int i = 0; i < request->character_data().skill_size(); ++i)
 		{
 			auto reqSkill = request->character_data().skill(i);
@@ -2149,25 +2149,24 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			skillPtr->_bExist = true;
 
 			posExist.append(reqSkill.index());
-		}
-		//技能删除
-		for (int i = 0; i < 15; ++i)
+		}		
+	}
+	//技能删除
+	for (int i = 0; i < 15; ++i)
+	{
+		if (posExist.contains(i))
+			continue;
+		auto pObjPtr = pCharacter->_skillPosForSkill.value(i);
+		if (pObjPtr)
 		{
-			if (posExist.contains(i))
-				continue;
-			auto pObjPtr = pCharacter->_skillPosForSkill.value(i);
-			if (pObjPtr)
-			{
-				pObjPtr->_bExist = false;
-				deleteOneObject(pObjPtr);
-			}
+			pObjPtr->_bExist = false;
+			deleteOneObject(pObjPtr);
 		}
 	}
-
+	posExist.clear();
 	//物品位置判断吧  每次更新 不存在的  数据置空
 	if (request->items_size() > 0)
 	{
-		QVector<int> posExist;
 		for (int i = 0; i < request->items_size(); ++i)
 		{
 			auto reqItem = request->items(i);
@@ -2187,23 +2186,23 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			pItemPtr->_bExist = true;
 			pItemPtr->setObjectCode(reqItem.item_id());
 			posExist.append(reqItem.pos());
-		}
-		for (int i = 0; i < 28; ++i)
+		}	
+	}
+	for (int i = 0; i < 28; ++i)
+	{
+		if (posExist.contains(i))
+			continue;
+		auto pItemPtr = pCharacter->_itemPosForPtr.value(i);
+		if (pItemPtr)
 		{
-			if (posExist.contains(i))
-				continue;
-			auto pItemPtr = pCharacter->_itemPosForPtr.value(i);
-			if (pItemPtr)
-			{
-				pItemPtr->_bExist = false;
-				deleteOneObject(pItemPtr);
-				pCharacter->_itemPosForPtr.remove(i);
-			}
+			pItemPtr->_bExist = false;
+			deleteOneObject(pItemPtr);
+			pCharacter->_itemPosForPtr.remove(i);
 		}
 	}
+	posExist.clear();
 	if (request->pet_data_size() > 0)
 	{
-		QVector<int> posExist;
 		for (int i = 0; i < request->pet_data_size(); ++i)
 		{
 			auto reqPet = request->pet_data(i);
@@ -2270,7 +2269,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 
 			if (reqPet.skill_size() > 0)
 			{
-				QVector<int> posExist;
+				QVector<int> petSkillPosExist;
 				for (int i = 0; i < reqPet.skill_size(); ++i)
 				{
 					auto reqSkill = reqPet.skill(i);
@@ -2294,12 +2293,12 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 					skillPtr->_xp = reqSkill.xp();
 					skillPtr->_maxxp = reqSkill.maxxp();
 					skillPtr->_bExist = true;
-					posExist.append(reqSkill.index());
+					petSkillPosExist.append(reqSkill.index());
 				}
 				//技能删除
 				for (int i = 0; i < 10; ++i)
 				{
-					if (posExist.contains(i))
+					if (petSkillPosExist.contains(i))
 						continue;
 					auto pObjPtr = petPtr->_skillPosForSkill.value(i);
 					if (pObjPtr)
@@ -2309,18 +2308,18 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 					}
 				}
 			}
-		}
-		//宠物删除
-		for (int i = 0; i < 5; ++i)
+		}	
+	}
+	//宠物删除
+	for (int i = 0; i < 5; ++i)
+	{
+		if (posExist.contains(i))
+			continue;
+		auto petPtr = pCharacter->_petPosForPet.value(i);
+		if (petPtr)
 		{
-			if (posExist.contains(i))
-				continue;
-			auto petPtr = pCharacter->_petPosForPet.value(i);
-			if (petPtr)
-			{
-				petPtr->_bExist = false;
-				deleteOneObject(petPtr);
-			}
+			petPtr->_bExist = false;
+			deleteOneObject(petPtr);
 		}
 	}
 
@@ -2361,9 +2360,9 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	pCharacter->_bankgold = request->gold();
 
 	//物品位置判断吧  每次更新 不存在的  数据置空
+	QVector<int> posExist;
 	if (request->items_size() > 0)
 	{
-		QVector<int> posExist;
 		for (int i = 0; i < request->items_size(); ++i)
 		{
 			auto reqItem = request->items(i);
@@ -2383,22 +2382,22 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			pItemPtr->_bExist = true;
 			pItemPtr->setObjectCode(reqItem.item_id());
 			posExist.append(reqItem.pos());
-		}
-		for (int i = 100; i < 180; ++i)
+		}		
+	}
+	for (int i = 100; i < 180; ++i)
+	{
+		if (posExist.contains(i))
+			continue;
+		auto pItemPtr = pCharacter->_itemPosForPtr.value(i);
+		if (pItemPtr)
 		{
-			if (posExist.contains(i))
-				continue;
-			auto pItemPtr = pCharacter->_itemPosForPtr.value(i);
-			if (pItemPtr)
-			{
-				pItemPtr->_bExist = false;
-				deleteOneObject(pItemPtr);
-			}
+			pItemPtr->_bExist = false;
+			deleteOneObject(pItemPtr);
 		}
 	}
+	posExist.clear();
 	if (request->pet_data_size() > 0)
 	{
-		QVector<int> posExist;
 		for (int i = 0; i < request->pet_data_size(); ++i)
 		{
 			auto reqPet = request->pet_data(i);
@@ -2500,17 +2499,17 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 				}
 			}*/
 
-		}
-		for (int i = 100; i < 105; ++i)
+		}	
+	}
+	for (int i = 100; i < 105; ++i)
+	{
+		if (posExist.contains(i))
+			continue;
+		auto petPtr = pCharacter->_petPosForPet.value(i);
+		if (petPtr)
 		{
-			if (posExist.contains(i))
-				continue;
-			auto petPtr = pCharacter->_petPosForPet.value(i);
-			if (petPtr)
-			{
-				petPtr->_bExist = false;
-				deleteOneObject(petPtr);
-			}
+			petPtr->_bExist = false;
+			deleteOneObject(petPtr);
 		}
 	}
 }

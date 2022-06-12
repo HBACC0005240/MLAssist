@@ -36,6 +36,15 @@ private slots:
 	void on_pushButton_moveDown_clicked();
 	void on_table_customContextMenu(const QPoint &pos);
 
+protected:
+	int transConditionCGAValToLocal(int nval);
+	int transActionCGAValToLocal(int nval);
+	int transPetActionCGAValToLocal(int nval);
+	int transTargetCGAValToLocal(int nval);
+	int transTargetSlectCGAValToLocal(int nval);
+	int transConNumRelCGAValToLocal(int nval);
+	int transConStrRelCGAValToLocal(int nval);
+
 public slots:
 	void doLoadUserConfig(QSettings &iniFile);
 	void doSaveUserConfig(QSettings &iniFile);

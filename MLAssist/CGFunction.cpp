@@ -7283,7 +7283,7 @@ void CGFunction::AutoEncounterEnemyThread(CGFunction *pThis)
 	g_CGAInterface->SetGameTextUICurrentScript("高速遇敌:开");
 
 	emit pThis->signal_startAutoEncounterEnemySucess();
-	while (pThis->m_bAutoEncounterEnemy)
+	while (pThis->m_bAutoEncounterEnemy && !g_pGameCtrl->GetExitGame())
 	{
 		//		if (pThis->IsInNormalState())	//这里不判断了，ForceMoveTo里面已经判断了
 		{

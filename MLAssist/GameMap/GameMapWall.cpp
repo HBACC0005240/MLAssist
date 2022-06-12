@@ -297,14 +297,15 @@ void GameMapWall::AutoWallMazeThread(GameMapWall *pThis)
 	{
 		if (g_pGameCtrl->GetExitGame() || g_pGameFun->IsStop())
 			break;
-		if (!g_pGameFun->IsMapDownload())
-		{
-			g_pGameFun->DownloadMap();
-			Sleep(2000); //等待2秒
-		}
+		//if (!g_pGameFun->IsMapDownload())
+		//{
+		//	g_pGameFun->DownloadMap();
+		//	Sleep(2000); //等待2秒
+		//}
 		auto entranceList = g_pGameFun->GetMazeEntranceList();
 		if (entranceList.size() < 2)
 		{
+			g_pGameFun->MakeMapOpenContainNextEntrance();
 			qDebug() << "传送点小于1，重新下载地图";
 			if (tryNum >= 3)
 			{
@@ -562,6 +563,7 @@ void GameMapWall::LoadMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QShare
 			}
 		}
 	}
+	update();
 }
 
 void GameMapWall::RepaintCollisionPixels(int xbase, int ybase, int xtop, int ytop)

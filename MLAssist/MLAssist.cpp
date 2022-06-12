@@ -215,12 +215,11 @@ void MLAssist::doIconActivated(QSystemTrayIcon::ActivationReason reason)
 void MLAssist::quitAndDeleteAllInfo()
 {
 	qDebug() << "quitAndDeleteAllInfo 程序退出";
-	emit g_pGameCtrl->signal_exit();
-	killProcess();
 	ITObjectDataMgr::getInstance().SetExitGame(true);
 	g_pGameCtrl->SetExitGame(true);
 	g_pGameCtrl->StopUpdateTimer();
-
+	emit g_pGameCtrl->signal_exit();
+	killProcess();
 	m_funThread.quit();
 	m_funThread.wait();
 	m_gameCtrlThread.quit();
@@ -266,10 +265,29 @@ void MLAssist::on_pushButton_loadCfg_clicked()
 	if (!m_lastOpenCfgPath.isEmpty())
 		szConfigName = m_lastOpenCfgPath;
 
-	QString path = QFileDialog::getOpenFileName(this, "选中配置", szConfigName, "*.save");
+	QString path = QFileDialog::getOpenFileName(this, "选中配置", szConfigName, "*.save;*.json");
 	if (path.isEmpty())
 		return;
 	m_lastOpenCfgPath = path;
+	if (path.endsWith("json"))
+	{
+		//g_pGameCtrl->HttpLoadSettings(req->url().query(), reqData, &doc);
+		QJsonDocument doc;
+		QFile file(path);
+		if (!file.open(QIODevice::ReadOnly))
+		{
+			qDebug() << path << "Json File open failed!";
+			return;
+		}
+		else
+		{
+			qDebug() << "Json File open successfully!";
+		}
+		QJsonParseError *error = new QJsonParseError;
+		ParseSettings(file.readAll(),doc);
+		file.close();
+		return;
+	}
 	on_load_config(path);
 }
 
@@ -286,7 +304,7 @@ void MLAssist::on_pushButton_saveCfg_clicked()
 
 	QString path = QFileDialog::getSaveFileName(this, "保存配置", szConfigName, "*.save");
 	if (path.isEmpty())
-		return;
+		return;	
 	//g_pGameCtrl->SaveConfig(path);
 	//还是在这调用把
 	m_lastOpenCfgPath = path;

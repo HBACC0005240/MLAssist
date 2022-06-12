@@ -201,6 +201,57 @@ void GameBattleWgt::doLoadJsConfig(QJsonObject &obj)
 		if (playerobj.contains("movespd"))
 			ui.horizontalSlider_moveSpeed->setValue(playerobj.take("movespd").toInt());
 	}
+	if (obj.contains("battle"))
+	{
+		QJsonObject battleobj = obj.value("battle").toObject();
+		if (battleobj.contains("autobattle"))
+			ui.checkBox_auto->setChecked(battleobj.value("autobattle").toBool());
+		if (battleobj.contains("bossprot"))
+			ui.checkBox_bossProtect->setChecked(battleobj.value("bossprot").toBool());
+		if (battleobj.contains("delayfrom"))
+		{
+			int delayFrom = battleobj.value("delayfrom").toInt() / 1000;
+			auto findIndex = ui.comboBox_highSpeedDelay->findData(delayFrom);
+			if (findIndex != -1)
+			{
+				ui.comboBox_highSpeedDelay->setCurrentIndex(findIndex);
+			}else
+			{
+				ui.comboBox_highSpeedDelay->addItem(QString::number(delayFrom),delayFrom);
+				ui.comboBox_highSpeedDelay->setCurrentIndex(ui.comboBox_highSpeedDelay->findData(delayFrom));
+			}		
+			
+		}
+		if (battleobj.contains("delayto"))
+		{
+			int delayVal = battleobj.value("delayto").toInt() / 1000;
+			auto findIndex = ui.comboBox_battleDelay->findData(delayVal);
+			if (findIndex != -1)
+			{
+				ui.comboBox_battleDelay->setCurrentIndex(findIndex);
+			}
+			else
+			{
+				ui.comboBox_battleDelay->addItem(QString::number(delayVal), delayVal);
+				ui.comboBox_battleDelay->setCurrentIndex(ui.comboBox_battleDelay->findData(delayVal));
+			}	
+		}
+		if (battleobj.contains("highspeed"))
+			ui.checkBox_HighSpeed->setChecked(battleobj.value("highspeed").toBool());
+		if (battleobj.contains("lockcd"))
+			ui.checkBox_LockCountdown->setChecked(battleobj.value("lockcd").toBool());	
+		if (battleobj.contains("lv1prot"))
+			ui.checkBox_Lv1Protect->setChecked(battleobj.value("lv1prot").toBool());	
+		if (battleobj.contains("pet2action"))
+			ui.checkBox_PetDoubleAction->setChecked(battleobj.value("pet2action").toBool());	
+		if (battleobj.contains("playerforceaction"))
+			ui.checkBox_PlayerForceAction->setChecked(battleobj.value("playerforceaction").toBool());
+		if (battleobj.contains("r1nodelay"))
+			ui.checkBox_firstNoDelay->setChecked(battleobj.value("r1nodelay").toBool());	
+		if (battleobj.contains("showhpmp"))
+			ui.checkBox_ShowHPMP->setChecked(battleobj.value("showhpmp").toBool());
+
+	}
 	m_pCustomBattleWgt->ParseBattleSettings(obj.take("battle"));
 }
 
@@ -230,7 +281,9 @@ void GameBattleWgt::doSaveJsConfig(QJsonObject &obj)
 	int delayVal = ui.comboBox_highSpeedDelay->currentData(Qt::UserRole).toInt();
 	delayVal *= 1000;
 	battle.insert("delayfrom", delayVal);
-	battle.insert("delayto", delayVal);
+	int delayToVal = ui.comboBox_battleDelay->currentData(Qt::UserRole).toInt();
+	delayToVal *= 1000;
+	battle.insert("delayto", delayToVal);
 
 	QJsonArray list;
 	m_pCustomBattleWgt->SaveBattleSettings(battle);

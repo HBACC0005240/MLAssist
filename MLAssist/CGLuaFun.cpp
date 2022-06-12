@@ -249,9 +249,19 @@ int CGLuaFun::Lua_SetCharacterSwitch(LuaState *L)
 int CGLuaFun::Lua_DoCharacterAction(LuaState *L)
 {
 	LuaStack args(L);
-	if (args[1].IsString())
+	if (args.Count() < 1)
+		return 0;
+	
+	QVariant vType = args[1].GetString();
+	bool transData = false;
+	if (vType.toInt(&transData) && transData)
 	{
-		QString sType = args[1].IsString() ? args[1].GetString() : "";
+		int nType = args[1].GetInteger();
+		g_pGameFun->DoCharacterAction(nType);	
+	}
+	else
+	{
+		QString sType = vType.toString();
 		int nVal = args.Count() > 1 ? args[2].GetInteger() : 0;
 		if (g_pGameFun->m_playerActionHash.value(sType) == TCharacter_Action_Gesture)
 		{
@@ -259,11 +269,6 @@ int CGLuaFun::Lua_DoCharacterAction(LuaState *L)
 		}
 		else
 			g_pGameFun->DoCharacterAction(g_pGameFun->m_playerActionHash.value(sType));
-	}
-	else
-	{
-		int nType = args[1].GetInteger();
-		g_pGameFun->DoCharacterAction(nType);
 	}
 	return 0;
 }

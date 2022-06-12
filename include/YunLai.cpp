@@ -230,9 +230,9 @@ BOOL YunLai::EnumWindowsCallback(HWND handle, LPARAM lParam)
 	if (data.process_id == process_id && IsMainWindow(handle))
 	{
 		data.best_handle = handle;
-		return FALSE;
+		return FALSE;	//结束遍历
 	}
-	return TRUE;
+	return TRUE;	//继续遍历
 
 }
 

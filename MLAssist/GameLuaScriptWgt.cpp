@@ -52,7 +52,7 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	connect(ui.tableWidget, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(onTableItemClicked(QTableWidgetItem *)));
 
 	connect(g_pGameCtrl, SIGNAL(signal_setUiScriptDesc(const QString &)), this, SLOT(setUiScriptDesc(const QString &)));
-	connect(g_pGameCtrl, SIGNAL(signal_exit()), this, SLOT(DoStopScriptThread()));
+	connect(g_pGameCtrl, SIGNAL(signal_exit()), this, SLOT(DoStopScriptThread()), Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, SIGNAL(signal_updateScriptRunLine(int)), this, SLOT(doUpdateScriptRow(int)), Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, SIGNAL(signal_loadScript(const QString &)), this, SLOT(doRunNewScript(const QString &)));
 	connect(g_pGameCtrl, &GameCtrl::NotifyFillLoadScript, this, &GameLuaScriptWgt::DoLoadScript, Qt::QueuedConnection);
@@ -814,6 +814,8 @@ void GameLuaScriptWgt::doRunScriptThread(GameLuaScriptWgt *pThis)
 					pThis->m_sLuaScriptRunMsg = QString::fromStdString(error);
 				}
 			}
+			(*pThis->m_pLuaState)->DoString("collectgarbage(\"collect\")");//lua脚本内存回收
+			(*pThis->m_pLuaState)->DoString("collectgarbage(\"collect\")");//lua脚本内存回收
 		}
 		catch (const std::exception &e)
 		{
@@ -1509,13 +1511,14 @@ void GameLuaScriptWgt::GameOnlineStateChange(int state)
 
 void GameLuaScriptWgt::DoStopScriptThread()
 {
-	if (m_scriptFuture.isRunning())
-	{
-		LuaObject objGlobal = (*m_pLuaState)->GetGlobals(); //注册全局函数
-		auto ls = objGlobal.GetCState();
-		qDebug() << "辅助退出，停止脚本!";
-		luaL_error(ls, "User Stop Script");
-	}
+	on_pushButton_stop_clicked();
+	//if (m_scriptFuture.isRunning())
+	//{
+	//	LuaObject objGlobal = (*m_pLuaState)->GetGlobals(); //注册全局函数
+	//	auto ls = objGlobal.GetCState();
+	//	qDebug() << "辅助退出，停止脚本!";
+	//	luaL_error(ls, "User Stop Script");
+	//}
 }
 
 void GameLuaScriptWgt::DealMqttTopicData(const QString &topicName, const QString &msg)
