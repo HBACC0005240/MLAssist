@@ -6590,15 +6590,15 @@ QImage CGFunction::CreateMapImage()
 				auto cellObject = objCells.cell.at((size_t)(dataSize));
 				if (cellWall == 1) //不可通行 1
 				{
-					pixels.get()[dataSize] = qRgb(0, 0, 0);
+					pixels.get()[dataSize] = qRgba(0, 0, 0, 255);
 				}
 				else
 				{
-					pixels.get()[dataSize] = qRgb(255, 255, 255);
-					//if (cellObject & 0xff) //路径上有传送门之类的 并且坐标不是目的坐标 跳过
-					//{
-					//	pixels.get()[dataSize] = qRgba(0, 0, 0, 0);
-					//}
+					//	pixels.get()[dataSize] = qRgb(255, 255, 255);
+					if (cellObject & 0xff) //传送点
+						pixels.get()[dataSize] = qRgba(255, 0, 0, 255);
+					else
+						pixels.get()[dataSize] = qRgba(255, 255, 255, 255);
 				}
 			}
 			//qDebug() << szDebug;

@@ -14,6 +14,7 @@ public:
 	~GameCustomBattleWgt();
 
 	void init();
+	void initTransMap();
 
 protected:
 	int calcTextRow(QFont &font, QString sText, int totalWidth);
@@ -70,4 +71,11 @@ private:
 	QMap<int, QString> hTargetCondString;		  //优先规则
 	GamePetList m_pets;
 	GameItemList m_items;
+	QMap<int, int> m_conditionMap;
+	QMap<int, int> m_actionMap;
+	QMap<int, int> m_petActionMap;
+	QMap<int, int> m_targetMap;
+	QMap<int, int> m_targetConditionMap;
+	QMap<int, int> m_targetConditionNumMap;
+	QMap<int, int> m_targetConditionStrMap;
 };

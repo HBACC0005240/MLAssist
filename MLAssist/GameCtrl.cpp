@@ -3158,7 +3158,11 @@ void GameCtrl::OnGetMapData()
 	int ingame = 0;
 	//qDebug("OnNotifyBattleAction.");
 	if (!g_CGAInterface->IsConnected() || !g_CGAInterface->IsInGame(ingame) || !ingame)
+	{
+		g_CGAInterface->SetImmediateDoneWork(false); //这个还是加上 否则掉线后 调用鉴定会退出去
 		return;
+	}
+
 	std::string mapName;
 	float x = 0, y = 0;
 	int index1 = 0, index2 = 0, mapIndex = 0;

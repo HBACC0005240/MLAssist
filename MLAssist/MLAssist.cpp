@@ -284,7 +284,7 @@ void MLAssist::on_pushButton_loadCfg_clicked()
 			qDebug() << "Json File open successfully!";
 		}
 		QJsonParseError *error = new QJsonParseError;
-		ParseSettings(file.readAll(),doc);
+		ParseSettings(file.readAll(), doc);
 		file.close();
 		return;
 	}
@@ -297,14 +297,16 @@ void MLAssist::on_pushButton_saveCfg_clicked()
 	auto pGamePlayer = g_pGameCtrl->getGameCharacter();
 	if (pGamePlayer)
 	{
-		szConfigName = szConfigName + QString("./%1.save").arg(pGamePlayer->name);
+		szConfigName = szConfigName + QString("./%1").arg(pGamePlayer->name);
 	}
 	if (!m_lastOpenCfgPath.isEmpty())
 		szConfigName = m_lastOpenCfgPath;
+	if (szConfigName.endsWith(".json"))
+		szConfigName.chop(5);
 
 	QString path = QFileDialog::getSaveFileName(this, "保存配置", szConfigName, "*.save");
 	if (path.isEmpty())
-		return;	
+		return;
 	//g_pGameCtrl->SaveConfig(path);
 	//还是在这调用把
 	m_lastOpenCfgPath = path;
