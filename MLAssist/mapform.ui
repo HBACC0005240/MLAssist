@@ -259,5 +259,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>lineEdit_y</sender>
+   <signal>returnPressed()</signal>
+   <receiver>pushButton_go</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>139</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

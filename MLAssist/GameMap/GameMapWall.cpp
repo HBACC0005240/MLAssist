@@ -601,10 +601,9 @@ void GameMapWall::RepaintCollisionPixels(int xbase, int ybase, int xtop, int yto
 					}
 				}
 			}
-
-			update();
 		}
 	}
+	update();
 }
 //探测距离 11码 x y最远+11能探测到 超过探测不到
 void GameMapWall::LoadMapInfo(QString name, int x, int y, int mapindex)
