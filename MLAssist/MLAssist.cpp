@@ -534,20 +534,22 @@ void MLAssist::OnNotifyLoginProgressStart()
 {
 	m_bIsInLoginProgress = true;
 	auto pChar = g_pGameCtrl->getGameCharacter();
+	QString sCharName = pChar ? pChar->name : "";
 	if (g_pGameFun->IsOnline())
-		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(pChar->name).arg(g_pGameFun->GetGameServerLine()));
+		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(sCharName).arg(g_pGameFun->GetGameServerLine()));
 	else
-		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 离线").arg(pChar->name));
+		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 离线").arg(sCharName));
 }
 
 void MLAssist::OnNotifyLoginProgressEnd()
 {
 	m_bIsInLoginProgress = false;
 	auto pChar = g_pGameCtrl->getGameCharacter();
+	QString sCharName = pChar ? pChar->name : "";
 	if (g_pGameFun->IsOnline())
-		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(pChar->name).arg(g_pGameFun->GetGameServerLine()));
+		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(sCharName).arg(g_pGameFun->GetGameServerLine()));
 	else
-		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 离线").arg(pChar->name));
+		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 离线").arg(sCharName));
 }
 
 void MLAssist::on_switch_ui_tab()
