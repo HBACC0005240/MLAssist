@@ -1104,7 +1104,9 @@ bool GameCtrl::AutoFirstAid()
 			return false;
 		m_pFirstAidCfg->dCost = pFirstAidSkill->subskills.at(m_pFirstAidCfg->nLv)->cost;
 		//	qDebug() << QString("耗魔%1").arg(m_pFirstAidCfg->dCost);
-		if (m_pGameCharacter->mp < m_pFirstAidCfg->dCost)
+		auto pNewChar = g_pGameFun->GetGameCharacter();
+		if (!pNewChar) return false;
+		if (pNewChar->mp < m_pFirstAidCfg->dCost)
 		{
 			//	qDebug() << "魔不够";
 			break; //return false;
@@ -1118,12 +1120,12 @@ bool GameCtrl::AutoFirstAid()
 		//优先自己
 		if (m_pFirstAidCfg->bSelf)
 		{
-			double dFirstAidVal = m_pGameCharacter->maxhp * m_pFirstAidCfg->dFirstAidHp / 100; //急救值
-			if (m_pGameCharacter->hp < dFirstAidVal)										   //急救自己
+			double dFirstAidVal = pNewChar->maxhp * m_pFirstAidCfg->dFirstAidHp / 100; //急救值
+			if (pNewChar->hp < dFirstAidVal)										   //急救自己
 			{
 				nFirstAidTarget = 0;
-				selectName = m_pGameCharacter->name;
-				selectSubName = m_pGameCharacter->name;
+				selectName = pNewChar->name;
+				selectSubName = pNewChar->name;
 			}
 		}
 		//宠物
@@ -1137,7 +1139,7 @@ bool GameCtrl::AutoFirstAid()
 					if (battlePet->hp < dFirstAidVal)											//急救宠物
 					{
 						nFirstAidTarget = 1;
-						selectName = m_pGameCharacter->name;
+						selectName = pNewChar->name;
 						selectSubName = battlePet->name;
 					}
 					break;
@@ -1155,7 +1157,7 @@ bool GameCtrl::AutoFirstAid()
 				if (teamPlayer.hp < dFirstAidVal)											//急救队友
 				{
 					nFirstAidTarget = 2;
-					selectName = m_pGameCharacter->name;
+					selectName = pNewChar->name;
 					selectSubName = QString::fromStdString(teamPlayer.name);
 					break;
 				}
@@ -1230,7 +1232,9 @@ bool GameCtrl::AutoHeal()
 
 	m_pHealCfg->dCost = pSelectSkill->subskills.at(m_pHealCfg->nLv)->cost;
 	//	qDebug() << QString("耗魔%1").arg(m_pHealCfg->dCost);
-	if (m_pGameCharacter->mp < m_pHealCfg->dCost)
+	auto pNewChar = g_pGameFun->GetGameCharacter();
+	if (!pNewChar) return false;
+	if (pNewChar->mp < m_pHealCfg->dCost)
 	{
 		//		qDebug() << "魔不够";
 		return false;
@@ -1244,11 +1248,11 @@ bool GameCtrl::AutoHeal()
 	//优先自己 默认打开自动治疗 就优先治疗自己
 	//if (m_pHealCfg->bSelf)
 	{
-		if (m_pGameCharacter->health > 0 && m_pGameCharacter->health < m_pHealCfg->nHurtVal) //治疗自己
+		if (pNewChar->health > 0 && pNewChar->health < m_pHealCfg->nHurtVal) //治疗自己
 		{
 			nHealTarget = 0;
-			selectName = m_pGameCharacter->name;
-			selectSubName = m_pGameCharacter->name;
+			selectName = pNewChar->name;
+			selectSubName = pNewChar->name;
 		}
 	}
 	//宠物
@@ -1261,7 +1265,7 @@ bool GameCtrl::AutoHeal()
 				if (battlePet->health > 0 && battlePet->health < m_pHealCfg->nHurtVal) //宠物
 				{
 					nHealTarget = 1;
-					selectName = m_pGameCharacter->name;
+					selectName = pNewChar->name;
 					selectSubName = battlePet->name;
 				}
 				break;
@@ -1350,14 +1354,17 @@ bool GameCtrl::AutoTransformation()
 															   //		qDebug() << QString("最高可使用等级%1").arg(pSelectSkill->maxLevel);
 		return false;
 	}
-	if (m_pGameCharacter->mp < 10)
+	auto pNewChar = g_pGameFun->GetGameCharacter();
+	if (!pNewChar) return false;
+	if (pNewChar->mp < 10)
 	{
 		//		qDebug() << "魔不够";
 		return false;
 	}
+
 	bool bResult = false;
 	m_pTransformation->lastUseSkill = QDateTime::currentMSecsSinceEpoch();
-	m_pTransformation->selectName = m_pGameCharacter->name; //当前角色人物名称
+	m_pTransformation->selectName = pNewChar->name; //当前角色人物名称
 	if (m_pTransformation->selectSubName.isEmpty())
 	{ //默认第一个
 		foreach (auto battlePet, m_pGamePets)
@@ -2913,7 +2920,6 @@ void GameCtrl::OnGetCharacterData()
 		CGA::cga_player_info_t info;
 		if (g_CGAInterface->GetPlayerInfo(info))
 		{
-
 			pNewChar->name = QString::fromStdString(info.name);
 			pNewChar->sGid = QString::fromStdString(info.gid);
 			pNewChar->job = QString::fromStdString(info.job);
@@ -3127,7 +3133,7 @@ void GameCtrl::OnGetCharacterData()
 
 	if (ingame)
 	{
-		emit NotifyGameCharacterInfo(pNewChar);
+		emit NotifyGameCharacterInfo(m_pGameCharacter);
 		emit signal_updateTrayToolTip(QString("%1 %2线").arg(m_pGameCharacter->name).arg(g_pGameFun->GetGameServerLine()));
 	}
 	else

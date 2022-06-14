@@ -180,8 +180,8 @@ void MLAssistTool::onRefreshFzData()
 			memset(szText, 0, 256);
 			pid = it.key();
 			hWnd = YunLai::FindMainWindow(pid);
-		//	GetClassNameW(hWnd, szText, 256);
-		//	qDebug() << QString::fromWCharArray(szText);
+			//	GetClassNameW(hWnd, szText, 256);
+			//	qDebug() << QString::fromWCharArray(szText);
 			if (GetWindowTextW(hWnd, szText, 256))
 			{
 				/*		WINDOWPLACEMENT wp;
@@ -197,7 +197,7 @@ void MLAssistTool::onRefreshFzData()
 						m_gameWndForLastHungTime.insert(hWnd, GetTickCount());
 					else
 						bShowTable = false;	//结束进程的 不显示
-				}				
+				}
 				long szLng = GetWindowLong(hWnd, GWL_STYLE);	//    '取的窗口原先的样式				
 			//	SetWindowLong(dstHwnd, GWL_EXSTYLE, rtn);		//     '把新的样式赋给窗体
 				auto wndTitle = QString::fromWCharArray(szText);
@@ -233,8 +233,8 @@ void MLAssistTool::onRefreshFzData()
 	{
 		if ((tid = GetWindowThreadProcessId(hWnd, (LPDWORD)&pid)) != 0 && pid != GetCurrentProcessId())
 		{
-	//		GetClassNameW(hWnd, szText, 256);
-	//		qDebug() << QString::fromWCharArray(szText);
+			//		GetClassNameW(hWnd, szText, 256);
+			//		qDebug() << QString::fromWCharArray(szText);
 			if (GetWindowTextW(hWnd, szText, 256))
 			{
 				bool bHung = IsHungAppWindow(hWnd);
@@ -423,20 +423,31 @@ void MLAssistTool::on_pushButton_allHide_clicked()
 {
 	int tabIndex = ui.tabWidget_ctrl->currentIndex();
 	ctrlAllStateTab(tabIndex, SW_HIDE);
+	/*auto fzItems = m_model->GetFzTableItemList();
+	for (auto item : fzItems)
+	{
+		HWND itemHwnd = (HWND)item->m_hWnd;
+		YunLai::WindowTransparentFade(itemHwnd, 125);
+	}*/
 }
 
 void MLAssistTool::on_pushButton_allMin_clicked()
 {
 	int tabIndex = ui.tabWidget_ctrl->currentIndex();
-
 	ctrlAllStateTab(tabIndex, SW_SHOWMINIMIZED);
 }
 
 void MLAssistTool::on_pushButton_allShow_clicked()
 {
 	int tabIndex = ui.tabWidget_ctrl->currentIndex();
-
 	ctrlAllStateTab(tabIndex, SW_RESTORE);
+
+	//auto fzItems = m_model->GetFzTableItemList();
+	//for (auto item : fzItems)
+	//{
+	//	HWND itemHwnd = (HWND)item->m_hWnd;
+	//	YunLai::WindowTransparentShow(itemHwnd, 255);
+	//}
 }
 
 void MLAssistTool::on_pushButton_curHide_clicked()

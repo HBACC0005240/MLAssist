@@ -15,7 +15,6 @@ public:
 	MLAssist(QWidget *parent = Q_NULLPTR);
 	~MLAssist();
 
-	void AutoLogin();
 	void createSysTrayAction();
 	void closeEvent(QCloseEvent *event);
 signals:
@@ -52,18 +51,15 @@ private:
 	QPoint m_windowspoint;
 	QPoint m_oldmousepoint;
 
-	bool m_bIsInLoginProgress = false;
-	QAction *m_pMinimizeAction;	  //最小号按钮
-	QAction *m_pMaximizeAction;	  //最大化按钮
-	QAction *m_pRestoreAction;	  //恢复按钮
-	QAction *m_pQuitAction;		  //退出按钮
-	QSystemTrayIcon *m_pTrayIcon; //系统托盘图标
-	QMenu *m_pTrayIconMenu;		  //系统托盘菜单
-	QPushButton *m_pLoadBtn;
-	QPushButton *m_pSaveBtn;
-	QThread m_gameCtrlThread; //
-	QThread m_battleWorkerThread;
-	QThread m_funThread;
+	bool m_bIsInLoginProgress = false;		//是否登录中
+	QAction *m_pMinimizeAction;				//最小号按钮
+	QAction *m_pMaximizeAction;				//最大化按钮
+	QAction *m_pRestoreAction;				//恢复按钮
+	QAction *m_pQuitAction;					//退出按钮
+	QSystemTrayIcon *m_pTrayIcon = nullptr; //系统托盘图标
+	QMenu *m_pTrayIconMenu = nullptr;		//系统托盘菜单
+	QPushButton *m_pLoadBtn = nullptr;
+	QPushButton *m_pSaveBtn = nullptr;
 	QString m_lastOpenCfgPath;
 };
 /*

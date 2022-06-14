@@ -25,7 +25,7 @@ MLAssist::MLAssist(QWidget *parent) :
 	//setWindowFlags(Qt::Tool);
 	//	setWindowFlags(Qt::FramelessWindowHint | Qt::Popup );//| Qt::Tool | Qt::WindowStaysOnTopHint
 	setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
-	createSysTrayAction();
+	//createSysTrayAction();
 	connect(g_pGameCtrl, SIGNAL(signal_updateTrayToolTip(const QString &)), this, SLOT(onUpdateTrayToolTip(const QString &)));
 	connect(g_pGameCtrl, SIGNAL(signal_loadUserConfig(const QString &)), this, SLOT(on_load_config(const QString &)));
 	connect(g_pGameCtrl, SIGNAL(signal_saveUserConfig(const QString &)), this, SLOT(on_save_config(const QString &)));
@@ -49,7 +49,6 @@ MLAssist::MLAssist(QWidget *parent) :
 	ui.tabWidget->setTabVisible(13, false);*/
 
 	auto pTabBar = ui.tabWidget->tabBar();
-
 	m_pLoadBtn = new QPushButton("读取", this);
 	m_pSaveBtn = new QPushButton("保存", this);
 	connect(m_pLoadBtn, SIGNAL(clicked()), this, SLOT(on_pushButton_loadCfg_clicked()));
@@ -66,16 +65,6 @@ MLAssist::MLAssist(QWidget *parent) :
 	pHLayout->setContentsMargins(0, 0, 0, 0);
 	ui.tabWidget->setCornerWidget(pWidget);
 	connect(ui.attachedWindget, SIGNAL(signal_followGameWnd(long, long, long, long)), this, SLOT(FollowGameWnd(long, long, long, long)));
-
-	/*g_pGameCtrl->moveToThread(&m_gameCtrlThread);
-	connect(&m_gameCtrlThread, SIGNAL(finished()), g_pGameCtrl, SLOT(deleteLater()));
-
-	g_pAutoBattleCtrl->moveToThread(&m_battleWorkerThread);
-	connect(&m_battleWorkerThread, SIGNAL(finished()), g_pAutoBattleCtrl, SLOT(deleteLater()));
-	m_gameCtrlThread.start();
-	m_battleWorkerThread.start();*/
-	//	g_pGameFun->moveToThread(&m_funThread);
-	//	m_funThread.start();
 }
 
 MLAssist::~MLAssist()
@@ -116,7 +105,7 @@ void MLAssist::onUpdateTrayToolTip(const QString &szText)
 	QString sTitle = szText;
 	if (m_bIsInLoginProgress)
 		sTitle += "(自动登录游戏中...)";
-	if (m_pTrayIcon->toolTip() != sTitle)
+	if (m_pTrayIcon && m_pTrayIcon->toolTip() != sTitle)
 		m_pTrayIcon->setToolTip(sTitle);
 	if (this->windowTitle() != sTitle)
 		this->setWindowTitle(sTitle);
@@ -220,13 +209,7 @@ void MLAssist::quitAndDeleteAllInfo()
 	g_pGameCtrl->StopUpdateTimer();
 	emit g_pGameCtrl->signal_exit();
 	killProcess();
-	m_funThread.quit();
-	m_funThread.wait();
-	m_gameCtrlThread.quit();
-	m_gameCtrlThread.wait();
 
-	m_battleWorkerThread.quit();
-	m_battleWorkerThread.wait();
 	g_pGameCtrl->WaitThreadFini();
 	qApp->exit(0);
 }
@@ -257,7 +240,7 @@ void MLAssist::killProcess()
 void MLAssist::on_pushButton_loadCfg_clicked()
 {
 	QString szConfigName = QCoreApplication::applicationDirPath() + "//配置//";
-	auto pGamePlayer = g_pGameCtrl->getGameCharacter();
+	auto pGamePlayer = g_pGameFun->GetGameCharacter();
 	if (pGamePlayer)
 	{
 		szConfigName = szConfigName + QString("/%1.save").arg(pGamePlayer->name);
@@ -294,7 +277,7 @@ void MLAssist::on_pushButton_loadCfg_clicked()
 void MLAssist::on_pushButton_saveCfg_clicked()
 {
 	QString szConfigName = QCoreApplication::applicationDirPath() + "//配置//";
-	auto pGamePlayer = g_pGameCtrl->getGameCharacter();
+	auto pGamePlayer = g_pGameFun->GetGameCharacter();
 	if (pGamePlayer)
 	{
 		szConfigName = szConfigName + QString("./%1").arg(pGamePlayer->name);
@@ -444,7 +427,9 @@ void MLAssist::SaveLoginBat(int type)
 	{
 		dir.mkdir(saveDir);
 	}
-	QString savePath = QString("%1\\%2.bat").arg(saveDir).arg(ConvertFileName(g_pGameCtrl->getGameCharacter()->name));
+	auto pChar = g_pGameFun->GetGameCharacter();
+	QString sPlayerName = pChar ? pChar->name : "";
+	QString savePath = QString("%1\\%2.bat").arg(saveDir).arg(ConvertFileName(sPlayerName));
 
 	QString path = QFileDialog::getSaveFileName(this, "保存启动批处理", savePath, "*.bat");
 	if (path.isEmpty())
@@ -533,7 +518,7 @@ bool MLAssist::eventFilter(QObject *obj, QEvent *event)
 void MLAssist::OnNotifyLoginProgressStart()
 {
 	m_bIsInLoginProgress = true;
-	auto pChar = g_pGameCtrl->getGameCharacter();
+	auto pChar = g_pGameFun->GetGameCharacter();
 	QString sCharName = pChar ? pChar->name : "";
 	if (g_pGameFun->IsOnline())
 		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(sCharName).arg(g_pGameFun->GetGameServerLine()));
@@ -544,7 +529,7 @@ void MLAssist::OnNotifyLoginProgressStart()
 void MLAssist::OnNotifyLoginProgressEnd()
 {
 	m_bIsInLoginProgress = false;
-	auto pChar = g_pGameCtrl->getGameCharacter();
+	auto pChar = g_pGameFun->GetGameCharacter();
 	QString sCharName = pChar ? pChar->name : "";
 	if (g_pGameFun->IsOnline())
 		emit g_pGameCtrl->signal_updateTrayToolTip(QString("%1 %2线").arg(sCharName).arg(g_pGameFun->GetGameServerLine()));
