@@ -4,7 +4,12 @@
 #include "./pybind11/include/pybind11/complex.h"
 #include "./pybind11/include/pybind11/stl_bind.h"
 #include "./pybind11/include/pybind11/chrono.h"
+#include "./pybind11/include/pybind11/iostream.h"
+
 #include "../CGALib/gameinterface.h"
+#include "./Astar/AStar.h"
+
+#define A_FIND_PATH std::vector<std::pair<int, int> >
 
 namespace py = pybind11;
 using PyCallbackFunc = std::function<void(py::object)>;
@@ -82,7 +87,14 @@ typedef struct pcga_craft_item_s
 	int sub_type;
 	std::vector<int> itempos;
 }pcga_craft_item_t;
-
+typedef struct MLPoint
+{
+	MLPoint() { x = y = 0; }
+	MLPoint(int a1, int a2) :x(a1), y(a2) {}
+	bool operator==(const MLPoint& p1) { return p1.x == x && p1.y == y; }
+	int x;
+	int y;
+}TMLPoint;
 class CGAPython
 {
 public:
@@ -234,6 +246,36 @@ public:
 	bool RegisterTradeStateNotify(const std::function<void(int)>& callback);
 	bool RegisterDownloadMapNotify(const std::function<void(cga_download_map_t)>& callback);
 	bool RegisterConnectionStateNotify(const std::function<void(cga_conn_state_t)>& callback);
+
+	////移动到指定坐标 超时时间 秒  封装下吧  python也可以自己实现寻路
+	bool IsInNormalState();
+	bool IsInRandomMap();
+	bool WaitInNormalState(int timeout = 10000);
+	TMLPoint CGAPython::GetMapCoordinate();
+	std::vector<TMLPoint> GetMapEntranceList();
+	double GetDistance(int x, int y);
+	bool MoveTo(int x, int y, int timeout = 10000);
+	//根据路径寻路
+	bool AutoNavigator(A_FIND_PATH path, bool isLoop = true);
+	bool isMoveing() { return m_bMoveing; }
+	//本地自动寻路
+	int AutoMoveTo(int x, int y, int timeout = 10000);
+	int AutoMoveToEx(int x, int y, std::string sMapName = "", int timeout = 10000);
+	int AutoMoveToPath(std::vector<pair<int, int> > findPath, int timeout = 10000);
+	int AutoMoveInternal(int x, int y, int timeout = 10000, bool isLoop = true);
+	int GetGameMapID();
+	bool IsReachableTargetEx(int sx, int sy, int tx, int ty);
+	bool IsReachableTarget(int tx, int ty);
+	A_FIND_PATH CalculatePath(int curX, int curY, int targetX, int targetY);
+	TMLPoint GetRandomSpace(int x, int y, int distance, bool judgeReachTgt = true);
+	int GetTeammatesCount();
+	bool IsTeamLeader();
+
+
 private:
 	CGA::CGAInterface* m_interface;
+	bool m_bMoveing = false;
+	bool m_bStop = false;
+	int m_navigatorLoopCount = 0;
+	double m_mazeWaitTime = 5000;
 };

@@ -38,12 +38,12 @@ GamePythonScriptWgt::GamePythonScriptWgt(QWidget *parent) :
 	m_output->setMaximumBlockCount(m_ConsoleMaxLines);
 	m_python = new QProcess(this);
 
-	connect(m_python, &QProcess::started, this, &GamePythonScriptWgt::OnNodeStarted);
-	connect(m_python, &QProcess::errorOccurred, this, &GamePythonScriptWgt::OnNodeStartError);
-	connect(m_python, SIGNAL(readyRead()), this, SLOT(OnNodeReadyRead()));
-	connect(m_python, SIGNAL(readyReadStandardOutput()), this, SLOT(OnNodeReadyRead()));
-	connect(m_python, SIGNAL(readyReadStandardError()), this, SLOT(OnNodeReadyRead()));
-	connect(m_python, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(OnNodeFinish(int, QProcess::ExitStatus)));
+	connect(m_python, &QProcess::started, this, &GamePythonScriptWgt::OnPythonStarted);
+	connect(m_python, &QProcess::errorOccurred, this, &GamePythonScriptWgt::OnPythonStartError);
+	connect(m_python, SIGNAL(readyRead()), this, SLOT(OnPythonReadyRead()));
+	connect(m_python, SIGNAL(readyReadStandardOutput()), this, SLOT(OnPythonReadyRead()));
+	connect(m_python, SIGNAL(readyReadStandardError()), this, SLOT(OnPythonReadyRead()));
+	connect(m_python, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(OnPythonFinish(int, QProcess::ExitStatus)));
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnAutoRestart()));
@@ -96,7 +96,7 @@ void GamePythonScriptWgt::dropEvent(QDropEvent *event)
 	}
 }
 
-void GamePythonScriptWgt::OnNodeStarted()
+void GamePythonScriptWgt::OnPythonStarted()
 {
 	if (m_bDebugging)
 	{
@@ -109,15 +109,15 @@ void GamePythonScriptWgt::OnNodeStarted()
 	ui.pushButton_term->setEnabled(true);
 }
 
-void GamePythonScriptWgt::OnNodeStartError(QProcess::ProcessError error)
+void GamePythonScriptWgt::OnPythonStartError(QProcess::ProcessError error)
 {
-	m_output->appendPlainText(tr("启动Python失败,错误信息: %1").arg(m_python->errorString()));
+	m_output->appendPlainText(tr("运行Python失败,错误信息: %1").arg(m_python->errorString()));
 	ui.pushButton_run->setEnabled(true);
 	ui.pushButton_debug->setEnabled(true);
 	ui.pushButton_term->setEnabled(false);
 }
 
-void GamePythonScriptWgt::OnNodeReadyRead()
+void GamePythonScriptWgt::OnPythonReadyRead()
 {
 	if (!m_bListening)
 		return;
@@ -169,23 +169,9 @@ void GamePythonScriptWgt::OnNodeReadyRead()
 			}
 		}
 	}
-	else
-	{
-		QByteArray data = m_python->readAll();
-		QLatin1String pattern("Debugger listening on ws://");
-
-		int findStart = data.indexOf(pattern);
-		if (findStart != -1)
-		{
-			m_output->appendPlainText(data);
-			m_output->appendPlainText(tr("\nCheck \"chrome://inspect\" in chrome to debug the node process."));
-
-			m_bListening = false;
-		}
-	}
 }
 
-void GamePythonScriptWgt::OnNodeFinish(int exitCode, QProcess::ExitStatus exitStatus)
+void GamePythonScriptWgt::OnPythonFinish(int exitCode, QProcess::ExitStatus exitStatus)
 {
 	if (m_bNavigating)
 	{
@@ -366,7 +352,7 @@ void GamePythonScriptWgt::on_pushButton_run_clicked()
 
 		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
 		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start(".//python//python.exe", args);
+		m_python->start(QCoreApplication::applicationDirPath() + "//python//python.exe", args);
 
 		UpdateGameTextUI(true);
 	}
@@ -433,7 +419,7 @@ void GamePythonScriptWgt::RunNavigatorScript(int x, int y, int enter, QString *r
 		ui.pushButton_suspend->setEnabled(false);
 		ui.checkBox_autorestart->setChecked(false);
 
-		m_output->appendPlainText(tr("Starting node..."));
+		m_output->appendPlainText(tr("Starting Python..."));
 
 		m_bDebugging = false;
 		m_bListening = true;
@@ -465,7 +451,7 @@ void GamePythonScriptWgt::RunNavigatorScript(int x, int y, int enter, QString *r
 
 		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
 		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start(".//python//python.exe", args);
+		m_python->start(QCoreApplication::applicationDirPath() + "//python//python.exe", args);
 
 		UpdateGameTextUI(true);
 	}
@@ -478,49 +464,14 @@ void GamePythonScriptWgt::RunNavigatorScript(int x, int y, int enter, QString *r
 
 void GamePythonScriptWgt::on_pushButton_debug_clicked()
 {
-	QMessageBox::information(this, "提示：", "推荐用VsCode打开脚本文件后，直接断点调试，"
-											 "也可以用windows自带Cmd命令行调试，格式：\n python.exe -m pdb test.py",
-			"确定");
+	m_output->appendPlainText("推荐用VsCode打开脚本文件后，直接断点调试，"
+							  "也可以用windows自带Cmd命令行调试，格式：\n python.exe -m pdb test.py");
+	QString sPath = "vscode://file/";
+	sPath += m_scriptPath;
+	ShellExecute(NULL, (wchar_t *)(QString("OPEN").utf16()), (wchar_t *)sPath.utf16(), NULL, NULL, SW_SHOW);
+	//ShellExecute(NULL, (wchar_t *)(QString("OPEN").utf16()), (wchar_t *)(QString("vscode://").utf16()), NULL, NULL, SW_SHOW);
+	//	ShellExecute(NULL, (wchar_t *)(QString("OPEN").utf16()), (wchar_t *)(QString("tencent://message/?uin=274100927").utf16()), NULL, NULL, SW_SHOW);
 	return;
-	if (m_port && ui.pushButton_debug->isEnabled() && m_python->state() != QProcess::Running)
-	{
-		ui.pushButton_run->setEnabled(false);
-		ui.pushButton_debug->setEnabled(false);
-		ui.pushButton_term->setEnabled(false);
-		ui.pushButton_load->setEnabled(false);
-		ui.pushButton_suspend->setEnabled(false);
-
-		m_output->appendPlainText(tr("Starting node in debug mode..."));
-
-		m_bDebugging = true;
-		m_bListening = true;
-		m_bNavigating = false;
-		m_bPathBegin = false;
-
-		QStringList args;
-		QFileInfo fileInfo(m_scriptPath);
-
-		args.append("--inspect");
-		args.append(fileInfo.fileName());
-		args.append(QString::number(m_port));
-
-		QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-
-		env.insert("CGA_GAME_PORT", qgetenv("CGA_GAME_PORT"));
-		env.insert("CGA_GUI_PORT", qgetenv("CGA_GUI_PORT"));
-		env.insert("CGA_DIR_PATH", qgetenv("CGA_DIR_PATH"));
-		env.insert("CGA_DIR_PATH_UTF8", qgetenv("CGA_DIR_PATH_UTF8"));
-		env.insert("CGA_GUI_PID", QString("%1").arg(GetCurrentProcessId()));
-		env.insert("NODE_SKIP_PLATFORM_CHECK", "1");
-		env.insert("PYTHONIOENCODING", "utf-8");
-		m_python->setProcessEnvironment(env);
-
-		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
-		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start(".//python//python.exe", args);
-
-		UpdateGameTextUI(true);
-	}
 }
 
 void GamePythonScriptWgt::on_pushButton_term_clicked()

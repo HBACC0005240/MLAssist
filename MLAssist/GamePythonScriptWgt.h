@@ -39,10 +39,10 @@ public slots:
 	void OnHttpLoadScript(QString query, QByteArray postdata, QJsonDocument *doc);
 
 private slots:
-	void OnNodeStarted();
-	void OnNodeStartError(QProcess::ProcessError error);
-	void OnNodeReadyRead();
-	void OnNodeFinish(int exitCode, QProcess::ExitStatus exitStatus);
+	void OnPythonStarted();
+	void OnPythonStartError(QProcess::ProcessError error);
+	void OnPythonReadyRead();
+	void OnPythonFinish(int exitCode, QProcess::ExitStatus exitStatus);
 	void OnCloseWindow();
 	void OnAutoRestart();
 	void on_pushButton_suspend_clicked();

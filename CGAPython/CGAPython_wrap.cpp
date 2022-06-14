@@ -1,15 +1,74 @@
 #include "CGAPython.h"
-
 namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<int>);
 //写了这个 就必须def类  这个在Python调用 感觉也麻烦 就是效率高 另一种会默认转换为python格式
 //PYBIND11_MAKE_OPAQUE(std::vector<cga_pet_skill_info_t>);		
 
+
+#include <ctime>
+#include <string>
+#include <chrono>
+#include <sstream>
+#include <iostream>
+
+std::string GetCurrentTimeStamp(int time_stamp_type = 0)
+{
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+	std::tm* now_tm = std::localtime(&now_time_t);
+
+	char buffer[128];
+	strftime(buffer, sizeof(buffer), "%F %T", now_tm);
+
+	std::ostringstream ss;
+	ss.fill('0');
+
+	std::chrono::milliseconds ms;
+	std::chrono::microseconds cs;
+	std::chrono::nanoseconds ns;
+
+	switch (time_stamp_type)
+	{
+	case 0:
+		ss << buffer;
+		break;
+	case 1:
+		ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+		ss << buffer << ":" << ms.count();
+		break;
+	case 2:
+		ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+		cs = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()) % 1000000;
+		ss << buffer << ":" << ms.count() << ":" << cs.count() % 1000;
+		break;
+	case 3:
+		ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+		cs = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()) % 1000000;
+		ns = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()) % 1000000000;
+		ss << buffer << ":" << ms.count() << ":" << cs.count() % 1000 << ":" << ns.count() % 1000;
+		break;
+	default:
+		ss << buffer;
+		break;
+	}
+
+	return ss.str();
+}
+
+void noisy_function(const std::string& msg, bool flush) {
+
+	std::cout << GetCurrentTimeStamp() << "Test" << msg;
+	if (flush) {
+		std::cout << std::flush;
+	}
+}
+
 //注册python模块
 PYBIND11_MODULE(CGAPython, m) {
 	m.doc() = "pybind11 CGAPython";
 	//m.def("CreateInterface", &CGA::CreateInterface);
-
+	add_ostream_redirect(m);
+	m.def("noisy_function", &noisy_function, py::arg("msg"), py::arg("flush") = true);
 	py::class_<CGA::cga_game_data_t>(m, "cga_game_data_t")
 		.def(py::init<>())
 		.def_readwrite("reserved", &CGA::cga_game_data_t::reserved);
@@ -430,6 +489,8 @@ PYBIND11_MODULE(CGAPython, m) {
 		return py::make_iterator(v.begin(), v.end());
 	}, py::keep_alive<0, 1>())
 		;
+	//py::add_ostream_redirect(m, "ostream_redirect");
+
 	py::class_<CGAPython>(m, "CGA")
 		.def(py::init<>())
 		.def("IsConnected", &CGAPython::IsConnected)
@@ -554,7 +615,7 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def("DeleteCard", &CGAPython::DeleteCard)
 		.def("SendMail", &CGAPython::SendMail)
 		.def("SendPetMail", &CGAPython::SendPetMail)
-
+		.def("AutoMoveTo", &CGAPython::AutoMoveTo, "自动寻路,参数(x,y,timeout),超时可选,单位毫秒", py::arg("x"), py::arg("y"), py::arg("timeout") = 10000)
 
 		.def("RegisterChatMsgNotify", &CGAPython::RegisterChatMsgNotify)
 		.def("RegisterServerShutdownNotify", &CGAPython::RegisterServerShutdownNotify)
