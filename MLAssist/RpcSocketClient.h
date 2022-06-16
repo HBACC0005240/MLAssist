@@ -8,8 +8,13 @@ using CGData::CGItemResponse;
 using CGData::CGRpcService;
 using CGData::CGStoreItemRequest;
 using CGData::CGStoreItemResponse;
+using CGData::DownloadMapDataRequest;
+using CGData::DownloadMapDataResponse;
+using CGData::UploadMapDataRequest;
+using CGData::UploadMapDataResponse;
 using grpc::Channel;
 using grpc::ClientContext;
+using grpc::ClientWriter;
 using grpc::Status;
 #pragma comment(lib, "../lib/grpc/grpc++_alts.lib")
 #pragma comment(lib, "../lib/grpc/grpc_plugin_support.lib")
@@ -71,8 +76,8 @@ public:
 	void GetServerStoreMapData();
 	void UploadGidData();
 	void UploadGidBankData();
+	void UploadMapData();
 	bool SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply);
-
 
 	bool GetConnectState();
 	void StoreCGItemData(GameItemPtr pItem);

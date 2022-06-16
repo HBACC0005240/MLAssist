@@ -207,7 +207,7 @@ public:
 	GamePetList GetGamePets();
 
 	QSharedPointer<CGA::cga_picbook_info_s> GetPetCard(QString name);
-	int GetGameServerLine();
+
 	//通过好友名片，获取队长所在的游戏线路
 	int GetFriendServerLine(QString name);
 	//工作
@@ -316,6 +316,8 @@ public:
 	QString GetMapFilePath();
 	bool IsInRandomMap();
 
+	//获取当前游戏线路
+	int GetGameServerLine();
 	//获取地图编号
 	int GetMapIndex();
 

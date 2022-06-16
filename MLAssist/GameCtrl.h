@@ -45,6 +45,7 @@ public:
 	void SetGameCGAMutex(HANDLE mutex) { m_hGameMutex = mutex; }
 	void SetSelfHttpServerPort(int port) { m_nSelfHttpServerPort = port; }
 	void SetCreateLog(bool bFlag) { m_bCreateLog = bFlag; }
+	void SetCGGameInstallPath(const QString &sPath) { m_sCGInstallPath = sPath; }
 
 	void Disconnect();
 	quint32 GetGameThreadID() { return m_nGameThreadID; }
@@ -55,6 +56,7 @@ public:
 	HANDLE GetGameCGAMutex() { return m_hGameMutex; }
 	int GetSelfHttpServerPort() { return m_nSelfHttpServerPort; }
 	bool GetCreateLog() { return m_bCreateLog; }
+	QString GetCGGameInstallPath() { return m_sCGInstallPath; }
 
 	void SetGameGid(const QString &gid);
 	QString GetGameGid();
@@ -451,5 +453,6 @@ private:
 	int m_loginWaitInterval = 3000;														 //自动登录间隔
 	bool m_bCreateLog = false;															 //日志开关
 	bool m_bOpenNetToMTool = false;														 //是否打开和MLAssistTool通信功能
+	QString m_sCGInstallPath;															 //魔力安装目录
 };
 #define g_pGameCtrl GameCtrl::getInstace()

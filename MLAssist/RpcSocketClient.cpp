@@ -569,6 +569,47 @@ void RpcSocketClient::UploadGidBankData()
 	}
 }
 
+void RpcSocketClient::UploadMapData()
+{
+	if (!isConnected())
+		return;
+	int index1, index2, index3;
+	std::string sfilemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
+	//if (index1 == 0) //固定地图 暂时不上传
+	//	return;
+
+	CGData::UploadMapDataRequest request;
+	request.set_filename(std::to_string(index3));
+	request.set_serverline(std::to_string(index2));
+	request.set_maptype(std::to_string(index1));
+
+	QString sPath = g_pGameCtrl->GetCGGameInstallPath();
+	if (index1 == 0)
+		sPath = QString("%1/map/%2/%3.dat").arg(sPath).arg(index1).arg(index3);
+	else
+		sPath = QString("%1/map/%2/%3/%4.dat").arg(sPath).arg(index1).arg(index2).arg(index3);
+	QFile filemap(sPath);
+	if (!filemap.open(QIODevice::ReadOnly))
+		return;
+	auto mapData = filemap.readAll();
+	filemap.close();
+	request.set_imagedata(mapData.data());
+	grpc::ClientContext context;
+	CGData::UploadMapDataResponse response;
+	//std::unique_ptr<ClientWriter<CGData::UploadMapDataRequest> > writer(_stub->UploadMapData(&context, &response));
+	auto stream = _stub->UploadMapData(&context, &response);
+	stream->Write(request);
+	stream->WritesDone();
+	Status status = stream->Finish();
+	if (!status.ok())
+	{
+		std::cout << status.error_code() << ": " << status.error_message()
+				  << std::endl;
+		std::cout << "RPC failed";
+	}
+}
+
 bool RpcSocketClient::SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply)
 {
 	if (!isConnected())

@@ -82,6 +82,9 @@ ITObjectDataMgr::~ITObjectDataMgr(void)
 
 bool ITObjectDataMgr::init()
 {
+	QSettings installIniFile(QCoreApplication::applicationDirPath() + "//PlayOnline.ini", QSettings::IniFormat);
+	QString installPath = "E:\\Program Files (x86)\\易玩通\\魔力宝贝6.0"; //installIniFile.value("Path/Game4", "").toString();
+	g_pGameCtrl->SetCGGameInstallPath(installPath);
 	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
 	QSettings iniFile(iniPath, QSettings::IniFormat);
 	bool isOpenToolNet = iniFile.value("server/openTool").toBool();

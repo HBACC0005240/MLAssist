@@ -3837,10 +3837,12 @@ void GameCtrl::OnNotifyUnitMenu(QSharedPointer<CGA::cga_unit_menu_items_t> menu)
 
 void GameCtrl::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 {
-	if (m_uLastUseItemTime.elapsed() < 3000)
+	//根据系统提示吃道具  不加时间和状态判断
+	/*if (m_uLastUseItemTime.elapsed() < 3000)
 		return;
 	if (!g_pGameFun->IsInNormalState())
-		return;
+		return;*/
+	//吃深蓝
 	if (m_bAutoEatDeepBlue)
 	{
 		if (unitid == -1 && msg.contains("道具的效果消失了")) //系统消息
@@ -3868,6 +3870,7 @@ void GameCtrl::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 		//		if (pItem->exist && pItem->pos >= 8 && pItem->id == 18526)
 		//		{
 		//			bool bRes = false;
+		// 			g_pGameFun->WaitInNormalState();
 		//			g_CGAInterface->UseItem(pItem->pos, bRes);
 		//			m_uLastUseItemTime.restart();
 		//			break;
@@ -3876,7 +3879,7 @@ void GameCtrl::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 		//	return;
 		//}
 	}
-	if (m_bAutoEatTimeCrystal) //吃时水
+	if (m_bAutoEatTimeCrystal && g_pGameFun->IsInNormalState()) //吃时水
 	{
 		CGA::cga_player_info_t info;
 		if (g_CGAInterface->GetPlayerInfo(info))

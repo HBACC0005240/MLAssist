@@ -11,6 +11,8 @@ using grpc::Status;
 using CGData::CGRpcService;
 using CGData::CGItemRequest;
 using CGData::CGItemResponse;
+using CGData::UploadMapDataRequest;
+using CGData::UploadMapDataResponse;
 #pragma comment(lib,"../lib/grpc/grpc++_alts.lib")
 #pragma comment(lib,"../lib/grpc/grpc_plugin_support.lib")
 #pragma comment(lib,"../lib/grpc/grpc_unsecure.lib")
@@ -75,6 +77,7 @@ public:
 
 	Status UploadGidData(::grpc::ServerContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response)override;
 	Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response)override;
+	Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* stream, ::CGData::UploadMapDataResponse* response)override;
 
 	Status SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)override;
 	Status SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response)override;

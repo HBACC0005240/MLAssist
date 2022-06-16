@@ -108,6 +108,21 @@ Status GGRpcServiceImpl::UploadGidBankData(::grpc::ServerContext* context, const
 	return Status::OK;
 }
 
+Status GGRpcServiceImpl::UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader < ::CGData::UploadMapDataRequest>* stream, ::CGData::UploadMapDataResponse* response)
+{
+	CGData::UploadMapDataRequest request;
+	stream->Read(&request);
+
+	QString sPath = QCoreApplication::applicationDirPath() + "//mgrMap//";
+	sPath = QString("%1/map/%2/%3/%4.dat").arg(sPath).arg(request.maptype().c_str()).arg(request.serverline().c_str()).arg(request.filename().c_str());
+	QFile filemap(sPath);
+	if (!filemap.open(QIODevice::WriteOnly))
+		return Status::OK;
+	filemap.write(request.imagedata().c_str(), request.imagedata().size());
+	filemap.close();
+	return Status::OK;
+}
+
 Status GGRpcServiceImpl::SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)
 {
 	return ITObjectDataMgr::getInstance().SelectGidData(request, response);

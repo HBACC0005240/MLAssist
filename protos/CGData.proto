@@ -36,8 +36,10 @@ service CGRpcService {
 	rpc StoreCGMapData (CGStoreMapRequest) returns (CGStoreMapResponse){};
 
 	//定时上报当辅助信息
-	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};				//上报当前游戏数据
-	rpc UploadGidBankData (UploadGidBankDataRequest) returns (UploadGidBankDataResponse){};	//上报当前游戏数据
+	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};					//上报当前游戏数据
+	rpc UploadGidBankData (UploadGidBankDataRequest) returns (UploadGidBankDataResponse){};		//上报当前游戏数据
+	rpc UploadMapData (stream  UploadMapDataRequest) returns (UploadMapDataResponse){};		//上传当前迷宫地图数据
+	rpc DownloadMapData (DownloadMapDataRequest) returns (stream  DownloadMapDataResponse){};	//下载当前迷宫地图数据
 
 	//发布是rpc的普通方法
 	rpc Publish (StringPub) returns (StringPub);
@@ -70,6 +72,31 @@ message UploadGidBankDataRequest
 	int32 role_type=6;	
 
 	//银行的 单独上传
+}
+message UploadMapDataRequest
+{
+	string FileName = 1;		//地图编号名称
+	string ServerLine=2;		//服务线路
+	string MapType=3;			//地图类型 0固定地图 1迷宫地图
+	bytes ImageData = 4;		//地图数据
+}
+
+message UploadMapDataResponse {
+	
+}
+
+//Download
+message DownloadMapDataRequest {
+	string FileName = 1;		//地图编号名称
+	string ServerLine=2;		//服务线路
+	string MapType=3;			//地图类型 0固定地图 1迷宫地图
+}
+
+message DownloadMapDataResponse {
+ 	string FileName = 1;		//地图编号名称
+	string ServerLine=2;		//服务线路
+	string MapType=3;			//地图类型 0固定地图 1迷宫地图
+	bytes ImageData = 4;		//地图数据
 }
 message CGAccountGidData
 {
