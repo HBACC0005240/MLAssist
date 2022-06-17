@@ -3,6 +3,7 @@
 #include "GPCalc.h"
 #include "ITLog.h"
 #include "ITObjectID.h"
+#include "ITPublic.h"
 #include "RpcSocketClient.h"
 #include "StdAfx.h"
 #include <QCoreApplication>
@@ -12,6 +13,7 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QtConcurrent>
+
 #ifdef Q_OS_UNIX
 #include "unistd.h"
 #endif
@@ -82,8 +84,9 @@ ITObjectDataMgr::~ITObjectDataMgr(void)
 
 bool ITObjectDataMgr::init()
 {
-	QSettings installIniFile(QCoreApplication::applicationDirPath() + "//PlayOnline.ini", QSettings::IniFormat);
-	QString installPath = "E:\\Program Files (x86)\\易玩通\\魔力宝贝6.0"; //installIniFile.value("Path/Game4", "").toString();
+	QSettings::Format format = QSettings::registerFormat("ini", IniReadFunc, IniWriteFunc);
+	QSettings installIniFile(QCoreApplication::applicationDirPath() + "//PlayOnline.ini", format);
+	QString installPath = (installIniFile.value("Path/Game4", "").toString());
 	g_pGameCtrl->SetCGGameInstallPath(installPath);
 	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
 	QSettings iniFile(iniPath, QSettings::IniFormat);

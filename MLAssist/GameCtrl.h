@@ -180,6 +180,9 @@ public:
 	void SetAutoLoginInterval(int timeout) { m_loginWaitInterval = timeout; }
 	int GetAutoLoginInterval() { return m_loginWaitInterval; }
 
+	//是否实时刷新玩家信息
+	bool IsRealUpdatePlayerUi() { return m_bRealUpdatePlayerUi; }
+
 	//地图是否可见-
 	void SetMapIsVisible(bool bvisible) { m_bMapIsVisible = bvisible; } //地图是否可见 不可见时 不刷新地图 降低cpu 内存
 	quint32 nativeKeycode(Qt::Key key);									//windows快捷键值转qt
@@ -340,6 +343,7 @@ public slots:
 	void OnSetAutoTalkNpc(bool state);											//自动对话
 	void OnSetAutoTalkNpcYesOrNo(bool state);									//自动对话选是或否
 	void OnSetRealUpdateUi(int state);											//是否实时刷新ui界面数据 主要是npc 玩家 和物品
+	void OnSetRealUpdatePlayerUi(int state);									//是否实时刷新ui界面数据 主要是npc 玩家 和物品
 	void OnEnableDataDisplayUi(int state);										//是否启用ui界面数据 主要是npc 玩家 和物品
 	void OnSetAutoEatDeepBlue(int state);										//打开关闭自动吃深蓝
 	void OnSetAutoEatTimeCrystal(int state);									//打开关闭自动吃时水
@@ -405,6 +409,7 @@ private:
 	GamePlayerUpgradeCfg *m_upgradePlayerCfg;											 //人物升级加点
 	QTime m_lastUpdateTeamTime;															 //获取队伍信息间隔
 	bool m_bRealUpdateUi = false;														 //是否实时刷新ui界面数据
+	bool m_bRealUpdatePlayerUi = false;													//是否实时刷新玩家信息
 	bool m_bEnabledDataDisplayUi = false;												 //是否启用ui界面Npc 物品 玩家显示功能
 	bool m_bMapIsVisible = false;														 //当前是否显示地图
 	QMap<int, GameConditionCfg *> m_pEatFoodJudge;										 //人物吃料理判断

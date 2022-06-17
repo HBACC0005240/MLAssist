@@ -416,18 +416,7 @@ void GameMapWall::DownLoadMap()
 
 void GameMapWall::SaveMapData()
 {
-	QString tmpMapDir = QCoreApplication::applicationDirPath() + "//tmpMap//";
-	QDir existDir(tmpMapDir);
-	if (!existDir.exists())
-	{
-		existDir.mkdir(tmpMapDir);
-	}
-	QString sPath = QCoreApplication::applicationDirPath() + "//tmpMap//" + QString("%1.bmp").arg(g_pGameFun->GetMapIndex());
-	QString sJpgPath = QCoreApplication::applicationDirPath() + "//tmpMap//" + QString("%1.jpg").arg(g_pGameFun->GetMapIndex());
-	//QImage image((uchar *)m_pixels.get(), m_pixelwidth/2, m_pixelheight/2, QImage::Format_ARGB32);
-	QImage image = g_pGameFun->CreateMapImage();
-	image.save(sPath);
-	QFile::rename(sPath, sJpgPath);
+	g_pGameFun->SaveCurrentMapImage();
 }
 
 void GameMapWall::SearchThread(GameMapWall *pThis)

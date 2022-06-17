@@ -11,6 +11,7 @@
 #include "Tsp.h"
 #include "stdafx.h"
 #include <QDebug>
+#include "RpcSocketClient.h"
 #pragma comment(lib, "../lib/QtXlsx/Qt5Xlsx.lib")
 
 //#include <opencv2/highgui.hpp>
@@ -4849,9 +4850,8 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 	if (findPath.size() < 1) //离线地图查找一波
 	{
 		qDebug() << "未找到可通行路径，加载离线地图尝试！" << curPos << "tgt:" << x << "," << y;
-		int mapIndex = GetMapIndex();
 		QImage mapImage;
-		LoadOffLineMapImageData(mapIndex, mapImage);
+		LoadOffLineMapImageData(mapImage);
 		findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
 		if (findPath.size() > 0)
 			qDebug() << "离线地图查找路径成功，继续寻路";
@@ -5311,6 +5311,47 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 			return;
 		}
 	}
+	///begin 同步地图 判断迷宫是否已开
+	if (g_pGameCtrl->GetIsOpenNetToMLAssistTool())
+	{
+		QImage mapImage;
+		RpcSocketClient::getInstance().DownloadMapData(mapImage);
+		if (mapImage.width() > 0 && mapImage.height() > 0)
+		{
+			auto warpList = GetMazeEntranceListFromOfflineMap(mapImage);
+			if (warpList.size() >= 2)
+			{
+				QPoint curPos = GetMapCoordinate();
+				bool bReachable = true;
+				for (auto tEntrance : warpList)				
+				{				
+					auto findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), tEntrance.x(), tEntrance.y());
+					if (findPath.size() <= 0)
+					{
+						bReachable = false;
+						break;
+					}
+				}
+				if (bReachable) //两个出入口可达 退出 否则继续搜索
+				{
+					qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
+							{
+								auto ad = GetDistanceEx(curPos.x(), curPos.y(), a.x(), a.y());
+								auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
+								return ad < bd;
+							});
+					if (isNearFar) //取远
+						AutoMoveTo(entranceList[1].x(), entranceList[1].y());
+					else
+						AutoMoveTo(entranceList[0].x(), entranceList[0].y());
+					return;
+				}
+			}
+		}	
+	}
+	///end
+
+
 	QList<QPoint> allMoveAblePosList;
 	SearchAroundMapOpen(allMoveAblePosList, 2);
 	QPoint inPos;
@@ -5546,9 +5587,8 @@ bool CGFunction::IsReachableTargetEx(int sx, int sy, int tx, int ty)
 	if (findPath.size() < 1) //离线地图查找一波
 	{
 		qDebug() << "目标不可达，加载离线地图尝试！";
-		int mapIndex = GetMapIndex();
 		QImage mapImage;
-		LoadOffLineMapImageData(mapIndex, mapImage);
+		LoadOffLineMapImageData(mapImage);
 		findPath = CalculatePathEx(mapImage, sx, sy, tx, ty);
 		if (findPath.size() > 0)
 			qDebug() << "离线地图查找路径成功，继续寻路";
@@ -6575,35 +6615,34 @@ QImage CGFunction::CreateMapImage()
 		CGA::cga_map_cells_t objCells;
 		g_CGAInterface->GetMapObjectTable(true, objCells);
 		qDebug() << "Cell Size:" << cells.cell.size();
-		auto pixels = QSharedPointer<QRgb>(new QRgb[cells.x_size * cells.y_size]);
 		int pixelwidth = cells.x_size;
 		int pixelheight = cells.y_size;
+		QColor cBlack(0, 0, 0);
+		QColor cRed(255, 0, 0);
+		QColor cWhite(255, 255, 255);
+		QImage image(pixelwidth, pixelheight, QImage::Format_ARGB32);
 		for (int tmpy = 0; tmpy < pixelheight; ++tmpy) //
 		{
 			for (int tmpx = 0; tmpx < pixelwidth; ++tmpx) //
 			{
 				size_t dataSize = (tmpx + tmpy * cells.x_size);
-				/*	if (dataSize >= cells.cell.size())
-					continue;*/
-				//	qDebug() << tmpy + tmpx * cells.x_size;
 				auto cellWall = cells.cell.at((size_t)(dataSize)); //地图单位数据 行列
 				auto cellObject = objCells.cell.at((size_t)(dataSize));
 				if (cellWall == 1) //不可通行 1
 				{
-					pixels.get()[dataSize] = qRgba(0, 0, 0, 255);
+					image.setPixelColor(tmpx, tmpy, cBlack);
 				}
 				else
 				{
-					//	pixels.get()[dataSize] = qRgb(255, 255, 255);
 					if (cellObject & 0xff) //传送点
-						pixels.get()[dataSize] = qRgba(255, 0, 0, 255);
+						image.setPixelColor(tmpx, tmpy, cRed);
 					else
-						pixels.get()[dataSize] = qRgba(255, 255, 255, 255);
+						image.setPixelColor(tmpx, tmpy, cWhite);
 				}
 			}
 			//qDebug() << szDebug;
 		}
-		return QImage((uchar *)pixels.get(), pixelwidth, pixelheight, QImage::Format_ARGB32);
+		return image;
 	}
 	return QImage();
 }
@@ -6616,7 +6655,6 @@ bool CGFunction::CreateMapImage(QVector<short> &map, int &widgth, int &height)
 		CGA::cga_map_cells_t objCells;
 		g_CGAInterface->GetMapObjectTable(true, objCells);
 		qDebug() << "Cell Size:" << cells.cell.size();
-		auto pixels = QSharedPointer<QRgb>(new QRgb[cells.x_size * cells.y_size]);
 		int pixelwidth = cells.x_size;
 		int pixelheight = cells.y_size;
 		map = map.fromStdVector(cells.cell);
@@ -6625,6 +6663,25 @@ bool CGFunction::CreateMapImage(QVector<short> &map, int &widgth, int &height)
 		return true;
 	}
 	return false;
+}
+
+bool CGFunction::SaveCurrentMapImage(const QString &sTgtPath)
+{
+	QString sPath = QCoreApplication::applicationDirPath() + "//sync_map//";
+	if (sTgtPath.isEmpty())
+	{
+		int index1, index2, index3;
+		std::string sfilemap;
+		g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
+		if (index1 == 0)
+			sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
+		else
+			sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+	}
+	else
+		sPath = sTgtPath;
+	QImage image = g_pGameFun->CreateMapImage();
+	return image.save(sPath);
 }
 
 void CGFunction::MoveToThread(CGFunction *pThis, int x, int y, int timeout)
@@ -7128,6 +7185,30 @@ QList<QPoint> CGFunction::GetMazeEntranceList()
 	return enteranceList;
 }
 
+QList<QPoint> CGFunction::GetMazeEntranceListFromOfflineMap(QImage mapImage)
+{
+	QList<QPoint> warpList;
+	if (mapImage.width() <= 0 || mapImage.height() <= 0)
+		return warpList;
+	
+	int w = mapImage.width();
+	int h = mapImage.height();
+	std::vector<uchar> mapData; //地图数据
+
+	QColor qRgb(255, 0, 0);
+	for (int tmpx = 0; tmpx < h; ++tmpx) //行
+	{
+		for (int tmpy = 0; tmpy < w; ++tmpy) //列
+		{
+			if (mapImage.pixelColor(tmpy, tmpx) == qRgb) //不可通行 1
+			{
+				warpList.append(QPoint(tmpy, tmpx));
+			}			
+		}
+	}
+	return warpList;
+}
+
 QList<QPoint> CGFunction::GetMapEntranceList()
 {
 	QList<QPoint> enteranceList;
@@ -7598,6 +7679,15 @@ bool CGFunction::DownloadMap()
 
 bool CGFunction::DownloadMapEx(int xfrom, int yfrom, int xsize, int ysize)
 {
+	////增加一个离线 目前通过自己的管理服务作为中转
+	//if (g_pGameCtrl->GetIsOpenNetToMLAssistTool())//打开 才进行查询
+	//{
+	//	//不判断所有传送点是否可达 只判断地图有2个传送门 就认为地图已打开
+	//	if( GetMazeEntranceList().size() < 2)
+	//	{
+	//	
+	//	}		
+	//}
 	MakeMapOpen();
 	return false;
 	int last_index3 = GetMapIndex();
@@ -10324,24 +10414,34 @@ int CGFunction::GetMapFloorNumberFromName(bool bSerial /*= false*/, bool bBack /
 	return GetNumberFromName(sMapName, bSerial, bBack);
 }
 
-bool CGFunction::LoadOffLineMapImageData(int index, QImage &mapImage)
+bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QImage &mapImage)
 {
-	QString sOffLineMapPath = QApplication::applicationDirPath() + QString("//map//%1.jpg").arg(index);
-	if (QFile::exists(sOffLineMapPath) == false)
+	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
+	if (index1 == 0)
+		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
+	else
+		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+
+	if (QFile::exists(sPath) == false)
 	{
-		qDebug() << "跨图寻路：未找到指定地图数据！";
+		qDebug() << "离线地图寻路：未找到指定地图数据！";
 		return false;
 	}
-	memset(&_mapHead, 0, sizeof(_mapHead));
-	mapImage.load(sOffLineMapPath);
-	_mapHead.w = mapImage.width();
-	_mapHead.h = mapImage.height();
-	if (_mapHead.w <= 0 || _mapHead.h <= 0)
+	mapImage.load(sPath);
+	if (mapImage.width() <= 0 || mapImage.height() <= 0)
 	{
-		qDebug() << "跨图寻路：地图数据错误！";
+		qDebug() << "离线地图寻路：地图数据错误！";
 		return false;
 	}
 	return true;
+}
+
+bool CGFunction::LoadOffLineMapImageData(QImage &mapImage)
+{
+	int index1, index2, index3;
+	std::string sfilemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
+	return LoadOffLineMapImageData(index1, index2, index3, mapImage);
 }
 
 void CGFunction::Gesture(int index)

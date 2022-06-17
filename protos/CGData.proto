@@ -77,8 +77,9 @@ message UploadMapDataRequest
 {
 	string FileName = 1;		//地图编号名称
 	string ServerLine=2;		//服务线路
-	string MapType=3;			//地图类型 0固定地图 1迷宫地图
-	bytes ImageData = 4;		//地图数据
+	string MapType=3;			//地图类型 0固定地图 1迷宫地图	
+	string fileTime=4;			//地图时间
+	bytes ImageData = 5;		//地图数据
 }
 
 message UploadMapDataResponse {
@@ -96,7 +97,8 @@ message DownloadMapDataResponse {
  	string FileName = 1;		//地图编号名称
 	string ServerLine=2;		//服务线路
 	string MapType=3;			//地图类型 0固定地图 1迷宫地图
-	bytes ImageData = 4;		//地图数据
+	string fileTime=4;			//地图时间
+	bytes ImageData = 5;		//地图数据
 }
 message CGAccountGidData
 {

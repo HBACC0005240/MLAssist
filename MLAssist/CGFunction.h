@@ -307,7 +307,8 @@ public:
 	//从地图名称中解析出当前楼层
 	int GetNumberFromName(const QString &sMapName, bool bSerial = false, bool bBack = false);
 	int GetMapFloorNumberFromName(bool bSerial = false, bool bBack = false);
-	bool LoadOffLineMapImageData(int index, QImage &mapImage);
+	bool LoadOffLineMapImageData(QImage &mapImage);
+	bool LoadOffLineMapImageData(int index1, int index2, int index3, QImage &mapImage);
 	//获取当前坐标
 	QPoint GetMapCoordinate();
 
@@ -413,6 +414,7 @@ public:
 	//当前地图创建为image
 	QImage CreateMapImage();
 	bool CreateMapImage(QVector<short> &map, int &widgth, int &height);
+	bool SaveCurrentMapImage(const QString &sTgtPath = "");
 
 	static void MoveToThread(CGFunction *pThis, int x, int y, int timeout);
 
@@ -432,6 +434,7 @@ public:
 
 	//获取当前迷宫所有入口点
 	QList<QPoint> GetMazeEntranceList();
+	QList<QPoint> GetMazeEntranceListFromOfflineMap(QImage mapImage);
 	//获取当前地图所有入口点
 	QList<QPoint> GetMapEntranceList();
 	int TransDirectionToCga(int nDir);
@@ -763,7 +766,6 @@ private:
 	bool m_getInTradeStuffs = false;					 //获取到交易物品
 	QHash<int, QString> m_tradeState;					 //交易状态
 	QMap<int, QVector<int> > m_boyOrGirl;				 //人物是男还是女
-	tMapHead _mapHead;									 //地图结构体
 	QMutex m_charMutex;									 //人物聊天信息锁
 	QMutex m_topicMutex;								 //订阅信息锁
 	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息

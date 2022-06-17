@@ -43,6 +43,7 @@ public slots:
 	void OnUpdateFriendCard();
 	void doItemDoubleClicked(QListWidgetItem *);
 	void OnNotifyGetPlayerInfo(CharacterPtr charinfo);
+	void on_listWidget_customContextMenuRequested(const QPoint &);
 
 private:
 	Ui::GameChatWgt ui;

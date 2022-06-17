@@ -427,6 +427,8 @@ static const char* CGRpcService_method_names[] = {
   "/CGData.CGRpcService/StoreCGMapData",
   "/CGData.CGRpcService/UploadGidData",
   "/CGData.CGRpcService/UploadGidBankData",
+  "/CGData.CGRpcService/UploadMapData",
+  "/CGData.CGRpcService/DownloadMapData",
   "/CGData.CGRpcService/Publish",
   "/CGData.CGRpcService/Subscribe",
   "/CGData.CGRpcService/SelectAccountGidData",
@@ -449,11 +451,13 @@ CGRpcService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chann
   , rpcmethod_StoreCGMapData_(CGRpcService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_UploadGidData_(CGRpcService_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_UploadGidBankData_(CGRpcService_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Publish_(CGRpcService_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Subscribe_(CGRpcService_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
-  , rpcmethod_SelectAccountGidData_(CGRpcService_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SelectGidData_(CGRpcService_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SelectDstTypeGidData_(CGRpcService_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_UploadMapData_(CGRpcService_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
+  , rpcmethod_DownloadMapData_(CGRpcService_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_Publish_(CGRpcService_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Subscribe_(CGRpcService_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_SelectAccountGidData_(CGRpcService_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SelectGidData_(CGRpcService_method_names[13], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SelectDstTypeGidData_(CGRpcService_method_names[14], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CGRpcService::Stub::GetCGItemData(::grpc::ClientContext* context, const ::CGData::CGItemRequest& request, ::CGData::CGItemResponse* response) {
@@ -638,6 +642,38 @@ void CGRpcService::Stub::async::UploadGidBankData(::grpc::ClientContext* context
     this->PrepareAsyncUploadGidBankDataRaw(context, request, cq);
   result->StartCall();
   return result;
+}
+
+::grpc::ClientWriter< ::CGData::UploadMapDataRequest>* CGRpcService::Stub::UploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response) {
+  return ::grpc::internal::ClientWriterFactory< ::CGData::UploadMapDataRequest>::Create(channel_.get(), rpcmethod_UploadMapData_, context, response);
+}
+
+void CGRpcService::Stub::async::UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) {
+  ::grpc::internal::ClientCallbackWriterFactory< ::CGData::UploadMapDataRequest>::Create(stub_->channel_.get(), stub_->rpcmethod_UploadMapData_, context, response, reactor);
+}
+
+::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>* CGRpcService::Stub::AsyncUploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncWriterFactory< ::CGData::UploadMapDataRequest>::Create(channel_.get(), cq, rpcmethod_UploadMapData_, context, response, true, tag);
+}
+
+::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>* CGRpcService::Stub::PrepareAsyncUploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncWriterFactory< ::CGData::UploadMapDataRequest>::Create(channel_.get(), cq, rpcmethod_UploadMapData_, context, response, false, nullptr);
+}
+
+::grpc::ClientReader< ::CGData::DownloadMapDataResponse>* CGRpcService::Stub::DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) {
+  return ::grpc::internal::ClientReaderFactory< ::CGData::DownloadMapDataResponse>::Create(channel_.get(), rpcmethod_DownloadMapData_, context, request);
+}
+
+void CGRpcService::Stub::async::DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) {
+  ::grpc::internal::ClientCallbackReaderFactory< ::CGData::DownloadMapDataResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_DownloadMapData_, context, request, reactor);
+}
+
+::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* CGRpcService::Stub::AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncReaderFactory< ::CGData::DownloadMapDataResponse>::Create(channel_.get(), cq, rpcmethod_DownloadMapData_, context, request, true, tag);
+}
+
+::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* CGRpcService::Stub::PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncReaderFactory< ::CGData::DownloadMapDataResponse>::Create(channel_.get(), cq, rpcmethod_DownloadMapData_, context, request, false, nullptr);
 }
 
 ::grpc::Status CGRpcService::Stub::Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) {
@@ -831,6 +867,26 @@ CGRpcService::Service::Service() {
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CGRpcService_method_names[8],
+      ::grpc::internal::RpcMethod::CLIENT_STREAMING,
+      new ::grpc::internal::ClientStreamingHandler< CGRpcService::Service, ::CGData::UploadMapDataRequest, ::CGData::UploadMapDataResponse>(
+          [](CGRpcService::Service* service,
+             ::grpc::ServerContext* ctx,
+             ::grpc::ServerReader<::CGData::UploadMapDataRequest>* reader,
+             ::CGData::UploadMapDataResponse* resp) {
+               return service->UploadMapData(ctx, reader, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CGRpcService_method_names[9],
+      ::grpc::internal::RpcMethod::SERVER_STREAMING,
+      new ::grpc::internal::ServerStreamingHandler< CGRpcService::Service, ::CGData::DownloadMapDataRequest, ::CGData::DownloadMapDataResponse>(
+          [](CGRpcService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::CGData::DownloadMapDataRequest* req,
+             ::grpc::ServerWriter<::CGData::DownloadMapDataResponse>* writer) {
+               return service->DownloadMapData(ctx, req, writer);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CGRpcService_method_names[10],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::StringPub, ::CGData::StringPub, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](CGRpcService::Service* service,
@@ -840,7 +896,7 @@ CGRpcService::Service::Service() {
                return service->Publish(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      CGRpcService_method_names[9],
+      CGRpcService_method_names[11],
       ::grpc::internal::RpcMethod::SERVER_STREAMING,
       new ::grpc::internal::ServerStreamingHandler< CGRpcService::Service, ::CGData::StringPub, ::CGData::StringPub>(
           [](CGRpcService::Service* service,
@@ -850,7 +906,7 @@ CGRpcService::Service::Service() {
                return service->Subscribe(ctx, req, writer);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      CGRpcService_method_names[10],
+      CGRpcService_method_names[12],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](CGRpcService::Service* service,
@@ -860,7 +916,7 @@ CGRpcService::Service::Service() {
                return service->SelectAccountGidData(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      CGRpcService_method_names[11],
+      CGRpcService_method_names[13],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](CGRpcService::Service* service,
@@ -870,7 +926,7 @@ CGRpcService::Service::Service() {
                return service->SelectGidData(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      CGRpcService_method_names[12],
+      CGRpcService_method_names[14],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](CGRpcService::Service* service,
@@ -937,6 +993,20 @@ CGRpcService::Service::~Service() {
   (void) context;
   (void) request;
   (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CGRpcService::Service::UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* reader, ::CGData::UploadMapDataResponse* response) {
+  (void) context;
+  (void) reader;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CGRpcService::Service::DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer) {
+  (void) context;
+  (void) request;
+  (void) writer;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 

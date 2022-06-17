@@ -113,13 +113,54 @@ Status GGRpcServiceImpl::UploadMapData(::grpc::ServerContext* context, ::grpc::S
 	CGData::UploadMapDataRequest request;
 	stream->Read(&request);
 
-	QString sPath = QCoreApplication::applicationDirPath() + "//mgrMap//";
-	sPath = QString("%1/map/%2/%3/%4.dat").arg(sPath).arg(request.maptype().c_str()).arg(request.serverline().c_str()).arg(request.filename().c_str());
-	QFile filemap(sPath);
-	if (!filemap.open(QIODevice::WriteOnly))
-		return Status::OK;
-	filemap.write(request.imagedata().c_str(), request.imagedata().size());
-	filemap.close();
+	//原始数据保存
+	/*QString sPath = QCoreApplication::applicationDirPath() + "//mgrMap//";
+	if (std::stoi(request.maptype()) == 0)
+		sPath = QString("%1/%2/%3.dat").arg(sPath).arg(request.maptype().c_str()).arg(request.filename().c_str());
+	else
+		sPath = QString("%1/%2/%3/%4.dat").arg(sPath).arg(request.maptype().c_str()).arg(request.serverline().c_str()).arg(request.filename().c_str());
+	*/
+	//解析后bmp数据保存
+	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
+	if (std::stoi(request.maptype()) == 0)
+		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(request.maptype().c_str()).arg(request.filename().c_str());
+	else
+		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(request.maptype().c_str()).arg(request.serverline().c_str()).arg(request.filename().c_str());
+	QImage image;
+	image.loadFromData((uchar*)request.imagedata().c_str(), request.imagedata().size());;
+	image.save(sPath);
+	//QFile filemap(sPath);
+	//if (!filemap.open(QIODevice::WriteOnly))
+	//	return Status::OK;
+	//filemap.write(request.imagedata().c_str(), request.imagedata().size());
+	//filemap.close();
+	return Status::OK;
+}
+
+Status GGRpcServiceImpl::DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer)
+{
+	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
+	if (std::stoi(request->maptype()) == 0)
+		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(request->maptype().c_str()).arg(request->filename().c_str());
+	else
+		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(request->maptype().c_str()).arg(request->serverline().c_str()).arg(request->filename().c_str());
+
+	QImage image;
+	image.load(sPath);
+	CGData::DownloadMapDataResponse response;
+	response.set_filename(request->filename());
+	response.set_serverline(request->serverline());
+	response.set_maptype(request->maptype());
+	QFileInfo mapInfo(sPath);
+	response.set_filetime(mapInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss").toStdString());
+
+	QByteArray ba;
+	QBuffer buffer(&ba);
+	buffer.open(QIODevice::WriteOnly);
+	image.save(&buffer, "BMP"); // writes image into ba in PNG format
+	response.set_imagedata(ba.data(), ba.size());
+
+	writer->Write(response);
 	return Status::OK;
 }
 

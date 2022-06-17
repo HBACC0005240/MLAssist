@@ -1562,6 +1562,24 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidBankDataResponse>> PrepareAsyncUploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidBankDataResponse>>(PrepareAsyncUploadGidBankDataRaw(context, request, cq));
     }
+    std::unique_ptr< ::grpc::ClientWriterInterface< ::CGData::UploadMapDataRequest>> UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response) {
+      return std::unique_ptr< ::grpc::ClientWriterInterface< ::CGData::UploadMapDataRequest>>(UploadMapDataRaw(context, response));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::CGData::UploadMapDataRequest>> AsyncUploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::CGData::UploadMapDataRequest>>(AsyncUploadMapDataRaw(context, response, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::CGData::UploadMapDataRequest>> PrepareAsyncUploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::CGData::UploadMapDataRequest>>(PrepareAsyncUploadMapDataRaw(context, response, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReaderInterface< ::CGData::DownloadMapDataResponse>> DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< ::CGData::DownloadMapDataResponse>>(DownloadMapDataRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>> AsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>>(AsyncDownloadMapDataRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>> PrepareAsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>>(PrepareAsyncDownloadMapDataRaw(context, request, cq));
+    }
     // 发布是rpc的普通方法
     virtual ::grpc::Status Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>> AsyncPublish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
@@ -1630,6 +1648,8 @@ class CGRpcService final {
       virtual void UploadGidData(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) = 0;
+      virtual void DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) = 0;
       // 发布是rpc的普通方法
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) = 0;
@@ -1666,6 +1686,12 @@ class CGRpcService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidDataResponse>* PrepareAsyncUploadGidDataRaw(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidBankDataResponse>* AsyncUploadGidBankDataRaw(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidBankDataResponse>* PrepareAsyncUploadGidBankDataRaw(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientWriterInterface< ::CGData::UploadMapDataRequest>* UploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response) = 0;
+    virtual ::grpc::ClientAsyncWriterInterface< ::CGData::UploadMapDataRequest>* AsyncUploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncWriterInterface< ::CGData::UploadMapDataRequest>* PrepareAsyncUploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< ::CGData::DownloadMapDataResponse>* DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>* AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>* PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>* AsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>* PrepareAsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientReaderInterface< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) = 0;
@@ -1737,6 +1763,24 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::UploadGidBankDataResponse>> PrepareAsyncUploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::UploadGidBankDataResponse>>(PrepareAsyncUploadGidBankDataRaw(context, request, cq));
     }
+    std::unique_ptr< ::grpc::ClientWriter< ::CGData::UploadMapDataRequest>> UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response) {
+      return std::unique_ptr< ::grpc::ClientWriter< ::CGData::UploadMapDataRequest>>(UploadMapDataRaw(context, response));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>> AsyncUploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>>(AsyncUploadMapDataRaw(context, response, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>> PrepareAsyncUploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>>(PrepareAsyncUploadMapDataRaw(context, response, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReader< ::CGData::DownloadMapDataResponse>> DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) {
+      return std::unique_ptr< ::grpc::ClientReader< ::CGData::DownloadMapDataResponse>>(DownloadMapDataRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>> AsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>>(AsyncDownloadMapDataRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>> PrepareAsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>>(PrepareAsyncDownloadMapDataRaw(context, request, cq));
+    }
     ::grpc::Status Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>> AsyncPublish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>>(AsyncPublishRaw(context, request, cq));
@@ -1793,6 +1837,8 @@ class CGRpcService final {
       void UploadGidData(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, std::function<void(::grpc::Status)>) override;
       void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) override;
+      void DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Subscribe(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::grpc::ClientReadReactor< ::CGData::StringPub>* reactor) override;
@@ -1829,6 +1875,12 @@ class CGRpcService final {
     ::grpc::ClientAsyncResponseReader< ::CGData::UploadGidDataResponse>* PrepareAsyncUploadGidDataRaw(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::UploadGidBankDataResponse>* AsyncUploadGidBankDataRaw(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::UploadGidBankDataResponse>* PrepareAsyncUploadGidBankDataRaw(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientWriter< ::CGData::UploadMapDataRequest>* UploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response) override;
+    ::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>* AsyncUploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncWriter< ::CGData::UploadMapDataRequest>* PrepareAsyncUploadMapDataRaw(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< ::CGData::DownloadMapDataResponse>* DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) override;
+    ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>* AsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>* PrepareAsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientReader< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) override;
@@ -1848,6 +1900,8 @@ class CGRpcService final {
     const ::grpc::internal::RpcMethod rpcmethod_StoreCGMapData_;
     const ::grpc::internal::RpcMethod rpcmethod_UploadGidData_;
     const ::grpc::internal::RpcMethod rpcmethod_UploadGidBankData_;
+    const ::grpc::internal::RpcMethod rpcmethod_UploadMapData_;
+    const ::grpc::internal::RpcMethod rpcmethod_DownloadMapData_;
     const ::grpc::internal::RpcMethod rpcmethod_Publish_;
     const ::grpc::internal::RpcMethod rpcmethod_Subscribe_;
     const ::grpc::internal::RpcMethod rpcmethod_SelectAccountGidData_;
@@ -1874,6 +1928,8 @@ class CGRpcService final {
     // 定时上报当辅助信息
     virtual ::grpc::Status UploadGidData(::grpc::ServerContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response);
     virtual ::grpc::Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response);
+    virtual ::grpc::Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* reader, ::CGData::UploadMapDataResponse* response);
+    virtual ::grpc::Status DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer);
     // 发布是rpc的普通方法
     virtual ::grpc::Status Publish(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response);
     // 订阅则是一个单向的流服务，服务端返回的数据可能很大
@@ -2047,12 +2103,52 @@ class CGRpcService final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_UploadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_UploadMapData() {
+      ::grpc::Service::MarkMethodAsync(8);
+    }
+    ~WithAsyncMethod_UploadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadMapData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* /*reader*/, ::CGData::UploadMapDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUploadMapData(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::CGData::UploadMapDataResponse, ::CGData::UploadMapDataRequest>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncClientStreaming(8, context, reader, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_DownloadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_DownloadMapData() {
+      ::grpc::Service::MarkMethodAsync(9);
+    }
+    ~WithAsyncMethod_DownloadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DownloadMapData(::grpc::ServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDownloadMapData(::grpc::ServerContext* context, ::CGData::DownloadMapDataRequest* request, ::grpc::ServerAsyncWriter< ::CGData::DownloadMapDataResponse>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(9, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Publish() {
-      ::grpc::Service::MarkMethodAsync(8);
+      ::grpc::Service::MarkMethodAsync(10);
     }
     ~WithAsyncMethod_Publish() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2063,7 +2159,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPublish(::grpc::ServerContext* context, ::CGData::StringPub* request, ::grpc::ServerAsyncResponseWriter< ::CGData::StringPub>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2072,7 +2168,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Subscribe() {
-      ::grpc::Service::MarkMethodAsync(9);
+      ::grpc::Service::MarkMethodAsync(11);
     }
     ~WithAsyncMethod_Subscribe() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2083,7 +2179,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSubscribe(::grpc::ServerContext* context, ::CGData::StringPub* request, ::grpc::ServerAsyncWriter< ::CGData::StringPub>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncServerStreaming(9, context, request, writer, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncServerStreaming(11, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2092,7 +2188,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodAsync(10);
+      ::grpc::Service::MarkMethodAsync(12);
     }
     ~WithAsyncMethod_SelectAccountGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2103,7 +2199,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectAccountGidData(::grpc::ServerContext* context, ::CGData::SelectAccountGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectAccountGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2112,7 +2208,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodAsync(11);
+      ::grpc::Service::MarkMethodAsync(13);
     }
     ~WithAsyncMethod_SelectGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2123,7 +2219,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectGidData(::grpc::ServerContext* context, ::CGData::SelectGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2132,7 +2228,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodAsync(12);
+      ::grpc::Service::MarkMethodAsync(14);
     }
     ~WithAsyncMethod_SelectDstTypeGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2143,10 +2239,10 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectDstTypeGidData(::grpc::ServerContext* context, ::CGData::SelectGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectAccountGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GetCGItemData<WithAsyncMethod_GetConnectState<WithAsyncMethod_GetPetGradeCalcData<WithAsyncMethod_GetServerStoreMapData<WithAsyncMethod_StoreCGItemData<WithAsyncMethod_StoreCGMapData<WithAsyncMethod_UploadGidData<WithAsyncMethod_UploadGidBankData<WithAsyncMethod_Publish<WithAsyncMethod_Subscribe<WithAsyncMethod_SelectAccountGidData<WithAsyncMethod_SelectGidData<WithAsyncMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > AsyncService;
+  typedef WithAsyncMethod_GetCGItemData<WithAsyncMethod_GetConnectState<WithAsyncMethod_GetPetGradeCalcData<WithAsyncMethod_GetServerStoreMapData<WithAsyncMethod_StoreCGItemData<WithAsyncMethod_StoreCGMapData<WithAsyncMethod_UploadGidData<WithAsyncMethod_UploadGidBankData<WithAsyncMethod_UploadMapData<WithAsyncMethod_DownloadMapData<WithAsyncMethod_Publish<WithAsyncMethod_Subscribe<WithAsyncMethod_SelectAccountGidData<WithAsyncMethod_SelectGidData<WithAsyncMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_GetCGItemData : public BaseClass {
    private:
@@ -2364,18 +2460,62 @@ class CGRpcService final {
       ::grpc::CallbackServerContext* /*context*/, const ::CGData::UploadGidBankDataRequest* /*request*/, ::CGData::UploadGidBankDataResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithCallbackMethod_UploadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_UploadMapData() {
+      ::grpc::Service::MarkMethodCallback(8,
+          new ::grpc::internal::CallbackClientStreamingHandler< ::CGData::UploadMapDataRequest, ::CGData::UploadMapDataResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, ::CGData::UploadMapDataResponse* response) { return this->UploadMapData(context, response); }));
+    }
+    ~WithCallbackMethod_UploadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadMapData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* /*reader*/, ::CGData::UploadMapDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerReadReactor< ::CGData::UploadMapDataRequest>* UploadMapData(
+      ::grpc::CallbackServerContext* /*context*/, ::CGData::UploadMapDataResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_DownloadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_DownloadMapData() {
+      ::grpc::Service::MarkMethodCallback(9,
+          new ::grpc::internal::CallbackServerStreamingHandler< ::CGData::DownloadMapDataRequest, ::CGData::DownloadMapDataResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::DownloadMapDataRequest* request) { return this->DownloadMapData(context, request); }));
+    }
+    ~WithCallbackMethod_DownloadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DownloadMapData(::grpc::ServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerWriteReactor< ::CGData::DownloadMapDataResponse>* DownloadMapData(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithCallbackMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Publish() {
-      ::grpc::Service::MarkMethodCallback(8,
+      ::grpc::Service::MarkMethodCallback(10,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::StringPub, ::CGData::StringPub>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response) { return this->Publish(context, request, response); }));}
     void SetMessageAllocatorFor_Publish(
         ::grpc::MessageAllocator< ::CGData::StringPub, ::CGData::StringPub>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::StringPub, ::CGData::StringPub>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2396,7 +2536,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Subscribe() {
-      ::grpc::Service::MarkMethodCallback(9,
+      ::grpc::Service::MarkMethodCallback(11,
           new ::grpc::internal::CallbackServerStreamingHandler< ::CGData::StringPub, ::CGData::StringPub>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::StringPub* request) { return this->Subscribe(context, request); }));
@@ -2418,13 +2558,13 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodCallback(10,
+      ::grpc::Service::MarkMethodCallback(12,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) { return this->SelectAccountGidData(context, request, response); }));}
     void SetMessageAllocatorFor_SelectAccountGidData(
         ::grpc::MessageAllocator< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2445,13 +2585,13 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodCallback(11,
+      ::grpc::Service::MarkMethodCallback(13,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response) { return this->SelectGidData(context, request, response); }));}
     void SetMessageAllocatorFor_SelectGidData(
         ::grpc::MessageAllocator< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(11);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(13);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2472,13 +2612,13 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodCallback(12,
+      ::grpc::Service::MarkMethodCallback(14,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) { return this->SelectDstTypeGidData(context, request, response); }));}
     void SetMessageAllocatorFor_SelectDstTypeGidData(
         ::grpc::MessageAllocator< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(14);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2493,7 +2633,7 @@ class CGRpcService final {
     virtual ::grpc::ServerUnaryReactor* SelectDstTypeGidData(
       ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_GetCGItemData<WithCallbackMethod_GetConnectState<WithCallbackMethod_GetPetGradeCalcData<WithCallbackMethod_GetServerStoreMapData<WithCallbackMethod_StoreCGItemData<WithCallbackMethod_StoreCGMapData<WithCallbackMethod_UploadGidData<WithCallbackMethod_UploadGidBankData<WithCallbackMethod_Publish<WithCallbackMethod_Subscribe<WithCallbackMethod_SelectAccountGidData<WithCallbackMethod_SelectGidData<WithCallbackMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > CallbackService;
+  typedef WithCallbackMethod_GetCGItemData<WithCallbackMethod_GetConnectState<WithCallbackMethod_GetPetGradeCalcData<WithCallbackMethod_GetServerStoreMapData<WithCallbackMethod_StoreCGItemData<WithCallbackMethod_StoreCGMapData<WithCallbackMethod_UploadGidData<WithCallbackMethod_UploadGidBankData<WithCallbackMethod_UploadMapData<WithCallbackMethod_DownloadMapData<WithCallbackMethod_Publish<WithCallbackMethod_Subscribe<WithCallbackMethod_SelectAccountGidData<WithCallbackMethod_SelectGidData<WithCallbackMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GetCGItemData : public BaseClass {
@@ -2632,12 +2772,46 @@ class CGRpcService final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_UploadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_UploadMapData() {
+      ::grpc::Service::MarkMethodGeneric(8);
+    }
+    ~WithGenericMethod_UploadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadMapData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* /*reader*/, ::CGData::UploadMapDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_DownloadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_DownloadMapData() {
+      ::grpc::Service::MarkMethodGeneric(9);
+    }
+    ~WithGenericMethod_DownloadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DownloadMapData(::grpc::ServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Publish() {
-      ::grpc::Service::MarkMethodGeneric(8);
+      ::grpc::Service::MarkMethodGeneric(10);
     }
     ~WithGenericMethod_Publish() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2654,7 +2828,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Subscribe() {
-      ::grpc::Service::MarkMethodGeneric(9);
+      ::grpc::Service::MarkMethodGeneric(11);
     }
     ~WithGenericMethod_Subscribe() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2671,7 +2845,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodGeneric(10);
+      ::grpc::Service::MarkMethodGeneric(12);
     }
     ~WithGenericMethod_SelectAccountGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2688,7 +2862,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodGeneric(11);
+      ::grpc::Service::MarkMethodGeneric(13);
     }
     ~WithGenericMethod_SelectGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2705,7 +2879,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodGeneric(12);
+      ::grpc::Service::MarkMethodGeneric(14);
     }
     ~WithGenericMethod_SelectDstTypeGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2877,12 +3051,52 @@ class CGRpcService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_UploadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_UploadMapData() {
+      ::grpc::Service::MarkMethodRaw(8);
+    }
+    ~WithRawMethod_UploadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadMapData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* /*reader*/, ::CGData::UploadMapDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUploadMapData(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncClientStreaming(8, context, reader, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_DownloadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_DownloadMapData() {
+      ::grpc::Service::MarkMethodRaw(9);
+    }
+    ~WithRawMethod_DownloadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DownloadMapData(::grpc::ServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDownloadMapData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncWriter< ::grpc::ByteBuffer>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(9, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Publish() {
-      ::grpc::Service::MarkMethodRaw(8);
+      ::grpc::Service::MarkMethodRaw(10);
     }
     ~WithRawMethod_Publish() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2893,7 +3107,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPublish(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2902,7 +3116,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Subscribe() {
-      ::grpc::Service::MarkMethodRaw(9);
+      ::grpc::Service::MarkMethodRaw(11);
     }
     ~WithRawMethod_Subscribe() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2913,7 +3127,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSubscribe(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncWriter< ::grpc::ByteBuffer>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncServerStreaming(9, context, request, writer, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncServerStreaming(11, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2922,7 +3136,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodRaw(10);
+      ::grpc::Service::MarkMethodRaw(12);
     }
     ~WithRawMethod_SelectAccountGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2933,7 +3147,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectAccountGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2942,7 +3156,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodRaw(11);
+      ::grpc::Service::MarkMethodRaw(13);
     }
     ~WithRawMethod_SelectGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2953,7 +3167,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2962,7 +3176,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodRaw(12);
+      ::grpc::Service::MarkMethodRaw(14);
     }
     ~WithRawMethod_SelectDstTypeGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2973,7 +3187,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectDstTypeGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -3153,12 +3367,56 @@ class CGRpcService final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_UploadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_UploadMapData() {
+      ::grpc::Service::MarkMethodRawCallback(8,
+          new ::grpc::internal::CallbackClientStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, ::grpc::ByteBuffer* response) { return this->UploadMapData(context, response); }));
+    }
+    ~WithRawCallbackMethod_UploadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadMapData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* /*reader*/, ::CGData::UploadMapDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerReadReactor< ::grpc::ByteBuffer>* UploadMapData(
+      ::grpc::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_DownloadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_DownloadMapData() {
+      ::grpc::Service::MarkMethodRawCallback(9,
+          new ::grpc::internal::CallbackServerStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const::grpc::ByteBuffer* request) { return this->DownloadMapData(context, request); }));
+    }
+    ~WithRawCallbackMethod_DownloadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DownloadMapData(::grpc::ServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerWriteReactor< ::grpc::ByteBuffer>* DownloadMapData(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Publish() {
-      ::grpc::Service::MarkMethodRawCallback(8,
+      ::grpc::Service::MarkMethodRawCallback(10,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Publish(context, request, response); }));
@@ -3180,7 +3438,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Subscribe() {
-      ::grpc::Service::MarkMethodRawCallback(9,
+      ::grpc::Service::MarkMethodRawCallback(11,
           new ::grpc::internal::CallbackServerStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const::grpc::ByteBuffer* request) { return this->Subscribe(context, request); }));
@@ -3202,7 +3460,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodRawCallback(10,
+      ::grpc::Service::MarkMethodRawCallback(12,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectAccountGidData(context, request, response); }));
@@ -3224,7 +3482,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodRawCallback(11,
+      ::grpc::Service::MarkMethodRawCallback(13,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectGidData(context, request, response); }));
@@ -3246,7 +3504,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodRawCallback(12,
+      ::grpc::Service::MarkMethodRawCallback(14,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectDstTypeGidData(context, request, response); }));
@@ -3484,7 +3742,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Publish() {
-      ::grpc::Service::MarkMethodStreamed(8,
+      ::grpc::Service::MarkMethodStreamed(10,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::StringPub, ::CGData::StringPub>(
             [this](::grpc::ServerContext* context,
@@ -3511,7 +3769,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodStreamed(10,
+      ::grpc::Service::MarkMethodStreamed(12,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](::grpc::ServerContext* context,
@@ -3538,7 +3796,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodStreamed(11,
+      ::grpc::Service::MarkMethodStreamed(13,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>(
             [this](::grpc::ServerContext* context,
@@ -3565,7 +3823,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodStreamed(12,
+      ::grpc::Service::MarkMethodStreamed(14,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](::grpc::ServerContext* context,
@@ -3588,12 +3846,39 @@ class CGRpcService final {
   };
   typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > StreamedUnaryService;
   template <class BaseClass>
+  class WithSplitStreamingMethod_DownloadMapData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithSplitStreamingMethod_DownloadMapData() {
+      ::grpc::Service::MarkMethodStreamed(9,
+        new ::grpc::internal::SplitServerStreamingHandler<
+          ::CGData::DownloadMapDataRequest, ::CGData::DownloadMapDataResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerSplitStreamer<
+                     ::CGData::DownloadMapDataRequest, ::CGData::DownloadMapDataResponse>* streamer) {
+                       return this->StreamedDownloadMapData(context,
+                         streamer);
+                  }));
+    }
+    ~WithSplitStreamingMethod_DownloadMapData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status DownloadMapData(::grpc::ServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with split streamed
+    virtual ::grpc::Status StreamedDownloadMapData(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::CGData::DownloadMapDataRequest,::CGData::DownloadMapDataResponse>* server_split_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithSplitStreamingMethod_Subscribe : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithSplitStreamingMethod_Subscribe() {
-      ::grpc::Service::MarkMethodStreamed(9,
+      ::grpc::Service::MarkMethodStreamed(11,
         new ::grpc::internal::SplitServerStreamingHandler<
           ::CGData::StringPub, ::CGData::StringPub>(
             [this](::grpc::ServerContext* context,
@@ -3614,8 +3899,8 @@ class CGRpcService final {
     // replace default version of method with split streamed
     virtual ::grpc::Status StreamedSubscribe(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::CGData::StringPub,::CGData::StringPub>* server_split_streamer) = 0;
   };
-  typedef WithSplitStreamingMethod_Subscribe<Service > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<WithSplitStreamingMethod_Subscribe<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > StreamedService;
+  typedef WithSplitStreamingMethod_DownloadMapData<WithSplitStreamingMethod_Subscribe<Service > > SplitStreamedService;
+  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithSplitStreamingMethod_DownloadMapData<WithStreamedUnaryMethod_Publish<WithSplitStreamingMethod_Subscribe<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace CGData

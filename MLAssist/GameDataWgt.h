@@ -49,4 +49,8 @@ public slots:
 private:
 	Ui::GameDataWgt ui;
 	Character m_Infos[20];
+	QCheckBox *m_pRealUpdateCheckBox;
+	QTime m_lastUpdatePlayerTime;
+	QTime m_lastUpdatePlayerSkillTime;
+	QTime m_lastUpdatePlayerPetTime;
 };

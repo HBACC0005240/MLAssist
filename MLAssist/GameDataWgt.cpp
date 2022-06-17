@@ -10,6 +10,9 @@ GameDataWgt::GameDataWgt(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
+	m_lastUpdatePlayerTime.restart();
+	m_lastUpdatePlayerSkillTime.restart();
+	m_lastUpdatePlayerPetTime.restart();
 	connect(g_pGameCtrl, &GameCtrl::NotifyGameCharacterInfo, this, &GameDataWgt::OnNotifyGameCharacterInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGameSkillsInfo, this, &GameDataWgt::OnNotifyGetSkillsInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGetMapInfo, this, &GameDataWgt::doUpdateMapData, Qt::ConnectionType::QueuedConnection);
@@ -42,6 +45,16 @@ GameDataWgt::GameDataWgt(QWidget *parent) :
 	//ui.tableWidget->verticalHeader()->setDefaultSectionSize(15);
 	//ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	//ui.tableWidget->resizeColumnsToContents();//根据内容调整列宽 但每次都变 太麻烦 修改下
+	auto pTabBar = ui.tabWidget->tabBar();
+	m_pRealUpdateCheckBox = new QCheckBox("玩家实时刷新", this);
+	connect(m_pRealUpdateCheckBox, SIGNAL(stateChanged(int)), g_pGameCtrl, SLOT(OnSetRealUpdatePlayerUi(int)));
+
+	//m_pRealUpdateCheckBox->setMaximumWidth(40);
+	QWidget *pWidget = new QWidget(this);
+	QHBoxLayout *pHLayout = new QHBoxLayout(pWidget);
+	pHLayout->addWidget(m_pRealUpdateCheckBox);
+	pHLayout->setContentsMargins(0, 0, 0, 0);
+	ui.tabWidget->setCornerWidget(pWidget);
 }
 
 GameDataWgt::~GameDataWgt()
@@ -366,7 +379,7 @@ void GameDataWgt::doSaveUserConfig(QSettings &iniFile)
 
 void GameDataWgt::doUpdateAttachInfo()
 {
-	setItemText(12, 0, QString("进程:%1  端口:%2").arg(g_pGameCtrl->getGamePID()).arg(g_pGameCtrl->GetGamePort())); 
+	setItemText(12, 0, QString("进程:%1  端口:%2").arg(g_pGameCtrl->getGamePID()).arg(g_pGameCtrl->GetGamePort()));
 }
 
 //这个不彻底清除，只显示连接断开
@@ -389,6 +402,13 @@ void GameDataWgt::OnNotifyGameCharacterInfo(CharacterPtr char_info)
 {
 	if (!this->isVisible())
 		return;
+	if (!m_pRealUpdateCheckBox->isChecked())
+	{
+		if (m_lastUpdatePlayerTime.elapsed() < 5000)
+			return;
+		m_lastUpdatePlayerTime.restart();
+	}
+
 	ui.tableWidget->setUpdatesEnabled(false);
 	auto gamePlayer = char_info;
 	//0xE8FECA  E21C4A这两个应该是环境变量，周围有其他信息，不是太准
@@ -528,6 +548,12 @@ void GameDataWgt::OnNotifyGetSkillsInfo(GameSkillList skills)
 {
 	if (!this->isVisible())
 		return;
+	if (!m_pRealUpdateCheckBox->isChecked())
+	{
+		if (m_lastUpdatePlayerSkillTime.elapsed() < 5000)
+			return;
+		m_lastUpdatePlayerSkillTime.restart();
+	}
 	GameSkillList gameSkills = skills;
 	for (int i = 0; i < gameSkills.size(); ++i)
 	{
@@ -550,6 +576,14 @@ void GameDataWgt::OnNotifyGetPetsInfo(GamePetList pets)
 {
 	if (!this->isVisible())
 		return;
+	if (!this->isVisible())
+		return;
+	if (!m_pRealUpdateCheckBox->isChecked())
+	{
+		if (m_lastUpdatePlayerPetTime.elapsed() < 5000)
+			return;
+		m_lastUpdatePlayerPetTime.restart();
+	}
 	GamePetPtr battlePet = nullptr;
 	for (auto pet : pets)
 	{

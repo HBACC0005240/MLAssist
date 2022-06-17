@@ -62,6 +62,20 @@ int main(int argc, char* argv[])
 	gDefaultHandler = qInstallMessageHandler(outputMessage);
 	g_CGAInterface = CGA::CreateInterface();
 	ITObjectDataMgr::getInstance();
+	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
+	QDir makeDir;
+	QString sTmpPath = sPath + "0";
+	if (!makeDir.exists(sTmpPath))
+		makeDir.mkpath(sTmpPath);
+	for (int i = 1; i <= 10; ++i)
+	{
+		sTmpPath = sPath + QString::number(1) + "//" + QString::number(i);
+		if (!makeDir.exists(sTmpPath))
+		{
+			makeDir.mkpath(sTmpPath);
+		}
+	}
+
 	MLAssistTool w;
 	w.show();
 	return a.exec();

@@ -58,6 +58,63 @@ struct UploadGidBankDataRequestDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT UploadGidBankDataRequestDefaultTypeInternal _UploadGidBankDataRequest_default_instance_;
+constexpr UploadMapDataRequest::UploadMapDataRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : filename_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , serverline_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , maptype_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , filetime_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , imagedata_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct UploadMapDataRequestDefaultTypeInternal {
+  constexpr UploadMapDataRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~UploadMapDataRequestDefaultTypeInternal() {}
+  union {
+    UploadMapDataRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT UploadMapDataRequestDefaultTypeInternal _UploadMapDataRequest_default_instance_;
+constexpr UploadMapDataResponse::UploadMapDataResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct UploadMapDataResponseDefaultTypeInternal {
+  constexpr UploadMapDataResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~UploadMapDataResponseDefaultTypeInternal() {}
+  union {
+    UploadMapDataResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT UploadMapDataResponseDefaultTypeInternal _UploadMapDataResponse_default_instance_;
+constexpr DownloadMapDataRequest::DownloadMapDataRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : filename_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , serverline_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , maptype_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct DownloadMapDataRequestDefaultTypeInternal {
+  constexpr DownloadMapDataRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~DownloadMapDataRequestDefaultTypeInternal() {}
+  union {
+    DownloadMapDataRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT DownloadMapDataRequestDefaultTypeInternal _DownloadMapDataRequest_default_instance_;
+constexpr DownloadMapDataResponse::DownloadMapDataResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : filename_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , serverline_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , maptype_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , filetime_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , imagedata_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct DownloadMapDataResponseDefaultTypeInternal {
+  constexpr DownloadMapDataResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~DownloadMapDataResponseDefaultTypeInternal() {}
+  union {
+    DownloadMapDataResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT DownloadMapDataResponseDefaultTypeInternal _DownloadMapDataResponse_default_instance_;
 constexpr CGAccountGidData::CGAccountGidData(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : account_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
@@ -610,7 +667,7 @@ struct CGPlayerFlagEnabledDataDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CGPlayerFlagEnabledDataDefaultTypeInternal _CGPlayerFlagEnabledData_default_instance_;
 }  // namespace CGData
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_CGData_2eproto[35];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_CGData_2eproto[39];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_CGData_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_CGData_2eproto = nullptr;
 
@@ -638,6 +695,39 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::UploadGidBankDataRequest, pet_data_),
   PROTOBUF_FIELD_OFFSET(::CGData::UploadGidBankDataRequest, items_),
   PROTOBUF_FIELD_OFFSET(::CGData::UploadGidBankDataRequest, role_type_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataRequest, filename_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataRequest, serverline_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataRequest, maptype_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataRequest, filetime_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataRequest, imagedata_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadMapDataResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataRequest, filename_),
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataRequest, serverline_),
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataRequest, maptype_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, filename_),
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, serverline_),
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, maptype_),
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, filetime_),
+  PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, imagedata_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::CGAccountGidData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1002,44 +1092,52 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, sizeof(::CGData::CGGmeTypeRequest)},
   { 6, -1, sizeof(::CGData::StringPub)},
   { 12, -1, sizeof(::CGData::UploadGidBankDataRequest)},
-  { 23, -1, sizeof(::CGData::CGAccountGidData)},
-  { 34, -1, sizeof(::CGData::UploadGidDataRequest)},
-  { 45, -1, sizeof(::CGData::SelectAccountGidDataRequest)},
-  { 51, -1, sizeof(::CGData::SelectGidDataRequest)},
-  { 58, -1, sizeof(::CGData::SelectAccountGidDataResponse)},
-  { 64, -1, sizeof(::CGData::SelectGidDataResponse)},
-  { 75, -1, sizeof(::CGData::CGBaseData)},
-  { 89, -1, sizeof(::CGData::CGSkillBaseData)},
-  { 106, -1, sizeof(::CGData::CGAttrBaseData)},
-  { 136, -1, sizeof(::CGData::CGCharacterPersDesc)},
-  { 149, -1, sizeof(::CGData::CGCharacterData)},
-  { 186, -1, sizeof(::CGData::CGPetData)},
-  { 206, -1, sizeof(::CGData::CGItemData)},
-  { 221, -1, sizeof(::CGData::UploadGidDataResponse)},
-  { 226, -1, sizeof(::CGData::UploadGidBankDataResponse)},
-  { 231, -1, sizeof(::CGData::CGStoreMapRequest)},
-  { 238, -1, sizeof(::CGData::CGStoreMapResponse)},
-  { 243, -1, sizeof(::CGData::CGMapDataRequest)},
-  { 248, -1, sizeof(::CGData::CGMapDataResponse)},
-  { 254, -1, sizeof(::CGData::CGMapData)},
-  { 264, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
-  { 269, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
-  { 275, -1, sizeof(::CGData::CGPetGradeCalcData)},
-  { 301, -1, sizeof(::CGData::CGItemRequest)},
-  { 307, -1, sizeof(::CGData::CGItemResponse)},
-  { 323, -1, sizeof(::CGData::CGStoreItemRequest)},
-  { 338, -1, sizeof(::CGData::CGStoreItemResponse)},
-  { 345, -1, sizeof(::CGData::CGVoidData)},
-  { 350, -1, sizeof(::CGData::CGBoolData)},
-  { 356, -1, sizeof(::CGData::CGIntData)},
-  { 362, -1, sizeof(::CGData::CGSysTimeResponse)},
-  { 375, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
+  { 23, -1, sizeof(::CGData::UploadMapDataRequest)},
+  { 33, -1, sizeof(::CGData::UploadMapDataResponse)},
+  { 38, -1, sizeof(::CGData::DownloadMapDataRequest)},
+  { 46, -1, sizeof(::CGData::DownloadMapDataResponse)},
+  { 56, -1, sizeof(::CGData::CGAccountGidData)},
+  { 67, -1, sizeof(::CGData::UploadGidDataRequest)},
+  { 78, -1, sizeof(::CGData::SelectAccountGidDataRequest)},
+  { 84, -1, sizeof(::CGData::SelectGidDataRequest)},
+  { 91, -1, sizeof(::CGData::SelectAccountGidDataResponse)},
+  { 97, -1, sizeof(::CGData::SelectGidDataResponse)},
+  { 108, -1, sizeof(::CGData::CGBaseData)},
+  { 122, -1, sizeof(::CGData::CGSkillBaseData)},
+  { 139, -1, sizeof(::CGData::CGAttrBaseData)},
+  { 169, -1, sizeof(::CGData::CGCharacterPersDesc)},
+  { 182, -1, sizeof(::CGData::CGCharacterData)},
+  { 219, -1, sizeof(::CGData::CGPetData)},
+  { 239, -1, sizeof(::CGData::CGItemData)},
+  { 254, -1, sizeof(::CGData::UploadGidDataResponse)},
+  { 259, -1, sizeof(::CGData::UploadGidBankDataResponse)},
+  { 264, -1, sizeof(::CGData::CGStoreMapRequest)},
+  { 271, -1, sizeof(::CGData::CGStoreMapResponse)},
+  { 276, -1, sizeof(::CGData::CGMapDataRequest)},
+  { 281, -1, sizeof(::CGData::CGMapDataResponse)},
+  { 287, -1, sizeof(::CGData::CGMapData)},
+  { 297, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
+  { 302, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
+  { 308, -1, sizeof(::CGData::CGPetGradeCalcData)},
+  { 334, -1, sizeof(::CGData::CGItemRequest)},
+  { 340, -1, sizeof(::CGData::CGItemResponse)},
+  { 356, -1, sizeof(::CGData::CGStoreItemRequest)},
+  { 371, -1, sizeof(::CGData::CGStoreItemResponse)},
+  { 378, -1, sizeof(::CGData::CGVoidData)},
+  { 383, -1, sizeof(::CGData::CGBoolData)},
+  { 389, -1, sizeof(::CGData::CGIntData)},
+  { 395, -1, sizeof(::CGData::CGSysTimeResponse)},
+  { 408, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGGmeTypeRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_StringPub_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_UploadGidBankDataRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_UploadMapDataRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_UploadMapDataResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_DownloadMapDataRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_DownloadMapDataResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGAccountGidData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_UploadGidDataRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_SelectAccountGidDataRequest_default_instance_),
@@ -1081,168 +1179,180 @@ const char descriptor_table_protodef_CGData_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "\030\001 \001(\t\022\026\n\016character_name\030\002 \001(\t\022\014\n\004gold\030\003"
   " \001(\005\022#\n\010pet_data\030\004 \003(\0132\021.CGData.CGPetDat"
   "a\022!\n\005items\030\005 \003(\0132\022.CGData.CGItemData\022\021\n\t"
-  "role_type\030\006 \001(\005\"\177\n\020CGAccountGidData\022\017\n\007a"
-  "ccount\030\001 \001(\t\022\013\n\003gid\030\002 \001(\t\022\021\n\tgame_type\030\003"
-  " \001(\005\022\022\n\nbig_server\030\004 \001(\005\022\023\n\013server_line\030"
-  "\005 \001(\r\022\021\n\tcharacter\030\006 \001(\005\"\307\001\n\024UploadGidDa"
-  "taRequest\022\013\n\003gid\030\001 \001(\t\022\026\n\016character_name"
-  "\030\002 \001(\t\022/\n\016character_data\030\003 \001(\0132\027.CGData."
-  "CGCharacterData\022#\n\010pet_data\030\004 \003(\0132\021.CGDa"
-  "ta.CGPetData\022!\n\005items\030\005 \003(\0132\022.CGData.CGI"
-  "temData\022\021\n\trole_type\030\006 \001(\005\".\n\033SelectAcco"
-  "untGidDataRequest\022\017\n\007account\030\001 \001(\t\"6\n\024Se"
-  "lectGidDataRequest\022\013\n\003gid\030\001 \001(\t\022\021\n\trole_"
-  "type\030\002 \001(\005\"N\n\034SelectAccountGidDataRespon"
-  "se\022.\n\007gidData\030\001 \003(\0132\035.CGData.SelectGidDa"
-  "taResponse\"\310\001\n\025SelectGidDataResponse\022\013\n\003"
-  "gid\030\001 \001(\t\022\021\n\trole_type\030\002 \001(\005\022\026\n\016characte"
-  "r_name\030\003 \001(\t\022/\n\016character_data\030\004 \001(\0132\027.C"
-  "GData.CGCharacterData\022#\n\010pet_data\030\005 \003(\0132"
-  "\021.CGData.CGPetData\022!\n\005items\030\006 \003(\0132\022.CGDa"
-  "ta.CGItemData\"\212\001\n\nCGBaseData\022\014\n\004name\030\001 \001"
-  "(\t\022\n\n\002hp\030\002 \001(\005\022\n\n\002mp\030\003 \001(\005\022\r\n\005maxhp\030\004 \001("
-  "\005\022\r\n\005maxmp\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\n\n\002xp\030\007 "
-  "\001(\005\022\r\n\005maxxp\030\010 \001(\005\022\016\n\006health\030\t \001(\005\"\340\001\n\017C"
-  "GSkillBaseData\022\014\n\004name\030\001 \001(\t\022\014\n\004info\030\002 \001"
-  "(\t\022\n\n\002id\030\003 \001(\005\022\014\n\004cost\030\004 \001(\005\022\r\n\005flags\030\005 "
-  "\001(\005\022\r\n\005index\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\020\n\010max"
-  "Level\030\010 \001(\005\022\021\n\tavailable\030\t \001(\010\022\n\n\002xp\030\n \001"
-  "(\005\022\r\n\005maxxp\030\013 \001(\005\022*\n\tsubskills\030\014 \003(\0132\027.C"
-  "GData.CGSkillBaseData\"\317\004\n\016CGAttrBaseData"
-  "\022\025\n\rpoints_remain\030\001 \001(\005\022\030\n\020points_endura"
-  "nce\030\002 \001(\005\022\027\n\017points_strength\030\003 \001(\005\022\026\n\016po"
-  "ints_defense\030\004 \001(\005\022\026\n\016points_agility\030\005 \001"
-  "(\005\022\026\n\016points_magical\030\006 \001(\005\022\024\n\014value_atta"
-  "ck\030\007 \001(\005\022\027\n\017value_defensive\030\010 \001(\005\022\025\n\rval"
-  "ue_agility\030\t \001(\005\022\024\n\014value_spirit\030\n \001(\005\022\026"
-  "\n\016value_recovery\030\013 \001(\005\022\025\n\rresist_poison\030"
-  "\014 \001(\005\022\024\n\014resist_sleep\030\r \001(\005\022\025\n\rresist_me"
-  "dusa\030\016 \001(\005\022\024\n\014resist_drunk\030\017 \001(\005\022\024\n\014resi"
-  "st_chaos\030\020 \001(\005\022\025\n\rresist_forget\030\021 \001(\005\022\024\n"
-  "\014fix_critical\030\022 \001(\005\022\026\n\016fix_strikeback\030\023 "
-  "\001(\005\022\025\n\rfix_accurancy\030\024 \001(\005\022\021\n\tfix_dodge\030"
-  "\025 \001(\005\022\025\n\relement_earth\030\026 \001(\005\022\025\n\relement_"
-  "water\030\027 \001(\005\022\024\n\014element_fire\030\030 \001(\005\022\024\n\014ele"
-  "ment_wind\030\031 \001(\005\"\255\001\n\023CGCharacterPersDesc\022"
-  "\022\n\nchangeBits\030\001 \001(\005\022\020\n\010sellIcon\030\002 \001(\005\022\022\n"
-  "\nsellString\030\003 \001(\t\022\017\n\007buyIcon\030\004 \001(\005\022\021\n\tbu"
-  "yString\030\005 \001(\t\022\020\n\010wantIcon\030\006 \001(\005\022\022\n\nwantS"
-  "tring\030\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\273\005\n\017CGCh"
-  "aracterData\022%\n\tbase_data\030\001 \001(\0132\022.CGData."
-  "CGBaseData\022\r\n\005souls\030\002 \001(\005\022\r\n\005level\030\003 \001(\005"
-  "\022\014\n\004gold\030\004 \001(\005\022\020\n\010image_id\030\005 \001(\005\022\r\n\005scor"
-  "e\030\006 \001(\005\022\022\n\nskillslots\030\007 \001(\005\022\021\n\tuse_title"
-  "\030\010 \001(\005\022\021\n\tavatar_id\030\t \001(\005\022\016\n\006unitid\030\n \001("
-  "\005\022\r\n\005petid\030\013 \001(\005\022\021\n\tpetriding\030\014 \001(\010\022\021\n\td"
-  "irection\030\r \001(\005\022\022\n\npunchclock\030\016 \001(\005\022\027\n\017us"
-  "ingpunchclock\030\017 \001(\010\022\013\n\003job\030\020 \001(\t\022\016\n\006titl"
-  "es\030\021 \003(\t\022\026\n\016manu_endurance\030\022 \001(\005\022\025\n\rmanu"
-  "_skillful\030\023 \001(\005\022\031\n\021manu_intelligence\030\024 \001"
-  "(\005\022\026\n\016value_charisma\030\025 \001(\005\022\t\n\001x\030\026 \001(\005\022\t\n"
-  "\001y\030\027 \001(\005\022\020\n\010map_name\030\030 \001(\t\022\022\n\nmap_number"
-  "\030\031 \001(\005\022\023\n\013server_line\030\032 \001(\005\022&\n\006detail\030\033 "
-  "\001(\0132\026.CGData.CGAttrBaseData\022&\n\005skill\030\034 \003"
-  "(\0132\027.CGData.CGSkillBaseData\022\014\n\004nick\030\035 \001("
-  "\t\022.\n\tpers_desc\030\036 \001(\0132\033.CGData.CGCharacte"
-  "rPersDesc\022\027\n\017battle_position\030\037 \001(\005\022\021\n\tba"
-  "nk_gold\030  \001(\005\"\337\002\n\tCGPetData\022%\n\tbase_data"
-  "\030\001 \001(\0132\022.CGData.CGBaseData\022\r\n\005index\030\002 \001("
-  "\005\022\r\n\005flags\030\003 \001(\005\022\024\n\014battle_flags\030\004 \001(\005\022\020"
-  "\n\010loyality\030\005 \001(\005\022\026\n\016default_battle\030\006 \001(\010"
-  "\022\r\n\005state\030\007 \001(\005\022\r\n\005grade\030\010 \001(\005\022\024\n\014lossMi"
-  "nGrade\030\t \001(\005\022\024\n\014lossMaxGrade\030\n \001(\005\022&\n\005sk"
-  "ill\030\013 \003(\0132\027.CGData.CGSkillBaseData\022&\n\006de"
-  "tail\030\014 \001(\0132\026.CGData.CGAttrBaseData\022\021\n\tre"
-  "al_name\030\r \001(\t\022\014\n\004race\030\016 \001(\005\022\022\n\nskillslot"
-  "s\030\017 \001(\005\"\244\001\n\nCGItemData\022\020\n\010image_id\030\001 \001(\005"
-  "\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030"
-  "\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004in"
-  "fo\030\007 \001(\t\022\013\n\003pos\030\010 \001(\005\022\020\n\010assessed\030\t \001(\010\022"
-  "\r\n\005count\030\n \001(\005\"\027\n\025UploadGidDataResponse\""
-  "\033\n\031UploadGidBankDataResponse\"9\n\021CGStoreM"
-  "apRequest\022\022\n\nmap_number\030\001 \001(\005\022\020\n\010map_nam"
-  "e\030\002 \001(\t\"\024\n\022CGStoreMapResponse\"\022\n\020CGMapDa"
-  "taRequest\"4\n\021CGMapDataResponse\022\037\n\004maps\030\001"
-  " \003(\0132\021.CGData.CGMapData\"Z\n\tCGMapData\022\n\n\002"
-  "id\030\001 \001(\004\022\022\n\nmap_number\030\002 \001(\005\022\020\n\010map_name"
-  "\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\r\n\005often\030\005 \001(\005\"\027\n\025C"
-  "GPetGradeCalcRequest\"A\n\026CGPetGradeCalcRe"
-  "sponse\022\'\n\003pet\030\001 \003(\0132\032.CGData.CGPetGradeC"
-  "alcData\"\267\003\n\022CGPetGradeCalcData\022\n\n\002id\030\001 \001"
-  "(\004\022\016\n\006number\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\020\n\010race"
-  "Type\030\004 \001(\005\022\024\n\014raceTypeName\030\005 \001(\t\022\016\n\006base"
-  "BP\030\006 \001(\001\022\022\n\ntotalGrade\030\007 \001(\005\022\023\n\013bestBPGr"
-  "ade\030\010 \003(\001\022\021\n\tcan_catch\030\t \001(\005\022\021\n\tcard_typ"
-  "e\030\n \001(\005\022\020\n\010image_id\030\013 \001(\005\022\026\n\016rate_endura"
-  "nce\030\014 \001(\005\022\025\n\rrate_strength\030\r \001(\005\022\024\n\014rate"
-  "_defense\030\016 \001(\005\022\024\n\014rate_agility\030\017 \001(\005\022\024\n\014"
-  "rate_magical\030\020 \001(\005\022\025\n\relement_earth\030\021 \001("
-  "\005\022\025\n\relement_water\030\022 \001(\005\022\024\n\014element_fire"
-  "\030\023 \001(\005\022\024\n\014element_wind\030\024 \001(\005\022\023\n\013skill_sl"
-  "ots\030\025 \001(\005\" \n\rCGItemRequest\022\017\n\007item_id\030\001 "
-  "\001(\005\"\300\001\n\016CGItemResponse\022\n\n\002id\030\001 \001(\004\022\017\n\007it"
-  "em_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022"
-  "\r\n\005price\030\005 \001(\005\022\017\n\007maxpile\030\006 \001(\005\022\r\n\005level"
-  "\030\007 \001(\005\022\026\n\016sellLimitCount\030\010 \001(\005\022\021\n\tattrib"
-  "ute\030\t \001(\t\022\014\n\004desc\030\n \001(\t\022\r\n\005exist\030\013 \001(\010\"\273"
-  "\001\n\022CGStoreItemRequest\022\017\n\007item_id\030\001 \001(\005\022\014"
-  "\n\004name\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\r\n\005price\030\004 \001("
-  "\005\022\017\n\007maxpile\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\026\n\016sel"
-  "lLimitCount\030\007 \001(\005\022\021\n\tattribute\030\010 \001(\t\022\014\n\004"
-  "desc\030\t \001(\t\022\020\n\010assessed\030\n \001(\010\"4\n\023CGStoreI"
-  "temResponse\022\n\n\002id\030\001 \001(\005\022\021\n\tmaybeName\030\002 \001"
-  "(\t\"\014\n\nCGVoidData\"\031\n\nCGBoolData\022\013\n\003val\030\001 "
-  "\001(\010\"\030\n\tCGIntData\022\013\n\003val\030\001 \001(\005\"\223\001\n\021CGSysT"
-  "imeResponse\022\r\n\005years\030\001 \001(\005\022\r\n\005month\030\002 \001("
-  "\005\022\014\n\004days\030\003 \001(\005\022\r\n\005hours\030\004 \001(\005\022\014\n\004mins\030\005"
-  " \001(\005\022\014\n\004secs\030\006 \001(\005\022\022\n\nlocal_time\030\007 \001(\005\022\023"
-  "\n\013server_time\030\010 \001(\005\"8\n\027CGPlayerFlagEnabl"
-  "edData\022\r\n\005index\030\001 \001(\005\022\016\n\006enable\030\002 \001(\0102\237\004"
-  "\n\014MLRpcService\022:\n\nInitialize\022\030.CGData.CG"
-  "GmeTypeRequest\032\022.CGData.CGVoidData\0221\n\007Co"
-  "nnect\022\022.CGData.CGVoidData\032\022.CGData.CGBoo"
-  "lData\0221\n\010IsInGame\022\022.CGData.CGVoidData\032\021."
-  "CGData.CGIntData\0227\n\016GetWorldStatus\022\022.CGD"
-  "ata.CGVoidData\032\021.CGData.CGIntData\0226\n\rGet"
-  "GameStatus\022\022.CGData.CGVoidData\032\021.CGData."
-  "CGIntData\0224\n\013GetBGMIndex\022\022.CGData.CGVoid"
-  "Data\032\021.CGData.CGIntData\022;\n\nGetSysTime\022\022."
-  "CGData.CGVoidData\032\031.CGData.CGSysTimeResp"
-  "onse\022<\n\rGetPlayerInfo\022\022.CGData.CGVoidDat"
-  "a\032\027.CGData.CGCharacterData\022K\n\024SetPlayerF"
-  "lagEnabled\022\037.CGData.CGPlayerFlagEnabledD"
-  "ata\032\022.CGData.CGVoidData2\357\007\n\014CGRpcService"
-  "\022>\n\rGetCGItemData\022\025.CGData.CGItemRequest"
-  "\032\026.CGData.CGItemResponse\0229\n\017GetConnectSt"
-  "ate\022\022.CGData.CGVoidData\032\022.CGData.CGVoidD"
-  "ata\022V\n\023GetPetGradeCalcData\022\035.CGData.CGPe"
-  "tGradeCalcRequest\032\036.CGData.CGPetGradeCal"
-  "cResponse\"\000\022N\n\025GetServerStoreMapData\022\030.C"
-  "GData.CGMapDataRequest\032\031.CGData.CGMapDat"
-  "aResponse\"\000\022L\n\017StoreCGItemData\022\032.CGData."
-  "CGStoreItemRequest\032\033.CGData.CGStoreItemR"
-  "esponse\"\000\022I\n\016StoreCGMapData\022\031.CGData.CGS"
-  "toreMapRequest\032\032.CGData.CGStoreMapRespon"
-  "se\"\000\022N\n\rUploadGidData\022\034.CGData.UploadGid"
-  "DataRequest\032\035.CGData.UploadGidDataRespon"
-  "se\"\000\022Z\n\021UploadGidBankData\022 .CGData.Uploa"
-  "dGidBankDataRequest\032!.CGData.UploadGidBa"
-  "nkDataResponse\"\000\022/\n\007Publish\022\021.CGData.Str"
-  "ingPub\032\021.CGData.StringPub\0223\n\tSubscribe\022\021"
-  ".CGData.StringPub\032\021.CGData.StringPub0\001\022c"
-  "\n\024SelectAccountGidData\022#.CGData.SelectAc"
-  "countGidDataRequest\032$.CGData.SelectAccou"
-  "ntGidDataResponse\"\000\022N\n\rSelectGidData\022\034.C"
-  "GData.SelectGidDataRequest\032\035.CGData.Sele"
-  "ctGidDataResponse\"\000\022\\\n\024SelectDstTypeGidD"
-  "ata\022\034.CGData.SelectGidDataRequest\032$.CGDa"
-  "ta.SelectAccountGidDataResponse\"\000b\006proto"
-  "3"
+  "role_type\030\006 \001(\005\"r\n\024UploadMapDataRequest\022"
+  "\020\n\010FileName\030\001 \001(\t\022\022\n\nServerLine\030\002 \001(\t\022\017\n"
+  "\007MapType\030\003 \001(\t\022\020\n\010fileTime\030\004 \001(\t\022\021\n\tImag"
+  "eData\030\005 \001(\014\"\027\n\025UploadMapDataResponse\"O\n\026"
+  "DownloadMapDataRequest\022\020\n\010FileName\030\001 \001(\t"
+  "\022\022\n\nServerLine\030\002 \001(\t\022\017\n\007MapType\030\003 \001(\t\"u\n"
+  "\027DownloadMapDataResponse\022\020\n\010FileName\030\001 \001"
+  "(\t\022\022\n\nServerLine\030\002 \001(\t\022\017\n\007MapType\030\003 \001(\t\022"
+  "\020\n\010fileTime\030\004 \001(\t\022\021\n\tImageData\030\005 \001(\014\"\177\n\020"
+  "CGAccountGidData\022\017\n\007account\030\001 \001(\t\022\013\n\003gid"
+  "\030\002 \001(\t\022\021\n\tgame_type\030\003 \001(\005\022\022\n\nbig_server\030"
+  "\004 \001(\005\022\023\n\013server_line\030\005 \001(\r\022\021\n\tcharacter\030"
+  "\006 \001(\005\"\307\001\n\024UploadGidDataRequest\022\013\n\003gid\030\001 "
+  "\001(\t\022\026\n\016character_name\030\002 \001(\t\022/\n\016character"
+  "_data\030\003 \001(\0132\027.CGData.CGCharacterData\022#\n\010"
+  "pet_data\030\004 \003(\0132\021.CGData.CGPetData\022!\n\005ite"
+  "ms\030\005 \003(\0132\022.CGData.CGItemData\022\021\n\trole_typ"
+  "e\030\006 \001(\005\".\n\033SelectAccountGidDataRequest\022\017"
+  "\n\007account\030\001 \001(\t\"6\n\024SelectGidDataRequest\022"
+  "\013\n\003gid\030\001 \001(\t\022\021\n\trole_type\030\002 \001(\005\"N\n\034Selec"
+  "tAccountGidDataResponse\022.\n\007gidData\030\001 \003(\013"
+  "2\035.CGData.SelectGidDataResponse\"\310\001\n\025Sele"
+  "ctGidDataResponse\022\013\n\003gid\030\001 \001(\t\022\021\n\trole_t"
+  "ype\030\002 \001(\005\022\026\n\016character_name\030\003 \001(\t\022/\n\016cha"
+  "racter_data\030\004 \001(\0132\027.CGData.CGCharacterDa"
+  "ta\022#\n\010pet_data\030\005 \003(\0132\021.CGData.CGPetData\022"
+  "!\n\005items\030\006 \003(\0132\022.CGData.CGItemData\"\212\001\n\nC"
+  "GBaseData\022\014\n\004name\030\001 \001(\t\022\n\n\002hp\030\002 \001(\005\022\n\n\002m"
+  "p\030\003 \001(\005\022\r\n\005maxhp\030\004 \001(\005\022\r\n\005maxmp\030\005 \001(\005\022\r\n"
+  "\005level\030\006 \001(\005\022\n\n\002xp\030\007 \001(\005\022\r\n\005maxxp\030\010 \001(\005\022"
+  "\016\n\006health\030\t \001(\005\"\340\001\n\017CGSkillBaseData\022\014\n\004n"
+  "ame\030\001 \001(\t\022\014\n\004info\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\022\014\n\004c"
+  "ost\030\004 \001(\005\022\r\n\005flags\030\005 \001(\005\022\r\n\005index\030\006 \001(\005\022"
+  "\r\n\005level\030\007 \001(\005\022\020\n\010maxLevel\030\010 \001(\005\022\021\n\tavai"
+  "lable\030\t \001(\010\022\n\n\002xp\030\n \001(\005\022\r\n\005maxxp\030\013 \001(\005\022*"
+  "\n\tsubskills\030\014 \003(\0132\027.CGData.CGSkillBaseDa"
+  "ta\"\317\004\n\016CGAttrBaseData\022\025\n\rpoints_remain\030\001"
+  " \001(\005\022\030\n\020points_endurance\030\002 \001(\005\022\027\n\017points"
+  "_strength\030\003 \001(\005\022\026\n\016points_defense\030\004 \001(\005\022"
+  "\026\n\016points_agility\030\005 \001(\005\022\026\n\016points_magica"
+  "l\030\006 \001(\005\022\024\n\014value_attack\030\007 \001(\005\022\027\n\017value_d"
+  "efensive\030\010 \001(\005\022\025\n\rvalue_agility\030\t \001(\005\022\024\n"
+  "\014value_spirit\030\n \001(\005\022\026\n\016value_recovery\030\013 "
+  "\001(\005\022\025\n\rresist_poison\030\014 \001(\005\022\024\n\014resist_sle"
+  "ep\030\r \001(\005\022\025\n\rresist_medusa\030\016 \001(\005\022\024\n\014resis"
+  "t_drunk\030\017 \001(\005\022\024\n\014resist_chaos\030\020 \001(\005\022\025\n\rr"
+  "esist_forget\030\021 \001(\005\022\024\n\014fix_critical\030\022 \001(\005"
+  "\022\026\n\016fix_strikeback\030\023 \001(\005\022\025\n\rfix_accuranc"
+  "y\030\024 \001(\005\022\021\n\tfix_dodge\030\025 \001(\005\022\025\n\relement_ea"
+  "rth\030\026 \001(\005\022\025\n\relement_water\030\027 \001(\005\022\024\n\014elem"
+  "ent_fire\030\030 \001(\005\022\024\n\014element_wind\030\031 \001(\005\"\255\001\n"
+  "\023CGCharacterPersDesc\022\022\n\nchangeBits\030\001 \001(\005"
+  "\022\020\n\010sellIcon\030\002 \001(\005\022\022\n\nsellString\030\003 \001(\t\022\017"
+  "\n\007buyIcon\030\004 \001(\005\022\021\n\tbuyString\030\005 \001(\t\022\020\n\010wa"
+  "ntIcon\030\006 \001(\005\022\022\n\nwantString\030\007 \001(\t\022\022\n\ndesc"
+  "String\030\010 \001(\t\"\273\005\n\017CGCharacterData\022%\n\tbase"
+  "_data\030\001 \001(\0132\022.CGData.CGBaseData\022\r\n\005souls"
+  "\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004gold\030\004 \001(\005\022\020\n\010i"
+  "mage_id\030\005 \001(\005\022\r\n\005score\030\006 \001(\005\022\022\n\nskillslo"
+  "ts\030\007 \001(\005\022\021\n\tuse_title\030\010 \001(\005\022\021\n\tavatar_id"
+  "\030\t \001(\005\022\016\n\006unitid\030\n \001(\005\022\r\n\005petid\030\013 \001(\005\022\021\n"
+  "\tpetriding\030\014 \001(\010\022\021\n\tdirection\030\r \001(\005\022\022\n\np"
+  "unchclock\030\016 \001(\005\022\027\n\017usingpunchclock\030\017 \001(\010"
+  "\022\013\n\003job\030\020 \001(\t\022\016\n\006titles\030\021 \003(\t\022\026\n\016manu_en"
+  "durance\030\022 \001(\005\022\025\n\rmanu_skillful\030\023 \001(\005\022\031\n\021"
+  "manu_intelligence\030\024 \001(\005\022\026\n\016value_charism"
+  "a\030\025 \001(\005\022\t\n\001x\030\026 \001(\005\022\t\n\001y\030\027 \001(\005\022\020\n\010map_nam"
+  "e\030\030 \001(\t\022\022\n\nmap_number\030\031 \001(\005\022\023\n\013server_li"
+  "ne\030\032 \001(\005\022&\n\006detail\030\033 \001(\0132\026.CGData.CGAttr"
+  "BaseData\022&\n\005skill\030\034 \003(\0132\027.CGData.CGSkill"
+  "BaseData\022\014\n\004nick\030\035 \001(\t\022.\n\tpers_desc\030\036 \001("
+  "\0132\033.CGData.CGCharacterPersDesc\022\027\n\017battle"
+  "_position\030\037 \001(\005\022\021\n\tbank_gold\030  \001(\005\"\337\002\n\tC"
+  "GPetData\022%\n\tbase_data\030\001 \001(\0132\022.CGData.CGB"
+  "aseData\022\r\n\005index\030\002 \001(\005\022\r\n\005flags\030\003 \001(\005\022\024\n"
+  "\014battle_flags\030\004 \001(\005\022\020\n\010loyality\030\005 \001(\005\022\026\n"
+  "\016default_battle\030\006 \001(\010\022\r\n\005state\030\007 \001(\005\022\r\n\005"
+  "grade\030\010 \001(\005\022\024\n\014lossMinGrade\030\t \001(\005\022\024\n\014los"
+  "sMaxGrade\030\n \001(\005\022&\n\005skill\030\013 \003(\0132\027.CGData."
+  "CGSkillBaseData\022&\n\006detail\030\014 \001(\0132\026.CGData"
+  ".CGAttrBaseData\022\021\n\treal_name\030\r \001(\t\022\014\n\004ra"
+  "ce\030\016 \001(\005\022\022\n\nskillslots\030\017 \001(\005\"\244\001\n\nCGItemD"
+  "ata\022\020\n\010image_id\030\001 \001(\005\022\017\n\007item_id\030\002 \001(\005\022\014"
+  "\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005level\030\005 \001("
+  "\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004info\030\007 \001(\t\022\013\n\003pos\030\010 \001"
+  "(\005\022\020\n\010assessed\030\t \001(\010\022\r\n\005count\030\n \001(\005\"\027\n\025U"
+  "ploadGidDataResponse\"\033\n\031UploadGidBankDat"
+  "aResponse\"9\n\021CGStoreMapRequest\022\022\n\nmap_nu"
+  "mber\030\001 \001(\005\022\020\n\010map_name\030\002 \001(\t\"\024\n\022CGStoreM"
+  "apResponse\"\022\n\020CGMapDataRequest\"4\n\021CGMapD"
+  "ataResponse\022\037\n\004maps\030\001 \003(\0132\021.CGData.CGMap"
+  "Data\"Z\n\tCGMapData\022\n\n\002id\030\001 \001(\004\022\022\n\nmap_num"
+  "ber\030\002 \001(\005\022\020\n\010map_name\030\003 \001(\t\022\014\n\004desc\030\004 \001("
+  "\t\022\r\n\005often\030\005 \001(\005\"\027\n\025CGPetGradeCalcReques"
+  "t\"A\n\026CGPetGradeCalcResponse\022\'\n\003pet\030\001 \003(\013"
+  "2\032.CGData.CGPetGradeCalcData\"\267\003\n\022CGPetGr"
+  "adeCalcData\022\n\n\002id\030\001 \001(\004\022\016\n\006number\030\002 \001(\005\022"
+  "\014\n\004name\030\003 \001(\t\022\020\n\010raceType\030\004 \001(\005\022\024\n\014raceT"
+  "ypeName\030\005 \001(\t\022\016\n\006baseBP\030\006 \001(\001\022\022\n\ntotalGr"
+  "ade\030\007 \001(\005\022\023\n\013bestBPGrade\030\010 \003(\001\022\021\n\tcan_ca"
+  "tch\030\t \001(\005\022\021\n\tcard_type\030\n \001(\005\022\020\n\010image_id"
+  "\030\013 \001(\005\022\026\n\016rate_endurance\030\014 \001(\005\022\025\n\rrate_s"
+  "trength\030\r \001(\005\022\024\n\014rate_defense\030\016 \001(\005\022\024\n\014r"
+  "ate_agility\030\017 \001(\005\022\024\n\014rate_magical\030\020 \001(\005\022"
+  "\025\n\relement_earth\030\021 \001(\005\022\025\n\relement_water\030"
+  "\022 \001(\005\022\024\n\014element_fire\030\023 \001(\005\022\024\n\014element_w"
+  "ind\030\024 \001(\005\022\023\n\013skill_slots\030\025 \001(\005\" \n\rCGItem"
+  "Request\022\017\n\007item_id\030\001 \001(\005\"\300\001\n\016CGItemRespo"
+  "nse\022\n\n\002id\030\001 \001(\004\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name"
+  "\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005price\030\005 \001(\005\022\017\n\007m"
+  "axpile\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\026\n\016sellLimit"
+  "Count\030\010 \001(\005\022\021\n\tattribute\030\t \001(\t\022\014\n\004desc\030\n"
+  " \001(\t\022\r\n\005exist\030\013 \001(\010\"\273\001\n\022CGStoreItemReque"
+  "st\022\017\n\007item_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004typ"
+  "e\030\003 \001(\005\022\r\n\005price\030\004 \001(\005\022\017\n\007maxpile\030\005 \001(\005\022"
+  "\r\n\005level\030\006 \001(\005\022\026\n\016sellLimitCount\030\007 \001(\005\022\021"
+  "\n\tattribute\030\010 \001(\t\022\014\n\004desc\030\t \001(\t\022\020\n\010asses"
+  "sed\030\n \001(\010\"4\n\023CGStoreItemResponse\022\n\n\002id\030\001"
+  " \001(\005\022\021\n\tmaybeName\030\002 \001(\t\"\014\n\nCGVoidData\"\031\n"
+  "\nCGBoolData\022\013\n\003val\030\001 \001(\010\"\030\n\tCGIntData\022\013\n"
+  "\003val\030\001 \001(\005\"\223\001\n\021CGSysTimeResponse\022\r\n\005year"
+  "s\030\001 \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004days\030\003 \001(\005\022\r\n\005"
+  "hours\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004secs\030\006 \001(\005\022"
+  "\022\n\nlocal_time\030\007 \001(\005\022\023\n\013server_time\030\010 \001(\005"
+  "\"8\n\027CGPlayerFlagEnabledData\022\r\n\005index\030\001 \001"
+  "(\005\022\016\n\006enable\030\002 \001(\0102\237\004\n\014MLRpcService\022:\n\nI"
+  "nitialize\022\030.CGData.CGGmeTypeRequest\032\022.CG"
+  "Data.CGVoidData\0221\n\007Connect\022\022.CGData.CGVo"
+  "idData\032\022.CGData.CGBoolData\0221\n\010IsInGame\022\022"
+  ".CGData.CGVoidData\032\021.CGData.CGIntData\0227\n"
+  "\016GetWorldStatus\022\022.CGData.CGVoidData\032\021.CG"
+  "Data.CGIntData\0226\n\rGetGameStatus\022\022.CGData"
+  ".CGVoidData\032\021.CGData.CGIntData\0224\n\013GetBGM"
+  "Index\022\022.CGData.CGVoidData\032\021.CGData.CGInt"
+  "Data\022;\n\nGetSysTime\022\022.CGData.CGVoidData\032\031"
+  ".CGData.CGSysTimeResponse\022<\n\rGetPlayerIn"
+  "fo\022\022.CGData.CGVoidData\032\027.CGData.CGCharac"
+  "terData\022K\n\024SetPlayerFlagEnabled\022\037.CGData"
+  ".CGPlayerFlagEnabledData\032\022.CGData.CGVoid"
+  "Data2\231\t\n\014CGRpcService\022>\n\rGetCGItemData\022\025"
+  ".CGData.CGItemRequest\032\026.CGData.CGItemRes"
+  "ponse\0229\n\017GetConnectState\022\022.CGData.CGVoid"
+  "Data\032\022.CGData.CGVoidData\022V\n\023GetPetGradeC"
+  "alcData\022\035.CGData.CGPetGradeCalcRequest\032\036"
+  ".CGData.CGPetGradeCalcResponse\"\000\022N\n\025GetS"
+  "erverStoreMapData\022\030.CGData.CGMapDataRequ"
+  "est\032\031.CGData.CGMapDataResponse\"\000\022L\n\017Stor"
+  "eCGItemData\022\032.CGData.CGStoreItemRequest\032"
+  "\033.CGData.CGStoreItemResponse\"\000\022I\n\016StoreC"
+  "GMapData\022\031.CGData.CGStoreMapRequest\032\032.CG"
+  "Data.CGStoreMapResponse\"\000\022N\n\rUploadGidDa"
+  "ta\022\034.CGData.UploadGidDataRequest\032\035.CGDat"
+  "a.UploadGidDataResponse\"\000\022Z\n\021UploadGidBa"
+  "nkData\022 .CGData.UploadGidBankDataRequest"
+  "\032!.CGData.UploadGidBankDataResponse\"\000\022P\n"
+  "\rUploadMapData\022\034.CGData.UploadMapDataReq"
+  "uest\032\035.CGData.UploadMapDataResponse\"\000(\001\022"
+  "V\n\017DownloadMapData\022\036.CGData.DownloadMapD"
+  "ataRequest\032\037.CGData.DownloadMapDataRespo"
+  "nse\"\0000\001\022/\n\007Publish\022\021.CGData.StringPub\032\021."
+  "CGData.StringPub\0223\n\tSubscribe\022\021.CGData.S"
+  "tringPub\032\021.CGData.StringPub0\001\022c\n\024SelectA"
+  "ccountGidData\022#.CGData.SelectAccountGidD"
+  "ataRequest\032$.CGData.SelectAccountGidData"
+  "Response\"\000\022N\n\rSelectGidData\022\034.CGData.Sel"
+  "ectGidDataRequest\032\035.CGData.SelectGidData"
+  "Response\"\000\022\\\n\024SelectDstTypeGidData\022\034.CGD"
+  "ata.SelectGidDataRequest\032$.CGData.Select"
+  "AccountGidDataResponse\"\000b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_CGData_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_CGData_2eproto = {
-  false, false, 6481, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
-  &descriptor_table_CGData_2eproto_once, nullptr, 0, 35,
+  false, false, 6992, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
+  &descriptor_table_CGData_2eproto_once, nullptr, 0, 39,
   schemas, file_default_instances, TableStruct_CGData_2eproto::offsets,
   file_level_metadata_CGData_2eproto, file_level_enum_descriptors_CGData_2eproto, file_level_service_descriptors_CGData_2eproto,
 };
@@ -2009,6 +2119,1169 @@ void UploadGidBankDataRequest::InternalSwap(UploadGidBankDataRequest* other) {
 
 // ===================================================================
 
+class UploadMapDataRequest::_Internal {
+ public:
+};
+
+UploadMapDataRequest::UploadMapDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:CGData.UploadMapDataRequest)
+}
+UploadMapDataRequest::UploadMapDataRequest(const UploadMapDataRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  filename_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_filename().empty()) {
+    filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_filename(), 
+      GetArenaForAllocation());
+  }
+  serverline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_serverline().empty()) {
+    serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_serverline(), 
+      GetArenaForAllocation());
+  }
+  maptype_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_maptype().empty()) {
+    maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_maptype(), 
+      GetArenaForAllocation());
+  }
+  filetime_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_filetime().empty()) {
+    filetime_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_filetime(), 
+      GetArenaForAllocation());
+  }
+  imagedata_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_imagedata().empty()) {
+    imagedata_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_imagedata(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:CGData.UploadMapDataRequest)
+}
+
+inline void UploadMapDataRequest::SharedCtor() {
+filename_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+serverline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+maptype_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+filetime_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+imagedata_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+UploadMapDataRequest::~UploadMapDataRequest() {
+  // @@protoc_insertion_point(destructor:CGData.UploadMapDataRequest)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void UploadMapDataRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  filename_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  serverline_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  maptype_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  filetime_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  imagedata_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void UploadMapDataRequest::ArenaDtor(void* object) {
+  UploadMapDataRequest* _this = reinterpret_cast< UploadMapDataRequest* >(object);
+  (void)_this;
+}
+void UploadMapDataRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void UploadMapDataRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void UploadMapDataRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:CGData.UploadMapDataRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  filename_.ClearToEmpty();
+  serverline_.ClearToEmpty();
+  maptype_.ClearToEmpty();
+  filetime_.ClearToEmpty();
+  imagedata_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* UploadMapDataRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string FileName = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_filename();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.UploadMapDataRequest.FileName"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string ServerLine = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_serverline();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.UploadMapDataRequest.ServerLine"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string MapType = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_maptype();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.UploadMapDataRequest.MapType"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string fileTime = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          auto str = _internal_mutable_filetime();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.UploadMapDataRequest.fileTime"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // bytes ImageData = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          auto str = _internal_mutable_imagedata();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* UploadMapDataRequest::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CGData.UploadMapDataRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string FileName = 1;
+  if (!this->_internal_filename().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_filename().data(), static_cast<int>(this->_internal_filename().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.UploadMapDataRequest.FileName");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_filename(), target);
+  }
+
+  // string ServerLine = 2;
+  if (!this->_internal_serverline().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_serverline().data(), static_cast<int>(this->_internal_serverline().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.UploadMapDataRequest.ServerLine");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_serverline(), target);
+  }
+
+  // string MapType = 3;
+  if (!this->_internal_maptype().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_maptype().data(), static_cast<int>(this->_internal_maptype().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.UploadMapDataRequest.MapType");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_maptype(), target);
+  }
+
+  // string fileTime = 4;
+  if (!this->_internal_filetime().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_filetime().data(), static_cast<int>(this->_internal_filetime().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.UploadMapDataRequest.fileTime");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_filetime(), target);
+  }
+
+  // bytes ImageData = 5;
+  if (!this->_internal_imagedata().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        5, this->_internal_imagedata(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CGData.UploadMapDataRequest)
+  return target;
+}
+
+size_t UploadMapDataRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CGData.UploadMapDataRequest)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string FileName = 1;
+  if (!this->_internal_filename().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_filename());
+  }
+
+  // string ServerLine = 2;
+  if (!this->_internal_serverline().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_serverline());
+  }
+
+  // string MapType = 3;
+  if (!this->_internal_maptype().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_maptype());
+  }
+
+  // string fileTime = 4;
+  if (!this->_internal_filetime().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_filetime());
+  }
+
+  // bytes ImageData = 5;
+  if (!this->_internal_imagedata().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_imagedata());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData UploadMapDataRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    UploadMapDataRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*UploadMapDataRequest::GetClassData() const { return &_class_data_; }
+
+void UploadMapDataRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
+  static_cast<UploadMapDataRequest *>(to)->MergeFrom(
+      static_cast<const UploadMapDataRequest &>(from));
+}
+
+
+void UploadMapDataRequest::MergeFrom(const UploadMapDataRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CGData.UploadMapDataRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_filename().empty()) {
+    _internal_set_filename(from._internal_filename());
+  }
+  if (!from._internal_serverline().empty()) {
+    _internal_set_serverline(from._internal_serverline());
+  }
+  if (!from._internal_maptype().empty()) {
+    _internal_set_maptype(from._internal_maptype());
+  }
+  if (!from._internal_filetime().empty()) {
+    _internal_set_filetime(from._internal_filetime());
+  }
+  if (!from._internal_imagedata().empty()) {
+    _internal_set_imagedata(from._internal_imagedata());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void UploadMapDataRequest::CopyFrom(const UploadMapDataRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CGData.UploadMapDataRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UploadMapDataRequest::IsInitialized() const {
+  return true;
+}
+
+void UploadMapDataRequest::InternalSwap(UploadMapDataRequest* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &filename_, GetArenaForAllocation(),
+      &other->filename_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &serverline_, GetArenaForAllocation(),
+      &other->serverline_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &maptype_, GetArenaForAllocation(),
+      &other->maptype_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &filetime_, GetArenaForAllocation(),
+      &other->filetime_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &imagedata_, GetArenaForAllocation(),
+      &other->imagedata_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata UploadMapDataRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
+      file_level_metadata_CGData_2eproto[3]);
+}
+
+// ===================================================================
+
+class UploadMapDataResponse::_Internal {
+ public:
+};
+
+UploadMapDataResponse::UploadMapDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:CGData.UploadMapDataResponse)
+}
+UploadMapDataResponse::UploadMapDataResponse(const UploadMapDataResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CGData.UploadMapDataResponse)
+}
+
+inline void UploadMapDataResponse::SharedCtor() {
+}
+
+UploadMapDataResponse::~UploadMapDataResponse() {
+  // @@protoc_insertion_point(destructor:CGData.UploadMapDataResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void UploadMapDataResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void UploadMapDataResponse::ArenaDtor(void* object) {
+  UploadMapDataResponse* _this = reinterpret_cast< UploadMapDataResponse* >(object);
+  (void)_this;
+}
+void UploadMapDataResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void UploadMapDataResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void UploadMapDataResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:CGData.UploadMapDataResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* UploadMapDataResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* UploadMapDataResponse::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CGData.UploadMapDataResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CGData.UploadMapDataResponse)
+  return target;
+}
+
+size_t UploadMapDataResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CGData.UploadMapDataResponse)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData UploadMapDataResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    UploadMapDataResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*UploadMapDataResponse::GetClassData() const { return &_class_data_; }
+
+void UploadMapDataResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
+  static_cast<UploadMapDataResponse *>(to)->MergeFrom(
+      static_cast<const UploadMapDataResponse &>(from));
+}
+
+
+void UploadMapDataResponse::MergeFrom(const UploadMapDataResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CGData.UploadMapDataResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void UploadMapDataResponse::CopyFrom(const UploadMapDataResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CGData.UploadMapDataResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UploadMapDataResponse::IsInitialized() const {
+  return true;
+}
+
+void UploadMapDataResponse::InternalSwap(UploadMapDataResponse* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata UploadMapDataResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
+      file_level_metadata_CGData_2eproto[4]);
+}
+
+// ===================================================================
+
+class DownloadMapDataRequest::_Internal {
+ public:
+};
+
+DownloadMapDataRequest::DownloadMapDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:CGData.DownloadMapDataRequest)
+}
+DownloadMapDataRequest::DownloadMapDataRequest(const DownloadMapDataRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  filename_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_filename().empty()) {
+    filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_filename(), 
+      GetArenaForAllocation());
+  }
+  serverline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_serverline().empty()) {
+    serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_serverline(), 
+      GetArenaForAllocation());
+  }
+  maptype_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_maptype().empty()) {
+    maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_maptype(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:CGData.DownloadMapDataRequest)
+}
+
+inline void DownloadMapDataRequest::SharedCtor() {
+filename_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+serverline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+maptype_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+DownloadMapDataRequest::~DownloadMapDataRequest() {
+  // @@protoc_insertion_point(destructor:CGData.DownloadMapDataRequest)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void DownloadMapDataRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  filename_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  serverline_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  maptype_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void DownloadMapDataRequest::ArenaDtor(void* object) {
+  DownloadMapDataRequest* _this = reinterpret_cast< DownloadMapDataRequest* >(object);
+  (void)_this;
+}
+void DownloadMapDataRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void DownloadMapDataRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void DownloadMapDataRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:CGData.DownloadMapDataRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  filename_.ClearToEmpty();
+  serverline_.ClearToEmpty();
+  maptype_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* DownloadMapDataRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string FileName = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_filename();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataRequest.FileName"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string ServerLine = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_serverline();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataRequest.ServerLine"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string MapType = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_maptype();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataRequest.MapType"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* DownloadMapDataRequest::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CGData.DownloadMapDataRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string FileName = 1;
+  if (!this->_internal_filename().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_filename().data(), static_cast<int>(this->_internal_filename().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataRequest.FileName");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_filename(), target);
+  }
+
+  // string ServerLine = 2;
+  if (!this->_internal_serverline().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_serverline().data(), static_cast<int>(this->_internal_serverline().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataRequest.ServerLine");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_serverline(), target);
+  }
+
+  // string MapType = 3;
+  if (!this->_internal_maptype().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_maptype().data(), static_cast<int>(this->_internal_maptype().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataRequest.MapType");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_maptype(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CGData.DownloadMapDataRequest)
+  return target;
+}
+
+size_t DownloadMapDataRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CGData.DownloadMapDataRequest)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string FileName = 1;
+  if (!this->_internal_filename().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_filename());
+  }
+
+  // string ServerLine = 2;
+  if (!this->_internal_serverline().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_serverline());
+  }
+
+  // string MapType = 3;
+  if (!this->_internal_maptype().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_maptype());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DownloadMapDataRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    DownloadMapDataRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DownloadMapDataRequest::GetClassData() const { return &_class_data_; }
+
+void DownloadMapDataRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
+  static_cast<DownloadMapDataRequest *>(to)->MergeFrom(
+      static_cast<const DownloadMapDataRequest &>(from));
+}
+
+
+void DownloadMapDataRequest::MergeFrom(const DownloadMapDataRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CGData.DownloadMapDataRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_filename().empty()) {
+    _internal_set_filename(from._internal_filename());
+  }
+  if (!from._internal_serverline().empty()) {
+    _internal_set_serverline(from._internal_serverline());
+  }
+  if (!from._internal_maptype().empty()) {
+    _internal_set_maptype(from._internal_maptype());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DownloadMapDataRequest::CopyFrom(const DownloadMapDataRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CGData.DownloadMapDataRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DownloadMapDataRequest::IsInitialized() const {
+  return true;
+}
+
+void DownloadMapDataRequest::InternalSwap(DownloadMapDataRequest* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &filename_, GetArenaForAllocation(),
+      &other->filename_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &serverline_, GetArenaForAllocation(),
+      &other->serverline_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &maptype_, GetArenaForAllocation(),
+      &other->maptype_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata DownloadMapDataRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
+      file_level_metadata_CGData_2eproto[5]);
+}
+
+// ===================================================================
+
+class DownloadMapDataResponse::_Internal {
+ public:
+};
+
+DownloadMapDataResponse::DownloadMapDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:CGData.DownloadMapDataResponse)
+}
+DownloadMapDataResponse::DownloadMapDataResponse(const DownloadMapDataResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  filename_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_filename().empty()) {
+    filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_filename(), 
+      GetArenaForAllocation());
+  }
+  serverline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_serverline().empty()) {
+    serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_serverline(), 
+      GetArenaForAllocation());
+  }
+  maptype_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_maptype().empty()) {
+    maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_maptype(), 
+      GetArenaForAllocation());
+  }
+  filetime_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_filetime().empty()) {
+    filetime_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_filetime(), 
+      GetArenaForAllocation());
+  }
+  imagedata_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_imagedata().empty()) {
+    imagedata_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_imagedata(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:CGData.DownloadMapDataResponse)
+}
+
+inline void DownloadMapDataResponse::SharedCtor() {
+filename_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+serverline_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+maptype_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+filetime_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+imagedata_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+DownloadMapDataResponse::~DownloadMapDataResponse() {
+  // @@protoc_insertion_point(destructor:CGData.DownloadMapDataResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void DownloadMapDataResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  filename_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  serverline_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  maptype_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  filetime_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  imagedata_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void DownloadMapDataResponse::ArenaDtor(void* object) {
+  DownloadMapDataResponse* _this = reinterpret_cast< DownloadMapDataResponse* >(object);
+  (void)_this;
+}
+void DownloadMapDataResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void DownloadMapDataResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void DownloadMapDataResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:CGData.DownloadMapDataResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  filename_.ClearToEmpty();
+  serverline_.ClearToEmpty();
+  maptype_.ClearToEmpty();
+  filetime_.ClearToEmpty();
+  imagedata_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* DownloadMapDataResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string FileName = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_filename();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataResponse.FileName"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string ServerLine = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_serverline();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataResponse.ServerLine"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string MapType = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_maptype();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataResponse.MapType"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string fileTime = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          auto str = _internal_mutable_filetime();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.DownloadMapDataResponse.fileTime"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // bytes ImageData = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          auto str = _internal_mutable_imagedata();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* DownloadMapDataResponse::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CGData.DownloadMapDataResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string FileName = 1;
+  if (!this->_internal_filename().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_filename().data(), static_cast<int>(this->_internal_filename().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataResponse.FileName");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_filename(), target);
+  }
+
+  // string ServerLine = 2;
+  if (!this->_internal_serverline().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_serverline().data(), static_cast<int>(this->_internal_serverline().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataResponse.ServerLine");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_serverline(), target);
+  }
+
+  // string MapType = 3;
+  if (!this->_internal_maptype().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_maptype().data(), static_cast<int>(this->_internal_maptype().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataResponse.MapType");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_maptype(), target);
+  }
+
+  // string fileTime = 4;
+  if (!this->_internal_filetime().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_filetime().data(), static_cast<int>(this->_internal_filetime().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.DownloadMapDataResponse.fileTime");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_filetime(), target);
+  }
+
+  // bytes ImageData = 5;
+  if (!this->_internal_imagedata().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        5, this->_internal_imagedata(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CGData.DownloadMapDataResponse)
+  return target;
+}
+
+size_t DownloadMapDataResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CGData.DownloadMapDataResponse)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string FileName = 1;
+  if (!this->_internal_filename().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_filename());
+  }
+
+  // string ServerLine = 2;
+  if (!this->_internal_serverline().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_serverline());
+  }
+
+  // string MapType = 3;
+  if (!this->_internal_maptype().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_maptype());
+  }
+
+  // string fileTime = 4;
+  if (!this->_internal_filetime().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_filetime());
+  }
+
+  // bytes ImageData = 5;
+  if (!this->_internal_imagedata().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_imagedata());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DownloadMapDataResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    DownloadMapDataResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DownloadMapDataResponse::GetClassData() const { return &_class_data_; }
+
+void DownloadMapDataResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
+  static_cast<DownloadMapDataResponse *>(to)->MergeFrom(
+      static_cast<const DownloadMapDataResponse &>(from));
+}
+
+
+void DownloadMapDataResponse::MergeFrom(const DownloadMapDataResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CGData.DownloadMapDataResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_filename().empty()) {
+    _internal_set_filename(from._internal_filename());
+  }
+  if (!from._internal_serverline().empty()) {
+    _internal_set_serverline(from._internal_serverline());
+  }
+  if (!from._internal_maptype().empty()) {
+    _internal_set_maptype(from._internal_maptype());
+  }
+  if (!from._internal_filetime().empty()) {
+    _internal_set_filetime(from._internal_filetime());
+  }
+  if (!from._internal_imagedata().empty()) {
+    _internal_set_imagedata(from._internal_imagedata());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DownloadMapDataResponse::CopyFrom(const DownloadMapDataResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CGData.DownloadMapDataResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DownloadMapDataResponse::IsInitialized() const {
+  return true;
+}
+
+void DownloadMapDataResponse::InternalSwap(DownloadMapDataResponse* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &filename_, GetArenaForAllocation(),
+      &other->filename_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &serverline_, GetArenaForAllocation(),
+      &other->serverline_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &maptype_, GetArenaForAllocation(),
+      &other->maptype_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &filetime_, GetArenaForAllocation(),
+      &other->filetime_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &imagedata_, GetArenaForAllocation(),
+      &other->imagedata_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata DownloadMapDataResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
+      file_level_metadata_CGData_2eproto[6]);
+}
+
+// ===================================================================
+
 class CGAccountGidData::_Internal {
  public:
 };
@@ -2354,7 +3627,7 @@ void CGAccountGidData::InternalSwap(CGAccountGidData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGAccountGidData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[3]);
+      file_level_metadata_CGData_2eproto[7]);
 }
 
 // ===================================================================
@@ -2735,7 +4008,7 @@ void UploadGidDataRequest::InternalSwap(UploadGidDataRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UploadGidDataRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[4]);
+      file_level_metadata_CGData_2eproto[8]);
 }
 
 // ===================================================================
@@ -2935,7 +4208,7 @@ void SelectAccountGidDataRequest::InternalSwap(SelectAccountGidDataRequest* othe
 ::PROTOBUF_NAMESPACE_ID::Metadata SelectAccountGidDataRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[5]);
+      file_level_metadata_CGData_2eproto[9]);
 }
 
 // ===================================================================
@@ -3162,7 +4435,7 @@ void SelectGidDataRequest::InternalSwap(SelectGidDataRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SelectGidDataRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[6]);
+      file_level_metadata_CGData_2eproto[10]);
 }
 
 // ===================================================================
@@ -3352,7 +4625,7 @@ void SelectAccountGidDataResponse::InternalSwap(SelectAccountGidDataResponse* ot
 ::PROTOBUF_NAMESPACE_ID::Metadata SelectAccountGidDataResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[7]);
+      file_level_metadata_CGData_2eproto[11]);
 }
 
 // ===================================================================
@@ -3733,7 +5006,7 @@ void SelectGidDataResponse::InternalSwap(SelectGidDataResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SelectGidDataResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[8]);
+      file_level_metadata_CGData_2eproto[12]);
 }
 
 // ===================================================================
@@ -4133,7 +5406,7 @@ void CGBaseData::InternalSwap(CGBaseData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGBaseData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[9]);
+      file_level_metadata_CGData_2eproto[13]);
 }
 
 // ===================================================================
@@ -4628,7 +5901,7 @@ void CGSkillBaseData::InternalSwap(CGSkillBaseData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGSkillBaseData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[10]);
+      file_level_metadata_CGData_2eproto[14]);
 }
 
 // ===================================================================
@@ -5377,7 +6650,7 @@ void CGAttrBaseData::InternalSwap(CGAttrBaseData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGAttrBaseData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[11]);
+      file_level_metadata_CGData_2eproto[15]);
 }
 
 // ===================================================================
@@ -5811,7 +7084,7 @@ void CGCharacterPersDesc::InternalSwap(CGCharacterPersDesc* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGCharacterPersDesc::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[12]);
+      file_level_metadata_CGData_2eproto[16]);
 }
 
 // ===================================================================
@@ -6848,7 +8121,7 @@ void CGCharacterData::InternalSwap(CGCharacterData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGCharacterData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[13]);
+      file_level_metadata_CGData_2eproto[17]);
 }
 
 // ===================================================================
@@ -7427,7 +8700,7 @@ void CGPetData::InternalSwap(CGPetData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[14]);
+      file_level_metadata_CGData_2eproto[18]);
 }
 
 // ===================================================================
@@ -7886,7 +9159,7 @@ void CGItemData::InternalSwap(CGItemData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGItemData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[15]);
+      file_level_metadata_CGData_2eproto[19]);
 }
 
 // ===================================================================
@@ -8039,7 +9312,7 @@ void UploadGidDataResponse::InternalSwap(UploadGidDataResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UploadGidDataResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[16]);
+      file_level_metadata_CGData_2eproto[20]);
 }
 
 // ===================================================================
@@ -8192,7 +9465,7 @@ void UploadGidBankDataResponse::InternalSwap(UploadGidBankDataResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UploadGidBankDataResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[17]);
+      file_level_metadata_CGData_2eproto[21]);
 }
 
 // ===================================================================
@@ -8419,7 +9692,7 @@ void CGStoreMapRequest::InternalSwap(CGStoreMapRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreMapRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[18]);
+      file_level_metadata_CGData_2eproto[22]);
 }
 
 // ===================================================================
@@ -8572,7 +9845,7 @@ void CGStoreMapResponse::InternalSwap(CGStoreMapResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreMapResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[19]);
+      file_level_metadata_CGData_2eproto[23]);
 }
 
 // ===================================================================
@@ -8725,7 +9998,7 @@ void CGMapDataRequest::InternalSwap(CGMapDataRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGMapDataRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[20]);
+      file_level_metadata_CGData_2eproto[24]);
 }
 
 // ===================================================================
@@ -8915,7 +10188,7 @@ void CGMapDataResponse::InternalSwap(CGMapDataResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGMapDataResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[21]);
+      file_level_metadata_CGData_2eproto[25]);
 }
 
 // ===================================================================
@@ -9242,7 +10515,7 @@ void CGMapData::InternalSwap(CGMapData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGMapData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[22]);
+      file_level_metadata_CGData_2eproto[26]);
 }
 
 // ===================================================================
@@ -9395,7 +10668,7 @@ void CGPetGradeCalcRequest::InternalSwap(CGPetGradeCalcRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetGradeCalcRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[23]);
+      file_level_metadata_CGData_2eproto[27]);
 }
 
 // ===================================================================
@@ -9585,7 +10858,7 @@ void CGPetGradeCalcResponse::InternalSwap(CGPetGradeCalcResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetGradeCalcResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[24]);
+      file_level_metadata_CGData_2eproto[28]);
 }
 
 // ===================================================================
@@ -10287,7 +11560,7 @@ void CGPetGradeCalcData::InternalSwap(CGPetGradeCalcData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetGradeCalcData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[25]);
+      file_level_metadata_CGData_2eproto[29]);
 }
 
 // ===================================================================
@@ -10472,7 +11745,7 @@ void CGItemRequest::InternalSwap(CGItemRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGItemRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[26]);
+      file_level_metadata_CGData_2eproto[30]);
 }
 
 // ===================================================================
@@ -10954,7 +12227,7 @@ void CGItemResponse::InternalSwap(CGItemResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGItemResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[27]);
+      file_level_metadata_CGData_2eproto[31]);
 }
 
 // ===================================================================
@@ -11413,7 +12686,7 @@ void CGStoreItemRequest::InternalSwap(CGStoreItemRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreItemRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[28]);
+      file_level_metadata_CGData_2eproto[32]);
 }
 
 // ===================================================================
@@ -11640,7 +12913,7 @@ void CGStoreItemResponse::InternalSwap(CGStoreItemResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreItemResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[29]);
+      file_level_metadata_CGData_2eproto[33]);
 }
 
 // ===================================================================
@@ -11793,7 +13066,7 @@ void CGVoidData::InternalSwap(CGVoidData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGVoidData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[30]);
+      file_level_metadata_CGData_2eproto[34]);
 }
 
 // ===================================================================
@@ -11976,7 +13249,7 @@ void CGBoolData::InternalSwap(CGBoolData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGBoolData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[31]);
+      file_level_metadata_CGData_2eproto[35]);
 }
 
 // ===================================================================
@@ -12161,7 +13434,7 @@ void CGIntData::InternalSwap(CGIntData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGIntData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[32]);
+      file_level_metadata_CGData_2eproto[36]);
 }
 
 // ===================================================================
@@ -12519,7 +13792,7 @@ void CGSysTimeResponse::InternalSwap(CGSysTimeResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGSysTimeResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[33]);
+      file_level_metadata_CGData_2eproto[37]);
 }
 
 // ===================================================================
@@ -12737,7 +14010,7 @@ void CGPlayerFlagEnabledData::InternalSwap(CGPlayerFlagEnabledData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPlayerFlagEnabledData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[34]);
+      file_level_metadata_CGData_2eproto[38]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -12751,6 +14024,18 @@ template<> PROTOBUF_NOINLINE ::CGData::StringPub* Arena::CreateMaybeMessage< ::C
 }
 template<> PROTOBUF_NOINLINE ::CGData::UploadGidBankDataRequest* Arena::CreateMaybeMessage< ::CGData::UploadGidBankDataRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CGData::UploadGidBankDataRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CGData::UploadMapDataRequest* Arena::CreateMaybeMessage< ::CGData::UploadMapDataRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CGData::UploadMapDataRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CGData::UploadMapDataResponse* Arena::CreateMaybeMessage< ::CGData::UploadMapDataResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CGData::UploadMapDataResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CGData::DownloadMapDataRequest* Arena::CreateMaybeMessage< ::CGData::DownloadMapDataRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CGData::DownloadMapDataRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CGData::DownloadMapDataResponse* Arena::CreateMaybeMessage< ::CGData::DownloadMapDataResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CGData::DownloadMapDataResponse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::CGData::CGAccountGidData* Arena::CreateMaybeMessage< ::CGData::CGAccountGidData >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CGData::CGAccountGidData >(arena);

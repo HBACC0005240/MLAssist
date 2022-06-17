@@ -576,25 +576,43 @@ void RpcSocketClient::UploadMapData()
 	int index1, index2, index3;
 	std::string sfilemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
-	//if (index1 == 0) //固定地图 暂时不上传
-	//	return;
+	if (index1 == 0) //固定地图 暂时不上传
+		return;
 
 	CGData::UploadMapDataRequest request;
 	request.set_filename(std::to_string(index3));
 	request.set_serverline(std::to_string(index2));
 	request.set_maptype(std::to_string(index1));
+	request.set_filetime(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss").toStdString());
 
+	/*
+	* //地图原始数据上传
 	QString sPath = g_pGameCtrl->GetCGGameInstallPath();
 	if (index1 == 0)
 		sPath = QString("%1/map/%2/%3.dat").arg(sPath).arg(index1).arg(index3);
 	else
-		sPath = QString("%1/map/%2/%3/%4.dat").arg(sPath).arg(index1).arg(index2).arg(index3);
-	QFile filemap(sPath);
-	if (!filemap.open(QIODevice::ReadOnly))
-		return;
-	auto mapData = filemap.readAll();
-	filemap.close();
-	request.set_imagedata(mapData.data());
+		sPath = QString("%1/map/%2/%3/%4.dat").arg(sPath).arg(index1).arg(index2).arg(index3);*/
+	//解析后保存本地的bmp格式上传
+	//QString sPath = QCoreApplication::applicationDirPath() + "//sync_map//";
+	//if (index1 == 0)
+	//	sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
+	//else
+	//	sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+	//g_pGameFun->SaveCurrentMapImage(sPath);
+	//QFile filemap(sPath);
+	//if (!filemap.open(QIODevice::ReadOnly))
+	//	return;
+	//auto mapData = filemap.readAll();
+	//filemap.close();
+	//request.set_imagedata(mapData.data(), mapData.size());
+	//解析后缓冲器数据上传
+	QImage image = g_pGameFun->CreateMapImage();
+	QByteArray ba;
+	QBuffer buffer(&ba);
+	buffer.open(QIODevice::WriteOnly);
+	image.save(&buffer, "BMP"); // writes image into ba in PNG format
+	request.set_imagedata(ba.data(), ba.size());
+
 	grpc::ClientContext context;
 	CGData::UploadMapDataResponse response;
 	//std::unique_ptr<ClientWriter<CGData::UploadMapDataRequest> > writer(_stub->UploadMapData(&context, &response));
@@ -608,6 +626,28 @@ void RpcSocketClient::UploadMapData()
 				  << std::endl;
 		std::cout << "RPC failed";
 	}
+}
+
+void RpcSocketClient::DownloadMapData(QImage &image)
+{
+	if (!isConnected())
+		return;
+	int index1, index2, index3;
+	std::string sfilemap;
+	g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
+	if (index1 == 0) //固定地图 暂时不下载
+		return;
+	CGData::DownloadMapDataRequest request;
+	request.set_filename(std::to_string(index3));
+	request.set_serverline(std::to_string(index2));
+	request.set_maptype(std::to_string(index1));
+	ClientContext context;
+
+	auto stream = _stub->DownloadMapData(&context, request);
+	CGData::DownloadMapDataResponse response;
+	stream->Read(&response);
+	image.loadFromData((uchar *)response.imagedata().c_str(), response.imagedata().size());
+	return;
 }
 
 bool RpcSocketClient::SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply)

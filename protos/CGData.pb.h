@@ -46,7 +46,7 @@ struct TableStruct_CGData_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[35]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[39]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -132,6 +132,12 @@ extern CGSysTimeResponseDefaultTypeInternal _CGSysTimeResponse_default_instance_
 class CGVoidData;
 struct CGVoidDataDefaultTypeInternal;
 extern CGVoidDataDefaultTypeInternal _CGVoidData_default_instance_;
+class DownloadMapDataRequest;
+struct DownloadMapDataRequestDefaultTypeInternal;
+extern DownloadMapDataRequestDefaultTypeInternal _DownloadMapDataRequest_default_instance_;
+class DownloadMapDataResponse;
+struct DownloadMapDataResponseDefaultTypeInternal;
+extern DownloadMapDataResponseDefaultTypeInternal _DownloadMapDataResponse_default_instance_;
 class SelectAccountGidDataRequest;
 struct SelectAccountGidDataRequestDefaultTypeInternal;
 extern SelectAccountGidDataRequestDefaultTypeInternal _SelectAccountGidDataRequest_default_instance_;
@@ -159,6 +165,12 @@ extern UploadGidDataRequestDefaultTypeInternal _UploadGidDataRequest_default_ins
 class UploadGidDataResponse;
 struct UploadGidDataResponseDefaultTypeInternal;
 extern UploadGidDataResponseDefaultTypeInternal _UploadGidDataResponse_default_instance_;
+class UploadMapDataRequest;
+struct UploadMapDataRequestDefaultTypeInternal;
+extern UploadMapDataRequestDefaultTypeInternal _UploadMapDataRequest_default_instance_;
+class UploadMapDataResponse;
+struct UploadMapDataResponseDefaultTypeInternal;
+extern UploadMapDataResponseDefaultTypeInternal _UploadMapDataResponse_default_instance_;
 }  // namespace CGData
 PROTOBUF_NAMESPACE_OPEN
 template<> ::CGData::CGAccountGidData* Arena::CreateMaybeMessage<::CGData::CGAccountGidData>(Arena*);
@@ -187,6 +199,8 @@ template<> ::CGData::CGStoreMapRequest* Arena::CreateMaybeMessage<::CGData::CGSt
 template<> ::CGData::CGStoreMapResponse* Arena::CreateMaybeMessage<::CGData::CGStoreMapResponse>(Arena*);
 template<> ::CGData::CGSysTimeResponse* Arena::CreateMaybeMessage<::CGData::CGSysTimeResponse>(Arena*);
 template<> ::CGData::CGVoidData* Arena::CreateMaybeMessage<::CGData::CGVoidData>(Arena*);
+template<> ::CGData::DownloadMapDataRequest* Arena::CreateMaybeMessage<::CGData::DownloadMapDataRequest>(Arena*);
+template<> ::CGData::DownloadMapDataResponse* Arena::CreateMaybeMessage<::CGData::DownloadMapDataResponse>(Arena*);
 template<> ::CGData::SelectAccountGidDataRequest* Arena::CreateMaybeMessage<::CGData::SelectAccountGidDataRequest>(Arena*);
 template<> ::CGData::SelectAccountGidDataResponse* Arena::CreateMaybeMessage<::CGData::SelectAccountGidDataResponse>(Arena*);
 template<> ::CGData::SelectGidDataRequest* Arena::CreateMaybeMessage<::CGData::SelectGidDataRequest>(Arena*);
@@ -196,6 +210,8 @@ template<> ::CGData::UploadGidBankDataRequest* Arena::CreateMaybeMessage<::CGDat
 template<> ::CGData::UploadGidBankDataResponse* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataResponse>(Arena*);
 template<> ::CGData::UploadGidDataRequest* Arena::CreateMaybeMessage<::CGData::UploadGidDataRequest>(Arena*);
 template<> ::CGData::UploadGidDataResponse* Arena::CreateMaybeMessage<::CGData::UploadGidDataResponse>(Arena*);
+template<> ::CGData::UploadMapDataRequest* Arena::CreateMaybeMessage<::CGData::UploadMapDataRequest>(Arena*);
+template<> ::CGData::UploadMapDataResponse* Arena::CreateMaybeMessage<::CGData::UploadMapDataResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace CGData {
 
@@ -706,6 +722,724 @@ class UploadGidBankDataRequest final :
 };
 // -------------------------------------------------------------------
 
+class UploadMapDataRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadMapDataRequest) */ {
+ public:
+  inline UploadMapDataRequest() : UploadMapDataRequest(nullptr) {}
+  ~UploadMapDataRequest() override;
+  explicit constexpr UploadMapDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadMapDataRequest(const UploadMapDataRequest& from);
+  UploadMapDataRequest(UploadMapDataRequest&& from) noexcept
+    : UploadMapDataRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadMapDataRequest& operator=(const UploadMapDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadMapDataRequest& operator=(UploadMapDataRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadMapDataRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadMapDataRequest* internal_default_instance() {
+    return reinterpret_cast<const UploadMapDataRequest*>(
+               &_UploadMapDataRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(UploadMapDataRequest& a, UploadMapDataRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadMapDataRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadMapDataRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadMapDataRequest* New() const final {
+    return new UploadMapDataRequest();
+  }
+
+  UploadMapDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadMapDataRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadMapDataRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadMapDataRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadMapDataRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadMapDataRequest";
+  }
+  protected:
+  explicit UploadMapDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFileNameFieldNumber = 1,
+    kServerLineFieldNumber = 2,
+    kMapTypeFieldNumber = 3,
+    kFileTimeFieldNumber = 4,
+    kImageDataFieldNumber = 5,
+  };
+  // string FileName = 1;
+  void clear_filename();
+  const std::string& filename() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filename(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filename();
+  PROTOBUF_MUST_USE_RESULT std::string* release_filename();
+  void set_allocated_filename(std::string* filename);
+  private:
+  const std::string& _internal_filename() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filename(const std::string& value);
+  std::string* _internal_mutable_filename();
+  public:
+
+  // string ServerLine = 2;
+  void clear_serverline();
+  const std::string& serverline() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_serverline(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_serverline();
+  PROTOBUF_MUST_USE_RESULT std::string* release_serverline();
+  void set_allocated_serverline(std::string* serverline);
+  private:
+  const std::string& _internal_serverline() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_serverline(const std::string& value);
+  std::string* _internal_mutable_serverline();
+  public:
+
+  // string MapType = 3;
+  void clear_maptype();
+  const std::string& maptype() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_maptype(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_maptype();
+  PROTOBUF_MUST_USE_RESULT std::string* release_maptype();
+  void set_allocated_maptype(std::string* maptype);
+  private:
+  const std::string& _internal_maptype() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_maptype(const std::string& value);
+  std::string* _internal_mutable_maptype();
+  public:
+
+  // string fileTime = 4;
+  void clear_filetime();
+  const std::string& filetime() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filetime(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filetime();
+  PROTOBUF_MUST_USE_RESULT std::string* release_filetime();
+  void set_allocated_filetime(std::string* filetime);
+  private:
+  const std::string& _internal_filetime() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filetime(const std::string& value);
+  std::string* _internal_mutable_filetime();
+  public:
+
+  // bytes ImageData = 5;
+  void clear_imagedata();
+  const std::string& imagedata() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_imagedata(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_imagedata();
+  PROTOBUF_MUST_USE_RESULT std::string* release_imagedata();
+  void set_allocated_imagedata(std::string* imagedata);
+  private:
+  const std::string& _internal_imagedata() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_imagedata(const std::string& value);
+  std::string* _internal_mutable_imagedata();
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadMapDataRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr serverline_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr maptype_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filetime_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr imagedata_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UploadMapDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadMapDataResponse) */ {
+ public:
+  inline UploadMapDataResponse() : UploadMapDataResponse(nullptr) {}
+  ~UploadMapDataResponse() override;
+  explicit constexpr UploadMapDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadMapDataResponse(const UploadMapDataResponse& from);
+  UploadMapDataResponse(UploadMapDataResponse&& from) noexcept
+    : UploadMapDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadMapDataResponse& operator=(const UploadMapDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadMapDataResponse& operator=(UploadMapDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadMapDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadMapDataResponse* internal_default_instance() {
+    return reinterpret_cast<const UploadMapDataResponse*>(
+               &_UploadMapDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(UploadMapDataResponse& a, UploadMapDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadMapDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadMapDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadMapDataResponse* New() const final {
+    return new UploadMapDataResponse();
+  }
+
+  UploadMapDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadMapDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadMapDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadMapDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadMapDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadMapDataResponse";
+  }
+  protected:
+  explicit UploadMapDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadMapDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DownloadMapDataRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.DownloadMapDataRequest) */ {
+ public:
+  inline DownloadMapDataRequest() : DownloadMapDataRequest(nullptr) {}
+  ~DownloadMapDataRequest() override;
+  explicit constexpr DownloadMapDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  DownloadMapDataRequest(const DownloadMapDataRequest& from);
+  DownloadMapDataRequest(DownloadMapDataRequest&& from) noexcept
+    : DownloadMapDataRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline DownloadMapDataRequest& operator=(const DownloadMapDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DownloadMapDataRequest& operator=(DownloadMapDataRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DownloadMapDataRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DownloadMapDataRequest* internal_default_instance() {
+    return reinterpret_cast<const DownloadMapDataRequest*>(
+               &_DownloadMapDataRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(DownloadMapDataRequest& a, DownloadMapDataRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DownloadMapDataRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DownloadMapDataRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DownloadMapDataRequest* New() const final {
+    return new DownloadMapDataRequest();
+  }
+
+  DownloadMapDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DownloadMapDataRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const DownloadMapDataRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const DownloadMapDataRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DownloadMapDataRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.DownloadMapDataRequest";
+  }
+  protected:
+  explicit DownloadMapDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFileNameFieldNumber = 1,
+    kServerLineFieldNumber = 2,
+    kMapTypeFieldNumber = 3,
+  };
+  // string FileName = 1;
+  void clear_filename();
+  const std::string& filename() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filename(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filename();
+  PROTOBUF_MUST_USE_RESULT std::string* release_filename();
+  void set_allocated_filename(std::string* filename);
+  private:
+  const std::string& _internal_filename() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filename(const std::string& value);
+  std::string* _internal_mutable_filename();
+  public:
+
+  // string ServerLine = 2;
+  void clear_serverline();
+  const std::string& serverline() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_serverline(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_serverline();
+  PROTOBUF_MUST_USE_RESULT std::string* release_serverline();
+  void set_allocated_serverline(std::string* serverline);
+  private:
+  const std::string& _internal_serverline() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_serverline(const std::string& value);
+  std::string* _internal_mutable_serverline();
+  public:
+
+  // string MapType = 3;
+  void clear_maptype();
+  const std::string& maptype() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_maptype(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_maptype();
+  PROTOBUF_MUST_USE_RESULT std::string* release_maptype();
+  void set_allocated_maptype(std::string* maptype);
+  private:
+  const std::string& _internal_maptype() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_maptype(const std::string& value);
+  std::string* _internal_mutable_maptype();
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.DownloadMapDataRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr serverline_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr maptype_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DownloadMapDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.DownloadMapDataResponse) */ {
+ public:
+  inline DownloadMapDataResponse() : DownloadMapDataResponse(nullptr) {}
+  ~DownloadMapDataResponse() override;
+  explicit constexpr DownloadMapDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  DownloadMapDataResponse(const DownloadMapDataResponse& from);
+  DownloadMapDataResponse(DownloadMapDataResponse&& from) noexcept
+    : DownloadMapDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline DownloadMapDataResponse& operator=(const DownloadMapDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DownloadMapDataResponse& operator=(DownloadMapDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DownloadMapDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DownloadMapDataResponse* internal_default_instance() {
+    return reinterpret_cast<const DownloadMapDataResponse*>(
+               &_DownloadMapDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(DownloadMapDataResponse& a, DownloadMapDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DownloadMapDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DownloadMapDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DownloadMapDataResponse* New() const final {
+    return new DownloadMapDataResponse();
+  }
+
+  DownloadMapDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DownloadMapDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const DownloadMapDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const DownloadMapDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DownloadMapDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.DownloadMapDataResponse";
+  }
+  protected:
+  explicit DownloadMapDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFileNameFieldNumber = 1,
+    kServerLineFieldNumber = 2,
+    kMapTypeFieldNumber = 3,
+    kFileTimeFieldNumber = 4,
+    kImageDataFieldNumber = 5,
+  };
+  // string FileName = 1;
+  void clear_filename();
+  const std::string& filename() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filename(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filename();
+  PROTOBUF_MUST_USE_RESULT std::string* release_filename();
+  void set_allocated_filename(std::string* filename);
+  private:
+  const std::string& _internal_filename() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filename(const std::string& value);
+  std::string* _internal_mutable_filename();
+  public:
+
+  // string ServerLine = 2;
+  void clear_serverline();
+  const std::string& serverline() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_serverline(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_serverline();
+  PROTOBUF_MUST_USE_RESULT std::string* release_serverline();
+  void set_allocated_serverline(std::string* serverline);
+  private:
+  const std::string& _internal_serverline() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_serverline(const std::string& value);
+  std::string* _internal_mutable_serverline();
+  public:
+
+  // string MapType = 3;
+  void clear_maptype();
+  const std::string& maptype() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_maptype(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_maptype();
+  PROTOBUF_MUST_USE_RESULT std::string* release_maptype();
+  void set_allocated_maptype(std::string* maptype);
+  private:
+  const std::string& _internal_maptype() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_maptype(const std::string& value);
+  std::string* _internal_mutable_maptype();
+  public:
+
+  // string fileTime = 4;
+  void clear_filetime();
+  const std::string& filetime() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filetime(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filetime();
+  PROTOBUF_MUST_USE_RESULT std::string* release_filetime();
+  void set_allocated_filetime(std::string* filetime);
+  private:
+  const std::string& _internal_filetime() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filetime(const std::string& value);
+  std::string* _internal_mutable_filetime();
+  public:
+
+  // bytes ImageData = 5;
+  void clear_imagedata();
+  const std::string& imagedata() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_imagedata(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_imagedata();
+  PROTOBUF_MUST_USE_RESULT std::string* release_imagedata();
+  void set_allocated_imagedata(std::string* imagedata);
+  private:
+  const std::string& _internal_imagedata() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_imagedata(const std::string& value);
+  std::string* _internal_mutable_imagedata();
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.DownloadMapDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr serverline_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr maptype_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filetime_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr imagedata_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
 class CGAccountGidData final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.CGAccountGidData) */ {
  public:
@@ -750,7 +1484,7 @@ class CGAccountGidData final :
                &_CGAccountGidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    7;
 
   friend void swap(CGAccountGidData& a, CGAccountGidData& b) {
     a.Swap(&b);
@@ -954,7 +1688,7 @@ class UploadGidDataRequest final :
                &_UploadGidDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    8;
 
   friend void swap(UploadGidDataRequest& a, UploadGidDataRequest& b) {
     a.Swap(&b);
@@ -1185,7 +1919,7 @@ class SelectAccountGidDataRequest final :
                &_SelectAccountGidDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    9;
 
   friend void swap(SelectAccountGidDataRequest& a, SelectAccountGidDataRequest& b) {
     a.Swap(&b);
@@ -1329,7 +2063,7 @@ class SelectGidDataRequest final :
                &_SelectGidDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    10;
 
   friend void swap(SelectGidDataRequest& a, SelectGidDataRequest& b) {
     a.Swap(&b);
@@ -1484,7 +2218,7 @@ class SelectAccountGidDataResponse final :
                &_SelectAccountGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    11;
 
   friend void swap(SelectAccountGidDataResponse& a, SelectAccountGidDataResponse& b) {
     a.Swap(&b);
@@ -1632,7 +2366,7 @@ class SelectGidDataResponse final :
                &_SelectGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    12;
 
   friend void swap(SelectGidDataResponse& a, SelectGidDataResponse& b) {
     a.Swap(&b);
@@ -1863,7 +2597,7 @@ class CGBaseData final :
                &_CGBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    13;
 
   friend void swap(CGBaseData& a, CGBaseData& b) {
     a.Swap(&b);
@@ -2095,7 +2829,7 @@ class CGSkillBaseData final :
                &_CGSkillBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    14;
 
   friend void swap(CGSkillBaseData& a, CGSkillBaseData& b) {
     a.Swap(&b);
@@ -2374,7 +3108,7 @@ class CGAttrBaseData final :
                &_CGAttrBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    15;
 
   friend void swap(CGAttrBaseData& a, CGAttrBaseData& b) {
     a.Swap(&b);
@@ -2777,7 +3511,7 @@ class CGCharacterPersDesc final :
                &_CGCharacterPersDesc_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    16;
 
   friend void swap(CGCharacterPersDesc& a, CGCharacterPersDesc& b) {
     a.Swap(&b);
@@ -3013,7 +3747,7 @@ class CGCharacterData final :
                &_CGCharacterData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    17;
 
   friend void swap(CGCharacterData& a, CGCharacterData& b) {
     a.Swap(&b);
@@ -3559,7 +4293,7 @@ class CGPetData final :
                &_CGPetData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    18;
 
   friend void swap(CGPetData& a, CGPetData& b) {
     a.Swap(&b);
@@ -3884,7 +4618,7 @@ class CGItemData final :
                &_CGItemData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    19;
 
   friend void swap(CGItemData& a, CGItemData& b) {
     a.Swap(&b);
@@ -4137,7 +4871,7 @@ class UploadGidDataResponse final :
                &_UploadGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    20;
 
   friend void swap(UploadGidDataResponse& a, UploadGidDataResponse& b) {
     a.Swap(&b);
@@ -4263,7 +4997,7 @@ class UploadGidBankDataResponse final :
                &_UploadGidBankDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    21;
 
   friend void swap(UploadGidBankDataResponse& a, UploadGidBankDataResponse& b) {
     a.Swap(&b);
@@ -4389,7 +5123,7 @@ class CGStoreMapRequest final :
                &_CGStoreMapRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    22;
 
   friend void swap(CGStoreMapRequest& a, CGStoreMapRequest& b) {
     a.Swap(&b);
@@ -4544,7 +5278,7 @@ class CGStoreMapResponse final :
                &_CGStoreMapResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    23;
 
   friend void swap(CGStoreMapResponse& a, CGStoreMapResponse& b) {
     a.Swap(&b);
@@ -4670,7 +5404,7 @@ class CGMapDataRequest final :
                &_CGMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    24;
 
   friend void swap(CGMapDataRequest& a, CGMapDataRequest& b) {
     a.Swap(&b);
@@ -4796,7 +5530,7 @@ class CGMapDataResponse final :
                &_CGMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    25;
 
   friend void swap(CGMapDataResponse& a, CGMapDataResponse& b) {
     a.Swap(&b);
@@ -4944,7 +5678,7 @@ class CGMapData final :
                &_CGMapData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    26;
 
   friend void swap(CGMapData& a, CGMapData& b) {
     a.Swap(&b);
@@ -5137,7 +5871,7 @@ class CGPetGradeCalcRequest final :
                &_CGPetGradeCalcRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    27;
 
   friend void swap(CGPetGradeCalcRequest& a, CGPetGradeCalcRequest& b) {
     a.Swap(&b);
@@ -5263,7 +5997,7 @@ class CGPetGradeCalcResponse final :
                &_CGPetGradeCalcResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    28;
 
   friend void swap(CGPetGradeCalcResponse& a, CGPetGradeCalcResponse& b) {
     a.Swap(&b);
@@ -5411,7 +6145,7 @@ class CGPetGradeCalcData final :
                &_CGPetGradeCalcData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    29;
 
   friend void swap(CGPetGradeCalcData& a, CGPetGradeCalcData& b) {
     a.Swap(&b);
@@ -5793,7 +6527,7 @@ class CGItemRequest final :
                &_CGItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    30;
 
   friend void swap(CGItemRequest& a, CGItemRequest& b) {
     a.Swap(&b);
@@ -5932,7 +6666,7 @@ class CGItemResponse final :
                &_CGItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    31;
 
   friend void swap(CGItemResponse& a, CGItemResponse& b) {
     a.Swap(&b);
@@ -6196,7 +6930,7 @@ class CGStoreItemRequest final :
                &_CGStoreItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    32;
 
   friend void swap(CGStoreItemRequest& a, CGStoreItemRequest& b) {
     a.Swap(&b);
@@ -6449,7 +7183,7 @@ class CGStoreItemResponse final :
                &_CGStoreItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    33;
 
   friend void swap(CGStoreItemResponse& a, CGStoreItemResponse& b) {
     a.Swap(&b);
@@ -6604,7 +7338,7 @@ class CGVoidData final :
                &_CGVoidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    34;
 
   friend void swap(CGVoidData& a, CGVoidData& b) {
     a.Swap(&b);
@@ -6730,7 +7464,7 @@ class CGBoolData final :
                &_CGBoolData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    35;
 
   friend void swap(CGBoolData& a, CGBoolData& b) {
     a.Swap(&b);
@@ -6869,7 +7603,7 @@ class CGIntData final :
                &_CGIntData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    36;
 
   friend void swap(CGIntData& a, CGIntData& b) {
     a.Swap(&b);
@@ -7008,7 +7742,7 @@ class CGSysTimeResponse final :
                &_CGSysTimeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    37;
 
   friend void swap(CGSysTimeResponse& a, CGSysTimeResponse& b) {
     a.Swap(&b);
@@ -7224,7 +7958,7 @@ class CGPlayerFlagEnabledData final :
                &_CGPlayerFlagEnabledData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    38;
 
   friend void swap(CGPlayerFlagEnabledData& a, CGPlayerFlagEnabledData& b) {
     a.Swap(&b);
@@ -7623,6 +8357,620 @@ inline void UploadGidBankDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPA
 inline void UploadGidBankDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_role_type(value);
   // @@protoc_insertion_point(field_set:CGData.UploadGidBankDataRequest.role_type)
+}
+
+// -------------------------------------------------------------------
+
+// UploadMapDataRequest
+
+// string FileName = 1;
+inline void UploadMapDataRequest::clear_filename() {
+  filename_.ClearToEmpty();
+}
+inline const std::string& UploadMapDataRequest::filename() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadMapDataRequest.FileName)
+  return _internal_filename();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadMapDataRequest::set_filename(ArgT0&& arg0, ArgT... args) {
+ 
+ filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadMapDataRequest.FileName)
+}
+inline std::string* UploadMapDataRequest::mutable_filename() {
+  std::string* _s = _internal_mutable_filename();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadMapDataRequest.FileName)
+  return _s;
+}
+inline const std::string& UploadMapDataRequest::_internal_filename() const {
+  return filename_.Get();
+}
+inline void UploadMapDataRequest::_internal_set_filename(const std::string& value) {
+  
+  filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::_internal_mutable_filename() {
+  
+  return filename_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::release_filename() {
+  // @@protoc_insertion_point(field_release:CGData.UploadMapDataRequest.FileName)
+  return filename_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadMapDataRequest::set_allocated_filename(std::string* filename) {
+  if (filename != nullptr) {
+    
+  } else {
+    
+  }
+  filename_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), filename,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadMapDataRequest.FileName)
+}
+
+// string ServerLine = 2;
+inline void UploadMapDataRequest::clear_serverline() {
+  serverline_.ClearToEmpty();
+}
+inline const std::string& UploadMapDataRequest::serverline() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadMapDataRequest.ServerLine)
+  return _internal_serverline();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadMapDataRequest::set_serverline(ArgT0&& arg0, ArgT... args) {
+ 
+ serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadMapDataRequest.ServerLine)
+}
+inline std::string* UploadMapDataRequest::mutable_serverline() {
+  std::string* _s = _internal_mutable_serverline();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadMapDataRequest.ServerLine)
+  return _s;
+}
+inline const std::string& UploadMapDataRequest::_internal_serverline() const {
+  return serverline_.Get();
+}
+inline void UploadMapDataRequest::_internal_set_serverline(const std::string& value) {
+  
+  serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::_internal_mutable_serverline() {
+  
+  return serverline_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::release_serverline() {
+  // @@protoc_insertion_point(field_release:CGData.UploadMapDataRequest.ServerLine)
+  return serverline_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadMapDataRequest::set_allocated_serverline(std::string* serverline) {
+  if (serverline != nullptr) {
+    
+  } else {
+    
+  }
+  serverline_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), serverline,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadMapDataRequest.ServerLine)
+}
+
+// string MapType = 3;
+inline void UploadMapDataRequest::clear_maptype() {
+  maptype_.ClearToEmpty();
+}
+inline const std::string& UploadMapDataRequest::maptype() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadMapDataRequest.MapType)
+  return _internal_maptype();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadMapDataRequest::set_maptype(ArgT0&& arg0, ArgT... args) {
+ 
+ maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadMapDataRequest.MapType)
+}
+inline std::string* UploadMapDataRequest::mutable_maptype() {
+  std::string* _s = _internal_mutable_maptype();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadMapDataRequest.MapType)
+  return _s;
+}
+inline const std::string& UploadMapDataRequest::_internal_maptype() const {
+  return maptype_.Get();
+}
+inline void UploadMapDataRequest::_internal_set_maptype(const std::string& value) {
+  
+  maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::_internal_mutable_maptype() {
+  
+  return maptype_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::release_maptype() {
+  // @@protoc_insertion_point(field_release:CGData.UploadMapDataRequest.MapType)
+  return maptype_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadMapDataRequest::set_allocated_maptype(std::string* maptype) {
+  if (maptype != nullptr) {
+    
+  } else {
+    
+  }
+  maptype_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), maptype,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadMapDataRequest.MapType)
+}
+
+// string fileTime = 4;
+inline void UploadMapDataRequest::clear_filetime() {
+  filetime_.ClearToEmpty();
+}
+inline const std::string& UploadMapDataRequest::filetime() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadMapDataRequest.fileTime)
+  return _internal_filetime();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadMapDataRequest::set_filetime(ArgT0&& arg0, ArgT... args) {
+ 
+ filetime_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadMapDataRequest.fileTime)
+}
+inline std::string* UploadMapDataRequest::mutable_filetime() {
+  std::string* _s = _internal_mutable_filetime();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadMapDataRequest.fileTime)
+  return _s;
+}
+inline const std::string& UploadMapDataRequest::_internal_filetime() const {
+  return filetime_.Get();
+}
+inline void UploadMapDataRequest::_internal_set_filetime(const std::string& value) {
+  
+  filetime_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::_internal_mutable_filetime() {
+  
+  return filetime_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::release_filetime() {
+  // @@protoc_insertion_point(field_release:CGData.UploadMapDataRequest.fileTime)
+  return filetime_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadMapDataRequest::set_allocated_filetime(std::string* filetime) {
+  if (filetime != nullptr) {
+    
+  } else {
+    
+  }
+  filetime_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), filetime,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadMapDataRequest.fileTime)
+}
+
+// bytes ImageData = 5;
+inline void UploadMapDataRequest::clear_imagedata() {
+  imagedata_.ClearToEmpty();
+}
+inline const std::string& UploadMapDataRequest::imagedata() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadMapDataRequest.ImageData)
+  return _internal_imagedata();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadMapDataRequest::set_imagedata(ArgT0&& arg0, ArgT... args) {
+ 
+ imagedata_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadMapDataRequest.ImageData)
+}
+inline std::string* UploadMapDataRequest::mutable_imagedata() {
+  std::string* _s = _internal_mutable_imagedata();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadMapDataRequest.ImageData)
+  return _s;
+}
+inline const std::string& UploadMapDataRequest::_internal_imagedata() const {
+  return imagedata_.Get();
+}
+inline void UploadMapDataRequest::_internal_set_imagedata(const std::string& value) {
+  
+  imagedata_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::_internal_mutable_imagedata() {
+  
+  return imagedata_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadMapDataRequest::release_imagedata() {
+  // @@protoc_insertion_point(field_release:CGData.UploadMapDataRequest.ImageData)
+  return imagedata_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadMapDataRequest::set_allocated_imagedata(std::string* imagedata) {
+  if (imagedata != nullptr) {
+    
+  } else {
+    
+  }
+  imagedata_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), imagedata,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadMapDataRequest.ImageData)
+}
+
+// -------------------------------------------------------------------
+
+// UploadMapDataResponse
+
+// -------------------------------------------------------------------
+
+// DownloadMapDataRequest
+
+// string FileName = 1;
+inline void DownloadMapDataRequest::clear_filename() {
+  filename_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataRequest::filename() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataRequest.FileName)
+  return _internal_filename();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataRequest::set_filename(ArgT0&& arg0, ArgT... args) {
+ 
+ filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataRequest.FileName)
+}
+inline std::string* DownloadMapDataRequest::mutable_filename() {
+  std::string* _s = _internal_mutable_filename();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataRequest.FileName)
+  return _s;
+}
+inline const std::string& DownloadMapDataRequest::_internal_filename() const {
+  return filename_.Get();
+}
+inline void DownloadMapDataRequest::_internal_set_filename(const std::string& value) {
+  
+  filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataRequest::_internal_mutable_filename() {
+  
+  return filename_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataRequest::release_filename() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataRequest.FileName)
+  return filename_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataRequest::set_allocated_filename(std::string* filename) {
+  if (filename != nullptr) {
+    
+  } else {
+    
+  }
+  filename_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), filename,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataRequest.FileName)
+}
+
+// string ServerLine = 2;
+inline void DownloadMapDataRequest::clear_serverline() {
+  serverline_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataRequest::serverline() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataRequest.ServerLine)
+  return _internal_serverline();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataRequest::set_serverline(ArgT0&& arg0, ArgT... args) {
+ 
+ serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataRequest.ServerLine)
+}
+inline std::string* DownloadMapDataRequest::mutable_serverline() {
+  std::string* _s = _internal_mutable_serverline();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataRequest.ServerLine)
+  return _s;
+}
+inline const std::string& DownloadMapDataRequest::_internal_serverline() const {
+  return serverline_.Get();
+}
+inline void DownloadMapDataRequest::_internal_set_serverline(const std::string& value) {
+  
+  serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataRequest::_internal_mutable_serverline() {
+  
+  return serverline_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataRequest::release_serverline() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataRequest.ServerLine)
+  return serverline_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataRequest::set_allocated_serverline(std::string* serverline) {
+  if (serverline != nullptr) {
+    
+  } else {
+    
+  }
+  serverline_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), serverline,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataRequest.ServerLine)
+}
+
+// string MapType = 3;
+inline void DownloadMapDataRequest::clear_maptype() {
+  maptype_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataRequest::maptype() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataRequest.MapType)
+  return _internal_maptype();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataRequest::set_maptype(ArgT0&& arg0, ArgT... args) {
+ 
+ maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataRequest.MapType)
+}
+inline std::string* DownloadMapDataRequest::mutable_maptype() {
+  std::string* _s = _internal_mutable_maptype();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataRequest.MapType)
+  return _s;
+}
+inline const std::string& DownloadMapDataRequest::_internal_maptype() const {
+  return maptype_.Get();
+}
+inline void DownloadMapDataRequest::_internal_set_maptype(const std::string& value) {
+  
+  maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataRequest::_internal_mutable_maptype() {
+  
+  return maptype_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataRequest::release_maptype() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataRequest.MapType)
+  return maptype_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataRequest::set_allocated_maptype(std::string* maptype) {
+  if (maptype != nullptr) {
+    
+  } else {
+    
+  }
+  maptype_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), maptype,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataRequest.MapType)
+}
+
+// -------------------------------------------------------------------
+
+// DownloadMapDataResponse
+
+// string FileName = 1;
+inline void DownloadMapDataResponse::clear_filename() {
+  filename_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataResponse::filename() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataResponse.FileName)
+  return _internal_filename();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataResponse::set_filename(ArgT0&& arg0, ArgT... args) {
+ 
+ filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataResponse.FileName)
+}
+inline std::string* DownloadMapDataResponse::mutable_filename() {
+  std::string* _s = _internal_mutable_filename();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataResponse.FileName)
+  return _s;
+}
+inline const std::string& DownloadMapDataResponse::_internal_filename() const {
+  return filename_.Get();
+}
+inline void DownloadMapDataResponse::_internal_set_filename(const std::string& value) {
+  
+  filename_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::_internal_mutable_filename() {
+  
+  return filename_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::release_filename() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataResponse.FileName)
+  return filename_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataResponse::set_allocated_filename(std::string* filename) {
+  if (filename != nullptr) {
+    
+  } else {
+    
+  }
+  filename_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), filename,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataResponse.FileName)
+}
+
+// string ServerLine = 2;
+inline void DownloadMapDataResponse::clear_serverline() {
+  serverline_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataResponse::serverline() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataResponse.ServerLine)
+  return _internal_serverline();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataResponse::set_serverline(ArgT0&& arg0, ArgT... args) {
+ 
+ serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataResponse.ServerLine)
+}
+inline std::string* DownloadMapDataResponse::mutable_serverline() {
+  std::string* _s = _internal_mutable_serverline();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataResponse.ServerLine)
+  return _s;
+}
+inline const std::string& DownloadMapDataResponse::_internal_serverline() const {
+  return serverline_.Get();
+}
+inline void DownloadMapDataResponse::_internal_set_serverline(const std::string& value) {
+  
+  serverline_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::_internal_mutable_serverline() {
+  
+  return serverline_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::release_serverline() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataResponse.ServerLine)
+  return serverline_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataResponse::set_allocated_serverline(std::string* serverline) {
+  if (serverline != nullptr) {
+    
+  } else {
+    
+  }
+  serverline_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), serverline,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataResponse.ServerLine)
+}
+
+// string MapType = 3;
+inline void DownloadMapDataResponse::clear_maptype() {
+  maptype_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataResponse::maptype() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataResponse.MapType)
+  return _internal_maptype();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataResponse::set_maptype(ArgT0&& arg0, ArgT... args) {
+ 
+ maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataResponse.MapType)
+}
+inline std::string* DownloadMapDataResponse::mutable_maptype() {
+  std::string* _s = _internal_mutable_maptype();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataResponse.MapType)
+  return _s;
+}
+inline const std::string& DownloadMapDataResponse::_internal_maptype() const {
+  return maptype_.Get();
+}
+inline void DownloadMapDataResponse::_internal_set_maptype(const std::string& value) {
+  
+  maptype_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::_internal_mutable_maptype() {
+  
+  return maptype_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::release_maptype() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataResponse.MapType)
+  return maptype_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataResponse::set_allocated_maptype(std::string* maptype) {
+  if (maptype != nullptr) {
+    
+  } else {
+    
+  }
+  maptype_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), maptype,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataResponse.MapType)
+}
+
+// string fileTime = 4;
+inline void DownloadMapDataResponse::clear_filetime() {
+  filetime_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataResponse::filetime() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataResponse.fileTime)
+  return _internal_filetime();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataResponse::set_filetime(ArgT0&& arg0, ArgT... args) {
+ 
+ filetime_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataResponse.fileTime)
+}
+inline std::string* DownloadMapDataResponse::mutable_filetime() {
+  std::string* _s = _internal_mutable_filetime();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataResponse.fileTime)
+  return _s;
+}
+inline const std::string& DownloadMapDataResponse::_internal_filetime() const {
+  return filetime_.Get();
+}
+inline void DownloadMapDataResponse::_internal_set_filetime(const std::string& value) {
+  
+  filetime_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::_internal_mutable_filetime() {
+  
+  return filetime_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::release_filetime() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataResponse.fileTime)
+  return filetime_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataResponse::set_allocated_filetime(std::string* filetime) {
+  if (filetime != nullptr) {
+    
+  } else {
+    
+  }
+  filetime_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), filetime,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataResponse.fileTime)
+}
+
+// bytes ImageData = 5;
+inline void DownloadMapDataResponse::clear_imagedata() {
+  imagedata_.ClearToEmpty();
+}
+inline const std::string& DownloadMapDataResponse::imagedata() const {
+  // @@protoc_insertion_point(field_get:CGData.DownloadMapDataResponse.ImageData)
+  return _internal_imagedata();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DownloadMapDataResponse::set_imagedata(ArgT0&& arg0, ArgT... args) {
+ 
+ imagedata_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.DownloadMapDataResponse.ImageData)
+}
+inline std::string* DownloadMapDataResponse::mutable_imagedata() {
+  std::string* _s = _internal_mutable_imagedata();
+  // @@protoc_insertion_point(field_mutable:CGData.DownloadMapDataResponse.ImageData)
+  return _s;
+}
+inline const std::string& DownloadMapDataResponse::_internal_imagedata() const {
+  return imagedata_.Get();
+}
+inline void DownloadMapDataResponse::_internal_set_imagedata(const std::string& value) {
+  
+  imagedata_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::_internal_mutable_imagedata() {
+  
+  return imagedata_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DownloadMapDataResponse::release_imagedata() {
+  // @@protoc_insertion_point(field_release:CGData.DownloadMapDataResponse.ImageData)
+  return imagedata_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DownloadMapDataResponse::set_allocated_imagedata(std::string* imagedata) {
+  if (imagedata != nullptr) {
+    
+  } else {
+    
+  }
+  imagedata_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), imagedata,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.DownloadMapDataResponse.ImageData)
 }
 
 // -------------------------------------------------------------------
@@ -13392,6 +14740,14 @@ inline void CGPlayerFlagEnabledData::set_enable(bool value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -1,7 +1,10 @@
 #pragma once
 #include <windows.h>
 #include <QTextCodec>
-//ANSIת����UNICODE
+#include <QSettings>
+#include <QIODevice>
+#include <QTextStream>
+//ANS To UNICODE
 static QTextCodec* g_codecGBK = QTextCodec::codecForName("GBK");
 static LPWSTR ANSITOUNICODE1(const char* pBuf)
 {
@@ -65,4 +68,223 @@ static QString ConvertFileName(const QString& sFileName)
 	//	name = name.replace(it.value(), it.key());
 	//}
 	return sNewFileName;
+}
+
+static bool IniWriteFunc(QIODevice& device, const QSettings::SettingsMap& settingsMap)
+{
+	QString lastSection;
+	const char* const eol = "\r\n";
+	bool writeError = false;
+	QMapIterator<QString, QVariant> it(settingsMap);
+	while (it.hasNext() && !writeError)
+	{
+		it.next();
+		QString key = it.key();
+		QString section;
+		//qDebug() << "key: " << key;
+		int idx = key.lastIndexOf(QChar('/'));
+		if (idx == -1)
+		{
+			section = QString("[General]");
+		}
+		else
+		{
+			section = key.left(idx);
+			key = key.mid(idx + 1);
+			if (section.compare(QString("General"), Qt::CaseInsensitive) == 0)
+			{
+				section = QString("[%General]");
+			}
+			else
+			{
+				section.prepend(QChar('['));
+				section.append(QChar(']'));
+			}
+		}
+		if (section.compare(lastSection, Qt::CaseInsensitive))
+		{
+			if (!lastSection.isEmpty())
+			{
+				device.write(eol);
+			}
+			lastSection = section;
+			if (device.write(section.toUtf8() + eol) == -1)
+			{
+				writeError = true;
+			}
+		}
+		QByteArray block = key.toUtf8();
+		block += " = ";
+		if (it.value().type() == QVariant::StringList)
+		{
+			foreach(QString s, it.value().toStringList())
+			{
+				block += s;
+				block += ", ";
+			}
+			if (block.endsWith(", "))
+			{
+				block.chop(2);
+			}
+		}
+		else if (it.value().type() == QVariant::List)
+		{
+			foreach(QVariant v, it.value().toList())
+			{
+				block += v.toString();
+				block += ", ";
+			}
+			if (block.endsWith(", "))
+			{
+				block.chop(2);
+			}
+		}
+		else
+		{
+			block += it.value().toString();
+		}
+		block += eol;
+		if (device.write(block) == -1)
+		{
+			writeError = true;
+		}
+	}
+	return writeError;
+}
+static bool IniReadFunc(QIODevice& device, QSettings::SettingsMap& settingsMap)
+{
+	QString currentSection;
+	QTextStream stream(&device);
+	stream.setCodec("GB2312");
+	QString data;
+	bool ok = true;
+	while (!stream.atEnd())
+	{
+		data = stream.readLine();
+		if (data.trimmed().isEmpty())
+		{
+			continue;
+		}
+		if (data[0] == QChar('['))
+		{
+			QString iniSection;
+			int inx = data.indexOf(QChar(']'));
+			if (inx == -1)
+			{
+				ok = false;
+				iniSection = data.mid(1);
+			}
+			else
+			{
+				iniSection = data.mid(1, inx - 1);
+			}
+			iniSection = iniSection.trimmed();
+			if (iniSection.compare(QString("general"), Qt::CaseInsensitive) == 0)
+			{
+				currentSection.clear();
+			}
+			else
+			{
+				if (iniSection.compare(QString("%general"), Qt::CaseInsensitive) == 0)
+				{
+					currentSection = QString("general");
+				}
+				else
+				{
+					currentSection = iniSection;
+				}
+				currentSection += QChar('/');
+			}
+		}
+		else
+		{
+			bool inQuotes = false;
+			int equalsPos = -1;
+			QList<int> commaPos;
+			int i = 0;
+			while (i < data.size())
+			{
+				QChar ch = data.at(i);
+				if (ch == QChar('='))
+				{
+					if (!inQuotes && equalsPos == -1)
+					{
+						equalsPos = i;
+					}
+				}
+				else if (ch == QChar('"'))
+				{
+					inQuotes = !inQuotes;
+				}
+				else if (ch == QChar(','))
+				{
+					if (!inQuotes && equalsPos != -1)
+					{
+						commaPos.append(i);
+					}
+				}
+				/*	else if (ch == QChar(';') || ch == QChar('#')) {
+						if (!inQuotes) {
+							data.resize(i);
+							break;
+						}
+					}*/
+				else if (ch == QChar('\\'))
+				{
+					if (++i < data.size())
+					{
+					}
+					else
+					{
+						ok = false;
+						break;
+					}
+				}
+				i++;
+			}
+			if (equalsPos == -1)
+			{
+				break;
+			}
+			else
+			{
+				QString key = data.mid(0, equalsPos).trimmed();
+				if (key.isEmpty())
+				{
+					break;
+				}
+				else
+				{
+					key = currentSection + key;
+				}
+				if (commaPos.isEmpty())
+				{ //value
+					QString v = data.mid(equalsPos + 1).trimmed();
+					if (v.startsWith("\"") && v.endsWith("\"") && v.length() > 1)
+					{
+						v = v.mid(1, v.length() - 2);
+					}
+					settingsMap[key] = (v);
+				}
+				else
+				{ //value list
+					commaPos.prepend(equalsPos);
+					commaPos.append(-1);
+					QVariantList vals;
+					for (int i = 1; i < commaPos.size(); ++i)
+					{
+						QString d = data.mid(commaPos.at(i - 1) + 1, commaPos.at(i) - commaPos.at(i - 1) - 1);
+						QString v = d.trimmed();
+						if (v.startsWith("\"") && v.endsWith("\"") && v.length() > 1)
+						{
+							v = v.mid(1, v.length() - 2);
+						}
+						vals.append(v);
+					}
+					settingsMap[key] = vals;
+				}
+			}
+		}
+	}
+	return ok;
 }

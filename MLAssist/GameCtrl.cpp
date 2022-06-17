@@ -4013,6 +4013,11 @@ void GameCtrl::OnSetRealUpdateUi(int state)
 	m_bRealUpdateUi = (state == Qt::Checked ? true : false);
 }
 
+void GameCtrl::OnSetRealUpdatePlayerUi(int state)
+{
+	m_bRealUpdatePlayerUi = (state == Qt::Checked ? true : false);
+}
+
 void GameCtrl::OnEnableDataDisplayUi(int state)
 {
 	m_bEnabledDataDisplayUi = (state == Qt::Checked ? true : false);

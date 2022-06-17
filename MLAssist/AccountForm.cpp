@@ -48,7 +48,7 @@ AccountForm::AccountForm(QWidget *parent) :
 		ui(new Ui::AccountForm)
 {
 	ui->setupUi(this);
-	//ui->pushButton_Statistics->hide();
+	ui->pushButton_Statistics->hide();
 	m_polcn_lock = NULL;
 	m_polcn_map = NULL;
 	m_attachExistGameWndTime = QTime::currentTime().addSecs(-15);
@@ -1253,7 +1253,10 @@ void AccountForm::on_groupBox_createChara_clicked(bool bflag)
 #include "RpcSocketClient.h"
 void AccountForm::on_pushButton_Statistics_clicked()
 {
-	RpcSocketClient::getInstance().UploadMapData();
+	//RpcSocketClient::getInstance().UploadMapData();
+	/*QImage image;
+	RpcSocketClient::getInstance().DownloadMapData(image);
+	image.save("D:\\dicom\\test.bmp");*/
 }
 
 void AccountForm::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, quint32 port, quint32 hWnd)

@@ -5,6 +5,7 @@
 #include "YunLai.h"
 #include <QDateTime>
 #include <QScrollBar>
+#include <QMenu>
 GameChatWgt::GameChatWgt(QWidget *parent) :
 		QWidget(parent)
 {
@@ -24,6 +25,8 @@ GameChatWgt::GameChatWgt(QWidget *parent) :
 	connect(&m_friendCardTimer, SIGNAL(timeout()), this, SLOT(OnUpdateFriendCard()));
 	m_friendCardTimer.start(10000); //100秒刷一次
 	connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(doItemDoubleClicked(QListWidgetItem *)));
+	ui.listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+	//connect(ui.listWidget, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_listWidget_customContextMenuRequested(const QPoint &)));
 }
 
 GameChatWgt::~GameChatWgt()
@@ -216,6 +219,13 @@ void GameChatWgt::doItemDoubleClicked(QListWidgetItem *pItem)
 void GameChatWgt::OnNotifyGetPlayerInfo(CharacterPtr charinfo)
 {
 	m_player = charinfo;
+}
+
+void GameChatWgt::on_listWidget_customContextMenuRequested(const QPoint &pos)
+{
+	QMenu menu;
+	menu.addAction("刷新邮件列表", this, SLOT(OnUpdateFriendCard()));
+	menu.exec(QCursor::pos());
 }
 
 void GameChatWgt::addOneChatData(const QString &chatData, int nType, int color)

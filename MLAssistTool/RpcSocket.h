@@ -78,6 +78,7 @@ public:
 	Status UploadGidData(::grpc::ServerContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response)override;
 	Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response)override;
 	Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* stream, ::CGData::UploadMapDataResponse* response)override;
+	Status DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer)override;
 
 	Status SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)override;
 	Status SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response)override;
