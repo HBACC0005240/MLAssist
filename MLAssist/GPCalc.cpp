@@ -1,5 +1,5 @@
 #include "GPCalc.h"
-#include "ITPublic.h"
+//#include "ITPublic.h"
 #include "RpcSocketClient.h"
 #include <math.h>
 #include <QCoreApplication>

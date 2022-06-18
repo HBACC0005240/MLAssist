@@ -721,6 +721,7 @@ protected:
 	bool readCreateRandomNameJson();
 	bool readProfessionJson();
 	bool readTitleJson();
+	bool CheckUploadMapData();
 
 private:
 	QMap<QString, QVariantList> m_createRandomName;		 //创建随机名称

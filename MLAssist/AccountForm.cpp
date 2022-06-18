@@ -933,6 +933,31 @@ void AccountForm::on_account_comboBox_changed(int index)
 	on_account_changed();
 }
 
+void AccountForm::on_checkBox_autoLogin_stateChanged(int state)
+{
+	if (state==Qt::Unchecked)
+	{
+		if (g_CGAInterface->IsConnected())
+		{
+			g_CGAInterface->LoginGameServer("", "", 0, 0, 0, 0); //通知远端 不自动登录
+		}
+
+		ui->label_status->setText(tr("自动登录功能已关闭"));
+
+		if (m_polcn_lock)
+		{
+			CloseHandle(m_polcn_lock);
+			m_polcn_lock = NULL;
+		}
+		if (m_polcn_map)
+		{
+			CloseHandle(m_polcn_map);
+			m_polcn_map = NULL;
+		}
+		emit g_pGameCtrl->NotifyLoginProgressEnd();
+	}
+}
+
 void AccountForm::OnNotifyFillAutoLogin(int game, QString user, QString pwd, QString gid,
 		int bigserver, int server, int character,
 		bool autologin, bool skipupdate, bool autochangeserver, bool autokillgame,

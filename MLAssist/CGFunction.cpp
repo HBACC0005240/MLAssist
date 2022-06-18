@@ -180,6 +180,8 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("外观", TRet_Game_ImageID);
 	m_returnGameDataHash.insert("游戏进程", TRet_Game_GamePID);
 	m_returnGameDataHash.insert("游戏端口", TRet_Game_GamePort);
+	m_returnGameDataHash.insert("角色", TRet_Game_PlayerRole);
+	m_returnGameDataHash.insert("左右角色", TRet_Game_PlayerRole);
 
 	m_playerActionHash.insert("pk", TCharacter_Action_PK);
 	m_playerActionHash.insert("加入队伍", TCharacter_Action_JOINTEAM);
@@ -790,6 +792,7 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 		case TRet_Game_ImageID: return playerinfo.image_id;
 		case TRet_Game_GamePID: return QVariant::fromValue(g_pGameCtrl->getGamePID());
 		case TRet_Game_GamePort: return g_pGameCtrl->GetGamePort();
+		case TRet_Game_PlayerRole:return playerinfo.player_index;
 		case TRet_Game_Prestige:
 		{
 			auto playerTitles = playerinfo.titles;
@@ -5298,6 +5301,9 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 		}
 		if (bReachable) //两个出入口可达 退出 否则继续搜索
 		{
+			///begin 同步地图 判断迷宫是否已开
+			CheckUploadMapData();
+			
 			qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
 					{
 						auto ad = GetDistanceEx(curPos.x(), curPos.y(), a.x(), a.y());
@@ -5441,6 +5447,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 							break;
 						}
 					}
+					CheckUploadMapData();
 					if (bReachable) //两个出入口可达 退出 否则继续搜索
 						return true;
 				}
@@ -9694,6 +9701,16 @@ bool CGFunction::readTitleJson()
 	}
 	file.close();
 	return true;
+}
+
+bool CGFunction::CheckUploadMapData()
+{
+	if (g_pGameCtrl->GetIsOpenNetToMLAssistTool())
+	{
+		RpcSocketClient::getInstance().UploadMapData();
+		return true;
+	}
+	return false;
 }
 
 QSharedPointer<CGA_NPCDialog_t> CGFunction::WaitRecvHead(int timeout)

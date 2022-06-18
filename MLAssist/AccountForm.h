@@ -64,6 +64,7 @@ public slots:
 	void on_pushButton_logback_clicked();
 	void on_account_changed();
 	void on_account_comboBox_changed(int index);
+	void on_checkBox_autoLogin_stateChanged(int state);
 
 private:
 	Ui::AccountForm *ui;

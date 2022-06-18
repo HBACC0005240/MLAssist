@@ -468,6 +468,7 @@ enum TReturnGameData
 	TRet_Game_BankGold,		   //银行金币
 	TRet_Game_GamePID,		   //游戏进程ID
 	TRet_Game_GamePort,		   //游戏端口
+	TRet_Game_PlayerRole,	   //左右角色
 };
 //自定义快捷键
 enum TDefQuickKey
