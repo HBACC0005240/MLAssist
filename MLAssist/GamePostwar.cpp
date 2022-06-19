@@ -862,6 +862,16 @@ void GamePostwar::on_radioButton_sameType_clicked(bool bChecked)
 	}
 }
 
+void GamePostwar::on_radioButton_sameIDEquip_clicked(bool bChecked)
+{
+	auto pCfg = g_pGameCtrl->GetPlayerEquipProtectCfg();
+	if (pCfg && bChecked)
+	{
+		pCfg->nSwapEquip = 3;
+		//	qDebug() << pCfg->nSwapEquip;
+	}
+}
+
 void GamePostwar::on_checkBox_noEquipOffline_stateChanged(int state)
 {
 	auto pCfg = g_pGameCtrl->GetPlayerEquipProtectCfg();

@@ -2035,6 +2035,23 @@ bool GameCtrl::AutoEquipProtect()
 				}
 				else if (m_pEquipProtectCfg->nSwapEquip == 2) //下线
 				{
+				}else if (m_pEquipProtectCfg->nSwapEquip == 3) //同id
+				{
+					for (size_t n = 0; n < itemsinfo.size(); ++n)
+					{
+						const CGA::cga_item_info_t &iteminfo2 = itemsinfo.at(n);
+						int nCur2 = 0, nMax2 = 0;
+						g_pGameFun->ParseItemDurabilityEx(QString::fromStdString(iteminfo2.attr), nCur2, nMax2);
+						if (iteminfo2.pos > 7 && iteminfo2.itemid == iteminfo.itemid && nCur2 > nMax2 * 0.01 * m_pEquipProtectCfg->dVal)
+						{ //判断耐久是否符合要求 符合的话就换 不符合 判断下一个
+							g_CGAInterface->MoveItem(iteminfo2.pos, iteminfo.pos, -1, bRes);
+							if (m_pEquipProtectCfg->bRenEquip) //扔无耐久装备
+							{
+								g_CGAInterface->DropItem(iteminfo2.pos, bRes);
+							}
+							break;
+						}
+					}
 				}
 			}
 		}

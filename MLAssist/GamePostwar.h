@@ -58,6 +58,7 @@ public slots:
 	void on_radioButton_sameEquip_clicked(bool bChecked);
 	void on_radioButton_offLine_clicked(bool bChecked);
 	void on_radioButton_sameType_clicked(bool bChecked);
+	void on_radioButton_sameIDEquip_clicked(bool bChecked);
 	void on_checkBox_noEquipOffline_stateChanged(int state);
 	void on_checkBox_renEquip_stateChanged(int state);
 	void on_checkBox_eatTime_stateChanged(int state);
