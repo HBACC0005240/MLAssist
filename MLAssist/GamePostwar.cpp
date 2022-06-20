@@ -366,6 +366,7 @@ void GamePostwar::doLoadUserConfig(QSettings &iniFile)
 	ui.radioButton_sameEquip->setChecked(iniFile.value("SameEquip").toBool());
 	ui.radioButton_offLine->setChecked(iniFile.value("OffLine").toBool());
 	ui.radioButton_sameType->setChecked(iniFile.value("SameEquipType").toBool());
+	ui.radioButton_sameIDEquip->setChecked(iniFile.value("SameEquipID").toBool());
 	ui.checkBox_noEquipOffline->setChecked(iniFile.value("NoEquipOffLine").toBool());
 	ui.checkBox_renEquip->setChecked(iniFile.value("RenEquip").toBool());
 	updateEquipProtect();
@@ -458,6 +459,7 @@ void GamePostwar::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("SameEquip", ui.radioButton_sameEquip->isChecked());
 	iniFile.setValue("OffLine", ui.radioButton_offLine->isChecked());
 	iniFile.setValue("SameEquipType", ui.radioButton_sameType->isChecked());
+	iniFile.setValue("SameEquipID", ui.radioButton_sameIDEquip->isChecked());
 	iniFile.setValue("NoEquipOffLine", ui.checkBox_noEquipOffline->isChecked());
 	iniFile.setValue("RenEquip", ui.checkBox_renEquip->isChecked());
 	iniFile.endGroup();
@@ -914,6 +916,7 @@ void GamePostwar::updateEquipProtect()
 	on_radioButton_sameEquip_clicked(ui.radioButton_sameEquip->isChecked());
 	on_radioButton_offLine_clicked(ui.radioButton_offLine->isChecked());
 	on_radioButton_sameType_clicked(ui.radioButton_sameType->isChecked());
+	on_radioButton_sameIDEquip_clicked(ui.radioButton_sameIDEquip->isChecked());
 	on_checkBox_noEquipOffline_stateChanged(ui.checkBox_noEquipOffline->checkState());
 	on_checkBox_renEquip_stateChanged(ui.checkBox_renEquip->checkState());
 }
