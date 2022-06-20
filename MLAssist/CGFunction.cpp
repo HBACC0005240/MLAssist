@@ -8,10 +8,10 @@
 #include "GameCtrl.h"
 #include "ITObjectDataMgr.h"
 #include "QEventLoop.h"
+#include "RpcSocketClient.h"
 #include "Tsp.h"
 #include "stdafx.h"
 #include <QDebug>
-#include "RpcSocketClient.h"
 #pragma comment(lib, "../lib/QtXlsx/Qt5Xlsx.lib")
 
 //#include <opencv2/highgui.hpp>
@@ -792,7 +792,7 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 		case TRet_Game_ImageID: return playerinfo.image_id;
 		case TRet_Game_GamePID: return QVariant::fromValue(g_pGameCtrl->getGamePID());
 		case TRet_Game_GamePort: return g_pGameCtrl->GetGamePort();
-		case TRet_Game_PlayerRole:return playerinfo.player_index;
+		case TRet_Game_PlayerRole: return playerinfo.player_index;
 		case TRet_Game_Prestige:
 		{
 			auto playerTitles = playerinfo.titles;
@@ -5303,7 +5303,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 		{
 			///begin 同步地图 判断迷宫是否已开
 			CheckUploadMapData();
-			
+
 			qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
 					{
 						auto ad = GetDistanceEx(curPos.x(), curPos.y(), a.x(), a.y());
@@ -5329,8 +5329,8 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 			{
 				QPoint curPos = GetMapCoordinate();
 				bool bReachable = true;
-				for (auto tEntrance : warpList)				
-				{				
+				for (auto tEntrance : warpList)
+				{
 					auto findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), tEntrance.x(), tEntrance.y());
 					if (findPath.size() <= 0)
 					{
@@ -5353,10 +5353,9 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 					return;
 				}
 			}
-		}	
+		}
 	}
 	///end
-
 
 	QList<QPoint> allMoveAblePosList;
 	SearchAroundMapOpen(allMoveAblePosList, 2);
@@ -7197,7 +7196,7 @@ QList<QPoint> CGFunction::GetMazeEntranceListFromOfflineMap(QImage mapImage)
 	QList<QPoint> warpList;
 	if (mapImage.width() <= 0 || mapImage.height() <= 0)
 		return warpList;
-	
+
 	int w = mapImage.width();
 	int h = mapImage.height();
 	std::vector<uchar> mapData; //地图数据
@@ -7210,7 +7209,7 @@ QList<QPoint> CGFunction::GetMazeEntranceListFromOfflineMap(QImage mapImage)
 			if (mapImage.pixelColor(tmpy, tmpx) == qRgb) //不可通行 1
 			{
 				warpList.append(QPoint(tmpy, tmpx));
-			}			
+			}
 		}
 	}
 	return warpList;
@@ -7692,8 +7691,8 @@ bool CGFunction::DownloadMapEx(int xfrom, int yfrom, int xsize, int ysize)
 	//	//不判断所有传送点是否可达 只判断地图有2个传送门 就认为地图已打开
 	//	if( GetMazeEntranceList().size() < 2)
 	//	{
-	//	
-	//	}		
+	//
+	//	}
 	//}
 	MakeMapOpen();
 	return false;
@@ -9760,16 +9759,7 @@ bool CGFunction::WaitBattleEnd(int timeout /*=30000*/)
 		QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	qDebug() << "WaitBattleEnd Work Start";
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyBattleAction, [&](int flags)
-			{
-				//	qDebug() << "战斗状态：" << flags;
-				if (flags & FL_BATTLE_ACTION_END)
-				{
-					bEnd = true;
-					if (loop.isRunning())
-						loop.quit();
-				}
-			});
+	auto connection = connect(g_pGameCtrl, &GameCtrl::signal_battleStateEnd, &loop, &QEventLoop::quit);
 	loop.exec();
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	qDebug() << "WaitBattleEnd Work End";
@@ -10159,22 +10149,12 @@ QSharedPointer<CGA::cga_player_menu_items_t> CGFunction::WaitRecvPlayerMenu(int 
 {
 	QSharedPointer<CGA::cga_player_menu_items_t> reqMenu;
 	QEventLoop loop;
+	qDebug() << "WaitRecvPlayerMenu Start";
 	QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	QMutex mutex;
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyPlayerMenu, [&](QSharedPointer<CGA::cga_player_menu_items_t> players)
-			{
-				if (mutex.tryLock())
-				{
-					qDebug() << "Recv WaitRecvPlayerMenu";
-					reqMenu = players;
-					if (loop.isRunning())
-						loop.quit();
-					mutex.unlock();
-				}
-			});
+	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyPlayerMenu, &loop, &QEventLoop::quit);
 	loop.exec();
-	QMutexLocker locker(&mutex);
+	reqMenu = g_pGameCtrl->GetLastPlayerMenuResult();
 	qDebug() << "WaitRecvPlayerMenu End";
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	return reqMenu;
@@ -10183,22 +10163,12 @@ QSharedPointer<CGA::cga_unit_menu_items_t> CGFunction::WaitRecvPlayerMenuUnit(in
 {
 	QSharedPointer<CGA::cga_unit_menu_items_t> reqMenu;
 	QEventLoop loop;
-	QMutex mutex;
+	qDebug() << "WaitRecvPlayerMenuUnit Start";
 	QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyUnitMenu, [&](QSharedPointer<CGA::cga_unit_menu_items_t> players)
-			{
-				if (mutex.tryLock())
-				{
-					qDebug() << "Recv WaitRecvPlayerMenuUnit";
-					reqMenu = players;
-					if (loop.isRunning())
-						loop.quit();
-					mutex.unlock();
-				}
-			});
+	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyUnitMenu, &loop, &QEventLoop::quit);
 	loop.exec();
-	QMutexLocker locker(&mutex);
+	reqMenu = g_pGameCtrl->GetLastUnitMenuResult();
 	qDebug() << "WaitRecvPlayerMenuUnit End";
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	return reqMenu;
@@ -10206,24 +10176,13 @@ QSharedPointer<CGA::cga_unit_menu_items_t> CGFunction::WaitRecvPlayerMenuUnit(in
 
 int CGFunction::WaitRecvBattleAction(int timeout /*= 5000*/)
 {
-	QMutex mutex;
 	int flags = 0;
 	QEventLoop loop;
 	QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyBattleAction, [&](int flag)
-			{
-				if (mutex.tryLock())
-				{
-					flags = flag;
-					if (loop.isRunning())
-						loop.quit();
-					mutex.unlock();
-				}
-			});
+	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyBattleAction, &loop, &QEventLoop::quit);
 	loop.exec();
-	QMutexLocker locker(&mutex);
-
+	flags = g_pGameCtrl->GetLastBattleActionResult();
 	qDebug() << "WaitRecvBattleAction End";
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	return flags;
@@ -10250,19 +10209,16 @@ int CGFunction::WaitRecvGameWndKeyDown(int timeout /*= 5000*/)
 int CGFunction::WaitRecvConnectionState(int timeout /*= 5000*/)
 {
 	int flags = 0;
-	QString sMsg;
 	QEventLoop loop;
+	qDebug() << "WaitRecvConnectionState Start";
 	QTimer::singleShot(timeout, &loop, &QEventLoop::quit);
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
-	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyConnectionState, [&](int state, QString msg)
-			{
-				flags = state;
-				sMsg = msg;
-				if (loop.isRunning())
-					loop.quit();
-			});
+	auto connection = connect(g_pGameCtrl, &GameCtrl::NotifyConnectionState, &loop, &QEventLoop::quit);
 	loop.exec();
-	qDebug() << "WaitRecvGameWndKeyDown End";
+	auto recvState = g_pGameCtrl->GetLastConnectStateResult();
+	if (recvState)
+		flags = recvState->state;
+	qDebug() << "WaitRecvConnectionState End";
 	QObject::disconnect(connection); //利用Connection 断开lambda的连接
 	return flags;
 }

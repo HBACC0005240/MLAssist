@@ -6,6 +6,8 @@ GamePostwar::GamePostwar(QWidget *parent) :
 		QWidget(parent)
 {
 	ui.setupUi(this);
+	ui.radioButton_offLine->hide();
+	ui.checkBox_noEquipOffline->hide();
 	connect(g_pGameCtrl, SIGNAL(signal_activeGameFZ()), this, SLOT(Active()));
 	connect(g_pGameCtrl, SIGNAL(signal_addRenItem(GameItemPtr, bool)), this, SLOT(doAddRenItem(GameItemPtr, bool)));
 	connect(g_pGameCtrl, SIGNAL(signal_addDieItem(GameItemPtr)), this, SLOT(doAddDieItem(GameItemPtr)));
@@ -350,7 +352,7 @@ void GamePostwar::doLoadUserConfig(QSettings &iniFile)
 	ui.lineEdit_playerEatMedicament->setText(iniFile.value("AutoHpVal").toString());
 	ui.lineEdit_playerEatMagic->setText(iniFile.value("AutoMpVal").toString());
 	ui.lineEdit_petEatMedicament->setText(iniFile.value("AutoPetHpVal").toString());
-	ui.lineEdit_petEatMagic->setText(iniFile.value("AutoPetMpVal").toString());	
+	ui.lineEdit_petEatMagic->setText(iniFile.value("AutoPetMpVal").toString());
 
 	ui.checkBox_playerEatMedicament->setChecked(iniFile.value("AutoHp").toBool());
 	ui.checkBox_playerEatMagic->setChecked(iniFile.value("AutoMp").toBool());

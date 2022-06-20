@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>247</height>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -841,14 +841,7 @@
               <item>
                <widget class="QRadioButton" name="radioButton_sameIDEquip">
                 <property name="text">
-                 <string>自动更好同ID装备</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioButton_offLine">
-                <property name="text">
-                 <string>直接下线</string>
+                 <string>自动更换同ID装备</string>
                 </property>
                </widget>
               </item>
@@ -856,6 +849,13 @@
                <widget class="QRadioButton" name="radioButton_sameType">
                 <property name="text">
                  <string>自动更换同类装备</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButton_offLine">
+                <property name="text">
+                 <string>直接下线</string>
                 </property>
                </widget>
               </item>

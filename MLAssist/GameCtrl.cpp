@@ -591,7 +591,7 @@ void GameCtrl::StartUpdateTimer()
 	m_lastRecvNpcDlgTime.start();																									 //接收对话框时间判断
 	m_lastNormalState.start();																										 //非正常状态判断
 	g_CGAInterface->RegisterGameWndKeyDownNotify(std::bind(&GameCtrl::NotifyGameWndKeyDown, this, std::placeholders::_1));			 //按键回调
-	g_CGAInterface->RegisterBattleActionNotify(std::bind(&GameCtrl::NotifyBattleAction, this, std::placeholders::_1));				 //战斗回调
+	g_CGAInterface->RegisterBattleActionNotify(std::bind(&GameCtrl::NotifyBattleActionCallBack, this, std::placeholders::_1));		 //战斗回调
 	g_CGAInterface->RegisterChatMsgNotify(std::bind(&GameCtrl::NotifyChatMsgCallback, this, std::placeholders::_1));				 //聊天信息回调
 	g_CGAInterface->RegisterNPCDialogNotify(std::bind(&GameCtrl::NotifyNPCDialogCallback, this, std::placeholders::_1));			 //npc对话框回调
 	g_CGAInterface->RegisterDownloadMapNotify(std::bind(&GameCtrl::NotifyDownloadMapCallback, this, std::placeholders::_1));		 //下载地图
@@ -2035,7 +2035,8 @@ bool GameCtrl::AutoEquipProtect()
 				}
 				else if (m_pEquipProtectCfg->nSwapEquip == 2) //下线
 				{
-				}else if (m_pEquipProtectCfg->nSwapEquip == 3) //同id
+				}
+				else if (m_pEquipProtectCfg->nSwapEquip == 3) //同id
 				{
 					for (size_t n = 0; n < itemsinfo.size(); ++n)
 					{
@@ -2091,6 +2092,54 @@ QSharedPointer<CGA::cga_working_result_t> GameCtrl::GetLastWorkResult()
 	auto lastData = m_workResCache.last();
 	if ((GetTickCount() - lastData.first) > 3000)
 		return nullptr;
+	else
+		return lastData.second;
+}
+
+QSharedPointer<CGA::cga_player_menu_items_t> GameCtrl::GetLastPlayerMenuResult()
+{
+	if (m_playerMenuCache.size() < 1)
+		return nullptr;
+	QMutexLocker locker(&m_playerMenuResMutex);
+	auto lastData = m_playerMenuCache.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return nullptr;
+	else
+		return lastData.second;
+}
+
+QSharedPointer<CGA::cga_unit_menu_items_t> GameCtrl::GetLastUnitMenuResult()
+{
+	if (m_unitMenuCache.size() < 1)
+		return nullptr;
+	QMutexLocker locker(&m_unitMenuResMutex);
+	auto lastData = m_unitMenuCache.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return nullptr;
+	else
+		return lastData.second;
+}
+
+QSharedPointer<CGA::cga_conn_state_t> GameCtrl::GetLastConnectStateResult()
+{
+	if (m_connectStateCache.size() < 1)
+		return nullptr;
+	QMutexLocker locker(&m_connectResMutex);
+	auto lastData = m_connectStateCache.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return nullptr;
+	else
+		return lastData.second;
+}
+
+int GameCtrl::GetLastBattleActionResult()
+{
+	if (m_battleActionCache.size() < 1)
+		return 0;
+	QMutexLocker locker(&m_battleResMutex);
+	auto lastData = m_battleActionCache.last();
+	if ((GetTickCount() - lastData.first) > 3000)
+		return 0;
 	else
 		return lastData.second;
 }
@@ -2333,7 +2382,14 @@ void GameCtrl::NotifyTimeoutThread(GameCtrl *pThis)
 	int ingame = 0;
 	while (!pThis->m_bExit)
 	{
-		{
+		pThis->RemoveTimeoutCache(pThis->m_npcDlgMutex, pThis->m_npcDlgCache);
+		pThis->RemoveTimeoutCache(pThis->m_workResMutex, pThis->m_workResCache);
+		pThis->RemoveTimeoutCache(pThis->m_tradeDlgMutex, pThis->m_tradeDlgCache);
+		pThis->RemoveTimeoutCache(pThis->m_battleResMutex, pThis->m_battleActionCache);
+		pThis->RemoveTimeoutCache(pThis->m_playerMenuResMutex, pThis->m_playerMenuCache);
+		pThis->RemoveTimeoutCache(pThis->m_unitMenuResMutex, pThis->m_unitMenuCache);
+		pThis->RemoveTimeoutCache(pThis->m_connectResMutex, pThis->m_connectStateCache);
+		/*{
 			QMutexLocker locker(&pThis->m_npcDlgMutex);
 			quint64 curTime = GetTickCount();
 			for (auto it = pThis->m_npcDlgCache.begin(); it != pThis->m_npcDlgCache.end();)
@@ -2345,33 +2401,7 @@ void GameCtrl::NotifyTimeoutThread(GameCtrl *pThis)
 				else
 					++it;
 			}
-		}
-		{
-			QMutexLocker locker(&pThis->m_workResMutex);
-			quint64 curTime = GetTickCount();
-			for (auto it = pThis->m_workResCache.begin(); it != pThis->m_workResCache.end();)
-			{
-				if ((curTime - it->first) > 30000)
-				{
-					it = pThis->m_workResCache.erase(it);
-				}
-				else
-					++it;
-			}
-		}
-		{
-			QMutexLocker locker(&pThis->m_tradeDlgMutex);
-			quint64 curTime = GetTickCount();
-			for (auto it = pThis->m_tradeDlgCache.begin(); it != pThis->m_tradeDlgCache.end();)
-			{
-				if ((curTime - it->first) > 30000)
-				{
-					it = pThis->m_tradeDlgCache.erase(it);
-				}
-				else
-					++it;
-			}
-		}
+		}*/
 		QThread::msleep(500);
 	}
 }
@@ -3169,8 +3199,11 @@ void GameCtrl::OnGetTeamData()
 {
 	if (m_isInBattle)
 		return;
-	if (m_lastUpdateTeamTime.elapsed() < 5000) //5秒刷新
-		return;
+	if (!m_bRealUpdatePlayerUi)
+	{
+		if (m_lastUpdateTeamTime.elapsed() < 5000) //5秒刷新
+			return;
+	}
 	auto teamPlayerDatas = g_pGameFun->GetTeamPlayers();
 	emit NotifyTeamInfo(teamPlayerDatas);
 	m_lastUpdateTeamTime.restart();
@@ -3265,7 +3298,10 @@ void GameCtrl::OnNotifyBattleAction(int flags)
 	if (flags & FL_BATTLE_ACTION_BEGIN)
 		m_isInBattle = true;
 	else if (flags & FL_BATTLE_ACTION_END)
+	{
+		emit signal_battleStateEnd();
 		m_isInBattle = false;
+	}
 	//QTime espTime;
 	//espTime = QTime::currentTime();
 	//espTime.restart();
@@ -3375,6 +3411,8 @@ void GameCtrl::NotifyPlayerMenuCallback(CGA::cga_player_menu_items_t items)
 		qDebug() << QString::fromStdString(items[i].name) << items[i].index << items[i].color;
 	}
 	//*menu = items;
+	QMutexLocker locker(&m_playerMenuResMutex);
+	m_playerMenuCache.append(qMakePair(GetTickCount(), menu));
 	emit NotifyPlayerMenu(menu);
 }
 //工作状态回调
@@ -3468,6 +3506,15 @@ void GameCtrl::NotifyTradeStateCallback(int state)
 		emit NotifyTradeState(state); //程序内部使用的
 }
 
+void GameCtrl::NotifyBattleActionCallBack(int flags)
+{
+	{
+		QMutexLocker locker(&m_battleResMutex);
+		m_battleActionCache.append(qMakePair(GetTickCount(), flags));
+	}
+	emit NotifyBattleAction(flags);
+}
+
 void GameCtrl::NotifyUnitMenuCallback(CGA::cga_unit_menu_items_t items)
 {
 	QSharedPointer<CGA::cga_unit_menu_items_t> menu(new CGA::cga_unit_menu_items_t);
@@ -3478,12 +3525,18 @@ void GameCtrl::NotifyUnitMenuCallback(CGA::cga_unit_menu_items_t items)
 	//*menu = items;
 
 	//	qDebug() << "NotifyUnitMenuCallback" << items.size() << menu->size();
-
+	QMutexLocker locker(&m_unitMenuResMutex);
+	m_unitMenuCache.append(qMakePair(GetTickCount(), menu));
 	emit NotifyUnitMenu(menu);
 }
 
 void GameCtrl::NotifyConnectionStateCallback(CGA::cga_conn_state_t msg)
 {
+	QSharedPointer<CGA::cga_conn_state_t> connState(new CGA::cga_conn_state_t);
+	connState->msg = msg.msg;
+	connState->state = msg.state;
+	QMutexLocker locker(&m_connectResMutex);
+	m_connectStateCache.append(qMakePair(GetTickCount(), connState));
 	NotifyConnectionState(msg.state, QString::fromStdString(msg.msg));
 }
 

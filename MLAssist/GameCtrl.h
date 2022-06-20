@@ -166,6 +166,10 @@ public:
 	QSharedPointer<CGA_NPCDialog_t> GetLastNpcDialog();
 	QSharedPointer<CGA::cga_trade_dialog_t> GetLastTradeDialog();
 	QSharedPointer<CGA::cga_working_result_t> GetLastWorkResult();
+	QSharedPointer<CGA::cga_player_menu_items_t> GetLastPlayerMenuResult();
+	QSharedPointer<CGA::cga_unit_menu_items_t> GetLastUnitMenuResult();
+	QSharedPointer<CGA::cga_conn_state_t> GetLastConnectStateResult();
+	int GetLastBattleActionResult();
 
 	//启动游戏是否隐藏
 	void SetStartGameHide(int val) { m_startGameHide = val; }
@@ -198,6 +202,9 @@ public:
 
 private:
 	QVariant GetPetVal(CGA::cga_pet_info_t &pPet, int nVal); //获取宠物值
+	template <typename TData>
+	void RemoveTimeoutCache(QMutex &pMutex, TData &tmpCache);
+
 signals:
 	void signal_exit();																			 //退出辅助
 	void signal_ctrl_app(int);																	 //控制辅助窗口状态
@@ -301,6 +308,8 @@ signals:
 	void HttpLoadAccount(QString query, QByteArray postdata, QJsonDocument *doc);
 	void HttpLoadScript(QString query, QByteArray postdata, QJsonDocument *doc);
 
+	void signal_battleStateEnd();
+
 public slots:
 	void OnGetCharacterData();													//获取人物信息
 	void OnGetTeamData();														//获取队伍信息
@@ -321,6 +330,7 @@ public slots:
 	void NotifyTradeStuffsCallback(CGA::cga_trade_stuff_info_t items);			//交易物品回调
 	void NotifyTradeDialogCallback(CGA::cga_trade_dialog_t dlg);				//交易对话框回调
 	void NotifyTradeStateCallback(int state);									//交易状态回调
+	void NotifyBattleActionCallBack(int flags);									//战斗回调信号
 	void OnNotifyNPCDialog(const QSharedPointer<CGA_NPCDialog_t> &dlg);			//处理弹框槽函数
 	void OnNotifyPlayerMenu(QSharedPointer<CGA::cga_player_menu_items_t> menu); //吃药等人物选择菜单
 	void OnNotifyUnitMenu(QSharedPointer<CGA::cga_unit_menu_items_t> menu);		//二级选择菜单
@@ -352,112 +362,137 @@ public slots:
 
 private:
 	QMutex m_gidMutex;
-	QString m_sGid;																		 //gid
-	HANDLE m_hGameMutex;																 //CGA附加到游戏上的锁
-	DWORD m_gameProcessID = 0;															 //游戏进程
-	HWND m_gameHwnd;																	 //游戏窗口句柄
-	ULONG m_gameBaseAddr;																 //游戏基址
-	int m_nGamePort = 0;																 //注册dll通讯端口
-	int m_nSelfHttpServerPort = 0;														 //自身http服务通讯端口
-	quint32 m_nGameThreadID;															 //线程ID
-	bool m_bExit;																		 //退出游戏
-	QTimer m_updateTimer;																 //定时更新定时器
-	QTimer m_characterTimer;															 //人物角色获取定时器
-	QTimer m_mapTimer;																	 //地图信息获取定时器
-	GameItemList m_pRenItemList;														 //扔物品列表
-	GameItemList m_pPileItemList;														 //扔物品列表
-	GameSearchList m_pSearchList;														 //搜索列表
-	GameItemList m_pSaleItemList;														 //自动卖物品列表
-	GameItemList m_pPickItemList;														 //自动捡物列表
-	GameItemList m_pGameItems;															 //人物物品信息  0-7人物佩戴 8-27包裹 5左饰 0头 6右饰 2手 3手 1身 4脚 7水晶
-	QSharedPointer<Character> m_pGameCharacter = nullptr;								 //当前游戏人物信息
-	GamePetList m_pGamePets;															 //人物宠物信息
-	GameSkillList m_pGameSkills;														 //人物技能信息
-	GameCompoundList m_pCompoundList;													 //可以合成的物品列表 其他地方取对象 不要保存
-	int m_nRunScriptState = SCRIPT_CTRL_STOP;											 //脚本运行状态
-	int m_nMoveSpeed;																	 //移动速度
-	int m_nWorkDelay = 6500;															 //工作延时
-	int m_nWorkAcc = 100;																 //工作
-	bool m_bAutoSupply = true;															 //自动补血
-	bool m_bAutoSale = true;															 //自动卖
-	bool m_bOverTimeT = true;															 //道具防超时被T
-	QTime m_nLastOverTime;																 //道具超时检测时间
-	QTime m_nLastAutoRenTime;															 //上次自动扔时间
-	bool m_bAutoRenItems = true;														 //自动扔物品
-	bool m_bAutoDieItems = true;														 //自动叠加物品
-	bool m_bAutoFirstAid = true;														 //自动急救
-	bool m_bAutoEatDeepBlue = false;													 //自动深蓝
-	bool m_bAutoEatDogFood = false;														 //自动吃狗粮
-	bool m_bAutoEatTimeCrystal = false;													 //自动吃时水
-	GamePickCfg m_bAutoPickCfg;															 //自动捡物
-	int m_nWorkType = TWork_None;														 //当前工作类型
-	GameFirstAidCfg *m_pFirstAidCfg = nullptr;											 //急救设置
-	GameHealCfg *m_pHealCfg = nullptr;													 //治疗设置
-	GameCfgBase *m_pTransformation = nullptr;											 //变身设置
-	GameCfgBase *m_pCosplay = nullptr;													 //变装设置
-	GameCfgBase *m_pAutoPetRiding = nullptr;											 //骑乘
-	bool m_bAutoDropPet = false;														 //自动扔宠
-	QTime m_nLastAutoDropPetTime;														 //上次自动扔时间
-	QMap<int, bool> m_bDropPetCheckItem;												 //自动扔宠检查项
-	QMap<int, QVariant> m_nDropPetCheckVal;												 //自动扔宠检查值
-	GameBattlePetCfg *m_pBattlePetCfg = nullptr;										 //出战宠物设置
-	bool m_bHasNPCDlg = true;															 //是否有NPC对话框弹出 有True处理后false
-	bool m_bAutoClickNpc = false;														 //自动点击NPC
-	bool m_bAutoTalkNpcYesOrNo = true;													 //对话NPC选是或否
-	bool m_bAutoUpLoadBankData = true;													 //自动上传银行信息
-	GameUpgradeCfg *m_upgradePetCfg;													 //宠物升级加点
-	GamePlayerUpgradeCfg *m_upgradePlayerCfg;											 //人物升级加点
-	QTime m_lastUpdateTeamTime;															 //获取队伍信息间隔
-	bool m_bRealUpdateUi = false;														 //是否实时刷新ui界面数据
-	bool m_bRealUpdatePlayerUi = false;													//是否实时刷新玩家信息
-	bool m_bEnabledDataDisplayUi = false;												 //是否启用ui界面Npc 物品 玩家显示功能
-	bool m_bMapIsVisible = false;														 //当前是否显示地图
-	QMap<int, GameConditionCfg *> m_pEatFoodJudge;										 //人物吃料理判断
-	QTime m_uLastUseItemTime;															 //最后一次使用物品时间
-	GameConditionCfg *m_pEatFoodCfg = nullptr;											 //人物使用物品配置
-	GameEquipProtectCfg *m_pEquipProtectCfg = nullptr;									 //装备保护配置
-	QStringList m_sEquipProtectFilters;													 //装备保护过滤名称
-	bool m_bAutoHeal = false;															 //自动治疗
-	QString m_NurseMessage;																 //补血相关消息
-	int m_NurseNPCId = 0;																 //补血NpcID
-	int m_saleNpcID = 0;																 //卖货NpcID
-	bool m_bSyncGameWindow = true;														 //辅助和游戏窗口同步
-	QFuture<void> m_characterFuture;													 //获取人物信息线程
-	QFuture<void> m_itemsFuture;														 //获取物品栏信息线程
-	QFuture<void> m_mapFuture;															 //地图下载线程
-	QFuture<void> m_normalFuture;														 //常态线程
-	QFuture<void> m_notifyTimeoutFuture;												 //回调检测线程
-	QMap<int, quint32> m_quickKeyMap;													 //快捷键表
-	int m_nScriptDelayTime = 100;														 //脚本执行延时时间，每行脚本延时时间 最小100
-	int m_DownloadMapX;																	 //下载地图x
-	int m_DownloadMapY;																	 //下载地图y
-	int m_DownloadMapXSize;																 //下载地图宽
-	int m_DownloadMapYSize;																 //下载地图高
-	bool m_IsDownloadingMap;															 //是否下载地图中
-	QCommandLineParser m_cmdParser;														 //bat命令行解析
-	QHash<int, QCommandLineOption *> m_commandMap;										 //命令解析映射
-	QMap<int, QString> m_upgradeTypeText;												 //升级类型对应
-	int m_lastGameConnState = -1;														 //最后一次连接状态
-	QString m_lastGameConnMsg;															 //最后一次连接提示信息
-	int m_lastBattleAvgTeamPetLv = 0;													 //计算上次战斗平均宠物等级
-	int m_lastBattleTroopPetMinLv = 0;													 //最后一次战斗后 宠物最低等级
-	QTime m_lastNormalState;															 //判断正常状态 防止卡主
-	QTime m_lastRecvNpcDlgTime;															 //判断对话框状态 防止卡主
-	bool m_isInBattle = false;															 //是否战斗中
-	QTime m_lastUploadTime;																 //最后一次上报时间
-	bool m_bNeedUploadBank = false;														 //是否需要上传银行信息
-	int m_startGameHide = 0;															 //启动游戏隐藏
-	int m_followGamePos = 0;															 //跟随游戏显示位置
-	QVector<QPair<quint64, QSharedPointer<CGA_NPCDialog_t> > > m_npcDlgCache;			 //对话框缓存
-	QVector<QPair<quint64, QSharedPointer<CGA::cga_working_result_t> > > m_workResCache; //工作缓存
-	QVector<QPair<quint64, QSharedPointer<CGA::cga_trade_dialog_t> > > m_tradeDlgCache;	 //交易对话框缓存
-	QMutex m_npcDlgMutex;																 //npc对话框锁
-	QMutex m_tradeDlgMutex;																 //交易对话框锁
-	QMutex m_workResMutex;																 //工作返回锁
-	bool m_repeatedGidExit = true;														 //重复挂接是否退出
-	int m_loginWaitInterval = 3000;														 //自动登录间隔
-	bool m_bCreateLog = false;															 //日志开关
-	bool m_bOpenNetToMTool = false;														 //是否打开和MLAssistTool通信功能
-	QString m_sCGInstallPath;															 //魔力安装目录
+	QString m_sGid;																			   //gid
+	HANDLE m_hGameMutex;																	   //CGA附加到游戏上的锁
+	DWORD m_gameProcessID = 0;																   //游戏进程
+	HWND m_gameHwnd;																		   //游戏窗口句柄
+	ULONG m_gameBaseAddr;																	   //游戏基址
+	int m_nGamePort = 0;																	   //注册dll通讯端口
+	int m_nSelfHttpServerPort = 0;															   //自身http服务通讯端口
+	quint32 m_nGameThreadID;																   //线程ID
+	bool m_bExit;																			   //退出游戏
+	QTimer m_updateTimer;																	   //定时更新定时器
+	QTimer m_characterTimer;																   //人物角色获取定时器
+	QTimer m_mapTimer;																		   //地图信息获取定时器
+	GameItemList m_pRenItemList;															   //扔物品列表
+	GameItemList m_pPileItemList;															   //扔物品列表
+	GameSearchList m_pSearchList;															   //搜索列表
+	GameItemList m_pSaleItemList;															   //自动卖物品列表
+	GameItemList m_pPickItemList;															   //自动捡物列表
+	GameItemList m_pGameItems;																   //人物物品信息  0-7人物佩戴 8-27包裹 5左饰 0头 6右饰 2手 3手 1身 4脚 7水晶
+	QSharedPointer<Character> m_pGameCharacter = nullptr;									   //当前游戏人物信息
+	GamePetList m_pGamePets;																   //人物宠物信息
+	GameSkillList m_pGameSkills;															   //人物技能信息
+	GameCompoundList m_pCompoundList;														   //可以合成的物品列表 其他地方取对象 不要保存
+	int m_nRunScriptState = SCRIPT_CTRL_STOP;												   //脚本运行状态
+	int m_nMoveSpeed;																		   //移动速度
+	int m_nWorkDelay = 6500;																   //工作延时
+	int m_nWorkAcc = 100;																	   //工作
+	bool m_bAutoSupply = true;																   //自动补血
+	bool m_bAutoSale = true;																   //自动卖
+	bool m_bOverTimeT = true;																   //道具防超时被T
+	QTime m_nLastOverTime;																	   //道具超时检测时间
+	QTime m_nLastAutoRenTime;																   //上次自动扔时间
+	bool m_bAutoRenItems = true;															   //自动扔物品
+	bool m_bAutoDieItems = true;															   //自动叠加物品
+	bool m_bAutoFirstAid = true;															   //自动急救
+	bool m_bAutoEatDeepBlue = false;														   //自动深蓝
+	bool m_bAutoEatDogFood = false;															   //自动吃狗粮
+	bool m_bAutoEatTimeCrystal = false;														   //自动吃时水
+	GamePickCfg m_bAutoPickCfg;																   //自动捡物
+	int m_nWorkType = TWork_None;															   //当前工作类型
+	GameFirstAidCfg *m_pFirstAidCfg = nullptr;												   //急救设置
+	GameHealCfg *m_pHealCfg = nullptr;														   //治疗设置
+	GameCfgBase *m_pTransformation = nullptr;												   //变身设置
+	GameCfgBase *m_pCosplay = nullptr;														   //变装设置
+	GameCfgBase *m_pAutoPetRiding = nullptr;												   //骑乘
+	bool m_bAutoDropPet = false;															   //自动扔宠
+	QTime m_nLastAutoDropPetTime;															   //上次自动扔时间
+	QMap<int, bool> m_bDropPetCheckItem;													   //自动扔宠检查项
+	QMap<int, QVariant> m_nDropPetCheckVal;													   //自动扔宠检查值
+	GameBattlePetCfg *m_pBattlePetCfg = nullptr;											   //出战宠物设置
+	bool m_bHasNPCDlg = true;																   //是否有NPC对话框弹出 有True处理后false
+	bool m_bAutoClickNpc = false;															   //自动点击NPC
+	bool m_bAutoTalkNpcYesOrNo = true;														   //对话NPC选是或否
+	bool m_bAutoUpLoadBankData = true;														   //自动上传银行信息
+	GameUpgradeCfg *m_upgradePetCfg;														   //宠物升级加点
+	GamePlayerUpgradeCfg *m_upgradePlayerCfg;												   //人物升级加点
+	QTime m_lastUpdateTeamTime;																   //获取队伍信息间隔
+	bool m_bRealUpdateUi = false;															   //是否实时刷新ui界面数据
+	bool m_bRealUpdatePlayerUi = false;														   //是否实时刷新玩家信息
+	bool m_bEnabledDataDisplayUi = false;													   //是否启用ui界面Npc 物品 玩家显示功能
+	bool m_bMapIsVisible = false;															   //当前是否显示地图
+	QMap<int, GameConditionCfg *> m_pEatFoodJudge;											   //人物吃料理判断
+	QTime m_uLastUseItemTime;																   //最后一次使用物品时间
+	GameConditionCfg *m_pEatFoodCfg = nullptr;												   //人物使用物品配置
+	GameEquipProtectCfg *m_pEquipProtectCfg = nullptr;										   //装备保护配置
+	QStringList m_sEquipProtectFilters;														   //装备保护过滤名称
+	bool m_bAutoHeal = false;																   //自动治疗
+	QString m_NurseMessage;																	   //补血相关消息
+	int m_NurseNPCId = 0;																	   //补血NpcID
+	int m_saleNpcID = 0;																	   //卖货NpcID
+	bool m_bSyncGameWindow = true;															   //辅助和游戏窗口同步
+	QFuture<void> m_characterFuture;														   //获取人物信息线程
+	QFuture<void> m_itemsFuture;															   //获取物品栏信息线程
+	QFuture<void> m_mapFuture;																   //地图下载线程
+	QFuture<void> m_normalFuture;															   //常态线程
+	QFuture<void> m_notifyTimeoutFuture;													   //回调检测线程
+	QMap<int, quint32> m_quickKeyMap;														   //快捷键表
+	int m_nScriptDelayTime = 100;															   //脚本执行延时时间，每行脚本延时时间 最小100
+	int m_DownloadMapX;																		   //下载地图x
+	int m_DownloadMapY;																		   //下载地图y
+	int m_DownloadMapXSize;																	   //下载地图宽
+	int m_DownloadMapYSize;																	   //下载地图高
+	bool m_IsDownloadingMap;																   //是否下载地图中
+	QCommandLineParser m_cmdParser;															   //bat命令行解析
+	QHash<int, QCommandLineOption *> m_commandMap;											   //命令解析映射
+	QMap<int, QString> m_upgradeTypeText;													   //升级类型对应
+	int m_lastGameConnState = -1;															   //最后一次连接状态
+	QString m_lastGameConnMsg;																   //最后一次连接提示信息
+	int m_lastBattleAvgTeamPetLv = 0;														   //计算上次战斗平均宠物等级
+	int m_lastBattleTroopPetMinLv = 0;														   //最后一次战斗后 宠物最低等级
+	QTime m_lastNormalState;																   //判断正常状态 防止卡主
+	QTime m_lastRecvNpcDlgTime;																   //判断对话框状态 防止卡主
+	bool m_isInBattle = false;																   //是否战斗中
+	QTime m_lastUploadTime;																	   //最后一次上报时间
+	bool m_bNeedUploadBank = false;															   //是否需要上传银行信息
+	int m_startGameHide = 0;																   //启动游戏隐藏
+	int m_followGamePos = 0;																   //跟随游戏显示位置
+	QVector<QPair<quint64, QSharedPointer<CGA_NPCDialog_t> > > m_npcDlgCache;				   //对话框缓存
+	QVector<QPair<quint64, QSharedPointer<CGA::cga_working_result_t> > > m_workResCache;	   //工作缓存
+	QVector<QPair<quint64, QSharedPointer<CGA::cga_trade_dialog_t> > > m_tradeDlgCache;		   //交易对话框缓存
+	QVector<QPair<quint64, QSharedPointer<CGA::cga_player_menu_items_t> > > m_playerMenuCache; //菜单选择缓存
+	QVector<QPair<quint64, QSharedPointer<CGA::cga_unit_menu_items_t> > > m_unitMenuCache;	   //菜单列表选择缓存
+	QVector<QPair<quint64, int> > m_battleActionCache;										   //对战状态缓存
+	QVector<QPair<quint64, QSharedPointer<CGA::cga_conn_state_t> > > m_connectStateCache;	   //连接状态缓存
+	QMutex m_npcDlgMutex;																	   //npc对话框锁
+	QMutex m_tradeDlgMutex;																	   //交易对话框锁
+	QMutex m_workResMutex;																	   //工作返回锁
+	QMutex m_playerMenuResMutex;															   //菜单锁
+	QMutex m_unitMenuResMutex;																   //菜单项锁
+	QMutex m_battleResMutex;																   //战斗状态返回锁
+	QMutex m_connectResMutex;																   //连接状态返回锁
+	bool m_repeatedGidExit = true;															   //重复挂接是否退出
+	int m_loginWaitInterval = 3000;															   //自动登录间隔
+	bool m_bCreateLog = false;																   //日志开关
+	bool m_bOpenNetToMTool = false;															   //是否打开和MLAssistTool通信功能
+	QString m_sCGInstallPath;																   //魔力安装目录
 };
+
+template <typename TData>
+void GameCtrl::RemoveTimeoutCache(QMutex &pMutex, TData &tmpCache)
+{
+	QMutexLocker locker(&pMutex);
+	quint64 curTime = GetTickCount();
+	for (auto it = tmpCache.begin(); it != tmpCache.end();)
+	{
+		if ((curTime - it->first) > 30000)
+		{
+			it = tmpCache.erase(it);
+		}
+		else
+			++it;
+	}
+}
+
 #define g_pGameCtrl GameCtrl::getInstace()
