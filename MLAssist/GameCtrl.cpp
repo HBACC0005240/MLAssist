@@ -3180,8 +3180,8 @@ void GameCtrl::OnGetCharacterData()
 
 	if (ingame)
 	{
-		emit NotifyGameCharacterInfo(m_pGameCharacter);
-		emit signal_updateTrayToolTip(QString("%1 %2线").arg(m_pGameCharacter->name).arg(g_pGameFun->GetGameServerLine()));
+		emit NotifyGameCharacterInfo(pNewChar);
+		emit signal_updateTrayToolTip(QString("%1 %2线").arg(pNewChar->name).arg(g_pGameFun->GetGameServerLine()));
 	}
 	else
 	{
@@ -3190,9 +3190,9 @@ void GameCtrl::OnGetCharacterData()
 	}
 
 	//emit NotifyGameItemsInfo(new);
-	emit NotifyGamePetsInfo(m_pGamePets);
-	emit NotifyGameSkillsInfo(m_pGameSkills);
-	emit NotifyGameCompoundInfo(m_pCompoundList);
+	emit NotifyGamePetsInfo(newPetList);
+	emit NotifyGameSkillsInfo(newSkillList);
+	emit NotifyGameCompoundInfo(newCompoundList);
 }
 
 void GameCtrl::OnGetTeamData()
