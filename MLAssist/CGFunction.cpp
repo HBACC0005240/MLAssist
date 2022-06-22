@@ -5340,16 +5340,16 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 				}
 				if (bReachable) //两个出入口可达 退出 否则继续搜索
 				{
-					qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
+					qSort(warpList.begin(), warpList.end(), [&](QPoint a, QPoint b)
 							{
 								auto ad = GetDistanceEx(curPos.x(), curPos.y(), a.x(), a.y());
 								auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
 								return ad < bd;
 							});
 					if (isNearFar) //取远
-						AutoMoveTo(entranceList[1].x(), entranceList[1].y());
+						AutoMoveTo(warpList[1].x(), warpList[1].y());
 					else
-						AutoMoveTo(entranceList[0].x(), entranceList[0].y());
+						AutoMoveTo(warpList[0].x(), warpList[0].y());
 					return;
 				}
 			}
