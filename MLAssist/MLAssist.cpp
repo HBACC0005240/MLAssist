@@ -359,6 +359,13 @@ void MLAssist::on_load_config(const QString &sPath)
 void MLAssist::on_save_config(const QString &sPath)
 {
 	qDebug() << "Save Config" << sPath;
+	//if (QFile::exists(sPath))
+	//{
+	//	QString fileFmt = CheckFileFormat(sPath);
+	//	if (fileFmt == "GBK")
+	//		QFile::remove(sPath);
+	//}
+
 	QSettings iniFile(sPath, QSettings::IniFormat);
 	//iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
 	iniFile.setIniCodec(QTextCodec::codecForName("UTF-8")); //这样分组下的键值可以读取中文  下面的是读取段的中文
