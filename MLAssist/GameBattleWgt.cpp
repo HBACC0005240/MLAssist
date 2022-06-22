@@ -215,12 +215,12 @@ void GameBattleWgt::doLoadJsConfig(QJsonObject &obj)
 			if (findIndex != -1)
 			{
 				ui.comboBox_highSpeedDelay->setCurrentIndex(findIndex);
-			}else
+			}
+			else
 			{
-				ui.comboBox_highSpeedDelay->addItem(QString::number(delayFrom),delayFrom);
+				ui.comboBox_highSpeedDelay->addItem(QString::number(delayFrom), delayFrom);
 				ui.comboBox_highSpeedDelay->setCurrentIndex(ui.comboBox_highSpeedDelay->findData(delayFrom));
-			}		
-			
+			}
 		}
 		if (battleobj.contains("delayto"))
 		{
@@ -234,23 +234,22 @@ void GameBattleWgt::doLoadJsConfig(QJsonObject &obj)
 			{
 				ui.comboBox_battleDelay->addItem(QString::number(delayVal), delayVal);
 				ui.comboBox_battleDelay->setCurrentIndex(ui.comboBox_battleDelay->findData(delayVal));
-			}	
+			}
 		}
 		if (battleobj.contains("highspeed"))
 			ui.checkBox_HighSpeed->setChecked(battleobj.value("highspeed").toBool());
 		if (battleobj.contains("lockcd"))
-			ui.checkBox_LockCountdown->setChecked(battleobj.value("lockcd").toBool());	
+			ui.checkBox_LockCountdown->setChecked(battleobj.value("lockcd").toBool());
 		if (battleobj.contains("lv1prot"))
-			ui.checkBox_Lv1Protect->setChecked(battleobj.value("lv1prot").toBool());	
+			ui.checkBox_Lv1Protect->setChecked(battleobj.value("lv1prot").toBool());
 		if (battleobj.contains("pet2action"))
-			ui.checkBox_PetDoubleAction->setChecked(battleobj.value("pet2action").toBool());	
+			ui.checkBox_PetDoubleAction->setChecked(battleobj.value("pet2action").toBool());
 		if (battleobj.contains("playerforceaction"))
 			ui.checkBox_PlayerForceAction->setChecked(battleobj.value("playerforceaction").toBool());
 		if (battleobj.contains("r1nodelay"))
-			ui.checkBox_firstNoDelay->setChecked(battleobj.value("r1nodelay").toBool());	
+			ui.checkBox_firstNoDelay->setChecked(battleobj.value("r1nodelay").toBool());
 		if (battleobj.contains("showhpmp"))
 			ui.checkBox_ShowHPMP->setChecked(battleobj.value("showhpmp").toBool());
-
 	}
 	m_pCustomBattleWgt->ParseBattleSettings(obj.take("battle"));
 }
@@ -1123,13 +1122,16 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 	ui.checkBox_OverTimeT->setChecked(iniFile.value("OverTimeT").toBool());
 	iniFile.endGroup();
 
-	auto LoadSettingCfg = [&](int i)
+	auto LoadSettingCfg = [&](int i) -> CBattleSettingPtr
 	{
 		bool bTrans = false;
 		QString sDevType = iniFile.value(QString("ActionCondType%1").arg(i)).toString();
 		int nDevType = sDevType.toInt(&bTrans);
 		if (!bTrans) //字符串 转为int
 			nDevType = g_pAutoBattleCtrl->GetBattleTypeFromText(sDevType);
+		if (nDevType == dtNone)
+			return nullptr;
+
 		CBattleCondition *pCond = (CBattleCondition *)g_battleModuleReg.CreateNewBattleObj(nDevType);
 		int nTextCondCount = iniFile.value(QString("ActionCondTextValCount%1").arg(i)).toInt();
 		QStringList textCondData;
@@ -1161,6 +1163,8 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 		nDevType = sDevType.toInt(&bTrans);
 		if (!bTrans) //字符串 转为int
 			nDevType = g_pAutoBattleCtrl->GetBattleTypeFromText(sDevType);
+		if (nDevType == dtNone)
+			return nullptr;
 		CBattleAction *pAction = (CBattleAction *)g_battleModuleReg.CreateNewBattleObj(nDevType);
 		int nActionTextValCount = iniFile.value(QString("ActionTextValCount%1").arg(i)).toInt();
 		QStringList textAction;
@@ -1184,6 +1188,8 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 		nDevType = sDevType.toInt(&bTrans);
 		if (!bTrans) //字符串 转为int
 			nDevType = g_pAutoBattleCtrl->GetBattleTypeFromText(sDevType);
+		if (nDevType == dtNone)
+			return nullptr;
 		CBattleAction *pPetAction = (CBattleAction *)g_battleModuleReg.CreateNewBattleObj(nDevType);
 		nActionTextValCount = iniFile.value(QString("PetActionTextValCount%1").arg(i)).toInt();
 		textAction.clear();
@@ -1207,6 +1213,8 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 		nDevType = sDevType.toInt(&bTrans);
 		if (!bTrans) //字符串 转为int
 			nDevType = g_pAutoBattleCtrl->GetBattleTypeFromText(sDevType);
+		if (nDevType == dtNone)
+			return nullptr;
 		CBattleTarget *pTarget = (CBattleTarget *)g_battleModuleReg.CreateNewBattleObj(nDevType);
 
 		int tgtVal = 0;
@@ -1222,6 +1230,8 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 		nDevType = sDevType.toInt(&bTrans);
 		if (!bTrans) //字符串 转为int
 			nDevType = g_pAutoBattleCtrl->GetBattleTypeFromText(sDevType);
+		if (nDevType == dtNone)
+			return nullptr;
 		CBattleTarget *pPetTarget = (CBattleTarget *)g_battleModuleReg.CreateNewBattleObj(nDevType);
 
 		sTgtVal = iniFile.value(QString("PetTargetVal%1").arg(i)).toString();

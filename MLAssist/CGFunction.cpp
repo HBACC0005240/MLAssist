@@ -4426,7 +4426,7 @@ bool CGFunction::MoveTo(int x, int y, int timeout)
 	return false;
 }
 
-bool CGFunction::AutoNavigator(A_FIND_PATH path, bool isLoop)
+bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isLoop)
 {
 	m_navigatorLoopCount += 1;
 	auto backPath = path;
@@ -4817,7 +4817,7 @@ int CGFunction::AutoMoveToEx(int x, int y, QString sMapName, int timeout /*= 100
 	return 0;
 }
 
-int CGFunction::AutoMoveToPath(std::vector<pair<int, int> > findPath, int timeout /*=100*/)
+int CGFunction::AutoMoveToPath(std::vector<pair<int, int> > &findPath, int timeout /*=100*/)
 {
 	if (findPath.size() > 0)
 		AutoNavigator(findPath);

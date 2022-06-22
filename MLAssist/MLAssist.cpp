@@ -295,6 +295,34 @@ void MLAssist::on_pushButton_saveCfg_clicked()
 	m_lastOpenCfgPath = path;
 	on_save_config(path);
 }
+QString MLAssist::CheckFileFormat(const QString &fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QFile::ReadOnly | QFile::Text))
+		return "";
+
+	QByteArray buff = file.readAll();
+	QString codeFormat = GetCorrectUnicode(buff);
+	//qDebug() << codeFormat << __LINE__;
+	file.close();
+	return codeFormat;
+}
+QString MLAssist::GetCorrectUnicode(const QByteArray &ba)
+{
+	QTextCodec::ConverterState state;
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QString text = codec->toUnicode(ba.constData(), ba.size(), &state);
+	if (state.invalidChars > 0)
+	{
+		text = QTextCodec::codecForName("GBK")->toUnicode(ba);
+		return QString("GBK");
+	}
+	else
+	{
+		text = ba;
+		return QString("UTF8");
+	}
+}
 
 void MLAssist::on_load_config(const QString &sPath)
 {
@@ -307,11 +335,15 @@ void MLAssist::on_load_config(const QString &sPath)
 	if (!QFile::exists(sCfgPath))
 		return;
 	m_lastOpenCfgPath = sCfgPath;
+	QString fileFmt = CheckFileFormat(m_lastOpenCfgPath);
 
 	qDebug() << "Load Config" << sCfgPath;
 	//	g_pGameCtrl->LoadConfig(path);
 	QSettings iniFile(sCfgPath, QSettings::IniFormat);
-	iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
+	if (fileFmt == "GBK")
+		iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
+	else
+		iniFile.setIniCodec(QTextCodec::codecForName("UTF-8")); //这样分组下的键值可以读取中文  下面的是读取段的中文
 	ui.attachedWindget->doLoadUserConfig(iniFile);
 	ui.gameChatWgt->doLoadUserConfig(iniFile);
 	ui.gameDataWgt->doLoadUserConfig(iniFile);
@@ -328,7 +360,8 @@ void MLAssist::on_save_config(const QString &sPath)
 {
 	qDebug() << "Save Config" << sPath;
 	QSettings iniFile(sPath, QSettings::IniFormat);
-	iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
+	//iniFile.setIniCodec(QTextCodec::codecForName("GB2312")); //这样分组下的键值可以读取中文  下面的是读取段的中文
+	iniFile.setIniCodec(QTextCodec::codecForName("UTF-8")); //这样分组下的键值可以读取中文  下面的是读取段的中文
 	ui.attachedWindget->doSaveUserConfig(iniFile);
 	ui.gameChatWgt->doSaveUserConfig(iniFile);
 	ui.gameDataWgt->doSaveUserConfig(iniFile);

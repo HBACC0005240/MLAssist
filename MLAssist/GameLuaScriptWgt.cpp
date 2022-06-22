@@ -814,8 +814,8 @@ void GameLuaScriptWgt::doRunScriptThread(GameLuaScriptWgt *pThis)
 					pThis->m_sLuaScriptRunMsg = QString::fromStdString(error);
 				}
 			}
-			(*pThis->m_pLuaState)->DoString("collectgarbage(\"collect\")");//lua脚本内存回收
-			(*pThis->m_pLuaState)->DoString("collectgarbage(\"collect\")");//lua脚本内存回收
+			(*pThis->m_pLuaState)->DoString("collectgarbage(\"collect\")"); //lua脚本内存回收
+			(*pThis->m_pLuaState)->DoString("collectgarbage(\"collect\")"); //lua脚本内存回收
 		}
 		catch (const std::exception &e)
 		{
@@ -905,7 +905,7 @@ void GameLuaScriptWgt::on_pushButton_open_clicked()
 {
 	if (m_scriptPath.isEmpty())
 		m_scriptPath = QCoreApplication::applicationDirPath() + "//脚本//";
-	QString szPath = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("打开"), m_scriptPath, "*.lua"); //*.script;
+	QString szPath = QFileDialog::getOpenFileName(nullptr, QString::fromLocal8Bit("打开"), m_scriptPath, "*.lua", nullptr, QFileDialog::DontUseNativeDialog); //*.script;
 	if (szPath.isEmpty())
 		return;
 	openScript(szPath);

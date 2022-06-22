@@ -22,6 +22,8 @@ protected:
 	void killProcess();
 	bool eventFilter(QObject *obj, QEvent *event);
 	bool ParseSettings(const QByteArray &data, QJsonDocument &doc);
+	QString CheckFileFormat(const QString &fileName);
+	QString GetCorrectUnicode(const QByteArray &ba);
 
 public slots:
 	void on_ctrl_app(int val); //控制程序显示隐藏

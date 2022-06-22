@@ -145,7 +145,7 @@ void GameScriptSetWgt::doLoadUserConfig(QSettings &iniFile)
 	{
 		ui.listWidget->clear();
 		m_nameForEdit.clear();
-	//	m_userCustomScriptData.clear();
+		//	m_userCustomScriptData.clear();
 	}
 	for (int i = 0; i < count; ++i)
 	{
@@ -183,7 +183,6 @@ void GameScriptSetWgt::doLoadUserConfig(QSettings &iniFile)
 		}
 		index++;
 		g_pGameFun->SetScriptUiSetData(name, GetUserDefineData(name, val));
-
 	}
 	iniFile.endGroup();
 	on_pushButton_fetchTeamData_clicked();
@@ -205,7 +204,7 @@ void GameScriptSetWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("PetMp", ui.lineEdit_petMpUI->text());
 	iniFile.setValue("TroopCount", ui.lineEdit_troopCountUI->text());
 	iniFile.setValue("TeammateName", ui.lineEdit_teammateName->text());
-
+	QString sTeammateName = ui.lineEdit_teammateName->text();
 	iniFile.setValue("CustomCount", m_userCustomScriptData.size());
 	int index = 1;
 	for (auto it = m_userCustomScriptData.begin(); it != m_userCustomScriptData.end(); ++it)
