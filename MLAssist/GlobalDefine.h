@@ -5,6 +5,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QSharedPointer>
+#include <QMutex>
 
 static QPoint g_defAddTroop(521, 11);
 static QPoint g_defMapCtrl(624, 11);
@@ -522,6 +523,7 @@ struct GameCfgBase
 	QString selectSubName;	   //二级选择名称
 	uint64_t lastUseSkill = 0; //最后一次调用的时间
 	double dCost = 0;		   //技能耗魔
+	QMutex cMutex;
 };
 //游戏治疗设置
 struct GameHealCfg : public GameCfgBase

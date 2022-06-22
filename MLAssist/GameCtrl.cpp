@@ -926,9 +926,13 @@ bool GameCtrl::OnEatItem()
 					if (pItem && pItem->exist && pItem->type == 23) //料理
 					{
 						bool result = false;
-						m_pEatFoodCfg->bChecked = true;
-						m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
-						m_pEatFoodCfg->selectSubName = QString::fromStdString(char_info.name);
+						
+						{
+							QMutexLocker locker(&m_pEatFoodCfg->cMutex);
+							m_pEatFoodCfg->bChecked = true;
+							m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
+							m_pEatFoodCfg->selectSubName = QString::fromStdString(char_info.name);
+						}					
 						if (g_CGAInterface->UseItem(pItem->pos, result) && result)
 						{
 							m_uLastUseItemTime.restart();
@@ -945,9 +949,15 @@ bool GameCtrl::OnEatItem()
 					if (pItem && pItem->exist && pItem->type == 23) //料理
 					{
 						bool result = false;
-						m_pEatFoodCfg->bChecked = true;
-						m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
-						m_pEatFoodCfg->selectSubName = pPet->name;
+						{
+							QMutexLocker locker(&m_pEatFoodCfg->cMutex);
+							m_pEatFoodCfg->bChecked = true;
+							m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
+							if (pPet->name.isEmpty())
+								m_pEatFoodCfg->selectSubName = pPet->realname;
+							else
+								m_pEatFoodCfg->selectSubName = pPet->name;
+						}
 						if (g_CGAInterface->UseItem(pItem->pos, result) && result)
 						{
 							m_uLastUseItemTime.restart();
@@ -964,9 +974,12 @@ bool GameCtrl::OnEatItem()
 					if (pItem && pItem->exist && pItem->type == 43) //血瓶
 					{
 						bool result = false;
-						m_pEatFoodCfg->bChecked = true;
-						m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
-						m_pEatFoodCfg->selectSubName = QString::fromStdString(char_info.name);
+						{
+							QMutexLocker locker(&m_pEatFoodCfg->cMutex);
+							m_pEatFoodCfg->bChecked = true;
+							m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
+							m_pEatFoodCfg->selectSubName = QString::fromStdString(char_info.name);
+						}	
 						if (g_CGAInterface->UseItem(pItem->pos, result) && result)
 						{
 							m_uLastUseItemTime.restart();
@@ -983,9 +996,15 @@ bool GameCtrl::OnEatItem()
 					if (pItem && pItem->exist && pItem->type == 43) //吃血瓶
 					{
 						bool result = false;
-						m_pEatFoodCfg->bChecked = true;
-						m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
-						m_pEatFoodCfg->selectSubName = pPet->name;
+						{
+							QMutexLocker locker(&m_pEatFoodCfg->cMutex);
+							m_pEatFoodCfg->bChecked = true;
+							m_pEatFoodCfg->selectName = QString::fromStdString(char_info.name);
+							if (pPet->name.isEmpty())
+								m_pEatFoodCfg->selectSubName = pPet->realname;
+							else
+								m_pEatFoodCfg->selectSubName = pPet->name;
+						}
 						if (g_CGAInterface->UseItem(pItem->pos, result) && result)
 						{
 							m_uLastUseItemTime.restart();
@@ -3899,6 +3918,12 @@ void GameCtrl::OnNotifyUnitMenu(QSharedPointer<CGA::cga_unit_menu_items_t> menu)
 			if (QString::fromStdString(menu->at(i).name) == m_pEatFoodCfg->selectSubName)
 			{
 				g_CGAInterface->UnitMenuSelect(menu->at(i).index, bResult);
+				{
+					QMutexLocker locker(&m_pEatFoodCfg->cMutex);
+					//一次成功后 重置选择的名称
+					m_pEatFoodCfg->selectName = ""; //可能有风险
+					m_pEatFoodCfg->selectSubName = "";
+				}
 				return;
 			}
 		}
