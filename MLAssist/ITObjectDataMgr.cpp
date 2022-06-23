@@ -90,7 +90,8 @@ bool ITObjectDataMgr::init()
 	g_pGameCtrl->SetCGGameInstallPath(installPath);
 	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
 	QSettings iniFile(iniPath, QSettings::IniFormat);
-	bool isOpenToolNet = iniFile.value("server/openTool").toBool();
+	bool isOpenToolNet = iniFile.value("server/openTool", false).toBool();
+	bool isOpenSyncMap = iniFile.value("server/mapSync", false).toBool();
 	QString sServerIp = iniFile.value("server/ip", "www.wzqlive.com").toString();
 	QString sServerPort = iniFile.value("server/port", "50051").toString();
 	int startHide = iniFile.value("game/startHide", 0).toInt();
@@ -101,6 +102,7 @@ bool ITObjectDataMgr::init()
 	{
 		loginWaitTime = 0;
 	}
+	g_pGameCtrl->SetIsOpenSyncMap(isOpenSyncMap);
 	g_pGameCtrl->SetIsOpenNetToMLAssistTool(isOpenToolNet);
 	g_pGameCtrl->SetAutoLoginInterval(loginWaitTime);
 	bool repeatedGidExit = iniFile.value("game/repeatedGidExit", true).toBool();

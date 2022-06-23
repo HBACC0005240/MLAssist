@@ -328,10 +328,12 @@ public:
 	bool AutoNavigator(A_FIND_PATH &path, bool isLoop = true);
 	bool isMoveing() { return m_bMoveing; }
 	//本地自动寻路
-	int AutoMoveTo(int x, int y, int tomeout = 10000);
+	int AutoMoveTo(int x, int y, int timeout = 10000);
+	int AutoMoveToOffLineMap(int x, int y, QImage &mapData, int timeout = 10000);
 	int AutoMoveToEx(int x, int y, QString sMapName = "", int timeout = 10000);
 	int AutoMoveToPath(std::vector<pair<int, int> > &findPath, int timeout = 10000);
 	int AutoMoveInternal(int x, int y, int timeout = 10000, bool isLoop = true);
+	int AutoMoveInternalOffLineMap(int x, int y, QImage &mapData, int timeout = 10000, bool isLoop = true);
 
 	//跨地图寻路
 	int AutoMoveToTgtMap(int tx, int ty, int tgtMapIndex, int timeout = 100);

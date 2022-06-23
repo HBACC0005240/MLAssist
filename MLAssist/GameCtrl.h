@@ -181,6 +181,8 @@ public:
 	bool GetStartGameRepeatedGidExit() { return m_repeatedGidExit; }
 	void SetIsOpenNetToMLAssistTool(bool val) { m_bOpenNetToMTool = val; }
 	bool GetIsOpenNetToMLAssistTool() { return m_bOpenNetToMTool; }
+	void SetIsOpenSyncMap(bool val) { m_bOpenSyncMap = val; }
+	bool GetIsOpenSyncMap() { return m_bOpenSyncMap; }
 	void SetAutoLoginInterval(int timeout) { m_loginWaitInterval = timeout; }
 	int GetAutoLoginInterval() { return m_loginWaitInterval; }
 
@@ -477,6 +479,7 @@ private:
 	bool m_bCreateLog = false;																   //日志开关
 	bool m_bOpenNetToMTool = false;															   //是否打开和MLAssistTool通信功能
 	QString m_sCGInstallPath;																   //魔力安装目录
+	bool m_bOpenSyncMap = false;															   //是否打开了同步地图功能
 };
 
 template <typename TData>

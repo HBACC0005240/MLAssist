@@ -77,7 +77,7 @@ public:
 	void UploadGidData();
 	void UploadGidBankData();
 	void UploadMapData();
-	void DownloadMapData(QImage &image);
+	bool DownloadMapData(QImage &image);
 	bool SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply);
 
 	bool GetConnectState();

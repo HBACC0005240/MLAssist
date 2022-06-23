@@ -4788,6 +4788,24 @@ int CGFunction::AutoMoveTo(int x, int y, int timeout /*=100*/)
 	return bRet;
 }
 
+int CGFunction::AutoMoveToOffLineMap(int x, int y, QImage &mapData, int timeout /*= 10000*/)
+{
+	if (m_bMoveing)
+	{
+		qDebug() << "移动中";
+		return 0;
+	}
+	m_navigatorLoopCount = 0;
+	if (GetTeammatesCount() > 0 && !IsTeamLeader()) //队伍人数>0 并且不是队长的话  返回
+	{
+		qDebug() << "AutoMoveTo 队伍人数>0 并且自己不是队长";
+		return 0;
+	}
+	bool bRet = AutoMoveInternalOffLineMap(x, y, mapData, timeout);
+	qDebug() << "目标" << x << "," << y << " 寻路结束 ";
+	return bRet;
+}
+
 int CGFunction::AutoMoveToEx(int x, int y, QString sMapName, int timeout /*= 100*/)
 {
 	if (sMapName.isEmpty())
@@ -4856,6 +4874,51 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 		QImage mapImage;
 		LoadOffLineMapImageData(mapImage);
 		findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
+		if (findPath.size() > 0)
+			qDebug() << "离线地图查找路径成功，继续寻路";
+	}
+	bool bRet = false;
+	if (findPath.size() > 0)
+	{
+		bRet = AutoNavigator(findPath, isLoop);
+	}
+	else
+	{
+		qDebug() << "未找到可通行路径！当前：" << curPos.x() << ","
+				 << curPos.y() << "目标：" << x << "," << y << "Normal " << IsInNormalState();
+	}
+	m_bMoveing = false;
+	return bRet;
+}
+
+int CGFunction::AutoMoveInternalOffLineMap(int x, int y, QImage &mapData, int timeout /*= 10000*/, bool isLoop /*= true*/)
+{
+	if (m_navigatorLoopCount >= 20)
+		return 0;
+	QPoint curPoint = GetMapCoordinate();
+	if (curPoint.x() == x && curPoint.y() == y)
+	{
+		auto warpPosList = GetMapEntranceList(); //传送点
+		if (warpPosList.contains(QPoint(x, y)))	 //切一下 然后再移动一次
+		{
+			qDebug() << "AutoMoveTo 坐标一样 目标为传送点，重新进入！";
+			auto tmpPos = GetRandomSpace(x, y, 1);
+			g_CGAInterface->WalkTo(tmpPos.x(), tmpPos.y());
+			Sleep(2000);
+			g_CGAInterface->WalkTo(x, y);
+		}
+		qDebug() << "AutoMoveTo 坐标一样 返回！";
+		return 1;
+	}
+	m_bMoveing = true;
+	WaitInNormalState();
+	//距离判断 虽然有些坐标很近，但有阻碍物，这里还是计算路径
+	QPoint curPos = GetMapCoordinate();
+	auto findPath = CalculatePath(curPos.x(), curPos.y(), x, y);
+	if (findPath.size() < 1) //离线地图查找一波
+	{
+		qDebug() << "未找到可通行路径，加载离线地图尝试！" << curPos << "tgt:" << x << "," << y;
+		findPath = CalculatePathEx(mapData, curPos.x(), curPos.y(), x, y);
 		if (findPath.size() > 0)
 			qDebug() << "离线地图查找路径成功，继续寻路";
 	}
@@ -5318,11 +5381,11 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 		}
 	}
 	///begin 同步地图 判断迷宫是否已开
-	if (g_pGameCtrl->GetIsOpenNetToMLAssistTool())
+	if (g_pGameCtrl->GetIsOpenNetToMLAssistTool() && g_pGameCtrl->GetIsOpenSyncMap())
 	{
 		QImage mapImage;
-		RpcSocketClient::getInstance().DownloadMapData(mapImage);
-		if (mapImage.width() > 0 && mapImage.height() > 0)
+		bool bMapRes = RpcSocketClient::getInstance().DownloadMapData(mapImage);
+		if (bMapRes && mapImage.width() > 0 && mapImage.height() > 0 && mapImage.width() == cells.x_size && mapImage.height() == cells.y_size)
 		{
 			auto warpList = GetMazeEntranceListFromOfflineMap(mapImage);
 			if (warpList.size() >= 2)
@@ -5347,9 +5410,9 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 								return ad < bd;
 							});
 					if (isNearFar) //取远
-						AutoMoveTo(warpList[1].x(), warpList[1].y());
+						AutoMoveToOffLineMap(warpList[1].x(), warpList[1].y(), mapImage);
 					else
-						AutoMoveTo(warpList[0].x(), warpList[0].y());
+						AutoMoveToOffLineMap(warpList[0].x(), warpList[0].y(), mapImage);
 					return;
 				}
 			}
@@ -6673,7 +6736,7 @@ bool CGFunction::CreateMapImage(QVector<short> &map, int &widgth, int &height)
 
 bool CGFunction::SaveCurrentMapImage(const QString &sTgtPath)
 {
-	QString sPath = QCoreApplication::applicationDirPath() + "//sync_map//";
+	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
 	if (sTgtPath.isEmpty())
 	{
 		int index1, index2, index3;

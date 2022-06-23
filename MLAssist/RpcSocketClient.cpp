@@ -628,15 +628,15 @@ void RpcSocketClient::UploadMapData()
 	}
 }
 
-void RpcSocketClient::DownloadMapData(QImage &image)
+bool RpcSocketClient::DownloadMapData(QImage &image)
 {
 	if (!isConnected())
-		return;
+		return false;
 	int index1, index2, index3;
 	std::string sfilemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
 	if (index1 == 0) //固定地图 暂时不下载
-		return;
+		return false;
 	CGData::DownloadMapDataRequest request;
 	request.set_filename(std::to_string(index3));
 	request.set_serverline(std::to_string(index2));
@@ -646,8 +646,22 @@ void RpcSocketClient::DownloadMapData(QImage &image)
 	auto stream = _stub->DownloadMapData(&context, request);
 	CGData::DownloadMapDataResponse response;
 	stream->Read(&response);
+	QString slastModifiedTime = QString::fromStdString(response.filetime());
+	auto lastModifiedTime = QDateTime::fromString(slastModifiedTime, "yyyy-MM-dd hh:mm:ss");
+	if (QDateTime::currentDateTime().secsTo(lastModifiedTime) >= 3600 * 4) //4个小时 认为废弃
+	{
+		//qDebug() << "服务器迷宫地图时间超4小时，本次结果不作为依据";
+		return false;
+	}
 	image.loadFromData((uchar *)response.imagedata().c_str(), response.imagedata().size());
-	return;
+	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
+	if (index1 == 0)
+		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
+	else
+		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+
+	image.save(sPath);
+	return true;
 }
 
 bool RpcSocketClient::SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply)
