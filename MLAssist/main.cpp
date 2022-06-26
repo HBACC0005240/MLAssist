@@ -26,17 +26,19 @@ void outputMessage(QtMsgType type, const QMessageLogContext &context, const QStr
 		{
 			QString sDateMsg = QDateTime::currentDateTime().toString("yyyy:MM:dd hh:mm:ss ");
 			g_pGameCtrl->signal_addOneDebugMsg(sDateMsg + msg);
-			ITLOG_DEBUG(msg.toStdString().c_str());
+			if (g_pGameCtrl->GetCreateLog())
+				ITLOG_DEBUG(msg.toStdString().c_str());
 			break;
 		}
-		case QtWarningMsg:
-		{
-			ITLOG_WARNING(msg.toStdString().c_str());
-			break;
-		}
-		case QtCriticalMsg: ITLOG_NOTICE(msg.toStdString().c_str()); break;
-		case QtFatalMsg: ITLOG_FATAL(msg.toStdString().c_str()); break;
-		default: ITLOG_NOTICE(msg.toStdString().c_str()); break;
+		//case QtWarningMsg:
+		//{
+		//	ITLOG_WARNING(msg.toStdString().c_str());
+		//	break;
+		//}
+		//case QtCriticalMsg: ITLOG_NOTICE(msg.toStdString().c_str()); break;
+		//case QtFatalMsg: ITLOG_FATAL(msg.toStdString().c_str()); break;
+		//default: ITLOG_NOTICE(msg.toStdString().c_str()); break;
+		default: break;
 	}
 	//用系统原来的函数完成原来的功能. 比如输出到调试窗
 	if (gDefaultHandler)

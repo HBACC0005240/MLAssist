@@ -7430,9 +7430,14 @@ void CGFunction::AutoEncounterEnemyThread(CGFunction *pThis)
 	{
 		targetPos = pThis->GetRandomSpace(startPoint.x(), startPoint.y());
 	}
+	g_CGAInterface->WalkTo(targetPos.x(),targetPos.y());
+	Sleep(1000);
+	g_CGAInterface->WalkTo(startPoint.x(), startPoint.y());
 	g_CGAInterface->SetGameTextUICurrentScript("高速遇敌:开");
-
+	QTime recordTime;
+	recordTime.restart();
 	emit pThis->signal_startAutoEncounterEnemySucess();
+	bool bMoveNext = false;
 	while (pThis->m_bAutoEncounterEnemy && !g_pGameCtrl->GetExitGame())
 	{
 		//		if (pThis->IsInNormalState())	//这里不判断了，ForceMoveTo里面已经判断了
@@ -7443,33 +7448,43 @@ void CGFunction::AutoEncounterEnemyThread(CGFunction *pThis)
 				emit pThis->signal_stopAutoEncounterEnemy();
 				return;
 			}
-			if (preMapName != pThis->GetMapName()) //地图变更 退出
+			if (recordTime.elapsed() > 5000)
 			{
-				pThis->updateEndAutoAction();
-				emit pThis->signal_stopAutoEncounterEnemy();
-				return;
-			}
+				recordTime.restart();
+				if (preMapName != pThis->GetMapName()) //地图变更 退出
+				{
+					pThis->updateEndAutoAction();
+					emit pThis->signal_stopAutoEncounterEnemy();
+					return;
+				}
+			}		
 			//	qDebug() << "方向" << pThis->m_nAutoEncounterDir <<"间隔" << pThis->m_nAutoEncounterEnemyInterval << nDir;
-			QPoint curPoint = pThis->GetMapCoordinate();
-			if (curPoint.x() == startPoint.x() && curPoint.y() == startPoint.y())
-			{
+			//QPoint curPoint = pThis->GetMapCoordinate();
+			//if (curPoint.x() == startPoint.x() && curPoint.y() == startPoint.y())
+			//{
+			//	g_CGAInterface->ForceMoveTo(targetPos.x(), targetPos.y(), pThis->m_bIsShowAutoEncounterEnemy, bResult);
+			//	/*if (pThis->m_bIsShowAutoEncounterEnemy)
+			//		g_CGAInterface->WalkTo(targetPos.x(), targetPos.y());
+			//	else
+			//		g_CGAInterface->ForceMoveTo(targetPos.x(), targetPos.y(), false, bResult);*/
+			//}
+			//else
+			//{
+			//	g_CGAInterface->ForceMoveTo(startPoint.x(), startPoint.y(), pThis->m_bIsShowAutoEncounterEnemy, bResult);
+			//	/*		if (pThis->m_bIsShowAutoEncounterEnemy)
+			//		g_CGAInterface->WalkTo(startPoint.x(), startPoint.y());
+			//	else
+			//		g_CGAInterface->ForceMoveTo(startPoint.x(), startPoint.y(), false, bResult);*/
+			//}
+			if (bMoveNext)
 				g_CGAInterface->ForceMoveTo(targetPos.x(), targetPos.y(), pThis->m_bIsShowAutoEncounterEnemy, bResult);
-				/*if (pThis->m_bIsShowAutoEncounterEnemy)
-					g_CGAInterface->WalkTo(targetPos.x(), targetPos.y());
-				else
-					g_CGAInterface->ForceMoveTo(targetPos.x(), targetPos.y(), false, bResult);*/
-			}
 			else
-			{
 				g_CGAInterface->ForceMoveTo(startPoint.x(), startPoint.y(), pThis->m_bIsShowAutoEncounterEnemy, bResult);
-				/*		if (pThis->m_bIsShowAutoEncounterEnemy)
-					g_CGAInterface->WalkTo(startPoint.x(), startPoint.y());
-				else
-					g_CGAInterface->ForceMoveTo(startPoint.x(), startPoint.y(), false, bResult);*/
-			}
+
 		}
 		//需要改方向的话  在这加 把nDir值改了即可
 		Sleep(pThis->m_nAutoEncounterEnemyInterval);
+		bMoveNext = !bMoveNext;
 	}
 	pThis->updateEndAutoAction();
 	//判断地图是否一致，一致回到初始坐标 再退出线程
@@ -8529,6 +8544,8 @@ GameConditionCfg *CGFunction::GetStopScriptCfg(int type)
 //还是分开写吧  不何在一起了
 bool CGFunction::IsNeedStopScript()
 {
+	if (m_pStopScriptJudge.size() < 1)
+		return false;
 	auto pCharacter = g_pGameFun->GetGameCharacter(); //人物信息
 	if (!pCharacter)
 		return false;
@@ -8697,6 +8714,8 @@ bool CGFunction::IsNeedStopScript()
 }
 bool CGFunction::IsNeedStopEncounter()
 {
+	if (m_pStopEncounterJudge.size() < 1)
+		return false;
 	auto pCharacter = GetGameCharacter(); //人物信息
 	if (!pCharacter)
 		return false;
