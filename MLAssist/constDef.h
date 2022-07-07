@@ -469,6 +469,8 @@ enum TReturnGameData
 	TRet_Game_GamePID,		   //游戏进程ID
 	TRet_Game_GamePort,		   //游戏端口
 	TRet_Game_PlayerRole,	   //左右角色
+	TRet_Game_PetBookInfo,	   //图鉴信息
+	TRet_Game_CheckHavePetBook,//检查图鉴
 };
 //自定义快捷键
 enum TDefQuickKey

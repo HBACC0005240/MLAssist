@@ -571,6 +571,8 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "人物信息", m_luaFun, &CGLuaFun::Lua_GetPlayerAllData);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下级称号数据", m_luaFun, &CGLuaFun::Lua_GetNextTitleData);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "宠物信息", m_luaFun, &CGLuaFun::Lua_GetPetData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "图鉴信息", m_luaFun, &CGLuaFun::Lua_GetDstPetPicBooksInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "检查图鉴", m_luaFun, &CGLuaFun::Lua_CheckHavePetPicBooksInfo);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "物品信息", m_luaFun, &CGLuaFun::Lua_GetAllItemData);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "全部宠物信息", m_luaFun, &CGLuaFun::Lua_GetAllPetData);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "装备信息", m_luaFun, &CGLuaFun::Lua_GetPlayereEquipData);

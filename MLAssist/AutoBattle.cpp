@@ -436,9 +436,10 @@ void CBattleWorker::OnPerformanceBattle()
 	//第3级：遇敌就逃跑；
 	//第4级：无1级敌人时逃跑；
 	//第5级：遇指定怪逃跑；
+	auto tmpBattleCtx = m_BattleContext;
 	if (m_noPetDoubleAction && m_noPetDoubleAction->bEnabled)
 	{
-		if (m_noPetDoubleAction->DoAction(m_BattleContext))
+		if (m_noPetDoubleAction->DoAction(tmpBattleCtx))
 			return;
 	}
 	if (CheckEscape())
@@ -463,7 +464,7 @@ void CBattleWorker::OnPerformanceBattle()
 	for (int i = 0; i < m_SettingList.size(); ++i)
 	{
 		const CBattleSettingPtr &ptr = m_SettingList.at(i);
-		if (ptr->DoAction(m_BattleContext))
+		if (ptr->DoAction(tmpBattleCtx))
 			return;
 	}
 	//1-10回合配置调用
@@ -544,13 +545,14 @@ bool CBattleWorker::CheckEscape()
 {
 	if (m_pEscapeSettingList.size() < 1)
 		return false;
+	auto tmpBattleCtx = m_BattleContext;
 	QList<int> internalOrd = QList<int>({ TEscapeSet_All, TEscapeSet_TeammateCount, TEscapeSet_No1Lv, TEscapeSet_NoBoss, TEscapeSet_SpecialEnemy, TEscapeSet_EnemyAvgLv, TEscapeSet_EnemyCount });
 	for (int i = 0; i < internalOrd.size(); ++i)
 	{
 		auto escapeList = m_pEscapeSettingList.values(internalOrd[i]);
 		foreach (CBattleSettingPtr setting, escapeList)
 		{
-			if (setting->DoAction(m_BattleContext))
+			if (setting->DoAction(tmpBattleCtx))
 				return true;
 		}
 	}
@@ -592,6 +594,7 @@ bool CBattleWorker::CheckHaveLv1()
 			bSkip = true;
 		}
 	}
+	auto tmpBattleCtx = m_BattleContext;
 	if (bSkip)
 	{
 		//如果过滤勾选了，并且1级怪不达标，并且勾选了无1级逃跑，则逃跑处理，否则按默认1-10怪攻击
@@ -601,7 +604,7 @@ bool CBattleWorker::CheckHaveLv1()
 			auto escapeList = m_pEscapeSettingList.values(TEscapeSet_No1Lv);
 			foreach (CBattleSettingPtr setting, escapeList)
 			{
-				if (setting->DoAction(m_BattleContext))
+				if (setting->DoAction(tmpBattleCtx))
 					return true;
 			}
 		}
@@ -613,7 +616,7 @@ bool CBattleWorker::CheckHaveLv1()
 	for (int i = 0; i < internalOrd.size(); ++i)
 	{
 		auto it = m_pLv1SettingList.value(internalOrd[i]);
-		if (it && it->bEnabled && it->DoAction(m_BattleContext))
+		if (it && it->bEnabled && it->DoAction(tmpBattleCtx))
 			return true;
 	}
 	return false;
@@ -869,12 +872,14 @@ void CBattleWorker::ClearSpecifNumRoundSetting()
 
 bool CBattleWorker::OnSpecifNumEnemyBattle()
 {
+	auto tmpBattleCtx = m_BattleContext;
+
 	for (int i = 0; i < m_pSpecNumEnemySettingList.size(); ++i)
 	{
 		const CBattleSettingPtr &ptr = m_pSpecNumEnemySettingList[i];
 		if (ptr->HasPlayerAction())
 		{
-			if (ptr->DoAction(m_BattleContext))
+			if (ptr->DoAction(tmpBattleCtx))
 				return true;
 		}
 	}
@@ -883,12 +888,13 @@ bool CBattleWorker::OnSpecifNumEnemyBattle()
 
 bool CBattleWorker::OnSpecifNumRoundBattle()
 {
+	auto tmpBattleCtx = m_BattleContext;
 	for (int i = 0; i < m_pSpecNumRoundSettingList.size(); ++i)
 	{
 		const CBattleSettingPtr &ptr = m_pSpecNumRoundSettingList[i];
 		if (ptr->HasPlayerAction())
 		{
-			if (ptr->DoAction(m_BattleContext))
+			if (ptr->DoAction(tmpBattleCtx))
 				return true;
 		}
 	}

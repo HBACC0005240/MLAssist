@@ -437,6 +437,8 @@ public:
 	int Lua_GetCardsInfo(LuaState *L);
 	int Lua_GetCardsRecvMsg(LuaState *L);
 	int Lua_GetPicBooksInfo(LuaState *L);
+	int Lua_CheckHavePetPicBooksInfo(LuaState *L);
+	int Lua_GetDstPetPicBooksInfo(LuaState *L);
 	int Lua_IsItemValid(LuaState *L);
 	int Lua_GetItemInfo(LuaState *L);
 	int Lua_GetItemsInfo(LuaState *L);

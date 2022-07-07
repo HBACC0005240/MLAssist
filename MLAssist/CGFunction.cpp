@@ -182,6 +182,8 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("游戏端口", TRet_Game_GamePort);
 	m_returnGameDataHash.insert("角色", TRet_Game_PlayerRole);
 	m_returnGameDataHash.insert("左右角色", TRet_Game_PlayerRole);
+	m_returnGameDataHash.insert("检查图鉴", TRet_Game_CheckHavePetBook);
+	m_returnGameDataHash.insert("图鉴信息", TRet_Game_PetBookInfo);
 
 	m_playerActionHash.insert("pk", TCharacter_Action_PK);
 	m_playerActionHash.insert("加入队伍", TCharacter_Action_JOINTEAM);
@@ -966,6 +968,34 @@ int CGFunction::GetBattlePetData(const QString &sType, QString val, QString val2
 				g_CGAInterface->ChangePetState(petIndex, nVal, bRet);
 				return pPet ? pPet->battle_flags : 0;
 			}
+		}
+	/*	case TRet_Game_PetBookInfo:		//不支持返回表，其实可以返回字符串，然后转为表
+		{
+			std::string tgtPetName = val.toStdString();
+			CGA::cga_picbooks_info_t books;
+			g_CGAInterface->GetPicBooksInfo(books);
+			for (auto &pet : books)
+			{
+				if (pet.name == tgtPetName)
+				{
+					return true;
+				}
+			}
+			break;
+		}*/
+		case TRet_Game_CheckHavePetBook:
+		{
+			std::string tgtPetName = val.toStdString();
+			CGA::cga_picbooks_info_t books;
+			g_CGAInterface->GetPicBooksInfo(books);
+			for (auto &pet : books)
+			{
+				if (pet.name == tgtPetName)
+				{
+					return true;
+				}
+			}
+			break;
 		}
 		default:
 			break;
@@ -4872,10 +4902,17 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 	{
 		qDebug() << "未找到可通行路径，加载离线地图尝试！" << curPos << "tgt:" << x << "," << y;
 		QImage mapImage;
-		LoadOffLineMapImageData(mapImage);
-		findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
-		if (findPath.size() > 0)
-			qDebug() << "离线地图查找路径成功，继续寻路";
+		if(LoadOffLineMapImageData(mapImage))
+		{
+			findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
+			if (findPath.size() > 0)
+				qDebug() << "离线地图查找路径成功，继续寻路";
+		}
+		else
+		{
+			qDebug() << "未找到匹配的离线地图，返回！";
+		}
+		
 	}
 	bool bRet = false;
 	if (findPath.size() > 0)
@@ -5657,10 +5694,16 @@ bool CGFunction::IsReachableTargetEx(int sx, int sy, int tx, int ty)
 	{
 		qDebug() << "目标不可达，加载离线地图尝试！";
 		QImage mapImage;
-		LoadOffLineMapImageData(mapImage);
-		findPath = CalculatePathEx(mapImage, sx, sy, tx, ty);
-		if (findPath.size() > 0)
-			qDebug() << "离线地图查找路径成功，继续寻路";
+		if (LoadOffLineMapImageData(mapImage))
+		{
+			findPath = CalculatePathEx(mapImage, sx, sy, tx, ty);
+			if (findPath.size() > 0)
+				qDebug() << "离线地图查找路径成功，继续寻路";
+		}else
+		{
+			qDebug() << "未找到匹配的离线地图数据,返回";
+		}
+	
 	}
 	if (findPath.size() > 0)
 	{
@@ -10471,11 +10514,17 @@ int CGFunction::GetMapFloorNumberFromName(bool bSerial /*= false*/, bool bBack /
 
 bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QImage &mapImage)
 {
+	CGA::cga_map_cells_t cells;
+	g_CGAInterface->GetMapCollisionTable(true, cells);
 	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
 	if (index1 == 0)
 		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
 	else
+	{
+		if (!g_pGameCtrl->GetIsOpenNetToMLAssistTool() || !g_pGameCtrl->GetIsOpenSyncMap())
+			return false;		
 		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+	}
 
 	if (QFile::exists(sPath) == false)
 	{
@@ -10486,6 +10535,11 @@ bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QIm
 	if (mapImage.width() <= 0 || mapImage.height() <= 0)
 	{
 		qDebug() << "离线地图寻路：地图数据错误！";
+		return false;
+	}
+	if (mapImage.width() != cells.x_size || mapImage.height() != cells.y_size)
+	{
+		qDebug() << "离线地图寻路：离线地图宽高和当前不匹配！";
 		return false;
 	}
 	return true;

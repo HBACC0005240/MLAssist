@@ -3965,6 +3965,75 @@ int CGLuaFun::Lua_GetPicBooksInfo(LuaState *L)
 	return 1;
 }
 
+int CGLuaFun::Lua_CheckHavePetPicBooksInfo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		L->PushBoolean(false);
+		return 1;
+	}
+	bool bHave = false;
+	std::string name = args[1].GetString();
+	CGA::cga_picbooks_info_t books;
+	g_CGAInterface->GetPicBooksInfo(books);
+	for (auto &pet:books)
+	{
+		if (pet.name == name)
+		{
+			bHave = true;
+			break;
+		}
+	}
+	L->PushBoolean(bHave);
+	return 1;
+}
+
+int CGLuaFun::Lua_GetDstPetPicBooksInfo(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		L->PushBoolean(false);
+		return 1;
+	}
+	bool bHave = false;
+	std::string name = args[1].GetString();
+	CGA::cga_picbooks_info_t books;
+	g_CGAInterface->GetPicBooksInfo(books);
+	for (int i=0;i< books.size();++i)
+	{
+		if (books[i].name == name)
+		{
+			LuaObject subObj(L);
+			subObj.AssignNewTable();
+			subObj.SetString("name", books[i].name.c_str());
+			subObj.SetInteger("can_catch", books[i].can_catch);
+			subObj.SetInteger("card_type", books[i].card_type);
+			subObj.SetInteger("race", books[i].race);
+			subObj.SetInteger("index", books[i].index);
+			subObj.SetInteger("image_id", books[i].image_id);
+			subObj.SetInteger("rate_endurance", books[i].rate_endurance);
+			subObj.SetInteger("rate_strength", books[i].rate_strength);
+			subObj.SetInteger("rate_defense", books[i].rate_defense);
+			subObj.SetInteger("rate_agility", books[i].rate_agility);
+			subObj.SetInteger("rate_magical", books[i].rate_magical);
+			subObj.SetInteger("element_earth", books[i].element_earth);
+			subObj.SetInteger("element_water", books[i].element_water);
+			subObj.SetInteger("element_fire", books[i].element_fire);
+			subObj.SetInteger("element_wind", books[i].element_wind);
+			subObj.SetInteger("skill_slots", books[i].skill_slots);
+			subObj.Push(L);
+			bHave = true;
+			break;
+		}
+	}
+	if (bHave)
+		return 1;
+	else
+		return 0;
+}
+
 int CGLuaFun::Lua_IsItemValid(LuaState *L)
 {
 	LuaStack args(L);
