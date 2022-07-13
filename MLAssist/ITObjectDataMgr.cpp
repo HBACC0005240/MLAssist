@@ -97,6 +97,7 @@ bool ITObjectDataMgr::init()
 	int startHide = iniFile.value("game/startHide", 0).toInt();
 	int followPos = iniFile.value("game/followPos", 0).toInt();
 	int mazeWaitTime = iniFile.value("game/mazeWaitTime", 5000).toInt();
+	int mazeSearchWaitTime = iniFile.value("game/mazeSearchWaitTime", 3000).toInt();
 	int loginWaitTime = iniFile.value("game/loginIntervalTime", 3000).toInt(); //登录间隔
 	if (loginWaitTime < 0)
 	{
@@ -107,6 +108,7 @@ bool ITObjectDataMgr::init()
 	g_pGameCtrl->SetAutoLoginInterval(loginWaitTime);
 	bool repeatedGidExit = iniFile.value("game/repeatedGidExit", true).toBool();
 	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
+	g_pGameFun->SetMazeMapSearchWaitTime(mazeSearchWaitTime);
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
 	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
@@ -331,6 +333,34 @@ void ITObjectDataMgr::AddNewSubscribe(const QStringList &subscribe)
 		newSubscribeList.append(m_sMQTTCode + tSubscribe);
 	}
 	m_customSubscribeList = newSubscribeList;
+	m_retrySubscribes = m_customSubscribeList;
+}
+
+void ITObjectDataMgr::RemoveSubscribe(const QStringList &subscribe)
+{
+	if (m_sMQTTCode.isEmpty())
+	{
+		qDebug() << "没有设置mqttCode，不能使用此功能!";
+		return;
+	}	
+	QStringList removeList;
+	if (m_client && m_client->state() == QMqttClient::Connected)
+	{
+		for (QString tSubscribe : subscribe)
+		{
+			QString encryptTopic = m_sMQTTCode + tSubscribe;
+			if (m_customSubscribeList.contains(encryptTopic))
+			{
+				m_client->unsubscribe(encryptTopic);		
+				removeList.append(encryptTopic);
+			}	
+		}
+		
+	}
+	for (auto tSubscribe:removeList)
+	{
+		m_customSubscribeList.removeOne(tSubscribe);
+	}
 	m_retrySubscribes = m_customSubscribeList;
 }
 
@@ -1598,16 +1628,48 @@ void ITObjectDataMgr::OnRecvMessage(const QByteArray &message, const QMqttTopicN
 	m_recvPublishMsgCache.push_back(qMakePair(GetTickCount(), QStringList() << tmpTopic << message));
 	emit signal_mqttMsg(tmpTopic, message);
 }
-QStringList ITObjectDataMgr::GetLastPublishMsg()
+QStringList ITObjectDataMgr::GetLastPublishMsg(int timeInteral)
 {
 	if (m_recvPublishMsgCache.size() < 1)
 		return QStringList();
 	QMutexLocker locker(&m_mqttMutex);
 	auto lastData = m_recvPublishMsgCache.last();
-	if ((GetTickCount() - lastData.first) > 3000)
+	if ((GetTickCount() - lastData.first) > timeInteral)
 		return QStringList();
 	else
 		return lastData.second;
+}
+
+QStringList ITObjectDataMgr::GetLastTgtPublishMsg(const QString &topic)
+{
+	if (m_recvPublishMsgCache.size() < 1)
+		return QStringList();
+	if (topic.isEmpty())
+		return GetLastPublishMsg();
+	
+	QMutexLocker locker(&m_mqttMutex);
+	for (int i=m_recvPublishMsgCache.size()-1;i>=0;--i)
+	{
+		auto recvMsg = m_recvPublishMsgCache[i].second;
+		if (recvMsg.size() >= 2 && recvMsg[0]==topic)
+		{
+			return recvMsg;
+		}
+	}
+	return QStringList();
+}
+
+QList<QStringList> ITObjectDataMgr::GetAllRecvTopicMsgList()
+{
+	QList<QStringList> recvMsgList; 
+	if (m_recvPublishMsgCache.size() < 1)
+		return recvMsgList;
+	QMutexLocker locker(&m_mqttMutex);
+	for (auto it:m_recvPublishMsgCache)
+	{
+		recvMsgList.append(it.second);
+	}
+	return recvMsgList;
 }
 
 void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)

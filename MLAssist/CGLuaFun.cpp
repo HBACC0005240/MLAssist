@@ -3062,8 +3062,9 @@ int CGLuaFun::Lua_WaitSysAndChatMsg(LuaState *L)
 int CGLuaFun::Lua_WaitSubscribeMsg(LuaState *L)
 {
 	LuaStack args(L);
-	int timeout = args.Count() > 0 ? args[1].GetInteger() : 5000;
-	std::tuple<QString, QString> sMsgData = g_pGameFun->WaitSubscribeMsg(timeout);
+	int timeInterval = args.Count() > 0 ? args[1].GetInteger() : 5000;
+	int timeout = args.Count() > 1 ? args[2].GetInteger() : 5000;
+	std::tuple<QString, QString> sMsgData = g_pGameFun->WaitSubscribeMsg(timeInterval,timeout);
 	QString sTopic = std::get<0>(sMsgData);
 	QString sMsg = std::get<1>(sMsgData);
 	L->PushString(sTopic.toStdString().c_str());
@@ -3098,6 +3099,33 @@ int CGLuaFun::Lua_SubscribeMsg(LuaState *L)
 	return 1;
 }
 
+int CGLuaFun::Lua_RemoveSubscribeMsg(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		qDebug() << "取消订阅失败，参数为空！";
+		L->PushBoolean(false);
+		return 1;
+	}
+	QStringList sDefaultVal;
+	if (args[1].IsTable())
+	{
+		LuaObject tblData = args[1];
+		for (LuaTableIterator it(tblData); it; it.Next())
+		{
+			sDefaultVal << it.GetValue().GetString();
+		}
+	}
+	else
+	{
+		sDefaultVal << args[1].GetString();
+	}
+	ITObjectDataMgr::getInstance().RemoveSubscribe(sDefaultVal);
+	L->PushBoolean(true);
+	return 1;
+}
+
 int CGLuaFun::Lua_PublishMsg(LuaState *L)
 {
 	LuaStack args(L);
@@ -3112,31 +3140,59 @@ int CGLuaFun::Lua_PublishMsg(LuaState *L)
 	return 1;
 }
 
-int CGLuaFun::Lua_GetTopicMsgList(LuaState *L)
+int CGLuaFun::Lua_GetAllRecvTopicMsgList(LuaState *L)
 {
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
-	auto pMsgList = g_pGameFun->GetTopicMsgList();
+	auto pMsgList = ITObjectDataMgr::getInstance().GetAllRecvTopicMsgList();
 	for (int i = 0; i < pMsgList.size(); ++i)
-	{
+	{		
 		auto it = pMsgList[i];
+		if (it.size() < 2)
+			continue;
+		
 		LuaObject subObj(L);
 		subObj.AssignNewTable();
-		subObj.SetString("topic", it.first.toStdString().c_str());
-		subObj.SetString("msg", it.second.toStdString().c_str());
+		subObj.SetString("topic", it[0].toStdString().c_str());
+		subObj.SetString("msg", it[1].toStdString().c_str());
 		tableObj.SetObject(i + 1, subObj);
 	}
 	tableObj.Push(L);
 	return 1;
+}
+int CGLuaFun::Lua_GetTopicMsgList(LuaState *L)
+{
+	LuaStack args(L);
+	QString sTgtToipc = args.Count() > 0 ? args[1].GetString() : "";
+	auto pMsgList = ITObjectDataMgr::getInstance().GetLastTgtPublishMsg(sTgtToipc);
+	if (pMsgList.size() >= 2)
+	{
+		L->PushString(pMsgList[0].toStdString().c_str());
+		L->PushString(pMsgList[1].toStdString().c_str());
+	}
+	else
+	{
+		L->PushString("");
+		L->PushString("");
+	}
+	return 2;
 }
 
 int CGLuaFun::Lua_GetLastTopicMsg(LuaState *L)
 {
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
-	auto topicMsg = g_pGameFun->GetLastTopicMsgList();
-	tableObj.SetString("topic", topicMsg.first.toStdString().c_str());
-	tableObj.SetString("msg", topicMsg.second.toStdString().c_str());
+	auto topicMsg = ITObjectDataMgr::getInstance().GetLastPublishMsg();
+	if (topicMsg.size() >=2)
+	{
+		tableObj.SetString("topic", topicMsg[0].toStdString().c_str());
+		tableObj.SetString("msg", topicMsg[1].toStdString().c_str());
+	}
+	else
+	{
+		tableObj.SetString("topic", "");
+		tableObj.SetString("msg", "");
+	}
 	tableObj.Push(L);
 	return 1;
 }

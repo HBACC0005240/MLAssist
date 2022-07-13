@@ -2523,7 +2523,7 @@ bool CGFunction::LaunchTrade(const QString &sName, const QString &myTradeData, c
 		return false;
 	}
 
-	auto tradeDlg = WaitTradeDialog();
+	auto tradeDlg = WaitTradeDialog(timeout);
 	if (tradeDlg == nullptr)
 	{
 		qDebug() << "等待交易对话框超时,交易取消";
@@ -2545,7 +2545,7 @@ bool CGFunction::LaunchTrade(const QString &sName, const QString &myTradeData, c
 bool CGFunction::WaitTrade(const QString &sName /*= ""*/, const QString &myTradeData /*= ""*/, const QString &sTradeData /*= ""*/, int timeout /*= 3000*/)
 {
 	SetCharacterSwitch(CHARACTER_Trade, true);
-	auto tradeDlg = WaitTradeDialog();
+	auto tradeDlg = WaitTradeDialog(timeout);
 	if (tradeDlg == nullptr)
 	{
 		qDebug() << "等待交易对话框超时,交易取消";
@@ -5527,6 +5527,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 		{
 			//auto tSearchPos = tSearchList[0];
 			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+			Sleep(m_mazeSearchWaitTime);	//到达目标点 等待时间，用来防止到达点后，地图没有更新过来
 			if (type == 1)
 			{
 				if (SearchAroundMapOpen(allMoveAblePosList, type))
@@ -5614,6 +5615,7 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 		{
 			//auto tSearchPos = tSearchList[0];
 			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+			Sleep(m_mazeSearchWaitTime); //到达目标点 等待时间，用来防止到达点后，地图没有更新过来
 			if (findPos == QPoint(0, 0))
 			{
 				auto mapUnit = FindMapUnit(name, searchType);
@@ -10109,7 +10111,7 @@ std::tuple<int, QString> CGFunction::WaitSysAndChatMsg(int timeout /*= 5000*/)
 	return std::make_tuple(retunitid, sysMsg);
 }
 //等待订阅消息
-std::tuple<QString, QString> CGFunction::WaitSubscribeMsg(int timeout /*= 5000*/)
+std::tuple<QString, QString> CGFunction::WaitSubscribeMsg(int lastInterval,int timeout /*= 5000*/)
 {
 	QString retMsg;
 	QString rettopic = 0;
@@ -10119,7 +10121,7 @@ std::tuple<QString, QString> CGFunction::WaitSubscribeMsg(int timeout /*= 5000*/
 	connect(g_pGameFun, &CGFunction::signal_stopScript, &loop, &QEventLoop::quit);
 	connect(&ITObjectDataMgr::getInstance(), &ITObjectDataMgr::signal_mqttMsg, &loop, &QEventLoop::quit);
 	loop.exec();
-	QStringList sRecvMsg = ITObjectDataMgr::getInstance().GetLastPublishMsg();
+	QStringList sRecvMsg = ITObjectDataMgr::getInstance().GetLastPublishMsg(lastInterval);
 	if (sRecvMsg.size() >= 2)
 	{
 		retMsg = sRecvMsg[1];

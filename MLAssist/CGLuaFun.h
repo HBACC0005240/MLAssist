@@ -379,9 +379,11 @@ public:
 	int Lua_WaitSubscribeMsg(LuaState *L);
 	//订阅消息
 	int Lua_SubscribeMsg(LuaState *L);
+	int Lua_RemoveSubscribeMsg(LuaState *L);
 	//发布消息
 	int Lua_PublishMsg(LuaState *L);
 	//获取已接收到的订阅消息
+	int Lua_GetAllRecvTopicMsgList(LuaState *L);
 	int Lua_GetTopicMsgList(LuaState *L);
 	int Lua_GetLastTopicMsg(LuaState *L);
 

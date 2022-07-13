@@ -527,7 +527,7 @@ public:
 	std::tuple<int, QString> WaitChatMsg(int timeout = 5000);
 	//监听系统和聊天消息
 	std::tuple<int, QString> WaitSysAndChatMsg(int timeout = 5000);
-	std::tuple<QString, QString> WaitSubscribeMsg(int timeout = 5000);
+	std::tuple<QString, QString> WaitSubscribeMsg(int lastInterval=5000,int timeout = 5000);
 
 	//需要卖物品
 	bool NeedSale();
@@ -717,6 +717,8 @@ public:
 	QMap<QString, int> m_sPrestigeMap;		//玩家声望称号列表
 	void SetMazeChangedMapWaitTime(int time) { m_mazeWaitTime = time; }
 	int GetMazeChangedMapWaitTime() { return m_mazeWaitTime; }
+	void SetMazeMapSearchWaitTime(int time) { m_mazeSearchWaitTime = time; }
+	int GetMazeMapSearchWaitTime() { return m_mazeSearchWaitTime; }
 
 protected:
 	bool InternalAutoNavigator();
@@ -773,5 +775,6 @@ private:
 	QMutex m_topicMutex;								 //订阅信息锁
 	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息
 	int m_mazeWaitTime = 5000;							 //迷宫切图等待时间
+	int m_mazeSearchWaitTime = 3000;					 //迷宫搜索等待时间
 };
 #define g_pGameFun CGFunction::GetInstance()

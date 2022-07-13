@@ -474,9 +474,11 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待最新消息", m_luaFun, &CGLuaFun::Lua_WaitSysAndChatMsg); //等待收到的最新消息 包括系统和聊天
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待订阅消息", m_luaFun, &CGLuaFun::Lua_WaitSubscribeMsg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "订阅消息", m_luaFun, &CGLuaFun::Lua_SubscribeMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取消订阅消息", m_luaFun, &CGLuaFun::Lua_RemoveSubscribeMsg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发布消息", m_luaFun, &CGLuaFun::Lua_PublishMsg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收订阅消息", m_luaFun, &CGLuaFun::Lua_GetTopicMsgList);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收最新订阅消息", m_luaFun, &CGLuaFun::Lua_GetLastTopicMsg);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收所有订阅消息", m_luaFun, &CGLuaFun::Lua_GetAllRecvTopicMsgList);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "debugMsg", m_luaFun, &CGLuaFun::Lua_DebugMessage);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户输入框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);

@@ -94,8 +94,11 @@ public:
 	void insertMapNumForObj(int num, ITGameMapPtr obj) { m_numberForGameMap.insert(num, obj); }
 
 	void AddNewSubscribe(const QStringList &subscribe);
+	void RemoveSubscribe(const QStringList &subscribe);
 	void PublishOneTopic(const QString &topic, const QString &msg);
-	QStringList GetLastPublishMsg();
+	QStringList GetLastPublishMsg(int timeInteral=5000);
+	QStringList GetLastTgtPublishMsg(const QString& topic);
+	QList<QStringList> GetAllRecvTopicMsgList();
 
 protected:
 	bool LoadItems();

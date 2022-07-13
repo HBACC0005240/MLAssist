@@ -34,6 +34,8 @@ void GameLuaScriptInputValWgt::ClearAllInputWidget()
 
 void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, const QVariant &vData, const QVariant &vData2)
 {
+	if (m_pKeyForWidget.contains(sMsg))	//已经建立wgt的 直接返回
+		return;
 	switch (type)
 	{
 		case TInputType_Edit:
