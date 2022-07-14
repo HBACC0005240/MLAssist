@@ -696,10 +696,6 @@ bool CBattleCondition_TeammateHp::Check(CGA_BattleContext_t &context, int &condi
 		if (!context.m_UnitGroup[i]->exist)
 			continue;
 		int curv = context.m_UnitGroup[i]->hp;
-		//修复队友死亡后，一直用技能bug
-		if (curv == 0)
-			continue;
-
 		int maxv = context.m_UnitGroup[i]->maxhp;
 		//qDebug("curhp%d maxhp%d v%d r%d p%d", curv, maxv, m_value, m_relation, m_percentage?1:0);
 		if (m_percentage && maxv > 0)

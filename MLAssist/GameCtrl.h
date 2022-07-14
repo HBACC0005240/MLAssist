@@ -164,11 +164,12 @@ public:
 
 	//获取最新对话框
 	QSharedPointer<CGA_NPCDialog_t> GetLastNpcDialog();
-	QSharedPointer<CGA::cga_trade_dialog_t> GetLastTradeDialog();
+	QSharedPointer<CGA::cga_trade_dialog_t> GetLastTradeDialog(int timeInteral = 5000);
 	QSharedPointer<CGA::cga_working_result_t> GetLastWorkResult();
 	QSharedPointer<CGA::cga_player_menu_items_t> GetLastPlayerMenuResult();
 	QSharedPointer<CGA::cga_unit_menu_items_t> GetLastUnitMenuResult();
 	QSharedPointer<CGA::cga_conn_state_t> GetLastConnectStateResult();
+	QList<QSharedPointer<CGA::cga_trade_dialog_t> > GetAllRecvTopicMsgList();
 	int GetLastBattleActionResult();
 
 	//启动游戏是否隐藏

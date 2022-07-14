@@ -179,6 +179,11 @@ public:
 	int Lua_LaunchTrade(LuaState *L);
 	//等待交易
 	int Lua_WaitTrade(LuaState *L);
+	//交易物品验证确认
+	int Lua_TradeInternal(LuaState *L);
+	//已收到的交易对话框消息
+	int Lua_GetLastRecvTradeDlgInfo(LuaState *L);
+	int Lua_GetAllRecvTradeDlgInfo(LuaState *L);
 	//等待交易对话框
 	int Lua_WaitTradeDlg(LuaState *L);
 	//添加交易信息

@@ -512,15 +512,18 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "整理银行", m_luaFun, &CGLuaFun::Lua_SortBankItems);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待交易", m_luaFun, &CGLuaFun::Lua_WaitTrade);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易物品验证确认", m_luaFun, &CGLuaFun::Lua_TradeInternal);
 
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收最新交易消息", m_luaFun, &CGLuaFun::Lua_GetLastRecvTradeDlgInfo);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收所有交易消息", m_luaFun, &CGLuaFun::Lua_GetAllRecvTradeDlgInfo);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发起交易", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待交易对话框", m_luaFun, &CGLuaFun::Lua_WaitTradeDlg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "添加交易信息", m_luaFun, &CGLuaFun::Lua_TradeAddStuffs);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待对方交易信息", m_luaFun, &CGLuaFun::Lua_WaitTrade);
-
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易金币", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易物品", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易宠物", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
+
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "丢", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "捡", m_luaFun, &CGLuaFun::Lua_PickupItem);

@@ -1173,10 +1173,62 @@ int CGLuaFun::Lua_WaitTrade(LuaState *L)
 	LuaStack args(L);
 	QString sName = args.Count() > 0 ? args[1].GetString() : "";
 	QString myTradeData = args.Count() > 1 ? args[2].GetString() : "";
-	QString sTradeData = args.Count() > 1 ? args[3].GetString() : "";
-	int nTimeOut = args.Count() > 2 ? args[4].GetInteger() : 3000;
+	QString sTradeData = args.Count() > 2 ? args[3].GetString() : "";
+	int nTimeOut = args.Count() > 3 ? args[4].GetInteger() : 3000;
 	bool bRet = g_pGameFun->WaitTrade(sName, myTradeData, sTradeData, nTimeOut);
 	L->PushBoolean(bRet);
+	return 1;
+}
+
+int CGLuaFun::Lua_TradeInternal(LuaState *L)
+{
+	LuaStack args(L);
+	QString sName = args.Count() > 0 ? args[1].GetString() : "";
+	QString myTradeData = args.Count() > 1 ? args[2].GetString() : "";
+	QString sTradeData = args.Count() > 2 ? args[3].GetString() : "";
+	int nTimeOut = args.Count() > 3 ? args[4].GetInteger() : 5000;
+	bool bRet = g_pGameFun->TradeInternal(sName, myTradeData, sTradeData, nTimeOut);
+	L->PushBoolean(bRet);
+	return 1;
+}
+
+//已接收最新交易消息
+int CGLuaFun::Lua_GetLastRecvTradeDlgInfo(LuaState *L)
+{
+	LuaStack args(L);
+	int timeInterval = args.Count() > 0 ? args[1].GetInteger() : 5000;
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
+	auto tradeInfo = g_pGameCtrl->GetLastTradeDialog(timeInterval);
+	if (tradeInfo)
+	{
+		tableObj.SetString("name", tradeInfo->name.c_str());
+		tableObj.SetInteger("level", tradeInfo->level);
+	}
+	else
+	{
+		tableObj.SetString("name", "");
+		tableObj.SetString("level", 0);
+	}
+	tableObj.Push(L);
+	return 1;
+}
+//已接收所有交易消息
+int CGLuaFun::Lua_GetAllRecvTradeDlgInfo(LuaState *L)
+{
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
+	auto pDlgList = g_pGameCtrl->GetAllRecvTopicMsgList();
+	for (int i = 0; i < pDlgList.size(); ++i)
+	{
+		auto tradeInfo = pDlgList[i];	
+		LuaObject subObj(L);
+		subObj.AssignNewTable();
+		tableObj.SetString("name", tradeInfo->name.c_str());
+		tableObj.SetInteger("level", tradeInfo->level);
+		tableObj.SetObject(i + 1, subObj);
+	}
+	tableObj.Push(L);
 	return 1;
 }
 
@@ -3180,9 +3232,11 @@ int CGLuaFun::Lua_GetTopicMsgList(LuaState *L)
 
 int CGLuaFun::Lua_GetLastTopicMsg(LuaState *L)
 {
+	LuaStack args(L);
+	int timeInterval = args.Count() > 0 ? args[1].GetInteger() : 5000;
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
-	auto topicMsg = ITObjectDataMgr::getInstance().GetLastPublishMsg();
+	auto topicMsg = ITObjectDataMgr::getInstance().GetLastPublishMsg(timeInterval);
 	if (topicMsg.size() >=2)
 	{
 		tableObj.SetString("topic", topicMsg[0].toStdString().c_str());

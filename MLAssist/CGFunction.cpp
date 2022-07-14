@@ -2502,7 +2502,7 @@ bool CGFunction::LaunchTrade(const QString &sName, const QString &myTradeData, c
 		{
 			for (int i = 0; i < rcvMenu->size(); ++i)
 			{
-				if (QString::fromStdString(rcvMenu->at(i).name) == sName || rcvMenu->at(i).index == sName.toInt())
+				if (QString::fromStdString(rcvMenu->at(i).name) == sName /*|| rcvMenu->at(i).index == sName.toInt()*/)
 				{
 					bFind = true;
 					//注：选择名称时候，dll里是原codec转发，游戏用的gbk，这里是utf8，所以交易对话框会乱码，要转回gbk
@@ -2578,6 +2578,10 @@ QSharedPointer<CGA::cga_trade_dialog_t> CGFunction::WaitTradeDialog(int timeout)
 {
 	QSharedPointer<CGA::cga_trade_dialog_t> retDlg;
 	qDebug() << "正在等待交易对话框";
+	retDlg = g_pGameCtrl->GetLastTradeDialog();
+	if (retDlg != nullptr)
+		return retDlg;
+	
 	bool bSuccess = true;
 	QEventLoop loop;
 	QTimer::singleShot(timeout, &loop, &QEventLoop::quit);

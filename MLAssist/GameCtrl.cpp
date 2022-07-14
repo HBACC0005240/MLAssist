@@ -2091,13 +2091,13 @@ QSharedPointer<CGA_NPCDialog_t> GameCtrl::GetLastNpcDialog()
 	else
 		return lastData.second;
 }
-QSharedPointer<CGA::cga_trade_dialog_t> GameCtrl::GetLastTradeDialog()
+QSharedPointer<CGA::cga_trade_dialog_t> GameCtrl::GetLastTradeDialog(int timeInteral)
 {
 	if (m_tradeDlgCache.size() < 1)
 		return nullptr;
 	QMutexLocker locker(&m_tradeDlgMutex);
 	auto lastData = m_tradeDlgCache.last();
-	if ((GetTickCount() - lastData.first) > 3000)
+	if ((GetTickCount() - lastData.first) > timeInteral)
 		return nullptr;
 	else
 		return lastData.second;
@@ -2149,6 +2149,20 @@ QSharedPointer<CGA::cga_conn_state_t> GameCtrl::GetLastConnectStateResult()
 		return nullptr;
 	else
 		return lastData.second;
+}
+
+QList<QSharedPointer<CGA::cga_trade_dialog_t> > GameCtrl::GetAllRecvTopicMsgList()
+{
+	QList<QSharedPointer<CGA::cga_trade_dialog_t> > retTradeDlgs;
+	if (m_tradeDlgCache.size() < 1)
+		return retTradeDlgs;
+	QMutexLocker locker(&m_tradeDlgMutex);
+	auto lastData = m_tradeDlgCache.last();
+	for (auto tmpDlg:m_tradeDlgCache)
+	{
+		retTradeDlgs.append(tmpDlg.second);
+	}
+	return retTradeDlgs;
 }
 
 int GameCtrl::GetLastBattleActionResult()
