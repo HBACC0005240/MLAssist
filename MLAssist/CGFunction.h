@@ -325,7 +325,7 @@ public:
 	//移动到指定坐标 超时时间 秒
 	bool MoveTo(int x, int y, int timeout = 10000);
 	//根据路径寻路
-	bool AutoNavigator(A_FIND_PATH &path, bool isLoop = true);
+	bool AutoNavigator(A_FIND_PATH &path,bool isSyncMap=false, bool isLoop = true);
 	bool isMoveing() { return m_bMoveing; }
 	//本地自动寻路
 	int AutoMoveTo(int x, int y, int timeout = 10000);

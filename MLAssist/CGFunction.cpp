@@ -4460,7 +4460,7 @@ bool CGFunction::MoveTo(int x, int y, int timeout)
 	return false;
 }
 
-bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isLoop)
+bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 {
 	m_navigatorLoopCount += 1;
 	auto backPath = path;
@@ -4561,7 +4561,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isLoop)
 					auto findPath = CalculatePath(curPos.x(), curPos.y(), tarX, tarY);
 					if (findPath.size() > 0 && isLoop)
 					{
-						AutoNavigator(findPath, false);
+						AutoNavigator(findPath, isSyncMap, false);
 					}
 					else
 					{
@@ -4750,27 +4750,36 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isLoop)
 						}
 						dwLastTime = dwCurTime;
 						qDebug() << "卡墙，短坐标自动寻路！" << tarX << tarY;
-						//g_CGAInterface->FixMapWarpStuck(1); //会切回上个图
-						WaitInNormalState();
-						QPoint curPos = GetMapCoordinate();
-						auto findPath = CalculatePath(curPos.x(), curPos.y(), tarX, tarY);
-						if (findPath.size() == 1 || !isLoop)
+						if (isSyncMap) //有时候有黑线 需要旁边走动一下才行 这里要加个旁边走功能 
 						{
-							qDebug() << "卡墙：WalkTo" << tarX << tarY;
-							g_CGAInterface->WalkTo(tarX, tarY); //重新执行一次移动
-						}
-						else if (findPath.size() > 1 && isLoop)
+							qDebug() << "卡墙，可能是黑线，当前是离线地图寻路，周围移动！";						
+							auto tmpPos = GetRandomSpace(curX, curY, 2);
+							if (AutoMoveInternal(tmpPos.x(), tmpPos.y(), false) == false)
+								return false;	
+						}else
 						{
-							qDebug() << "卡墙：AutoMoveInternal" << tarX << tarY;
-							if (AutoMoveInternal(tarX, tarY, false) == false)
+							//g_CGAInterface->FixMapWarpStuck(1); //会切回上个图
+							WaitInNormalState();
+							QPoint curPos = GetMapCoordinate();
+							auto findPath = CalculatePath(curPos.x(), curPos.y(), tarX, tarY);
+							if (findPath.size() == 1 || !isLoop)
+							{
+								qDebug() << "卡墙：WalkTo" << tarX << tarY;
+								g_CGAInterface->WalkTo(tarX, tarY); //重新执行一次移动
+							}
+							else if (findPath.size() > 1 && isLoop)
+							{
+								qDebug() << "卡墙：AutoMoveInternal" << tarX << tarY;
+								if (AutoMoveInternal(tarX, tarY, false) == false)
+									return false;
+								dwLastTime = dwCurTime;
+							}
+							else
+							{
+								qDebug() << "目标不可达，返回！" << tarX << tarY;
 								return false;
-							dwLastTime = dwCurTime;
-						}
-						else
-						{
-							qDebug() << "目标不可达，返回！" << tarX << tarY;
-							return false;
-						}
+							}
+						}						
 					}
 					//else if (dwCurTime - dwLastTime > 5000) //5秒 执行移动
 					//{
@@ -4900,6 +4909,7 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 	m_bMoveing = true;
 	WaitInNormalState();
 	//距离判断 虽然有些坐标很近，但有阻碍物，这里还是计算路径
+	bool isOffLineMap = false;
 	QPoint curPos = GetMapCoordinate();
 	auto findPath = CalculatePath(curPos.x(), curPos.y(), x, y);
 	if (findPath.size() < 1) //离线地图查找一波
@@ -4910,7 +4920,11 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 		{
 			findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
 			if (findPath.size() > 0)
+			{
+
 				qDebug() << "离线地图查找路径成功，继续寻路";
+				isOffLineMap = true;
+			}
 		}
 		else
 		{
@@ -4921,7 +4935,7 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 	bool bRet = false;
 	if (findPath.size() > 0)
 	{
-		bRet = AutoNavigator(findPath, isLoop);
+		bRet = AutoNavigator(findPath,isOffLineMap, isLoop);
 	}
 	else
 	{
@@ -4966,7 +4980,7 @@ int CGFunction::AutoMoveInternalOffLineMap(int x, int y, QImage &mapData, int ti
 	bool bRet = false;
 	if (findPath.size() > 0)
 	{
-		bRet = AutoNavigator(findPath, isLoop);
+		bRet = AutoNavigator(findPath, true,isLoop);
 	}
 	else
 	{
