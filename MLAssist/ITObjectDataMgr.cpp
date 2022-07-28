@@ -317,22 +317,24 @@ void ITObjectDataMgr::AddNewSubscribe(const QStringList &subscribe)
 		return;
 	}
 	if (m_client && m_client->state() == QMqttClient::Connected)
-	{
-		//连接状态 进行订阅 不是连接 也就没有订阅
-		for (auto oldSub : m_customSubscribeList)
+	{	
+		for (auto newSub : subscribe)
 		{
-			if (!subscribe.contains(/*m_sMQTTCode + */ oldSub))
+			QString tmpNewTopic = m_sMQTTCode + newSub;
+			if (!m_customSubscribeList.contains(tmpNewTopic))
 			{
-				m_client->unsubscribe(oldSub);
+				m_client->subscribe(tmpNewTopic);
 			}
 		}
 	}
-	QStringList newSubscribeList;
-	for (QString tSubscribe : subscribe)
+	for (auto newSub : subscribe)
 	{
-		newSubscribeList.append(m_sMQTTCode + tSubscribe);
+		QString tmpNewTopic = m_sMQTTCode + newSub;
+		if (!m_customSubscribeList.contains(tmpNewTopic))
+		{
+			m_customSubscribeList.append(tmpNewTopic);
+		}
 	}
-	m_customSubscribeList = newSubscribeList;
 	m_retrySubscribes = m_customSubscribeList;
 }
 
@@ -915,7 +917,7 @@ void ITObjectDataMgr::StoreServerItemData(GameItemPtr pItem)
 	{
 		//已鉴定 名称不一样 则更新本地
 		if (!localItem->_bUpdate && bForceUpdate || (pItem->assessed && localItem->getObjectName() != pItem->name))
-		{
+		{			
 			localItem->_itemType = pItem->type;
 			//localItem->_itemPrice = nPrice;
 			//localItem->_itemPile = nMaxPile;
@@ -932,7 +934,7 @@ void ITObjectDataMgr::StoreServerItemData(GameItemPtr pItem)
 			localItem->_itemAttr = pItem->attr;
 			localItem->_bUpdate = true;
 			localItem->setEditStatus();
-
+			RpcSocketClient::getInstance().StoreCGItemData(pItem);
 			qDebug() << localItem->getObjectName() << " " << pItem->type << " " << pItem->level << " " << pItem->name << " " << pItem->info << " " << pItem->id;
 		}
 		if (pItem->assessed == false && pItem->maybeName != localItem->getObjectName())
@@ -1670,6 +1672,25 @@ QList<QStringList> ITObjectDataMgr::GetAllRecvTopicMsgList()
 		recvMsgList.append(it.second);
 	}
 	return recvMsgList;
+}
+
+void ITObjectDataMgr::RemoveAllTopics()
+{
+	if (m_sMQTTCode.isEmpty())
+	{
+		qDebug() << "没有设置mqttCode，不能使用此功能!";
+		return;
+	}
+	if (m_client && m_client->state() == QMqttClient::Connected)
+	{
+		//连接状态 进行订阅 不是连接 也就没有订阅
+		for (auto oldSub : m_customSubscribeList)
+		{			
+			m_client->unsubscribe(oldSub);			
+		}
+	}
+	m_customSubscribeList.clear();
+	m_retrySubscribes = m_customSubscribeList;
 }
 
 void ITObjectDataMgr::NormalThread(ITObjectDataMgr *pThis)

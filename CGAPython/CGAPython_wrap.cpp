@@ -455,6 +455,11 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def_readwrite("index", &CGA::cga_buy_item_t::index)
 		.def_readwrite("count", &CGA::cga_buy_item_t::count)
 		;
+	py::class_<TMLPoint>(m, "TMLPoint")
+		.def(py::init<>())
+		.def_readwrite("x", &TMLPoint::x)
+		.def_readwrite("y", &TMLPoint::y)
+		;
 	py::class_<pcga_craft_item_t>(m, "cga_craft_item_t")
 		.def(py::init<>())
 		.def_readwrite("skill_index", &pcga_craft_item_t::skill_index)
@@ -536,6 +541,7 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def("ChangePetState", &CGAPython::ChangePetState)
 		.def("GetMapIndex", &CGAPython::GetMapIndex)
 		.def("GetMapXY", &CGAPython::GetMapXY)
+		.def("GetMapCoordinate", &CGAPython::GetMapCoordinate)
 		.def("GetMapXYFloat", &CGAPython::GetMapXYFloat)
 		.def("GetMoveSpeed", &CGAPython::GetMoveSpeed)
 		.def("GetMouseXY", &CGAPython::GetMouseXY)

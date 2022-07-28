@@ -18,6 +18,15 @@ QStringList g_cgPetInfoList;
 
 GPCalc::GPCalc()
 {
+	m_specialPetBase.insert("小蝙蝠", 0.3);
+	m_specialPetBase.insert("使魔", 0.3);
+	m_specialPetBase.insert("英普", 0.3);
+	m_specialPetBase.insert("大地牛头怪", 0.3);
+	m_specialPetBase.insert("烈风牛头怪", 0.3);
+	m_specialPetBase.insert("火焰牛头怪", 0.3);
+	m_specialPetBase.insert("寒冰牛头怪", 0.3);
+	m_specialPetBase.insert("大地牛头怪", 0.3);
+	m_specialPetBase.insert("小鸭子", 0.22);
 	//QString configPath = QCoreApplication::applicationDirPath() + "//config.ini";
 	//QSettings::Format format = QSettings::registerFormat("ini", IniReadFunc, IniWriteFunc);
 	//QSettings iniFile(configPath, format);					 // QSettings::IniFormat);
@@ -116,6 +125,16 @@ double GPCalc::CalcBaseBP(int petNumber, int level)
 	//其他所有寵
 	return 0.2;
 }
+
+double GPCalc::CalcBaseBP(const QString &petName, int level /*=1*/)
+{
+	if (m_specialPetBase.contains(petName))
+	{
+		return m_specialPetBase.value(petName);
+	}
+	return 0.2;
+}
+
 //名称 血 魔 攻 防 敏 精神 回复 体 力 强 敏 魔
 QSharedPointer<GamePetCalcData> GPCalc::CreatePetData(QStringList inputData)
 {
@@ -135,10 +154,12 @@ QSharedPointer<GamePetCalcData> GPCalc::CreatePetData(QStringList inputData)
 	//有1级的bp
 	for (int b = 0; b < 5; b++) //当前用户输入的1级游戏bp数据
 		pet->curShowBp[b] = inputData[b + 8].toInt();
-	pet->baseBP = CalcBaseBP(pet->number, 1);	   //先用这个 后面预置
 	auto pDefPet = m_cgPetDef.value(inputData[0]); //宠物图鉴
 	if (pDefPet == nullptr)
 		return nullptr;
+	pet->petName = pDefPet->name;
+	pet->number = pDefPet->number;
+	pet->baseBP = CalcBaseBP(pet->petName, 1); //先用这个 后面预置	
 	int totalGrade = 0;
 	for (size_t i = 0; i < 5; i++)
 	{

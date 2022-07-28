@@ -56,6 +56,7 @@ public slots:
 	void OnNotifyGetItemsInfo(GameItemList items);
 	void OnNotifyGetPetsInfo(GamePetList pets);
 	void on_pushButton_float_clicked();
+	void dealTableViewClicked(const QModelIndex &index);
 
 private:
 	Ui::GameCustomBattleWgt ui;

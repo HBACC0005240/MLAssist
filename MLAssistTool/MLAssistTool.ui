@@ -535,6 +535,31 @@ color: rgb(255, 255, 255);</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>在线</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="GameOnlineInfo" name="widget_onlineAccount" native="true"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="GameAccountWgt" name="tab_3">
        <attribute name="title">
         <string>账号</string>
@@ -609,6 +634,12 @@ color: rgb(255, 255, 255);</string>
    <class>MLDebugWgt</class>
    <extends>QWidget</extends>
    <header>MLDebugWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameOnlineInfo</class>
+   <extends>QWidget</extends>
+   <header>GameOnlineInfo.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

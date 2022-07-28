@@ -402,6 +402,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetItemPileCount);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取所有物品数量", m_luaFun, &CGLuaFun::Lua_GetAllItemCount);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取所有物品叠加数量", m_luaFun, &CGLuaFun::Lua_GetAllItemPileCount);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹空格集合", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpacePos);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队伍人数", m_luaFun, &CGLuaFun::Lua_GetTeammatesCount);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹空格", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpaceCount);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取已用格", m_luaFun, &CGLuaFun::Lua_GetBagUsedItemCount);
@@ -445,7 +446,8 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "等待指定入队", m_luaFun, &CGLuaFun::Lua_WaitTeammates);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动寻路", m_luaFun, &CGLuaFun::Lua_AutoMove);
-	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动", m_luaFun, &CGLuaFun::Lua_AutoMove);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动", m_luaFun, &CGLuaFun::Lua_MovePos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动到", m_luaFun, &CGLuaFun::Lua_WaitMovePos);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动一格", m_luaFun, &CGLuaFun::Lua_MoveGo);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "moveGo", m_luaFun, &CGLuaFun::Lua_MoveGo);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "搜索地图", m_luaFun, &CGLuaFun::Lua_SearchMap);
@@ -479,6 +481,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收订阅消息", m_luaFun, &CGLuaFun::Lua_GetTopicMsgList);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收最新订阅消息", m_luaFun, &CGLuaFun::Lua_GetLastTopicMsg);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "已接收所有订阅消息", m_luaFun, &CGLuaFun::Lua_GetAllRecvTopicMsgList);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清空订阅消息", m_luaFun, &CGLuaFun::Lua_RemoveAllTopics);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "debugMsg", m_luaFun, &CGLuaFun::Lua_DebugMessage);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "用户输入框", m_luaFun, &CGLuaFun::Lua_UserDefDialog);

@@ -410,6 +410,7 @@ void AccountForm::OnAutoLogin()
 					{
 						qDebug() << "300秒登录失败，干掉游戏窗口，重新加载！";
 						g_pGameCtrl->KillGameWndProcess();
+						return;
 					}
 					//增加等待
 					if (m_loginInterval > 0)
@@ -920,12 +921,22 @@ void AccountForm::on_pushButton_logback_clicked()
 
 void AccountForm::on_account_changed()
 {
-	g_CGAInterface->LoginGameServer(ui->comboBox_gid->currentText().toStdString(),
-			m_glt.toStdString(),
-			m_serverid,
-			ui->comboBox_bigserver->currentData().toInt(),
-			ui->comboBox_server->currentData().toInt(),
-			ui->comboBox_character->currentData().toInt());
+	if (ui->checkBox_autoLogin->isChecked())
+	{
+		g_CGAInterface->LoginGameServer(ui->comboBox_gid->currentText().toStdString(),
+				m_glt.toStdString(),
+				m_serverid,
+				ui->comboBox_bigserver->currentData().toInt(),
+				ui->comboBox_server->currentData().toInt(),
+				ui->comboBox_character->currentData().toInt());
+	}
+	else
+	{
+		if (g_CGAInterface->IsConnected())
+		{
+			g_CGAInterface->LoginGameServer("", "", 0, 0, 0, 0); //通知远端 不自动登录
+		}
+	}
 }
 
 void AccountForm::on_account_comboBox_changed(int index)

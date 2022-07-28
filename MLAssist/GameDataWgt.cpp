@@ -573,9 +573,7 @@ void GameDataWgt::OnNotifyGetSkillsInfo(GameSkillList skills)
 }
 
 void GameDataWgt::OnNotifyGetPetsInfo(GamePetList pets)
-{
-	if (!this->isVisible())
-		return;
+{	
 	if (!this->isVisible())
 		return;
 	if (!m_pRealUpdateCheckBox->isChecked())

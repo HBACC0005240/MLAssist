@@ -148,6 +148,8 @@ public:
 	int Lua_WaitTime(LuaState *L);
 	//自动寻路
 	int Lua_AutoMove(LuaState *L);
+	int Lua_MovePos(LuaState *L);
+	int Lua_WaitMovePos(LuaState *L);
 	//指定方向移动一格
 	int Lua_MoveGo(LuaState *L);
 	//移动到目标周围一格
@@ -275,6 +277,7 @@ public:
 
 	//取人物包裹未使用空格
 	int Lua_GetItemNotUseSpaceCount(LuaState *L);
+	int Lua_GetItemNotUseSpacePos(LuaState *L);
 	//取人物包裹已使用空格
 	int Lua_GetBagUsedItemCount(LuaState *L);
 	//取银行未使用空格
@@ -391,6 +394,7 @@ public:
 	int Lua_GetAllRecvTopicMsgList(LuaState *L);
 	int Lua_GetTopicMsgList(LuaState *L);
 	int Lua_GetLastTopicMsg(LuaState *L);
+	int Lua_RemoveAllTopics(LuaState *L);
 
 	/**************************原生CGA接口**********************/
 	//卖物品

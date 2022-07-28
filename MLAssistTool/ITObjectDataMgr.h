@@ -84,9 +84,12 @@ public:
 	static void loadDataBaseInfo(ITObjectDataMgr* pThis);
 	static void SaveDataThread(ITObjectDataMgr* pThis);
 	static ITObjectDataMgr& getInstance(void);
+	static void checkOnlineThread(ITObjectDataMgr* pThis);
 
 	bool LoadOffLineMapImageData(int index, QImage& mapImage);
 	ITCGPetPictorialBookPtr GetGamePetFromNumber(int number) { return m_numberForPet.value(number); }
+	//获取连接过的角色信息
+	QHash<QString, ITGidRolePtr> GetAlreadyConnectedData() { return m_idForAccountRole; }
 
 protected:
 	bool LoadIdentification();
@@ -121,6 +124,8 @@ protected:
 	QString GetCharacterSexText(int image_id);
 	int GetCharacterSex(int image_id);
 
+	
+
 signals:
 	void signal_loadDataFini();
 public slots:
@@ -150,20 +155,18 @@ private:
 	std::map<int, int> _mapTileMap;	  // 地表数字映射，映射为tiled map中tile层的新id
 	std::vector<int> _vObjectData;	  // 实际就是第二个tiled层
 	std::map<int, int> _mapObjectMap; // 物件数字映射，映射为tiled map中object层的新id
-
 	QHash<QString, QHash<int, ITObjectPtr> > m_tableForObj; //加速查询
 	QHash<int, ITGameItemPtr> m_codeForGameItem;			//代码和道具映射
 	QMap<int, ITGameMapPtr> m_numberForGameMap;				//地图编码和地图对象映射
 	QMap<int, ITGameGateMapPtr> m_numberForGateMap;			//地图编码和地图可达对象映射
 	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
-
-
 	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//gid+name 对应指定游戏人物
 	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid+name 对应指定gid
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
 	QMutex m_objMutex;
 	QMutex m_rpcGidMutex;
+	bool m_bForceUpdate = false;
 };
 #endif

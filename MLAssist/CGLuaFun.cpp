@@ -880,6 +880,33 @@ int CGLuaFun::Lua_AutoMove(LuaState *L)
 	return 0;
 }
 
+int CGLuaFun::Lua_MovePos(LuaState *L)
+{
+	LuaStack args(L);
+
+	int x = args[1].GetInteger();
+	int y = args[2].GetInteger();	
+	qDebug() << "Lua_MovePos";
+	g_CGAInterface->WalkTo(x, y);
+	return 0;
+}
+
+int CGLuaFun::Lua_WaitMovePos(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 2)
+		return 0;
+	
+	int x = args[1].GetInteger();
+	int y = args[2].GetInteger();
+	QString sMapName = args.Count() >= 3 ? args[3].GetString() : "";
+	int tgtx = args.Count() >= 4 ? args[4].GetInteger():0;
+	int tgty = args.Count() >= 5 ? args[5].GetInteger():0;
+	int timeOut = args.Count() >=6 ? args[6].GetInteger():10000;
+	g_pGameFun->MoveTo(x, y,sMapName,tgtx,tgty,timeOut);
+	return 0;
+}
+
 int CGLuaFun::Lua_MoveGo(LuaState *L)
 {
 	LuaStack args(L);
@@ -1765,11 +1792,31 @@ int CGLuaFun::Lua_GetPetData(LuaState *L)
 	if (args.Count() < 1)
 		return 0;
 	int petId = args.Count() > 0 ? args[1].GetInteger() : 0;
+	LuaObject tableObj(L);
+	tableObj.AssignNewTable();
+	tableObj.SetString("name", "");
+	tableObj.SetString("realname", "");
+	tableObj.SetInteger("level", 0);
+	tableObj.SetInteger("hp",0);
+	tableObj.SetInteger("maxhp", 0);
+	tableObj.SetInteger("mp", 0);
+	tableObj.SetInteger("maxmp", 0);
+	tableObj.SetInteger("xp", 0);
+	tableObj.SetInteger("maxxp", 0);
+	tableObj.SetInteger("health", 0);
+	tableObj.SetInteger("flags", 0);
+	tableObj.SetInteger("race", 0);
+	tableObj.SetInteger("loyality", 0);
+	tableObj.SetInteger("battle_flags", 0);
+	tableObj.SetInteger("state", 0);
+	tableObj.SetInteger("index", 0);
+	tableObj.SetInteger("grade", 0);
+	tableObj.SetInteger("minGrade", 0);
+	tableObj.SetInteger("maxGrade", 0);
 	CGA::cga_pet_info_t info;
 	if (g_CGAInterface->GetPetInfo(petId, info))
 	{
-		LuaObject tableObj(L);
-		tableObj.AssignNewTable();
+		
 		tableObj.SetString("name", info.name.c_str());
 		tableObj.SetString("realname", info.realname.c_str());
 		tableObj.SetInteger("level", info.level);
@@ -1796,10 +1843,10 @@ int CGLuaFun::Lua_GetPetData(LuaState *L)
 				tableObj.SetInteger("maxGrade", pCalcData->lossMax);
 			}
 		}
-		tableObj.Push(L);
-		return 1;
+		
 	}
-	return 0;
+	tableObj.Push(L);
+	return 1;
 }
 
 int CGLuaFun::Lua_GetAllPetData(LuaState *L)
@@ -2153,6 +2200,24 @@ int CGLuaFun::Lua_GetItemNotUseSpaceCount(LuaState *L)
 	LuaStack args(L);
 	int val = g_pGameFun->GetInventoryEmptySlotCount();
 	L->PushInteger(val);
+	return 1;
+}
+
+int CGLuaFun::Lua_GetItemNotUseSpacePos(LuaState *L)
+{
+	LuaStack args(L);
+	auto posList = g_pGameFun->GetInventoryEmptySlotPosList();
+	LuaObject tblObj(L);
+	tblObj.AssignNewTable();
+	for (auto i=0;i<posList.size();++i)
+	{		
+		LuaObject subTblObj(L);
+		subTblObj.AssignInteger(L, posList[i]);
+		//subTblObj.AssignNewTable();
+		//subTblObj.SetInteger("pos", posList[i]);
+		tblObj.SetObject(i + 1, subTblObj);
+	}
+	tblObj.Push(L);
 	return 1;
 }
 
@@ -3249,6 +3314,12 @@ int CGLuaFun::Lua_GetLastTopicMsg(LuaState *L)
 	}
 	tableObj.Push(L);
 	return 1;
+}
+
+int CGLuaFun::Lua_RemoveAllTopics(LuaState *L)
+{
+	ITObjectDataMgr::getInstance().RemoveAllTopics();
+	return 0;
 }
 
 int CGLuaFun::Lua_SellNPCStore(LuaState *L)

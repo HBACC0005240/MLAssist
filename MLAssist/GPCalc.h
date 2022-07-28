@@ -12,6 +12,7 @@ public:
 	static GPCalc *GetInstance();
 
 	double CalcBaseBP(int petNumber,int level=1);
+	double CalcBaseBP(const QString& petName,int level=1);
 	QSharedPointer<GamePetSolution> CreateSol(double solution[5], int grIndex, int level, int base);
 	double CalcStat(int type, double dV[5]);
 	double CalcSpi(double spiVals[5]);
@@ -30,5 +31,6 @@ private:
 
 	QStringList args;
 	double baseBP = 0;
+	QMap<QString, double> m_specialPetBase;
 };
 #define g_pGamePetCalc GPCalc::GetInstance()

@@ -22,7 +22,7 @@ GamePetWgt::GamePetWgt(QWidget *parent) :
 	pHLayout->setContentsMargins(0, 0, 0, 0);
 	ui.tabWidget->setCornerWidget(pWidget);
 
-	for (int i = 0; i < 12; ++i)
+	for (int i = 0; i < 13; ++i)
 	{
 		for (size_t n = 0; n < 5; n++)
 		{
@@ -269,7 +269,7 @@ void GamePetWgt::OnNotifyGetPetsInfo(GamePetList pets)
 		QString sLv;
 		QString sXp;
 		QString sDangCi;
-		QString sAttac, sDefensive, sAgility, sSpirit, sLoyality;
+		QString sAttac, sDefensive, sAgility, sSpirit, sLoyality, sRecovery;
 		QString state;
 		QColor gradeColor("black");
 		QColor backColor("white");
@@ -293,6 +293,7 @@ void GamePetWgt::OnNotifyGetPetsInfo(GamePetList pets)
 			sDefensive = QString("%1").arg(pPet->detail.value_defensive);
 			sAgility = QString("%1").arg(pPet->detail.value_agility);
 			sSpirit = QString("%1").arg(pPet->detail.value_spirit);
+			sRecovery = QString("%1").arg(pPet->detail.value_recovery);
 			sLoyality = QString("%1").arg(pPet->loyality);
 			if (pPet->level == 1 && pPet->bCalcGrade)
 			{
@@ -343,8 +344,9 @@ void GamePetWgt::OnNotifyGetPetsInfo(GamePetList pets)
 		setItemText(7, pos, sDefensive);
 		setItemText(8, pos, sAgility);
 		setItemText(9, pos, sSpirit);
-		setItemText(10, pos, sLoyality);
-		setItemText(11, pos, state);
+		setItemText(10, pos, sRecovery);
+		setItemText(11, pos, sLoyality);
+		setItemText(12, pos, state);
 	}
 	ui.tableWidget->setUpdatesEnabled(true);
 	//ui.tableWidget->resizeColumnsToContents(); //根据内容调整列宽 但每次都变 太麻烦 修改下
@@ -403,8 +405,14 @@ void GamePetWgt::on_dropPet_LineEdit_editingFinished()
 
 void GamePetWgt::on_pushButton_saveBook_clicked()
 {
-	g_pGameFun->SavePetPictorialBookToHtml();
-	QMessageBox::information(this, "提示", "保存完成,程序所在图鉴文件夹下", "确定");
+	QString path = QString("%1\\图鉴\\%2.html").arg(QApplication::applicationDirPath()).arg(g_pGameFun->GetGameCharacter()->name);
+
+	g_pGameFun->SavePetPictorialBookToHtml(path);
+	//是否打开对话框
+	if (QMessageBox::information(this, "提示", "保存完成,程序所在图鉴文件夹下,是否打开图鉴信息！", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	{
+		QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+	}
 }
 
 void GamePetWgt::onTableCustomContextMenu(const QPoint &pos)
@@ -414,7 +422,7 @@ void GamePetWgt::onTableCustomContextMenu(const QPoint &pos)
 	{
 		int nrow = m_pCurItem->row();
 		int ncol = m_pCurItem->column();
-		if (nrow != 0 && nrow != 11) //名字和状态可以改
+		if (nrow != 0 && nrow != 12) //名字和状态可以改
 			return;
 
 		QMenu menu;
@@ -423,7 +431,7 @@ void GamePetWgt::onTableCustomContextMenu(const QPoint &pos)
 			menu.addAction("修改名称", this, SLOT(doChangePetName()));
 			menu.addAction("修改为名称档次", this, SLOT(doChangePetNameGrade()));
 		}
-		else if (nrow == 11)
+		else if (nrow == 12)
 			menu.addAction("修改状态", this, SLOT(doChangePetState()));
 		menu.exec(QCursor::pos());
 	}

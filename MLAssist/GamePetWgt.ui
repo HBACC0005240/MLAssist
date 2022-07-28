@@ -155,7 +155,12 @@ QTableView
          </row>
          <row>
           <property name="text">
-           <string>魔法</string>
+           <string>精神</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>回复</string>
           </property>
          </row>
          <row>

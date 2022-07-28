@@ -113,6 +113,24 @@ ITObjectDataMgr& ITObjectDataMgr::getInstance(void)
 	return mitsObjicedata;
 }
 
+void ITObjectDataMgr::checkOnlineThread(ITObjectDataMgr *pThis)
+{
+	if (!pThis)
+		return;
+	while (!pThis->m_bExit)
+	{
+		for (auto it = pThis->m_idForAccountRole.begin(); it != pThis->m_idForAccountRole.end(); ++it)
+		{
+			if (it.value()->_lastUploadTime.elapsed() > 30000)//30秒 状态更新为离线
+			{
+				it.value()->_connectState = 0;
+			}
+		}
+
+		QThread::msleep(10000);		//10秒检测一次
+	}
+}
+
 bool ITObjectDataMgr::init()
 {
 	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
@@ -123,6 +141,7 @@ bool ITObjectDataMgr::init()
 	QString strUserName = ini.value("dbconn/UserID", "sa").toString();
 	QString strPassWord = ini.value("dbconn/password", "123").toString();
 	int nPort = ini.value("dbconn/Port", "3306").toInt();
+	m_bForceUpdate = ini.value("dbconn/forceUpdateItem", false).toBool();
 
 	//QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
 	bool bRet = false;
@@ -141,6 +160,7 @@ bool ITObjectDataMgr::init()
 		bRet = false;
 	}
 	QtConcurrent::run(SaveDataThread, this);
+	QtConcurrent::run(checkOnlineThread, this);
 	return bRet;
 }
 
@@ -1371,7 +1391,7 @@ bool ITObjectDataMgr::deleteOneDeviceFromDB(ITObjectPtr pObj)
 		strSql = QString("DELETE FROM char_item WHERE id=%1").arg((int)pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (GETDEVSUBCLASS(objType) == TObject_CharPet)
+	else if (GETDEVSUBCLASS(objType) == TObject_CGPet)
 	{
 		strSql = QString("DELETE FROM char_pet WHERE id=%1").arg((int)pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -1735,7 +1755,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (GETDEVSUBCLASS(objType) == TObject_CharPet)
+	else if (GETDEVSUBCLASS(objType) == TObject_CGPet)
 	{
 		QString szOwnCode;
 		quint64 char_id = 0;
@@ -1825,7 +1845,7 @@ QString ITObjectDataMgr::StoreServerItemData(const ::CGData::CGStoreItemRequest*
 	if (!pItem)
 		return "";
 
-	bool bForceUpdate = false;
+	bool bForceUpdate = m_bForceUpdate;
 	//通过code 先通过code判断吧，后续再说 或者名称判断
 	auto localItem = m_codeForGameItem.value(pItem->item_id());
 	if (localItem)
@@ -2044,6 +2064,8 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	}
 	else
 		pCharacter->setEditStatus();
+	pCharacter->_connectState = 1;
+	pCharacter->_lastUploadTime.restart();
 	
 	if (pCharacter->getObjectType() != roleObjectType)
 	{

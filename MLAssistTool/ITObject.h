@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QSharedPointer>
 #include <QMutex>
+#include <QTime>
 
 class ITObject;
 class ITGameItem;
@@ -372,6 +373,8 @@ public:
 	QMap<int, ITGameItemPtr> _itemPosForPtr;//物品id和物品指针映射
 	QMap<QString, ITGameItemPtr> _bankItemNameForPtr;//银行物品名称和物品指针映射
 	QMutex _mutex;
+	QTime _lastUploadTime;		//最后一次上传时间
+	int _connectState = 0; //0离线 1在线
 };
 
 DECLARE_OBJECT_MODULE_FACTORY(ITGidRole)

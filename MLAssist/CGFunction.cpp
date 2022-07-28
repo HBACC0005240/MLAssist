@@ -713,6 +713,32 @@ int CGFunction::GetInventoryEmptySlotCount()
 	return nCount;
 }
 
+QList<int> CGFunction::GetInventoryEmptySlotPosList()
+{
+	QList<int> posExist;
+	CGA::cga_items_info_t itemsinfo;
+	if (g_CGAInterface->GetItemsInfo(itemsinfo))
+	{
+		for (size_t i = 0; i < itemsinfo.size(); ++i)
+		{
+			const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
+			if (iteminfo.pos > 7)
+			{
+				posExist.push_back(iteminfo.pos);
+			}
+		}
+	}
+	QList<int> notUsePosList;
+	for (size_t i = 8; i < 28; i++)
+	{
+		if (!posExist.contains(i))
+		{
+			notUsePosList.append(i);
+		}
+	}
+	return notUsePosList;
+}
+
 int CGFunction::GetBagUsedItemCount()
 {
 	int nCount = 0;
@@ -4421,19 +4447,26 @@ bool CGFunction::IsTeamLeader(const QString &sName)
 	return false;
 }
 
-bool CGFunction::MoveTo(int x, int y, int timeout)
+bool CGFunction::MoveTo(int x, int y, QString tgtMapName, int tgtx , int tgty, int timeout)
 {
 	if (m_bMoveing)
 		return false;
+	if (tgtx == 0)
+		tgtx = x;
+	if (tgty == 0)
+		tgty = y;
+	if (tgtMapName.isEmpty())
+		tgtMapName = GetMapName();
+	
 	int curX, curY;
 	g_CGAInterface->GetMapXY(curX, curY);
 
-	//判断当前坐标和目标坐标距离 超出8格  不执行
-	if (GetDistance(x, y) > 8)
-	{
-		qDebug() << QString("目标x或者y超出范围,当前坐标(%1,%2) 目标坐标(%3,%4)").arg(curX).arg(curY).arg(x).arg(y);
-		return false;
-	}
+	////判断当前坐标和目标坐标距离 超出8格  不执行
+	//if (GetDistance(x, y) > 8)
+	//{
+	//	qDebug() << QString("目标x或者y超出范围,当前坐标(%1,%2) 目标坐标(%3,%4)").arg(curX).arg(curY).arg(x).arg(y);
+	//	return false;
+	//}
 	bool bRet = g_CGAInterface->WalkTo(x, y);
 	if (bRet == false)
 	{
@@ -4448,13 +4481,13 @@ bool CGFunction::MoveTo(int x, int y, int timeout)
 		if (m_bStop)
 			return false;
 		g_CGAInterface->GetMapXY(curX, curY);
-		if (curX == x && curY == y)
+		if (curX == tgtx && curY == tgty && GetMapName() == tgtMapName)
 		{
 			m_bMoveing = false;
 			return true;
 		}
 		//QApplication::processEvents();
-		//Sleep(100);
+		Sleep(100);
 	}
 	m_bMoveing = false;
 	return false;
@@ -5385,6 +5418,8 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	}
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
 		return;
+	TurnAbout(0);
+	TurnAbout(2);
 	CGA::cga_map_cells_t cells;
 	if (g_CGAInterface->GetMapCollisionTable(true, cells) == false)
 	{
@@ -7940,7 +7975,7 @@ void CGFunction::ThrowNotFullItemName(const QString &name, int nCount)
 void CGFunction::PileItem(QString name, int count)
 {
 	GameItemList pItemList = GetGameItems();
-	for (size_t i = 8; i < pItemList.size(); i++)
+	for (size_t i = 0; i < pItemList.size(); i++)
 	{
 		GameItemPtr pItem = pItemList.at(i);
 		if (pItem && pItem->exist && pItem->name == name && pItem->count < count)

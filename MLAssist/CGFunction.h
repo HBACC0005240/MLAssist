@@ -90,6 +90,7 @@ public:
 
 	//获取背包中的空闲格子数量
 	int GetInventoryEmptySlotCount();
+	QList<int> GetInventoryEmptySlotPosList();
 
 	//获取已用格子数量
 	int GetBagUsedItemCount();
@@ -323,7 +324,7 @@ public:
 	int GetMapIndex();
 
 	//移动到指定坐标 超时时间 秒
-	bool MoveTo(int x, int y, int timeout = 10000);
+	bool MoveTo(int x, int y, QString tgtMapName = "", int tgtx = 0, int tgty = 0, int timeout = 10000);
 	//根据路径寻路
 	bool AutoNavigator(A_FIND_PATH &path,bool isSyncMap=false, bool isLoop = true);
 	bool isMoveing() { return m_bMoveing; }

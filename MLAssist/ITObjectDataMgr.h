@@ -99,6 +99,7 @@ public:
 	QStringList GetLastPublishMsg(int timeInteral=5000);
 	QStringList GetLastTgtPublishMsg(const QString& topic);
 	QList<QStringList> GetAllRecvTopicMsgList();
+	void RemoveAllTopics();
 
 protected:
 	bool LoadItems();

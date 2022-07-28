@@ -143,6 +143,7 @@ void GameCustomBattleWgt::init()
 	connect(m_model, SIGNAL(syncList(CBattleSettingList)), g_pAutoBattleCtrl, SLOT(OnSyncList(CBattleSettingList)), Qt::ConnectionType::QueuedConnection);
 	ui.tableView_settings->setMouseTracking(true);
 	connect(ui.tableView_settings, SIGNAL(entered(const QModelIndex &)), this, SLOT(showToolTip(const QModelIndex &)));
+	connect(ui.tableView_settings, SIGNAL(clicked(const QModelIndex &)), this, SLOT(dealTableViewClicked(const QModelIndex &)));
 }
 
 void GameCustomBattleWgt::initTransMap()
@@ -1323,7 +1324,7 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 					auto condition2TypeId = transConditionCGAValToLocal(setting.take("condition2").toInt());
 					auto condition2RelId = transConNumRelCGAValToLocal(setting.take("condition2rel").toInt());
 					auto condition2Value = setting.take("condition2val").toString();
-					ui.comboBox_condition2_type->setCurrentIndex(ui.comboBox_condition_type->findData(condition2TypeId));
+					ui.comboBox_condition2_type->setCurrentIndex(ui.comboBox_condition2_type->findData(condition2TypeId));
 					on_comboBox_condition2_type_currentIndexChanged(ui.comboBox_condition2_type->currentIndex());
 					ui.comboBox_condition2_relation->setCurrentIndex(ui.comboBox_condition2_relation->findData(condition2RelId));
 
@@ -1369,9 +1370,9 @@ bool GameCustomBattleWgt::ParseBattleSettings(const QJsonValue &val)
 					}
 					ui.comboBox_playerAction->setCurrentIndex(playerActionIndex);
 					ui.comboBox_playerActionValue->clear();
-					ui.comboBox_playerActionValue->addItem(tr("Lv Max"), QVariant(0));
+					ui.comboBox_playerActionValue->addItem(tr("最高级"), QVariant(0));
 					for (auto lv = 1; lv <= 10; ++lv)
-						ui.comboBox_playerActionValue->addItem(tr("Lv %1").arg(lv), QVariant(lv));
+						ui.comboBox_playerActionValue->addItem(tr("%1级").arg(lv), QVariant(lv));
 					ui.comboBox_playerActionValue->setCurrentIndex(playerSkillLevel);
 					ui.comboBox_playerTarget->setEnabled(true);
 				}
@@ -1566,12 +1567,169 @@ void GameCustomBattleWgt::on_pushButton_float_clicked()
 	emit signal_float_window();
 }
 
+void GameCustomBattleWgt::dealTableViewClicked(const QModelIndex &index)
+{
+	if (!index.isValid())
+	{
+		qDebug() << "Invalid index";
+		return;
+	}
+	auto pSettings = m_model->BattleSettingFromIndex(index);
+	if (!pSettings)
+	{
+		return;
+	}
+	if (pSettings->m_condition)
+	{
+		int conditionTypeId = pSettings->m_condition->GetDevType();
+		ui.comboBox_condition_type->setCurrentIndex(ui.comboBox_condition_type->findData(conditionTypeId));
+		on_comboBox_condition_type_currentIndexChanged(ui.comboBox_condition_type->currentIndex());
+		int conditionRelId = pSettings->m_condition->GetConditionRelId();
+		ui.comboBox_condition_relation->setCurrentIndex(ui.comboBox_condition_relation->findData(conditionRelId));
+
+		QString conditionValue;
+		pSettings->m_condition->GetConditionValue(conditionValue);
+		ui.comboBox_condition_value->setCurrentText(conditionValue);
+		if (ui.comboBox_condition_type->currentIndex() == dtCondition_TeammateDebuff)
+		{
+			if (conditionValue.toInt() == FL_DEBUFF_SLEEP)
+				ui.comboBox_condition_value->setCurrentIndex(0);
+			else if (conditionValue.toInt() == FL_DEBUFF_MEDUSA)
+				ui.comboBox_condition_value->setCurrentIndex(1);
+			else if (conditionValue.toInt() == FL_DEBUFF_DRUNK)
+				ui.comboBox_condition_value->setCurrentIndex(2);
+			else if (conditionValue.toInt() == FL_DEBUFF_CHAOS)
+				ui.comboBox_condition_value->setCurrentIndex(3);
+			else if (conditionValue.toInt() == FL_DEBUFF_FORGET)
+				ui.comboBox_condition_value->setCurrentIndex(4);
+			else if (conditionValue.toInt() == FL_DEBUFF_POISON)
+				ui.comboBox_condition_value->setCurrentIndex(5);
+			else if (conditionValue.toInt() == FL_DEBUFF_ANY)
+				ui.comboBox_condition_value->setCurrentIndex(6);
+		}
+	}
+	
+	if (pSettings->m_condition2)
+	{
+		auto condition2TypeId = pSettings->m_condition2->GetDevType();
+		auto condition2RelId = pSettings->m_condition2->GetConditionRelId();
+		QString condition2Value;
+		pSettings->m_condition2->GetConditionValue(condition2Value);
+		ui.comboBox_condition2_type->setCurrentIndex(ui.comboBox_condition2_type->findData(condition2TypeId));
+		on_comboBox_condition2_type_currentIndexChanged(ui.comboBox_condition2_type->currentIndex());
+		ui.comboBox_condition2_relation->setCurrentIndex(ui.comboBox_condition2_relation->findData(condition2RelId));
+
+		ui.comboBox_condition2_value->setCurrentText(condition2Value);
+		if (ui.comboBox_condition2_type->currentIndex() == dtCondition_TeammateDebuff)
+		{
+			if (condition2Value.toInt() == FL_DEBUFF_SLEEP)
+				ui.comboBox_condition2_value->setCurrentIndex(0);
+			else if (condition2Value.toInt() == FL_DEBUFF_MEDUSA)
+				ui.comboBox_condition2_value->setCurrentIndex(1);
+			else if (condition2Value.toInt() == FL_DEBUFF_DRUNK)
+				ui.comboBox_condition2_value->setCurrentIndex(2);
+			else if (condition2Value.toInt() == FL_DEBUFF_CHAOS)
+				ui.comboBox_condition2_value->setCurrentIndex(3);
+			else if (condition2Value.toInt() == FL_DEBUFF_FORGET)
+				ui.comboBox_condition2_value->setCurrentIndex(4);
+			else if (condition2Value.toInt() == FL_DEBUFF_POISON)
+				ui.comboBox_condition2_value->setCurrentIndex(5);
+			else if (condition2Value.toInt() == FL_DEBUFF_ANY)
+				ui.comboBox_condition2_value->setCurrentIndex(6);
+		}
+	}
+	
+	if (pSettings->m_playerAction)
+	{
+		auto playerActionId = pSettings->m_playerAction->GetDevType();
+		if (playerActionId == dtAction_PlayerChangePet || playerActionId == dtAction_PlayerUseItem)
+		{
+			ui.comboBox_playerAction->setCurrentIndex(ui.comboBox_playerAction->findData(playerActionId));
+			on_comboBox_playerAction_currentIndexChanged(ui.comboBox_playerAction->currentIndex());
+			QString playerActionValue;
+			pSettings->m_playerAction->GetActionName(playerActionValue, true);
+			ui.comboBox_playerActionValue->setCurrentText(playerActionValue);
+		}
+		else if (playerActionId == dtAction_PlayerSkillAttack)
+		{
+			auto playerSkillAction = (CBattleAction_PlayerSkillAttack *)pSettings->m_playerAction;
+
+			QString playerSkillName = playerSkillAction->GetSkillName();
+			auto playerSkillLevel = playerSkillAction->GetSkillLevel();
+
+			int playerActionIndex = ui.comboBox_playerAction->findText(playerSkillName);
+			if (playerActionIndex == -1)
+			{
+				ui.comboBox_playerAction->addItem(playerSkillName, dtAction_PlayerSkillAttack);
+				playerActionIndex = ui.comboBox_playerAction->findText(playerSkillName);
+			}
+			ui.comboBox_playerAction->setCurrentIndex(playerActionIndex);
+			ui.comboBox_playerActionValue->clear();
+			ui.comboBox_playerActionValue->addItem(tr("最高级"), QVariant(0));
+			for (auto lv = 1; lv <= 10; ++lv)
+				ui.comboBox_playerActionValue->addItem(tr("%1级").arg(lv), QVariant(lv));
+			ui.comboBox_playerActionValue->setCurrentIndex(playerSkillLevel);
+			ui.comboBox_playerTarget->setEnabled(true);
+		}
+		else
+		{
+			ui.comboBox_playerAction->setCurrentIndex(ui.comboBox_playerAction->findData(playerActionId));
+			on_comboBox_playerAction_currentIndexChanged(ui.comboBox_playerAction->currentIndex());
+		}
+	}
+	
+	if (pSettings->m_playerTarget)
+	{
+		auto playerTargetId = pSettings->m_playerTarget->GetDevType();
+		auto playerTargetSel = pSettings->m_playerTarget->GetTargetSelectId();
+		ui.comboBox_playerTarget->setCurrentIndex(ui.comboBox_playerTarget->findData(playerTargetId));
+		on_comboBox_playerTarget_currentIndexChanged(ui.comboBox_playerTarget->currentIndex());
+		ui.comboBox_playerTargetSelect->setCurrentIndex(ui.comboBox_playerTargetSelect->findData(playerTargetSel));
+	}
+	
+
+	if (pSettings->m_petAction)
+	{
+		auto petActionId = pSettings->m_petAction->GetDevType();
+		if (petActionId == dtAction_PetSkillAttack)
+		{
+			auto petSkillAction = (CBattleAction_PetSkillAttack *)pSettings->m_petAction;
+			auto petSkillName = petSkillAction->GetSkillName();
+			int petActionIndex = ui.comboBox_petAction->findText(petSkillName);
+			if (petActionIndex == -1)
+			{
+				ui.comboBox_petAction->addItem(petSkillName, dtAction_PetSkillAttack);
+				petActionIndex = ui.comboBox_petAction->findText(petSkillName);
+			}
+			ui.comboBox_petAction->setCurrentIndex(petActionIndex);
+			//	ui.comboBox_petAction->setCurrentText(petSkillName);
+			//	on_comboBox_petAction_currentIndexChanged(dtAction_PetSkillAttack);
+		}
+		else
+		{
+			ui.comboBox_petAction->setCurrentIndex(petActionId);
+			on_comboBox_petAction_currentIndexChanged(ui.comboBox_petAction->currentIndex());
+		}
+
+	}
+	if (pSettings->m_petTarget)
+	{
+
+		auto petTargetId = pSettings->m_petTarget->GetDevType();
+		auto petTargetSel = pSettings->m_petTarget->GetTargetSelectId();
+		ui.comboBox_petTarget->setCurrentIndex(ui.comboBox_petTarget->findData(petTargetId));
+		on_comboBox_petTarget_currentIndexChanged(ui.comboBox_petTarget->currentIndex());
+		ui.comboBox_petTargetSelect->setCurrentIndex(ui.comboBox_petTargetSelect->findData(petTargetSel));
+	}
+}
+
 void GameCustomBattleWgt::doLoadUserConfig(QSettings &iniFile)
 {
 	//战斗设置读取
 	auto LoadSettingCfg = [&](int i)
 	{
 		bool bTrans = false;
+
 		QString sDevType = iniFile.value(QString("ActionCondType%1").arg(i)).toString();
 		int nDevType = sDevType.toInt(&bTrans);
 		if (!bTrans) //字符串 转为int
@@ -1601,6 +1759,43 @@ void GameCustomBattleWgt::doLoadUserConfig(QSettings &iniFile)
 				condData.append(tmpVal.toInt());
 		}
 		pCond->SetConditionData(condData);
+		
+		CBattleCondition *pCond2 = nullptr;
+		QString sDevType2 = iniFile.value(QString("ActionCondType2-%1").arg(i)).toString();
+		nDevType = sDevType2.toInt(&bTrans);
+		if (!bTrans) //字符串 转为int
+			nDevType = g_pAutoBattleCtrl->GetBattleTypeFromText(sDevType2);
+		if (nDevType!=0)
+		{
+			pCond2 = (CBattleCondition *)g_battleModuleReg.CreateNewBattleObj(nDevType);
+			if (pCond2)
+			{
+				nTextCondCount = iniFile.value(QString("ActionCondTextValCount2-%1").arg(i)).toInt();
+				QStringList textCondData2;
+				for (int n = 0; n < nTextCondCount; ++n)
+				{
+					textCondData2.append(iniFile.value(QString("ActionCondTextVal2-%1-%2").arg(i).arg(n)).toString());
+				}
+				pCond2->SetConditionTextData(textCondData2);
+
+				nCondDataCount = iniFile.value(QString("ActionCondValCount2-%1").arg(i)).toInt();
+				QList<int> condData2;
+				for (int n = 0; n < nCondDataCount; ++n)
+				{
+					QVariant tmpVal = iniFile.value(QString("ActionCondVal2-%1-%2").arg(i).arg(n));
+					if (n == 0)
+					{
+						if (g_pAutoBattleCtrl->GetBattleTypeFromText(tmpVal.toString()) == 0)
+							condData2.append(tmpVal.toInt());
+						else
+							condData2.append(g_pAutoBattleCtrl->GetBattleTypeFromText(tmpVal.toString()));
+					}
+					else
+						condData2.append(tmpVal.toInt());
+				}
+				pCond2->SetConditionData(condData2);
+			}			
+		}
 
 		//	nDevType = iniFile.value(QString("ActionType%1").arg(i)).toInt();
 		sDevType = iniFile.value(QString("ActionType%1").arg(i)).toString();
@@ -1688,9 +1883,9 @@ void GameCustomBattleWgt::doLoadUserConfig(QSettings &iniFile)
 			pPetTarget->SetTargetVal(tgtVal);
 			pPetTarget->SetTargetSpecialName(iniFile.value(QString("PetTargetSpcName%1").arg(i)).toString());
 		}
-
-		CBattleCondition *pCondition2 = new CBattleCondition_Ignore();
-		CBattleSettingPtr ptr(new CBattleSetting(pCond, pCondition2, pAction, pTarget, pPetAction, pPetTarget));
+		if (pCond2==nullptr)
+			pCond2 = new CBattleCondition_Ignore();
+		CBattleSettingPtr ptr(new CBattleSetting(pCond, pCond2, pAction, pTarget, pPetAction, pPetTarget));
 		return ptr;
 	};
 	//战斗设置
@@ -1758,6 +1953,24 @@ void GameCustomBattleWgt::doSaveUserConfig(QSettings &iniFile)
 				iniFile.setValue(QString("ActionCondVal%1-%2").arg(index).arg(i), condData.at(i));
 		}
 		iniFile.setValue(QString("ActionCondValCount%1").arg(index), condData.size());
+		
+		CBattleCondition *pCond2 = pSetting->m_condition2;
+		iniFile.setValue(QString("ActionCondType2-%1").arg(index), g_pAutoBattleCtrl->GetBattleTypeText(pCond2->GetDevType()));
+		QStringList textCondData2 = pCond2->GetConditionTextData();
+		for (int i = 0; i < textCondData2.size(); ++i)
+		{
+			iniFile.setValue(QString("ActionCondTextVal2-%1-%2").arg(index).arg(i), textCondData2.at(i));
+		}
+		iniFile.setValue(QString("ActionCondTextValCount2-%1").arg(index), textCondData2.size());
+		QList<int> condData2 = pCond2->GetConditionData();
+		for (int i = 0; i < condData2.size(); ++i)
+		{
+			if (i == 0)
+				iniFile.setValue(QString("ActionCondVal2-%1-%2").arg(index).arg(i), g_pAutoBattleCtrl->GetBattleTypeText(condData2.at(i)));
+			else
+				iniFile.setValue(QString("ActionCondVal2-%1-%2").arg(index).arg(i), condData2.at(i));
+		}
+		iniFile.setValue(QString("ActionCondValCount2-%1").arg(index), condData2.size());
 
 		CBattleAction *pAction = pSetting->m_playerAction;
 		QStringList textAction;
