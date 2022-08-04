@@ -239,7 +239,11 @@ void AttachGameWnd::ConnectToServer(quint32 ProcessId, quint32 ThreadId, int por
 	}
 	else
 	{
-		QMessageBox::information(this, "Info", ("Could not connect to local RPC server."));
+		
+		QMessageBox msg;
+		msg.setText("Could not connect to local RPC server.");
+		QTimer::singleShot(15000, &msg, &QMessageBox::reject); //15秒
+		msg.exec();
 	}
 }
 
