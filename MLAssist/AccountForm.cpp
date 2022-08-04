@@ -1286,7 +1286,7 @@ void AccountForm::on_groupBox_createChara_clicked(bool bflag)
 		ui->lineEdit_CharaElements->setEnabled(false);
 	}
 }
-#include "RpcSocketClient.h"
+//#include "RpcSocketClient.h"
 void AccountForm::on_pushButton_Statistics_clicked()
 {
 	//RpcSocketClient::getInstance().UploadMapData();

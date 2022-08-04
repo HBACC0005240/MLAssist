@@ -137,16 +137,16 @@ void GamePostwar::doLoadJsConfig(QJsonObject &obj)
 			ui.checkBox_petEatMagic->setChecked(playerobj.take("petmed").toBool());
 
 		if (playerobj.contains("usefoodat"))
-			ui.lineEdit_playerEatMedicament->setText(playerobj.take("usefoodat").toString());
+			ui.lineEdit_playerEatMedicament->setText(playerobj.take("usefoodat").toString().remove("%"));
 
 		if (playerobj.contains("usemedat"))
-			ui.lineEdit_playerEatMagic->setText(playerobj.take("usemedat").toString());
+			ui.lineEdit_playerEatMagic->setText(playerobj.take("usemedat").toString().remove("%"));
 
 		if (playerobj.contains("petfoodat"))
-			ui.lineEdit_petEatMedicament->setText(playerobj.take("petfoodat").toString());
+			ui.lineEdit_petEatMedicament->setText(playerobj.take("petfoodat").toString().remove("%"));
 
 		if (playerobj.contains("petmedat"))
-			ui.lineEdit_petEatMagic->setText(playerobj.take("petmedat").toString());
+			ui.lineEdit_petEatMagic->setText(playerobj.take("petmedat").toString().remove("%"));
 	}
 	if (obj.contains("itemdroplist"))
 	{
@@ -181,7 +181,8 @@ void GamePostwar::doLoadJsConfig(QJsonObject &obj)
 			ui.listWidget_die->clear();
 			const QJsonArray arr = val.toArray();
 			QJsonArray::const_iterator itor = arr.constBegin();
-			while (itor != arr.constEnd())
+			int tryNum = 0;
+			while (itor != arr.constEnd() && tryNum<1000)
 			{
 				if ((*itor).isString())
 				{
@@ -190,11 +191,17 @@ void GamePostwar::doLoadJsConfig(QJsonObject &obj)
 					{
 						auto strip = line.indexOf("|");
 						if (strip <= 0)
+						{
+							tryNum++;
 							continue;
+						}
 						bool bValue = false;
 						int maxcount = line.mid(strip + 1).toInt(&bValue);
 						if (!(bValue && maxcount > 0))
+						{
+							tryNum ++;
 							continue;
+						}
 						QString szName;
 						if (line.at(0) == '#')
 						{

@@ -17,7 +17,11 @@
 #ifdef Q_OS_UNIX
 #include "unistd.h"
 #endif
+#ifdef _DEBUG
+#pragma comment(lib, "../ThirdPart/qmqtt/x32/debug/lib/Qt5Mqttd.lib")
+#else
 #pragma comment(lib, "../ThirdPart/qmqtt/x32/release/lib/Qt5Mqtt.lib")
+#endif
 ObjectModuleRegisty::~ObjectModuleRegisty(void)
 {
 	for (auto it = moduleInfoList.begin(); it != moduleInfoList.end(); ++it)
@@ -945,7 +949,7 @@ void ITObjectDataMgr::StoreServerItemData(GameItemPtr pItem)
 	else
 	{
 		//取服务器数据 没有再新建
-		localItem = RpcSocketClient::getInstance().GetCGItemData(pItem->id);
+		localItem =RpcSocketClient::getInstance().GetCGItemData(pItem->id);
 		if (!localItem)
 		{
 			localItem = newOneObject(TObject_Item).dynamicCast<ITGameItem>();

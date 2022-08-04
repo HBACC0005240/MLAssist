@@ -7,7 +7,7 @@ GameOnlineInfo::GameOnlineInfo(QWidget *parent)
 {
 	ui.setupUi(this);
 	QTimer *timer = new QTimer;
-	connect(timer, SIGNAL(timeOut()), this, SLOT(doUpdateTimer()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(doUpdateTimer()));
 	timer->start(5000);
 }
 

@@ -498,7 +498,7 @@ void GamePythonScriptWgt::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 Thr
 
 void GamePythonScriptWgt::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
 {
-	if (path.endsWith("lua") || path.endsWith("luae"))
+	if (!path.endsWith("py"))
 		return;
 	if (!path.isEmpty())
 	{

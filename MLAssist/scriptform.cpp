@@ -543,7 +543,7 @@ void ScriptForm::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, qu
 
 void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
 {
-	if (path.endsWith("lua") || path.endsWith("luae"))
+	if (!path.endsWith("js"))
 		return;
 	if (!path.isEmpty())
 	{

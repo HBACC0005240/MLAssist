@@ -12,6 +12,14 @@
 #include <QDebug>
 #include <QTextCodec>
 #include <QtWidgets/QApplication>
+#include "../lib/vld/vld.h"
+#include "../lib/vld/vld_def.h"
+
+//#ifdef _DEBUG
+//#pragma comment(lib, "../lib/vld/debug/vld_x86.lib")
+//#pragma comment(lib, "../lib/vld/debug/vld.lib")
+//#pragma comment(lib, "../lib/vld/debug/libformat.lib")
+//#endif
 
 CGA::CGAInterface *g_CGAInterface = NULL;
 QtMessageHandler gDefaultHandler = NULL;
@@ -96,5 +104,7 @@ int main(int argc, char *argv[])
 	w.show();
 	g_pGameCtrl->RunParseCmd();
 	g_pHttpServer->init();
-	return a.exec();
+	int ret= a.exec();
+	//SafeDelete(g_CGAInterface);
+	return ret;
 }

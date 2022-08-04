@@ -34,7 +34,7 @@ void GameLuaScriptInputValWgt::ClearAllInputWidget()
 
 void GameLuaScriptInputValWgt::AddOneInputVar(int type, const QVariant &sMsg, const QVariant &vData, const QVariant &vData2)
 {
-	if (m_pKeyForWidget.contains(sMsg))	//ÒÑ¾­½¨Á¢wgtµÄ Ö±½Ó·µ»Ø
+	if (m_pKeyForWidget.contains(sMsg))	//å·²ç»å»ºç«‹wgtçš„ ç›´æ¥è¿”å›
 		return;
 	switch (type)
 	{

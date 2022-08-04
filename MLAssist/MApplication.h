@@ -17,6 +17,7 @@ public:
 
 	bool notify(QObject *pObj, QEvent *ev);
 	void setWindowInstance(QWidget *wnd);
+	QWidget *getWindowInstance() { return m_pMainWindow; }
 
 private:
 	unsigned int getDragDirection();

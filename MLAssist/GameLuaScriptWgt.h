@@ -21,6 +21,7 @@ public:
 	void initScriptSystem();
 	template <class Callee>
 	void RegisterLuaFun(LuaObject &objGlobal, const char *funcName, const Callee &callee, int (Callee::*func)(LuaState *), int nupvalues = 0);
+	void UnRegisterLuaFun(LuaObject &objGlobal, const char *funcName);
 	QString GetLoginScriptData(int type = 0);
 	static void doRunScriptThread(GameLuaScriptWgt *pThis);
 	static void LuaHook(lua_State *L, lua_Debug *ar);
@@ -110,4 +111,5 @@ private:
 	LuaCodeEditorDlg *m_pLuaCodeEditor = nullptr;
 	LuaCodeHighLighter *m_pLuaCodeHighLighter;
 	bool m_bLuaCodeEditorInit = false;
+	QStringList m_regLuaFunNames;
 };

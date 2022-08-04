@@ -63,6 +63,7 @@ private:
 	QPushButton *m_pLoadBtn = nullptr;
 	QPushButton *m_pSaveBtn = nullptr;
 	QString m_lastOpenCfgPath;
+	QMutex m_jsonMutex;
 };
 /*
 经验值：EXP（Experience）

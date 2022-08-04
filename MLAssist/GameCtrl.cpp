@@ -148,6 +148,23 @@ GameCtrl::GameCtrl()
 
 GameCtrl::~GameCtrl()
 {
+	SafeDelete(m_pFirstAidCfg);
+	SafeDelete(m_pHealCfg);
+	SafeDelete(m_pBattlePetCfg);
+	SafeDelete(m_pEatFoodCfg);
+	SafeDelete(m_pEquipProtectCfg);
+	SafeDelete(m_pTransformation);
+	SafeDelete(m_pCosplay);
+	SafeDelete(m_pAutoPetRiding);
+	SafeDelete(m_upgradePetCfg);
+	SafeDelete(m_upgradePlayerCfg);
+	for (auto it = m_commandMap.begin(); it != m_commandMap.end();++it)
+	{
+		if (it.value())
+		{
+			SafeDelete(it.value());
+		}
+	}
 }
 
 GameCtrl *GameCtrl::getInstace()
@@ -1515,7 +1532,7 @@ bool GameCtrl::AutoSetBattlePet()
 		if (pet->battle_flags == TPET_STATE_BATTLE && pet->loyality < internalLoyalityVal)
 		{
 			qDebug() << "宠物忠诚低于35，内置保护启动，收回宠物！";
-			g_CGAInterface->ChangePetState(i, TPET_STATE_NONE, bResult); //3休息 2战斗 1待命 16散步
+			g_CGAInterface->ChangePetState(pet->index, TPET_STATE_NONE, bResult); //3休息 2战斗 1待命 16散步
 			bRecall = true;
 		}
 	}
@@ -1526,13 +1543,13 @@ bool GameCtrl::AutoSetBattlePet()
 			continue;
 		if (pet->battle_flags == TPET_STATE_BATTLE && m_pBattlePetCfg->bRecallLoyality && pet->loyality < m_pBattlePetCfg->nRecallLoyality)
 		{
-			g_CGAInterface->ChangePetState(i, TPET_STATE_NONE, bResult); //3休息 2战斗 1待命 16散步
+			g_CGAInterface->ChangePetState(pet->index, TPET_STATE_NONE, bResult); //3休息 2战斗 1待命 16散步
 			bRecall = true;
 			continue;
 		}
 		if (pet->battle_flags == TPET_STATE_BATTLE && m_pBattlePetCfg->bRecallMp && pet->mp < m_pBattlePetCfg->nRecallMp)
 		{
-			g_CGAInterface->ChangePetState(i, TPET_STATE_READY, bResult); //3休息 2战斗 1待命 16散步
+			g_CGAInterface->ChangePetState(pet->index, TPET_STATE_READY, bResult); //3休息 2战斗 1待命 16散步
 			continue;
 		}
 	}
@@ -1553,7 +1570,7 @@ bool GameCtrl::AutoSetBattlePet()
 				if (nMaxVal < pet->level)
 				{
 					nMaxVal = pet->level;
-					nIndex = i;
+					nIndex = pet->index;
 					nPetLoy = pet->loyality;
 				}
 			}
@@ -1568,7 +1585,7 @@ bool GameCtrl::AutoSetBattlePet()
 				if (nMaxVal < pet->hp)
 				{
 					nMaxVal = pet->hp;
-					nIndex = i;
+					nIndex = pet->index;
 					nPetLoy = pet->loyality;
 				}
 			}
@@ -1583,7 +1600,7 @@ bool GameCtrl::AutoSetBattlePet()
 				if (nMaxVal < pet->mp)
 				{
 					nMaxVal = pet->mp;
-					nIndex = i;
+					nIndex = pet->index;
 					nPetLoy = pet->loyality;
 				}
 			}

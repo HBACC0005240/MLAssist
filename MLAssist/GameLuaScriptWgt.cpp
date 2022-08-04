@@ -757,13 +757,20 @@ void GameLuaScriptWgt::initScriptSystem()
 	}
 	//luaL_requiref(ls, "common", nullptr, true);
 	(*m_pLuaState)->DoString("common=require(\"common\")");
+	m_regLuaFunNames.removeDuplicates();
 }
 template <class Callee>
 void GameLuaScriptWgt::RegisterLuaFun(LuaObject &objGlobal, const char *funcName, const Callee &callee, int (Callee::*func)(LuaState *), int nupvalues /*= 0*/)
 {
 	objGlobal.Register(funcName, callee, func);
+	m_regLuaFunNames.append(funcName);
 	if (!m_bLuaCodeEditorInit)
 		m_pLuaCodeHighLighter->appendHighLightingFun(funcName);
+}
+
+void GameLuaScriptWgt::UnRegisterLuaFun(LuaObject &objGlobal, const char *funcName)
+{
+	objGlobal.Unregister(funcName);
 }
 
 QString GameLuaScriptWgt::GetLoginScriptData(int type)
@@ -1054,7 +1061,17 @@ void GameLuaScriptWgt::on_pushButton_stop_clicked()
 	{
 		m_scriptFuture.waitForFinished();
 	}
+	if (m_pLuaState)
+	{
+		LuaObject objGlobal = (*m_pLuaState)->GetGlobals();
+		for (auto luaFun : m_regLuaFunNames)
+		{
+			objGlobal.Unregister(luaFun.toStdString().c_str());
+		}
+		m_regLuaFunNames.clear();
+	}	
 	SafeDelete(m_pLuaState);
+
 	g_pNetworkFactory->CloseAllTcpServer();
 	g_pNetworkFactory->CloseAllTcpClient();
 }

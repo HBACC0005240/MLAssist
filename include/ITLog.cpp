@@ -3,7 +3,12 @@ using namespace log4cplus;
 using namespace log4cplus::helpers;
 
 log4cplus::Logger ITLog::m_logger = log4cplus::Logger::getInstance(LOG4CPLUS_TEXT("main_log"));
+#ifdef _DEBUG
+#pragma comment(lib, "../lib/log4cplus/log4cplusUD.lib")
+#else
+#pragma comment(lib, "../lib/log4cplus/log4cplusU.lib")
 
+#endif
 ITLog* ITLog::m_pInstance = NULL;
 ITLog::ITLog()
 {

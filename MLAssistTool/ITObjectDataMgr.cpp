@@ -123,6 +123,7 @@ void ITObjectDataMgr::checkOnlineThread(ITObjectDataMgr *pThis)
 		{
 			if (it.value()->_lastUploadTime.elapsed() > 30000)//30秒 状态更新为离线
 			{
+				QMutexLocker locker(&it.value()->_mutex);
 				it.value()->_connectState = 0;
 			}
 		}
@@ -853,7 +854,12 @@ bool ITObjectDataMgr::LoadGidPets()
 				pObj->_realName = realname;
 				pObj->_level = recordset->getIntValue("level");
 				pObj->_state = recordset->getIntValue("state");
-				//pObj->_imageid = recordset->getIntValue("imageid");			
+				pObj->_health = recordset->getIntValue("health");			
+				pObj->_loyality = recordset->getIntValue("loyality");			
+				pObj->_race = recordset->getIntValue("race");			
+				pObj->_grade = recordset->getIntValue("grade");			
+				pObj->_lossMinGrade = recordset->getIntValue("lossMinGrade");			
+				pObj->_lossMaxGrade = recordset->getIntValue("lossMaxGrade");			
 				pObj->_xp = recordset->getIntValue("xp");
 				pObj->_maxxp = recordset->getIntValue("maxxp");
 				pObj->_hp = recordset->getIntValue("hp");
@@ -1011,6 +1017,7 @@ bool ITObjectDataMgr::LoadItems()
 			int nType = recordset->getIntValue("type");
 
 			QString sDesc = recordset->getStrValue("desc");
+			QString attr = recordset->getStrValue("attribute");
 			int nPrice = recordset->getIntValue("price");
 			int nMaxPile = recordset->getIntValue("maxPile");
 			int nLevel = recordset->getIntValue("level");
@@ -1026,6 +1033,7 @@ bool ITObjectDataMgr::LoadItems()
 				pItem->setObjectName(sName);
 				pItem->setObjectDsec(sDesc);
 				pItem->setObjectCode(nCode);
+				pItem->_itemAttr = attr;
 				m_pObjectList.insert(nID, pItem);
 				m_codeForGameItem.insert(nCode, pItem);
 			}

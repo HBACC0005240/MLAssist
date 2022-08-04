@@ -12,8 +12,11 @@
 #include "Tsp.h"
 #include "stdafx.h"
 #include <QDebug>
+#ifdef _DEBUG
+#pragma comment(lib, "../lib/QtXlsx/Qt5Xlsxd.lib")
+#else
 #pragma comment(lib, "../lib/QtXlsx/Qt5Xlsx.lib")
-
+#endif
 //#include <opencv2/highgui.hpp>
 //#include <opencv2/opencv.hpp>
 

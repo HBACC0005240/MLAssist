@@ -395,6 +395,8 @@ void MLAssist::load_json_config(QJsonDocument &doc)
 }
 void MLAssist::OnHttpLoadSettings(QString query, QByteArray postdata, QJsonDocument *doc)
 {
+	QMutexLocker locker(&m_jsonMutex);
+
 	QJsonObject obj;
 
 	QJsonDocument newdoc;
@@ -435,6 +437,8 @@ bool MLAssist::ParseSettings(const QByteArray &data, QJsonDocument &doc)
 }
 void MLAssist::save_json_config(QJsonDocument &doc)
 {
+	QMutexLocker locker(&m_jsonMutex);
+
 	QJsonObject obj;
 	//ui.gameChatWgt->doSaveJsConfig(obj);
 	//ui.gameDataWgt->doSaveJsConfig(obj);

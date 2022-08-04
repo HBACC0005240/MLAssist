@@ -4,7 +4,11 @@
 #include "qhttpserverrequest.hpp"
 #include "qhttpserverresponse.hpp"
 #include <QObject>
+#ifdef _DEBUG
+#pragma comment(lib, "../qhttp/xbin/qhttpd.lib")
+#else
 #pragma comment(lib, "../qhttp/xbin/qhttp.lib")
+#endif
 using namespace qhttp::server;
 class MLAssistHttpServer : public QObject
 {

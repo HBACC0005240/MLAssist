@@ -448,7 +448,7 @@ private:
 	int m_DownloadMapYSize;																	   //下载地图高
 	bool m_IsDownloadingMap;																   //是否下载地图中
 	QCommandLineParser m_cmdParser;															   //bat命令行解析
-	QHash<int, QCommandLineOption *> m_commandMap;											   //命令解析映射
+	QHash<int, QCommandLineOption* > m_commandMap;											   //命令解析映射
 	QMap<int, QString> m_upgradeTypeText;													   //升级类型对应
 	int m_lastGameConnState = -1;															   //最后一次连接状态
 	QString m_lastGameConnMsg;																   //最后一次连接提示信息
