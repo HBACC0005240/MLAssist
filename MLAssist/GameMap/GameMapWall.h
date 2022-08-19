@@ -40,6 +40,7 @@ public:
 	void SetSearchData(const QString &sName, int ntype);
 	void RunSearch();
 	void DownLoadMap();
+	void QuestMap();
 	void SaveMapData();
 
 	static void SearchThread(GameMapWall *pThis);

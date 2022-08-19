@@ -192,12 +192,16 @@ public:
 	int Lua_TradeAddStuffs(LuaState *L);
 	//扔物品
 	int Lua_ThrowItemName(LuaState *L);
+	int Lua_ThrowPosItem(LuaState *L);
 	//扔不满指定数量物品
 	int Lua_ThrowNoFullItemName(LuaState *L);
 	//拾取
 	int Lua_PickupItem(LuaState *L);
 	//叠加物品
 	int Lua_PileItem(LuaState *L);
+	//拆叠加物
+	int Lua_SplitItem(LuaState *L);
+	int Lua_SplitPosItem(LuaState *L);
 	//交换物品
 	int Lua_SwitchItem(LuaState *L);
 	//装备物品

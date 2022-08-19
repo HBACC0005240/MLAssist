@@ -401,8 +401,6 @@ typedef struct CGA_BattleContext_s
 		m_iSkillAllowBit = 0;
 		m_iPetSkillAllowBit = 0;
 		m_iConditionTarget = -1;
-		m_nLv1MaxHp = 0;
-		m_nLv1MaxMp = 0;
 		m_nCurDoubleAction = 0;
 	}
 
@@ -434,8 +432,6 @@ typedef struct CGA_BattleContext_s
 	int m_iSkillAllowBit;			 //技能是否允许
 	int m_iPetSkillAllowBit;		 //宠物技能是否允许
 	int m_iConditionTarget;			 //判断目标
-	int m_nLv1MaxHp;				 //1级怪血
-	int m_nLv1MaxMp;				 //1级怪魔
 
 	CharacterPtr m_character;
 	GameSkillList m_PlayerSkills;

@@ -324,8 +324,6 @@ bool CBattleWorker::OnBattleAction(int flags)
 	m_BattleContext.m_bIsPetDoubleAction = m_bPetDoubleAction;	   //宠物二动
 	m_BattleContext.m_bIsPlayerForceAction = m_bPlayerForceAction; //人物强制行动
 	m_BattleContext.m_bIsHaveLv1Enemy = false;					   //重置1级敌人
-	m_BattleContext.m_nLv1MaxHp = 0;							   //重置1级最大血
-	m_BattleContext.m_nLv1MaxMp = 0;							   //重置1级最大魔
 	m_BattleContext.m_bIsSealLv1Enemy = m_bHave1LvEnemy;		   //ui勾选1级宠 是否封印
 	//分析战斗数据
 	AnalysisBattleData();
@@ -546,7 +544,7 @@ bool CBattleWorker::CheckEscape()
 	if (m_pEscapeSettingList.size() < 1)
 		return false;
 	auto tmpBattleCtx = m_BattleContext;
-	QList<int> internalOrd = QList<int>({ TEscapeSet_All, TEscapeSet_TeammateCount, TEscapeSet_No1Lv, TEscapeSet_NoBoss, TEscapeSet_SpecialEnemy, TEscapeSet_EnemyAvgLv, TEscapeSet_EnemyCount });
+	QList<int> internalOrd = QList<int>({ TEscapeSet_All, TEscapeSet_TeammateCount, TEscapeSet_Filter1Lv,TEscapeSet_No1Lv, TEscapeSet_NoBoss, TEscapeSet_SpecialEnemy, TEscapeSet_EnemyAvgLv, TEscapeSet_EnemyCount });
 	for (int i = 0; i < internalOrd.size(); ++i)
 	{
 		auto escapeList = m_pEscapeSettingList.values(internalOrd[i]);
@@ -562,8 +560,6 @@ bool CBattleWorker::CheckEscape()
 bool CBattleWorker::CheckHaveLv1()
 {
 	bool bHave = false;
-	int nMaxHp = 0;
-	int nMaxMp = 0;
 	//启用1级抓宠设置
 	if (!m_bHave1LvEnemy)
 		return false;
@@ -571,46 +567,11 @@ bool CBattleWorker::CheckHaveLv1()
 	if (g_pGameFun->GetPetCount() >= 5)
 		return false;
 	bHave = m_BattleContext.m_bIsHaveLv1Enemy;
-	nMaxHp = m_BattleContext.m_nLv1MaxHp;
-	nMaxMp = m_BattleContext.m_nLv1MaxMp;
 	if (bHave == false)
 		return false;
 	if (m_pLv1SettingList.size() < 1)
 		return false;
-
-	//过滤血检查
-	bool bSkip = false;
-	if (m_bCheckLv1MaxHp)
-	{
-		if (nMaxHp < m_nCheckLv1MaxHpVal) //1级怪不达标 执行其他操作
-		{
-			bSkip = true;
-		}
-	}
-	if (m_bCheckLv1MaxMp)
-	{
-		if (nMaxMp < m_nCheckLv1MaxMpVal) //1级怪不达标 执行其他操作
-		{
-			bSkip = true;
-		}
-	}
 	auto tmpBattleCtx = m_BattleContext;
-	if (bSkip)
-	{
-		//如果过滤勾选了，并且1级怪不达标，并且勾选了无1级逃跑，则逃跑处理，否则按默认1-10怪攻击
-		if (m_bNoLv1Escape) //无1级怪逃跑
-		{
-			qDebug() << QString("1级怪不达标：Hp-%1 Mp-%2").arg(nMaxHp).arg(nMaxMp);
-			auto escapeList = m_pEscapeSettingList.values(TEscapeSet_No1Lv);
-			foreach (CBattleSettingPtr setting, escapeList)
-			{
-				if (setting->DoAction(tmpBattleCtx))
-					return true;
-			}
-		}
-		//跳过此次1判断 执行后续判断
-		return false;
-	}
 	QList<int> internalOrd = QList<int>({ /*TLv1EnemySet_FilterHP, TLv1EnemySet_FilterMP,*/ TLv1EnemySet_RecallPet, TLv1EnemySet_RoundOne, TLv1EnemySet_Lv1HpAction,
 			TLv1EnemySet_CleanNoLv1, TLv1EnemySet_LastSet });
 	for (int i = 0; i < internalOrd.size(); ++i)
@@ -708,20 +669,9 @@ void CBattleWorker::OnSetHave1LvEnemy(int state)
 }
 
 void CBattleWorker::OnSetHave1LvAction(int nAction, bool bEnabled)
-{
-	if (nAction == TLv1EnemySet_FilterHP)
-	{
-		m_bCheckLv1MaxHp = bEnabled;
-	}
-	else if (nAction == TLv1EnemySet_FilterMP)
-	{
-		m_bCheckLv1MaxMp = bEnabled;
-	}
-	else
-	{
-		if (m_pLv1SettingList.value(nAction) != nullptr)
-			m_pLv1SettingList.value(nAction)->bEnabled = bEnabled;
-	}
+{	
+	if (m_pLv1SettingList.value(nAction) != nullptr)
+		m_pLv1SettingList.value(nAction)->bEnabled = bEnabled;	
 }
 
 void CBattleWorker::OnSetNoPetFirstAction(int state)
@@ -985,9 +935,8 @@ void CBattleWorker::AnalysisBattleData()
 		}
 		if (pBattleUnitList[i]->level == 1)
 		{
+			//如果有多个1级怪 每次保存最大血魔
 			g_pAutoBattleCtrl->m_BattleContext.m_bIsHaveLv1Enemy = true;
-			g_pAutoBattleCtrl->m_BattleContext.m_nLv1MaxHp = pBattleUnitList[i]->maxhp;
-			g_pAutoBattleCtrl->m_BattleContext.m_nLv1MaxMp = pBattleUnitList[i]->maxmp;
 			g_pGameCtrl->signal_addOneChat(QString("发现：%1 1级宠").arg(pBattleUnitList[i]->name));
 			//qDebug() << pBattleUnitList[i]->level;
 		}

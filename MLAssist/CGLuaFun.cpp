@@ -1338,6 +1338,17 @@ int CGLuaFun::Lua_ThrowItemName(LuaState *L)
 	return 0;
 }
 
+int CGLuaFun::Lua_ThrowPosItem(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	
+	int nPos = args[1].GetInteger();
+	g_pGameFun->ThrowItemPos(nPos);
+	return 0;
+}
+
 int CGLuaFun::Lua_ThrowNoFullItemName(LuaState *L)
 {
 	LuaStack args(L);
@@ -1361,6 +1372,25 @@ int CGLuaFun::Lua_PileItem(LuaState *L)
 	QString sName = L->IsString(1) ? args[1].GetString() : "";
 	int nCount = L->IsInteger(2) ? args[2].GetInteger() : 0;
 	g_pGameFun->PileItem(sName, nCount);
+	return 0;
+}
+
+int CGLuaFun::Lua_SplitItem(LuaState *L)
+{
+	LuaStack args(L);
+	QString sName = args.Count() > 0 ? args[1].GetString() : "";
+	int nCount = args.Count() > 1 ? args[2].GetInteger() : 0;
+	int nFlags = args.Count() > 2 ? args[3].GetInteger() : 0;	
+	g_pGameFun->SplitItem(sName, nCount,nFlags);
+	return 0;
+}
+int CGLuaFun::Lua_SplitPosItem(LuaState *L)
+{
+	LuaStack args(L);
+	int nPos = args.Count() > 0 ? args[1].GetInteger() : -1;
+	int nCount = args.Count() > 1 ? args[2].GetInteger() : 0;
+	int nFlags = args.Count() > 2 ? args[3].GetInteger() : 0;
+	g_pGameFun->SplitPosItem(nPos, nCount, nFlags);
 	return 0;
 }
 
@@ -2336,7 +2366,9 @@ int CGLuaFun::Lua_WaitTeammatesEx(LuaState *L)
 
 int CGLuaFun::Lua_WaitRecvHead(LuaState *L)
 {
-	auto dlg = g_pGameFun->WaitRecvHead();
+	LuaStack args(L);
+	int timeout = args.Count() > 0 ? args[1].GetInteger() : 10000;
+	auto dlg = g_pGameFun->WaitRecvHead(timeout);
 	LuaObject tableObj(L);
 	tableObj.AssignNewTable();
 	tableObj.SetInteger("type", 0);

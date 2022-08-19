@@ -1745,7 +1745,8 @@ bool GameCtrl::AutoPickItems()
 				{
 					if (m_bAutoPickCfg.bFollow)
 					{
-						g_pGameFun->MoveToNpcNear(unit.xpos, unit.ypos);
+						if(g_pGameFun->MoveToNpcNear(unit.xpos, unit.ypos) ==false)
+							break;
 					}
 					curPos = g_pGameFun->GetMapCoordinate();
 					if (g_pGameFun->IsNearTarget(curPos.x(), curPos.y(), unit.xpos, unit.ypos))
@@ -2484,7 +2485,6 @@ void GameCtrl::OnQueueDownloadMap()
 {
 	if (!m_IsDownloadingMap)
 		return;
-	return; //下载地图封了 先屏蔽
 	//	qDebug() << "OnQueueDownloadMap";
 	int ingame = 0;
 	bool connected = g_CGAInterface->IsConnected();
@@ -3463,7 +3463,13 @@ void GameCtrl::NotifyPlayerMenuCallback(CGA::cga_player_menu_items_t items)
 	//*menu = items;
 	QMutexLocker locker(&m_playerMenuResMutex);
 	m_playerMenuCache.append(qMakePair(GetTickCount(), menu));
-	emit NotifyPlayerMenu(menu);
+	if (m_nRunScriptState == SCRIPT_CTRL_RUN)
+	{
+		Sleep(m_nScriptDelayTime + 100);
+		emit NotifyPlayerMenu(menu);
+	}
+	else
+		emit NotifyPlayerMenu(menu);
 }
 //工作状态回调
 void GameCtrl::NotifyWorkingResultCallback(CGA::cga_working_result_t msg)
@@ -3487,7 +3493,13 @@ void GameCtrl::NotifyWorkingResultCallback(CGA::cga_working_result_t msg)
 	//		 << working->intelligence << working->levelup << working->name.c_str() << working->skillful << working->status
 	//		 << working->success << working->type << working->unk << working->value << working->value2 << working->xp;
 	////是否成功working->success 技能类型type 获得物品name 技能是否升级levelup 物品类型？imgid status
-	NotifyWorkingResult(working);
+	if (m_nRunScriptState == SCRIPT_CTRL_RUN)
+	{
+		Sleep(m_nScriptDelayTime + 100);
+		NotifyWorkingResult(working);
+	}
+	else
+		NotifyWorkingResult(working);
 }
 
 void GameCtrl::NotifyServerShutdown(int port)
@@ -3562,7 +3574,13 @@ void GameCtrl::NotifyBattleActionCallBack(int flags)
 		QMutexLocker locker(&m_battleResMutex);
 		m_battleActionCache.append(qMakePair(GetTickCount(), flags));
 	}
-	emit NotifyBattleAction(flags);
+	if (m_nRunScriptState == SCRIPT_CTRL_RUN)
+	{
+		Sleep(m_nScriptDelayTime + 200);
+		emit NotifyBattleAction(flags); //程序内部使用的
+	}
+	else
+		emit NotifyBattleAction(flags);
 }
 
 void GameCtrl::NotifyUnitMenuCallback(CGA::cga_unit_menu_items_t items)
@@ -3571,13 +3589,20 @@ void GameCtrl::NotifyUnitMenuCallback(CGA::cga_unit_menu_items_t items)
 	for (int i = 0; i < items.size(); ++i)
 	{
 		menu->push_back(items[i]);
+		qDebug() << "NotifyUnitMenuCallback" <<  items[i].name.c_str() << items[i].index;
 	}
 	//*menu = items;
 
 	//	qDebug() << "NotifyUnitMenuCallback" << items.size() << menu->size();
 	QMutexLocker locker(&m_unitMenuResMutex);
 	m_unitMenuCache.append(qMakePair(GetTickCount(), menu));
-	emit NotifyUnitMenu(menu);
+	if (m_nRunScriptState == SCRIPT_CTRL_RUN)
+	{
+		Sleep(m_nScriptDelayTime + 200);
+		emit NotifyUnitMenu(menu); //程序内部使用的
+	}
+	else
+		emit NotifyUnitMenu(menu);
 }
 
 void GameCtrl::NotifyConnectionStateCallback(CGA::cga_conn_state_t msg)
@@ -3587,7 +3612,13 @@ void GameCtrl::NotifyConnectionStateCallback(CGA::cga_conn_state_t msg)
 	connState->state = msg.state;
 	QMutexLocker locker(&m_connectResMutex);
 	m_connectStateCache.append(qMakePair(GetTickCount(), connState));
-	NotifyConnectionState(msg.state, QString::fromStdString(msg.msg));
+	if (m_nRunScriptState == SCRIPT_CTRL_RUN)
+	{
+		Sleep(m_nScriptDelayTime + 200);
+		emit NotifyConnectionState(msg.state, QString::fromStdString(msg.msg)); //程序内部使用的
+	}
+	else
+		emit NotifyConnectionState(msg.state, QString::fromStdString(msg.msg));
 }
 
 void GameCtrl::NotifyDownloadMapCallback(CGA::cga_download_map_t down)

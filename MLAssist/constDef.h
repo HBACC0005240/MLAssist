@@ -149,6 +149,8 @@ enum TEscapeSet
 	TEscapeSet_EnemyCount = 5,	  //敌人个数
 	TEscapeSet_NoBoss = 6,		  //非Boss逃跑
 	TEscapeSet_TeammateCount = 7, //队伍人数逃跑
+	TEscapeSet_Filter1Lv = 8,	//过滤1级
+
 
 };
 //1级宠设置

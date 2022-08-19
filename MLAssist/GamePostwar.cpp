@@ -573,10 +573,17 @@ void GamePostwar::doAddRenItem(GameItemPtr pItem, bool bCode)
 {
 	if (!pItem || pItem->name.isEmpty())
 		return;
+
 	QString sName = pItem->name;
 	QString sToolTip = QString("%1|%2").arg(pItem->name).arg(pItem->id);
 	if (bCode)
 		sName = QString::number(pItem->id);
+	auto pFindItem = ui.listWidget_ren->findItems(sName, Qt::MatchExactly);
+	if (pFindItem.size() > 0)
+	{
+		pFindItem.at(0)->setCheckState( Qt::Checked);
+		return;
+	}
 	QListWidgetItem *pTableItem = new QListWidgetItem(sName);
 	pTableItem->setCheckState(Qt::Checked);
 	ui.listWidget_ren->addItem(pTableItem);

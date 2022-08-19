@@ -396,6 +396,14 @@ void GameMapWall::RunSearch()
 
 void GameMapWall::DownLoadMap()
 {
+	if (m_collision)
+	{
+		emit RequestDownloadMap(m_collision->xsize, m_collision->ysize);
+	}
+}
+
+void GameMapWall::QuestMap()
+{
 	int index1 = 0, index2 = 0, mapIndex = 0;
 	std::string filemap;
 	if (g_CGAInterface->GetMapIndex(index1, index2, mapIndex, filemap))
@@ -407,11 +415,6 @@ void GameMapWall::DownLoadMap()
 		}
 	}
 	QtConcurrent::run(AutoMazeOpen, this);
-
-	//if (m_collision)
-	//{
-	//	emit RequestDownloadMap(m_collision->xsize, m_collision->ysize);
-	//}
 }
 
 void GameMapWall::SaveMapData()

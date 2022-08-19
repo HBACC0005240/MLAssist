@@ -830,6 +830,59 @@ void GameBattleWgt::ResetNumRoundBtnColor()
 	}
 }
 
+void GameBattleWgt::SetFilterLv1Pet()
+{
+	int nHpVal = ui.lineEdit_Lv1FilterHp->text().toInt();
+	int nMpVal = ui.lineEdit_Lv1FilterMp->text().toInt();
+	if (ui.checkBox_Lv1FilterHp->isChecked() && ui.checkBox_Lv1FilterMp->isChecked())
+	{
+		CBattleCondition_EnemyLv1MaxHp *pCondition = (CBattleCondition_EnemyLv1MaxHp *)g_battleModuleReg.CreateNewBattleObj(dtCondition_EnemyLv1MaxHp);
+		pCondition->setConditionPercentage(false);
+		pCondition->setConditionValue(nHpVal);
+		pCondition->setRelation(dtCompare_LessThan);
+		CBattleCondition_EnemyLv1MaxMp *pCondition2 = (CBattleCondition_EnemyLv1MaxMp *)g_battleModuleReg.CreateNewBattleObj(dtCondition_EnemyLv1MaxMp);
+		pCondition->setConditionPercentage(false);
+		pCondition->setConditionValue(nMpVal);
+		pCondition->setRelation(dtCompare_LessThan);
+		CBattleAction *pPlayerAction = (CBattleAction *)g_battleModuleReg.CreateNewBattleObj(dtAction_PlayerEscape);
+		CBattleAction *pPetAction = nullptr;
+		CBattleTarget *pPetTarget = nullptr;
+		CreatePetActionTarget(pPetAction, pPetTarget);
+		CBattleSettingPtr ptr(new CBattleSetting(pCondition, pCondition2, pPlayerAction, nullptr, pPetAction, pPetTarget));
+		g_pAutoBattleCtrl->AddEscapeSetting(TEscapeSet_Filter1Lv, ptr);
+	}
+	else if (ui.checkBox_Lv1FilterHp->isChecked() && !ui.checkBox_Lv1FilterMp->isChecked())
+	{
+		CBattleCondition_EnemyLv1MaxHp *pCondition = (CBattleCondition_EnemyLv1MaxHp *)g_battleModuleReg.CreateNewBattleObj(dtCondition_EnemyLv1MaxHp);
+		pCondition->setConditionPercentage(false);
+		pCondition->setConditionValue(nHpVal);
+		pCondition->setRelation(dtCompare_LessThan);
+		CBattleCondition *pCondition2 = new CBattleCondition_Ignore();
+		CBattleAction *pPlayerAction = (CBattleAction *)g_battleModuleReg.CreateNewBattleObj(dtAction_PlayerEscape);
+		CBattleAction *pPetAction = nullptr;
+		CBattleTarget *pPetTarget = nullptr;
+		CreatePetActionTarget(pPetAction, pPetTarget);
+		CBattleSettingPtr ptr(new CBattleSetting(pCondition, pCondition2, pPlayerAction, nullptr, pPetAction, pPetTarget));
+		g_pAutoBattleCtrl->AddEscapeSetting(TEscapeSet_Filter1Lv, ptr);
+	}
+	else if (!ui.checkBox_Lv1FilterHp->isChecked() && ui.checkBox_Lv1FilterMp->isChecked())
+	{
+		CBattleCondition_EnemyLv1MaxMp *pCondition = (CBattleCondition_EnemyLv1MaxMp *)g_battleModuleReg.CreateNewBattleObj(dtCondition_EnemyLv1MaxMp);
+		pCondition->setConditionPercentage(false);
+		pCondition->setConditionValue(nMpVal);
+		pCondition->setRelation(dtCompare_LessThan);
+		CBattleCondition *pCondition2 = new CBattleCondition_Ignore();
+		CBattleAction *pPlayerAction = (CBattleAction *)g_battleModuleReg.CreateNewBattleObj(dtAction_PlayerEscape);
+		CBattleAction *pPetAction = nullptr;
+		CBattleTarget *pPetTarget = nullptr;
+		CreatePetActionTarget(pPetAction, pPetTarget);
+		CBattleSettingPtr ptr(new CBattleSetting(pCondition, pCondition2, pPlayerAction, nullptr, pPetAction, pPetTarget));
+		g_pAutoBattleCtrl->AddEscapeSetting(TEscapeSet_Filter1Lv, ptr);
+	}
+	else
+		g_pAutoBattleCtrl->RemoveEscapeSetting(TEscapeSet_Filter1Lv);
+}
+
 //无1级怪逃跑设置
 void GameBattleWgt::on_checkBox_NoLv1Escape_stateChanged(int state)
 {
@@ -1726,24 +1779,22 @@ void GameBattleWgt::doStopPalyAlarm()
 
 void GameBattleWgt::on_checkBox_Lv1FilterHp_stateChanged(int state)
 {
-	g_pAutoBattleCtrl->OnSetHave1LvAction(TLv1EnemySet_FilterHP, state == Qt::Checked ? true : false);
+	SetFilterLv1Pet();
 }
 
 void GameBattleWgt::on_checkBox_Lv1FilterMp_stateChanged(int state)
 {
-	g_pAutoBattleCtrl->OnSetHave1LvAction(TLv1EnemySet_FilterMP, state == Qt::Checked ? true : false);
+	SetFilterLv1Pet();
 }
 
 void GameBattleWgt::on_lineEdit_Lv1FilterHp_editingFinished()
 {
-	int nVal = ui.lineEdit_Lv1FilterHp->text().toInt();
-	g_pAutoBattleCtrl->SetLv1FilterMaxHpVal(nVal);
+	SetFilterLv1Pet();
 }
 
 void GameBattleWgt::on_lineEdit_Lv1FilterMp_editingFinished()
 {
-	int nVal = ui.lineEdit_Lv1FilterMp->text().toInt();
-	g_pAutoBattleCtrl->SetLv1FilterMaxMpVal(nVal);
+	SetFilterLv1Pet();
 }
 
 void GameBattleWgt::on_groupBox_Have1LvEnemy_toggled(bool checked)

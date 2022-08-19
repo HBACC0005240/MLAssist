@@ -528,9 +528,13 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "交易宠物", m_luaFun, &CGLuaFun::Lua_LaunchTrade);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔指定位置物品", m_luaFun, &CGLuaFun::Lua_ThrowPosItem);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "丢", m_luaFun, &CGLuaFun::Lua_ThrowItemName);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "捡", m_luaFun, &CGLuaFun::Lua_PickupItem);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "扔叠加物", m_luaFun, &CGLuaFun::Lua_ThrowNoFullItemName);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "拆", m_luaFun, &CGLuaFun::Lua_SplitItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "拆指定位置物品", m_luaFun, &CGLuaFun::Lua_SplitPosItem);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "拆分物品", m_luaFun, &CGLuaFun::Lua_SplitItem);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "叠", m_luaFun, &CGLuaFun::Lua_PileItem);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "买", m_luaFun, &CGLuaFun::Lua_Shopping);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "解析购买列表", m_luaFun, &CGLuaFun::Lua_ParseBuyStoreMsg);

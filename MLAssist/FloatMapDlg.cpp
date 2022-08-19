@@ -140,6 +140,10 @@ void FloatMapDlg::on_pushButton_downMap_clicked()
 {
 	m_pGameMapWallItem->DownLoadMap();
 }
+void FloatMapDlg::on_pushButton_questMap_clicked()
+{
+	m_pGameMapWallItem->QuestMap();
+}
 //搜索迷宫坐标
 void FloatMapDlg::on_pushButton_searchMazePos_clicked()
 {

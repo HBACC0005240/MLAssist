@@ -40,6 +40,7 @@ public slots:
 	void on_pushButton_downMap_clicked();
 	void on_pushButton_searchMazePos_clicked();
 	void on_toolButton_downMap_clicked();
+	void on_pushButton_questMap_clicked();
 
 private:
 	Ui::FloatMapDlg ui;

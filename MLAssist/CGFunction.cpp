@@ -5854,17 +5854,22 @@ void CGFunction::SearchMaze(QString name)
 	auto curPos = GetMapCoordinate();
 }
 
-void CGFunction::MoveToNpc(const QString &npcName)
+bool CGFunction::MoveToNpc(const QString &npcName)
 {
 	auto unit = FindPlayerUnit(npcName);
 	if (unit)
 	{
 		auto pos = GetRandomSpace(unit->xpos, unit->ypos);
 		AutoMoveTo(pos.x(), pos.y());
+		if (GetMapCoordinate() == pos)
+		{
+			return true;
+		}
 	}
+	return false;
 }
 
-void CGFunction::MoveToNpcEx(const QString &npcName, int nDir, int dis)
+bool CGFunction::MoveToNpcEx(const QString &npcName, int nDir, int dis)
 {
 	auto unit = FindPlayerUnit(npcName);
 	if (unit)
@@ -5874,22 +5879,32 @@ void CGFunction::MoveToNpcEx(const QString &npcName, int nDir, int dis)
 		if (IsTargetExistWall(pos.x(), pos.y()) != 0)
 		{
 			qDebug() << "目标为墙";
-			return;
+			return false;
 		}
 		AutoMoveTo(pos.x(), pos.y());
+		if (GetMapCoordinate() == pos)
+		{
+			return true;
+		}
 	}
+	return false;
 }
 
-void CGFunction::MoveToNpcNear(int x, int y, int dis)
+bool CGFunction::MoveToNpcNear(int x, int y, int dis)
 {
 	dis = dis ? dis : 1;
 	auto pos = GetRandomSpace(x, y, dis);
 	if (IsTargetExistWall(pos.x(), pos.y()) != 0)
 	{
 		qDebug() << "目标为墙";
-		return;
+		return false;
 	}
 	AutoMoveTo(pos.x(), pos.y());
+	if (GetMapCoordinate() == pos)
+	{
+		return true;
+	}
+	return false;
 }
 
 QPoint CGFunction::GetRandomSpace(int x, int y, int distance, bool judgeReachTgt)
@@ -7995,6 +8010,77 @@ void CGFunction::PileItem(QString name, int count)
 			}
 		}
 	}
+}
+///分拆物品，参数为，物品名，数量，标志，当标志=0时，数量为要分拆出去的数量；当标志=1时，数量为物品留在原地的数量，把多余的移出去 
+void CGFunction::SplitItem(QString name, int count, int flag /*=0*/)
+{
+	QList<int> posExist;
+	CGA::cga_items_info_t itemsinfo;
+	if (g_CGAInterface->GetItemsInfo(itemsinfo))
+	{
+		for (size_t i = 0; i < itemsinfo.size(); ++i)
+		{
+			const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
+			if (iteminfo.pos > 7)
+			{
+				posExist.push_back(iteminfo.pos);
+			}
+		}
+	}
+	QList<int> notUsePosList;
+	for (size_t i = 8; i < 28; i++)
+	{
+		if (!posExist.contains(i))
+		{
+			notUsePosList.append(i);
+		}
+	}
+	if (notUsePosList.size() < 1)
+	{
+		qDebug() << "包裹没有空位！";
+		return;
+	}
+	bool bRet = false;
+	for (size_t i = 0; i < itemsinfo.size(); ++i)
+	{
+		const CGA::cga_item_info_t &iteminfo = itemsinfo.at(i);
+		if (iteminfo.pos > 7 && (iteminfo.name == name.toStdString() || iteminfo.itemid == name.toInt()) && iteminfo.count > count)
+		{
+			if (flag==0)
+			{
+				g_CGAInterface->MoveItem(iteminfo.pos, notUsePosList[0], count, bRet);
+			}
+			else
+			{
+				g_CGAInterface->MoveItem(iteminfo.pos, notUsePosList[0], iteminfo.count- count, bRet);
+			}
+			break;
+		}
+	}
+	return ;
+}
+
+void CGFunction::SplitPosItem(int srcPos, int count, int flag /*=0*/)
+{
+	if (srcPos <= 7)
+	{
+		qDebug() << "拆分物品参数错误！";
+		return;
+	}
+	QList<int> notUsePosList = GetInventoryEmptySlotPosList();	
+	if (notUsePosList.size() < 1)
+	{
+		qDebug() << "包裹没有空位！";
+		return;
+	}
+	CGA::cga_item_info_t srcItemInfo;
+	g_CGAInterface->GetItemInfo(srcPos, srcItemInfo);
+	bool bRet = false;
+	if (flag == 0)
+		g_CGAInterface->MoveItem(srcPos, notUsePosList[0], count, bRet);
+	else
+		g_CGAInterface->MoveItem(srcPos, notUsePosList[0], count - srcItemInfo.count, bRet);
+	return;
 }
 
 bool CGFunction::NeedHPSupply(CGA::cga_player_info_t &pl)

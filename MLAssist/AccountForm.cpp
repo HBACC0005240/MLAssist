@@ -396,7 +396,8 @@ void AccountForm::OnAutoLogin()
 						if (m_gltExpiredTime.elapsed() > 10 * 60 * 1000)
 						{
 							qDebug() << "AutoLogin 10分钟持续登录过期，重新启动游戏！";
-							g_pGameCtrl->KillGameWndProcess();
+							//g_pGameCtrl->KillGameWndProcess();
+							emit g_pGameCtrl->NotifyKillProcess();
 							return;
 						}
 					}
@@ -409,7 +410,8 @@ void AccountForm::OnAutoLogin()
 					if (m_lastGameWndConnTime.elapsed() > 30 * 10000) //300秒
 					{
 						qDebug() << "300秒登录失败，干掉游戏窗口，重新加载！";
-						g_pGameCtrl->KillGameWndProcess();
+//						g_pGameCtrl->KillGameWndProcess();
+						emit g_pGameCtrl->NotifyKillProcess();
 						return;
 					}
 					//增加等待
@@ -744,7 +746,8 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 		if (m_login_failure > 30 && ui->checkBox_autoKillGame->isChecked())
 		{
 			qDebug() << "登录失败次数超10次，干掉游戏窗口，重新加载！";
-			g_pGameCtrl->KillGameWndProcess();
+			//g_pGameCtrl->KillGameWndProcess();
+			emit g_pGameCtrl->NotifyKillProcess();
 			m_login_failure = 0;
 			//YunLai::KillProcess(g_pGameCtrl->getGameHwnd());
 			//10次以后，再进行换线操作，否则太频繁

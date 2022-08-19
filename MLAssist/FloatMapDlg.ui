@@ -249,6 +249,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton_downMap">
+            <property name="text">
+             <string>下载地图</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -283,7 +290,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_downMap">
+           <widget class="QPushButton" name="pushButton_questMap">
             <property name="text">
              <string>自动开图</string>
             </property>

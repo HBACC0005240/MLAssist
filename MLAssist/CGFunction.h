@@ -106,6 +106,8 @@ public:
 
 	//堆叠
 	void PileItem(QString name, int count);
+	void SplitItem(QString name, int count,int flag=0);
+	void SplitPosItem(int srcPos, int count,int flag=0);
 
 	//获取指定物品数量
 	int GetItemCount(const QString &itemName);
@@ -361,9 +363,9 @@ public:
 	//搜索迷宫
 	void SearchMaze(QString name);
 	//移动到指定玩家NPC附近
-	void MoveToNpc(const QString &npcName);
-	void MoveToNpcEx(const QString &npcName, int nDir, int dis = 1);
-	void MoveToNpcNear(int x, int y, int dis = 1);
+	bool MoveToNpc(const QString &npcName);
+	bool MoveToNpcEx(const QString &npcName, int nDir, int dis = 1);
+	bool MoveToNpcNear(int x, int y, int dis = 1);
 
 	//获取目标坐标周围空闲坐标
 	QPoint GetRandomSpace(int x, int y, int distance = 1, bool judgeReachTgt = false);

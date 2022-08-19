@@ -30,6 +30,7 @@ protected:
 	void CreateNoPetDoubleAction();
 	void ResetNumEnemyBtnColor();
 	void ResetNumRoundBtnColor();
+	void SetFilterLv1Pet();
 
 public slots:
 	void doLoadJsConfig(QJsonObject &obj);

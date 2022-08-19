@@ -57,8 +57,6 @@ public:
 	void addHaveLv1Setting(int nType, CBattleSettingPtr setting); //1级怪设置
 	QHash<int, CBattleSettingPtr> GetInternalLv1Settings();		  //获取内置l1
 	void ClearHaveLv1Setting();
-	void SetLv1FilterMaxHpVal(int nVal) { m_nCheckLv1MaxHpVal = nVal; }
-	void SetLv1FilterMaxMpVal(int nVal) { m_nCheckLv1MaxMpVal = nVal; }
 
 	QString GetBattleTypeText(int ntype) { return m_battleMapText.value(ntype); }
 	int GetBattleTypeFromText(QString text) { return m_battleMapText.key(text); }
@@ -156,10 +154,6 @@ private:
 	QHash<int, CBattleSettingPtr> m_pIntProtSettings;		 //内置保护配置
 	QMultiHash<int, CBattleSettingPtr> m_pEscapeSettingList; //逃跑设置
 	QHash<int, CBattleSettingPtr> m_pLv1SettingList;		 //一级怪应对
-	bool m_bCheckLv1MaxHp = false;
-	bool m_bCheckLv1MaxMp = false;
-	int m_nCheckLv1MaxHpVal = 0;
-	int m_nCheckLv1MaxMpVal = 0;
 };
 
 #define g_pAutoBattleCtrl CBattleWorker::getInstace()
