@@ -62,7 +62,7 @@
 color: rgb(255, 255, 255);</string>
                  </property>
                  <property name="text">
-                  <string>关闭当前</string>
+                  <string>关闭选中</string>
                  </property>
                 </widget>
                </item>

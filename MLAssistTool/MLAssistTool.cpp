@@ -56,6 +56,10 @@ void MLAssistTool::initTable()
 	ui.tableView_fz->setColumnWidth(2, 350);
 	ui.tableView_fz->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Fixed);
 	ui.tableView_fz->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Fixed);
+	ui.tableView_fz->setSelectionBehavior(QAbstractItemView::SelectRows);
+	ui.tableView_fz->setSelectionMode(QAbstractItemView::SingleSelection);
+	
+	
 	//ui.tableView_fz->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
 	m_mlModl = new MLWndTableModel(ui.tableView_ml);
 	ui.tableView_ml->setModel(m_mlModl);
@@ -64,6 +68,9 @@ void MLAssistTool::initTable()
 	ui.tableView_ml->setColumnWidth(2, 350);
 	ui.tableView_ml->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Fixed);
 	ui.tableView_ml->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Fixed);
+	ui.tableView_ml->setSelectionBehavior(QAbstractItemView::SelectRows);
+	ui.tableView_ml->setSelectionMode(QAbstractItemView::SingleSelection);	
+
 	//ui.tableView_ml->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
 }
 
@@ -396,22 +403,28 @@ void MLAssistTool::on_pushButton_closeCur_clicked()
 	int tabIndex = ui.tabWidget_ctrl->currentIndex();
 	if (tabIndex == 0)//Fz
 	{
-		auto index = ui.tableView_fz->currentIndex();
-		auto item = m_model->ItemFromIndex(index);
-		if (item)
+		auto selectIndexs =ui.tableView_fz->selectionModel()->selectedIndexes();
+		for (auto& index:selectIndexs)
 		{
-			YunLai::KillProcessEx(item->m_ProcessId);
-		}
+			auto item = m_model->ItemFromIndex(index);
+			if (item)
+			{
+				YunLai::KillProcessEx(item->m_ProcessId);
+			}
+		}		
 		onRefreshFzData();
 
 	}
 	else if (tabIndex == 1) //ML
 	{
-		auto index = ui.tableView_ml->currentIndex();
-		auto item = m_mlModl->ItemFromIndex(index);
-		if (item)
+		auto selectIndexs = ui.tableView_ml->selectionModel()->selectedIndexes();
+		for (auto &index : selectIndexs)
 		{
-			YunLai::KillProcessEx(item->m_ProcessId);
+			auto item = m_model->ItemFromIndex(index);
+			if (item)
+			{
+				YunLai::KillProcessEx(item->m_ProcessId);
+			}
 		}
 		onRefreshFzData();
 

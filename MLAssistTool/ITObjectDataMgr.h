@@ -91,6 +91,10 @@ public:
 	//获取连接过的角色信息
 	QHash<QString, ITGidRolePtr> GetAlreadyConnectedData() { return m_idForAccountRole; }
 
+	int GetGameRoleCount() { return m_gameRoleCount; }
+	int GetGameRoleOnlineCount() { return m_onlineCount; }
+	int GetGameRoleOfflineCount() { return m_offlineCount; }
+
 protected:
 	bool LoadIdentification();
 	bool LoadAccount();
@@ -168,5 +172,8 @@ private:
 	QMutex m_objMutex;
 	QMutex m_rpcGidMutex;
 	bool m_bForceUpdate = false;
+	int m_onlineCount = 0;
+	int m_offlineCount = 0;
+	int m_gameRoleCount = 0;
 };
 #endif

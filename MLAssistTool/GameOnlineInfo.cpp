@@ -16,17 +16,20 @@ GameOnlineInfo::~GameOnlineInfo()
 
 void GameOnlineInfo::doUpdateTimer()
 {
-	auto gameInfos = ITObjectDataMgr::getInstance().GetAlreadyConnectedData();
-	int onlineCount = 0;
-	int offlineCount = 0;
-	for (auto it=gameInfos.begin();it!=gameInfos.end();++it)
-	{
-		if (it.value()->_connectState == 1)
-			onlineCount += 1;
-		else
-			offlineCount += 1;		
-	}
-	ui.label_fzCount->setText(QString::number(gameInfos.size()));
-	ui.label_fzOnline->setText(QString::number(onlineCount));
-	ui.label_fzOffline->setText(QString::number(offlineCount));
+	//auto gameInfos = ITObjectDataMgr::getInstance().GetAlreadyConnectedData();
+	//int onlineCount = 0;
+	//int offlineCount = 0;
+	//for (auto it=gameInfos.begin();it!=gameInfos.end();++it)
+	//{
+	//	if (it.value()->_connectState == 1)
+	//		onlineCount += 1;
+	//	else
+	//		offlineCount += 1;		
+	//}
+	//ui.label_fzCount->setText(QString::number(gameInfos.size()));
+	//ui.label_fzOnline->setText(QString::number(onlineCount));
+	//ui.label_fzOffline->setText(QString::number(offlineCount));
+	ui.label_fzCount->setText(QString::number(ITObjectDataMgr::getInstance().GetGameRoleCount()));
+	ui.label_fzOnline->setText(QString::number(ITObjectDataMgr::getInstance().GetGameRoleOnlineCount()));
+	ui.label_fzOffline->setText(QString::number(ITObjectDataMgr::getInstance().GetGameRoleOfflineCount()));
 }

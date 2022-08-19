@@ -119,15 +119,25 @@ void ITObjectDataMgr::checkOnlineThread(ITObjectDataMgr *pThis)
 		return;
 	while (!pThis->m_bExit)
 	{
-		for (auto it = pThis->m_idForAccountRole.begin(); it != pThis->m_idForAccountRole.end(); ++it)
+		auto tmpObjs = pThis->m_idForAccountRole;
+		pThis->m_gameRoleCount = tmpObjs.size();
+		int onlineCount = 0;
+		int offlineCount = 0;
+		for (auto it = tmpObjs.begin(); it != tmpObjs.end(); ++it)
 		{
-			if (it.value()->_lastUploadTime.elapsed() > 30000)//30秒 状态更新为离线
+			if (it.value()->_connectState == 1 && it.value()->_lastUploadTime.elapsed() > 30000) //30秒 状态更新为离线
 			{
-				QMutexLocker locker(&it.value()->_mutex);
+				//QMutexLocker locker(&it.value()->_mutex);
 				it.value()->_connectState = 0;
+				offlineCount += 1;
+			}
+			else if (it.value()->_connectState == 1)
+			{
+				onlineCount += 1;
 			}
 		}
-
+		pThis->m_offlineCount = offlineCount;
+		pThis->m_onlineCount = onlineCount;
 		QThread::msleep(10000);		//10秒检测一次
 	}
 }
@@ -524,16 +534,23 @@ bool ITObjectDataMgr::isNeedSaveData()
 		
 	}
 	{
-		QMutexLocker locker(&m_objMutex);
-		tmpObjList = m_pObjectList;
+		//QMutexLocker locker(&m_objMutex);
+		//tmpObjList = m_pObjectList;
+		for (auto it = m_pObjectList.begin(); it != m_pObjectList.end(); ++it)
+		{
+			if (it.value()->getStatus() != TStatus_Normal)
+			{
+				return true;
+			}
+		}
 	}
-	for (auto it= tmpObjList.begin();it!= tmpObjList.end();++it)
+	/*for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
 	{
 		if (it.value()->getStatus() != TStatus_Normal)
 		{
 			return true;
 		}
-	}
+	}*/
 	return false;
 }
 
@@ -761,9 +778,24 @@ bool ITObjectDataMgr::LoadAccountRole()
 				pCharacter->_element_fire = recordset->getIntValue("element_fire");
 				pCharacter->_element_wind = recordset->getIntValue("element_wind");
 				pCharacter->_points_remain = recordset->getIntValue("points_remain");
-				pCharacter->setObjectName(sName);
+				pCharacter->_lastUploadTime.restart();
+				pCharacter->_connectState = 0;
+				pCharacter->setObjectName(sName);						
+
+				//重复 删除老的 插入新的
+				auto oldChara = m_idForAccountRole.value(sGid + sName);
+				if (oldChara != nullptr)
+				{
+					if (!m_pDelObjectList.contains(oldChara->getObjectID()))
+					{
+						deleteOneObject(oldChara);
+					/*	m_pDelObjectList.insert(oldChara->getObjectID(), oldChara);
+						m_pObjectList.remove(oldChara->getObjectID());*/
+					}
+				}
 				m_pObjectList.insert(nID, pCharacter);
 				m_idForAccountRole.insert(sGid + sName, pCharacter);
+				
 			}
 		}
 		return true;
@@ -800,7 +832,7 @@ bool ITObjectDataMgr::LoadGidItems()
 				pItem->setObjectID(nID);
 
 				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
-				if (!pGidRole)
+				if (!pGidRole)//查找道具相关的角色 没找到 则删除当前道具对象
 				{
 					if (!m_pDelObjectList.contains(nID))
 						m_pDelObjectList.insert(nID, pItem);
@@ -810,14 +842,15 @@ bool ITObjectDataMgr::LoadGidItems()
 					pItem->setObjectParent(pGidRole);
 					pGidRole->addChildObj(pItem);
 					m_pObjectList.insert(nID, pItem);
-					//重复 删除老的 插入新的
+					//重复 删除老的映射 插入新的
 					auto oldItem = pGidRole->_itemPosForPtr.value(item_pos);
 					if (oldItem != nullptr)
 					{							
 						if (!m_pDelObjectList.contains(oldItem->getObjectID()))
 						{
-							m_pDelObjectList.insert(oldItem->getObjectID(), oldItem);
-							m_pObjectList.remove(oldItem->getObjectID());
+							deleteOneObject(oldItem);
+							/*m_pDelObjectList.insert(oldItem->getObjectID(), oldItem);
+							m_pObjectList.remove(oldItem->getObjectID());*/
 						}						
 					}		
 					pGidRole->_itemPosForPtr.insert(item_pos, pItem);//替换新的
@@ -915,8 +948,9 @@ bool ITObjectDataMgr::LoadGidPets()
 					{
 						if (!m_pDelObjectList.contains(pOldObj->getObjectID()))
 						{
-							m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
-							m_pObjectList.remove(pOldObj->getObjectID());
+							deleteOneObject(pOldObj);
+							/*m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
+							m_pObjectList.remove(pOldObj->getObjectID());*/
 						}						
 					}
 					pGidRole->_petPosForPet.insert(pObj->_pos, pObj);					
@@ -987,8 +1021,9 @@ bool ITObjectDataMgr::LoadGidSkills()
 					{
 						if (!m_pDelObjectList.contains(pOldObj->getObjectID()))
 						{
-							m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
-							m_pObjectList.remove(pOldObj->getObjectID());
+							deleteOneObject(pOldObj);
+							/*m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
+							m_pObjectList.remove(pOldObj->getObjectID());*/
 						}
 					}
 					pGidRole->_skillPosForSkill.insert(index, pObj);
