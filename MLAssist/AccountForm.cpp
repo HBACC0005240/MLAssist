@@ -356,6 +356,7 @@ void AccountForm::OnAutoLogin()
 		if (g_CGAInterface->IsInGame(ingame) && ingame == 1)
 		{
 			m_lastGameWndConnTime.restart();
+			m_loginInterval = g_pGameCtrl->GetAutoLoginInterval();
 			ui->textEdit_output->setText(tr("游戏登录成功.\n"));
 			ui->label_status->setText(tr("游戏登录成功."));
 			//qDebug() << "AutoLogin 游戏登录成功！";
@@ -742,6 +743,10 @@ void AccountForm::OnNotifyConnectionState(int state, QString msg)
 	qDebug() << state << msg;
 	if ((state == 10000 || state == 0) && !msg.isEmpty())
 	{ // 0 "断线后在限定时间内不能登录！"    0 "此服务器很拥挤。"  0分多种情况
+		if (msg.contains("断线后在限定时间内不能登录"))
+		{
+			m_loginInterval = 30000;	//30秒
+		}
 		m_login_failure++;
 		if (m_login_failure > 30 && ui->checkBox_autoKillGame->isChecked())
 		{

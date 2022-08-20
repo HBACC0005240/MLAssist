@@ -6505,6 +6505,19 @@ QSharedPointer<CGA::cga_map_unit_t> CGFunction::FindMapUnit(const QString &name,
 				}
 				break;
 			}
+			case 3: //宠物
+			{
+				foreach (auto unit, units)
+				{
+					if (unit.valid && unit.type == 1 && unit.model_id != 0 && (unit.flags & 512) != 0 && unit.unit_name == name.toStdString()) //宠物
+					{
+						mapUnit = unit;
+						bFind = true;
+						break;
+					}
+				}
+				break;
+			}
 			default:
 				break;
 		}

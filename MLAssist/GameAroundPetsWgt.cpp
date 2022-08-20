@@ -1,30 +1,27 @@
-#include "GameGamerWgt.h"
+#include "GameAroundPetsWgt.h"
 #include <QMenu>
 
-GameGamerWgt::GameGamerWgt(QWidget *parent)
+GameAroundPetsWgt::GameAroundPetsWgt(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 	m_lastUpdate.start();
 	initTable();
-	connect(g_pGameCtrl, &GameCtrl::NotifyGetMapCellInfo, this, &GameGamerWgt::OnNotifyGetMapCellInfo, Qt::ConnectionType::QueuedConnection);
+	connect(g_pGameCtrl, &GameCtrl::NotifyGetMapCellInfo, this, &GameAroundPetsWgt::OnNotifyGetMapCellInfo, Qt::ConnectionType::QueuedConnection);
 }
 
-GameGamerWgt::~GameGamerWgt()
+GameAroundPetsWgt::~GameAroundPetsWgt()
 {
 }
 
-void GameGamerWgt::initTable()
+void GameAroundPetsWgt::initTable()
 {
 	QStringList saveHeadList;
 	saveHeadList << "名字"
-				 << "等级"
-				 << "玩家ID"
-				 << "玩家位置"
-				 << "玩家称号"
-				 << "自定称号"
-				 << "健康"
-				 << "图标ID"
+				 << "真实名称"
+				 << "等级"				
+				 << "宠物ID"
+				 << "宠物位置"							 
 				 << "外观ID";
 	ui.tableWidget->setColumnCount(saveHeadList.size());
 	ui.tableWidget->setHorizontalHeaderLabels(saveHeadList);
@@ -38,15 +35,13 @@ void GameGamerWgt::initTable()
 	ui.tableWidget->horizontalHeader()->setFixedHeight(30);
 	//	ui.tableWidget->setRowCount(1);
 	//640
-	ui.tableWidget->setColumnWidth(0, 100);
-	ui.tableWidget->setColumnWidth(1, 40);
+	ui.tableWidget->setColumnWidth(0, 130);
+	ui.tableWidget->setColumnWidth(1, 130);
 	ui.tableWidget->setColumnWidth(2, 50);
 	ui.tableWidget->setColumnWidth(3, 80);
 	ui.tableWidget->setColumnWidth(4, 100);
-	ui.tableWidget->setColumnWidth(5, 100);
-	ui.tableWidget->setColumnWidth(6, 40);
-	ui.tableWidget->setColumnWidth(7, 50);
-	ui.tableWidget->setColumnWidth(8, 50);
+	ui.tableWidget->setColumnWidth(5, 50);
+	ui.tableWidget->setColumnWidth(6, 50);
 	connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(doTableCellClicked(int, int)));
 	connect(ui.tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(doItemDoubleClicked(QTableWidgetItem *)));
 	connect(ui.tableWidget->horizontalHeader(), SIGNAL(sectionPressed(int)), this, SLOT(doColPressed(int)));
@@ -54,7 +49,7 @@ void GameGamerWgt::initTable()
 	connect(ui.tableWidget, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_customContextMenu(const QPoint &)));
 }
 
-void GameGamerWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QSharedPointer<CGA_MapCellData_t> obj, QSharedPointer<CGA_MapUnits_t> units)
+void GameAroundPetsWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QSharedPointer<CGA_MapCellData_t> obj, QSharedPointer<CGA_MapUnits_t> units)
 {
 	//不启用 不刷新
 	if (!g_pGameCtrl->IsEnabledDisplayDataUi())
@@ -72,7 +67,7 @@ void GameGamerWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll
 		for (size_t i = 0; i < units->size(); i++)
 		{
 			auto unit = units->at(i);
-			if (unit.valid && unit.type == 8 && unit.model_id != 0 && (unit.flags & 256) != 0)//玩家
+			if (unit.valid && unit.type == 1 && unit.model_id != 0 && (unit.flags & 512) != 0)//宠物
 			{
 				if (m_bFilterNoName && unit.unit_name.isEmpty())
 				{
@@ -112,7 +107,7 @@ void GameGamerWgt::OnNotifyGetMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll
 	return;
 }
 
-void GameGamerWgt::on_customContextMenu(const QPoint &pos)
+void GameAroundPetsWgt::on_customContextMenu(const QPoint &pos)
 {
 	QMenu menu;
 	int nrow = -1;
@@ -124,8 +119,8 @@ void GameGamerWgt::on_customContextMenu(const QPoint &pos)
 	auto pAction = menu.addAction(QString("屏蔽没名字的"), [&]() {
 		m_bFilterNoName = !m_bFilterNoName;
 	});
-	menu.addAction(QString("移动到玩家附近"), [&]() {
-		QTableWidgetItem *pPosItem = ui.tableWidget->item(nrow, 3);
+	menu.addAction(QString("移动到目标附近"), [&]() {
+		QTableWidgetItem *pPosItem = ui.tableWidget->item(nrow, 4);
 		if (pPosItem)
 		{
 			QStringList splitPos = pPosItem->text().split(",");
@@ -144,17 +139,12 @@ void GameGamerWgt::on_customContextMenu(const QPoint &pos)
 }
 
 //更新坐标 以及新增行
-bool GameGamerWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
+bool GameAroundPetsWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
 {
-	auto pTblItem = m_unitIDForItem.value(unit.unit_id);
+	auto pTblItem = m_unitIDForPet.value(unit.unit_id);
 	if (pTblItem)
 	{
 		int nrow = pTblItem->row();
-		auto pIconItem = ui.tableWidget->item(nrow, 7);
-		if (pIconItem)
-		{
-			pIconItem->setText(QString::number(unit.icon));
-		}
 		auto sPos = QString("%1,%2").arg(unit.xpos).arg(unit.ypos);
 		if (pTblItem->text() == sPos)
 		{
@@ -168,15 +158,12 @@ bool GameGamerWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
 	else
 	{
 		QString strItem1, strItem2, strItem3, strItem4, strItem5, strItem6, strItem7, strItem8, strItem9;
-		strItem1 = unit.unit_name;
-		strItem2 = QString::number(unit.level);
-		strItem3 = QString::number(unit.unit_id);
-		strItem4 = QString("%1,%2").arg(unit.xpos).arg(unit.ypos);
-		strItem5 = unit.title_name;
-		strItem6 = unit.nick_name;
-		strItem7 = QString::number(unit.injury);
-		strItem8 = QString::number(unit.icon);
-		strItem9 = QString::number(unit.model_id);
+		strItem1 = unit.nick_name;
+		strItem2 = unit.unit_name;
+		strItem3 = QString::number(unit.level);
+		strItem4 = QString::number(unit.unit_id);
+		strItem5 = QString("%1,%2").arg(unit.xpos).arg(unit.ypos);		
+		strItem6 = QString::number(unit.model_id);
 
 		int rowno = ui.tableWidget->rowCount();
 		ui.tableWidget->setRowCount(rowno + 1);
@@ -210,28 +197,17 @@ bool GameGamerWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
 		item6->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowno, 5, item6);
 
-		QTableWidgetItem *item7 = new QTableWidgetItem(strItem7);
-		item7->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowno, 6, item7);
-
-		QTableWidgetItem *item8 = new QTableWidgetItem(strItem8);
-		item8->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowno, 7, item8);
-
-		QTableWidgetItem *item9 = new QTableWidgetItem(strItem9);
-		item9->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowno, 8, item9);
-		m_unitIDForItem.insert(unit.unit_id, item4);
+		m_unitIDForPet.insert(unit.unit_id, item5);
 	}
 }
 
-bool GameGamerWgt::removeUnitRow(const CGA_MapUnit_t &unit)
+bool GameAroundPetsWgt::removeUnitRow(const CGA_MapUnit_t &unit)
 {
-	auto pTblItem = m_unitIDForItem.value(unit.unit_id);
+	auto pTblItem = m_unitIDForPet.value(unit.unit_id);
 	if (pTblItem)
 	{
 		ui.tableWidget->removeRow(pTblItem->row());
 	}
-	m_unitIDForItem.remove(unit.unit_id);
+	m_unitIDForPet.remove(unit.unit_id);
 	return true;
 }

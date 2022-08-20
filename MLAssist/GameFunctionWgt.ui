@@ -54,6 +54,11 @@
        <string>物品</string>
       </attribute>
      </widget>
+     <widget class="GameAroundPetsWgt" name="gamePetsWgt">
+      <attribute name="title">
+       <string>宠物</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -82,6 +87,12 @@
    <class>GameItemsPosWgt</class>
    <extends>QWidget</extends>
    <header>GameItemsPosWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameAroundPetsWgt</class>
+   <extends>QWidget</extends>
+   <header>GameAroundPetsWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

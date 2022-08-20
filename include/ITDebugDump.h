@@ -6,6 +6,7 @@
 #include "DbgHelp.h"
 #include <QDateTime>
 #include <QDir>
+#include <OleAuto.h>
 //ANSI转化成UNICODE
 static LPWSTR ANSITOUNICODE(const char* pBuf)
 {
