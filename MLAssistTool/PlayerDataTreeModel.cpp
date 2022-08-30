@@ -2,6 +2,7 @@
 #include "treeitem.h"
 #include <QMimeData>
 #include "ITObjectDataMgr.h"
+#include "ITPublic.h"
 PlayerDataTreeModel::PlayerDataTreeModel(QObject* parent)
 	: TreeModel(parent)
 {
@@ -56,6 +57,23 @@ QVariant PlayerDataTreeModel::headerData(int section, Qt::Orientation orientatio
 	return QVariant();
 }
 
+
+
+bool PlayerDataTreeModel::SortStringFun(const QString& s1,const QString& s2)
+{
+	if (s1.compare(s2) == 0)
+	{
+		return true;
+	}
+	int nRet = customCompareString(s1, s2);
+	if (nRet > 0)
+		return false;
+	else if (nRet < 0)
+		return true;
+	else
+		return true;
+}
+
 void PlayerDataTreeModel::SetupModelData( ITObjectList pObjList)
 {
 	if (pObjList.size() < 1)
@@ -64,9 +82,7 @@ void PlayerDataTreeModel::SetupModelData( ITObjectList pObjList)
 //	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
 
 	qSort(pObjList.begin(), pObjList.end(), [&](ITObjectPtr& a, ITObjectPtr& b)
-	{
-		return a->getObjectName() < b->getObjectName();
-	});
+			{ return SortStringFun(a->getObjectName() , b->getObjectName()); });
 	for (ITObjectPtr tObj : pObjList)
 	{
 		TreeItem* tempitem = new TreeItem(tObj->getObjectName());

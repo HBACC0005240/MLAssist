@@ -271,6 +271,8 @@ public:
 	int GetTeammatesCount();
 	bool IsTeamLeader();
 
+	bool GetDebugLog() { return m_bDebugLog; }
+	void SetDebugLog(bool val) { m_bDebugLog = val; }
 
 private:
 	CGA::CGAInterface* m_interface;
@@ -278,4 +280,5 @@ private:
 	bool m_bStop = false;
 	int m_navigatorLoopCount = 0;
 	double m_mazeWaitTime = 5000;
+	bool m_bDebugLog = false;
 };

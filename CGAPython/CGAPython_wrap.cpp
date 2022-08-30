@@ -621,7 +621,7 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def("DeleteCard", &CGAPython::DeleteCard)
 		.def("SendMail", &CGAPython::SendMail)
 		.def("SendPetMail", &CGAPython::SendPetMail)
-		.def("AutoMoveTo", &CGAPython::AutoMoveTo, "自动寻路,参数(x,y,timeout),超时可选,单位毫秒", py::arg("x"), py::arg("y"), py::arg("timeout") = 10000)
+		.def("AutoMoveTo", &CGAPython::AutoMoveToEx, "自动寻路,参数(x,y,name,timeout),超时可选,单位毫秒", py::arg("x"), py::arg("y"), py::arg("sMapName")="", py::arg("timeout") = 10000)
 
 		.def("RegisterChatMsgNotify", &CGAPython::RegisterChatMsgNotify)
 		.def("RegisterServerShutdownNotify", &CGAPython::RegisterServerShutdownNotify)
@@ -635,6 +635,7 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def("RegisterTradeStateNotify", &CGAPython::RegisterTradeStateNotify)
 		.def("RegisterDownloadMapNotify", &CGAPython::RegisterDownloadMapNotify)
 		.def("RegisterConnectionStateNotify", &CGAPython::RegisterConnectionStateNotify)
+		.def("RegisterUnitMenuNotify", &CGAPython::RegisterUnitMenuNotify)
 		;
 
 }

@@ -17,6 +17,8 @@ public:
 	bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
 	QMimeData* mimeData(const QModelIndexList& indexes) const;
 	QStringList mimeTypes() const;
+	bool SortStringFun(const QString &s1, const QString &s2);
+
 signals:
 	void resetModelSignal();
 public:

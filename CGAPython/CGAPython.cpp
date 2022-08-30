@@ -954,7 +954,7 @@ bool CGAPython::MoveTo(int x, int y, int timeout)
 	//判断当前坐标和目标坐标距离 超出8格  不执行
 	if (GetDistance(x, y) > 8)
 	{
-		//std::cout << std::string("目标x或者y超出范围,当前坐标(%1,%2) 目标坐标(%3,%4)").arg(curX).arg(curY).arg(x).arg(y);
+		//if(m_bDebugLog)std::cout << std::string("目标x或者y超出范围,当前坐标(%1,%2) 目标坐标(%3,%4)").arg(curX).arg(curY).arg(x).arg(y);
 		return false;
 	}
 	bool bRet = m_interface->WalkTo(x, y);
@@ -1013,7 +1013,7 @@ std::vector<TMLPoint> CGAPython::GetMapEntranceList()
 	}
 	if (enteranceList.size() > 2)
 	{
-		//std::cout << "获取到多个传送点";
+		//if(m_bDebugLog)std::cout << "获取到多个传送点";
 	}
 	return enteranceList;
 }
@@ -1114,11 +1114,11 @@ A_FIND_PATH CGAPython::CalculatePath(int curX, int curY, int targetX, int target
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "Try catch CalculatePathEx Ero" << e.what();
+		if(m_bDebugLog)std::cout << "Try catch CalculatePathEx Ero" << e.what();
 	}
 	catch (...)
 	{
-		std::cout << "Try catch CalculatePathEx Ero";
+		if(m_bDebugLog)std::cout << "Try catch CalculatePathEx Ero";
 	}
 	return findPath;
 }
@@ -1129,7 +1129,7 @@ bool CGAPython::IsReachableTargetEx(int sx, int sy, int tx, int ty)
 	auto findPath = CalculatePath(sx, sy, tx, ty);
 	if (findPath.size() < 1) //离线地图查找一波
 	{
-		//std::cout << "目标不可达，加载离线地图尝试！";
+		//if(m_bDebugLog)std::cout << "目标不可达，加载离线地图尝试！";
 		//int mapIndex = GetGameMapID();
 		//QImage mapImage;
 		//LoadOffLineMapImageData(mapIndex, mapImage);
@@ -1154,11 +1154,11 @@ bool CGAPython::IsReachableTarget(int tx, int ty)
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "Try catch IsReachableTarget Ero" << e.what();
+		if(m_bDebugLog)std::cout << "Try catch IsReachableTarget Ero" << e.what();
 	}
 	catch (...)
 	{
-		std::cout << "Try Catch IsReachableTarget Ero";
+		if(m_bDebugLog)std::cout << "Try Catch IsReachableTarget Ero";
 	}
 	return false;
 }
@@ -1252,7 +1252,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 			break;
 		tarX = coor.first;
 		tarY = coor.second;
-		std::cout << "目标:" << tarX << "-" << tarY << std::endl;
+		if(m_bDebugLog)std::cout << "目标:" << tarX << "," << tarY << std::endl;
 		walkprePos = GetMapCoordinate(); //记录下移动前坐标
 		m_interface->WalkTo(coor.first, coor.second);
 		dwLastTime = 0;
@@ -1262,14 +1262,14 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 			//1、判断战斗和切图
 			while (!IsInNormalState() && !m_bStop) //战斗或者切图 等待完毕
 			{
-				//std::cout << "AutoNavigator" << "战斗或者切图"<< std::endl;
+				//if(m_bDebugLog)std::cout << "AutoNavigator" << "战斗或者切图"<< std::endl;
 				isNormal = false;
 				Sleep(1000); //还是多等2秒吧  防止卡位
 			}
 			//2、判断地图是否发送变更 例如：迷宫送出来，登出，切到下个图
 			if (curMapIndex != GetGameMapID() || curMapName != GetMapName())
 			{
-				std::cout << "当前地图更改，寻路判断!" << std::endl;
+				if(m_bDebugLog)std::cout << "当前地图更改，寻路判断!" << std::endl;
 				int gameStatus = 0;
 				int lastWarpMap202 = 0;
 				//战斗卡住 进行判断
@@ -1284,7 +1284,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 					{
 						m_interface->FixMapWarpStuck(0);
 						lastWarpMap202 = timestamp + 8;
-						std::cout << ("切换地图 卡住 fix warp") << std::endl;
+						if(m_bDebugLog)std::cout << ("切换地图 卡住 fix warp") << std::endl;
 					}
 					Sleep(1000);
 				}
@@ -1295,13 +1295,13 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 				{
 					//m_interface->WalkTo(tarX, tarY); //重新执行一次移动
 					//重新执行一次重新寻路
-					std::cout << "还在原图：重新查找路径 进行寻路" << std::endl;
+					if(m_bDebugLog)std::cout << "还在原图：重新查找路径 进行寻路" << std::endl;
 					auto tgtPos = backPath.end();
 					return AutoMoveInternal(tgtPos->first, tgtPos->second, false);
 				}
 				else
 				{
-					std::cout << "地图更改，寻路结束!" << std::endl;
+					if(m_bDebugLog)std::cout << "地图更改，寻路结束!" << std::endl;
 					if (IsInRandomMap())
 						Sleep(m_mazeWaitTime);
 					return false;
@@ -1310,10 +1310,10 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 			//调换顺序 战斗或者切图后，还在本地图，再次执行 有问题 就是同一个地图 但是是个传送点
 			if (!isNormal) //刚才战斗和切图了 现在重新执行最后一次坐标点任务
 			{
-				std::cout << "战斗/切图等待，再次寻路！" << tarX << tarY << std::endl;
+				if(m_bDebugLog)std::cout << "战斗/切图等待，再次寻路！" << tarX << "," << tarY << std::endl;
 				if (GetDistance(tarX, tarY) > 11)
 				{
-					std::cout << "战斗/切图等待，再次寻路 距离大于11 刚才可能为传送 返回!" << tarX << tarY << std::endl;
+					if(m_bDebugLog)std::cout << "战斗/切图等待，再次寻路 距离大于11 刚才可能为传送 返回!" << tarX << "," << tarY << std::endl;
 					//尝试自动寻路
 					TMLPoint curPos = GetMapCoordinate();
 					auto findPath = CalculatePath(curPos.x, curPos.y, tarX, tarY);
@@ -1323,7 +1323,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 					}
 					else
 					{
-						std::cout << "战斗/切图等待，再次寻路 失败!" << tarX << tarY << std::endl;
+						if(m_bDebugLog)std::cout << "战斗/切图等待，再次寻路 失败!" << tarX << "," << tarY << std::endl;
 						return false;
 					}
 				}
@@ -1331,7 +1331,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 				{
 					if (!IsReachableTarget(walkprePos.x, walkprePos.y)) //用移动前点判断 不能到 说明换图成功，特别是ud这个图
 					{
-						std::cout << "原坐标不可达，移动至目标点成功，寻路结束!" << std::endl;
+						if(m_bDebugLog)std::cout << "原坐标不可达，移动至目标点成功，寻路结束!" << std::endl;
 						WaitInNormalState();
 						return true;
 					}
@@ -1350,7 +1350,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 			{
 				if (std::find(std::begin(warpPosList), std::end(warpPosList), TMLPoint(tarX, tarY)) != std::end(warpPosList)) //切一下 然后再移动一次
 				{
-					std::cout << "目标为传送点,判断地图切换:" << tarX << "," << tarY << std::endl;
+					if(m_bDebugLog)std::cout << "目标为传送点,判断地图切换:" << tarX << "," << tarY << std::endl;
 					int tryNum = 0;
 					unsigned long fixWarpTime = GetTickCount(); //5秒判断
 					while (tryNum < 3)
@@ -1371,7 +1371,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 								{
 									m_interface->FixMapWarpStuck(0);
 									lastWarpMap202 = timestamp + 8;
-									std::cout << ("切换地图 卡住 fix warp 0") << std::endl;
+									if(m_bDebugLog)std::cout << ("切换地图 卡住 fix warp 0") << std::endl;
 								}
 								Sleep(1000);
 							}
@@ -1385,7 +1385,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							//如果是传送点 也增加切图判断，没切的话 重新执行一下
 							if (curMapIndex != GetGameMapID() || curMapName != GetMapName())
 							{
-								std::cout << "当前地图更改，寻路结束!" << std::endl;
+								if(m_bDebugLog)std::cout << "当前地图更改，寻路结束!" << std::endl;
 								WaitInNormalState();
 								if (IsInRandomMap())
 									Sleep(m_mazeWaitTime);
@@ -1393,7 +1393,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							}
 							else if (curMapIndex == GetGameMapID() && curMapName == GetMapName() && (curX != tarX || curY != tarY)) //好多图 名字一样
 							{
-								std::cout << "坐标切换，寻路结束!" << std::endl;
+								if(m_bDebugLog)std::cout << "坐标切换，寻路结束!" << std::endl;
 								WaitInNormalState();
 								return true;
 							}
@@ -1402,11 +1402,11 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 								//地图一致 目标一致，但是是传送点，	 判断原坐标是否可达
 								if (!IsReachableTarget(walkprePos.x, walkprePos.y)) //用移动前点判断 不能到 说明换图成功，特别是ud这个图
 								{
-									std::cout << "原坐标不可达，移动至目标点成功，寻路结束!" << std::endl;
+									if(m_bDebugLog)std::cout << "原坐标不可达，移动至目标点成功，寻路结束!" << std::endl;
 									WaitInNormalState();
 									return true;
 								}
-								std::cout << "到达目标点，目标为传送点，地图卡住，切回地图,重新寻路" << tarX << tarY << std::endl;
+								if(m_bDebugLog)std::cout << "到达目标点，目标为传送点，地图卡住，切回地图,重新寻路" << tarX << "," << tarY << std::endl;
 								m_interface->FixMapWarpStuck(1); //会切回上个图
 								TMLPoint curPos = GetMapCoordinate();
 								if (!isLoop)
@@ -1436,7 +1436,7 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							m_interface->GetMapXY(curX, curY);
 							if (curMapIndex != GetGameMapID() || curMapName != GetMapName()) //正常结束
 							{
-								std::cout << "当前地图更改，寻路结束!" << std::endl;
+								if(m_bDebugLog)std::cout << "当前地图更改，寻路结束!" << std::endl;
 								WaitInNormalState();
 								if (IsInRandomMap())
 									Sleep(m_mazeWaitTime);
@@ -1444,24 +1444,24 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 							}
 							else if (curMapIndex == GetGameMapID() && curMapName == GetMapName() && (curX != tarX || curY != tarY)) //好多图 名字一样
 							{
-								std::cout << "坐标切换，寻路结束!" << std::endl;
+								if(m_bDebugLog)std::cout << "坐标切换，寻路结束!" << std::endl;
 								WaitInNormalState();
 								return true;
 							}
 						}
 						Sleep(1000); //防止判断过快
 					}
-					std::cout << "传送点切换返回,3次重试结束:" << tarX << "," << tarY << std::endl;
+					if(m_bDebugLog)std::cout << "传送点切换返回,3次重试结束:" << tarX << "," << tarY << std::endl;
 					if (!IsReachableTarget(walkprePos.x, walkprePos.y)) //用移动前点判断 不能到 说明换图成功，特别是ud这个图
 					{
-						std::cout << "原坐标不可达，移动至目标点成功，寻路结束!" << std::endl;
+						if(m_bDebugLog)std::cout << "原坐标不可达，移动至目标点成功，寻路结束!" << std::endl;
 						WaitInNormalState();
 						return true;
 					}
 					else
 					{
 						//}
-						std::cout << "当前为传送点，但原坐标可达，重新移动至目标点，不判断目标点，寻路结束!" << tarX << tarY << std::endl;
+						if(m_bDebugLog)std::cout << "当前为传送点，但原坐标可达，重新移动至目标点，不判断目标点，寻路结束!" << tarX << "," << tarY << std::endl;
 						m_interface->WalkTo(tarX, tarY); //重新执行一次移动 如果卡墙  也不管了 由脚本去判断
 						WaitInNormalState();
 						return true;
@@ -1484,30 +1484,30 @@ bool CGAPython::AutoNavigator(A_FIND_PATH path, bool isLoop)
 						dwTimeoutTryCount++;
 						if (dwTimeoutTryCount >= 3)
 						{
-							std::cout << "短坐标自动寻路次数超3次，返回!" << tarX << tarY << std::endl;
+							if(m_bDebugLog)std::cout << "短坐标自动寻路次数超3次，返回!" << tarX << "," << tarY << std::endl;
 							return false;
 						}
 						dwLastTime = dwCurTime;
-						std::cout << "卡墙，短坐标自动寻路!" << tarX << tarY << std::endl;
+						if(m_bDebugLog)std::cout << "卡墙，短坐标自动寻路!" << tarX  << "," << tarY << std::endl;
 						//m_interface->FixMapWarpStuck(1); //会切回上个图
 						WaitInNormalState();
 						TMLPoint curPos = GetMapCoordinate();
 						auto findPath = CalculatePath(curPos.x, curPos.y, tarX, tarY);
 						if (findPath.size() == 1 || !isLoop)
 						{
-							std::cout << "卡墙：WalkTo" << tarX << tarY << std::endl;
+							if(m_bDebugLog)std::cout << "卡墙：WalkTo" << tarX << "," << tarY << std::endl;
 							m_interface->WalkTo(tarX, tarY); //重新执行一次移动
 						}
 						else if (findPath.size() > 1 && isLoop)
 						{
-							std::cout << "卡墙：AutoMoveInternal" << tarX << tarY << std::endl;
+							if(m_bDebugLog)std::cout << "卡墙：AutoMoveInternal" << tarX << "," << tarY << std::endl;
 							if (AutoMoveInternal(tarX, tarY, false) == false)
 								return false;
 							dwLastTime = dwCurTime;
 						}
 						else
 						{
-							std::cout << "目标不可达，返回!" << tarX << tarY << std::endl;
+							if(m_bDebugLog)std::cout << "目标不可达，返回!" << tarX << "," << tarY << std::endl;
 							return false;
 						}
 					}
@@ -1538,17 +1538,17 @@ int CGAPython::AutoMoveTo(int x, int y, int timeout /*=100*/)
 {
 	if (m_bMoveing)
 	{
-		//std::cout << "移动中";
+		//if(m_bDebugLog)std::cout << "移动中";
 		return 0;
 	}
 	m_navigatorLoopCount = 0;
 	if (GetTeammatesCount() > 0 && !IsTeamLeader()) //队伍人数>0 并且不是队长的话  返回
 	{
-		std::cout << "AutoMoveTo 队伍人数>0 并且自己不是队长" << std::endl;
+		if(m_bDebugLog)std::cout << "AutoMoveTo 队伍人数>0 并且自己不是队长" << std::endl;
 		return 0;
 	}
 	bool bRet = AutoMoveInternal(x, y, timeout);
-	std::cout << "目标" << x << "," << y << " 寻路结束 " << std::endl;
+	if(m_bDebugLog)std::cout << "目标" << x << "," << y << " 寻路结束 " << std::endl;
 	return bRet;
 }
 bool CGAPython::IsTeamLeader()
@@ -1594,7 +1594,7 @@ int CGAPython::AutoMoveToEx(int x, int y, std::string sMapName, int timeout /*= 
 			}
 			tryNum++;
 		}
-		std::cout << "尝试3次后，到达目标地图失败:" << sMapName << " " << x << "," << y << std::endl;
+		if(m_bDebugLog)std::cout << "尝试3次后，到达目标地图失败:" << sMapName << " " << x << "," << y << std::endl;
 	}
 	return 0;
 }
@@ -1604,7 +1604,7 @@ int CGAPython::AutoMoveToPath(std::vector<pair<int, int> > findPath, int timeout
 	if (findPath.size() > 0)
 		AutoNavigator(findPath);
 	else
-		std::cout << "未找到可通行路径!" << std::endl;
+		if(m_bDebugLog)std::cout << "未找到可通行路径!" << std::endl;
 	return 0;
 }
 
@@ -1618,13 +1618,13 @@ int CGAPython::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoop
 		auto warpPosList = GetMapEntranceList(); //传送点		
 		if (std::find(warpPosList.begin(), warpPosList.end(), TMLPoint(x, y)) != std::end(warpPosList))	 //切一下 然后再移动一次
 		{
-			std::cout << "AutoMoveTo 坐标一样,目标为传送点，重新进入!" << std::endl;
+			if(m_bDebugLog)std::cout << "AutoMoveTo 坐标一样,目标为传送点，重新进入!" << std::endl;
 			auto tmpPos = GetRandomSpace(x, y, 1);
 			m_interface->WalkTo(tmpPos.x, tmpPos.y);
 			Sleep(2000);
 			m_interface->WalkTo(x, y);
 		}
-		std::cout << "AutoMoveTo 坐标一样,返回!" << std::endl;
+		if(m_bDebugLog)std::cout << "AutoMoveTo 坐标一样 返回!" << std::endl;
 		return 1;
 	}
 	m_bMoveing = true;
@@ -1634,13 +1634,13 @@ int CGAPython::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoop
 	auto findPath = CalculatePath(curPos.x, curPos.y, x, y);
 	if (findPath.size() < 1) //离线地图查找一波
 	{
-		/*	std::cout << "未找到可通行路径，加载离线地图尝试！" << curPos.x << curPos.y << "tgt:" << x << "," << y<< std::endl;
+		/*	if(m_bDebugLog)std::cout << "未找到可通行路径，加载离线地图尝试！" << curPos.x << curPos.y << "tgt:" << x << "," << y<< std::endl;
 			int mapIndex = GetGameMapID();
 			QImage mapImage;
 			LoadOffLineMapImageData(mapIndex, mapImage);
 			findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
 			if (findPath.size() > 0)
-				std::cout << "离线地图查找路径成功，继续寻路"<< std::endl;*/
+				if(m_bDebugLog)std::cout << "离线地图查找路径成功，继续寻路"<< std::endl;*/
 	}
 	bool bRet = false;
 	if (findPath.size() > 0)
@@ -1649,7 +1649,7 @@ int CGAPython::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoop
 	}
 	else
 	{
-		/*std::cout << "未找到可通行路径！当前：" << curPos.x << ","
+		/*if(m_bDebugLog)std::cout << "未找到可通行路径！当前：" << curPos.x << ","
 			<< curPos.y << "目标：" << x << "," << y << "Normal" << IsInNormalState()<< std::endl;*/
 	}
 	m_bMoveing = false;

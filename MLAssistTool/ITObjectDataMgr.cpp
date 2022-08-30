@@ -130,6 +130,10 @@ void ITObjectDataMgr::checkOnlineThread(ITObjectDataMgr *pThis)
 				//QMutexLocker locker(&it.value()->_mutex);
 				it.value()->_connectState = 0;
 				offlineCount += 1;
+				if (pThis->m_onlineAccountRoles.contains(it.key()))
+				{
+					pThis->m_onlineAccountRoles.removeOne(it.key());
+				}
 			}
 			else if (it.value()->_connectState == 1)
 			{
@@ -2109,7 +2113,10 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		pCharacter->setEditStatus();
 	pCharacter->_connectState = 1;
 	pCharacter->_lastUploadTime.restart();
-	
+	if (!m_onlineAccountRoles.contains(sID))
+	{
+		m_onlineAccountRoles.append(sID);
+	}	
 	if (pCharacter->getObjectType() != roleObjectType)
 	{
 		pCharacter->setObjectType(roleObjectType);

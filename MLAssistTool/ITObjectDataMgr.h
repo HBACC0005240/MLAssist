@@ -90,6 +90,8 @@ public:
 	ITCGPetPictorialBookPtr GetGamePetFromNumber(int number) { return m_numberForPet.value(number); }
 	//获取连接过的角色信息
 	QHash<QString, ITGidRolePtr> GetAlreadyConnectedData() { return m_idForAccountRole; }
+	ITGidRolePtr GetGidRolePtrFromKey(const QString &sKey) { return m_idForAccountRole.value(sKey); }
+	QStringList GetOnlineRoleKeys() { return m_onlineAccountRoles; }
 
 	int GetGameRoleCount() { return m_gameRoleCount; }
 	int GetGameRoleOnlineCount() { return m_onlineCount; }
@@ -166,6 +168,7 @@ private:
 	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
 	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//gid+name 对应指定游戏人物
+	QStringList m_onlineAccountRoles;					//gid+name 在线列表 不在线清除此列表项
 	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid+name 对应指定gid
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
