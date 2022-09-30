@@ -1237,41 +1237,62 @@ void GameCustomBattleWgt::on_table_customContextMenu(const QPoint &pos)
 	}
 }
 
-int GameCustomBattleWgt::transConditionCGAValToLocal(int nval)
+int GameCustomBattleWgt::transConditionCGAValToLocal(int nval, bool toLocal )
 {
-	return m_conditionMap.value(nval);
+	if (toLocal)
+		return m_conditionMap.value(nval);
+	else
+		return m_conditionMap.key(nval);
 }
 
-int GameCustomBattleWgt::transActionCGAValToLocal(int nval)
+int GameCustomBattleWgt::transActionCGAValToLocal(int nval, bool toLocal )
 {
-	return m_actionMap.value(nval);
+	if (toLocal)
+		return m_actionMap.value(nval);
+	else
+		return m_actionMap.key(nval);
 }
 
-int GameCustomBattleWgt::transPetActionCGAValToLocal(int nval)
+int GameCustomBattleWgt::transPetActionCGAValToLocal(int nval, bool toLocal )
 {
-	return m_petActionMap.value(nval);
+	if (toLocal)
+		return m_petActionMap.value(nval);
+	else
+		return m_petActionMap.key(nval);
 }
 
-int GameCustomBattleWgt::transTargetCGAValToLocal(int nval)
+int GameCustomBattleWgt::transTargetCGAValToLocal(int nval, bool toLocal )
 {
-	return m_targetMap.value(nval);
+	if (toLocal)
+		return m_targetMap.value(nval);
+	else
+		return m_targetMap.key(nval);
 }
 
-int GameCustomBattleWgt::transTargetSlectCGAValToLocal(int nval)
+int GameCustomBattleWgt::transTargetSlectCGAValToLocal(int nval, bool toLocal )
 {
-	return m_targetConditionMap.value(nval);
+	if (toLocal)
+		return m_targetConditionMap.value(nval);
+	else
+		return m_targetConditionMap.key(nval);
 }
 
-int GameCustomBattleWgt::transConNumRelCGAValToLocal(int nval)
+int GameCustomBattleWgt::transConNumRelCGAValToLocal(int nval, bool toLocal )
 {
-	return m_targetConditionNumMap.value(nval);
+	if (toLocal)
+		return m_targetConditionNumMap.value(nval);
+	else
+		return m_targetConditionNumMap.key(nval);
 }
 
-int GameCustomBattleWgt::transConStrRelCGAValToLocal(int nval)
+int GameCustomBattleWgt::transConStrRelCGAValToLocal(int nval, bool toLocal )
 {
 	m_targetConditionStrMap.insert(0, dtCompare_Contain);
 	m_targetConditionStrMap.insert(1, dtCompare_NotContain);
-	return m_targetConditionStrMap.value(nval);
+	if (toLocal)
+		return m_targetConditionStrMap.value(nval);
+	else
+		return m_targetConditionStrMap.key(nval);
 }
 
 //这部分解析 还得写个转换 把CGA值 转devtype
@@ -1432,19 +1453,19 @@ void GameCustomBattleWgt::SaveBattleSettings(QJsonObject &obj)
 		auto setting = m_model->BattleSettingFromIndex(m_model->index(i, 0));
 		row.insert("index", i);
 
-		row.insert("condition", setting->GetConditionTypeId());
-		row.insert("conditionrel", setting->GetConditionRelId());
+		row.insert("condition", transConditionCGAValToLocal(setting->GetConditionTypeId(),false));
+		row.insert("conditionrel", transConNumRelCGAValToLocal(setting->GetConditionRelId(), false));
 		QString conditionVauleStr;
 		setting->GetConditionValue(conditionVauleStr);
 		row.insert("conditionval", conditionVauleStr);
 
-		row.insert("condition2", setting->GetCondition2TypeId());
-		row.insert("condition2rel", setting->GetCondition2RelId());
+		row.insert("condition2", transConditionCGAValToLocal(setting->GetCondition2TypeId(),false));
+		row.insert("condition2rel", transConNumRelCGAValToLocal(setting->GetCondition2RelId(),false));
 		QString condition2VauleStr;
 		setting->GetCondition2Value(condition2VauleStr);
 		row.insert("condition2val", condition2VauleStr);
 
-		row.insert("playeraction", setting->GetPlayerActionTypeId());
+		row.insert("playeraction", transActionCGAValToLocal(setting->GetPlayerActionTypeId(),false));
 		if (setting->GetPlayerActionTypeId() == dtAction_PlayerChangePet || setting->GetPlayerActionTypeId() == dtAction_PlayerUseItem)
 		{
 			QString actionVauleStr;
@@ -1456,16 +1477,16 @@ void GameCustomBattleWgt::SaveBattleSettings(QJsonObject &obj)
 			row.insert("playerskillname", setting->GetPlayerSkillName());
 			row.insert("playerskilllevel", setting->GetPlayerSkillLevel());
 		}
-		row.insert("playertarget", setting->GetPlayerTargetTypeId());
-		row.insert("playertargetsel", setting->GetPlayerTargetSelectId());
+		row.insert("playertarget", transTargetCGAValToLocal(setting->GetPlayerTargetTypeId(),false));
+		row.insert("playertargetsel", transTargetSlectCGAValToLocal(setting->GetPlayerTargetSelectId(),false));
 
-		row.insert("petaction", setting->GetPetActionTypeId());
+		row.insert("petaction", transPetActionCGAValToLocal(setting->GetPetActionTypeId(),false));
 		if (setting->GetPetActionTypeId() == dtAction_PetSkillAttack)
 		{
 			row.insert("petskillname", setting->GetPetSkillName());
 		}
-		row.insert("pettarget", setting->GetPetTargetTypeId());
-		row.insert("pettargetsel", setting->GetPetTargetSelectId());
+		row.insert("pettarget", transTargetCGAValToLocal(setting->GetPetTargetTypeId(),false));
+		row.insert("pettargetsel", transTargetSlectCGAValToLocal(setting->GetPetTargetSelectId(),false));
 
 		/*row.insert("petaction2", setting->GetPetAction2TypeId());
         if(setting->GetPetAction2TypeId() == BattlePetAction_Skill){

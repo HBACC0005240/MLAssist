@@ -38,13 +38,13 @@ private slots:
 	void on_table_customContextMenu(const QPoint &pos);
 
 protected:
-	int transConditionCGAValToLocal(int nval);
-	int transActionCGAValToLocal(int nval);
-	int transPetActionCGAValToLocal(int nval);
-	int transTargetCGAValToLocal(int nval);
-	int transTargetSlectCGAValToLocal(int nval);
-	int transConNumRelCGAValToLocal(int nval);
-	int transConStrRelCGAValToLocal(int nval);
+	int transConditionCGAValToLocal(int nval,bool toLocal=true);
+	int transActionCGAValToLocal(int nval, bool toLocal = true);
+	int transPetActionCGAValToLocal(int nval, bool toLocal = true);
+	int transTargetCGAValToLocal(int nval, bool toLocal = true);
+	int transTargetSlectCGAValToLocal(int nval, bool toLocal = true);
+	int transConNumRelCGAValToLocal(int nval, bool toLocal = true);
+	int transConStrRelCGAValToLocal(int nval, bool toLocal = true);
 
 public slots:
 	void doLoadUserConfig(QSettings &iniFile);
