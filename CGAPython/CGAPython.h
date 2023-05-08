@@ -232,6 +232,7 @@ public:
 	bool DeleteCard(int index, bool packetonly);
 	bool SendMail(int index, const std::string& msg);
 	bool SendPetMail(int index, int petid, int itempos, const std::string& msg);
+	bool GetGameServerInfo(cga_game_server_info_t& info);
 
 	bool RegisterChatMsgNotify(const std::function<void(CGA::cga_chat_msg_t)>& f);
 	bool RegisterServerShutdownNotify(const std::function<void(int)>& callback);

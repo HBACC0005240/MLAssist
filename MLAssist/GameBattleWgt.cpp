@@ -13,6 +13,8 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 {
 	ui.setupUi(this);
 	ui.pushButton_petDoubleAction->hide();
+	ui.checkBox_PlayerForceAction->hide();
+
 	m_pSoundAlarm = new QSound(QApplication::applicationDirPath() + "//ALARM.wav");
 	ui.tabWidget->setStyle(new ITTabBarStyle);
 
@@ -99,6 +101,7 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 	connect(ui.checkBox_ShowHPMP, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetShowHPMPEnabled(int)), Qt::ConnectionType::QueuedConnection);
 	connect(ui.checkBox_PetDoubleAction, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetPetDoubleAction(int)), Qt::ConnectionType::QueuedConnection);
 	connect(ui.checkBox_PlayerForceAction, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetPlayerForceAction(int)), Qt::ConnectionType::QueuedConnection);
+	connect(ui.checkBox_petVisible, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetFloorPetVisible(int)), Qt::ConnectionType::QueuedConnection);
 
 	//切图
 	connect(ui.checkBox_noAnimation, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetNoSwitchAnim(int)), Qt::ConnectionType::QueuedConnection);
@@ -109,6 +112,7 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 	connect(ui.listWidget_SpecialEnemy, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(doSpecialEnemyItemChanged(QListWidgetItem *)));
 	connect(g_pAutoBattleCtrl, SIGNAL(PlayAlarmWav()), this, SLOT(doPlayAlarmWav()));
 	connect(g_pAutoBattleCtrl, SIGNAL(StopAlarmWav()), this, SLOT(doStopPalyAlarm()));
+
 }
 
 GameBattleWgt::~GameBattleWgt()

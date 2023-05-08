@@ -287,6 +287,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QCheckBox" name="checkBox_petVisible">
+              <property name="text">
+               <string>屏蔽宠物</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="checkBox_noAnimation">
               <property name="text">
                <string>屏蔽切图</string>

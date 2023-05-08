@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="AStar">
+      <UniqueIdentifier>{7b446cfa-90fb-4c69-b3dd-b78d34d75f35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\CGALib\gameinterface.cpp">
@@ -24,6 +27,18 @@
     <ClCompile Include="CGAPython_wrap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="AStar\AStar.cpp">
+      <Filter>AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar\AStarGrid.cpp">
+      <Filter>AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar\AStarNode.cpp">
+      <Filter>AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar\AStarUtil.cpp">
+      <Filter>AStar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CGALib\gameinterface.h">
@@ -34,6 +49,21 @@
     </ClInclude>
     <ClInclude Include="CGAPython.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar\AStar.h">
+      <Filter>AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar\AStarDef.h">
+      <Filter>AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar\AStarGrid.h">
+      <Filter>AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar\AStarNode.h">
+      <Filter>AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar\AStarUtil.h">
+      <Filter>AStar</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

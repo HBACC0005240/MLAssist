@@ -1055,7 +1055,19 @@ namespace CGA
 	}cga_picbook_info_t;
 
 	typedef std::vector<cga_picbook_info_t> cga_picbooks_info_t;
+	typedef struct cga_game_server_info_s
+	{
+		cga_game_server_info_s()
+		{
+			port = 0;
+		}
+		cga_game_server_info_s(const std::string& a1, int a2) : ip(a1), port(a2)
+		{
 
+		}
+		std::string ip;
+		int port;
+	}cga_game_server_info_t;
 #define TRADE_STUFFS_ITEM 1
 #define TRADE_STUFFS_PET 2
 #define TRADE_STUFFS_PETSKILL 3
@@ -1098,6 +1110,7 @@ namespace CGA
 #define ENABLE_FLAG_CARD 3
 #define ENABLE_FLAG_TRADE 4
 #define ENABLE_FLAG_FAMILY 5
+#define ENABLE_FLAG_SHOWPETS 6
 #define ENABLE_FLAG_AVATAR_PUBLIC 100
 #define ENABLE_FLAG_BATTLE_POSITION 101
 
@@ -1139,6 +1152,7 @@ namespace CGA
 		virtual bool IsConnected() = 0;
 		virtual void Disconnect() = 0;
 		virtual bool Connect(int port) = 0;
+		virtual int GetPort() = 0;
 		virtual bool Initialize(cga_game_data_t& data) = 0;
 
 		virtual bool IsInGame(int& ingame) = 0;
@@ -1267,6 +1281,7 @@ namespace CGA
 		virtual bool DeleteCard(int index, bool packetonly, bool& result) = 0;
 		virtual bool SendMail(int index, const std::string& msg, bool& result) = 0;
 		virtual bool SendPetMail(int index, int petid, int itempos, const std::string& msg, bool& result) = 0;
+		virtual bool GetGameServerInfo(cga_game_server_info_t& info) = 0;
 
 		virtual bool RegisterServerShutdownNotify(const std::function<void(int)>& callback) = 0;
 		virtual bool RegisterGameWndKeyDownNotify(const std::function<void(unsigned int)>& callback) = 0;

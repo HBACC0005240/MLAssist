@@ -124,6 +124,11 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def_readwrite("skill_slots", &CGA::cga_picbook_info_t::skill_slots)
 		.def_readwrite("name", &CGA::cga_picbook_info_t::name)
 		;
+	py::class_<CGA::cga_game_server_info_t>(m, "cga_game_server_info_t")
+		.def(py::init<>())
+		.def_readwrite("ip", &cga_game_server_info_t::ip)
+		.def_readwrite("port", &cga_game_server_info_t::port)
+		;
 	py::class_<CGA::CGAShare_t>(m, "CGAShare_t")
 		.def(py::init<>())
 		.def_readwrite("ProcessId", &CGA::CGAShare_t::ProcessId)
@@ -621,6 +626,7 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def("DeleteCard", &CGAPython::DeleteCard)
 		.def("SendMail", &CGAPython::SendMail)
 		.def("SendPetMail", &CGAPython::SendPetMail)
+		.def("GetGameServerInfo", &CGAPython::GetGameServerInfo)
 		.def("AutoMoveTo", &CGAPython::AutoMoveToEx, "自动寻路,参数(x,y,name,timeout),超时可选,单位毫秒", py::arg("x"), py::arg("y"), py::arg("sMapName")="", py::arg("timeout") = 10000)
 
 		.def("RegisterChatMsgNotify", &CGAPython::RegisterChatMsgNotify)

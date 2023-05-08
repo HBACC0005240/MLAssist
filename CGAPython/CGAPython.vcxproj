@@ -76,6 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
+    <OutDir>..\bin\Python\Python310-32</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -103,7 +104,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CGA_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Environment\boost\boost_1_75_0\;../rest_rpc/;../rest_rpc/spdlog/include;../rest_rpc/iguana;../rest_rpc/iguana/third_party/msgpack/include;C:\Users\HBACC\AppData\Local\Programs\Python\Python310-32\include;../CGALib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>J:\Environment\boost\boost_1_75_0\;../rest_rpc/;../rest_rpc/spdlog/include;../rest_rpc/iguana;../rest_rpc/iguana/third_party/msgpack/include;../bin/python/Python310-32/include;../CGALib</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -111,7 +112,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Environment\boost\boost_1_75_0/stage/lib;C:\Users\HBACC\AppData\Local\Programs\Python\Python310-32\libs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>J:\Environment\boost\boost_1_75_0/stage/lib;../bin/python/Python310-32/libs</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -144,12 +145,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CGALib\gameinterface.cpp" />
+    <ClCompile Include="AStar\AStar.cpp" />
+    <ClCompile Include="AStar\AStarGrid.cpp" />
+    <ClCompile Include="AStar\AStarNode.cpp" />
+    <ClCompile Include="AStar\AStarUtil.cpp" />
     <ClCompile Include="CGAPython.cpp" />
     <ClCompile Include="CGAPython_wrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CGALib\gameinterface.h" />
     <ClInclude Include="..\CGALib\packdata.h" />
+    <ClInclude Include="AStar\AStar.h" />
+    <ClInclude Include="AStar\AStarDef.h" />
+    <ClInclude Include="AStar\AStarGrid.h" />
+    <ClInclude Include="AStar\AStarNode.h" />
+    <ClInclude Include="AStar\AStarUtil.h" />
     <ClInclude Include="CGAPython.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -244,73 +244,56 @@ char* NET_EscapeStringEx(char* src)
 	return src;
 }
 
+
 char* NET_EscapeStringEx2(const char* str, char* dst, int maxlen)
 {
-	static char table[] = "n\nc,z|y\\";
+	int srclen;
+	int i;
+	int j;
+	char ch;
 
-	int v4; // ST24_4
-	unsigned int j; // [esp+10h] [ebp-1Ch]
-	int v6; // [esp+14h] [ebp-18h]
-	signed int v7; // [esp+18h] [ebp-14h]
-	signed int v8; // [esp+1Ch] [ebp-10h]
-	signed int i; // [esp+20h] [ebp-Ch]
-	int k; // [esp+24h] [ebp-8h]
-	char v11; // [esp+2Bh] [ebp-1h]
-
-	v7 = strlen(str);
-	k = 0;
-	v6 = 0;
-	for (i = 0; i < v7; ++i)
+	srclen = strlen(str);
+	for (i = 0, j = 0; i < srclen && j < maxlen - 1; ++i)
 	{
 		if ((UCHAR)str[i] != (UCHAR)0xFF)
 		{
-			v11 = 0;
-			v8 = 0;
-			if (k + 1 >= maxlen)
-				break;
 			if (str[i] & 0x80)
 			{
-				if (k + 2 >= maxlen || k + 1 >= v6 + v7)
-				{
-					dst[k] = 0;
-					return dst;
-				}
-				dst[k] = str[i];
-				v4 = k + 1;
-				dst[v4] = str[++i];
-				k = v4 + 1;
+				if (j + 1 == maxlen - 1) break;
+				dst[j++] = str[i];
+				i++;
+				if (i == srclen) break;
+				dst[j++] = str[i];
 			}
-			else
+			else if (str[i] == '\\')
 			{
-				for (j = 0; j < 4; ++j)
+				i++;
+				if (i == srclen) break;
+				ch = NET_EscapeCharFromTable(str[i]);
+				if (ch == '\\')
 				{
-					if (str[i] == table[2 * j])
-					{
-						v8 = 1;
-						v11 = table[2 * j + 1];
-						break;
-					}
+					if (j + 1 == maxlen - 1) break;
+					dst[j++] = '\\';
+					dst[j++] = '\\';
 				}
-				if (v8 == 1)
+				else if (ch == '\n')
 				{
-					if (k + 2 >= maxlen)
-					{
-						dst[k] = 0;
-						return dst;
-					}
-					dst[k] = '\\';
-					dst[k + 1] = v11;
-					k += 2;
-					++v6;
+					if (j + 1 == maxlen - 1) break;
+					dst[j++] = '\\';
+					dst[j++] = 'n';
 				}
 				else
 				{
-					dst[k++] = str[i];
+					dst[j++] = ch;
 				}
+			}
+			else
+			{
+				dst[j++] = str[i];
 			}
 		}
 	}
-	dst[k] = 0;
+	dst[j] = 0;
 	return dst;
 }
 void CGA_NotifyGameWndKeyDown(unsigned int key);
@@ -3221,6 +3204,9 @@ void CGAService::Initialize(game_type type)
 		g_picbook_info = CONVERT_GAMEVAR(void*, 0x11FBE54 - 0x400000);//ok;
 		g_picbook_maxcount = CONVERT_GAMEVAR(int*, 0xF11E08 - 0x400000);//ok;
 		g_select_card = CONVERT_GAMEVAR(int*, 0xCB4198 - 0x400000);//ok;
+		g_show_pets = CONVERT_GAMEVAR(short*, 0x601854 - 0x400000);//ok;
+		g_game_server_ip = CONVERT_GAMEVAR(char*, 0xF9E858 - 0x400000);//ok;
+		g_game_server_port = CONVERT_GAMEVAR(char*, 0xF9E8D8 - 0x400000);//ok;
 
 		Sys_CheckModify = CONVERT_GAMEVAR(char(__cdecl*)(const char*), 0x1BD030);//ok
 		COMMON_PlaySound = CONVERT_GAMEVAR(void(__cdecl*)(int, int, int), 0x1B1570);//ok
@@ -3468,6 +3454,9 @@ void CGAService::Initialize(game_type type)
 		m_work_immediate_state = 0;
 		m_work_basedelay_enforced = 2000;
 		m_ui_noswitchanim = false;
+		m_ui_switchanim_wait = 0;
+		m_ui_switchanim_endtick = 0;
+		m_ui_switchanim_waittick = 0;
 		m_player_menu_type = 0;
 		m_unit_menu_type = 0;
 		m_ui_selectbigserver_click_index = -1;
@@ -3692,7 +3681,7 @@ void CGAService::DrawCustomText()
 		NET_ParseBattlePackets(m_btl_delayanimpacket.a1, "M|END|");
 	}
 
-	if (m_gametextui_enable /*&& GetForegroundWindow() == g_MainHwnd*/)
+	if (m_gametextui_enable && GetForegroundWindow() == g_MainHwnd)
 	{
 		if (GetWorldStatus() == 10)
 		{
@@ -4056,7 +4045,11 @@ bool CGAService::IsPlayerFlagEnabled(int index)
 		return ((*g_playerBase)->enable_flags & index2player_flags[index]) ? true : false;
 	}
 
-	if (index == ENABLE_FLAG_AVATAR_PUBLIC)
+	if (index == ENABLE_FLAG_SHOWPETS)
+	{
+		return (*g_show_pets) ? true : false;
+	}
+	else if(index == ENABLE_FLAG_AVATAR_PUBLIC)
 	{
 		int publicState = *(int*)((char*)g_avatar_public_state + 0x828 * (*g_local_player_index));
 		return publicState ? true : false;
@@ -6195,7 +6188,12 @@ void CGAService::WM_SayWords(const char* str, int color, int range, int size)
 
 	std::string msg = "P|";
 
-	msg += boost::locale::conv::from_utf<char>(str, "GBK");
+	auto str_gbk = boost::locale::conv::from_utf<char>(str, "GBK");
+
+	char buf[1024] = { 0 };
+	NET_EscapeStringEx2(str_gbk.c_str(), buf, 1024);
+
+	msg += buf;
 
 	if (m_game_type == cg_item_6000)
 		NET_WriteSayWords_cgitem(*g_net_socket, g_player_xpos->decode(), g_player_ypos->decode(), msg.c_str(), color, range, size);
@@ -6212,18 +6210,18 @@ void CGAService::SayWords(std::string str, int color, int range, int size)
 
 bool CGAService::WM_ChangeNickName(const char* name)
 {
-	if (strlen(name) > 16)
-		return false;
+	auto name_gbk = boost::locale::conv::from_utf<char>(name, "GBK");
 
-	NET_WriteChangeNickNamePacket_cgitem(*g_net_socket, name);
+	char buf[128] = { 0 };
+	NET_EscapeStringEx2(name_gbk.c_str(), buf, 127);
+
+	NET_WriteChangeNickNamePacket_cgitem(*g_net_socket, buf);
 	return true;
 }
 
 bool CGAService::ChangeNickName(std::string name)
 {
-	auto textutf8 = boost::locale::conv::from_utf<char>(name, "GBK");
-
-	return SendMessageA(g_MainHwnd, WM_CGA_CHANGE_NICK_NAME, (WPARAM)textutf8.c_str(), (LPARAM)NULL) ? true : false;
+	return SendMessageA(g_MainHwnd, WM_CGA_CHANGE_NICK_NAME, (WPARAM)name.c_str(), (LPARAM)NULL) ? true : false;
 }
 
 bool CGAService::WM_ChangeTitleName(int titleId)
@@ -6255,13 +6253,10 @@ bool CGAService::WM_ChangePetName(int petId, const char* name)
 {
 	if (petId >= 0 && petId <= 4 && g_pet_base[petId].level)
 	{
-		auto str = boost::locale::conv::from_utf<char>(name, "GBK");
+		auto name_gbk = boost::locale::conv::from_utf<char>(name, "GBK");
 
 		char buf[256] = { 0 };
-		strncpy(buf, str.c_str(), 255);
-		buf[255] = 0;
-
-		NET_EscapeStringEx(buf);
+		NET_EscapeStringEx2(name_gbk.c_str(), buf, 256);
 		NET_WriteChangePetNamePacket_cgitem(*g_net_socket, petId, buf);
 
 		return true;
@@ -6283,9 +6278,10 @@ void CGAService::WM_ChangePersDesc(cga_pers_desc_t* input)
 
 	if (input->changeBits & 2)
 	{
-		auto str = boost::locale::conv::from_utf<char>(input->sellString, "GBK");
-		strncpy(g_pers_desc->sellString, str.c_str(), 255);
-		g_pers_desc->sellString[255] = 0;
+		auto str_gbk = boost::locale::conv::from_utf<char>(input->sellString, "GBK");
+
+		char buf[256] = { 0 };
+		NET_EscapeStringEx2(str_gbk.c_str(), g_pers_desc->sellString, 256);
 	}
 
 	if (input->changeBits & 4)
@@ -6295,9 +6291,10 @@ void CGAService::WM_ChangePersDesc(cga_pers_desc_t* input)
 
 	if (input->changeBits & 8)
 	{
-		auto str = boost::locale::conv::from_utf<char>(input->buyString, "GBK");
-		strncpy(g_pers_desc->buyString, str.c_str(), 255);
-		g_pers_desc->buyString[255] = 0;
+		auto str_gbk = boost::locale::conv::from_utf<char>(input->buyString, "GBK");
+
+		char buf[256] = { 0 };
+		NET_EscapeStringEx2(str_gbk.c_str(), g_pers_desc->buyString, 256);
 	}
 
 	if (input->changeBits & 0x10)
@@ -6307,16 +6304,18 @@ void CGAService::WM_ChangePersDesc(cga_pers_desc_t* input)
 
 	if (input->changeBits & 0x20)
 	{
-		auto str = boost::locale::conv::from_utf<char>(input->wantString, "GBK");
-		strncpy(g_pers_desc->wantString, str.c_str(), 255);
-		g_pers_desc->wantString[255] = 0;
+		auto str_gbk = boost::locale::conv::from_utf<char>(input->wantString, "GBK");
+
+		char buf[256] = { 0 };
+		NET_EscapeStringEx2(str_gbk.c_str(), g_pers_desc->wantString, 256);
 	}
 
 	if (input->changeBits & 0x40)
 	{
-		auto str = boost::locale::conv::from_utf<char>(input->descString, "GBK");
-		strncpy(g_pers_desc->descString, str.c_str(), 255);
-		g_pers_desc->descString[255] = 0;
+		auto str_gbk = boost::locale::conv::from_utf<char>(input->descString, "GBK");
+
+		char buf[256] = { 0 };
+		NET_EscapeStringEx2(str_gbk.c_str(), g_pers_desc->descString, 256);
 	}
 
 	UI_UpdatePersDesc(0);
@@ -7072,6 +7071,16 @@ bool CGAService::WM_EnableFlags(int type, bool enable)
 		else if (!((*g_enableflags) & PLAYER_ENABLE_FLAGS_FAMILY) && enable)
 			UI_HandleEnableFlags(22, 2);
 	}
+	else if (type == ENABLE_FLAG_SHOWPETS) {
+		if ((*g_show_pets) && !enable)
+		{
+			(*g_show_pets) = 0;
+		}
+		else if (!(*g_show_pets) && enable)
+		{
+			(*g_show_pets) = 1;
+		}
+	}
 	else if (type == ENABLE_FLAG_AVATAR_PUBLIC) {
 
 		NET_WriteChangeAvatarPublicStatePacket_cgitem(*g_net_socket, enable ? 1 : 0);
@@ -7507,6 +7516,10 @@ bool CGAService::SendPetMail(int index, int petid, int itemid, const std::string
 	ULONG packed_arg = (index & 0xFF) | ((petid & 0xFF) << 8) | ((itemid & 0xFF) << 16);
 
 	return SendMessageA(g_MainHwnd, WM_CGA_SEND_PET_MAIL, (WPARAM)packed_arg, (LPARAM)msg.c_str()) ? true : false;
+}
+cga_game_server_info_t CGAService::GetGameServerInfo()
+{
+	return cga_game_server_info_t(std::string(g_game_server_ip), atoi(g_game_server_port));
 }
 
 void CGAService::WM_SendClientLogin(const char* acc, const char* pwd, int gametype)

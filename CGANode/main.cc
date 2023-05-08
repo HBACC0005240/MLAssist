@@ -297,6 +297,26 @@ void SendPetMail(const Nan::FunctionCallbackInfo<v8::Value>& info)
 	info.GetReturnValue().Set(bResult);
 }
 
+void GetGameServerInfo(const Nan::FunctionCallbackInfo<v8::Value>& info)
+{
+	auto isolate = info.GetIsolate();
+	HandleScope handle_scope(isolate);
+	auto context = isolate->GetCurrentContext();
+
+	CGA::cga_game_server_info_t svinfo;
+	if (!g_CGAInterface->GetGameServerInfo(svinfo))
+	{
+		Nan::ThrowError("RPC Invocation failed.");
+		return;
+	}
+
+	Local<Object> obj = Object::New(isolate);
+	obj->Set(context, String::NewFromUtf8(isolate, "ip").ToLocalChecked(), Nan::New(svinfo.ip).ToLocalChecked());
+	obj->Set(context, String::NewFromUtf8(isolate, "port").ToLocalChecked(), Integer::New(isolate, svinfo.port));
+
+	info.GetReturnValue().Set(obj);
+}
+
 void ChangePersDesc(const Nan::FunctionCallbackInfo<v8::Value>& info)
 {
 	auto isolate = info.GetIsolate();
@@ -497,6 +517,7 @@ void Init(v8::Local<v8::Object> exports) {
 	exports->Set(context, Nan::New("DeleteCard").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(DeleteCard)->GetFunction(context).ToLocalChecked());
 	exports->Set(context, Nan::New("SendMail").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(SendMail)->GetFunction(context).ToLocalChecked());
 	exports->Set(context, Nan::New("SendPetMail").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(SendPetMail)->GetFunction(context).ToLocalChecked());
+	exports->Set(context, Nan::New("GetGameServerInfo").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(GetGameServerInfo)->GetFunction(context).ToLocalChecked());
 	exports->Set(context, Nan::New("RequestDownloadMap").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(RequestDownloadMap)->GetFunction(context).ToLocalChecked());
 	exports->Set(context, Nan::New("AsyncWaitBattleAction").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(AsyncWaitBattleAction)->GetFunction(context).ToLocalChecked());
 	exports->Set(context, Nan::New("GetBattleUnits").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(GetBattleUnits)->GetFunction(context).ToLocalChecked());
