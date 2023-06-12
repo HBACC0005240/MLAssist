@@ -144,6 +144,8 @@ public:
 	void ClearRenItems();
 	void ClearDieItems();
 	void ClearSaleItems();
+
+	bool isFloorPetVisible() { return m_bFloorPetVisble; }		///< 地面宠物是否可见
 	//战后
 
 	bool AutoFirstAid();		   //自动急救
@@ -362,6 +364,7 @@ public slots:
 	void OnSetAutoEatTimeCrystal(int state);									//打开关闭自动吃时水
 	void OnSetAutoEatDogFood(int state);										//打开关闭自动吃狗粮
 	void OnSetAutoUploadBankData(int state);									//打开关闭自动上传银行数据
+	void OnSetFloorPetVisible(int state);										///<隐藏显示地面宠物
 
 private:
 	QMutex m_gidMutex;
@@ -481,6 +484,7 @@ private:
 	bool m_bOpenNetToMTool = false;															   //是否打开和MLAssistTool通信功能
 	QString m_sCGInstallPath;																   //魔力安装目录
 	bool m_bOpenSyncMap = false;															   //是否打开了同步地图功能
+	bool m_bFloorPetVisble = false;															   //地面宠物隐藏显示
 };
 
 template <typename TData>

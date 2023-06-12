@@ -3013,6 +3013,8 @@ void GameCtrl::OnGetCharacterData()
 		//g_CGAInterface->SetWorkDelay(m_nWorkDelay);
 		g_CGAInterface->SetWorkAcceleration(m_nWorkAcc);
 		//g_CGAInterface->SetNoSwitchAnim(m_bNoSwitchAnim);
+		bool bResult = false;
+		g_CGAInterface->EnableFlags(ENABLE_FLAG_SHOWPETS, m_bFloorPetVisble, bResult);
 
 		CGA::cga_player_info_t info;
 		if (g_CGAInterface->GetPlayerInfo(info))
@@ -4308,4 +4310,15 @@ void GameCtrl::SetScriptRunState(int state)
 {
 	qDebug() << "SetScriptRunState" << state;
 	m_nRunScriptState = state;
+}
+
+void GameCtrl::OnSetFloorPetVisible(int state)
+{
+	m_bFloorPetVisble = state ? false : true;
+	int ingame = 0;
+	if (g_CGAInterface->IsConnected() && g_CGAInterface->IsInGame(ingame) && ingame)
+	{
+		bool bResult = false;
+		g_CGAInterface->EnableFlags(ENABLE_FLAG_SHOWPETS, m_bFloorPetVisble, bResult);
+	}
 }

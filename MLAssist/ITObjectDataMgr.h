@@ -148,6 +148,7 @@ public slots:
 	void OnMqttConnected();
 	void OnSubscribeState(QMqttSubscription::SubscriptionState s);
 	void on_publishMqttMsg(const QString &, const QString &);
+	void onCheckIniCfgModify();
 
 private:
 	ITDataBaseConnPtr m_dbconn;								   //数据库连接对象
@@ -184,5 +185,8 @@ private:
 	QMutex m_mqttMutex;										   //mqtt信号量
 	QList<QPair<quint64, QStringList> > m_recvPublishMsgCache; //收到的发布消息缓存
 	QString m_sMQTTCode;
+	QTimer *m_pCheckCfgTimer;									//检查配置文件变动定时器
+	QString m_sConfigIniPath;									//配置文件路径
+	QDateTime m_cfgFileLastModifiedTime;						//配置文件最后一次修改时间
 };
 #endif

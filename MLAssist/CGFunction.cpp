@@ -10671,11 +10671,15 @@ int CGFunction::GetMapFloorNumberFromName(bool bSerial /*= false*/, bool bBack /
 
 bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QImage &mapImage)
 {
+	bool bSysMap = false;
 	CGA::cga_map_cells_t cells;
 	g_CGAInterface->GetMapCollisionTable(true, cells);
 	QString sPath = QCoreApplication::applicationDirPath() + "//map//";
 	if (index1 == 0)
+	{
 		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
+		bSysMap = true;
+	}
 	else
 	{
 		if (!g_pGameCtrl->GetIsOpenNetToMLAssistTool() || !g_pGameCtrl->GetIsOpenSyncMap())
@@ -10686,6 +10690,12 @@ bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QIm
 	if (QFile::exists(sPath) == false)
 	{
 		qDebug() << "离线地图寻路：未找到指定地图数据！";
+		return false;
+	}
+	QFileInfo fi(sPath);	
+	if (!bSysMap && QDateTime::currentDateTime().secsTo(fi.lastModified()) >= 3600 * 4) //4个小时 认为废弃
+	{
+		qDebug() << "服务器迷宫地图时间超4小时，本次结果不作为依据";
 		return false;
 	}
 	mapImage.load(sPath);
@@ -10699,6 +10709,7 @@ bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QIm
 		qDebug() << "离线地图寻路：离线地图宽高和当前不匹配！";
 		return false;
 	}
+	
 	return true;
 }
 

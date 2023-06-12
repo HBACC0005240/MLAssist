@@ -92,11 +92,17 @@ bool ITObjectDataMgr::init()
 	QSettings installIniFile(QCoreApplication::applicationDirPath() + "//PlayOnline.ini", format);
 	QString installPath = (installIniFile.value("Path/Game4", "").toString());
 	g_pGameCtrl->SetCGGameInstallPath(installPath);
-	QString iniPath = QCoreApplication::applicationDirPath() + "/config.ini";
-	QSettings iniFile(iniPath, QSettings::IniFormat);
+	m_sConfigIniPath = QCoreApplication::applicationDirPath() + "/config.ini";
+
+	QFileInfo f(m_sConfigIniPath);
+	if (f.exists())
+		m_cfgFileLastModifiedTime = f.lastModified();
+
+
+	QSettings iniFile(m_sConfigIniPath, QSettings::IniFormat);
 	bool isOpenToolNet = iniFile.value("server/openTool", false).toBool();
 	bool isOpenSyncMap = iniFile.value("server/mapSync", false).toBool();
-	QString sServerIp = iniFile.value("server/ip", "www.wzqlive.com").toString();
+	QString sServerIp = iniFile.value("server/ip", "127.0.0.1").toString();
 	QString sServerPort = iniFile.value("server/port", "50051").toString();
 	int startHide = iniFile.value("game/startHide", 0).toInt();
 	int followPos = iniFile.value("game/followPos", 0).toInt();
@@ -117,7 +123,7 @@ bool ITObjectDataMgr::init()
 	g_pGameCtrl->SetFollowGamePos(followPos);
 	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
 
-	QString sMQTTServerIp = iniFile.value("server/mqttIP", "www.luguo666.com").toString();
+	QString sMQTTServerIp = iniFile.value("server/mqttIP", "127.0.0.1").toString();
 	int nMQTTServerPort = iniFile.value("server/mqttPort", 1883).toInt();
 	m_sMQTTCode = iniFile.value("server/mqttcode", "").toString();
 	//日志配置
@@ -178,6 +184,10 @@ bool ITObjectDataMgr::init()
 	RpcSocketClient::getInstance().init();
 	QtConcurrent::run(NormalThread, this);
 	QtConcurrent::run(LoadPetDataThread, this, isLoadPetCalcData, isLoadOfflineDb);
+
+	m_pCheckCfgTimer = new QTimer;
+	connect(m_pCheckCfgTimer, SIGNAL(timeout()), SLOT(onCheckIniCfgModify()));
+	m_pCheckCfgTimer->start(5000);
 	//emit signal_loadPetData(isLoadPetCalcData, isLoadOfflineDb);
 	return true;
 }
@@ -1857,6 +1867,53 @@ void ITObjectDataMgr::OnSubscribeState(QMqttSubscription::SubscriptionState s)
 void ITObjectDataMgr::on_publishMqttMsg(const QString &topic, const QString &msg)
 {
 	PublishOneTopic(topic, msg);
+}
+
+void ITObjectDataMgr::onCheckIniCfgModify()
+{
+	QFileInfo fi(m_sConfigIniPath);
+	QDateTime lastMdTime = fi.lastModified();
+	if (m_cfgFileLastModifiedTime == lastMdTime)
+		return;
+	m_cfgFileLastModifiedTime = lastMdTime;
+
+	QSettings iniFile(m_sConfigIniPath, QSettings::IniFormat);
+	bool isOpenToolNet = iniFile.value("server/openTool", false).toBool();
+	bool isOpenSyncMap = iniFile.value("server/mapSync", false).toBool();
+	QString sServerIp = iniFile.value("server/ip", "127.0.0.1").toString();
+	QString sServerPort = iniFile.value("server/port", "50051").toString();
+	int startHide = iniFile.value("game/startHide", 0).toInt();
+	int followPos = iniFile.value("game/followPos", 0).toInt();
+	int mazeWaitTime = iniFile.value("game/mazeWaitTime", 5000).toInt();			//迷宫等待时间
+	int mazeSearchWaitTime = iniFile.value("game/mazeSearchWaitTime", 3000).toInt();//搜索等待时间
+	bool repeatedGidExit = iniFile.value("game/repeatedGidExit", true).toBool();	//重复账号退出
+	int loginWaitTime = iniFile.value("game/loginIntervalTime", 3000).toInt();		//登录间隔
+	QString sMQTTServerIp = iniFile.value("server/mqttIP", "127.0.0.1").toString();
+	int nMQTTServerPort = iniFile.value("server/mqttPort", 1883).toInt();
+	m_sMQTTCode = iniFile.value("server/mqttcode", "").toString();
+
+	if (loginWaitTime < 0)
+	{
+		loginWaitTime = 0;
+	}
+	g_pGameCtrl->SetIsOpenSyncMap(isOpenSyncMap);
+	g_pGameCtrl->SetIsOpenNetToMLAssistTool(isOpenToolNet);
+	g_pGameCtrl->SetAutoLoginInterval(loginWaitTime);
+	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
+	g_pGameFun->SetMazeMapSearchWaitTime(mazeSearchWaitTime);
+	g_pGameCtrl->SetStartGameHide(startHide);
+	g_pGameCtrl->SetFollowGamePos(followPos);
+	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
+
+	m_client->setHostname(sMQTTServerIp);
+	m_client->setPort(nMQTTServerPort);
+	
+	//bool isLoadPetCalcData = iniFile.value("db/loadPetCalcData", false).toBool();
+	//bool isLoadOfflineDb = iniFile.value("db/loadOfflineDB", false).toBool();
+
+	RpcSocketClient::getInstance().setServerIp(sServerIp);
+	RpcSocketClient::getInstance().setServerPort(sServerPort);
+	RpcSocketClient::getInstance().init();
 }
 
 bool ITObjectDataMgr::pingToDestination(const QString &strIp)

@@ -69,7 +69,7 @@ MLAssist::MLAssist(QWidget *parent) :
 
 MLAssist::~MLAssist()
 {
-	quitAndDeleteAllInfo();
+	//quitAndDeleteAllInfo();
 }
 void MLAssist::createSysTrayAction()
 {
@@ -118,6 +118,7 @@ void MLAssist::closeEvent(QCloseEvent *event)
 	{
 		qDebug() << "程序退出";
 		event->accept();
+		quitAndDeleteAllInfo();
 	}
 	else
 	{
@@ -209,7 +210,7 @@ void MLAssist::quitAndDeleteAllInfo()
 	g_pGameCtrl->StopUpdateTimer();
 	emit g_pGameCtrl->signal_exit();
 	killProcess();
-
+	::TerminateProcess(GetCurrentProcess(),0);
 	g_pGameCtrl->WaitThreadFini();
 	qApp->exit(0);
 }

@@ -90,7 +90,7 @@ void CGWeb::finishLoading(bool)
 		m_lastCreateGidTime.restart();
 		Sleep(1000);	//休息2秒 防止过快 503 貌似 多块都一样
 		QString sGid = ui.lineEdit_gid->text();
-		QString sNewGidNum = QString("%1").arg(m_nBeginNum, 3, 10, QLatin1Char('0'));
+		QString sNewGidNum = QString("%1").arg(m_nBeginNum, m_precisionNum, 10, QLatin1Char('0'));
 		sGid += sNewGidNum;
 		qDebug() << "CreateNewGidNum:" << sGid;
 		QString sIDName = "gid_13";

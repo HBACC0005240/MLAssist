@@ -101,7 +101,7 @@ GameBattleWgt::GameBattleWgt(QWidget *parent) :
 	connect(ui.checkBox_ShowHPMP, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetShowHPMPEnabled(int)), Qt::ConnectionType::QueuedConnection);
 	connect(ui.checkBox_PetDoubleAction, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetPetDoubleAction(int)), Qt::ConnectionType::QueuedConnection);
 	connect(ui.checkBox_PlayerForceAction, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetPlayerForceAction(int)), Qt::ConnectionType::QueuedConnection);
-	connect(ui.checkBox_petVisible, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetFloorPetVisible(int)), Qt::ConnectionType::QueuedConnection);
+	connect(ui.checkBox_petVisible, SIGNAL(stateChanged(int)), g_pGameCtrl, SLOT(OnSetFloorPetVisible(int)), Qt::ConnectionType::QueuedConnection);
 
 	//切图
 	connect(ui.checkBox_noAnimation, SIGNAL(stateChanged(int)), g_pAutoBattleCtrl, SLOT(OnSetNoSwitchAnim(int)), Qt::ConnectionType::QueuedConnection);
@@ -1170,9 +1170,11 @@ void GameBattleWgt::doLoadUserConfig(QSettings &iniFile)
 	ui.checkBox_allEscape->setChecked(iniFile.value("AllEscape").toBool());
 	ui.checkBox_NoLv1Escape->setChecked(iniFile.value("NoLv1Escape").toBool());
 	//	ui.checkBox_noBossEscape->setChecked(iniFile.value("IsNoBoss", ui.checkBox_noBossEscape->isChecked()); //无Boss怪逃跑
-	ui.groupBox_noPet->setChecked(iniFile.value("NoPetDoubleAction").toBool());		//不带宠二动
-	ui.radioButton_attack->setChecked(iniFile.value("NoPetActionAttack").toBool()); //不带宠二动攻击
-	ui.radioButton_defense->setChecked(iniFile.value("NoPetActionGuard").toBool()); //不带宠二动防御
+	ui.groupBox_noPet->setChecked(iniFile.value("NoPetDoubleAction").toBool());		///< 不带宠二动
+	ui.checkBox_petVisible->setChecked(iniFile.value("FloorPetVisble").toBool());	///< 屏蔽宠物
+
+	ui.radioButton_attack->setChecked(iniFile.value("NoPetActionAttack").toBool()); ///< 不带宠二动攻击
+	ui.radioButton_defense->setChecked(iniFile.value("NoPetActionGuard").toBool()); ///< 不带宠二动防御
 
 	ui.groupBox_SpecialEnemyEscape->setChecked(iniFile.value("SpecialEscape").toBool());
 	ui.horizontalSlider_moveSpeed->setValue(iniFile.value("MoveSpeed").toInt());
@@ -1559,6 +1561,7 @@ void GameBattleWgt::doSaveUserConfig(QSettings &iniFile)
 	iniFile.setValue("LockCountdown", g_pAutoBattleCtrl->m_bLockCountdown);								//锁定倒计时
 	iniFile.setValue("ShowHPMP", g_pAutoBattleCtrl->m_bShowHPMP);										//显血
 	iniFile.setValue("PetDoubleAction", g_pAutoBattleCtrl->m_bPetDoubleAction);							//宠物2动
+	iniFile.setValue("FloorPetVisble", !g_pGameCtrl->isFloorPetVisible());								//屏蔽宠物
 	iniFile.setValue("PlayerForceAction", g_pAutoBattleCtrl->m_bPlayerForceAction);						//人物强制行动
 	iniFile.setValue("NoSwitchAnim", g_pAutoBattleCtrl->m_bNoSwitchAnim);								//切图
 	iniFile.setValue("AllEscape", g_pAutoBattleCtrl->m_bAllEscape);										//全跑

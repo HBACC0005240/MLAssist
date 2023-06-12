@@ -30,6 +30,19 @@ GamePetWgt::GamePetWgt(QWidget *parent) :
 			ui.tableWidget->setItem(i, n, pItem);
 		}
 	}
+	//档次加黑提醒
+	//QFont gradeFont;
+	////gradeFont.setItalic(true);
+	//gradeFont.setBold(true);
+	//for (int i=0;i<5;++i)
+	//{
+	//	QTableWidgetItem *pItem = ui.tableWidget->item(5, i);
+	//	if (pItem)
+	//	{
+	//		pItem->setFont(gradeFont);
+	//	}
+	//}
+
 	connect(g_pGameCtrl, &GameCtrl::NotifyGamePetsInfo, this, &GamePetWgt::OnNotifyGetPetsInfo, Qt::ConnectionType::QueuedConnection);
 	ui.tableWidget->setContextMenuPolicy(Qt::CustomContextMenu); //打开右键功能
 	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -268,7 +281,7 @@ void GamePetWgt::OnNotifyGetPetsInfo(GamePetList pets)
 		QString szMp;
 		QString sLv;
 		QString sXp;
-		QString sDangCi;
+		QString sDangCi = "--";
 		QString sAttac, sDefensive, sAgility, sSpirit, sLoyality, sRecovery;
 		QString state;
 		QColor gradeColor("black");
@@ -339,7 +352,8 @@ void GamePetWgt::OnNotifyGetPetsInfo(GamePetList pets)
 		setItemText(2, pos, szMp, QColor("blue"));
 		setItemText(3, pos, sLv, QColor("blue"));
 		setItemText(4, pos, sXp, QColor("green"));
-		setItemText(5, pos, sDangCi, gradeColor);
+		setItemText(5, pos, sDangCi, gradeColor,QColor(240,255,255));
+		//setItemText(5, pos, sDangCi, gradeColor,QColor(255,255,240));
 		setItemText(6, pos, sAttac);
 		setItemText(7, pos, sDefensive);
 		setItemText(8, pos, sAgility);

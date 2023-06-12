@@ -92,18 +92,18 @@ public slots:
 	void OnSetNoSwitchAnim(int state);					 //切图
 	void OnSetPetDoubleAction(int state);				 //宠物二动
 	void OnSetPlayerForceAction(int state);				 //人强制行动
-	void OnSetFloorPetVisible(int state);				 //隐藏显示地面宠物
 	void OnSetShowHPMPEnabled(int state);				 //显示血魔
 	void OnSetHave1LvEnemy(int state);					 //有1级怪
 	void OnSetHave1LvAction(int nAction, bool bEnabled); //1级怪应对措施项
-	void OnSetNoPetFirstAction(int state);				//人物二动 是否第一动使用面板操作 攻击 防御 逃跑
+	void OnSetNoPetFirstAction(int state);				 ///<人物二动 是否第一动使用面板操作 攻击 防御 逃跑
 
-	void OnSetHightSpeedDelayVal(const QString &speed); //高速延时值
-	void OnSetHightSpeedDelayVal(int speed);			//高速延时值
+	void OnSetHightSpeedDelayVal(const QString &speed);	///<高速延时值
+	void OnSetHightSpeedDelayVal(int speed);			///<高速延时值
 
 	void OnSetDelayFrom(int val);
 	void OnSetDelayTo(int val);
 	void OnSyncList(CBattleSettingList list);
+
 signals:
 	void NotifyBattleAction(int flags);
 	void PlayAlarmWav();
@@ -124,7 +124,6 @@ public:
 	bool m_bShowHPMP = false;			//是否显示血魔
 	bool m_bPetDoubleAction = true;		//宠物二动
 	bool m_bPlayerForceAction = false;	//人强制行动
-	bool m_bFloorPetVisble = false;		//地面宠物隐藏显示
 	bool m_bNoSwitchAnim = false;		//切图
 	bool m_bHave1LvEnemy = false;		//有1级怪
 	bool m_bHave1LvRoundOne = false;	//有1级怪时 第一回合设置

@@ -653,16 +653,7 @@ void CBattleWorker::OnSetPlayerForceAction(int state)
 	m_bPlayerForceAction = state ? true : false;
 }
 
-void CBattleWorker::OnSetFloorPetVisible(int state)
-{
-	m_bFloorPetVisble = state ? false : true;
-	int ingame = 0;
-	if (g_CGAInterface->IsConnected() && g_CGAInterface->IsInGame(ingame) && ingame)
-	{
-		bool bResult = false;
-		g_CGAInterface->EnableFlags(ENABLE_FLAG_SHOWPETS,m_bFloorPetVisble,bResult);
-	}
-}
+
 
 void CBattleWorker::OnSetShowHPMPEnabled(int state)
 {

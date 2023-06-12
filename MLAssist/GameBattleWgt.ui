@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>626</width>
-    <height>268</height>
+    <height>286</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -290,6 +290,9 @@
              <widget class="QCheckBox" name="checkBox_petVisible">
               <property name="text">
                <string>屏蔽宠物</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
