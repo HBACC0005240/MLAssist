@@ -1659,6 +1659,11 @@ bool GameCtrl::AutoDropPet()
 		return false;
 	bool bCheckRealName = m_bDropPetCheckItem.value(TDropPetType_RealName);
 	QString sPetRealName = m_nDropPetCheckVal.value(TDropPetType_RealName).toString();
+	QStringList sPetRealNames;
+	if (sPetRealName.contains("|"))
+		sPetRealNames = sPetRealName.split("|");
+	else
+		sPetRealNames << sPetRealName;
 	for (auto it = m_bDropPetCheckItem.begin(); it != m_bDropPetCheckItem.end(); ++it)
 	{
 		if (it.value() && it.key() != TDropPetType_RealName) //勾选 判断  如果是名称 不判断
@@ -1666,7 +1671,8 @@ bool GameCtrl::AutoDropPet()
 			for (size_t i = 0; i < petsinfo.size(); ++i)
 			{
 				CGA::cga_pet_info_t pet = petsinfo.at(i);
-				if (bCheckRealName && pet.realname != sPetRealName.toStdString())
+				//if (bCheckRealName && pet.realname != sPetRealName.toStdString())
+				if (bCheckRealName && !sPetRealNames.contains(QString::fromStdString(pet.realname)))
 					continue;
 				int nVal = m_nDropPetCheckVal.value(it.key()).toInt();
 
@@ -2357,6 +2363,18 @@ void GameCtrl::NormalThread(GameCtrl *pThis)
 				qDebug() << "状态不正常，超过30分钟，登出服务器!";
 				g_pGameFun->LogoutServer();
 				pThis->m_lastNormalState.restart();
+			}
+			if (g_pGameFun->GetMapName() == "艾尔莎岛" && g_pGameFun->IsInBattle())
+			{
+				if (pThis->m_lastPlayerAbnormalState.elapsed() > 20 * 1000)
+				{
+					qDebug() << "当前位置在艾尔莎岛，但是在战斗状态，应该是被飞回城了，调用回城!";
+					g_pGameFun->Logout();
+					pThis->m_lastPlayerAbnormalState.restart();
+				}	
+			}else
+			{
+				pThis->m_lastPlayerAbnormalState.restart();
 			}
 			QThread::msleep(1000);
 			continue;

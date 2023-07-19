@@ -4788,7 +4788,8 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 						qDebug() << "卡墙，短坐标自动寻路！" << tarX << tarY;
 						if (isSyncMap) //有时候有黑线 需要旁边走动一下才行 这里要加个旁边走功能 
 						{
-							qDebug() << "卡墙，可能是黑线，当前是离线地图寻路，周围移动！";						
+							qDebug() << "卡墙，可能是黑线，当前是离线地图寻路，周围移动！";		
+							SyncUpdateRoundMap();
 							auto tmpPos = GetRandomSpace(curX, curY, 2);
 							if (AutoMoveInternal(tmpPos.x(), tmpPos.y(), false) == false)
 								return false;	
@@ -5025,6 +5026,65 @@ int CGFunction::AutoMoveInternalOffLineMap(int x, int y, QImage &mapData, int ti
 	}
 	m_bMoveing = false;
 	return bRet;
+}
+
+void CGFunction::UpdateRoundMap(int range /*=22*/)
+{
+	if (range <= 0)
+		range = 22;
+	CGA::cga_map_cells_t cells;
+	g_CGAInterface->GetMapCollisionTable(true, cells);
+	if (cells.x_size <= 0 || cells.y_size <= 0)
+		return;
+	int x, y;
+	g_CGAInterface->GetMapXY(x,y);
+	int tx = x - range;
+	int ty = y - range;
+	int bx = x + range;
+	int by = y + range;
+	if (tx <= cells.x_bottom)
+		tx = cells.x_bottom;
+	if (ty <= cells.y_bottom)
+		ty = cells.y_bottom;	
+	if (bx >= cells.x_size)
+		tx = cells.x_size;
+	if (by >= cells.y_size)
+		by = cells.y_size;
+	qDebug() << "刷新周边地图:" << tx << "," << ty << "," << bx << "," << by;
+	g_CGAInterface->RequestDownloadMap(tx, ty, bx, by);	
+}
+
+void CGFunction::SyncUpdateRoundMap(int range /*=22*/)
+{
+	if (range <= 0)
+		range = 22;
+	CGA::cga_map_cells_t cells;
+	g_CGAInterface->GetMapCollisionTable(true, cells);
+	if (cells.x_size <= 0 || cells.y_size <= 0)
+		return;
+	int x, y;
+	g_CGAInterface->GetMapXY(x, y);
+	int tx = x - range;
+	int ty = y - range;
+	int bx = x + range;
+	int by = y + range;
+	if (tx <= cells.x_bottom)
+		tx = cells.x_bottom;
+	if (ty <= cells.y_bottom)
+		ty = cells.y_bottom;
+	if (bx >= cells.x_size)
+		tx = cells.x_size;
+	if (by >= cells.y_size)
+		by = cells.y_size;
+	qDebug() << "同步刷新周边地图:" << tx << "," << ty << "," << bx << "," << by;
+
+	g_CGAInterface->RequestDownloadMap(tx, ty, bx, by);
+	auto mapRegion = WaitRefreshMapRegion();
+	if (mapRegion.size() < 1 || mapRegion.size() != 5)
+	{
+		qDebug() << "刷新地图信息错误！";
+		return;
+	}
 }
 
 int CGFunction::AutoMoveToTgtMap(int tx, int ty, int tgtMapIndex, int timeout /*=100*/)
@@ -5409,6 +5469,11 @@ void CGFunction::MakeMapOpenEx()
 	return;
 }
 
+void CGFunction::SetCrossMazeClipRange(int moveRange /*= 13*/, int clipRange /*= 12*/)
+{
+	m_mazeMoveAbleRange = moveRange;
+	m_mazeClipMoveAbleRange = clipRange;
+}
 void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 {
 	int index1, index2, index3;
@@ -5549,8 +5614,9 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 	auto moveAblePosList = GetMovablePoints(curPos);
 	if (moveAblePosList.size() < 1)
 		return false;
-	auto moveAbleRangePosList = GetMovablePointsEx(curPos, 13);
-	auto clipMoveAblePosList = GetMovablePointsEx(curPos, 12);
+	//这个要自动缩减才行，否则碰到一下奇葩图 会循环查找
+	auto moveAbleRangePosList = GetMovablePointsEx(curPos, m_mazeMoveAbleRange);
+	auto clipMoveAblePosList = GetMovablePointsEx(curPos, m_mazeClipMoveAbleRange);
 	QList<QPoint> newMoveAblePosList = moveAbleRangePosList;
 	//这是筛出的4方向边界点
 	for (int i = 0; i < clipMoveAblePosList.size(); ++i)
@@ -5581,9 +5647,11 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 		allMoveAblePosList += clipMoveAblePosList;
 		for (auto tSearchPos : tSearchList)
 		{
-			//auto tSearchPos = tSearchList[0];
-			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
-			Sleep(m_mazeSearchWaitTime);	//到达目标点 等待时间，用来防止到达点后，地图没有更新过来
+			//auto tSearchPos = tSearchList[0];					
+			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());		
+			//增加更新周边图
+			SyncUpdateRoundMap();
+			Sleep(m_mazeSearchWaitTime);	//到达目标点 等待时间，用来防止到达点后，地图没有更新过来			
 			if (type == 1)
 			{
 				if (SearchAroundMapOpen(allMoveAblePosList, type))
@@ -5671,6 +5739,8 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 		{
 			//auto tSearchPos = tSearchList[0];
 			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
+			//增加更新周边图
+			SyncUpdateRoundMap();
 			Sleep(m_mazeSearchWaitTime); //到达目标点 等待时间，用来防止到达点后，地图没有更新过来
 			if (findPos == QPoint(0, 0))
 			{

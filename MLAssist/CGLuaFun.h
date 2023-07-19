@@ -138,6 +138,7 @@ public:
 	int Lua_AutoWalkMaze(LuaState *L);
 	//穿越整个迷宫
 	int Lua_AutoWalkRandomMaze(LuaState *L);
+	int Lua_SetCrossMazeClipRange(LuaState *L);
 	//取程序路径
 	int Lua_GetAppRunPath(LuaState *L);
 	//登出
@@ -158,6 +159,9 @@ public:
 	int Lua_SearchMap(LuaState *L);
 	//下载当前地图
 	int Lua_DownloadMap(LuaState *L);
+	int Lua_DownloadDstSizeMap(LuaState *L);
+	//下载周围地图
+	int Lua_DownloadRoundMap(LuaState *L);
 	//迷宫下层坐标 距离最远的
 	int Lua_GetNextMazeWarp(LuaState *L);
 	//迷宫所有传送坐标

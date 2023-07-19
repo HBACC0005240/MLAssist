@@ -313,6 +313,7 @@ void GameMapWall::AutoWallMazeThread(GameMapWall *pThis)
 				break;
 			}
 			tryNum++;
+			Sleep(5000);
 			continue;
 		}
 		//迷宫多个出入点 返回空

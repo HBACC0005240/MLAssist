@@ -454,6 +454,8 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "搜索范围迷宫", m_luaFun, &CGLuaFun::Lua_FindToRandomEntry);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "移动到目标附近", m_luaFun, &CGLuaFun::Lua_MoveToNpcNear);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下载地图", m_luaFun, &CGLuaFun::Lua_DownloadMap);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下载指定大小地图", m_luaFun, &CGLuaFun::Lua_DownloadDstSizeMap);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "下载周围地图", m_luaFun, &CGLuaFun::Lua_DownloadRoundMap);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "停止脚本", m_luaFun, &CGLuaFun::Lua_StopScript);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "加载脚本", m_luaFun, &CGLuaFun::Lua_LoadScript);
@@ -622,6 +624,7 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "是否目标附近", m_luaFun, &CGLuaFun::Lua_IsNearTarget);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkMaze);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "自动穿越迷宫", m_luaFun, &CGLuaFun::Lua_AutoWalkRandomMaze);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置穿越迷宫范围", m_luaFun, &CGLuaFun::Lua_SetCrossMazeClipRange);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "发送邮件", m_luaFun, &CGLuaFun::Lua_SendMail);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "接收邮件", m_luaFun, &CGLuaFun::Lua_RecvMail);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "查看邮件", m_luaFun, &CGLuaFun::Lua_RecvMailEx);

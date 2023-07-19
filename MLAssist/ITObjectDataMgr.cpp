@@ -1817,6 +1817,7 @@ void ITObjectDataMgr::OnCheckConnectMqtt()
 		return;
 	if (m_client->state() == QMqttClient::Disconnected)
 	{
+		qDebug() << "mqtt连接断开，重新连接主机" << m_client->hostname();
 		m_client->connectToHost();
 	}
 	else if (m_client->state() == QMqttClient::Connected)
@@ -1840,6 +1841,7 @@ void ITObjectDataMgr::OnMqttConnected()
 {
 	if (!m_client)
 		return;
+	qDebug() << "连接mqtt成功，订阅事件" << m_client->hostname();
 	for (auto subTopic : m_customSubscribeList)
 	{
 		auto sub = m_client->subscribe(subTopic);
@@ -1904,7 +1906,7 @@ void ITObjectDataMgr::onCheckIniCfgModify()
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
 	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
-
+	m_client->disconnectFromHost();
 	m_client->setHostname(sMQTTServerIp);
 	m_client->setPort(nMQTTServerPort);
 	

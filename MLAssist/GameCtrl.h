@@ -485,6 +485,7 @@ private:
 	QString m_sCGInstallPath;																   //魔力安装目录
 	bool m_bOpenSyncMap = false;															   //是否打开了同步地图功能
 	bool m_bFloorPetVisble = false;															   //地面宠物隐藏显示
+	QTime m_lastPlayerAbnormalState;														   //判断正常状态 防止卡主
 };
 
 template <typename TData>

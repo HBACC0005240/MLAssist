@@ -34,18 +34,21 @@ FloatMapDlg::~FloatMapDlg()
 void FloatMapDlg::LoadMapCellInfo(QSharedPointer<CGA_MapCellData_t> coll, QSharedPointer<CGA_MapCellData_t> obj, QSharedPointer<CGA_MapUnits_t> units)
 {
 	m_pGameMapWallItem->LoadMapCellInfo(coll, obj, units);
+	ui.mapWidget->GetScene()->update();
 }
 
 void FloatMapDlg::LoadMapInfo(QString name, int x, int y, int mapindex)
 {
 	m_pGameMapWallItem->LoadMapInfo(name, x, y, mapindex);
 	ui.label_mapName->setText(name);
-	ui.label_mapNum->setText(QString::number(mapindex));
+	ui.label_mapNum->setText(" 编号:" + QString::number(mapindex));
+	ui.label_xy->setText(QString("坐标:%1,%2").arg(x).arg(y));
 }
 
 void FloatMapDlg::RepaintCollisionPixels(int xbase, int ybase, int xtop, int ytop)
 {
 	m_pGameMapWallItem->RepaintCollisionPixels(xbase, ybase, xtop, ytop);
+	ui.mapWidget->GetScene()->update();
 }
 
 void FloatMapDlg::SetCrosshair(bool bFlag)

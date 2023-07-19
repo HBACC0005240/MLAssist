@@ -211,7 +211,8 @@ void MapForm::on_pushButton_loadmap_clicked()
 			return;
 		}
 	}
-	QtConcurrent::run(AutoMazeOpen, this);
+	g_pGameFun->UpdateRoundMap();
+	//QtConcurrent::run(AutoMazeOpen, this);
 	return;
 	if (m_collision)
 	{

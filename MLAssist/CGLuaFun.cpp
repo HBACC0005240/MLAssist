@@ -698,6 +698,15 @@ int CGLuaFun::Lua_AutoWalkRandomMaze(LuaState *L)
 	return 0;
 }
 
+int CGLuaFun::Lua_SetCrossMazeClipRange(LuaState *L)
+{
+	LuaStack args(L);
+	int v1 = args.Count() > 0 ? args[1].GetInteger() : 13;
+	int v2 = args.Count() > 1 ? args[2].GetInteger() : 12;
+	g_pGameFun->SetCrossMazeClipRange(v1,v2);
+	return 0;
+}
+
 int CGLuaFun::Lua_GetAppRunPath(LuaState *L)
 {
 	QString sName = QApplication::applicationDirPath();
@@ -967,6 +976,25 @@ int CGLuaFun::Lua_SearchMap(LuaState *L)
 int CGLuaFun::Lua_DownloadMap(LuaState *L)
 {
 	g_pGameFun->DownloadMap();
+	return 0;
+}
+
+int CGLuaFun::Lua_DownloadDstSizeMap(LuaState *L)
+{
+	LuaStack args(L);
+	int v1 = args.Count() > 0 ? args[1].GetInteger() : 0;
+	int v2 = args.Count() > 1 ? args[2].GetInteger() : 0;
+	int v3 = args.Count() > 2 ? args[3].GetInteger() : 0;
+	int v4 = args.Count() > 3 ? args[4].GetInteger() : 0;
+	g_CGAInterface->RequestDownloadMap(v1,v2,v3,v4);
+	return 0;
+}
+
+int CGLuaFun::Lua_DownloadRoundMap(LuaState *L)
+{
+	LuaStack args(L);
+	int nRange = args.Count() > 0 ? args[1].GetInteger():22;
+	g_pGameFun->UpdateRoundMap(nRange);
 	return 0;
 }
 

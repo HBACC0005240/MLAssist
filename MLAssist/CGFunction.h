@@ -338,6 +338,10 @@ public:
 	int AutoMoveInternal(int x, int y, int timeout = 10000, bool isLoop = true);
 	int AutoMoveInternalOffLineMap(int x, int y, QImage &mapData, int timeout = 10000, bool isLoop = true);
 
+	//! 更新周围地图，解决黑线问题
+	void UpdateRoundMap(int range=22);
+	void SyncUpdateRoundMap(int range=22);
+
 	//跨地图寻路
 	int AutoMoveToTgtMap(int tx, int ty, int tgtMapIndex, int timeout = 100);
 	//寻找目标范围内传送石
@@ -348,6 +352,9 @@ public:
 	//地图全开
 	QList<QPoint> MakeMapOpen();
 	void MakeMapOpenEx();
+	//! 迷宫开图 搜索剪切范围
+	void SetCrossMazeClipRange(int moveRange = 13, int clipRange = 12);
+	
 	//下层寻路
 	void MakeMapOpenContainNextEntrance(int isNearFar = 1);
 	//1地图全开 2有2个迷宫出入口，并可达即可
@@ -779,5 +786,7 @@ private:
 	QList<QPair<QString, QString> > m_topicMsg;			 //接收到的主题信息
 	int m_mazeWaitTime = 5000;							 //迷宫切图等待时间
 	int m_mazeSearchWaitTime = 3000;					 //迷宫搜索等待时间
+	int m_mazeMoveAbleRange = 13;		
+	int m_mazeClipMoveAbleRange = 12;		
 };
 #define g_pGameFun CGFunction::GetInstance()
