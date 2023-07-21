@@ -377,6 +377,7 @@ public:
 	//获取目标坐标周围空闲坐标
 	QPoint GetRandomSpace(int x, int y, int distance = 1, bool judgeReachTgt = false);
 	QPoint GetRandomSpaceOffLine(QImage map, int x, int y, int distance = 1, bool judgeReachTgt = false);
+	QList<QPoint> GetRandomSpaceFourDir(int x, int y, int distance = 1, bool judgeReachTgt = false);
 
 	//搜索地图 名称 搜索物品或者npc或者玩家 0 1 2
 	bool SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int searchType = 1);
@@ -729,6 +730,7 @@ public:
 	int GetMazeChangedMapWaitTime() { return m_mazeWaitTime; }
 	void SetMazeMapSearchWaitTime(int time) { m_mazeSearchWaitTime = time; }
 	int GetMazeMapSearchWaitTime() { return m_mazeSearchWaitTime; }
+	void SetSyncUpdateRoundMap(bool bFlag) { m_bSyncUpdateRoundMap = bFlag; }
 
 protected:
 	bool InternalAutoNavigator();
@@ -788,5 +790,6 @@ private:
 	int m_mazeSearchWaitTime = 3000;					 //迷宫搜索等待时间
 	int m_mazeMoveAbleRange = 13;		
 	int m_mazeClipMoveAbleRange = 12;		
+	bool m_bSyncUpdateRoundMap = false;					//!< 是否更新周边地图
 };
 #define g_pGameFun CGFunction::GetInstance()

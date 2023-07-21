@@ -4789,10 +4789,23 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 						if (isSyncMap) //有时候有黑线 需要旁边走动一下才行 这里要加个旁边走功能 
 						{
 							qDebug() << "卡墙，可能是黑线，当前是离线地图寻路，周围移动！";		
-							SyncUpdateRoundMap();
-							auto tmpPos = GetRandomSpace(curX, curY, 2);
-							if (AutoMoveInternal(tmpPos.x(), tmpPos.y(), false) == false)
-								return false;	
+							if (m_bSyncUpdateRoundMap)
+								SyncUpdateRoundMap();
+							bool bBlankRet = false;
+							auto tmpPosList = GetRandomSpaceFourDir(curX, curY, 2);
+							for (auto tmpPos : tmpPosList)
+							{
+								if (AutoMoveInternal(tmpPos.x(), tmpPos.y(), false))
+								{
+									bBlankRet = true;
+									break;									
+								}
+							}
+							if (!bBlankRet)
+							{
+								return false;
+							}
+							
 						}else
 						{
 							//g_CGAInterface->FixMapWarpStuck(1); //会切回上个图
@@ -4958,8 +4971,8 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 			findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
 			if (findPath.size() > 0)
 			{
-
-				qDebug() << "离线地图查找路径成功，继续寻路";
+				qDebug() << "离线地图查找路径成功,等指定迷宫等待时间后，继续寻路";
+				Sleep(m_mazeWaitTime);				
 				isOffLineMap = true;
 			}
 		}
@@ -5012,7 +5025,10 @@ int CGFunction::AutoMoveInternalOffLineMap(int x, int y, QImage &mapData, int ti
 		qDebug() << "未找到可通行路径，加载离线地图尝试！" << curPos << "tgt:" << x << "," << y;
 		findPath = CalculatePathEx(mapData, curPos.x(), curPos.y(), x, y);
 		if (findPath.size() > 0)
-			qDebug() << "离线地图查找路径成功，继续寻路";
+		{
+			qDebug() << "离线地图查找路径成功,等指定迷宫等待时间后，继续寻路";
+			Sleep(m_mazeWaitTime);
+		}
 	}
 	bool bRet = false;
 	if (findPath.size() > 0)
@@ -5047,7 +5063,7 @@ void CGFunction::UpdateRoundMap(int range /*=22*/)
 	if (ty <= cells.y_bottom)
 		ty = cells.y_bottom;	
 	if (bx >= cells.x_size)
-		tx = cells.x_size;
+		bx = cells.x_size;
 	if (by >= cells.y_size)
 		by = cells.y_size;
 	qDebug() << "刷新周边地图:" << tx << "," << ty << "," << bx << "," << by;
@@ -5073,7 +5089,7 @@ void CGFunction::SyncUpdateRoundMap(int range /*=22*/)
 	if (ty <= cells.y_bottom)
 		ty = cells.y_bottom;
 	if (bx >= cells.x_size)
-		tx = cells.x_size;
+		bx = cells.x_size;
 	if (by >= cells.y_size)
 		by = cells.y_size;
 	qDebug() << "同步刷新周边地图:" << tx << "," << ty << "," << bx << "," << by;
@@ -5650,7 +5666,8 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 			//auto tSearchPos = tSearchList[0];					
 			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());		
 			//增加更新周边图
-			SyncUpdateRoundMap();
+			if(m_bSyncUpdateRoundMap) 
+				SyncUpdateRoundMap();
 			Sleep(m_mazeSearchWaitTime);	//到达目标点 等待时间，用来防止到达点后，地图没有更新过来			
 			if (type == 1)
 			{
@@ -5740,7 +5757,8 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 			//auto tSearchPos = tSearchList[0];
 			AutoMoveTo(tSearchPos->_centrePos.x(), tSearchPos->_centrePos.y());
 			//增加更新周边图
-			SyncUpdateRoundMap();
+			if (m_bSyncUpdateRoundMap)
+				SyncUpdateRoundMap();
 			Sleep(m_mazeSearchWaitTime); //到达目标点 等待时间，用来防止到达点后，地图没有更新过来
 			if (findPos == QPoint(0, 0))
 			{
@@ -6100,6 +6118,57 @@ QPoint CGFunction::GetRandomSpaceOffLine(QImage mapImage, int x, int y, int dist
 	qDebug() << nTempX << nTempY;
 	return QPoint(nTempX, nTempY);
 }
+
+QList<QPoint> CGFunction::GetRandomSpaceFourDir(int x, int y, int distance /*= 1*/, bool judgeReachTgt /*= false*/)
+{
+	int nTempX = 0;
+	int nTempY = 0;
+	auto warpPosList = GetMapEntranceList(); //传送点
+	QList<QPoint> tPoints;
+	CGA::cga_map_cells_t cells;
+	if (g_CGAInterface->GetMapCollisionTable(true, cells))
+	{
+		if (x > cells.x_size || y > cells.y_size)
+		{
+			return tPoints;
+		}
+		do
+		{
+			
+			auto FindFun = [&](int x, int y)
+			{
+				bool bAble = cells.cell.at((size_t)(x + y * cells.x_size)) == 0 && warpPosList.contains(QPoint(x, y)) == false;
+				if (bAble && judgeReachTgt)
+				{
+					return IsReachableTarget(x, y); //
+				}
+				return bAble;
+			}; 
+			nTempX = x - distance;
+			nTempY = y;
+			//不为传送点
+			if (FindFun(nTempX, nTempY))
+			{
+				tPoints.append(QPoint(nTempX, nTempY));
+			}
+			nTempX = x + distance;
+			nTempY = y;
+			if (FindFun(nTempX, nTempY))
+				tPoints.append(QPoint(nTempX, nTempY));
+			nTempX = x;
+			nTempY = y - distance;
+			if (FindFun(nTempX, nTempY))
+				tPoints.append(QPoint(nTempX, nTempY));
+			nTempX = x;
+			nTempY = y + distance;
+			if (FindFun(nTempX, nTempY))
+				tPoints.append(QPoint(nTempX, nTempY));	
+		} while (0);
+	}
+	qDebug() << nTempX << nTempY;
+	return tPoints;
+}
+
 //当前层搜索
 bool CGFunction::SearchMap(QString name, QPoint &findPos, QPoint &nextPos, int searchType)
 {

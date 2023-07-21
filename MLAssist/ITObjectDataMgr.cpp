@@ -109,6 +109,7 @@ bool ITObjectDataMgr::init()
 	int mazeWaitTime = iniFile.value("game/mazeWaitTime", 5000).toInt();
 	int mazeSearchWaitTime = iniFile.value("game/mazeSearchWaitTime", 3000).toInt();
 	int loginWaitTime = iniFile.value("game/loginIntervalTime", 3000).toInt(); //登录间隔
+	bool bUpdateRoundMap = iniFile.value("game/updateRoundMap", false).toBool();
 	if (loginWaitTime < 0)
 	{
 		loginWaitTime = 0;
@@ -122,6 +123,7 @@ bool ITObjectDataMgr::init()
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
 	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
+	g_pGameFun->SetSyncUpdateRoundMap(bUpdateRoundMap);
 
 	QString sMQTTServerIp = iniFile.value("server/mqttIP", "127.0.0.1").toString();
 	int nMQTTServerPort = iniFile.value("server/mqttPort", 1883).toInt();
@@ -1893,6 +1895,8 @@ void ITObjectDataMgr::onCheckIniCfgModify()
 	QString sMQTTServerIp = iniFile.value("server/mqttIP", "127.0.0.1").toString();
 	int nMQTTServerPort = iniFile.value("server/mqttPort", 1883).toInt();
 	m_sMQTTCode = iniFile.value("server/mqttcode", "").toString();
+	bool bUpdateRoundMap = iniFile.value("game/updateRoundMap", false).toBool();
+
 
 	if (loginWaitTime < 0)
 	{
@@ -1903,6 +1907,8 @@ void ITObjectDataMgr::onCheckIniCfgModify()
 	g_pGameCtrl->SetAutoLoginInterval(loginWaitTime);
 	g_pGameFun->SetMazeChangedMapWaitTime(mazeWaitTime);
 	g_pGameFun->SetMazeMapSearchWaitTime(mazeSearchWaitTime);
+	g_pGameFun->SetSyncUpdateRoundMap(bUpdateRoundMap);
+
 	g_pGameCtrl->SetStartGameHide(startHide);
 	g_pGameCtrl->SetFollowGamePos(followPos);
 	g_pGameCtrl->SetStartGameRepeatedGidExit(repeatedGidExit);
