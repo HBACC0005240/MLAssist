@@ -843,7 +843,7 @@ bool CGAPython::AddAllTradeItems(int step)
 	return m_interface->AddAllTradeItems(step);
 }
 
-cga_team_players_t CGAPython::GetTeamPlayerInfo(cga_team_players_t& result)
+cga_team_players_t CGAPython::GetTeamPlayerInfo()
 {
 	CGA::cga_team_players_t info;
 	m_interface->GetTeamPlayerInfo(info);

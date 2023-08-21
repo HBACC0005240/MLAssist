@@ -216,7 +216,7 @@ public:
 	bool EnableFlags(int type, bool enable);
 	bool TradeAddStuffs(cga_sell_items_t items, cga_sell_pets_t pets, int gold);
 	bool AddAllTradeItems(int step);
-	cga_team_players_t GetTeamPlayerInfo(cga_team_players_t& result);
+	cga_team_players_t GetTeamPlayerInfo();
 
 	bool FixMapWarpStuck(int type);
 	bool SetNoSwitchAnim(bool enable);
