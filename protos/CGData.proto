@@ -39,7 +39,8 @@ service CGRpcService {
 	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};					//上报当前游戏数据
 	rpc UploadGidBankData (UploadGidBankDataRequest) returns (UploadGidBankDataResponse){};		//上报当前游戏数据
 	rpc UploadMapData (stream  UploadMapDataRequest) returns (UploadMapDataResponse){};		//上传当前迷宫地图数据
-	rpc DownloadMapData (DownloadMapDataRequest) returns (stream  DownloadMapDataResponse){};	//下载当前迷宫地图数据
+	rpc DownloadMapData (DownloadMapDataRequest) returns (stream  DownloadMapDataResponse){};	//下载当前迷宫地图数据	
+	rpc UploadCharcterServer (SelectCharacterServerResponse) returns (CGVoidData){};		//上报服务信息
 
 	//发布是rpc的普通方法
 	rpc Publish (StringPub) returns (StringPub);
@@ -51,7 +52,13 @@ service CGRpcService {
 	rpc SelectAccountGidData (SelectAccountGidDataRequest) returns (SelectAccountGidDataResponse){};				
 	rpc SelectGidData (SelectGidDataRequest) returns (SelectGidDataResponse){};				
 	//查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
-	rpc SelectDstTypeGidData (SelectGidDataRequest) returns (SelectAccountGidDataResponse){};				
+	rpc SelectDstTypeGidData (SelectGidDataRequest) returns (SelectAccountGidDataResponse){};		
+	//查询游戏角色建立的服务信息
+	rpc SelectCharacterServer(SelectCharacterServerRequest) returns (SelectCharacterServerResponse){};		
+	//查询游戏指定任务当前坐标
+	rpc SelectTaskInfo(SelectTaskInfoRequest) returns (SelectTaskInfoResponse){};		
+	//查询游戏角色当前信息
+	rpc SelectCharacterData(SelectCharacterDataRequest) returns (SelectCharacterDataResponse){};		
 
 }
 message CGGmeTypeRequest
@@ -129,6 +136,52 @@ message SelectGidDataRequest
 {
 	string gid=1;				//游戏Gid
 	int32 role_type=2;			//角色类型 左右角色？
+}
+//查询游戏数据
+message SelectCharacterDataRequest
+{
+	string char_name=1;				//游戏名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信
+}
+message SelectCharacterDataResponse
+{
+	string character_name=1;				//游戏名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信		
+	CGCharacterData character_data=3;
+	repeated CGPetData pet_data=4;
+	repeated CGItemData items=5;
+}
+//查询游戏gid数据
+message SelectCharacterServerRequest
+{
+	string char_name=1;				//游戏名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信
+}
+message SelectCharacterServerResponse
+{
+	string char_name=1;				//游戏名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信
+	string ip=3;					//游戏角色建立通信服务时的ip
+	int32 port=4;					//游戏角色建立通信服务时的端口
+	int32 online=5;					//游戏角色是否在线
+
+}
+message SelectTaskInfoRequest
+{
+	string task_name=1;				//任务名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信
+}
+message SelectTaskInfoResponse
+{
+	string task_name=1;				//任务名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信
+	int32 line=3;
+	int32 npc_pos_x=4;
+	int32 npc_pos_y=5;
+	int32 last_time=6;
+	int32 last_map_first_num=7;
+	int32 last_map_first_width=8;
+	int32 last_map_first_height=9;
 }
 //账号下所有gid账号数据
 message SelectAccountGidDataResponse
@@ -245,6 +298,7 @@ message CGCharacterData
 	CGCharacterPersDesc pers_desc=30;
 	int32 battle_position=31;
 	int32 bank_gold=32;
+	optional int32 big_line=33;
 }
 message CGPetData
 {

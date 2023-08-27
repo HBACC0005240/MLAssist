@@ -55,6 +55,7 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	qRegisterMetaType<ITGameGateMapPtr>("ITGameGateMapPtr");
 	qRegisterMetaType<ITGameSkillPtr>("ITGameGateMapPtr");
 	qRegisterMetaType<ITAccountIdentityPtr>("ITAccountIdentityPtr");
+	qRegisterMetaType<ITCharcterServerPtr>("ITCharcterServerPtr");
 
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_GateMap, NEW_MODULE_FACTORY(ITGameGateMap));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_PetBook, NEW_MODULE_FACTORY(ITCGPetPictorialBook));
@@ -77,6 +78,7 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CGSkill, NEW_MODULE_FACTORY(ITGameSkill));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharSkill, NEW_MODULE_FACTORY(ITGameSkill));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharPetSkill, NEW_MODULE_FACTORY(ITGameSkill));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharServer, NEW_MODULE_FACTORY(ITCharcterServer));
 	connect(this, SIGNAL(signal_loadDataFini()), this, SLOT(doLoadDBInfoOver())); //这个是加载数据库完成
 	init();
 }
@@ -2167,6 +2169,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	pCharacter->_map_name = QString::fromStdString(request->character_data().map_name());				  //地图名称
 	pCharacter->_map_number = request->character_data().map_number();			  //地图编号
 	pCharacter->_server_line = request->character_data().server_line();		  //当前服务器线路
+	pCharacter->_big_line = request->character_data().has_big_line()? request->character_data().big_line():0; //当前服务器线路
 	qDebug() << QString::fromStdString(request->gid()) << QString::fromStdString(request->character_name()) << request->character_data().level();
 	pCharacter->_points_remain = request->character_data().detail().points_remain();
 	pCharacter->_points_endurance = request->character_data().detail().points_endurance();
@@ -2586,6 +2589,35 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	}
 }
 
+void ITObjectDataMgr::UploadCharcterServer(const ::CGData::SelectCharacterServerResponse *request)
+{
+	if (!request)
+		return;
+	QString sCharacterName = QString::fromStdString(request->char_name());
+	int big_line = request->big_line();
+	QString sIP = QString::fromStdString(request->ip());
+	int nPort = request->port();
+	int nOnline = request->online();
+	if ( sCharacterName.isEmpty())
+		return;
+	auto pCharForObjHash = m_charNameForObj.value(big_line);
+	auto pCharacter = pCharForObjHash.value(sCharacterName);
+	if (!pCharacter)
+	{
+		pCharacter = newOneObject(TObject_CharServer).dynamicCast<ITCharcterServer>();	
+	}
+	else
+		pCharacter->setEditStatus();
+	pCharacter->setObjectName(sCharacterName);
+	pCharacter->_ip = sIP;
+	pCharacter->_port = nPort;
+	pCharacter->_big_line = big_line;
+	pCharacter->online = nOnline;
+	pCharForObjHash.insert(sCharacterName, pCharacter);
+	m_charNameForObj.insert(big_line, pCharForObjHash);
+	
+}
+
 Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)
 {
 	QString sGid = QString::fromStdString(request->gid());
@@ -2759,6 +2791,48 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 	}
 	return Status::OK;
 
+}
+
+Status ITObjectDataMgr::SelectCharacterServer(const ::CGData::SelectCharacterServerRequest *request, ::CGData::SelectCharacterServerResponse *response)
+{
+	if (!request)
+		return Status::OK;
+	QString sCharacterName = QString::fromStdString(request->char_name());
+	int big_line = request->big_line();	
+	if (sCharacterName.isEmpty())
+		return Status::OK;
+	auto pCharForObjHash = m_charNameForObj.value(big_line);
+	auto pCharacter = pCharForObjHash.value(sCharacterName);
+	if (!pCharacter)
+	{
+		return Status::OK;
+	}	
+	response->set_ip(pCharacter->_ip.toStdString());
+	response->set_port(pCharacter->_port);
+	response->set_online(pCharacter->online);
+	response->set_big_line(pCharacter->_big_line);
+	return Status::OK;
+}
+
+Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataRequest *request, ::CGData::SelectCharacterDataResponse *response)
+{
+	if (!request)
+		return Status::OK;
+	QString sCharacterName = QString::fromStdString(request->char_name());
+	int big_line = request->big_line();
+	if (sCharacterName.isEmpty())
+		return Status::OK;
+	auto pCharForObjHash = m_charNameForObj.value(big_line);
+	auto pCharacter = pCharForObjHash.value(sCharacterName);
+	if (!pCharacter)
+	{
+		return Status::OK;
+	}
+	response->set_ip(pCharacter->_ip.toStdString());
+	response->set_port(pCharacter->_port);
+	response->set_online(pCharacter->online);
+	response->set_big_line(pCharacter->_big_line);
+	return Status::OK;
 }
 
 ITObjectList ITObjectDataMgr::FindData(int nType, const QString& sName)

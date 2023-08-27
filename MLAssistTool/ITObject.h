@@ -7,6 +7,7 @@
 #include <QMutex>
 #include <QTime>
 
+
 class ITObject;
 class ITGameItem;
 class ITGamePet;
@@ -18,6 +19,7 @@ class ITAccountGid;
 class ITGidRole;
 class ITCGPetPictorialBook;
 class ITGameSkill;
+class ITCharcterServer;
 typedef QSharedPointer<ITObject> ITObjectPtr;
 typedef QList<ITObjectPtr> ITObjectList;
 
@@ -50,6 +52,8 @@ typedef QList<ITGidRolePtr> ITGidRoleList;
 
 typedef QSharedPointer<ITGameSkill> ITGameSkillPtr;
 typedef QList<ITGameSkillPtr> ITGameSkillList;
+typedef QSharedPointer<ITCharcterServer> ITCharcterServerPtr;
+typedef QList<ITCharcterServer> ITCharcterServerList;
 
 Q_DECLARE_METATYPE(ITGameItemPtr)
 Q_DECLARE_METATYPE(ITGamePetPtr)
@@ -60,6 +64,7 @@ Q_DECLARE_METATYPE(ITAccountGidPtr)
 Q_DECLARE_METATYPE(ITGidRolePtr)
 Q_DECLARE_METATYPE(ITCGPetPictorialBook)
 Q_DECLARE_METATYPE(ITGameSkillPtr)
+Q_DECLARE_METATYPE(ITCharcterServerPtr)
 enum TObjStatus //设备状态
 {
 	TStatus_Normal = 0, //正常
@@ -91,6 +96,7 @@ public:
 #define NEW_MODULE_FACTORY(ModuleName) \
 	(new ModuleName##Factory())
 #endif // !NEW_MODULE_FACTORY
+
 
 class ITObject
 {
@@ -133,6 +139,7 @@ public:
 	bool _bUpdate = false; //是否更新
 
 private:
+	QMutex* m_nameMutex;			//不能定义，子类继承或赋值函数赋值时候，因为此锁不能赋值，所以报错
 	int m_nType = TObject_None;		//Obj类型		状态值为enum类型ObjectType
 	int m_nStatus = TStatus_Normal; //Obj修改状态
 	quint64 m_ullID = 0;			//id
@@ -184,6 +191,7 @@ public:
 	int _element_fire = 0;
 	int _element_wind = 0;
 };
+DECLARE_OBJECT_MODULE_FACTORY(ITGameBaseData)
 class ITGamePet : public ITGameBaseData
 {
 public:
@@ -362,6 +370,7 @@ public:
 	QString _map_name = "";
 	int _map_number = 0;
 	int _server_line = 0;
+	int _big_line = 0;	//电信 网通
 
 	ITGamePetList _petList;	  //所有宠物信息
 	ITGameItemList _itemList; //所有道具信息
@@ -422,6 +431,9 @@ DECLARE_OBJECT_MODULE_FACTORY(ITAccountGidRoleRunConfig)
 class ITCGPetPictorialBook : public ITObject
 {
 public:
+	ITCGPetPictorialBook();
+	ITCGPetPictorialBook(QString szName, int nType, quint64 ullID);
+	virtual ~ITCGPetPictorialBook();
 	int _petNumber = 0;	   //宠物编号
 	int _petRaceType = 0;  //宠物种族
 	QString _petRace;	   //宠物种族
@@ -445,6 +457,15 @@ public:
 	int rate_defense;	//0x0014 防御
 	int rate_agility;	//0x0018 敏捷
 	int rate_magical;	//0x001C 魔法
-
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITCGPetPictorialBook)
+
+class ITCharcterServer : public ITObject
+{
+public:
+	QString _ip;
+	int _port;
+	int _big_line;
+	int online;
+};
+DECLARE_OBJECT_MODULE_FACTORY(ITCharcterServer)

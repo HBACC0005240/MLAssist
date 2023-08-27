@@ -75,8 +75,11 @@ public:
 	void StoreServerMapData(const QString& mapName, int mapNumber);
 	void StoreUploadGidData(const ::CGData::UploadGidDataRequest* request);
 	void StoreUploadGidBankData(const ::CGData::UploadGidBankDataRequest* request);
+	void UploadCharcterServer(const ::CGData::SelectCharacterServerResponse *request);
 	//辅助查询接口
 	Status SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
+	Status SelectCharacterServer(const ::CGData::SelectCharacterServerRequest *request, ::CGData::SelectCharacterServerResponse *response);
+	Status SelectCharacterData(const ::CGData::SelectCharacterDataRequest *request, ::CGData::SelectCharacterDataResponse *response);
 
 	//数据库查询接口
 	ITObjectList FindData(int nType,const QString& sName);
@@ -169,7 +172,8 @@ private:
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
 	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//gid+name 对应指定游戏人物
 	QStringList m_onlineAccountRoles;					//gid+name 在线列表 不在线清除此列表项
-	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid+name 对应指定gid
+	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid 对应指定gid
+	QHash<int, QHash<QString, ITCharcterServerPtr> > m_charNameForObj;
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
 	QMutex m_objMutex;

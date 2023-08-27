@@ -29,6 +29,8 @@ enum TObjectType
 	TObject_GateMap = 0x4200,		 //常用坐标
 	TObject_Map = 0x4300,			 //地图信息
 	TObject_PetBook = 0x4400,		//宠物图鉴
+	TObject_CharServer = 0x4500,	//服务信息		
+
 
 };
 enum TBattleType

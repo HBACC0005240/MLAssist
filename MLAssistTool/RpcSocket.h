@@ -13,6 +13,10 @@ using CGData::CGItemRequest;
 using CGData::CGItemResponse;
 using CGData::UploadMapDataRequest;
 using CGData::UploadMapDataResponse;
+using CGData::SelectCharacterServerRequest;
+using CGData::SelectCharacterServerResponse;
+using CGData::SelectCharacterDataRequest;
+using CGData::SelectCharacterDataResponse;
 #ifdef _DEBUG
 #pragma comment(lib, "../lib/grpc/debug/grpc++_alts.lib")
 #pragma comment(lib, "../lib/grpc/debug/grpc_plugin_support.lib")
@@ -129,15 +133,18 @@ public:
 	Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response)override;
 	Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* stream, ::CGData::UploadMapDataResponse* response)override;
 	Status DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer)override;
+	Status UploadCharcterServer(::grpc::ServerContext *context, const ::CGData::SelectCharacterServerResponse *request, ::CGData::CGVoidData *response) override;
 
 	Status SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)override;
 	Status SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response)override;
+	Status SelectCharacterServer(::grpc::ServerContext *context, const ::CGData::SelectCharacterServerRequest *request, ::CGData::SelectCharacterServerResponse *response) override;
+	Status SelectCharacterData(::grpc::ServerContext *context, const ::CGData::SelectCharacterDataRequest *request, ::CGData::SelectCharacterDataResponse *response) override;
 
 	::grpc::Status Publish(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response);
 	// 订阅则是一个单向的流服务，服务端返回的数据可能很大
 	::grpc::Status Subscribe(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::grpc::ServerWriter< ::CGData::StringPub>* writer);
 
-
+	
 };
 
 class RpcSocket

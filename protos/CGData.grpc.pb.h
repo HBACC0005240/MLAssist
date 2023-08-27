@@ -1580,6 +1580,13 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>> PrepareAsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>>(PrepareAsyncDownloadMapDataRaw(context, request, cq));
     }
+    virtual ::grpc::Status UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::CGData::CGVoidData* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>> AsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>>(AsyncUploadCharcterServerRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>> PrepareAsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>>(PrepareAsyncUploadCharcterServerRaw(context, request, cq));
+    }
     // 发布是rpc的普通方法
     virtual ::grpc::Status Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>> AsyncPublish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
@@ -1623,6 +1630,30 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>> PrepareAsyncSelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>>(PrepareAsyncSelectDstTypeGidDataRaw(context, request, cq));
     }
+    // 查询游戏角色建立的服务信息
+    virtual ::grpc::Status SelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::CGData::SelectCharacterServerResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterServerResponse>> AsyncSelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterServerResponse>>(AsyncSelectCharacterServerRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterServerResponse>> PrepareAsyncSelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterServerResponse>>(PrepareAsyncSelectCharacterServerRaw(context, request, cq));
+    }
+    // 查询游戏指定任务当前坐标
+    virtual ::grpc::Status SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::CGData::SelectTaskInfoResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>> AsyncSelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>>(AsyncSelectTaskInfoRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>> PrepareAsyncSelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>>(PrepareAsyncSelectTaskInfoRaw(context, request, cq));
+    }
+    // 查询游戏角色当前信息
+    virtual ::grpc::Status SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::CGData::SelectCharacterDataResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>> AsyncSelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>>(AsyncSelectCharacterDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>> PrepareAsyncSelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>>(PrepareAsyncSelectCharacterDataRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -1650,6 +1681,8 @@ class CGRpcService final {
       virtual void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) = 0;
       virtual void DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) = 0;
+      virtual void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       // 发布是rpc的普通方法
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) = 0;
@@ -1665,6 +1698,15 @@ class CGRpcService final {
       // 查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
       virtual void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // 查询游戏角色建立的服务信息
+      virtual void SelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // 查询游戏指定任务当前坐标
+      virtual void SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // 查询游戏角色当前信息
+      virtual void SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -1692,6 +1734,8 @@ class CGRpcService final {
     virtual ::grpc::ClientReaderInterface< ::CGData::DownloadMapDataResponse>* DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>* AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>* PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>* AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>* PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>* AsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>* PrepareAsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientReaderInterface< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) = 0;
@@ -1703,6 +1747,12 @@ class CGRpcService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectGidDataResponse>* PrepareAsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>* AsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectAccountGidDataResponse>* PrepareAsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterServerResponse>* AsyncSelectCharacterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterServerResponse>* PrepareAsyncSelectCharacterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>* AsyncSelectTaskInfoRaw(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>* PrepareAsyncSelectTaskInfoRaw(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>* AsyncSelectCharacterDataRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>* PrepareAsyncSelectCharacterDataRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -1781,6 +1831,13 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>> PrepareAsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>>(PrepareAsyncDownloadMapDataRaw(context, request, cq));
     }
+    ::grpc::Status UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::CGData::CGVoidData* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>> AsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>>(AsyncUploadCharcterServerRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>> PrepareAsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>>(PrepareAsyncUploadCharcterServerRaw(context, request, cq));
+    }
     ::grpc::Status Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>> AsyncPublish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>>(AsyncPublishRaw(context, request, cq));
@@ -1818,6 +1875,27 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>> PrepareAsyncSelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>>(PrepareAsyncSelectDstTypeGidDataRaw(context, request, cq));
     }
+    ::grpc::Status SelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::CGData::SelectCharacterServerResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterServerResponse>> AsyncSelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterServerResponse>>(AsyncSelectCharacterServerRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterServerResponse>> PrepareAsyncSelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterServerResponse>>(PrepareAsyncSelectCharacterServerRaw(context, request, cq));
+    }
+    ::grpc::Status SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::CGData::SelectTaskInfoResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectTaskInfoResponse>> AsyncSelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectTaskInfoResponse>>(AsyncSelectTaskInfoRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectTaskInfoResponse>> PrepareAsyncSelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectTaskInfoResponse>>(PrepareAsyncSelectTaskInfoRaw(context, request, cq));
+    }
+    ::grpc::Status SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::CGData::SelectCharacterDataResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterDataResponse>> AsyncSelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterDataResponse>>(AsyncSelectCharacterDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterDataResponse>> PrepareAsyncSelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterDataResponse>>(PrepareAsyncSelectCharacterDataRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -1839,6 +1917,8 @@ class CGRpcService final {
       void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) override;
       void DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) override;
+      void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, std::function<void(::grpc::Status)>) override;
+      void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Subscribe(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::grpc::ClientReadReactor< ::CGData::StringPub>* reactor) override;
@@ -1848,6 +1928,12 @@ class CGRpcService final {
       void SelectGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, std::function<void(::grpc::Status)>) override;
       void SelectDstTypeGidData(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response, std::function<void(::grpc::Status)>) override;
+      void SelectCharacterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response, std::function<void(::grpc::Status)>) override;
+      void SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response, std::function<void(::grpc::Status)>) override;
+      void SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1881,6 +1967,8 @@ class CGRpcService final {
     ::grpc::ClientReader< ::CGData::DownloadMapDataResponse>* DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) override;
     ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>* AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>* PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>* AsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>* PrepareAsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientReader< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) override;
@@ -1892,6 +1980,12 @@ class CGRpcService final {
     ::grpc::ClientAsyncResponseReader< ::CGData::SelectGidDataResponse>* PrepareAsyncSelectGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* AsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::SelectAccountGidDataResponse>* PrepareAsyncSelectDstTypeGidDataRaw(::grpc::ClientContext* context, const ::CGData::SelectGidDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterServerResponse>* AsyncSelectCharacterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterServerResponse>* PrepareAsyncSelectCharacterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectTaskInfoResponse>* AsyncSelectTaskInfoRaw(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectTaskInfoResponse>* PrepareAsyncSelectTaskInfoRaw(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterDataResponse>* AsyncSelectCharacterDataRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::SelectCharacterDataResponse>* PrepareAsyncSelectCharacterDataRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_GetCGItemData_;
     const ::grpc::internal::RpcMethod rpcmethod_GetConnectState_;
     const ::grpc::internal::RpcMethod rpcmethod_GetPetGradeCalcData_;
@@ -1902,11 +1996,15 @@ class CGRpcService final {
     const ::grpc::internal::RpcMethod rpcmethod_UploadGidBankData_;
     const ::grpc::internal::RpcMethod rpcmethod_UploadMapData_;
     const ::grpc::internal::RpcMethod rpcmethod_DownloadMapData_;
+    const ::grpc::internal::RpcMethod rpcmethod_UploadCharcterServer_;
     const ::grpc::internal::RpcMethod rpcmethod_Publish_;
     const ::grpc::internal::RpcMethod rpcmethod_Subscribe_;
     const ::grpc::internal::RpcMethod rpcmethod_SelectAccountGidData_;
     const ::grpc::internal::RpcMethod rpcmethod_SelectGidData_;
     const ::grpc::internal::RpcMethod rpcmethod_SelectDstTypeGidData_;
+    const ::grpc::internal::RpcMethod rpcmethod_SelectCharacterServer_;
+    const ::grpc::internal::RpcMethod rpcmethod_SelectTaskInfo_;
+    const ::grpc::internal::RpcMethod rpcmethod_SelectCharacterData_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -1930,6 +2028,7 @@ class CGRpcService final {
     virtual ::grpc::Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response);
     virtual ::grpc::Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* reader, ::CGData::UploadMapDataResponse* response);
     virtual ::grpc::Status DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer);
+    virtual ::grpc::Status UploadCharcterServer(::grpc::ServerContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response);
     // 发布是rpc的普通方法
     virtual ::grpc::Status Publish(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response);
     // 订阅则是一个单向的流服务，服务端返回的数据可能很大
@@ -1941,6 +2040,12 @@ class CGRpcService final {
     virtual ::grpc::Status SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
     // 查询指定类型的gid角色数据 例如：当前gid是哥布林仓库专用，则查询所有此类型账号 一个角色可以是全部类型
     virtual ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response);
+    // 查询游戏角色建立的服务信息
+    virtual ::grpc::Status SelectCharacterServer(::grpc::ServerContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response);
+    // 查询游戏指定任务当前坐标
+    virtual ::grpc::Status SelectTaskInfo(::grpc::ServerContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response);
+    // 查询游戏角色当前信息
+    virtual ::grpc::Status SelectCharacterData(::grpc::ServerContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_GetCGItemData : public BaseClass {
@@ -2143,12 +2248,32 @@ class CGRpcService final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_UploadCharcterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_UploadCharcterServer() {
+      ::grpc::Service::MarkMethodAsync(10);
+    }
+    ~WithAsyncMethod_UploadCharcterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUploadCharcterServer(::grpc::ServerContext* context, ::CGData::SelectCharacterServerResponse* request, ::grpc::ServerAsyncResponseWriter< ::CGData::CGVoidData>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Publish() {
-      ::grpc::Service::MarkMethodAsync(10);
+      ::grpc::Service::MarkMethodAsync(11);
     }
     ~WithAsyncMethod_Publish() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2159,7 +2284,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPublish(::grpc::ServerContext* context, ::CGData::StringPub* request, ::grpc::ServerAsyncResponseWriter< ::CGData::StringPub>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2168,7 +2293,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Subscribe() {
-      ::grpc::Service::MarkMethodAsync(11);
+      ::grpc::Service::MarkMethodAsync(12);
     }
     ~WithAsyncMethod_Subscribe() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2179,7 +2304,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSubscribe(::grpc::ServerContext* context, ::CGData::StringPub* request, ::grpc::ServerAsyncWriter< ::CGData::StringPub>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncServerStreaming(11, context, request, writer, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncServerStreaming(12, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2188,7 +2313,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodAsync(12);
+      ::grpc::Service::MarkMethodAsync(13);
     }
     ~WithAsyncMethod_SelectAccountGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2199,7 +2324,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectAccountGidData(::grpc::ServerContext* context, ::CGData::SelectAccountGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectAccountGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2208,7 +2333,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodAsync(13);
+      ::grpc::Service::MarkMethodAsync(14);
     }
     ~WithAsyncMethod_SelectGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2219,7 +2344,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectGidData(::grpc::ServerContext* context, ::CGData::SelectGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2228,7 +2353,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodAsync(14);
+      ::grpc::Service::MarkMethodAsync(15);
     }
     ~WithAsyncMethod_SelectDstTypeGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2239,10 +2364,70 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectDstTypeGidData(::grpc::ServerContext* context, ::CGData::SelectGidDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectAccountGidDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(15, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GetCGItemData<WithAsyncMethod_GetConnectState<WithAsyncMethod_GetPetGradeCalcData<WithAsyncMethod_GetServerStoreMapData<WithAsyncMethod_StoreCGItemData<WithAsyncMethod_StoreCGMapData<WithAsyncMethod_UploadGidData<WithAsyncMethod_UploadGidBankData<WithAsyncMethod_UploadMapData<WithAsyncMethod_DownloadMapData<WithAsyncMethod_Publish<WithAsyncMethod_Subscribe<WithAsyncMethod_SelectAccountGidData<WithAsyncMethod_SelectGidData<WithAsyncMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_SelectCharacterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SelectCharacterServer() {
+      ::grpc::Service::MarkMethodAsync(16);
+    }
+    ~WithAsyncMethod_SelectCharacterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectCharacterServer(::grpc::ServerContext* context, ::CGData::SelectCharacterServerRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectCharacterServerResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_SelectTaskInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SelectTaskInfo() {
+      ::grpc::Service::MarkMethodAsync(17);
+    }
+    ~WithAsyncMethod_SelectTaskInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectTaskInfo(::grpc::ServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectTaskInfo(::grpc::ServerContext* context, ::CGData::SelectTaskInfoRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectTaskInfoResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(17, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_SelectCharacterData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SelectCharacterData() {
+      ::grpc::Service::MarkMethodAsync(18);
+    }
+    ~WithAsyncMethod_SelectCharacterData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterData(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectCharacterData(::grpc::ServerContext* context, ::CGData::SelectCharacterDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::SelectCharacterDataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(18, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_GetCGItemData<WithAsyncMethod_GetConnectState<WithAsyncMethod_GetPetGradeCalcData<WithAsyncMethod_GetServerStoreMapData<WithAsyncMethod_StoreCGItemData<WithAsyncMethod_StoreCGMapData<WithAsyncMethod_UploadGidData<WithAsyncMethod_UploadGidBankData<WithAsyncMethod_UploadMapData<WithAsyncMethod_DownloadMapData<WithAsyncMethod_UploadCharcterServer<WithAsyncMethod_Publish<WithAsyncMethod_Subscribe<WithAsyncMethod_SelectAccountGidData<WithAsyncMethod_SelectGidData<WithAsyncMethod_SelectDstTypeGidData<WithAsyncMethod_SelectCharacterServer<WithAsyncMethod_SelectTaskInfo<WithAsyncMethod_SelectCharacterData<Service > > > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_GetCGItemData : public BaseClass {
    private:
@@ -2504,18 +2689,45 @@ class CGRpcService final {
       ::grpc::CallbackServerContext* /*context*/, const ::CGData::DownloadMapDataRequest* /*request*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithCallbackMethod_UploadCharcterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_UploadCharcterServer() {
+      ::grpc::Service::MarkMethodCallback(10,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response) { return this->UploadCharcterServer(context, request, response); }));}
+    void SetMessageAllocatorFor_UploadCharcterServer(
+        ::grpc::MessageAllocator< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_UploadCharcterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* UploadCharcterServer(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithCallbackMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Publish() {
-      ::grpc::Service::MarkMethodCallback(10,
+      ::grpc::Service::MarkMethodCallback(11,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::StringPub, ::CGData::StringPub>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response) { return this->Publish(context, request, response); }));}
     void SetMessageAllocatorFor_Publish(
         ::grpc::MessageAllocator< ::CGData::StringPub, ::CGData::StringPub>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(11);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::StringPub, ::CGData::StringPub>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2536,7 +2748,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Subscribe() {
-      ::grpc::Service::MarkMethodCallback(11,
+      ::grpc::Service::MarkMethodCallback(12,
           new ::grpc::internal::CallbackServerStreamingHandler< ::CGData::StringPub, ::CGData::StringPub>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::StringPub* request) { return this->Subscribe(context, request); }));
@@ -2558,13 +2770,13 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodCallback(12,
+      ::grpc::Service::MarkMethodCallback(13,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) { return this->SelectAccountGidData(context, request, response); }));}
     void SetMessageAllocatorFor_SelectAccountGidData(
         ::grpc::MessageAllocator< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(13);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2585,13 +2797,13 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodCallback(13,
+      ::grpc::Service::MarkMethodCallback(14,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response) { return this->SelectGidData(context, request, response); }));}
     void SetMessageAllocatorFor_SelectGidData(
         ::grpc::MessageAllocator< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(13);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(14);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2612,13 +2824,13 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodCallback(14,
+      ::grpc::Service::MarkMethodCallback(15,
           new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response) { return this->SelectDstTypeGidData(context, request, response); }));}
     void SetMessageAllocatorFor_SelectDstTypeGidData(
         ::grpc::MessageAllocator< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(14);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(15);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2633,7 +2845,88 @@ class CGRpcService final {
     virtual ::grpc::ServerUnaryReactor* SelectDstTypeGidData(
       ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_GetCGItemData<WithCallbackMethod_GetConnectState<WithCallbackMethod_GetPetGradeCalcData<WithCallbackMethod_GetServerStoreMapData<WithCallbackMethod_StoreCGItemData<WithCallbackMethod_StoreCGMapData<WithCallbackMethod_UploadGidData<WithCallbackMethod_UploadGidBankData<WithCallbackMethod_UploadMapData<WithCallbackMethod_DownloadMapData<WithCallbackMethod_Publish<WithCallbackMethod_Subscribe<WithCallbackMethod_SelectAccountGidData<WithCallbackMethod_SelectGidData<WithCallbackMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_SelectCharacterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SelectCharacterServer() {
+      ::grpc::Service::MarkMethodCallback(16,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterServerRequest, ::CGData::SelectCharacterServerResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response) { return this->SelectCharacterServer(context, request, response); }));}
+    void SetMessageAllocatorFor_SelectCharacterServer(
+        ::grpc::MessageAllocator< ::CGData::SelectCharacterServerRequest, ::CGData::SelectCharacterServerResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(16);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterServerRequest, ::CGData::SelectCharacterServerResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SelectCharacterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectCharacterServer(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_SelectTaskInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SelectTaskInfo() {
+      ::grpc::Service::MarkMethodCallback(17,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectTaskInfoRequest, ::CGData::SelectTaskInfoResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response) { return this->SelectTaskInfo(context, request, response); }));}
+    void SetMessageAllocatorFor_SelectTaskInfo(
+        ::grpc::MessageAllocator< ::CGData::SelectTaskInfoRequest, ::CGData::SelectTaskInfoResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(17);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectTaskInfoRequest, ::CGData::SelectTaskInfoResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SelectTaskInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectTaskInfo(::grpc::ServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectTaskInfo(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_SelectCharacterData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SelectCharacterData() {
+      ::grpc::Service::MarkMethodCallback(18,
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterDataRequest, ::CGData::SelectCharacterDataResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response) { return this->SelectCharacterData(context, request, response); }));}
+    void SetMessageAllocatorFor_SelectCharacterData(
+        ::grpc::MessageAllocator< ::CGData::SelectCharacterDataRequest, ::CGData::SelectCharacterDataResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(18);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterDataRequest, ::CGData::SelectCharacterDataResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SelectCharacterData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterData(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectCharacterData(
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_GetCGItemData<WithCallbackMethod_GetConnectState<WithCallbackMethod_GetPetGradeCalcData<WithCallbackMethod_GetServerStoreMapData<WithCallbackMethod_StoreCGItemData<WithCallbackMethod_StoreCGMapData<WithCallbackMethod_UploadGidData<WithCallbackMethod_UploadGidBankData<WithCallbackMethod_UploadMapData<WithCallbackMethod_DownloadMapData<WithCallbackMethod_UploadCharcterServer<WithCallbackMethod_Publish<WithCallbackMethod_Subscribe<WithCallbackMethod_SelectAccountGidData<WithCallbackMethod_SelectGidData<WithCallbackMethod_SelectDstTypeGidData<WithCallbackMethod_SelectCharacterServer<WithCallbackMethod_SelectTaskInfo<WithCallbackMethod_SelectCharacterData<Service > > > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GetCGItemData : public BaseClass {
@@ -2806,12 +3099,29 @@ class CGRpcService final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_UploadCharcterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_UploadCharcterServer() {
+      ::grpc::Service::MarkMethodGeneric(10);
+    }
+    ~WithGenericMethod_UploadCharcterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Publish() {
-      ::grpc::Service::MarkMethodGeneric(10);
+      ::grpc::Service::MarkMethodGeneric(11);
     }
     ~WithGenericMethod_Publish() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2828,7 +3138,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Subscribe() {
-      ::grpc::Service::MarkMethodGeneric(11);
+      ::grpc::Service::MarkMethodGeneric(12);
     }
     ~WithGenericMethod_Subscribe() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2845,7 +3155,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodGeneric(12);
+      ::grpc::Service::MarkMethodGeneric(13);
     }
     ~WithGenericMethod_SelectAccountGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2862,7 +3172,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodGeneric(13);
+      ::grpc::Service::MarkMethodGeneric(14);
     }
     ~WithGenericMethod_SelectGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2879,13 +3189,64 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodGeneric(14);
+      ::grpc::Service::MarkMethodGeneric(15);
     }
     ~WithGenericMethod_SelectDstTypeGidData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
     ::grpc::Status SelectDstTypeGidData(::grpc::ServerContext* /*context*/, const ::CGData::SelectGidDataRequest* /*request*/, ::CGData::SelectAccountGidDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SelectCharacterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SelectCharacterServer() {
+      ::grpc::Service::MarkMethodGeneric(16);
+    }
+    ~WithGenericMethod_SelectCharacterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SelectTaskInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SelectTaskInfo() {
+      ::grpc::Service::MarkMethodGeneric(17);
+    }
+    ~WithGenericMethod_SelectTaskInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectTaskInfo(::grpc::ServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SelectCharacterData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SelectCharacterData() {
+      ::grpc::Service::MarkMethodGeneric(18);
+    }
+    ~WithGenericMethod_SelectCharacterData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterData(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -3091,12 +3452,32 @@ class CGRpcService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_UploadCharcterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_UploadCharcterServer() {
+      ::grpc::Service::MarkMethodRaw(10);
+    }
+    ~WithRawMethod_UploadCharcterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUploadCharcterServer(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Publish() {
-      ::grpc::Service::MarkMethodRaw(10);
+      ::grpc::Service::MarkMethodRaw(11);
     }
     ~WithRawMethod_Publish() override {
       BaseClassMustBeDerivedFromService(this);
@@ -3107,7 +3488,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPublish(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -3116,7 +3497,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Subscribe() {
-      ::grpc::Service::MarkMethodRaw(11);
+      ::grpc::Service::MarkMethodRaw(12);
     }
     ~WithRawMethod_Subscribe() override {
       BaseClassMustBeDerivedFromService(this);
@@ -3127,7 +3508,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSubscribe(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncWriter< ::grpc::ByteBuffer>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncServerStreaming(11, context, request, writer, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncServerStreaming(12, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -3136,7 +3517,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodRaw(12);
+      ::grpc::Service::MarkMethodRaw(13);
     }
     ~WithRawMethod_SelectAccountGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -3147,7 +3528,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectAccountGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -3156,7 +3537,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodRaw(13);
+      ::grpc::Service::MarkMethodRaw(14);
     }
     ~WithRawMethod_SelectGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -3167,7 +3548,7 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -3176,7 +3557,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodRaw(14);
+      ::grpc::Service::MarkMethodRaw(15);
     }
     ~WithRawMethod_SelectDstTypeGidData() override {
       BaseClassMustBeDerivedFromService(this);
@@ -3187,7 +3568,67 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSelectDstTypeGidData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(15, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SelectCharacterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SelectCharacterServer() {
+      ::grpc::Service::MarkMethodRaw(16);
+    }
+    ~WithRawMethod_SelectCharacterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectCharacterServer(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SelectTaskInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SelectTaskInfo() {
+      ::grpc::Service::MarkMethodRaw(17);
+    }
+    ~WithRawMethod_SelectTaskInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectTaskInfo(::grpc::ServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectTaskInfo(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(17, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SelectCharacterData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SelectCharacterData() {
+      ::grpc::Service::MarkMethodRaw(18);
+    }
+    ~WithRawMethod_SelectCharacterData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterData(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSelectCharacterData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(18, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -3411,12 +3852,34 @@ class CGRpcService final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_UploadCharcterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_UploadCharcterServer() {
+      ::grpc::Service::MarkMethodRawCallback(10,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->UploadCharcterServer(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_UploadCharcterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* UploadCharcterServer(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Publish() {
-      ::grpc::Service::MarkMethodRawCallback(10,
+      ::grpc::Service::MarkMethodRawCallback(11,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Publish(context, request, response); }));
@@ -3438,7 +3901,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Subscribe() {
-      ::grpc::Service::MarkMethodRawCallback(11,
+      ::grpc::Service::MarkMethodRawCallback(12,
           new ::grpc::internal::CallbackServerStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const::grpc::ByteBuffer* request) { return this->Subscribe(context, request); }));
@@ -3460,7 +3923,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodRawCallback(12,
+      ::grpc::Service::MarkMethodRawCallback(13,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectAccountGidData(context, request, response); }));
@@ -3482,7 +3945,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodRawCallback(13,
+      ::grpc::Service::MarkMethodRawCallback(14,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectGidData(context, request, response); }));
@@ -3504,7 +3967,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodRawCallback(14,
+      ::grpc::Service::MarkMethodRawCallback(15,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectDstTypeGidData(context, request, response); }));
@@ -3518,6 +3981,72 @@ class CGRpcService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* SelectDstTypeGidData(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SelectCharacterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SelectCharacterServer() {
+      ::grpc::Service::MarkMethodRawCallback(16,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectCharacterServer(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SelectCharacterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectCharacterServer(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SelectTaskInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SelectTaskInfo() {
+      ::grpc::Service::MarkMethodRawCallback(17,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectTaskInfo(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SelectTaskInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectTaskInfo(::grpc::ServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectTaskInfo(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SelectCharacterData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SelectCharacterData() {
+      ::grpc::Service::MarkMethodRawCallback(18,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SelectCharacterData(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SelectCharacterData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SelectCharacterData(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SelectCharacterData(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -3737,12 +4266,39 @@ class CGRpcService final {
     virtual ::grpc::Status StreamedUploadGidBankData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::UploadGidBankDataRequest,::CGData::UploadGidBankDataResponse>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_UploadCharcterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_UploadCharcterServer() {
+      ::grpc::Service::MarkMethodStreamed(10,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>* streamer) {
+                       return this->StreamedUploadCharcterServer(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_UploadCharcterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedUploadCharcterServer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectCharacterServerResponse,::CGData::CGVoidData>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_Publish : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Publish() {
-      ::grpc::Service::MarkMethodStreamed(10,
+      ::grpc::Service::MarkMethodStreamed(11,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::StringPub, ::CGData::StringPub>(
             [this](::grpc::ServerContext* context,
@@ -3769,7 +4325,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SelectAccountGidData() {
-      ::grpc::Service::MarkMethodStreamed(12,
+      ::grpc::Service::MarkMethodStreamed(13,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::SelectAccountGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](::grpc::ServerContext* context,
@@ -3796,7 +4352,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SelectGidData() {
-      ::grpc::Service::MarkMethodStreamed(13,
+      ::grpc::Service::MarkMethodStreamed(14,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::SelectGidDataRequest, ::CGData::SelectGidDataResponse>(
             [this](::grpc::ServerContext* context,
@@ -3823,7 +4379,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SelectDstTypeGidData() {
-      ::grpc::Service::MarkMethodStreamed(14,
+      ::grpc::Service::MarkMethodStreamed(15,
         new ::grpc::internal::StreamedUnaryHandler<
           ::CGData::SelectGidDataRequest, ::CGData::SelectAccountGidDataResponse>(
             [this](::grpc::ServerContext* context,
@@ -3844,7 +4400,88 @@ class CGRpcService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedSelectDstTypeGidData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectGidDataRequest,::CGData::SelectAccountGidDataResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_Publish<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SelectCharacterServer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SelectCharacterServer() {
+      ::grpc::Service::MarkMethodStreamed(16,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectCharacterServerRequest, ::CGData::SelectCharacterServerResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectCharacterServerRequest, ::CGData::SelectCharacterServerResponse>* streamer) {
+                       return this->StreamedSelectCharacterServer(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SelectCharacterServer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SelectCharacterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerRequest* /*request*/, ::CGData::SelectCharacterServerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSelectCharacterServer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectCharacterServerRequest,::CGData::SelectCharacterServerResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SelectTaskInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SelectTaskInfo() {
+      ::grpc::Service::MarkMethodStreamed(17,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectTaskInfoRequest, ::CGData::SelectTaskInfoResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectTaskInfoRequest, ::CGData::SelectTaskInfoResponse>* streamer) {
+                       return this->StreamedSelectTaskInfo(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SelectTaskInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SelectTaskInfo(::grpc::ServerContext* /*context*/, const ::CGData::SelectTaskInfoRequest* /*request*/, ::CGData::SelectTaskInfoResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSelectTaskInfo(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectTaskInfoRequest,::CGData::SelectTaskInfoResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SelectCharacterData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SelectCharacterData() {
+      ::grpc::Service::MarkMethodStreamed(18,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::CGData::SelectCharacterDataRequest, ::CGData::SelectCharacterDataResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::CGData::SelectCharacterDataRequest, ::CGData::SelectCharacterDataResponse>* streamer) {
+                       return this->StreamedSelectCharacterData(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SelectCharacterData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SelectCharacterData(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterDataRequest* /*request*/, ::CGData::SelectCharacterDataResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSelectCharacterData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectCharacterDataRequest,::CGData::SelectCharacterDataResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithStreamedUnaryMethod_UploadCharcterServer<WithStreamedUnaryMethod_Publish<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<WithStreamedUnaryMethod_SelectCharacterServer<WithStreamedUnaryMethod_SelectTaskInfo<WithStreamedUnaryMethod_SelectCharacterData<Service > > > > > > > > > > > > > > > > StreamedUnaryService;
   template <class BaseClass>
   class WithSplitStreamingMethod_DownloadMapData : public BaseClass {
    private:
@@ -3878,7 +4515,7 @@ class CGRpcService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithSplitStreamingMethod_Subscribe() {
-      ::grpc::Service::MarkMethodStreamed(11,
+      ::grpc::Service::MarkMethodStreamed(12,
         new ::grpc::internal::SplitServerStreamingHandler<
           ::CGData::StringPub, ::CGData::StringPub>(
             [this](::grpc::ServerContext* context,
@@ -3900,7 +4537,7 @@ class CGRpcService final {
     virtual ::grpc::Status StreamedSubscribe(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::CGData::StringPub,::CGData::StringPub>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_DownloadMapData<WithSplitStreamingMethod_Subscribe<Service > > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithSplitStreamingMethod_DownloadMapData<WithStreamedUnaryMethod_Publish<WithSplitStreamingMethod_Subscribe<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<Service > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GetCGItemData<WithStreamedUnaryMethod_GetConnectState<WithStreamedUnaryMethod_GetPetGradeCalcData<WithStreamedUnaryMethod_GetServerStoreMapData<WithStreamedUnaryMethod_StoreCGItemData<WithStreamedUnaryMethod_StoreCGMapData<WithStreamedUnaryMethod_UploadGidData<WithStreamedUnaryMethod_UploadGidBankData<WithSplitStreamingMethod_DownloadMapData<WithStreamedUnaryMethod_UploadCharcterServer<WithStreamedUnaryMethod_Publish<WithSplitStreamingMethod_Subscribe<WithStreamedUnaryMethod_SelectAccountGidData<WithStreamedUnaryMethod_SelectGidData<WithStreamedUnaryMethod_SelectDstTypeGidData<WithStreamedUnaryMethod_SelectCharacterServer<WithStreamedUnaryMethod_SelectTaskInfo<WithStreamedUnaryMethod_SelectCharacterData<Service > > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace CGData

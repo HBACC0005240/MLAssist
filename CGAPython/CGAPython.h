@@ -169,7 +169,7 @@ public:
 	bool SayWords(const std::string& str, int, int, int);
 	bool ChangeNickName(std::string& str);
 	bool ChangeTitleName(int titleId);
-	CGA::cga_pers_desc_t ChangePersDesc();
+	bool ChangePersDesc(CGA::cga_pers_desc_t desc);
 	bool ChangePetName(int petId, const std::string& name);
 
 	bool UseItem(int itempos);

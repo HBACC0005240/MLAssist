@@ -525,11 +525,9 @@ bool CGAPython::ChangeTitleName(int titleId)
 	return bVal;
 }
 
-CGA::cga_pers_desc_t CGAPython::ChangePersDesc()
+ bool CGAPython::ChangePersDesc(CGA::cga_pers_desc_t desc)
 {
-	CGA::cga_pers_desc_t desc;
-	m_interface->ChangePersDesc(desc);
-	return desc;
+	return m_interface->ChangePersDesc(desc);
 }
 
 bool CGAPython::ChangePetName(int petId, const std::string& name)

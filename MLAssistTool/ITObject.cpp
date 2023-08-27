@@ -6,6 +6,7 @@ ITObject::ITObject()
 	m_ullID = 0;
 	m_nType = dtNone;
 	m_parent = nullptr;
+	m_nameMutex = new QMutex;
 }
 
 ITObject::ITObject(QString szName, int nObjType, quint64 ullID)
@@ -14,6 +15,7 @@ ITObject::ITObject(QString szName, int nObjType, quint64 ullID)
 	m_szName = szName;
 	m_nType = nObjType;
 	m_parent = nullptr;
+	m_nameMutex = new QMutex;
 }
 
 ITObject::~ITObject()
@@ -32,6 +34,7 @@ void ITObject::setObjectID(quint64 nCode)
 
 void ITObject::setObjectName(const QString& sName)
 {
+	QMutexLocker locker(m_nameMutex);
 	m_szName = sName;
 }
 
@@ -57,6 +60,7 @@ quint64 ITObject::getObjectID(void)
 
 QString ITObject::getObjectName(void)
 {
+	QMutexLocker locker(m_nameMutex);
 	return m_szName;
 }
 
@@ -237,4 +241,17 @@ ITGameSkill::ITGameSkill(QString szName, int nType, quint64 ullID) :
 ITGameSkill::~ITGameSkill()
 {
 
+}
+
+ITCGPetPictorialBook::ITCGPetPictorialBook()
+{
+}
+
+ITCGPetPictorialBook::ITCGPetPictorialBook(QString szName, int nType, quint64 ullID) :
+		ITObject(szName, nType, ullID)
+{
+}
+
+ITCGPetPictorialBook::~ITCGPetPictorialBook()
+{
 }

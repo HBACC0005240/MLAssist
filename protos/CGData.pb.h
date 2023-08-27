@@ -46,7 +46,7 @@ struct TableStruct_CGData_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[39]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[45]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -144,12 +144,30 @@ extern SelectAccountGidDataRequestDefaultTypeInternal _SelectAccountGidDataReque
 class SelectAccountGidDataResponse;
 struct SelectAccountGidDataResponseDefaultTypeInternal;
 extern SelectAccountGidDataResponseDefaultTypeInternal _SelectAccountGidDataResponse_default_instance_;
+class SelectCharacterDataRequest;
+struct SelectCharacterDataRequestDefaultTypeInternal;
+extern SelectCharacterDataRequestDefaultTypeInternal _SelectCharacterDataRequest_default_instance_;
+class SelectCharacterDataResponse;
+struct SelectCharacterDataResponseDefaultTypeInternal;
+extern SelectCharacterDataResponseDefaultTypeInternal _SelectCharacterDataResponse_default_instance_;
+class SelectCharacterServerRequest;
+struct SelectCharacterServerRequestDefaultTypeInternal;
+extern SelectCharacterServerRequestDefaultTypeInternal _SelectCharacterServerRequest_default_instance_;
+class SelectCharacterServerResponse;
+struct SelectCharacterServerResponseDefaultTypeInternal;
+extern SelectCharacterServerResponseDefaultTypeInternal _SelectCharacterServerResponse_default_instance_;
 class SelectGidDataRequest;
 struct SelectGidDataRequestDefaultTypeInternal;
 extern SelectGidDataRequestDefaultTypeInternal _SelectGidDataRequest_default_instance_;
 class SelectGidDataResponse;
 struct SelectGidDataResponseDefaultTypeInternal;
 extern SelectGidDataResponseDefaultTypeInternal _SelectGidDataResponse_default_instance_;
+class SelectTaskInfoRequest;
+struct SelectTaskInfoRequestDefaultTypeInternal;
+extern SelectTaskInfoRequestDefaultTypeInternal _SelectTaskInfoRequest_default_instance_;
+class SelectTaskInfoResponse;
+struct SelectTaskInfoResponseDefaultTypeInternal;
+extern SelectTaskInfoResponseDefaultTypeInternal _SelectTaskInfoResponse_default_instance_;
 class StringPub;
 struct StringPubDefaultTypeInternal;
 extern StringPubDefaultTypeInternal _StringPub_default_instance_;
@@ -203,8 +221,14 @@ template<> ::CGData::DownloadMapDataRequest* Arena::CreateMaybeMessage<::CGData:
 template<> ::CGData::DownloadMapDataResponse* Arena::CreateMaybeMessage<::CGData::DownloadMapDataResponse>(Arena*);
 template<> ::CGData::SelectAccountGidDataRequest* Arena::CreateMaybeMessage<::CGData::SelectAccountGidDataRequest>(Arena*);
 template<> ::CGData::SelectAccountGidDataResponse* Arena::CreateMaybeMessage<::CGData::SelectAccountGidDataResponse>(Arena*);
+template<> ::CGData::SelectCharacterDataRequest* Arena::CreateMaybeMessage<::CGData::SelectCharacterDataRequest>(Arena*);
+template<> ::CGData::SelectCharacterDataResponse* Arena::CreateMaybeMessage<::CGData::SelectCharacterDataResponse>(Arena*);
+template<> ::CGData::SelectCharacterServerRequest* Arena::CreateMaybeMessage<::CGData::SelectCharacterServerRequest>(Arena*);
+template<> ::CGData::SelectCharacterServerResponse* Arena::CreateMaybeMessage<::CGData::SelectCharacterServerResponse>(Arena*);
 template<> ::CGData::SelectGidDataRequest* Arena::CreateMaybeMessage<::CGData::SelectGidDataRequest>(Arena*);
 template<> ::CGData::SelectGidDataResponse* Arena::CreateMaybeMessage<::CGData::SelectGidDataResponse>(Arena*);
+template<> ::CGData::SelectTaskInfoRequest* Arena::CreateMaybeMessage<::CGData::SelectTaskInfoRequest>(Arena*);
+template<> ::CGData::SelectTaskInfoResponse* Arena::CreateMaybeMessage<::CGData::SelectTaskInfoResponse>(Arena*);
 template<> ::CGData::StringPub* Arena::CreateMaybeMessage<::CGData::StringPub>(Arena*);
 template<> ::CGData::UploadGidBankDataRequest* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataRequest>(Arena*);
 template<> ::CGData::UploadGidBankDataResponse* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataResponse>(Arena*);
@@ -2174,6 +2198,1111 @@ class SelectGidDataRequest final :
 };
 // -------------------------------------------------------------------
 
+class SelectCharacterDataRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectCharacterDataRequest) */ {
+ public:
+  inline SelectCharacterDataRequest() : SelectCharacterDataRequest(nullptr) {}
+  ~SelectCharacterDataRequest() override;
+  explicit constexpr SelectCharacterDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectCharacterDataRequest(const SelectCharacterDataRequest& from);
+  SelectCharacterDataRequest(SelectCharacterDataRequest&& from) noexcept
+    : SelectCharacterDataRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectCharacterDataRequest& operator=(const SelectCharacterDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectCharacterDataRequest& operator=(SelectCharacterDataRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectCharacterDataRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectCharacterDataRequest* internal_default_instance() {
+    return reinterpret_cast<const SelectCharacterDataRequest*>(
+               &_SelectCharacterDataRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(SelectCharacterDataRequest& a, SelectCharacterDataRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectCharacterDataRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectCharacterDataRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectCharacterDataRequest* New() const final {
+    return new SelectCharacterDataRequest();
+  }
+
+  SelectCharacterDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectCharacterDataRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectCharacterDataRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectCharacterDataRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectCharacterDataRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectCharacterDataRequest";
+  }
+  protected:
+  explicit SelectCharacterDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCharNameFieldNumber = 1,
+    kBigLineFieldNumber = 2,
+  };
+  // string char_name = 1;
+  void clear_char_name();
+  const std::string& char_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_char_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_char_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_char_name();
+  void set_allocated_char_name(std::string* char_name);
+  private:
+  const std::string& _internal_char_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_char_name(const std::string& value);
+  std::string* _internal_mutable_char_name();
+  public:
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectCharacterDataRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr char_name_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectCharacterDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectCharacterDataResponse) */ {
+ public:
+  inline SelectCharacterDataResponse() : SelectCharacterDataResponse(nullptr) {}
+  ~SelectCharacterDataResponse() override;
+  explicit constexpr SelectCharacterDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectCharacterDataResponse(const SelectCharacterDataResponse& from);
+  SelectCharacterDataResponse(SelectCharacterDataResponse&& from) noexcept
+    : SelectCharacterDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectCharacterDataResponse& operator=(const SelectCharacterDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectCharacterDataResponse& operator=(SelectCharacterDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectCharacterDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectCharacterDataResponse* internal_default_instance() {
+    return reinterpret_cast<const SelectCharacterDataResponse*>(
+               &_SelectCharacterDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(SelectCharacterDataResponse& a, SelectCharacterDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectCharacterDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectCharacterDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectCharacterDataResponse* New() const final {
+    return new SelectCharacterDataResponse();
+  }
+
+  SelectCharacterDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectCharacterDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectCharacterDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectCharacterDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectCharacterDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectCharacterDataResponse";
+  }
+  protected:
+  explicit SelectCharacterDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPetDataFieldNumber = 4,
+    kItemsFieldNumber = 5,
+    kCharacterNameFieldNumber = 1,
+    kCharacterDataFieldNumber = 3,
+    kBigLineFieldNumber = 2,
+  };
+  // repeated .CGData.CGPetData pet_data = 4;
+  int pet_data_size() const;
+  private:
+  int _internal_pet_data_size() const;
+  public:
+  void clear_pet_data();
+  ::CGData::CGPetData* mutable_pet_data(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
+      mutable_pet_data();
+  private:
+  const ::CGData::CGPetData& _internal_pet_data(int index) const;
+  ::CGData::CGPetData* _internal_add_pet_data();
+  public:
+  const ::CGData::CGPetData& pet_data(int index) const;
+  ::CGData::CGPetData* add_pet_data();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
+      pet_data() const;
+
+  // repeated .CGData.CGItemData items = 5;
+  int items_size() const;
+  private:
+  int _internal_items_size() const;
+  public:
+  void clear_items();
+  ::CGData::CGItemData* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
+      mutable_items();
+  private:
+  const ::CGData::CGItemData& _internal_items(int index) const;
+  ::CGData::CGItemData* _internal_add_items();
+  public:
+  const ::CGData::CGItemData& items(int index) const;
+  ::CGData::CGItemData* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
+      items() const;
+
+  // string character_name = 1;
+  void clear_character_name();
+  const std::string& character_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_character_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_character_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_character_name();
+  void set_allocated_character_name(std::string* character_name);
+  private:
+  const std::string& _internal_character_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_character_name(const std::string& value);
+  std::string* _internal_mutable_character_name();
+  public:
+
+  // .CGData.CGCharacterData character_data = 3;
+  bool has_character_data() const;
+  private:
+  bool _internal_has_character_data() const;
+  public:
+  void clear_character_data();
+  const ::CGData::CGCharacterData& character_data() const;
+  PROTOBUF_MUST_USE_RESULT ::CGData::CGCharacterData* release_character_data();
+  ::CGData::CGCharacterData* mutable_character_data();
+  void set_allocated_character_data(::CGData::CGCharacterData* character_data);
+  private:
+  const ::CGData::CGCharacterData& _internal_character_data() const;
+  ::CGData::CGCharacterData* _internal_mutable_character_data();
+  public:
+  void unsafe_arena_set_allocated_character_data(
+      ::CGData::CGCharacterData* character_data);
+  ::CGData::CGCharacterData* unsafe_arena_release_character_data();
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectCharacterDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData > pet_data_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData > items_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
+  ::CGData::CGCharacterData* character_data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectCharacterServerRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectCharacterServerRequest) */ {
+ public:
+  inline SelectCharacterServerRequest() : SelectCharacterServerRequest(nullptr) {}
+  ~SelectCharacterServerRequest() override;
+  explicit constexpr SelectCharacterServerRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectCharacterServerRequest(const SelectCharacterServerRequest& from);
+  SelectCharacterServerRequest(SelectCharacterServerRequest&& from) noexcept
+    : SelectCharacterServerRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectCharacterServerRequest& operator=(const SelectCharacterServerRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectCharacterServerRequest& operator=(SelectCharacterServerRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectCharacterServerRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectCharacterServerRequest* internal_default_instance() {
+    return reinterpret_cast<const SelectCharacterServerRequest*>(
+               &_SelectCharacterServerRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(SelectCharacterServerRequest& a, SelectCharacterServerRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectCharacterServerRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectCharacterServerRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectCharacterServerRequest* New() const final {
+    return new SelectCharacterServerRequest();
+  }
+
+  SelectCharacterServerRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectCharacterServerRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectCharacterServerRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectCharacterServerRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectCharacterServerRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectCharacterServerRequest";
+  }
+  protected:
+  explicit SelectCharacterServerRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCharNameFieldNumber = 1,
+    kBigLineFieldNumber = 2,
+  };
+  // string char_name = 1;
+  void clear_char_name();
+  const std::string& char_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_char_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_char_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_char_name();
+  void set_allocated_char_name(std::string* char_name);
+  private:
+  const std::string& _internal_char_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_char_name(const std::string& value);
+  std::string* _internal_mutable_char_name();
+  public:
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectCharacterServerRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr char_name_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectCharacterServerResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectCharacterServerResponse) */ {
+ public:
+  inline SelectCharacterServerResponse() : SelectCharacterServerResponse(nullptr) {}
+  ~SelectCharacterServerResponse() override;
+  explicit constexpr SelectCharacterServerResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectCharacterServerResponse(const SelectCharacterServerResponse& from);
+  SelectCharacterServerResponse(SelectCharacterServerResponse&& from) noexcept
+    : SelectCharacterServerResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectCharacterServerResponse& operator=(const SelectCharacterServerResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectCharacterServerResponse& operator=(SelectCharacterServerResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectCharacterServerResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectCharacterServerResponse* internal_default_instance() {
+    return reinterpret_cast<const SelectCharacterServerResponse*>(
+               &_SelectCharacterServerResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(SelectCharacterServerResponse& a, SelectCharacterServerResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectCharacterServerResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectCharacterServerResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectCharacterServerResponse* New() const final {
+    return new SelectCharacterServerResponse();
+  }
+
+  SelectCharacterServerResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectCharacterServerResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectCharacterServerResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectCharacterServerResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectCharacterServerResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectCharacterServerResponse";
+  }
+  protected:
+  explicit SelectCharacterServerResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCharNameFieldNumber = 1,
+    kIpFieldNumber = 3,
+    kBigLineFieldNumber = 2,
+    kPortFieldNumber = 4,
+    kOnlineFieldNumber = 5,
+  };
+  // string char_name = 1;
+  void clear_char_name();
+  const std::string& char_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_char_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_char_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_char_name();
+  void set_allocated_char_name(std::string* char_name);
+  private:
+  const std::string& _internal_char_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_char_name(const std::string& value);
+  std::string* _internal_mutable_char_name();
+  public:
+
+  // string ip = 3;
+  void clear_ip();
+  const std::string& ip() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_ip(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_ip();
+  PROTOBUF_MUST_USE_RESULT std::string* release_ip();
+  void set_allocated_ip(std::string* ip);
+  private:
+  const std::string& _internal_ip() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_ip(const std::string& value);
+  std::string* _internal_mutable_ip();
+  public:
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 port = 4;
+  void clear_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 port() const;
+  void set_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_port() const;
+  void _internal_set_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 online = 5;
+  void clear_online();
+  ::PROTOBUF_NAMESPACE_ID::int32 online() const;
+  void set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_online() const;
+  void _internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectCharacterServerResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr char_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 port_;
+  ::PROTOBUF_NAMESPACE_ID::int32 online_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectTaskInfoRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectTaskInfoRequest) */ {
+ public:
+  inline SelectTaskInfoRequest() : SelectTaskInfoRequest(nullptr) {}
+  ~SelectTaskInfoRequest() override;
+  explicit constexpr SelectTaskInfoRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectTaskInfoRequest(const SelectTaskInfoRequest& from);
+  SelectTaskInfoRequest(SelectTaskInfoRequest&& from) noexcept
+    : SelectTaskInfoRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectTaskInfoRequest& operator=(const SelectTaskInfoRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectTaskInfoRequest& operator=(SelectTaskInfoRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectTaskInfoRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectTaskInfoRequest* internal_default_instance() {
+    return reinterpret_cast<const SelectTaskInfoRequest*>(
+               &_SelectTaskInfoRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(SelectTaskInfoRequest& a, SelectTaskInfoRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectTaskInfoRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectTaskInfoRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectTaskInfoRequest* New() const final {
+    return new SelectTaskInfoRequest();
+  }
+
+  SelectTaskInfoRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectTaskInfoRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectTaskInfoRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectTaskInfoRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectTaskInfoRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectTaskInfoRequest";
+  }
+  protected:
+  explicit SelectTaskInfoRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTaskNameFieldNumber = 1,
+    kBigLineFieldNumber = 2,
+  };
+  // string task_name = 1;
+  void clear_task_name();
+  const std::string& task_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_task_name();
+  void set_allocated_task_name(std::string* task_name);
+  private:
+  const std::string& _internal_task_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_name(const std::string& value);
+  std::string* _internal_mutable_task_name();
+  public:
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectTaskInfoRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_name_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectTaskInfoResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectTaskInfoResponse) */ {
+ public:
+  inline SelectTaskInfoResponse() : SelectTaskInfoResponse(nullptr) {}
+  ~SelectTaskInfoResponse() override;
+  explicit constexpr SelectTaskInfoResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectTaskInfoResponse(const SelectTaskInfoResponse& from);
+  SelectTaskInfoResponse(SelectTaskInfoResponse&& from) noexcept
+    : SelectTaskInfoResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectTaskInfoResponse& operator=(const SelectTaskInfoResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectTaskInfoResponse& operator=(SelectTaskInfoResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectTaskInfoResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectTaskInfoResponse* internal_default_instance() {
+    return reinterpret_cast<const SelectTaskInfoResponse*>(
+               &_SelectTaskInfoResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(SelectTaskInfoResponse& a, SelectTaskInfoResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectTaskInfoResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectTaskInfoResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SelectTaskInfoResponse* New() const final {
+    return new SelectTaskInfoResponse();
+  }
+
+  SelectTaskInfoResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SelectTaskInfoResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectTaskInfoResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SelectTaskInfoResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectTaskInfoResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.SelectTaskInfoResponse";
+  }
+  protected:
+  explicit SelectTaskInfoResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTaskNameFieldNumber = 1,
+    kBigLineFieldNumber = 2,
+    kLineFieldNumber = 3,
+    kNpcPosXFieldNumber = 4,
+    kNpcPosYFieldNumber = 5,
+    kLastTimeFieldNumber = 6,
+    kLastMapFirstNumFieldNumber = 7,
+    kLastMapFirstWidthFieldNumber = 8,
+    kLastMapFirstHeightFieldNumber = 9,
+  };
+  // string task_name = 1;
+  void clear_task_name();
+  const std::string& task_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_task_name();
+  void set_allocated_task_name(std::string* task_name);
+  private:
+  const std::string& _internal_task_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_name(const std::string& value);
+  std::string* _internal_mutable_task_name();
+  public:
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 line = 3;
+  void clear_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 line() const;
+  void set_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_line() const;
+  void _internal_set_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 npc_pos_x = 4;
+  void clear_npc_pos_x();
+  ::PROTOBUF_NAMESPACE_ID::int32 npc_pos_x() const;
+  void set_npc_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_npc_pos_x() const;
+  void _internal_set_npc_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 npc_pos_y = 5;
+  void clear_npc_pos_y();
+  ::PROTOBUF_NAMESPACE_ID::int32 npc_pos_y() const;
+  void set_npc_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_npc_pos_y() const;
+  void _internal_set_npc_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 last_time = 6;
+  void clear_last_time();
+  ::PROTOBUF_NAMESPACE_ID::int32 last_time() const;
+  void set_last_time(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_last_time() const;
+  void _internal_set_last_time(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 last_map_first_num = 7;
+  void clear_last_map_first_num();
+  ::PROTOBUF_NAMESPACE_ID::int32 last_map_first_num() const;
+  void set_last_map_first_num(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_last_map_first_num() const;
+  void _internal_set_last_map_first_num(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 last_map_first_width = 8;
+  void clear_last_map_first_width();
+  ::PROTOBUF_NAMESPACE_ID::int32 last_map_first_width() const;
+  void set_last_map_first_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_last_map_first_width() const;
+  void _internal_set_last_map_first_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 last_map_first_height = 9;
+  void clear_last_map_first_height();
+  ::PROTOBUF_NAMESPACE_ID::int32 last_map_first_height() const;
+  void set_last_map_first_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_last_map_first_height() const;
+  void _internal_set_last_map_first_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.SelectTaskInfoResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_name_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 npc_pos_x_;
+  ::PROTOBUF_NAMESPACE_ID::int32 npc_pos_y_;
+  ::PROTOBUF_NAMESPACE_ID::int32 last_time_;
+  ::PROTOBUF_NAMESPACE_ID::int32 last_map_first_num_;
+  ::PROTOBUF_NAMESPACE_ID::int32 last_map_first_width_;
+  ::PROTOBUF_NAMESPACE_ID::int32 last_map_first_height_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
 class SelectAccountGidDataResponse final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectAccountGidDataResponse) */ {
  public:
@@ -2218,7 +3347,7 @@ class SelectAccountGidDataResponse final :
                &_SelectAccountGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    17;
 
   friend void swap(SelectAccountGidDataResponse& a, SelectAccountGidDataResponse& b) {
     a.Swap(&b);
@@ -2366,7 +3495,7 @@ class SelectGidDataResponse final :
                &_SelectGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    18;
 
   friend void swap(SelectGidDataResponse& a, SelectGidDataResponse& b) {
     a.Swap(&b);
@@ -2597,7 +3726,7 @@ class CGBaseData final :
                &_CGBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    19;
 
   friend void swap(CGBaseData& a, CGBaseData& b) {
     a.Swap(&b);
@@ -2829,7 +3958,7 @@ class CGSkillBaseData final :
                &_CGSkillBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    20;
 
   friend void swap(CGSkillBaseData& a, CGSkillBaseData& b) {
     a.Swap(&b);
@@ -3108,7 +4237,7 @@ class CGAttrBaseData final :
                &_CGAttrBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    21;
 
   friend void swap(CGAttrBaseData& a, CGAttrBaseData& b) {
     a.Swap(&b);
@@ -3511,7 +4640,7 @@ class CGCharacterPersDesc final :
                &_CGCharacterPersDesc_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    22;
 
   friend void swap(CGCharacterPersDesc& a, CGCharacterPersDesc& b) {
     a.Swap(&b);
@@ -3747,7 +4876,7 @@ class CGCharacterData final :
                &_CGCharacterData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    23;
 
   friend void swap(CGCharacterData& a, CGCharacterData& b) {
     a.Swap(&b);
@@ -3850,6 +4979,7 @@ class CGCharacterData final :
     kServerLineFieldNumber = 26,
     kBattlePositionFieldNumber = 31,
     kBankGoldFieldNumber = 32,
+    kBigLineFieldNumber = 33,
   };
   // repeated string titles = 17;
   int titles_size() const;
@@ -4205,6 +5335,19 @@ class CGCharacterData final :
   void _internal_set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // optional int32 big_line = 33;
+  bool has_big_line() const;
+  private:
+  bool _internal_has_big_line() const;
+  public:
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.CGCharacterData)
  private:
   class _Internal;
@@ -4212,6 +5355,8 @@ class CGCharacterData final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> titles_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGSkillBaseData > skill_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr job_;
@@ -4244,7 +5389,7 @@ class CGCharacterData final :
   ::PROTOBUF_NAMESPACE_ID::int32 server_line_;
   ::PROTOBUF_NAMESPACE_ID::int32 battle_position_;
   ::PROTOBUF_NAMESPACE_ID::int32 bank_gold_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
   friend struct ::TableStruct_CGData_2eproto;
 };
 // -------------------------------------------------------------------
@@ -4293,7 +5438,7 @@ class CGPetData final :
                &_CGPetData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    24;
 
   friend void swap(CGPetData& a, CGPetData& b) {
     a.Swap(&b);
@@ -4618,7 +5763,7 @@ class CGItemData final :
                &_CGItemData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    25;
 
   friend void swap(CGItemData& a, CGItemData& b) {
     a.Swap(&b);
@@ -4871,7 +6016,7 @@ class UploadGidDataResponse final :
                &_UploadGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    26;
 
   friend void swap(UploadGidDataResponse& a, UploadGidDataResponse& b) {
     a.Swap(&b);
@@ -4997,7 +6142,7 @@ class UploadGidBankDataResponse final :
                &_UploadGidBankDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    27;
 
   friend void swap(UploadGidBankDataResponse& a, UploadGidBankDataResponse& b) {
     a.Swap(&b);
@@ -5123,7 +6268,7 @@ class CGStoreMapRequest final :
                &_CGStoreMapRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    28;
 
   friend void swap(CGStoreMapRequest& a, CGStoreMapRequest& b) {
     a.Swap(&b);
@@ -5278,7 +6423,7 @@ class CGStoreMapResponse final :
                &_CGStoreMapResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    29;
 
   friend void swap(CGStoreMapResponse& a, CGStoreMapResponse& b) {
     a.Swap(&b);
@@ -5404,7 +6549,7 @@ class CGMapDataRequest final :
                &_CGMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    30;
 
   friend void swap(CGMapDataRequest& a, CGMapDataRequest& b) {
     a.Swap(&b);
@@ -5530,7 +6675,7 @@ class CGMapDataResponse final :
                &_CGMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    31;
 
   friend void swap(CGMapDataResponse& a, CGMapDataResponse& b) {
     a.Swap(&b);
@@ -5678,7 +6823,7 @@ class CGMapData final :
                &_CGMapData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    32;
 
   friend void swap(CGMapData& a, CGMapData& b) {
     a.Swap(&b);
@@ -5871,7 +7016,7 @@ class CGPetGradeCalcRequest final :
                &_CGPetGradeCalcRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    33;
 
   friend void swap(CGPetGradeCalcRequest& a, CGPetGradeCalcRequest& b) {
     a.Swap(&b);
@@ -5997,7 +7142,7 @@ class CGPetGradeCalcResponse final :
                &_CGPetGradeCalcResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    34;
 
   friend void swap(CGPetGradeCalcResponse& a, CGPetGradeCalcResponse& b) {
     a.Swap(&b);
@@ -6145,7 +7290,7 @@ class CGPetGradeCalcData final :
                &_CGPetGradeCalcData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    35;
 
   friend void swap(CGPetGradeCalcData& a, CGPetGradeCalcData& b) {
     a.Swap(&b);
@@ -6527,7 +7672,7 @@ class CGItemRequest final :
                &_CGItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    36;
 
   friend void swap(CGItemRequest& a, CGItemRequest& b) {
     a.Swap(&b);
@@ -6666,7 +7811,7 @@ class CGItemResponse final :
                &_CGItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    37;
 
   friend void swap(CGItemResponse& a, CGItemResponse& b) {
     a.Swap(&b);
@@ -6930,7 +8075,7 @@ class CGStoreItemRequest final :
                &_CGStoreItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    38;
 
   friend void swap(CGStoreItemRequest& a, CGStoreItemRequest& b) {
     a.Swap(&b);
@@ -7183,7 +8328,7 @@ class CGStoreItemResponse final :
                &_CGStoreItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    39;
 
   friend void swap(CGStoreItemResponse& a, CGStoreItemResponse& b) {
     a.Swap(&b);
@@ -7338,7 +8483,7 @@ class CGVoidData final :
                &_CGVoidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    40;
 
   friend void swap(CGVoidData& a, CGVoidData& b) {
     a.Swap(&b);
@@ -7464,7 +8609,7 @@ class CGBoolData final :
                &_CGBoolData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    41;
 
   friend void swap(CGBoolData& a, CGBoolData& b) {
     a.Swap(&b);
@@ -7603,7 +8748,7 @@ class CGIntData final :
                &_CGIntData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    42;
 
   friend void swap(CGIntData& a, CGIntData& b) {
     a.Swap(&b);
@@ -7742,7 +8887,7 @@ class CGSysTimeResponse final :
                &_CGSysTimeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    43;
 
   friend void swap(CGSysTimeResponse& a, CGSysTimeResponse& b) {
     a.Swap(&b);
@@ -7958,7 +9103,7 @@ class CGPlayerFlagEnabledData final :
                &_CGPlayerFlagEnabledData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    44;
 
   friend void swap(CGPlayerFlagEnabledData& a, CGPlayerFlagEnabledData& b) {
     a.Swap(&b);
@@ -9553,6 +10698,822 @@ inline void SelectGidDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPACE_I
 inline void SelectGidDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_role_type(value);
   // @@protoc_insertion_point(field_set:CGData.SelectGidDataRequest.role_type)
+}
+
+// -------------------------------------------------------------------
+
+// SelectCharacterDataRequest
+
+// string char_name = 1;
+inline void SelectCharacterDataRequest::clear_char_name() {
+  char_name_.ClearToEmpty();
+}
+inline const std::string& SelectCharacterDataRequest::char_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataRequest.char_name)
+  return _internal_char_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectCharacterDataRequest::set_char_name(ArgT0&& arg0, ArgT... args) {
+ 
+ char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterDataRequest.char_name)
+}
+inline std::string* SelectCharacterDataRequest::mutable_char_name() {
+  std::string* _s = _internal_mutable_char_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterDataRequest.char_name)
+  return _s;
+}
+inline const std::string& SelectCharacterDataRequest::_internal_char_name() const {
+  return char_name_.Get();
+}
+inline void SelectCharacterDataRequest::_internal_set_char_name(const std::string& value) {
+  
+  char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterDataRequest::_internal_mutable_char_name() {
+  
+  return char_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterDataRequest::release_char_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterDataRequest.char_name)
+  return char_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectCharacterDataRequest::set_allocated_char_name(std::string* char_name) {
+  if (char_name != nullptr) {
+    
+  } else {
+    
+  }
+  char_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), char_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterDataRequest.char_name)
+}
+
+// int32 big_line = 2;
+inline void SelectCharacterDataRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterDataRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterDataRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataRequest.big_line)
+  return _internal_big_line();
+}
+inline void SelectCharacterDataRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectCharacterDataRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterDataRequest.big_line)
+}
+
+// -------------------------------------------------------------------
+
+// SelectCharacterDataResponse
+
+// string character_name = 1;
+inline void SelectCharacterDataResponse::clear_character_name() {
+  character_name_.ClearToEmpty();
+}
+inline const std::string& SelectCharacterDataResponse::character_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataResponse.character_name)
+  return _internal_character_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectCharacterDataResponse::set_character_name(ArgT0&& arg0, ArgT... args) {
+ 
+ character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterDataResponse.character_name)
+}
+inline std::string* SelectCharacterDataResponse::mutable_character_name() {
+  std::string* _s = _internal_mutable_character_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterDataResponse.character_name)
+  return _s;
+}
+inline const std::string& SelectCharacterDataResponse::_internal_character_name() const {
+  return character_name_.Get();
+}
+inline void SelectCharacterDataResponse::_internal_set_character_name(const std::string& value) {
+  
+  character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterDataResponse::_internal_mutable_character_name() {
+  
+  return character_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterDataResponse::release_character_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterDataResponse.character_name)
+  return character_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectCharacterDataResponse::set_allocated_character_name(std::string* character_name) {
+  if (character_name != nullptr) {
+    
+  } else {
+    
+  }
+  character_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), character_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterDataResponse.character_name)
+}
+
+// int32 big_line = 2;
+inline void SelectCharacterDataResponse::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterDataResponse::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterDataResponse::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataResponse.big_line)
+  return _internal_big_line();
+}
+inline void SelectCharacterDataResponse::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectCharacterDataResponse::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterDataResponse.big_line)
+}
+
+// .CGData.CGCharacterData character_data = 3;
+inline bool SelectCharacterDataResponse::_internal_has_character_data() const {
+  return this != internal_default_instance() && character_data_ != nullptr;
+}
+inline bool SelectCharacterDataResponse::has_character_data() const {
+  return _internal_has_character_data();
+}
+inline void SelectCharacterDataResponse::clear_character_data() {
+  if (GetArenaForAllocation() == nullptr && character_data_ != nullptr) {
+    delete character_data_;
+  }
+  character_data_ = nullptr;
+}
+inline const ::CGData::CGCharacterData& SelectCharacterDataResponse::_internal_character_data() const {
+  const ::CGData::CGCharacterData* p = character_data_;
+  return p != nullptr ? *p : reinterpret_cast<const ::CGData::CGCharacterData&>(
+      ::CGData::_CGCharacterData_default_instance_);
+}
+inline const ::CGData::CGCharacterData& SelectCharacterDataResponse::character_data() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataResponse.character_data)
+  return _internal_character_data();
+}
+inline void SelectCharacterDataResponse::unsafe_arena_set_allocated_character_data(
+    ::CGData::CGCharacterData* character_data) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(character_data_);
+  }
+  character_data_ = character_data;
+  if (character_data) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:CGData.SelectCharacterDataResponse.character_data)
+}
+inline ::CGData::CGCharacterData* SelectCharacterDataResponse::release_character_data() {
+  
+  ::CGData::CGCharacterData* temp = character_data_;
+  character_data_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::CGData::CGCharacterData* SelectCharacterDataResponse::unsafe_arena_release_character_data() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterDataResponse.character_data)
+  
+  ::CGData::CGCharacterData* temp = character_data_;
+  character_data_ = nullptr;
+  return temp;
+}
+inline ::CGData::CGCharacterData* SelectCharacterDataResponse::_internal_mutable_character_data() {
+  
+  if (character_data_ == nullptr) {
+    auto* p = CreateMaybeMessage<::CGData::CGCharacterData>(GetArenaForAllocation());
+    character_data_ = p;
+  }
+  return character_data_;
+}
+inline ::CGData::CGCharacterData* SelectCharacterDataResponse::mutable_character_data() {
+  ::CGData::CGCharacterData* _msg = _internal_mutable_character_data();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterDataResponse.character_data)
+  return _msg;
+}
+inline void SelectCharacterDataResponse::set_allocated_character_data(::CGData::CGCharacterData* character_data) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete character_data_;
+  }
+  if (character_data) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::CGData::CGCharacterData>::GetOwningArena(character_data);
+    if (message_arena != submessage_arena) {
+      character_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, character_data, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  character_data_ = character_data;
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterDataResponse.character_data)
+}
+
+// repeated .CGData.CGPetData pet_data = 4;
+inline int SelectCharacterDataResponse::_internal_pet_data_size() const {
+  return pet_data_.size();
+}
+inline int SelectCharacterDataResponse::pet_data_size() const {
+  return _internal_pet_data_size();
+}
+inline void SelectCharacterDataResponse::clear_pet_data() {
+  pet_data_.Clear();
+}
+inline ::CGData::CGPetData* SelectCharacterDataResponse::mutable_pet_data(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterDataResponse.pet_data)
+  return pet_data_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
+SelectCharacterDataResponse::mutable_pet_data() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.SelectCharacterDataResponse.pet_data)
+  return &pet_data_;
+}
+inline const ::CGData::CGPetData& SelectCharacterDataResponse::_internal_pet_data(int index) const {
+  return pet_data_.Get(index);
+}
+inline const ::CGData::CGPetData& SelectCharacterDataResponse::pet_data(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataResponse.pet_data)
+  return _internal_pet_data(index);
+}
+inline ::CGData::CGPetData* SelectCharacterDataResponse::_internal_add_pet_data() {
+  return pet_data_.Add();
+}
+inline ::CGData::CGPetData* SelectCharacterDataResponse::add_pet_data() {
+  ::CGData::CGPetData* _add = _internal_add_pet_data();
+  // @@protoc_insertion_point(field_add:CGData.SelectCharacterDataResponse.pet_data)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
+SelectCharacterDataResponse::pet_data() const {
+  // @@protoc_insertion_point(field_list:CGData.SelectCharacterDataResponse.pet_data)
+  return pet_data_;
+}
+
+// repeated .CGData.CGItemData items = 5;
+inline int SelectCharacterDataResponse::_internal_items_size() const {
+  return items_.size();
+}
+inline int SelectCharacterDataResponse::items_size() const {
+  return _internal_items_size();
+}
+inline void SelectCharacterDataResponse::clear_items() {
+  items_.Clear();
+}
+inline ::CGData::CGItemData* SelectCharacterDataResponse::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterDataResponse.items)
+  return items_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
+SelectCharacterDataResponse::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.SelectCharacterDataResponse.items)
+  return &items_;
+}
+inline const ::CGData::CGItemData& SelectCharacterDataResponse::_internal_items(int index) const {
+  return items_.Get(index);
+}
+inline const ::CGData::CGItemData& SelectCharacterDataResponse::items(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataResponse.items)
+  return _internal_items(index);
+}
+inline ::CGData::CGItemData* SelectCharacterDataResponse::_internal_add_items() {
+  return items_.Add();
+}
+inline ::CGData::CGItemData* SelectCharacterDataResponse::add_items() {
+  ::CGData::CGItemData* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:CGData.SelectCharacterDataResponse.items)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
+SelectCharacterDataResponse::items() const {
+  // @@protoc_insertion_point(field_list:CGData.SelectCharacterDataResponse.items)
+  return items_;
+}
+
+// -------------------------------------------------------------------
+
+// SelectCharacterServerRequest
+
+// string char_name = 1;
+inline void SelectCharacterServerRequest::clear_char_name() {
+  char_name_.ClearToEmpty();
+}
+inline const std::string& SelectCharacterServerRequest::char_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerRequest.char_name)
+  return _internal_char_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectCharacterServerRequest::set_char_name(ArgT0&& arg0, ArgT... args) {
+ 
+ char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerRequest.char_name)
+}
+inline std::string* SelectCharacterServerRequest::mutable_char_name() {
+  std::string* _s = _internal_mutable_char_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterServerRequest.char_name)
+  return _s;
+}
+inline const std::string& SelectCharacterServerRequest::_internal_char_name() const {
+  return char_name_.Get();
+}
+inline void SelectCharacterServerRequest::_internal_set_char_name(const std::string& value) {
+  
+  char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerRequest::_internal_mutable_char_name() {
+  
+  return char_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerRequest::release_char_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterServerRequest.char_name)
+  return char_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectCharacterServerRequest::set_allocated_char_name(std::string* char_name) {
+  if (char_name != nullptr) {
+    
+  } else {
+    
+  }
+  char_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), char_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterServerRequest.char_name)
+}
+
+// int32 big_line = 2;
+inline void SelectCharacterServerRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerRequest.big_line)
+  return _internal_big_line();
+}
+inline void SelectCharacterServerRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectCharacterServerRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerRequest.big_line)
+}
+
+// -------------------------------------------------------------------
+
+// SelectCharacterServerResponse
+
+// string char_name = 1;
+inline void SelectCharacterServerResponse::clear_char_name() {
+  char_name_.ClearToEmpty();
+}
+inline const std::string& SelectCharacterServerResponse::char_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.char_name)
+  return _internal_char_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectCharacterServerResponse::set_char_name(ArgT0&& arg0, ArgT... args) {
+ 
+ char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.char_name)
+}
+inline std::string* SelectCharacterServerResponse::mutable_char_name() {
+  std::string* _s = _internal_mutable_char_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterServerResponse.char_name)
+  return _s;
+}
+inline const std::string& SelectCharacterServerResponse::_internal_char_name() const {
+  return char_name_.Get();
+}
+inline void SelectCharacterServerResponse::_internal_set_char_name(const std::string& value) {
+  
+  char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerResponse::_internal_mutable_char_name() {
+  
+  return char_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerResponse::release_char_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterServerResponse.char_name)
+  return char_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectCharacterServerResponse::set_allocated_char_name(std::string* char_name) {
+  if (char_name != nullptr) {
+    
+  } else {
+    
+  }
+  char_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), char_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterServerResponse.char_name)
+}
+
+// int32 big_line = 2;
+inline void SelectCharacterServerResponse::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.big_line)
+  return _internal_big_line();
+}
+inline void SelectCharacterServerResponse::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectCharacterServerResponse::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.big_line)
+}
+
+// string ip = 3;
+inline void SelectCharacterServerResponse::clear_ip() {
+  ip_.ClearToEmpty();
+}
+inline const std::string& SelectCharacterServerResponse::ip() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.ip)
+  return _internal_ip();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectCharacterServerResponse::set_ip(ArgT0&& arg0, ArgT... args) {
+ 
+ ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.ip)
+}
+inline std::string* SelectCharacterServerResponse::mutable_ip() {
+  std::string* _s = _internal_mutable_ip();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterServerResponse.ip)
+  return _s;
+}
+inline const std::string& SelectCharacterServerResponse::_internal_ip() const {
+  return ip_.Get();
+}
+inline void SelectCharacterServerResponse::_internal_set_ip(const std::string& value) {
+  
+  ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerResponse::_internal_mutable_ip() {
+  
+  return ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerResponse::release_ip() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterServerResponse.ip)
+  return ip_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectCharacterServerResponse::set_allocated_ip(std::string* ip) {
+  if (ip != nullptr) {
+    
+  } else {
+    
+  }
+  ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ip,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterServerResponse.ip)
+}
+
+// int32 port = 4;
+inline void SelectCharacterServerResponse::clear_port() {
+  port_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::_internal_port() const {
+  return port_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::port() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.port)
+  return _internal_port();
+}
+inline void SelectCharacterServerResponse::_internal_set_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  port_ = value;
+}
+inline void SelectCharacterServerResponse::set_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.port)
+}
+
+// int32 online = 5;
+inline void SelectCharacterServerResponse::clear_online() {
+  online_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::_internal_online() const {
+  return online_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::online() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.online)
+  return _internal_online();
+}
+inline void SelectCharacterServerResponse::_internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  online_ = value;
+}
+inline void SelectCharacterServerResponse::set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_online(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.online)
+}
+
+// -------------------------------------------------------------------
+
+// SelectTaskInfoRequest
+
+// string task_name = 1;
+inline void SelectTaskInfoRequest::clear_task_name() {
+  task_name_.ClearToEmpty();
+}
+inline const std::string& SelectTaskInfoRequest::task_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoRequest.task_name)
+  return _internal_task_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectTaskInfoRequest::set_task_name(ArgT0&& arg0, ArgT... args) {
+ 
+ task_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoRequest.task_name)
+}
+inline std::string* SelectTaskInfoRequest::mutable_task_name() {
+  std::string* _s = _internal_mutable_task_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectTaskInfoRequest.task_name)
+  return _s;
+}
+inline const std::string& SelectTaskInfoRequest::_internal_task_name() const {
+  return task_name_.Get();
+}
+inline void SelectTaskInfoRequest::_internal_set_task_name(const std::string& value) {
+  
+  task_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectTaskInfoRequest::_internal_mutable_task_name() {
+  
+  return task_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectTaskInfoRequest::release_task_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectTaskInfoRequest.task_name)
+  return task_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectTaskInfoRequest::set_allocated_task_name(std::string* task_name) {
+  if (task_name != nullptr) {
+    
+  } else {
+    
+  }
+  task_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), task_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectTaskInfoRequest.task_name)
+}
+
+// int32 big_line = 2;
+inline void SelectTaskInfoRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoRequest.big_line)
+  return _internal_big_line();
+}
+inline void SelectTaskInfoRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectTaskInfoRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoRequest.big_line)
+}
+
+// -------------------------------------------------------------------
+
+// SelectTaskInfoResponse
+
+// string task_name = 1;
+inline void SelectTaskInfoResponse::clear_task_name() {
+  task_name_.ClearToEmpty();
+}
+inline const std::string& SelectTaskInfoResponse::task_name() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.task_name)
+  return _internal_task_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectTaskInfoResponse::set_task_name(ArgT0&& arg0, ArgT... args) {
+ 
+ task_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.task_name)
+}
+inline std::string* SelectTaskInfoResponse::mutable_task_name() {
+  std::string* _s = _internal_mutable_task_name();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectTaskInfoResponse.task_name)
+  return _s;
+}
+inline const std::string& SelectTaskInfoResponse::_internal_task_name() const {
+  return task_name_.Get();
+}
+inline void SelectTaskInfoResponse::_internal_set_task_name(const std::string& value) {
+  
+  task_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectTaskInfoResponse::_internal_mutable_task_name() {
+  
+  return task_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectTaskInfoResponse::release_task_name() {
+  // @@protoc_insertion_point(field_release:CGData.SelectTaskInfoResponse.task_name)
+  return task_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectTaskInfoResponse::set_allocated_task_name(std::string* task_name) {
+  if (task_name != nullptr) {
+    
+  } else {
+    
+  }
+  task_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), task_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectTaskInfoResponse.task_name)
+}
+
+// int32 big_line = 2;
+inline void SelectTaskInfoResponse::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.big_line)
+  return _internal_big_line();
+}
+inline void SelectTaskInfoResponse::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectTaskInfoResponse::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.big_line)
+}
+
+// int32 line = 3;
+inline void SelectTaskInfoResponse::clear_line() {
+  line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_line() const {
+  return line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.line)
+  return _internal_line();
+}
+inline void SelectTaskInfoResponse::_internal_set_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  line_ = value;
+}
+inline void SelectTaskInfoResponse::set_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.line)
+}
+
+// int32 npc_pos_x = 4;
+inline void SelectTaskInfoResponse::clear_npc_pos_x() {
+  npc_pos_x_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_npc_pos_x() const {
+  return npc_pos_x_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::npc_pos_x() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.npc_pos_x)
+  return _internal_npc_pos_x();
+}
+inline void SelectTaskInfoResponse::_internal_set_npc_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  npc_pos_x_ = value;
+}
+inline void SelectTaskInfoResponse::set_npc_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_npc_pos_x(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.npc_pos_x)
+}
+
+// int32 npc_pos_y = 5;
+inline void SelectTaskInfoResponse::clear_npc_pos_y() {
+  npc_pos_y_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_npc_pos_y() const {
+  return npc_pos_y_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::npc_pos_y() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.npc_pos_y)
+  return _internal_npc_pos_y();
+}
+inline void SelectTaskInfoResponse::_internal_set_npc_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  npc_pos_y_ = value;
+}
+inline void SelectTaskInfoResponse::set_npc_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_npc_pos_y(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.npc_pos_y)
+}
+
+// int32 last_time = 6;
+inline void SelectTaskInfoResponse::clear_last_time() {
+  last_time_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_last_time() const {
+  return last_time_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::last_time() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.last_time)
+  return _internal_last_time();
+}
+inline void SelectTaskInfoResponse::_internal_set_last_time(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  last_time_ = value;
+}
+inline void SelectTaskInfoResponse::set_last_time(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_last_time(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.last_time)
+}
+
+// int32 last_map_first_num = 7;
+inline void SelectTaskInfoResponse::clear_last_map_first_num() {
+  last_map_first_num_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_last_map_first_num() const {
+  return last_map_first_num_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::last_map_first_num() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.last_map_first_num)
+  return _internal_last_map_first_num();
+}
+inline void SelectTaskInfoResponse::_internal_set_last_map_first_num(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  last_map_first_num_ = value;
+}
+inline void SelectTaskInfoResponse::set_last_map_first_num(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_last_map_first_num(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.last_map_first_num)
+}
+
+// int32 last_map_first_width = 8;
+inline void SelectTaskInfoResponse::clear_last_map_first_width() {
+  last_map_first_width_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_last_map_first_width() const {
+  return last_map_first_width_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::last_map_first_width() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.last_map_first_width)
+  return _internal_last_map_first_width();
+}
+inline void SelectTaskInfoResponse::_internal_set_last_map_first_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  last_map_first_width_ = value;
+}
+inline void SelectTaskInfoResponse::set_last_map_first_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_last_map_first_width(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.last_map_first_width)
+}
+
+// int32 last_map_first_height = 9;
+inline void SelectTaskInfoResponse::clear_last_map_first_height() {
+  last_map_first_height_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::_internal_last_map_first_height() const {
+  return last_map_first_height_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoResponse::last_map_first_height() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoResponse.last_map_first_height)
+  return _internal_last_map_first_height();
+}
+inline void SelectTaskInfoResponse::_internal_set_last_map_first_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  last_map_first_height_ = value;
+}
+inline void SelectTaskInfoResponse::set_last_map_first_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_last_map_first_height(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoResponse.last_map_first_height)
 }
 
 // -------------------------------------------------------------------
@@ -12190,6 +14151,34 @@ inline void CGCharacterData::set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value)
   // @@protoc_insertion_point(field_set:CGData.CGCharacterData.bank_gold)
 }
 
+// optional int32 big_line = 33;
+inline bool CGCharacterData::_internal_has_big_line() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool CGCharacterData::has_big_line() const {
+  return _internal_has_big_line();
+}
+inline void CGCharacterData::clear_big_line() {
+  big_line_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.big_line)
+  return _internal_big_line();
+}
+inline void CGCharacterData::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  big_line_ = value;
+}
+inline void CGCharacterData::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.CGCharacterData.big_line)
+}
+
 // -------------------------------------------------------------------
 
 // CGPetData
@@ -14740,6 +16729,18 @@ inline void CGPlayerFlagEnabledData::set_enable(bool value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
