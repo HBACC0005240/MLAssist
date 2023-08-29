@@ -267,6 +267,11 @@ public:
 	//取好友名片
 	int Lua_GetFriendCard(LuaState *L);
 
+	//取指定角色信息-通过grpc
+	int Lua_GetTgtCharacterGameData(LuaState *L);
+	//上报当前角色数据
+	int Lua_UploadCharacterGameData(LuaState *L);
+
 	//更改个人信息
 	int Lua_SetPlayerInfo(LuaState *L);
 

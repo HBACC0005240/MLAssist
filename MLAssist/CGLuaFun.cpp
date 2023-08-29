@@ -2082,25 +2082,49 @@ int CGLuaFun::Lua_GetFriendCard(LuaState *L)
 {
 	LuaStack args(L);
 	QString friendName = args.Count() > 0 ? args[1].GetString() : "";
-
+	int useType = args.Count() > 1 ? args[2].GetInteger() : 0;
 	CGA::cga_cards_info_t cards;
 	g_CGAInterface->GetCardsInfo(cards);
 	if (!friendName.isEmpty())
 	{
-		for (auto info : cards)
+		if (useType == 0)
 		{
-			if (info.name == friendName.toStdString())
+			int bigLine = g_pGameFun->GetGameServerType(); //玩家当前同样大区
+			CGData::SelectCharacterDataResponse reply;
+			if (RpcSocketClient::getInstance().SelectCharacterData(friendName, bigLine, reply))
 			{
 				LuaObject subObj(L);
 				subObj.AssignNewTable();
-				subObj.SetString("name", info.name.c_str());
-				subObj.SetString("title", info.nickname.c_str());
-				subObj.SetInteger("index", info.index);
-				subObj.SetInteger("level", info.level);
-				subObj.SetInteger("avatar", info.avatar);
-				subObj.SetInteger("server", info.server);
+				subObj.SetString("name", reply.character_name().c_str());
+				subObj.SetString("title", reply.character_data().nick().c_str());
+				subObj.SetString("familyname", "");
+				subObj.SetInteger("index", -1);
+				subObj.SetInteger("level", reply.character_data().level());
+				subObj.SetInteger("avatar", -1);
+				subObj.SetInteger("server", reply.character_data().server_line());
 				subObj.Push(L);
-				return 1;
+				return 1;				
+			}
+		}
+		else
+		{
+
+			for (auto info : cards)
+			{
+				if (info.name == friendName.toStdString())
+				{
+					LuaObject subObj(L);
+					subObj.AssignNewTable();
+					subObj.SetString("name", info.name.c_str());
+					subObj.SetString("title", info.nickname.c_str());
+					subObj.SetString("familyname", info.familyname.c_str());
+					subObj.SetInteger("index", info.index);
+					subObj.SetInteger("level", info.level);
+					subObj.SetInteger("avatar", info.avatar);
+					subObj.SetInteger("server", info.server);
+					subObj.Push(L);
+					return 1;
+				}
 			}
 		}
 		return 0;
@@ -2117,6 +2141,7 @@ int CGLuaFun::Lua_GetFriendCard(LuaState *L)
 			subObj.AssignNewTable();
 			subObj.SetString("name", info.name.c_str());
 			subObj.SetString("title", info.nickname.c_str());
+			subObj.SetString("familyname", info.familyname.c_str());
 			subObj.SetInteger("index", info.index);
 			subObj.SetInteger("level", info.level);
 			subObj.SetInteger("avatar", info.avatar);
@@ -2126,6 +2151,137 @@ int CGLuaFun::Lua_GetFriendCard(LuaState *L)
 		tableObj.Push(L);
 		return 1;
 	}
+	return 0;
+}
+//查询指定角色信息
+int CGLuaFun::Lua_GetTgtCharacterGameData(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+	{
+		return 0;
+	}
+	QString sName = args[1].GetString();	//名称必须的
+	int bigLine = -1;	
+	if (args.Count()>=2)
+	{
+		bigLine = args[2].GetInteger();	
+	}
+	else
+	{
+		bigLine = g_pGameFun->GetGameServerType();//玩家当前同样大区
+	}
+	CGData::SelectCharacterDataResponse reply;
+	if (RpcSocketClient::getInstance().SelectCharacterData(sName, bigLine, reply))
+	{
+		LuaObject tableObj(L);
+		tableObj.AssignNewTable();
+		tableObj.SetString("character_name", reply.character_name().c_str());
+		tableObj.SetInteger("big_line", reply.big_line());		
+
+		LuaObject character_data(L);
+		character_data.AssignNewTable();
+
+		LuaObject base_data(L);
+		base_data.AssignNewTable();
+		base_data.SetString("name", reply.character_data().base_data().name().c_str());
+		base_data.SetInteger("hp", reply.character_data().base_data().hp());
+		base_data.SetInteger("mp", reply.character_data().base_data().mp());
+		base_data.SetInteger("maxhp", reply.character_data().base_data().maxhp());
+		base_data.SetInteger("maxmp", reply.character_data().base_data().maxmp());
+		base_data.SetInteger("level", reply.character_data().base_data().level());
+		base_data.SetInteger("xp", reply.character_data().base_data().xp());
+		base_data.SetInteger("maxxpp", reply.character_data().base_data().maxxp());
+		base_data.SetInteger("health", reply.character_data().base_data().health());
+		character_data.SetObject("base_data", base_data);
+
+		character_data.SetInteger("souls", reply.character_data().souls());
+		character_data.SetInteger("level", reply.character_data().level());
+		character_data.SetInteger("gold", reply.character_data().gold());
+		character_data.SetInteger("image_id", reply.character_data().image_id());
+		character_data.SetInteger("score", reply.character_data().score());
+		character_data.SetInteger("skillslots", reply.character_data().skillslots());
+		character_data.SetInteger("use_title", reply.character_data().use_title());
+		character_data.SetInteger("avatar_id", reply.character_data().avatar_id());
+		character_data.SetInteger("unitid", reply.character_data().unitid());
+		character_data.SetInteger("petid", reply.character_data().petid());
+		character_data.SetInteger("petriding", reply.character_data().petriding());
+		character_data.SetInteger("direction", reply.character_data().direction());
+		character_data.SetInteger("punchclock", reply.character_data().punchclock());
+		character_data.SetBoolean("usingpunchclock", reply.character_data().usingpunchclock());
+		character_data.SetString("job", reply.character_data().job().c_str());
+		
+		LuaObject titles(L);
+		titles.AssignNewTable();
+		for (int i = 0; i < reply.character_data().titles().size() ;++i)
+		{
+			if (reply.character_data().titles()[i].empty())
+				continue;
+			LuaObject title(L);
+			title.AssignString(L, reply.character_data().titles()[i].c_str());	
+			titles.SetObject(i + 1, title);
+		}
+		character_data.SetObject("titles", titles);
+
+		character_data.SetInteger("manu_endurance", reply.character_data().manu_endurance());
+		character_data.SetInteger("manu_skillful", reply.character_data().manu_skillful());
+		character_data.SetInteger("manu_intelligence", reply.character_data().manu_intelligence());
+		character_data.SetInteger("value_charisma", reply.character_data().value_charisma());
+		character_data.SetInteger("x", reply.character_data().x());
+		character_data.SetInteger("y", reply.character_data().y());
+		character_data.SetString("map_name", reply.character_data().map_name().c_str());
+		character_data.SetInteger("map_number", reply.character_data().map_number());
+		character_data.SetInteger("server_line", reply.character_data().server_line());
+		character_data.SetString("nick", reply.character_data().nick().c_str());
+		character_data.SetInteger("battle_position", reply.character_data().battle_position());
+		character_data.SetInteger("bank_gold", reply.character_data().bank_gold());
+		character_data.SetInteger("big_line", reply.character_data().big_line());
+
+		//技能和地水火风这些 先不返回了
+	/*	character_data.SetObject("detail", reply.character_data().level());
+		character_data.SetObject("skill", info.avatar);*/
+		LuaObject pers_desc(L);
+		pers_desc.AssignNewTable();
+		pers_desc.SetInteger("changeBits", reply.character_data().pers_desc().changebits());
+		pers_desc.SetInteger("sellIcon", reply.character_data().pers_desc().sellicon());
+		pers_desc.SetString("sellString", reply.character_data().pers_desc().sellstring().c_str());
+		pers_desc.SetInteger("buyIcon", reply.character_data().pers_desc().buyicon());
+		pers_desc.SetString("buyString", reply.character_data().pers_desc().buystring().c_str());
+		pers_desc.SetInteger("wantIcon", reply.character_data().pers_desc().wanticon());
+		pers_desc.SetString("wantString", reply.character_data().pers_desc().wantstring().c_str());
+		pers_desc.SetString("descString", reply.character_data().pers_desc().descstring().c_str());
+		character_data.SetObject("pers_desc", pers_desc);
+		tableObj.SetObject("character_data", character_data);	
+
+		//宠物数据也先不返回了
+		LuaObject items(L);
+		items.AssignNewTable();
+		for (int i=0;i<reply.items().size();++i)
+		{
+			LuaObject item(L);
+			item.AssignNewTable();
+			item.SetInteger("image_id", reply.items()[i].image_id());
+			item.SetInteger("item_id", reply.items()[i].item_id());
+			item.SetString("name", reply.items()[i].name().c_str());
+			item.SetInteger("type", reply.items()[i].type());
+			item.SetInteger("level", reply.items()[i].level());
+			item.SetString("attr", reply.items()[i].attr().c_str());
+			item.SetString("info", reply.items()[i].info().c_str());
+			item.SetInteger("pos", reply.items()[i].pos());
+			item.SetBoolean("assessed", reply.items()[i].assessed());
+			item.SetInteger("count", reply.items()[i].count());
+			items.SetObject(i + 1, item);
+		}
+		tableObj.SetObject("items", items);	
+		tableObj.Push(L);
+		return 1;
+	}
+	return 0;
+}
+
+int CGLuaFun::Lua_UploadCharacterGameData(LuaState *L)
+{
+	RpcSocketClient::getInstance().UploadGidData();
 	return 0;
 }
 

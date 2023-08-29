@@ -19,28 +19,28 @@ service MLRpcService
 
 //辅助和服务端通信用
 service CGRpcService {
-	// 根据item的id，获取item信息
+	//☆ 根据item的id，获取item信息
 	rpc GetCGItemData (CGItemRequest) returns (CGItemResponse);
 	rpc GetConnectState (CGVoidData) returns (CGVoidData);
 
-	//获取所有宠物算档数据
+	//☆ 获取所有宠物算档数据
 	rpc GetPetGradeCalcData (CGPetGradeCalcRequest) returns (CGPetGradeCalcResponse){};
 
-	//获取服务端所有id和map名称的映射，用于本地缓存
+	//☆ 获取服务端所有id和map名称的映射，用于本地缓存
 	rpc GetServerStoreMapData (CGMapDataRequest) returns (CGMapDataResponse){};
 
-	//客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
+	//☆ 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
 	rpc StoreCGItemData (CGStoreItemRequest) returns (CGStoreItemResponse){};
 
-	//客户端向服务器发送地图信息，服务端缓存更新
+	//☆ 客户端向服务器发送地图信息，服务端缓存更新
 	rpc StoreCGMapData (CGStoreMapRequest) returns (CGStoreMapResponse){};
 
-	//定时上报当辅助信息
+	//☆定时上报当辅助信息
 	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};					//上报当前游戏数据
 	rpc UploadGidBankData (UploadGidBankDataRequest) returns (UploadGidBankDataResponse){};		//上报当前游戏数据
-	rpc UploadMapData (stream  UploadMapDataRequest) returns (UploadMapDataResponse){};		//上传当前迷宫地图数据
+	rpc UploadMapData (stream  UploadMapDataRequest) returns (UploadMapDataResponse){};			//上传当前迷宫地图数据
 	rpc DownloadMapData (DownloadMapDataRequest) returns (stream  DownloadMapDataResponse){};	//下载当前迷宫地图数据	
-	rpc UploadCharcterServer (SelectCharacterServerResponse) returns (CGVoidData){};		//上报服务信息
+	rpc UploadCharcterServer (UploadCharcterServerRequest) returns (UploadCharcterServerResponse){};		//队长建立TCP服务时，上报服务相关信息，客户端可以查询这些信息，来通信
 
 	//发布是rpc的普通方法
 	rpc Publish (StringPub) returns (StringPub);
@@ -56,8 +56,9 @@ service CGRpcService {
 	//查询游戏角色建立的服务信息
 	rpc SelectCharacterServer(SelectCharacterServerRequest) returns (SelectCharacterServerResponse){};		
 	//查询游戏指定任务当前坐标
-	rpc SelectTaskInfo(SelectTaskInfoRequest) returns (SelectTaskInfoResponse){};		
-	//查询游戏角色当前信息
+	rpc SelectTaskInfo(SelectTaskInfoRequest) returns (SelectTaskInfoResponse){};	
+	
+	//☆ 查询游戏角色当前信息
 	rpc SelectCharacterData(SelectCharacterDataRequest) returns (SelectCharacterDataResponse){};		
 
 }
@@ -69,17 +70,41 @@ message StringPub
 {
   string value =1;
 }
+//上报当前游戏数据 大区+游戏角色名称  是唯一的
+message UploadGidDataRequest
+{
+	string gid=1;						//游戏gid
+	string character_name=2;			//游戏人物名称
+	CGCharacterData character_data=3;	//游戏角色数据
+	repeated CGPetData pet_data=4;		//游戏宠物数据
+	repeated CGItemData items=5;		//游戏人物物品信息
+	int32 role_type=6;					//角色类型-左右角色
+	int32 big_line=7;					//角色所在大区 1-时长 13-电信 or 14-网通  23-怀旧牧羊双子 24-怀旧金牛
+}
+//上报当前游戏数据回传
+message UploadGidDataResponse
+{
+
+}
+
+//上报角色银行数据
 message UploadGidBankDataRequest
 {
-	string gid=1;			//当前游戏id 账号下的子游戏id
+	string gid=1;					//当前游戏id 账号下的子游戏id
 	string character_name=2;		//游戏人物名称
-	int32 gold=3;				
-	repeated CGPetData pet_data=4;
-	repeated CGItemData items=5;
-	int32 role_type=6;	
-
-	//银行的 单独上传
+	int32 gold=3;					//银行金币
+	repeated CGPetData pet_data=4;	//银行宠物信息
+	repeated CGItemData items=5;	//银行物品信息
+	int32 role_type=6;				//角色类型
+	int32 big_line=7;				//角色所在大区 1-时长 13-电信 or 14-网通  23-怀旧牧羊双子 24-怀旧金牛
 }
+//上报当前游戏数据回传
+message UploadGidBankDataResponse
+{
+
+}
+
+//上传地图信息
 message UploadMapDataRequest
 {
 	string FileName = 1;		//地图编号名称
@@ -93,7 +118,8 @@ message UploadMapDataResponse {
 	
 }
 
-//Download
+
+//下载服务器缓存的地图信息
 message DownloadMapDataRequest {
 	string FileName = 1;		//地图编号名称
 	string ServerLine=2;		//服务线路
@@ -107,6 +133,21 @@ message DownloadMapDataResponse {
 	string fileTime=4;			//地图时间
 	bytes ImageData = 5;		//地图数据
 }
+//上报当前建立服务的ip 端口信息
+message UploadCharcterServerRequest
+{
+	string char_name=1;				//游戏名称-在一个大区下，名称唯一
+	int32 big_line=2;				//游戏大区-网通/电信
+	string ip=3;					//游戏角色建立通信服务时的ip
+	int32 port=4;					//游戏角色建立通信服务时的端口
+	int32 online=5;					//游戏角色是否在线
+}
+
+message UploadCharcterServerResponse
+{
+
+}
+
 message CGAccountGidData
 {
 	string account=1;		//可选 自动登录时，把大通行证上报
@@ -116,16 +157,9 @@ message CGAccountGidData
 	uint32 server_line=5;	//当前游戏线路
 	int32 character=6;		//左边角色 右边角色
 }
-//上报当前游戏数据
-message UploadGidDataRequest
-{
-	string gid=1;
-	string character_name=2;		//游戏人物名称
-	CGCharacterData character_data=3;
-	repeated CGPetData pet_data=4;
-	repeated CGItemData items=5;
-	int32 role_type=6;	
-}
+
+
+
 //查询账号下所有gid数据
 message SelectAccountGidDataRequest
 {
@@ -137,15 +171,16 @@ message SelectGidDataRequest
 	string gid=1;				//游戏Gid
 	int32 role_type=2;			//角色类型 左右角色？
 }
-//查询游戏数据
+//查询大区下指定角色名称游戏数据
 message SelectCharacterDataRequest
 {
 	string char_name=1;				//游戏名称-在一个大区下，名称唯一
 	int32 big_line=2;				//游戏大区-网通/电信
 }
+//查询游戏数据 
 message SelectCharacterDataResponse
 {
-	string character_name=1;				//游戏名称-在一个大区下，名称唯一
+	string character_name=1;		//游戏名称-在一个大区下，名称唯一
 	int32 big_line=2;				//游戏大区-网通/电信		
 	CGCharacterData character_data=3;
 	repeated CGPetData pet_data=4;
@@ -166,10 +201,13 @@ message SelectCharacterServerResponse
 	int32 online=5;					//游戏角色是否在线
 
 }
+
+//查询大区下指定任务信息 同步一些信息-例如指定线路黑龙坐标，改图npc坐标等
 message SelectTaskInfoRequest
 {
 	string task_name=1;				//任务名称-在一个大区下，名称唯一
 	int32 big_line=2;				//游戏大区-网通/电信
+	int32 line=3;					//游戏线路
 }
 message SelectTaskInfoResponse
 {
@@ -333,22 +371,13 @@ message CGItemData
 	int32 count=10;
 }
 
-//上报当前游戏数据回传
-message UploadGidDataResponse
-{
 
-}
-//上报当前游戏数据回传
-message UploadGidBankDataResponse
-{
-
-}
 
 //更新服务器地图信息
 message CGStoreMapRequest
 {
-	int32 map_number=1;
-	string map_name=2;
+	int32 map_number=1;		//地图编号
+	string map_name=2;		//地图名称
 }
 message CGStoreMapResponse
 {
@@ -368,11 +397,11 @@ message CGMapDataResponse
 }
 message CGMapData
 {
-	uint64 id=1;
-	int32 map_number=2;
-	string map_name=3;
-	string desc=4;
-	int32 often=5;
+	uint64 id=1;		//数据库id
+	int32 map_number=2;	//地图编号
+	string map_name=3;	//地图名称
+	string desc=4;		//地图描述
+	int32 often=5;		//是否常用
 }
 
 //获取宠物算档数据
@@ -387,17 +416,17 @@ message CGPetGradeCalcResponse
 }
 message CGPetGradeCalcData
 {
-	uint64 id=1;
-	int32 number = 2;
-	string name = 3;
-	int32 raceType = 4;
-	string raceTypeName = 5;
-	double baseBP=6;			//能力倍率
-	int32 totalGrade=7;			//综合档次
+	uint64 id=1;			//数据库id
+	int32 number = 2;		//宠物编号
+	string name = 3;		//宠物名称
+	int32 raceType = 4;		//种族类型
+	string raceTypeName = 5;//种族类型名称
+	double baseBP=6;		//能力倍率
+	int32 totalGrade=7;		//综合档次
 	repeated double bestBPGrade=8;		//满档成长档次
 	int32 can_catch=9;		//0x0001 0=不可捕捉，1=可以捕捉
 	int32 card_type=10;		//0x0002 0=无，1=银卡，2=金卡	
-	int32 image_id=11;		//0x0008
+	int32 image_id=11;		//0x0008 外观图片id
 	int32 rate_endurance=12; //0x000C 0=半颗星，3=2颗星，5=3颗星，9=5颗星
 	int32 rate_strength=13;	//0x0010 力量
 	int32 rate_defense=14;	//0x0014 防御
@@ -421,36 +450,36 @@ message CGItemRequest
 message CGItemResponse 
 {
 	uint64 id=1;		//数据库id
-	int32 item_id = 2;
-	string name = 3;
-	int32 type = 4;
-	int32 price = 5;
-	int32 maxpile=6;
-	int32 level=7;
-	int32 sellLimitCount=8;
-	string attribute=9;
-	string desc=10;
-	bool exist=11;
+	int32 item_id = 2;	//物品id	
+	string name = 3;	//物品名称
+	int32 type = 4;		//物品类型
+	int32 price = 5;	//物品价格
+	int32 maxpile=6;	//物品最大叠加数量
+	int32 level=7;		//物品等级
+	int32 sellLimitCount=8;	//物品一次售卖限定数量
+	string attribute=9;	//物品属性
+	string desc=10;		//物品描述
+	bool exist=11;		//物品是否存在
 }
-//缓存item信息
+//上报物品信息，缓存item信息
 message CGStoreItemRequest
 {
-	int32 item_id = 1;
-	string name = 2;
-	int32 type = 3;
-	int32 price = 4;
-	int32 maxpile=5;
-	int32 level=6;
-	int32 sellLimitCount=7;
-	string attribute=8;
-	string desc=9;
-	bool assessed=10;
+	int32 item_id = 1;	//物品id	
+	string name = 2	;	//物品名称
+	int32 type = 3;		//物品类型
+	int32 price = 4;	//物品价格
+	int32 maxpile=5;	//物品最大叠加数量
+	int32 level=6;		//物品等级
+	int32 sellLimitCount=7;//物品一次售卖限定数量
+	string attribute=8;//物品属性
+	string desc=9;		//物品描述
+	bool assessed=10;	//是否已鉴定
 }
 //返回item信息
 message CGStoreItemResponse
 {
-	int32 id = 1;
-	string maybeName=2;
+	int32 id = 1;		//查询的物品id
+	string maybeName=2;	//物品可能名称-发送未鉴定物品，服务端返回可能物品
 }
 message CGVoidData
 {

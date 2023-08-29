@@ -3040,10 +3040,12 @@ void GameCtrl::OnGetCharacterData()
 			pNewChar->name = QString::fromStdString(info.name);
 			pNewChar->sGid = QString::fromStdString(info.gid);
 			pNewChar->job = QString::fromStdString(info.job);
+			pNewChar->nickname = QString::fromStdString(info.nick);
 			pNewChar->level = info.level;
 			pNewChar->player_index = info.player_index;
 			pNewChar->gold = info.gold;
 			pNewChar->petid = info.petid;
+			pNewChar->battle_position = info.battle_position;
 			if (pNewChar->hp == 0)
 			{
 				pNewChar->hp = info.hp;

@@ -367,6 +367,7 @@ public:
 	int _value_charisma = 0;
 	int _x = 0;
 	int _y = 0;
+	int battle_position = 0;
 	QString _map_name = "";
 	int _map_number = 0;
 	int _server_line = 0;

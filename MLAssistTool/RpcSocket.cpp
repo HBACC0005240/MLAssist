@@ -163,7 +163,7 @@ Status GGRpcServiceImpl::DownloadMapData(::grpc::ServerContext* context, const :
 	writer->Write(response);
 	return Status::OK;
 }
-Status GGRpcServiceImpl::UploadCharcterServer(::grpc::ServerContext *context, const ::CGData::SelectCharacterServerResponse *request, ::CGData::CGVoidData *response)
+Status GGRpcServiceImpl::UploadCharcterServer(::grpc::ServerContext *context, const ::CGData::UploadCharcterServerRequest *request, ::CGData::UploadCharcterServerResponse *response)
 {
 	ITObjectDataMgr::getInstance().UploadCharcterServer(request);
 	return Status::OK;
@@ -184,6 +184,11 @@ Status GGRpcServiceImpl::SelectAccountGidData(::grpc::ServerContext* context, co
 Status GGRpcServiceImpl::SelectCharacterServer(::grpc::ServerContext *context, const ::CGData::SelectCharacterServerRequest *request, ::CGData::SelectCharacterServerResponse *response)
 {
 	return ITObjectDataMgr::getInstance().SelectCharacterServer(request, response);
+}
+
+Status GGRpcServiceImpl::SelectCharacterData(::grpc::ServerContext *context, const ::CGData::SelectCharacterDataRequest *request, ::CGData::SelectCharacterDataResponse *response)
+{
+	return ITObjectDataMgr::getInstance().SelectCharacterData(request, response);
 }
 
 Status GGRpcServiceImpl::GetPetGradeCalcData(::grpc::ServerContext* context, const ::CGData::CGPetGradeCalcRequest* request, ::CGData::CGPetGradeCalcResponse* response)

@@ -133,7 +133,7 @@ public:
 	Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response)override;
 	Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* stream, ::CGData::UploadMapDataResponse* response)override;
 	Status DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer)override;
-	Status UploadCharcterServer(::grpc::ServerContext *context, const ::CGData::SelectCharacterServerResponse *request, ::CGData::CGVoidData *response) override;
+	Status UploadCharcterServer(::grpc::ServerContext *context, const ::CGData::UploadCharcterServerRequest *request, ::CGData::UploadCharcterServerResponse *response) override;
 
 	Status SelectGidData(::grpc::ServerContext* context, const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)override;
 	Status SelectAccountGidData(::grpc::ServerContext* context, const ::CGData::SelectAccountGidDataRequest* request, ::CGData::SelectAccountGidDataResponse* response)override;

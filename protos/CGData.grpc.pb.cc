@@ -684,23 +684,23 @@ void CGRpcService::Stub::async::DownloadMapData(::grpc::ClientContext* context, 
   return ::grpc::internal::ClientAsyncReaderFactory< ::CGData::DownloadMapDataResponse>::Create(channel_.get(), cq, rpcmethod_DownloadMapData_, context, request, false, nullptr);
 }
 
-::grpc::Status CGRpcService::Stub::UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::CGData::CGVoidData* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_UploadCharcterServer_, context, request, response);
+::grpc::Status CGRpcService::Stub::UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::CGData::UploadCharcterServerResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_UploadCharcterServer_, context, request, response);
 }
 
-void CGRpcService::Stub::async::UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UploadCharcterServer_, context, request, response, std::move(f));
+void CGRpcService::Stub::async::UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UploadCharcterServer_, context, request, response, std::move(f));
 }
 
-void CGRpcService::Stub::async::UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, ::grpc::ClientUnaryReactor* reactor) {
+void CGRpcService::Stub::async::UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UploadCharcterServer_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>* CGRpcService::Stub::PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::CGData::CGVoidData, ::CGData::SelectCharacterServerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_UploadCharcterServer_, context, request);
+::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>* CGRpcService::Stub::PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::CGData::UploadCharcterServerResponse, ::CGData::UploadCharcterServerRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_UploadCharcterServer_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>* CGRpcService::Stub::AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>* CGRpcService::Stub::AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncUploadCharcterServerRaw(context, request, cq);
   result->StartCall();
@@ -988,11 +988,11 @@ CGRpcService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CGRpcService_method_names[10],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< CGRpcService::Service, ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](CGRpcService::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::CGData::SelectCharacterServerResponse* req,
-             ::CGData::CGVoidData* resp) {
+             const ::CGData::UploadCharcterServerRequest* req,
+             ::CGData::UploadCharcterServerResponse* resp) {
                return service->UploadCharcterServer(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
@@ -1150,7 +1150,7 @@ CGRpcService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status CGRpcService::Service::UploadCharcterServer(::grpc::ServerContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response) {
+::grpc::Status CGRpcService::Service::UploadCharcterServer(::grpc::ServerContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response) {
   (void) context;
   (void) request;
   (void) response;

@@ -75,7 +75,7 @@ public:
 	void StoreServerMapData(const QString& mapName, int mapNumber);
 	void StoreUploadGidData(const ::CGData::UploadGidDataRequest* request);
 	void StoreUploadGidBankData(const ::CGData::UploadGidBankDataRequest* request);
-	void UploadCharcterServer(const ::CGData::SelectCharacterServerResponse *request);
+	void UploadCharcterServer(const ::CGData::UploadCharcterServerRequest *request);
 	//辅助查询接口
 	Status SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
 	Status SelectCharacterServer(const ::CGData::SelectCharacterServerRequest *request, ::CGData::SelectCharacterServerResponse *response);
@@ -170,8 +170,8 @@ private:
 	QMap<int, ITGameGateMapPtr> m_numberForGateMap;			//地图编码和地图可达对象映射
 	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
-	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//gid+name 对应指定游戏人物
-	QStringList m_onlineAccountRoles;					//gid+name 在线列表 不在线清除此列表项
+	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//name+大区 对应指定游戏人物
+	QStringList m_onlineAccountRoles;					//name+大区 在线列表 不在线清除此列表项
 	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid 对应指定gid
 	QHash<int, QHash<QString, ITCharcterServerPtr> > m_charNameForObj;
 	ITRouteNodeList m_reachableRouteList;

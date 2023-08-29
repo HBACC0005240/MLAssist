@@ -156,6 +156,7 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("职称", TRet_Game_Profession);
 	m_returnGameDataHash.insert("profession", TRet_Game_Profession);
 	m_returnGameDataHash.insert("称号", TRet_Game_Prestige);
+	m_returnGameDataHash.insert("自定称号", TRet_Game_CustomPrestige);
 	m_returnGameDataHash.insert("prestige", TRet_Game_Prestige);
 	m_returnGameDataHash.insert("声望", TRet_Game_Prestige);
 	m_returnGameDataHash.insert("声望等级", TRet_Game_PrestigeLv);
@@ -228,6 +229,18 @@ CGFunction::CGFunction()
 	m_sPrestigeMap.insert("万物创造者", 10);
 	m_sPrestigeMap.insert("持石之贤者", 11);
 
+	//电信服务器列表
+	m_serverTelecoms << "221.122.119.111"
+					 << "221.122.119.112"
+					 << "221.122.119.113"
+					 << "221.122.119.114"
+					 << "221.122.119.115";
+	//网通服务器列表
+	m_serverNetcom << "221.122.119.117"
+				   << "221.122.119.119"
+				   << "221.122.119.120"
+				   << "221.122.119.166"
+				   << "221.122.119.167";
 	//readCreateRandomNameJson();
 	readProfessionJson();
 	readTitleJson();
@@ -836,6 +849,7 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 			}
 			return "";
 		}
+		case TRet_Game_CustomPrestige: return QString::fromStdString(playerinfo.nick);
 		case TRet_Game_PrestigeLv:
 		{
 			auto playerTitles = playerinfo.titles;
@@ -867,11 +881,8 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 			return index2;
 		}
 		case TRet_Game_CurServelLine:
-		{
-			int index1, index2, index3;
-			std::string filemap;
-			g_CGAInterface->GetMapIndex(index1, index2, index3, filemap);
-			return index1;
+		{			
+			return GetGameServerType();
 		}
 		default:
 			break;
@@ -4189,6 +4200,8 @@ CharacterPtr CGFunction::GetGameCharacter()
 		pNewChar->manu_intelligence = info.manu_intelligence;
 		pNewChar->value_charisma = info.value_charisma;
 		pNewChar->sGid = QString::fromStdString(info.gid);
+		pNewChar->nickname = QString::fromStdString(info.nick);
+		pNewChar->battle_position = info.battle_position;
 		pNewChar->titles.clear(); //那边在调用 只能读
 		for (auto tmpTitle : info.titles)
 		{
@@ -10024,6 +10037,24 @@ QString CGFunction::CreateGirlName()
 	auto xingJson = xingArray.at(xingIndex);
 	auto nameJson = nameArray.at(index);
 	return xingJson.toString() + nameJson.toString();
+}
+
+int CGFunction::GetGameServerType()
+{ 
+	CGA::cga_game_server_info_t serverInfo;
+	if(g_CGAInterface->GetGameServerInfo(serverInfo))
+	{
+		if (m_serverNetcom.contains(QString::fromStdString(serverInfo.ip)))
+		{
+			return 14;	//网通
+		}
+		else if (m_serverTelecoms.contains(QString::fromStdString(serverInfo.ip)))
+		{
+			return 13;	//电信
+		}
+		//怀旧
+	}
+	return -1;
 }
 
 bool CGFunction::readCreateRandomNameJson()

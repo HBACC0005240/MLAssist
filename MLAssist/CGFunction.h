@@ -732,6 +732,9 @@ public:
 	int GetMazeMapSearchWaitTime() { return m_mazeSearchWaitTime; }
 	void SetSyncUpdateRoundMap(bool bFlag) { m_bSyncUpdateRoundMap = bFlag; }
 
+	//获取是网通还是电信
+	int GetGameServerType();
+
 protected:
 	bool InternalAutoNavigator();
 	bool readCreateRandomNameJson();
@@ -791,5 +794,7 @@ private:
 	int m_mazeMoveAbleRange = 13;		
 	int m_mazeClipMoveAbleRange = 12;		
 	bool m_bSyncUpdateRoundMap = false;					//!< 是否更新周边地图
+	QStringList m_serverTelecoms;						//!< 电信服务器列表
+	QStringList m_serverNetcom;							//!< 网通服务器列表
 };
 #define g_pGameFun CGFunction::GetInstance()

@@ -208,12 +208,14 @@ void RpcSocketClient::UploadGidData()
 	{
 		return;
 	}
+	int bigLine = g_pGameFun->GetGameServerType();
 	CGData::UploadGidDataRequest request;
 	request.set_gid(pChara->sGid.toStdString());
 	request.set_role_type(pChara->player_index);
 	request.set_character_name(pChara->name.toStdString());
 	CGData::CGCharacterData *charData = new CGData::CGCharacterData;
 	request.set_allocated_character_data(charData);
+	request.set_big_line(bigLine);
 
 	//基础信息
 	{
@@ -245,6 +247,12 @@ void RpcSocketClient::UploadGidData()
 		charData->set_punchclock(pChara->punchclock);
 		charData->set_usingpunchclock(pChara->usingpunchclock);
 		charData->set_job(pChara->job.toStdString());
+		charData->set_nick(pChara->nickname.toStdString());
+		charData->set_battle_position(pChara->battle_position);
+		int bankGold = 0;
+		g_CGAInterface->GetBankGold(bankGold);
+		charData->set_bank_gold(bankGold);
+
 		CGA::cga_player_info_t info;
 		if (g_CGAInterface->GetPlayerInfo(info))
 		{
@@ -678,6 +686,26 @@ bool RpcSocketClient::SelectGidData(const QString &gid, int roleIndex, CGData::S
 		/*	auto repChara= reply.character_data();
 		CharacterPtr charaData = CharacterPtr(new Character);
 		charaData->name = QString::fromStdString(reply.character_name());*/
+		return true;
+	}
+	else
+	{
+		qDebug() << status.error_code() << ": " << status.error_message().c_str();
+		return false;
+	}
+}
+
+bool RpcSocketClient::SelectCharacterData(const QString &sName, int nBigLine, CGData::SelectCharacterDataResponse &reply)
+{
+	if (!isConnected())
+		return false;
+	CGData::SelectCharacterDataRequest request;
+	request.set_char_name(sName.toStdString());
+	request.set_big_line(nBigLine);
+	ClientContext context;
+	Status status = _stub->SelectCharacterData(&context, request, &reply);
+	if (status.ok())
+	{
 		return true;
 	}
 	else

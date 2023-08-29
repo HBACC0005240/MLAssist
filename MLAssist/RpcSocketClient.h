@@ -129,6 +129,7 @@ public:
 	void UploadMapData();
 	bool DownloadMapData(QImage &image);
 	bool SelectGidData(const QString &gid, int roleIndex, CGData::SelectGidDataResponse &reply);
+	bool SelectCharacterData(const QString &sName, int nBigLine, CGData::SelectCharacterDataResponse &reply);
 
 	bool GetConnectState();
 	void StoreCGItemData(GameItemPtr pItem);

@@ -46,7 +46,7 @@ struct TableStruct_CGData_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[45]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[47]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -171,6 +171,12 @@ extern SelectTaskInfoResponseDefaultTypeInternal _SelectTaskInfoResponse_default
 class StringPub;
 struct StringPubDefaultTypeInternal;
 extern StringPubDefaultTypeInternal _StringPub_default_instance_;
+class UploadCharcterServerRequest;
+struct UploadCharcterServerRequestDefaultTypeInternal;
+extern UploadCharcterServerRequestDefaultTypeInternal _UploadCharcterServerRequest_default_instance_;
+class UploadCharcterServerResponse;
+struct UploadCharcterServerResponseDefaultTypeInternal;
+extern UploadCharcterServerResponseDefaultTypeInternal _UploadCharcterServerResponse_default_instance_;
 class UploadGidBankDataRequest;
 struct UploadGidBankDataRequestDefaultTypeInternal;
 extern UploadGidBankDataRequestDefaultTypeInternal _UploadGidBankDataRequest_default_instance_;
@@ -230,6 +236,8 @@ template<> ::CGData::SelectGidDataResponse* Arena::CreateMaybeMessage<::CGData::
 template<> ::CGData::SelectTaskInfoRequest* Arena::CreateMaybeMessage<::CGData::SelectTaskInfoRequest>(Arena*);
 template<> ::CGData::SelectTaskInfoResponse* Arena::CreateMaybeMessage<::CGData::SelectTaskInfoResponse>(Arena*);
 template<> ::CGData::StringPub* Arena::CreateMaybeMessage<::CGData::StringPub>(Arena*);
+template<> ::CGData::UploadCharcterServerRequest* Arena::CreateMaybeMessage<::CGData::UploadCharcterServerRequest>(Arena*);
+template<> ::CGData::UploadCharcterServerResponse* Arena::CreateMaybeMessage<::CGData::UploadCharcterServerResponse>(Arena*);
 template<> ::CGData::UploadGidBankDataRequest* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataRequest>(Arena*);
 template<> ::CGData::UploadGidBankDataResponse* Arena::CreateMaybeMessage<::CGData::UploadGidBankDataResponse>(Arena*);
 template<> ::CGData::UploadGidDataRequest* Arena::CreateMaybeMessage<::CGData::UploadGidDataRequest>(Arena*);
@@ -524,6 +532,374 @@ class StringPub final :
 };
 // -------------------------------------------------------------------
 
+class UploadGidDataRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidDataRequest) */ {
+ public:
+  inline UploadGidDataRequest() : UploadGidDataRequest(nullptr) {}
+  ~UploadGidDataRequest() override;
+  explicit constexpr UploadGidDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadGidDataRequest(const UploadGidDataRequest& from);
+  UploadGidDataRequest(UploadGidDataRequest&& from) noexcept
+    : UploadGidDataRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadGidDataRequest& operator=(const UploadGidDataRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadGidDataRequest& operator=(UploadGidDataRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadGidDataRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadGidDataRequest* internal_default_instance() {
+    return reinterpret_cast<const UploadGidDataRequest*>(
+               &_UploadGidDataRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(UploadGidDataRequest& a, UploadGidDataRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadGidDataRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadGidDataRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadGidDataRequest* New() const final {
+    return new UploadGidDataRequest();
+  }
+
+  UploadGidDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadGidDataRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadGidDataRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadGidDataRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadGidDataRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadGidDataRequest";
+  }
+  protected:
+  explicit UploadGidDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPetDataFieldNumber = 4,
+    kItemsFieldNumber = 5,
+    kGidFieldNumber = 1,
+    kCharacterNameFieldNumber = 2,
+    kCharacterDataFieldNumber = 3,
+    kRoleTypeFieldNumber = 6,
+    kBigLineFieldNumber = 7,
+  };
+  // repeated .CGData.CGPetData pet_data = 4;
+  int pet_data_size() const;
+  private:
+  int _internal_pet_data_size() const;
+  public:
+  void clear_pet_data();
+  ::CGData::CGPetData* mutable_pet_data(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
+      mutable_pet_data();
+  private:
+  const ::CGData::CGPetData& _internal_pet_data(int index) const;
+  ::CGData::CGPetData* _internal_add_pet_data();
+  public:
+  const ::CGData::CGPetData& pet_data(int index) const;
+  ::CGData::CGPetData* add_pet_data();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
+      pet_data() const;
+
+  // repeated .CGData.CGItemData items = 5;
+  int items_size() const;
+  private:
+  int _internal_items_size() const;
+  public:
+  void clear_items();
+  ::CGData::CGItemData* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
+      mutable_items();
+  private:
+  const ::CGData::CGItemData& _internal_items(int index) const;
+  ::CGData::CGItemData* _internal_add_items();
+  public:
+  const ::CGData::CGItemData& items(int index) const;
+  ::CGData::CGItemData* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
+      items() const;
+
+  // string gid = 1;
+  void clear_gid();
+  const std::string& gid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_gid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_gid();
+  PROTOBUF_MUST_USE_RESULT std::string* release_gid();
+  void set_allocated_gid(std::string* gid);
+  private:
+  const std::string& _internal_gid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_gid(const std::string& value);
+  std::string* _internal_mutable_gid();
+  public:
+
+  // string character_name = 2;
+  void clear_character_name();
+  const std::string& character_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_character_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_character_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_character_name();
+  void set_allocated_character_name(std::string* character_name);
+  private:
+  const std::string& _internal_character_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_character_name(const std::string& value);
+  std::string* _internal_mutable_character_name();
+  public:
+
+  // .CGData.CGCharacterData character_data = 3;
+  bool has_character_data() const;
+  private:
+  bool _internal_has_character_data() const;
+  public:
+  void clear_character_data();
+  const ::CGData::CGCharacterData& character_data() const;
+  PROTOBUF_MUST_USE_RESULT ::CGData::CGCharacterData* release_character_data();
+  ::CGData::CGCharacterData* mutable_character_data();
+  void set_allocated_character_data(::CGData::CGCharacterData* character_data);
+  private:
+  const ::CGData::CGCharacterData& _internal_character_data() const;
+  ::CGData::CGCharacterData* _internal_mutable_character_data();
+  public:
+  void unsafe_arena_set_allocated_character_data(
+      ::CGData::CGCharacterData* character_data);
+  ::CGData::CGCharacterData* unsafe_arena_release_character_data();
+
+  // int32 role_type = 6;
+  void clear_role_type();
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type() const;
+  void set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_role_type() const;
+  void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 big_line = 7;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadGidDataRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData > pet_data_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData > items_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
+  ::CGData::CGCharacterData* character_data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UploadGidDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidDataResponse) */ {
+ public:
+  inline UploadGidDataResponse() : UploadGidDataResponse(nullptr) {}
+  ~UploadGidDataResponse() override;
+  explicit constexpr UploadGidDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadGidDataResponse(const UploadGidDataResponse& from);
+  UploadGidDataResponse(UploadGidDataResponse&& from) noexcept
+    : UploadGidDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadGidDataResponse& operator=(const UploadGidDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadGidDataResponse& operator=(UploadGidDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadGidDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadGidDataResponse* internal_default_instance() {
+    return reinterpret_cast<const UploadGidDataResponse*>(
+               &_UploadGidDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(UploadGidDataResponse& a, UploadGidDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadGidDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadGidDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadGidDataResponse* New() const final {
+    return new UploadGidDataResponse();
+  }
+
+  UploadGidDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadGidDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadGidDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadGidDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadGidDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadGidDataResponse";
+  }
+  protected:
+  explicit UploadGidDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadGidDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
 class UploadGidBankDataRequest final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidBankDataRequest) */ {
  public:
@@ -568,7 +944,7 @@ class UploadGidBankDataRequest final :
                &_UploadGidBankDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(UploadGidBankDataRequest& a, UploadGidBankDataRequest& b) {
     a.Swap(&b);
@@ -645,6 +1021,7 @@ class UploadGidBankDataRequest final :
     kCharacterNameFieldNumber = 2,
     kGoldFieldNumber = 3,
     kRoleTypeFieldNumber = 6,
+    kBigLineFieldNumber = 7,
   };
   // repeated .CGData.CGPetData pet_data = 4;
   int pet_data_size() const;
@@ -728,6 +1105,15 @@ class UploadGidBankDataRequest final :
   void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 big_line = 7;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.UploadGidBankDataRequest)
  private:
   class _Internal;
@@ -741,6 +1127,133 @@ class UploadGidBankDataRequest final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
   ::PROTOBUF_NAMESPACE_ID::int32 gold_;
   ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UploadGidBankDataResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidBankDataResponse) */ {
+ public:
+  inline UploadGidBankDataResponse() : UploadGidBankDataResponse(nullptr) {}
+  ~UploadGidBankDataResponse() override;
+  explicit constexpr UploadGidBankDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadGidBankDataResponse(const UploadGidBankDataResponse& from);
+  UploadGidBankDataResponse(UploadGidBankDataResponse&& from) noexcept
+    : UploadGidBankDataResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadGidBankDataResponse& operator=(const UploadGidBankDataResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadGidBankDataResponse& operator=(UploadGidBankDataResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadGidBankDataResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadGidBankDataResponse* internal_default_instance() {
+    return reinterpret_cast<const UploadGidBankDataResponse*>(
+               &_UploadGidBankDataResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(UploadGidBankDataResponse& a, UploadGidBankDataResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadGidBankDataResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadGidBankDataResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadGidBankDataResponse* New() const final {
+    return new UploadGidBankDataResponse();
+  }
+
+  UploadGidBankDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadGidBankDataResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadGidBankDataResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadGidBankDataResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadGidBankDataResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadGidBankDataResponse";
+  }
+  protected:
+  explicit UploadGidBankDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadGidBankDataResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -790,7 +1303,7 @@ class UploadMapDataRequest final :
                &_UploadMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    6;
 
   friend void swap(UploadMapDataRequest& a, UploadMapDataRequest& b) {
     a.Swap(&b);
@@ -998,7 +1511,7 @@ class UploadMapDataResponse final :
                &_UploadMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    7;
 
   friend void swap(UploadMapDataResponse& a, UploadMapDataResponse& b) {
     a.Swap(&b);
@@ -1124,7 +1637,7 @@ class DownloadMapDataRequest final :
                &_DownloadMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    8;
 
   friend void swap(DownloadMapDataRequest& a, DownloadMapDataRequest& b) {
     a.Swap(&b);
@@ -1300,7 +1813,7 @@ class DownloadMapDataResponse final :
                &_DownloadMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    9;
 
   friend void swap(DownloadMapDataResponse& a, DownloadMapDataResponse& b) {
     a.Swap(&b);
@@ -1464,6 +1977,325 @@ class DownloadMapDataResponse final :
 };
 // -------------------------------------------------------------------
 
+class UploadCharcterServerRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadCharcterServerRequest) */ {
+ public:
+  inline UploadCharcterServerRequest() : UploadCharcterServerRequest(nullptr) {}
+  ~UploadCharcterServerRequest() override;
+  explicit constexpr UploadCharcterServerRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadCharcterServerRequest(const UploadCharcterServerRequest& from);
+  UploadCharcterServerRequest(UploadCharcterServerRequest&& from) noexcept
+    : UploadCharcterServerRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadCharcterServerRequest& operator=(const UploadCharcterServerRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadCharcterServerRequest& operator=(UploadCharcterServerRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadCharcterServerRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadCharcterServerRequest* internal_default_instance() {
+    return reinterpret_cast<const UploadCharcterServerRequest*>(
+               &_UploadCharcterServerRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(UploadCharcterServerRequest& a, UploadCharcterServerRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadCharcterServerRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadCharcterServerRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadCharcterServerRequest* New() const final {
+    return new UploadCharcterServerRequest();
+  }
+
+  UploadCharcterServerRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadCharcterServerRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadCharcterServerRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadCharcterServerRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadCharcterServerRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadCharcterServerRequest";
+  }
+  protected:
+  explicit UploadCharcterServerRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCharNameFieldNumber = 1,
+    kIpFieldNumber = 3,
+    kBigLineFieldNumber = 2,
+    kPortFieldNumber = 4,
+    kOnlineFieldNumber = 5,
+  };
+  // string char_name = 1;
+  void clear_char_name();
+  const std::string& char_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_char_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_char_name();
+  PROTOBUF_MUST_USE_RESULT std::string* release_char_name();
+  void set_allocated_char_name(std::string* char_name);
+  private:
+  const std::string& _internal_char_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_char_name(const std::string& value);
+  std::string* _internal_mutable_char_name();
+  public:
+
+  // string ip = 3;
+  void clear_ip();
+  const std::string& ip() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_ip(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_ip();
+  PROTOBUF_MUST_USE_RESULT std::string* release_ip();
+  void set_allocated_ip(std::string* ip);
+  private:
+  const std::string& _internal_ip() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_ip(const std::string& value);
+  std::string* _internal_mutable_ip();
+  public:
+
+  // int32 big_line = 2;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 port = 4;
+  void clear_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 port() const;
+  void set_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_port() const;
+  void _internal_set_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 online = 5;
+  void clear_online();
+  ::PROTOBUF_NAMESPACE_ID::int32 online() const;
+  void set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_online() const;
+  void _internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadCharcterServerRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr char_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 port_;
+  ::PROTOBUF_NAMESPACE_ID::int32 online_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UploadCharcterServerResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadCharcterServerResponse) */ {
+ public:
+  inline UploadCharcterServerResponse() : UploadCharcterServerResponse(nullptr) {}
+  ~UploadCharcterServerResponse() override;
+  explicit constexpr UploadCharcterServerResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UploadCharcterServerResponse(const UploadCharcterServerResponse& from);
+  UploadCharcterServerResponse(UploadCharcterServerResponse&& from) noexcept
+    : UploadCharcterServerResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline UploadCharcterServerResponse& operator=(const UploadCharcterServerResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UploadCharcterServerResponse& operator=(UploadCharcterServerResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UploadCharcterServerResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UploadCharcterServerResponse* internal_default_instance() {
+    return reinterpret_cast<const UploadCharcterServerResponse*>(
+               &_UploadCharcterServerResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(UploadCharcterServerResponse& a, UploadCharcterServerResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UploadCharcterServerResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UploadCharcterServerResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UploadCharcterServerResponse* New() const final {
+    return new UploadCharcterServerResponse();
+  }
+
+  UploadCharcterServerResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UploadCharcterServerResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UploadCharcterServerResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UploadCharcterServerResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UploadCharcterServerResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.UploadCharcterServerResponse";
+  }
+  protected:
+  explicit UploadCharcterServerResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CGData.UploadCharcterServerResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
 class CGAccountGidData final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.CGAccountGidData) */ {
  public:
@@ -1508,7 +2340,7 @@ class CGAccountGidData final :
                &_CGAccountGidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    12;
 
   friend void swap(CGAccountGidData& a, CGAccountGidData& b) {
     a.Swap(&b);
@@ -1668,237 +2500,6 @@ class CGAccountGidData final :
 };
 // -------------------------------------------------------------------
 
-class UploadGidDataRequest final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidDataRequest) */ {
- public:
-  inline UploadGidDataRequest() : UploadGidDataRequest(nullptr) {}
-  ~UploadGidDataRequest() override;
-  explicit constexpr UploadGidDataRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  UploadGidDataRequest(const UploadGidDataRequest& from);
-  UploadGidDataRequest(UploadGidDataRequest&& from) noexcept
-    : UploadGidDataRequest() {
-    *this = ::std::move(from);
-  }
-
-  inline UploadGidDataRequest& operator=(const UploadGidDataRequest& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline UploadGidDataRequest& operator=(UploadGidDataRequest&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const UploadGidDataRequest& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const UploadGidDataRequest* internal_default_instance() {
-    return reinterpret_cast<const UploadGidDataRequest*>(
-               &_UploadGidDataRequest_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    8;
-
-  friend void swap(UploadGidDataRequest& a, UploadGidDataRequest& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(UploadGidDataRequest* other) {
-    if (other == this) return;
-    if (GetOwningArena() == other->GetOwningArena()) {
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(UploadGidDataRequest* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline UploadGidDataRequest* New() const final {
-    return new UploadGidDataRequest();
-  }
-
-  UploadGidDataRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<UploadGidDataRequest>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const UploadGidDataRequest& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const UploadGidDataRequest& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(UploadGidDataRequest* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "CGData.UploadGidDataRequest";
-  }
-  protected:
-  explicit UploadGidDataRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kPetDataFieldNumber = 4,
-    kItemsFieldNumber = 5,
-    kGidFieldNumber = 1,
-    kCharacterNameFieldNumber = 2,
-    kCharacterDataFieldNumber = 3,
-    kRoleTypeFieldNumber = 6,
-  };
-  // repeated .CGData.CGPetData pet_data = 4;
-  int pet_data_size() const;
-  private:
-  int _internal_pet_data_size() const;
-  public:
-  void clear_pet_data();
-  ::CGData::CGPetData* mutable_pet_data(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
-      mutable_pet_data();
-  private:
-  const ::CGData::CGPetData& _internal_pet_data(int index) const;
-  ::CGData::CGPetData* _internal_add_pet_data();
-  public:
-  const ::CGData::CGPetData& pet_data(int index) const;
-  ::CGData::CGPetData* add_pet_data();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
-      pet_data() const;
-
-  // repeated .CGData.CGItemData items = 5;
-  int items_size() const;
-  private:
-  int _internal_items_size() const;
-  public:
-  void clear_items();
-  ::CGData::CGItemData* mutable_items(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
-      mutable_items();
-  private:
-  const ::CGData::CGItemData& _internal_items(int index) const;
-  ::CGData::CGItemData* _internal_add_items();
-  public:
-  const ::CGData::CGItemData& items(int index) const;
-  ::CGData::CGItemData* add_items();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
-      items() const;
-
-  // string gid = 1;
-  void clear_gid();
-  const std::string& gid() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_gid(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_gid();
-  PROTOBUF_MUST_USE_RESULT std::string* release_gid();
-  void set_allocated_gid(std::string* gid);
-  private:
-  const std::string& _internal_gid() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_gid(const std::string& value);
-  std::string* _internal_mutable_gid();
-  public:
-
-  // string character_name = 2;
-  void clear_character_name();
-  const std::string& character_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_character_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_character_name();
-  PROTOBUF_MUST_USE_RESULT std::string* release_character_name();
-  void set_allocated_character_name(std::string* character_name);
-  private:
-  const std::string& _internal_character_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_character_name(const std::string& value);
-  std::string* _internal_mutable_character_name();
-  public:
-
-  // .CGData.CGCharacterData character_data = 3;
-  bool has_character_data() const;
-  private:
-  bool _internal_has_character_data() const;
-  public:
-  void clear_character_data();
-  const ::CGData::CGCharacterData& character_data() const;
-  PROTOBUF_MUST_USE_RESULT ::CGData::CGCharacterData* release_character_data();
-  ::CGData::CGCharacterData* mutable_character_data();
-  void set_allocated_character_data(::CGData::CGCharacterData* character_data);
-  private:
-  const ::CGData::CGCharacterData& _internal_character_data() const;
-  ::CGData::CGCharacterData* _internal_mutable_character_data();
-  public:
-  void unsafe_arena_set_allocated_character_data(
-      ::CGData::CGCharacterData* character_data);
-  ::CGData::CGCharacterData* unsafe_arena_release_character_data();
-
-  // int32 role_type = 6;
-  void clear_role_type();
-  ::PROTOBUF_NAMESPACE_ID::int32 role_type() const;
-  void set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_role_type() const;
-  void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:CGData.UploadGidDataRequest)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData > pet_data_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData > items_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
-  ::CGData::CGCharacterData* character_data_;
-  ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_CGData_2eproto;
-};
-// -------------------------------------------------------------------
-
 class SelectAccountGidDataRequest final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.SelectAccountGidDataRequest) */ {
  public:
@@ -1943,7 +2544,7 @@ class SelectAccountGidDataRequest final :
                &_SelectAccountGidDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    13;
 
   friend void swap(SelectAccountGidDataRequest& a, SelectAccountGidDataRequest& b) {
     a.Swap(&b);
@@ -2087,7 +2688,7 @@ class SelectGidDataRequest final :
                &_SelectGidDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    14;
 
   friend void swap(SelectGidDataRequest& a, SelectGidDataRequest& b) {
     a.Swap(&b);
@@ -2242,7 +2843,7 @@ class SelectCharacterDataRequest final :
                &_SelectCharacterDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    15;
 
   friend void swap(SelectCharacterDataRequest& a, SelectCharacterDataRequest& b) {
     a.Swap(&b);
@@ -2397,7 +2998,7 @@ class SelectCharacterDataResponse final :
                &_SelectCharacterDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    16;
 
   friend void swap(SelectCharacterDataResponse& a, SelectCharacterDataResponse& b) {
     a.Swap(&b);
@@ -2612,7 +3213,7 @@ class SelectCharacterServerRequest final :
                &_SelectCharacterServerRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    17;
 
   friend void swap(SelectCharacterServerRequest& a, SelectCharacterServerRequest& b) {
     a.Swap(&b);
@@ -2767,7 +3368,7 @@ class SelectCharacterServerResponse final :
                &_SelectCharacterServerResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    18;
 
   friend void swap(SelectCharacterServerResponse& a, SelectCharacterServerResponse& b) {
     a.Swap(&b);
@@ -2960,7 +3561,7 @@ class SelectTaskInfoRequest final :
                &_SelectTaskInfoRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    19;
 
   friend void swap(SelectTaskInfoRequest& a, SelectTaskInfoRequest& b) {
     a.Swap(&b);
@@ -3033,6 +3634,7 @@ class SelectTaskInfoRequest final :
   enum : int {
     kTaskNameFieldNumber = 1,
     kBigLineFieldNumber = 2,
+    kLineFieldNumber = 3,
   };
   // string task_name = 1;
   void clear_task_name();
@@ -3057,6 +3659,15 @@ class SelectTaskInfoRequest final :
   void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 line = 3;
+  void clear_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 line() const;
+  void set_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_line() const;
+  void _internal_set_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.SelectTaskInfoRequest)
  private:
   class _Internal;
@@ -3066,6 +3677,7 @@ class SelectTaskInfoRequest final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_name_;
   ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 line_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -3115,7 +3727,7 @@ class SelectTaskInfoResponse final :
                &_SelectTaskInfoResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    20;
 
   friend void swap(SelectTaskInfoResponse& a, SelectTaskInfoResponse& b) {
     a.Swap(&b);
@@ -3347,7 +3959,7 @@ class SelectAccountGidDataResponse final :
                &_SelectAccountGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    21;
 
   friend void swap(SelectAccountGidDataResponse& a, SelectAccountGidDataResponse& b) {
     a.Swap(&b);
@@ -3495,7 +4107,7 @@ class SelectGidDataResponse final :
                &_SelectGidDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    22;
 
   friend void swap(SelectGidDataResponse& a, SelectGidDataResponse& b) {
     a.Swap(&b);
@@ -3726,7 +4338,7 @@ class CGBaseData final :
                &_CGBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    23;
 
   friend void swap(CGBaseData& a, CGBaseData& b) {
     a.Swap(&b);
@@ -3958,7 +4570,7 @@ class CGSkillBaseData final :
                &_CGSkillBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    24;
 
   friend void swap(CGSkillBaseData& a, CGSkillBaseData& b) {
     a.Swap(&b);
@@ -4237,7 +4849,7 @@ class CGAttrBaseData final :
                &_CGAttrBaseData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    25;
 
   friend void swap(CGAttrBaseData& a, CGAttrBaseData& b) {
     a.Swap(&b);
@@ -4640,7 +5252,7 @@ class CGCharacterPersDesc final :
                &_CGCharacterPersDesc_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    26;
 
   friend void swap(CGCharacterPersDesc& a, CGCharacterPersDesc& b) {
     a.Swap(&b);
@@ -4876,7 +5488,7 @@ class CGCharacterData final :
                &_CGCharacterData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    27;
 
   friend void swap(CGCharacterData& a, CGCharacterData& b) {
     a.Swap(&b);
@@ -5438,7 +6050,7 @@ class CGPetData final :
                &_CGPetData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    28;
 
   friend void swap(CGPetData& a, CGPetData& b) {
     a.Swap(&b);
@@ -5763,7 +6375,7 @@ class CGItemData final :
                &_CGItemData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    29;
 
   friend void swap(CGItemData& a, CGItemData& b) {
     a.Swap(&b);
@@ -5972,258 +6584,6 @@ class CGItemData final :
 };
 // -------------------------------------------------------------------
 
-class UploadGidDataResponse final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidDataResponse) */ {
- public:
-  inline UploadGidDataResponse() : UploadGidDataResponse(nullptr) {}
-  ~UploadGidDataResponse() override;
-  explicit constexpr UploadGidDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  UploadGidDataResponse(const UploadGidDataResponse& from);
-  UploadGidDataResponse(UploadGidDataResponse&& from) noexcept
-    : UploadGidDataResponse() {
-    *this = ::std::move(from);
-  }
-
-  inline UploadGidDataResponse& operator=(const UploadGidDataResponse& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline UploadGidDataResponse& operator=(UploadGidDataResponse&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const UploadGidDataResponse& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const UploadGidDataResponse* internal_default_instance() {
-    return reinterpret_cast<const UploadGidDataResponse*>(
-               &_UploadGidDataResponse_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    26;
-
-  friend void swap(UploadGidDataResponse& a, UploadGidDataResponse& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(UploadGidDataResponse* other) {
-    if (other == this) return;
-    if (GetOwningArena() == other->GetOwningArena()) {
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(UploadGidDataResponse* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline UploadGidDataResponse* New() const final {
-    return new UploadGidDataResponse();
-  }
-
-  UploadGidDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<UploadGidDataResponse>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const UploadGidDataResponse& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const UploadGidDataResponse& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(UploadGidDataResponse* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "CGData.UploadGidDataResponse";
-  }
-  protected:
-  explicit UploadGidDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // @@protoc_insertion_point(class_scope:CGData.UploadGidDataResponse)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_CGData_2eproto;
-};
-// -------------------------------------------------------------------
-
-class UploadGidBankDataResponse final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.UploadGidBankDataResponse) */ {
- public:
-  inline UploadGidBankDataResponse() : UploadGidBankDataResponse(nullptr) {}
-  ~UploadGidBankDataResponse() override;
-  explicit constexpr UploadGidBankDataResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  UploadGidBankDataResponse(const UploadGidBankDataResponse& from);
-  UploadGidBankDataResponse(UploadGidBankDataResponse&& from) noexcept
-    : UploadGidBankDataResponse() {
-    *this = ::std::move(from);
-  }
-
-  inline UploadGidBankDataResponse& operator=(const UploadGidBankDataResponse& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline UploadGidBankDataResponse& operator=(UploadGidBankDataResponse&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const UploadGidBankDataResponse& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const UploadGidBankDataResponse* internal_default_instance() {
-    return reinterpret_cast<const UploadGidBankDataResponse*>(
-               &_UploadGidBankDataResponse_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    27;
-
-  friend void swap(UploadGidBankDataResponse& a, UploadGidBankDataResponse& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(UploadGidBankDataResponse* other) {
-    if (other == this) return;
-    if (GetOwningArena() == other->GetOwningArena()) {
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(UploadGidBankDataResponse* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline UploadGidBankDataResponse* New() const final {
-    return new UploadGidBankDataResponse();
-  }
-
-  UploadGidBankDataResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<UploadGidBankDataResponse>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const UploadGidBankDataResponse& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const UploadGidBankDataResponse& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(UploadGidBankDataResponse* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "CGData.UploadGidBankDataResponse";
-  }
-  protected:
-  explicit UploadGidBankDataResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // @@protoc_insertion_point(class_scope:CGData.UploadGidBankDataResponse)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_CGData_2eproto;
-};
-// -------------------------------------------------------------------
-
 class CGStoreMapRequest final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.CGStoreMapRequest) */ {
  public:
@@ -6268,7 +6628,7 @@ class CGStoreMapRequest final :
                &_CGStoreMapRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    30;
 
   friend void swap(CGStoreMapRequest& a, CGStoreMapRequest& b) {
     a.Swap(&b);
@@ -6423,7 +6783,7 @@ class CGStoreMapResponse final :
                &_CGStoreMapResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    31;
 
   friend void swap(CGStoreMapResponse& a, CGStoreMapResponse& b) {
     a.Swap(&b);
@@ -6549,7 +6909,7 @@ class CGMapDataRequest final :
                &_CGMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    32;
 
   friend void swap(CGMapDataRequest& a, CGMapDataRequest& b) {
     a.Swap(&b);
@@ -6675,7 +7035,7 @@ class CGMapDataResponse final :
                &_CGMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    33;
 
   friend void swap(CGMapDataResponse& a, CGMapDataResponse& b) {
     a.Swap(&b);
@@ -6823,7 +7183,7 @@ class CGMapData final :
                &_CGMapData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    34;
 
   friend void swap(CGMapData& a, CGMapData& b) {
     a.Swap(&b);
@@ -7016,7 +7376,7 @@ class CGPetGradeCalcRequest final :
                &_CGPetGradeCalcRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    35;
 
   friend void swap(CGPetGradeCalcRequest& a, CGPetGradeCalcRequest& b) {
     a.Swap(&b);
@@ -7142,7 +7502,7 @@ class CGPetGradeCalcResponse final :
                &_CGPetGradeCalcResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    36;
 
   friend void swap(CGPetGradeCalcResponse& a, CGPetGradeCalcResponse& b) {
     a.Swap(&b);
@@ -7290,7 +7650,7 @@ class CGPetGradeCalcData final :
                &_CGPetGradeCalcData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    37;
 
   friend void swap(CGPetGradeCalcData& a, CGPetGradeCalcData& b) {
     a.Swap(&b);
@@ -7672,7 +8032,7 @@ class CGItemRequest final :
                &_CGItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    38;
 
   friend void swap(CGItemRequest& a, CGItemRequest& b) {
     a.Swap(&b);
@@ -7811,7 +8171,7 @@ class CGItemResponse final :
                &_CGItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    39;
 
   friend void swap(CGItemResponse& a, CGItemResponse& b) {
     a.Swap(&b);
@@ -8075,7 +8435,7 @@ class CGStoreItemRequest final :
                &_CGStoreItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    40;
 
   friend void swap(CGStoreItemRequest& a, CGStoreItemRequest& b) {
     a.Swap(&b);
@@ -8328,7 +8688,7 @@ class CGStoreItemResponse final :
                &_CGStoreItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    41;
 
   friend void swap(CGStoreItemResponse& a, CGStoreItemResponse& b) {
     a.Swap(&b);
@@ -8483,7 +8843,7 @@ class CGVoidData final :
                &_CGVoidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    42;
 
   friend void swap(CGVoidData& a, CGVoidData& b) {
     a.Swap(&b);
@@ -8609,7 +8969,7 @@ class CGBoolData final :
                &_CGBoolData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    43;
 
   friend void swap(CGBoolData& a, CGBoolData& b) {
     a.Swap(&b);
@@ -8748,7 +9108,7 @@ class CGIntData final :
                &_CGIntData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    44;
 
   friend void swap(CGIntData& a, CGIntData& b) {
     a.Swap(&b);
@@ -8887,7 +9247,7 @@ class CGSysTimeResponse final :
                &_CGSysTimeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    45;
 
   friend void swap(CGSysTimeResponse& a, CGSysTimeResponse& b) {
     a.Swap(&b);
@@ -9103,7 +9463,7 @@ class CGPlayerFlagEnabledData final :
                &_CGPlayerFlagEnabledData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    46;
 
   friend void swap(CGPlayerFlagEnabledData& a, CGPlayerFlagEnabledData& b) {
     a.Swap(&b);
@@ -9287,6 +9647,316 @@ inline void StringPub::set_allocated_value(std::string* value) {
       GetArenaForAllocation());
   // @@protoc_insertion_point(field_set_allocated:CGData.StringPub.value)
 }
+
+// -------------------------------------------------------------------
+
+// UploadGidDataRequest
+
+// string gid = 1;
+inline void UploadGidDataRequest::clear_gid() {
+  gid_.ClearToEmpty();
+}
+inline const std::string& UploadGidDataRequest::gid() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.gid)
+  return _internal_gid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadGidDataRequest::set_gid(ArgT0&& arg0, ArgT... args) {
+ 
+ gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.gid)
+}
+inline std::string* UploadGidDataRequest::mutable_gid() {
+  std::string* _s = _internal_mutable_gid();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.gid)
+  return _s;
+}
+inline const std::string& UploadGidDataRequest::_internal_gid() const {
+  return gid_.Get();
+}
+inline void UploadGidDataRequest::_internal_set_gid(const std::string& value) {
+  
+  gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadGidDataRequest::_internal_mutable_gid() {
+  
+  return gid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadGidDataRequest::release_gid() {
+  // @@protoc_insertion_point(field_release:CGData.UploadGidDataRequest.gid)
+  return gid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadGidDataRequest::set_allocated_gid(std::string* gid) {
+  if (gid != nullptr) {
+    
+  } else {
+    
+  }
+  gid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), gid,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadGidDataRequest.gid)
+}
+
+// string character_name = 2;
+inline void UploadGidDataRequest::clear_character_name() {
+  character_name_.ClearToEmpty();
+}
+inline const std::string& UploadGidDataRequest::character_name() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.character_name)
+  return _internal_character_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadGidDataRequest::set_character_name(ArgT0&& arg0, ArgT... args) {
+ 
+ character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.character_name)
+}
+inline std::string* UploadGidDataRequest::mutable_character_name() {
+  std::string* _s = _internal_mutable_character_name();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.character_name)
+  return _s;
+}
+inline const std::string& UploadGidDataRequest::_internal_character_name() const {
+  return character_name_.Get();
+}
+inline void UploadGidDataRequest::_internal_set_character_name(const std::string& value) {
+  
+  character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadGidDataRequest::_internal_mutable_character_name() {
+  
+  return character_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadGidDataRequest::release_character_name() {
+  // @@protoc_insertion_point(field_release:CGData.UploadGidDataRequest.character_name)
+  return character_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadGidDataRequest::set_allocated_character_name(std::string* character_name) {
+  if (character_name != nullptr) {
+    
+  } else {
+    
+  }
+  character_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), character_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadGidDataRequest.character_name)
+}
+
+// .CGData.CGCharacterData character_data = 3;
+inline bool UploadGidDataRequest::_internal_has_character_data() const {
+  return this != internal_default_instance() && character_data_ != nullptr;
+}
+inline bool UploadGidDataRequest::has_character_data() const {
+  return _internal_has_character_data();
+}
+inline void UploadGidDataRequest::clear_character_data() {
+  if (GetArenaForAllocation() == nullptr && character_data_ != nullptr) {
+    delete character_data_;
+  }
+  character_data_ = nullptr;
+}
+inline const ::CGData::CGCharacterData& UploadGidDataRequest::_internal_character_data() const {
+  const ::CGData::CGCharacterData* p = character_data_;
+  return p != nullptr ? *p : reinterpret_cast<const ::CGData::CGCharacterData&>(
+      ::CGData::_CGCharacterData_default_instance_);
+}
+inline const ::CGData::CGCharacterData& UploadGidDataRequest::character_data() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.character_data)
+  return _internal_character_data();
+}
+inline void UploadGidDataRequest::unsafe_arena_set_allocated_character_data(
+    ::CGData::CGCharacterData* character_data) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(character_data_);
+  }
+  character_data_ = character_data;
+  if (character_data) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:CGData.UploadGidDataRequest.character_data)
+}
+inline ::CGData::CGCharacterData* UploadGidDataRequest::release_character_data() {
+  
+  ::CGData::CGCharacterData* temp = character_data_;
+  character_data_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::CGData::CGCharacterData* UploadGidDataRequest::unsafe_arena_release_character_data() {
+  // @@protoc_insertion_point(field_release:CGData.UploadGidDataRequest.character_data)
+  
+  ::CGData::CGCharacterData* temp = character_data_;
+  character_data_ = nullptr;
+  return temp;
+}
+inline ::CGData::CGCharacterData* UploadGidDataRequest::_internal_mutable_character_data() {
+  
+  if (character_data_ == nullptr) {
+    auto* p = CreateMaybeMessage<::CGData::CGCharacterData>(GetArenaForAllocation());
+    character_data_ = p;
+  }
+  return character_data_;
+}
+inline ::CGData::CGCharacterData* UploadGidDataRequest::mutable_character_data() {
+  ::CGData::CGCharacterData* _msg = _internal_mutable_character_data();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.character_data)
+  return _msg;
+}
+inline void UploadGidDataRequest::set_allocated_character_data(::CGData::CGCharacterData* character_data) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete character_data_;
+  }
+  if (character_data) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::CGData::CGCharacterData>::GetOwningArena(character_data);
+    if (message_arena != submessage_arena) {
+      character_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, character_data, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  character_data_ = character_data;
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadGidDataRequest.character_data)
+}
+
+// repeated .CGData.CGPetData pet_data = 4;
+inline int UploadGidDataRequest::_internal_pet_data_size() const {
+  return pet_data_.size();
+}
+inline int UploadGidDataRequest::pet_data_size() const {
+  return _internal_pet_data_size();
+}
+inline void UploadGidDataRequest::clear_pet_data() {
+  pet_data_.Clear();
+}
+inline ::CGData::CGPetData* UploadGidDataRequest::mutable_pet_data(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.pet_data)
+  return pet_data_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
+UploadGidDataRequest::mutable_pet_data() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.UploadGidDataRequest.pet_data)
+  return &pet_data_;
+}
+inline const ::CGData::CGPetData& UploadGidDataRequest::_internal_pet_data(int index) const {
+  return pet_data_.Get(index);
+}
+inline const ::CGData::CGPetData& UploadGidDataRequest::pet_data(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.pet_data)
+  return _internal_pet_data(index);
+}
+inline ::CGData::CGPetData* UploadGidDataRequest::_internal_add_pet_data() {
+  return pet_data_.Add();
+}
+inline ::CGData::CGPetData* UploadGidDataRequest::add_pet_data() {
+  ::CGData::CGPetData* _add = _internal_add_pet_data();
+  // @@protoc_insertion_point(field_add:CGData.UploadGidDataRequest.pet_data)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
+UploadGidDataRequest::pet_data() const {
+  // @@protoc_insertion_point(field_list:CGData.UploadGidDataRequest.pet_data)
+  return pet_data_;
+}
+
+// repeated .CGData.CGItemData items = 5;
+inline int UploadGidDataRequest::_internal_items_size() const {
+  return items_.size();
+}
+inline int UploadGidDataRequest::items_size() const {
+  return _internal_items_size();
+}
+inline void UploadGidDataRequest::clear_items() {
+  items_.Clear();
+}
+inline ::CGData::CGItemData* UploadGidDataRequest::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.items)
+  return items_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
+UploadGidDataRequest::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:CGData.UploadGidDataRequest.items)
+  return &items_;
+}
+inline const ::CGData::CGItemData& UploadGidDataRequest::_internal_items(int index) const {
+  return items_.Get(index);
+}
+inline const ::CGData::CGItemData& UploadGidDataRequest::items(int index) const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.items)
+  return _internal_items(index);
+}
+inline ::CGData::CGItemData* UploadGidDataRequest::_internal_add_items() {
+  return items_.Add();
+}
+inline ::CGData::CGItemData* UploadGidDataRequest::add_items() {
+  ::CGData::CGItemData* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:CGData.UploadGidDataRequest.items)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
+UploadGidDataRequest::items() const {
+  // @@protoc_insertion_point(field_list:CGData.UploadGidDataRequest.items)
+  return items_;
+}
+
+// int32 role_type = 6;
+inline void UploadGidDataRequest::clear_role_type() {
+  role_type_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::_internal_role_type() const {
+  return role_type_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::role_type() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.role_type)
+  return _internal_role_type();
+}
+inline void UploadGidDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  role_type_ = value;
+}
+inline void UploadGidDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_role_type(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.role_type)
+}
+
+// int32 big_line = 7;
+inline void UploadGidDataRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.big_line)
+  return _internal_big_line();
+}
+inline void UploadGidDataRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void UploadGidDataRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.big_line)
+}
+
+// -------------------------------------------------------------------
+
+// UploadGidDataResponse
 
 // -------------------------------------------------------------------
 
@@ -9503,6 +10173,30 @@ inline void UploadGidBankDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int
   _internal_set_role_type(value);
   // @@protoc_insertion_point(field_set:CGData.UploadGidBankDataRequest.role_type)
 }
+
+// int32 big_line = 7;
+inline void UploadGidBankDataRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidBankDataRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidBankDataRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadGidBankDataRequest.big_line)
+  return _internal_big_line();
+}
+inline void UploadGidBankDataRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void UploadGidBankDataRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadGidBankDataRequest.big_line)
+}
+
+// -------------------------------------------------------------------
+
+// UploadGidBankDataResponse
 
 // -------------------------------------------------------------------
 
@@ -10120,6 +10814,166 @@ inline void DownloadMapDataResponse::set_allocated_imagedata(std::string* imaged
 
 // -------------------------------------------------------------------
 
+// UploadCharcterServerRequest
+
+// string char_name = 1;
+inline void UploadCharcterServerRequest::clear_char_name() {
+  char_name_.ClearToEmpty();
+}
+inline const std::string& UploadCharcterServerRequest::char_name() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.char_name)
+  return _internal_char_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadCharcterServerRequest::set_char_name(ArgT0&& arg0, ArgT... args) {
+ 
+ char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.char_name)
+}
+inline std::string* UploadCharcterServerRequest::mutable_char_name() {
+  std::string* _s = _internal_mutable_char_name();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadCharcterServerRequest.char_name)
+  return _s;
+}
+inline const std::string& UploadCharcterServerRequest::_internal_char_name() const {
+  return char_name_.Get();
+}
+inline void UploadCharcterServerRequest::_internal_set_char_name(const std::string& value) {
+  
+  char_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadCharcterServerRequest::_internal_mutable_char_name() {
+  
+  return char_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadCharcterServerRequest::release_char_name() {
+  // @@protoc_insertion_point(field_release:CGData.UploadCharcterServerRequest.char_name)
+  return char_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadCharcterServerRequest::set_allocated_char_name(std::string* char_name) {
+  if (char_name != nullptr) {
+    
+  } else {
+    
+  }
+  char_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), char_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadCharcterServerRequest.char_name)
+}
+
+// int32 big_line = 2;
+inline void UploadCharcterServerRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.big_line)
+  return _internal_big_line();
+}
+inline void UploadCharcterServerRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void UploadCharcterServerRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.big_line)
+}
+
+// string ip = 3;
+inline void UploadCharcterServerRequest::clear_ip() {
+  ip_.ClearToEmpty();
+}
+inline const std::string& UploadCharcterServerRequest::ip() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.ip)
+  return _internal_ip();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadCharcterServerRequest::set_ip(ArgT0&& arg0, ArgT... args) {
+ 
+ ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.ip)
+}
+inline std::string* UploadCharcterServerRequest::mutable_ip() {
+  std::string* _s = _internal_mutable_ip();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadCharcterServerRequest.ip)
+  return _s;
+}
+inline const std::string& UploadCharcterServerRequest::_internal_ip() const {
+  return ip_.Get();
+}
+inline void UploadCharcterServerRequest::_internal_set_ip(const std::string& value) {
+  
+  ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadCharcterServerRequest::_internal_mutable_ip() {
+  
+  return ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadCharcterServerRequest::release_ip() {
+  // @@protoc_insertion_point(field_release:CGData.UploadCharcterServerRequest.ip)
+  return ip_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadCharcterServerRequest::set_allocated_ip(std::string* ip) {
+  if (ip != nullptr) {
+    
+  } else {
+    
+  }
+  ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ip,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadCharcterServerRequest.ip)
+}
+
+// int32 port = 4;
+inline void UploadCharcterServerRequest::clear_port() {
+  port_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::_internal_port() const {
+  return port_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::port() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.port)
+  return _internal_port();
+}
+inline void UploadCharcterServerRequest::_internal_set_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  port_ = value;
+}
+inline void UploadCharcterServerRequest::set_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.port)
+}
+
+// int32 online = 5;
+inline void UploadCharcterServerRequest::clear_online() {
+  online_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::_internal_online() const {
+  return online_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::online() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.online)
+  return _internal_online();
+}
+inline void UploadCharcterServerRequest::_internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  online_ = value;
+}
+inline void UploadCharcterServerRequest::set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_online(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.online)
+}
+
+// -------------------------------------------------------------------
+
+// UploadCharcterServerResponse
+
+// -------------------------------------------------------------------
+
 // CGAccountGidData
 
 // string account = 1;
@@ -10292,292 +11146,6 @@ inline void CGAccountGidData::_internal_set_character(::PROTOBUF_NAMESPACE_ID::i
 inline void CGAccountGidData::set_character(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_character(value);
   // @@protoc_insertion_point(field_set:CGData.CGAccountGidData.character)
-}
-
-// -------------------------------------------------------------------
-
-// UploadGidDataRequest
-
-// string gid = 1;
-inline void UploadGidDataRequest::clear_gid() {
-  gid_.ClearToEmpty();
-}
-inline const std::string& UploadGidDataRequest::gid() const {
-  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.gid)
-  return _internal_gid();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void UploadGidDataRequest::set_gid(ArgT0&& arg0, ArgT... args) {
- 
- gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.gid)
-}
-inline std::string* UploadGidDataRequest::mutable_gid() {
-  std::string* _s = _internal_mutable_gid();
-  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.gid)
-  return _s;
-}
-inline const std::string& UploadGidDataRequest::_internal_gid() const {
-  return gid_.Get();
-}
-inline void UploadGidDataRequest::_internal_set_gid(const std::string& value) {
-  
-  gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* UploadGidDataRequest::_internal_mutable_gid() {
-  
-  return gid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* UploadGidDataRequest::release_gid() {
-  // @@protoc_insertion_point(field_release:CGData.UploadGidDataRequest.gid)
-  return gid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void UploadGidDataRequest::set_allocated_gid(std::string* gid) {
-  if (gid != nullptr) {
-    
-  } else {
-    
-  }
-  gid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), gid,
-      GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set_allocated:CGData.UploadGidDataRequest.gid)
-}
-
-// string character_name = 2;
-inline void UploadGidDataRequest::clear_character_name() {
-  character_name_.ClearToEmpty();
-}
-inline const std::string& UploadGidDataRequest::character_name() const {
-  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.character_name)
-  return _internal_character_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void UploadGidDataRequest::set_character_name(ArgT0&& arg0, ArgT... args) {
- 
- character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.character_name)
-}
-inline std::string* UploadGidDataRequest::mutable_character_name() {
-  std::string* _s = _internal_mutable_character_name();
-  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.character_name)
-  return _s;
-}
-inline const std::string& UploadGidDataRequest::_internal_character_name() const {
-  return character_name_.Get();
-}
-inline void UploadGidDataRequest::_internal_set_character_name(const std::string& value) {
-  
-  character_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* UploadGidDataRequest::_internal_mutable_character_name() {
-  
-  return character_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* UploadGidDataRequest::release_character_name() {
-  // @@protoc_insertion_point(field_release:CGData.UploadGidDataRequest.character_name)
-  return character_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void UploadGidDataRequest::set_allocated_character_name(std::string* character_name) {
-  if (character_name != nullptr) {
-    
-  } else {
-    
-  }
-  character_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), character_name,
-      GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set_allocated:CGData.UploadGidDataRequest.character_name)
-}
-
-// .CGData.CGCharacterData character_data = 3;
-inline bool UploadGidDataRequest::_internal_has_character_data() const {
-  return this != internal_default_instance() && character_data_ != nullptr;
-}
-inline bool UploadGidDataRequest::has_character_data() const {
-  return _internal_has_character_data();
-}
-inline void UploadGidDataRequest::clear_character_data() {
-  if (GetArenaForAllocation() == nullptr && character_data_ != nullptr) {
-    delete character_data_;
-  }
-  character_data_ = nullptr;
-}
-inline const ::CGData::CGCharacterData& UploadGidDataRequest::_internal_character_data() const {
-  const ::CGData::CGCharacterData* p = character_data_;
-  return p != nullptr ? *p : reinterpret_cast<const ::CGData::CGCharacterData&>(
-      ::CGData::_CGCharacterData_default_instance_);
-}
-inline const ::CGData::CGCharacterData& UploadGidDataRequest::character_data() const {
-  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.character_data)
-  return _internal_character_data();
-}
-inline void UploadGidDataRequest::unsafe_arena_set_allocated_character_data(
-    ::CGData::CGCharacterData* character_data) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(character_data_);
-  }
-  character_data_ = character_data;
-  if (character_data) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:CGData.UploadGidDataRequest.character_data)
-}
-inline ::CGData::CGCharacterData* UploadGidDataRequest::release_character_data() {
-  
-  ::CGData::CGCharacterData* temp = character_data_;
-  character_data_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::CGData::CGCharacterData* UploadGidDataRequest::unsafe_arena_release_character_data() {
-  // @@protoc_insertion_point(field_release:CGData.UploadGidDataRequest.character_data)
-  
-  ::CGData::CGCharacterData* temp = character_data_;
-  character_data_ = nullptr;
-  return temp;
-}
-inline ::CGData::CGCharacterData* UploadGidDataRequest::_internal_mutable_character_data() {
-  
-  if (character_data_ == nullptr) {
-    auto* p = CreateMaybeMessage<::CGData::CGCharacterData>(GetArenaForAllocation());
-    character_data_ = p;
-  }
-  return character_data_;
-}
-inline ::CGData::CGCharacterData* UploadGidDataRequest::mutable_character_data() {
-  ::CGData::CGCharacterData* _msg = _internal_mutable_character_data();
-  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.character_data)
-  return _msg;
-}
-inline void UploadGidDataRequest::set_allocated_character_data(::CGData::CGCharacterData* character_data) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete character_data_;
-  }
-  if (character_data) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::CGData::CGCharacterData>::GetOwningArena(character_data);
-    if (message_arena != submessage_arena) {
-      character_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, character_data, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  character_data_ = character_data;
-  // @@protoc_insertion_point(field_set_allocated:CGData.UploadGidDataRequest.character_data)
-}
-
-// repeated .CGData.CGPetData pet_data = 4;
-inline int UploadGidDataRequest::_internal_pet_data_size() const {
-  return pet_data_.size();
-}
-inline int UploadGidDataRequest::pet_data_size() const {
-  return _internal_pet_data_size();
-}
-inline void UploadGidDataRequest::clear_pet_data() {
-  pet_data_.Clear();
-}
-inline ::CGData::CGPetData* UploadGidDataRequest::mutable_pet_data(int index) {
-  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.pet_data)
-  return pet_data_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >*
-UploadGidDataRequest::mutable_pet_data() {
-  // @@protoc_insertion_point(field_mutable_list:CGData.UploadGidDataRequest.pet_data)
-  return &pet_data_;
-}
-inline const ::CGData::CGPetData& UploadGidDataRequest::_internal_pet_data(int index) const {
-  return pet_data_.Get(index);
-}
-inline const ::CGData::CGPetData& UploadGidDataRequest::pet_data(int index) const {
-  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.pet_data)
-  return _internal_pet_data(index);
-}
-inline ::CGData::CGPetData* UploadGidDataRequest::_internal_add_pet_data() {
-  return pet_data_.Add();
-}
-inline ::CGData::CGPetData* UploadGidDataRequest::add_pet_data() {
-  ::CGData::CGPetData* _add = _internal_add_pet_data();
-  // @@protoc_insertion_point(field_add:CGData.UploadGidDataRequest.pet_data)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGPetData >&
-UploadGidDataRequest::pet_data() const {
-  // @@protoc_insertion_point(field_list:CGData.UploadGidDataRequest.pet_data)
-  return pet_data_;
-}
-
-// repeated .CGData.CGItemData items = 5;
-inline int UploadGidDataRequest::_internal_items_size() const {
-  return items_.size();
-}
-inline int UploadGidDataRequest::items_size() const {
-  return _internal_items_size();
-}
-inline void UploadGidDataRequest::clear_items() {
-  items_.Clear();
-}
-inline ::CGData::CGItemData* UploadGidDataRequest::mutable_items(int index) {
-  // @@protoc_insertion_point(field_mutable:CGData.UploadGidDataRequest.items)
-  return items_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >*
-UploadGidDataRequest::mutable_items() {
-  // @@protoc_insertion_point(field_mutable_list:CGData.UploadGidDataRequest.items)
-  return &items_;
-}
-inline const ::CGData::CGItemData& UploadGidDataRequest::_internal_items(int index) const {
-  return items_.Get(index);
-}
-inline const ::CGData::CGItemData& UploadGidDataRequest::items(int index) const {
-  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.items)
-  return _internal_items(index);
-}
-inline ::CGData::CGItemData* UploadGidDataRequest::_internal_add_items() {
-  return items_.Add();
-}
-inline ::CGData::CGItemData* UploadGidDataRequest::add_items() {
-  ::CGData::CGItemData* _add = _internal_add_items();
-  // @@protoc_insertion_point(field_add:CGData.UploadGidDataRequest.items)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
-UploadGidDataRequest::items() const {
-  // @@protoc_insertion_point(field_list:CGData.UploadGidDataRequest.items)
-  return items_;
-}
-
-// int32 role_type = 6;
-inline void UploadGidDataRequest::clear_role_type() {
-  role_type_ = 0;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::_internal_role_type() const {
-  return role_type_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 UploadGidDataRequest::role_type() const {
-  // @@protoc_insertion_point(field_get:CGData.UploadGidDataRequest.role_type)
-  return _internal_role_type();
-}
-inline void UploadGidDataRequest::_internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
-  role_type_ = value;
-}
-inline void UploadGidDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _internal_set_role_type(value);
-  // @@protoc_insertion_point(field_set:CGData.UploadGidDataRequest.role_type)
 }
 
 // -------------------------------------------------------------------
@@ -11304,6 +11872,26 @@ inline void SelectTaskInfoRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_I
 inline void SelectTaskInfoRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_big_line(value);
   // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoRequest.big_line)
+}
+
+// int32 line = 3;
+inline void SelectTaskInfoRequest::clear_line() {
+  line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoRequest::_internal_line() const {
+  return line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectTaskInfoRequest::line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectTaskInfoRequest.line)
+  return _internal_line();
+}
+inline void SelectTaskInfoRequest::_internal_set_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  line_ = value;
+}
+inline void SelectTaskInfoRequest::set_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectTaskInfoRequest.line)
 }
 
 // -------------------------------------------------------------------
@@ -14953,14 +15541,6 @@ inline void CGItemData::set_count(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // -------------------------------------------------------------------
 
-// UploadGidDataResponse
-
-// -------------------------------------------------------------------
-
-// UploadGidBankDataResponse
-
-// -------------------------------------------------------------------
-
 // CGStoreMapRequest
 
 // int32 map_number = 1;
@@ -16729,6 +17309,10 @@ inline void CGPlayerFlagEnabledData::set_enable(bool value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

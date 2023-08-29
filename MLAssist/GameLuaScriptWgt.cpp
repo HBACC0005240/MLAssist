@@ -407,6 +407,11 @@ void GameLuaScriptWgt::initScriptSystem()
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取包裹空格", m_luaFun, &CGLuaFun::Lua_GetItemNotUseSpaceCount);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取已用格", m_luaFun, &CGLuaFun::Lua_GetBagUsedItemCount);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取好友名片", m_luaFun, &CGLuaFun::Lua_GetFriendCard);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取角色信息", m_luaFun, &CGLuaFun::Lua_GetTgtCharacterGameData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取角色数据", m_luaFun, &CGLuaFun::Lua_GetTgtCharacterGameData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "上报角色数据", m_luaFun, &CGLuaFun::Lua_UploadCharacterGameData);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "上报角色信息", m_luaFun, &CGLuaFun::Lua_UploadCharacterGameData);
+
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取脚本界面数据", m_luaFun, &CGLuaFun::Lua_GetScriptUISetData);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队伍宠物平均等级", m_luaFun, &CGLuaFun::Lua_GetTeamPetAvgLv);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "取队伍宠物等级", m_luaFun, &CGLuaFun::Lua_GetTeamPetLv);

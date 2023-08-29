@@ -100,6 +100,7 @@ struct GameInfo
 	int id = -1;
 	QString realname; //真实名称 比如黄蜂
 	QString showname; //设置名称
+	QString nickname;	
 };
 struct GameTeamPlayer : public GameInfo
 {
@@ -229,6 +230,7 @@ struct Character : public GameInfo
 	int default_petid = -1;		  //默认出战宠物
 	int direction = 0;			  //面对的方向
 	int punchclock = 0;			  //卡时
+	int battle_position = 0;		//战斗位置
 	bool usingpunchclock = false; //是否打卡中
 	QString job;				  //职业名称
 	QStringList titles;			  //称号

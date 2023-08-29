@@ -1500,7 +1500,7 @@ class CGRpcService final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    // 根据item的id，获取item信息
+    // ☆ 根据item的id，获取item信息
     virtual ::grpc::Status GetCGItemData(::grpc::ClientContext* context, const ::CGData::CGItemRequest& request, ::CGData::CGItemResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGItemResponse>> AsyncGetCGItemData(::grpc::ClientContext* context, const ::CGData::CGItemRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGItemResponse>>(AsyncGetCGItemDataRaw(context, request, cq));
@@ -1515,7 +1515,7 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>> PrepareAsyncGetConnectState(::grpc::ClientContext* context, const ::CGData::CGVoidData& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>>(PrepareAsyncGetConnectStateRaw(context, request, cq));
     }
-    // 获取所有宠物算档数据
+    // ☆ 获取所有宠物算档数据
     virtual ::grpc::Status GetPetGradeCalcData(::grpc::ClientContext* context, const ::CGData::CGPetGradeCalcRequest& request, ::CGData::CGPetGradeCalcResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGPetGradeCalcResponse>> AsyncGetPetGradeCalcData(::grpc::ClientContext* context, const ::CGData::CGPetGradeCalcRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGPetGradeCalcResponse>>(AsyncGetPetGradeCalcDataRaw(context, request, cq));
@@ -1523,7 +1523,7 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGPetGradeCalcResponse>> PrepareAsyncGetPetGradeCalcData(::grpc::ClientContext* context, const ::CGData::CGPetGradeCalcRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGPetGradeCalcResponse>>(PrepareAsyncGetPetGradeCalcDataRaw(context, request, cq));
     }
-    // 获取服务端所有id和map名称的映射，用于本地缓存
+    // ☆ 获取服务端所有id和map名称的映射，用于本地缓存
     virtual ::grpc::Status GetServerStoreMapData(::grpc::ClientContext* context, const ::CGData::CGMapDataRequest& request, ::CGData::CGMapDataResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGMapDataResponse>> AsyncGetServerStoreMapData(::grpc::ClientContext* context, const ::CGData::CGMapDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGMapDataResponse>>(AsyncGetServerStoreMapDataRaw(context, request, cq));
@@ -1531,7 +1531,7 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGMapDataResponse>> PrepareAsyncGetServerStoreMapData(::grpc::ClientContext* context, const ::CGData::CGMapDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGMapDataResponse>>(PrepareAsyncGetServerStoreMapDataRaw(context, request, cq));
     }
-    // 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
+    // ☆ 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
     virtual ::grpc::Status StoreCGItemData(::grpc::ClientContext* context, const ::CGData::CGStoreItemRequest& request, ::CGData::CGStoreItemResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreItemResponse>> AsyncStoreCGItemData(::grpc::ClientContext* context, const ::CGData::CGStoreItemRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreItemResponse>>(AsyncStoreCGItemDataRaw(context, request, cq));
@@ -1539,7 +1539,7 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreItemResponse>> PrepareAsyncStoreCGItemData(::grpc::ClientContext* context, const ::CGData::CGStoreItemRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreItemResponse>>(PrepareAsyncStoreCGItemDataRaw(context, request, cq));
     }
-    // 客户端向服务器发送地图信息，服务端缓存更新
+    // ☆ 客户端向服务器发送地图信息，服务端缓存更新
     virtual ::grpc::Status StoreCGMapData(::grpc::ClientContext* context, const ::CGData::CGStoreMapRequest& request, ::CGData::CGStoreMapResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreMapResponse>> AsyncStoreCGMapData(::grpc::ClientContext* context, const ::CGData::CGStoreMapRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreMapResponse>>(AsyncStoreCGMapDataRaw(context, request, cq));
@@ -1547,7 +1547,7 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreMapResponse>> PrepareAsyncStoreCGMapData(::grpc::ClientContext* context, const ::CGData::CGStoreMapRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGStoreMapResponse>>(PrepareAsyncStoreCGMapDataRaw(context, request, cq));
     }
-    // 定时上报当辅助信息
+    // ☆定时上报当辅助信息
     virtual ::grpc::Status UploadGidData(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest& request, ::CGData::UploadGidDataResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidDataResponse>> AsyncUploadGidData(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadGidDataResponse>>(AsyncUploadGidDataRaw(context, request, cq));
@@ -1580,12 +1580,12 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>> PrepareAsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>>(PrepareAsyncDownloadMapDataRaw(context, request, cq));
     }
-    virtual ::grpc::Status UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::CGData::CGVoidData* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>> AsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>>(AsyncUploadCharcterServerRaw(context, request, cq));
+    virtual ::grpc::Status UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::CGData::UploadCharcterServerResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadCharcterServerResponse>> AsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadCharcterServerResponse>>(AsyncUploadCharcterServerRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>> PrepareAsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>>(PrepareAsyncUploadCharcterServerRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadCharcterServerResponse>> PrepareAsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadCharcterServerResponse>>(PrepareAsyncUploadCharcterServerRaw(context, request, cq));
     }
     // 发布是rpc的普通方法
     virtual ::grpc::Status Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) = 0;
@@ -1646,7 +1646,7 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>> PrepareAsyncSelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectTaskInfoResponse>>(PrepareAsyncSelectTaskInfoRaw(context, request, cq));
     }
-    // 查询游戏角色当前信息
+    // ☆ 查询游戏角色当前信息
     virtual ::grpc::Status SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::CGData::SelectCharacterDataResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>> AsyncSelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::CGData::SelectCharacterDataResponse>>(AsyncSelectCharacterDataRaw(context, request, cq));
@@ -1657,32 +1657,32 @@ class CGRpcService final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      // 根据item的id，获取item信息
+      // ☆ 根据item的id，获取item信息
       virtual void GetCGItemData(::grpc::ClientContext* context, const ::CGData::CGItemRequest* request, ::CGData::CGItemResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetCGItemData(::grpc::ClientContext* context, const ::CGData::CGItemRequest* request, ::CGData::CGItemResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void GetConnectState(::grpc::ClientContext* context, const ::CGData::CGVoidData* request, ::CGData::CGVoidData* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetConnectState(::grpc::ClientContext* context, const ::CGData::CGVoidData* request, ::CGData::CGVoidData* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      // 获取所有宠物算档数据
+      // ☆ 获取所有宠物算档数据
       virtual void GetPetGradeCalcData(::grpc::ClientContext* context, const ::CGData::CGPetGradeCalcRequest* request, ::CGData::CGPetGradeCalcResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetPetGradeCalcData(::grpc::ClientContext* context, const ::CGData::CGPetGradeCalcRequest* request, ::CGData::CGPetGradeCalcResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      // 获取服务端所有id和map名称的映射，用于本地缓存
+      // ☆ 获取服务端所有id和map名称的映射，用于本地缓存
       virtual void GetServerStoreMapData(::grpc::ClientContext* context, const ::CGData::CGMapDataRequest* request, ::CGData::CGMapDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetServerStoreMapData(::grpc::ClientContext* context, const ::CGData::CGMapDataRequest* request, ::CGData::CGMapDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      // 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
+      // ☆ 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
       virtual void StoreCGItemData(::grpc::ClientContext* context, const ::CGData::CGStoreItemRequest* request, ::CGData::CGStoreItemResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void StoreCGItemData(::grpc::ClientContext* context, const ::CGData::CGStoreItemRequest* request, ::CGData::CGStoreItemResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      // 客户端向服务器发送地图信息，服务端缓存更新
+      // ☆ 客户端向服务器发送地图信息，服务端缓存更新
       virtual void StoreCGMapData(::grpc::ClientContext* context, const ::CGData::CGStoreMapRequest* request, ::CGData::CGStoreMapResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void StoreCGMapData(::grpc::ClientContext* context, const ::CGData::CGStoreMapRequest* request, ::CGData::CGStoreMapResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      // 定时上报当辅助信息
+      // ☆定时上报当辅助信息
       virtual void UploadGidData(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void UploadGidData(::grpc::ClientContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) = 0;
       virtual void DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) = 0;
-      virtual void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       // 发布是rpc的普通方法
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) = 0;
@@ -1704,7 +1704,7 @@ class CGRpcService final {
       // 查询游戏指定任务当前坐标
       virtual void SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void SelectTaskInfo(::grpc::ClientContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      // 查询游戏角色当前信息
+      // ☆ 查询游戏角色当前信息
       virtual void SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void SelectCharacterData(::grpc::ClientContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -1734,8 +1734,8 @@ class CGRpcService final {
     virtual ::grpc::ClientReaderInterface< ::CGData::DownloadMapDataResponse>* DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>* AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::CGData::DownloadMapDataResponse>* PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>* AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::CGVoidData>* PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadCharcterServerResponse>* AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::UploadCharcterServerResponse>* PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>* AsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::CGData::StringPub>* PrepareAsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientReaderInterface< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) = 0;
@@ -1831,12 +1831,12 @@ class CGRpcService final {
     std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>> PrepareAsyncDownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>>(PrepareAsyncDownloadMapDataRaw(context, request, cq));
     }
-    ::grpc::Status UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::CGData::CGVoidData* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>> AsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>>(AsyncUploadCharcterServerRaw(context, request, cq));
+    ::grpc::Status UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::CGData::UploadCharcterServerResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>> AsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>>(AsyncUploadCharcterServerRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>> PrepareAsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>>(PrepareAsyncUploadCharcterServerRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>> PrepareAsyncUploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>>(PrepareAsyncUploadCharcterServerRaw(context, request, cq));
     }
     ::grpc::Status Publish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::CGData::StringPub* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>> AsyncPublish(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) {
@@ -1917,8 +1917,8 @@ class CGRpcService final {
       void UploadGidBankData(::grpc::ClientContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void UploadMapData(::grpc::ClientContext* context, ::CGData::UploadMapDataResponse* response, ::grpc::ClientWriteReactor< ::CGData::UploadMapDataRequest>* reactor) override;
       void DownloadMapData(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ClientReadReactor< ::CGData::DownloadMapDataResponse>* reactor) override;
-      void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, std::function<void(::grpc::Status)>) override;
-      void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response, std::function<void(::grpc::Status)>) override;
+      void UploadCharcterServer(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, std::function<void(::grpc::Status)>) override;
       void Publish(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Subscribe(::grpc::ClientContext* context, const ::CGData::StringPub* request, ::grpc::ClientReadReactor< ::CGData::StringPub>* reactor) override;
@@ -1967,8 +1967,8 @@ class CGRpcService final {
     ::grpc::ClientReader< ::CGData::DownloadMapDataResponse>* DownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request) override;
     ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* AsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReader< ::CGData::DownloadMapDataResponse>* PrepareAsyncDownloadMapDataRaw(::grpc::ClientContext* context, const ::CGData::DownloadMapDataRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>* AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::CGData::CGVoidData>* PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::SelectCharacterServerResponse& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>* AsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::CGData::UploadCharcterServerResponse>* PrepareAsyncUploadCharcterServerRaw(::grpc::ClientContext* context, const ::CGData::UploadCharcterServerRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>* AsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::CGData::StringPub>* PrepareAsyncPublishRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientReader< ::CGData::StringPub>* SubscribeRaw(::grpc::ClientContext* context, const ::CGData::StringPub& request) override;
@@ -2012,23 +2012,23 @@ class CGRpcService final {
    public:
     Service();
     virtual ~Service();
-    // 根据item的id，获取item信息
+    // ☆ 根据item的id，获取item信息
     virtual ::grpc::Status GetCGItemData(::grpc::ServerContext* context, const ::CGData::CGItemRequest* request, ::CGData::CGItemResponse* response);
     virtual ::grpc::Status GetConnectState(::grpc::ServerContext* context, const ::CGData::CGVoidData* request, ::CGData::CGVoidData* response);
-    // 获取所有宠物算档数据
+    // ☆ 获取所有宠物算档数据
     virtual ::grpc::Status GetPetGradeCalcData(::grpc::ServerContext* context, const ::CGData::CGPetGradeCalcRequest* request, ::CGData::CGPetGradeCalcResponse* response);
-    // 获取服务端所有id和map名称的映射，用于本地缓存
+    // ☆ 获取服务端所有id和map名称的映射，用于本地缓存
     virtual ::grpc::Status GetServerStoreMapData(::grpc::ServerContext* context, const ::CGData::CGMapDataRequest* request, ::CGData::CGMapDataResponse* response);
-    // 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
+    // ☆ 客户端向服务器发送当前包裹物品信息，服务端用于缓存和更新数据库
     virtual ::grpc::Status StoreCGItemData(::grpc::ServerContext* context, const ::CGData::CGStoreItemRequest* request, ::CGData::CGStoreItemResponse* response);
-    // 客户端向服务器发送地图信息，服务端缓存更新
+    // ☆ 客户端向服务器发送地图信息，服务端缓存更新
     virtual ::grpc::Status StoreCGMapData(::grpc::ServerContext* context, const ::CGData::CGStoreMapRequest* request, ::CGData::CGStoreMapResponse* response);
-    // 定时上报当辅助信息
+    // ☆定时上报当辅助信息
     virtual ::grpc::Status UploadGidData(::grpc::ServerContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response);
     virtual ::grpc::Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response);
     virtual ::grpc::Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* reader, ::CGData::UploadMapDataResponse* response);
     virtual ::grpc::Status DownloadMapData(::grpc::ServerContext* context, const ::CGData::DownloadMapDataRequest* request, ::grpc::ServerWriter< ::CGData::DownloadMapDataResponse>* writer);
-    virtual ::grpc::Status UploadCharcterServer(::grpc::ServerContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response);
+    virtual ::grpc::Status UploadCharcterServer(::grpc::ServerContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response);
     // 发布是rpc的普通方法
     virtual ::grpc::Status Publish(::grpc::ServerContext* context, const ::CGData::StringPub* request, ::CGData::StringPub* response);
     // 订阅则是一个单向的流服务，服务端返回的数据可能很大
@@ -2044,7 +2044,7 @@ class CGRpcService final {
     virtual ::grpc::Status SelectCharacterServer(::grpc::ServerContext* context, const ::CGData::SelectCharacterServerRequest* request, ::CGData::SelectCharacterServerResponse* response);
     // 查询游戏指定任务当前坐标
     virtual ::grpc::Status SelectTaskInfo(::grpc::ServerContext* context, const ::CGData::SelectTaskInfoRequest* request, ::CGData::SelectTaskInfoResponse* response);
-    // 查询游戏角色当前信息
+    // ☆ 查询游戏角色当前信息
     virtual ::grpc::Status SelectCharacterData(::grpc::ServerContext* context, const ::CGData::SelectCharacterDataRequest* request, ::CGData::SelectCharacterDataResponse* response);
   };
   template <class BaseClass>
@@ -2259,11 +2259,11 @@ class CGRpcService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestUploadCharcterServer(::grpc::ServerContext* context, ::CGData::SelectCharacterServerResponse* request, ::grpc::ServerAsyncResponseWriter< ::CGData::CGVoidData>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestUploadCharcterServer(::grpc::ServerContext* context, ::CGData::UploadCharcterServerRequest* request, ::grpc::ServerAsyncResponseWriter< ::CGData::UploadCharcterServerResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -2695,25 +2695,25 @@ class CGRpcService final {
    public:
     WithCallbackMethod_UploadCharcterServer() {
       ::grpc::Service::MarkMethodCallback(10,
-          new ::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>(
+          new ::grpc::internal::CallbackUnaryHandler< ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::CGData::SelectCharacterServerResponse* request, ::CGData::CGVoidData* response) { return this->UploadCharcterServer(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::CGData::UploadCharcterServerRequest* request, ::CGData::UploadCharcterServerResponse* response) { return this->UploadCharcterServer(context, request, response); }));}
     void SetMessageAllocatorFor_UploadCharcterServer(
-        ::grpc::MessageAllocator< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>* allocator) {
+        ::grpc::MessageAllocator< ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_UploadCharcterServer() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* UploadCharcterServer(
-      ::grpc::CallbackServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_Publish : public BaseClass {
@@ -3110,7 +3110,7 @@ class CGRpcService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -3463,7 +3463,7 @@ class CGRpcService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -3866,7 +3866,7 @@ class CGRpcService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -4273,10 +4273,10 @@ class CGRpcService final {
     WithStreamedUnaryMethod_UploadCharcterServer() {
       ::grpc::Service::MarkMethodStreamed(10,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>(
+          ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::CGData::SelectCharacterServerResponse, ::CGData::CGVoidData>* streamer) {
+                     ::CGData::UploadCharcterServerRequest, ::CGData::UploadCharcterServerResponse>* streamer) {
                        return this->StreamedUploadCharcterServer(context,
                          streamer);
                   }));
@@ -4285,12 +4285,12 @@ class CGRpcService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::SelectCharacterServerResponse* /*request*/, ::CGData::CGVoidData* /*response*/) override {
+    ::grpc::Status UploadCharcterServer(::grpc::ServerContext* /*context*/, const ::CGData::UploadCharcterServerRequest* /*request*/, ::CGData::UploadCharcterServerResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedUploadCharcterServer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::SelectCharacterServerResponse,::CGData::CGVoidData>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedUploadCharcterServer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::CGData::UploadCharcterServerRequest,::CGData::UploadCharcterServerResponse>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Publish : public BaseClass {

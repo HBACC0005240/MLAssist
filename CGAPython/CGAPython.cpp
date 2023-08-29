@@ -925,9 +925,7 @@ bool CGAPython::SendPetMail(int index, int petid, int itempos, const std::string
 
 bool CGAPython::GetGameServerInfo(cga_game_server_info_t& info)
 {
-	bool bVal = false;
-	m_interface->GetGameServerInfo(info);
-	return bVal;
+	return m_interface->GetGameServerInfo(info);
 }
 
 //bool CGAPython::GetPetSkillsInfo1(std::vector<int>& tests)
