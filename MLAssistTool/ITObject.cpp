@@ -255,3 +255,19 @@ ITCGPetPictorialBook::ITCGPetPictorialBook(QString szName, int nType, quint64 ul
 ITCGPetPictorialBook::~ITCGPetPictorialBook()
 {
 }
+
+ITGameAttributeData::ITGameAttributeData()
+{
+
+}
+
+ITGameAttributeData::ITGameAttributeData(QString szName, int nType, quint64 ullID)
+	:ITObject(szName, nType, ullID)
+{
+
+}
+
+ITGameAttributeData::~ITGameAttributeData()
+{
+
+}

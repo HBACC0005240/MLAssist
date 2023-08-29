@@ -602,7 +602,7 @@ bool ITObjectDataMgr::LoadIdentification()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString sName = recordset->getStrValue("name");
 			QString identityCard = recordset->getStrValue("identityCard");
 			int sex = recordset->getIntValue("sex");
@@ -634,7 +634,7 @@ bool ITObjectDataMgr::LoadAccount()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString user = recordset->getStrValue("user");
 			QString passwd = recordset->getStrValue("passwd");
 			QString identification = recordset->getStrValue("identification");
@@ -666,9 +666,9 @@ bool ITObjectDataMgr::LoadAccountGid()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString gid = recordset->getStrValue("gid");
-			quint64 aid = (quint64)recordset->getIntValue("aid");
+			quint64 aid = recordset->getUInt64Value("aid");
 			QString sDesc = recordset->getStrValue("desc");	//详细信息 从item表拿
 			if (gid.isEmpty())
 			{
@@ -707,7 +707,7 @@ bool ITObjectDataMgr::LoadAccountRole()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString sGid = recordset->getStrValue("gid");
 			QString sName = recordset->getStrValue("name");
 			int objType = recordset->getIntValue("role_type");
@@ -819,8 +819,8 @@ bool ITObjectDataMgr::LoadGidItems()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
-			quint64 nChara_dbid = (quint64)recordset->getIntValue("character_id");//角色id
+			quint64 nID = recordset->getUInt64Value("id");
+			quint64 nChara_dbid = recordset->getUInt64Value("character_id");//角色id
 			QString sName = recordset->getStrValue("name");
 			int count = recordset->getIntValue("count");
 			int isbank = recordset->getIntValue("isbank");
@@ -879,8 +879,8 @@ bool ITObjectDataMgr::LoadGidPets()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
-			quint64 character_id = (quint64)recordset->getIntValue("character_id");
+			quint64 nID = recordset->getUInt64Value("id");
+			quint64 character_id = recordset->getUInt64Value("character_id");
 			QString sName = recordset->getStrValue("name");
 			QString realname = recordset->getStrValue("realname");
 			int objtype = recordset->getIntValue("type");
@@ -978,8 +978,8 @@ bool ITObjectDataMgr::LoadGidSkills()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
-			quint64 nChara_dbid = (quint64)recordset->getIntValue("linkid");//角色id
+			quint64 nID = recordset->getUInt64Value("id");
+			quint64 nChara_dbid = recordset->getUInt64Value("linkid");//角色id
 			QString sName = recordset->getStrValue("name");
 			QString sInfo = recordset->getStrValue("info");
 			int skillid = recordset->getIntValue("skillid");
@@ -1052,7 +1052,7 @@ bool ITObjectDataMgr::LoadItems()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString sName = recordset->getStrValue("name");
 			int nCode = recordset->getIntValue("code");
 			int nType = recordset->getIntValue("type");
@@ -1095,7 +1095,7 @@ bool ITObjectDataMgr::LoadPets()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString sName = recordset->getStrValue("name");
 			int nCode = recordset->getIntValue("code");
 			int raceType = recordset->getIntValue("raceType");
@@ -1160,7 +1160,7 @@ bool ITObjectDataMgr::LoadGateMaps()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString sName = recordset->getStrValue("name");
 			/*int nCode = recordset->getIntValue("code");
 			int nType = recordset->getIntValue("type");*/
@@ -1238,7 +1238,7 @@ bool ITObjectDataMgr::LoadMaps()
 	{
 		while (recordset->next())
 		{
-			quint64 nID = (quint64)recordset->getIntValue("id");
+			quint64 nID = recordset->getUInt64Value("id");
 			QString sName = recordset->getStrValue("name");
 			QString sDesc = recordset->getStrValue("desc");
 			int number = recordset->getIntValue("number");

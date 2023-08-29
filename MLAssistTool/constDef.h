@@ -2,18 +2,18 @@
 enum TObjectType
 {
 	TObject_None = 0,				//空
-	TObject_AccountIdentity = 0x100, //账号集合 某个人证件
-	TObject_Account = 0x110,		 //账号
-	TObject_AccountGid = 0x211,		 //账号子ID
-	TObject_GidRole = 0x300,		 //账号子ID角色 左右角色
-	TObject_GidRoleLeft = 0x301,	 //账号子ID角色 左右角色
-	TObject_GidRoleRight = 0x302,	 //账号子ID角色 左右角色
+	TObject_AccountIdentity = 0x100,//账号集合 某个人证件
+	TObject_Account = 0x110,		//账号
+	TObject_AccountGid = 0x211,		//账号子ID
+	TObject_GidRole = 0x300,		//账号子ID角色 左右角色
+	TObject_GidRoleLeft = 0x301,	//账号子ID角色 左右角色
+	TObject_GidRoleRight = 0x302,	//账号子ID角色 左右角色
 	TObject_CGPet = 0x1000,			//宠物
-	TObject_Pet = 0x1001,			 //宠物
+	TObject_Pet = 0x1001,			//宠物
 	TObject_BankPet = 0x1002,		//银行宠物
 	TObject_CharPet = 0x1003,		//角色宠物
 
-	TObject_CGItem = 0x1100,		 //道具
+	TObject_CGItem = 0x1100,		//道具
 	TObject_Item = 0x1101,			//道具信息
 	TObject_CharItem = 0x1110,		//角色道具信息
 	TObject_CharBankItem = 0x1111,	//银行道具	
@@ -25,9 +25,9 @@ enum TObjectType
 	TObject_CharSkill = 0x1201,		
 	TObject_CharPetSkill = 0x1202,		
 
-	TObject_RoleRunConfig = 0x4000,	 //账号子ID角色 左右角色
-	TObject_GateMap = 0x4200,		 //常用坐标
-	TObject_Map = 0x4300,			 //地图信息
+	TObject_RoleRunConfig = 0x4000,	//账号子ID角色 左右角色
+	TObject_GateMap = 0x4200,		//常用坐标
+	TObject_Map = 0x4300,			//地图信息
 	TObject_PetBook = 0x4400,		//宠物图鉴
 	TObject_CharServer = 0x4500,	//服务信息		
 

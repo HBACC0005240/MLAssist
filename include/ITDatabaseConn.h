@@ -36,6 +36,8 @@ public:
 	double getDoubleValue(const QString& strName);
 	QByteArray getByteData(const QString& strName);
 	int getBitValue(const QString& strName);
+	quint64 getUInt64Value(const QString& strName);
+	qint64 getInt64Value(const QString& strName);
 	bool next();
 public:
 	QSqlQueryPtr m_sqlquery;

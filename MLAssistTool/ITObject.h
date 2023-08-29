@@ -97,7 +97,7 @@ public:
 	(new ModuleName##Factory())
 #endif // !NEW_MODULE_FACTORY
 
-
+//! 对象基类
 class ITObject
 {
 public:
@@ -150,6 +150,7 @@ private:
 	QString m_sObjDesc;				//描述
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITObject)
+//! 游戏基础数据-人物、宠物共有数据
 class ITGameBaseData : public ITObject
 {
 public:
@@ -157,41 +158,53 @@ public:
 	ITGameBaseData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameBaseData();
 
-	int _level = 0;
-	int	_xp = 0;
-	int _maxxp = 0;
-	int _hp = 0;
+	int _level = 0;					//!< 等级
+	int	_xp = 0;					//!< 经验
+	int _maxxp = 0;					//!< 最大经验
+	int _hp = 0;					//!< 血
 	int _maxhp = 0;
 	int _mp = 0;
 	int _maxmp = 0;
 	int _health = 0;
-	int _points_remain = 0;
-	int _points_endurance = 0;
-	int _points_strength = 0;
-	int _points_defense = 0;
-	int _points_agility = 0;
-	int _points_magical = 0;
-	int _value_attack = 0;
-	int _value_defensive = 0;
-	int _value_agility = 0;
-	int _value_spirit = 0;
-	int _value_recovery = 0;
-	int _resist_poison = 0;
-	int _resist_sleep = 0;
-	int _resist_medusa = 0;
-	int _resist_drunk = 0;
-	int _resist_chaos = 0;
-	int _resist_forget = 0;
-	int _fix_critical = 0;
-	int _fix_strikeback = 0;
-	int _fix_accurancy = 0;
-	int _fix_dodge = 0;
-	int _element_earth = 0;
-	int _element_water = 0;
-	int _element_fire = 0;
-	int _element_wind = 0;
+	
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameBaseData)
+//! 游戏基础数据-人物、宠物共有数据
+class ITGameAttributeData : public ITObject
+{
+public:
+	ITGameAttributeData();
+	ITGameAttributeData(QString szName, int nType, quint64 ullID);
+	virtual ~ITGameAttributeData();
+	int _points_remain = 0;			//!< 未加点
+	int _points_endurance = 0;		//!< 体力
+	int _points_strength = 0;		//!< 力量
+	int _points_defense = 0;		//!< 防御
+	int _points_agility = 0;		//!< 敏捷
+	int _points_magical = 0;		//!< 魔法
+	int _value_attack = 0;			//!< 攻击力
+	int _value_defensive = 0;		//!< 防御力
+	int _value_agility = 0;			//!< 敏捷度
+	int _value_spirit = 0;			//!< 精神
+	int _value_recovery = 0;		//!< 恢复
+	int _resist_poison = 0;			//!< 抵抗-毒
+	int _resist_sleep = 0;			//!< 抵抗-睡
+	int _resist_medusa = 0;			//!< 抵抗-石
+	int _resist_drunk = 0;			//!< 抵抗-醉
+	int _resist_chaos = 0;			//!< 抵抗-混
+	int _resist_forget = 0;			//!< 抵抗-遗忘
+	int _fix_critical = 0;			//!< 必杀
+	int _fix_strikeback = 0;		//!< 反击
+	int _fix_accurancy = 0;			//!< 命中
+	int _fix_dodge = 0;				//!< 闪躲
+	int _element_earth = 0;			//!< 属性-地
+	int _element_water = 0;			//!< 属性-水
+	int _element_fire = 0;			//!< 属性-火
+	int _element_wind = 0;			//!< 属性-风
+	int _manu_endurance = 0;		//!< 耐力
+	int _manu_skillful = 0;			//!< 灵巧
+	int _manu_intelligence = 0;		//!< 智力
+};
 class ITGamePet : public ITGameBaseData
 {
 public:
@@ -202,7 +215,7 @@ public:
 	quint64 _character_id = 0;//角色绑定关系
 	QString _realName;		//宠物真实名称
 	int _loyality = 0;		//忠诚
-	int _petNumber = 0;	   //宠物编号
+	int _petNumber = 0;		//宠物编号
 	int _state = 0;			//当前状态 战斗 待命 休息
 	int _skillslots = 0;	//技能格
 	int _race = 0;			//种族
@@ -212,6 +225,7 @@ public:
 	int _pos = 0;
 	bool _bExist = true;	//是否存在
 
+	ITGameBaseData* _pBaseData;//当前属性
 	ITGameSkillList _skillList;
 	QMap<int, ITGameSkillPtr> _skillPosForSkill;
 };
@@ -361,9 +375,7 @@ public:
 	int _direction = 0;
 	int _punchclock = 0;
 	bool _usingpunchclock = false;
-	int _manu_endurance = 0;
-	int _manu_skillful = 0;
-	int _manu_intelligence = 0;
+
 	int _value_charisma = 0;
 	int _x = 0;
 	int _y = 0;

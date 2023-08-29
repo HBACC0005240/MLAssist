@@ -1,7 +1,6 @@
 #ifndef ITObjectDataMgr_H
 #define ITObjectDataMgr_H
 
-//#include "GlobalDefine.h"
 #include "ITDatabaseConn.h"
 #include "ITObject.h"
 #include <QIcon>
@@ -10,7 +9,6 @@
 #include <QTimer>
 #include "RpcSocket.h"
 #include <QMutex>
-//#include "GameCtrl.h"
 
 class ObjectModuleRegisty
 {

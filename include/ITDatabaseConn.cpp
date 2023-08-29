@@ -62,6 +62,32 @@ int ITRecordSet::getBitValue(const QString& strName)
 	return 0;
 }
 
+quint64 ITRecordSet::getUInt64Value(const QString& strName)
+{
+	if (m_sqlquery != NULL)
+	{
+		int nameCol = m_sqlquery->record().indexOf(strName);
+		if (nameCol != -1)
+		{
+			return m_sqlquery->value(nameCol).toULongLong();
+		}
+	}
+	return 0;
+}
+
+qint64 ITRecordSet::getInt64Value(const QString& strName)
+{
+	if (m_sqlquery != NULL)
+	{
+		int nameCol = m_sqlquery->record().indexOf(strName);
+		if (nameCol != -1)
+		{
+			return m_sqlquery->value(nameCol).toLongLong();
+		}
+	}
+	return 0;
+}
+
 float ITRecordSet::getFloatValue(const QString& strName)
 {
 	if (m_sqlquery != NULL)
