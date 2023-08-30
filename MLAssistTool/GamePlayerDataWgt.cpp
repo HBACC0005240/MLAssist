@@ -256,9 +256,9 @@ void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 			return;
 		qDebug() << m_curSelectObj;
 
-		if (GETDEVCLASS( m_curSelectObj->getObjectType()) != TObject_GidRole)
+		if (GETDEVCLASS( m_curSelectObj->getObjectType()) != TObject_Character)
 			return;
-		ITGidRolePtr pRole = qSharedPointerCast<ITGidRole>(m_curSelectObj);
+		ITGidRolePtr pRole = qSharedPointerCast<ITGameCharacter>(m_curSelectObj);
 		ui.lineEdit_gold->setText(QString::number(pRole->_gold));
 		ui.lineEdit_bankGold->setText(QString::number(pRole->_bankgold));
 		doUpdateBagItemTableWidget(pRole);
@@ -449,14 +449,14 @@ void GamePlayerDataWgt::doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePt
 			{
 				pos = i;
 			}
-			szHp = QString("%1/%2").arg(pPet->_hp).arg(pPet->_maxhp);
-			szMp = QString("%1/%2").arg(pPet->_mp).arg(pPet->_maxmp);
-			sLv = QString::number(pPet->_level);
-			sXp = QString("%1").arg(pPet->_maxxp - pPet->_xp);
-			sAttac = QString("%1").arg(pPet->_value_attack);
-			sDefensive = QString("%1").arg(pPet->_value_defensive);
-			sAgility = QString("%1").arg(pPet->_value_agility);
-			sSpirit = QString("%1").arg(pPet->_value_spirit);
+			szHp = QString("%1/%2").arg(pPet->_baseData->_hp).arg(pPet->_baseData->_maxhp);
+			szMp = QString("%1/%2").arg(pPet->_baseData->_mp).arg(pPet->_baseData->_maxmp);
+			sLv = QString::number(pPet->_baseData->_level);
+			sXp = QString("%1").arg(pPet->_baseData->_maxxp - pPet->_baseData->_xp);
+			sAttac = QString("%1").arg(pPet->_attrData->_value_attack);
+			sDefensive = QString("%1").arg(pPet->_attrData->_value_defensive);
+			sAgility = QString("%1").arg(pPet->_attrData->_value_agility);
+			sSpirit = QString("%1").arg(pPet->_attrData->_value_spirit);
 			sLoyality = QString("%1").arg(pPet->_loyality);
 
 			if (pPet->_grade >= 0)

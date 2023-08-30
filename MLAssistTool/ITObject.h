@@ -9,6 +9,8 @@
 
 
 class ITObject;
+class ITGameBaseData;
+class ITGameAttributeData;
 class ITGameItem;
 class ITGamePet;
 class ITGameMap;
@@ -16,12 +18,24 @@ class ITGameGateMap;
 class ITAccountIdentity;
 class ITAccount;
 class ITAccountGid;
-class ITGidRole;
+class ITGameCharacter;
 class ITCGPetPictorialBook;
 class ITGameSkill;
 class ITCharcterServer;
+class ITRouteNode;
+
+
 typedef QSharedPointer<ITObject> ITObjectPtr;
 typedef QList<ITObjectPtr> ITObjectList;
+
+typedef QSharedPointer<ITGameBaseData> ITGameBaseDataPtr;
+typedef QList<ITGameBaseDataPtr> ITGameBaseDataList; 
+
+typedef QSharedPointer<ITGameCharacter> ITGameCharacterPtr;
+typedef QList<ITGameCharacterPtr> ITGameCharacterList;
+
+typedef QSharedPointer<ITGameAttributeData> ITGameAttributeDataPtr;
+typedef QList<ITGameAttributeDataPtr> ITGameAttributeDataList;
 
 typedef QSharedPointer<ITGameItem> ITGameItemPtr;
 typedef QList<ITGameItemPtr> ITGameItemList;
@@ -47,14 +61,21 @@ typedef QList<ITAccountPtr> ITAccountList;
 typedef QSharedPointer<ITAccountGid> ITAccountGidPtr;
 typedef QList<ITAccountGidPtr> ITAccountGidList;
 
-typedef QSharedPointer<ITGidRole> ITGidRolePtr;
+typedef QSharedPointer<ITGameCharacter> ITGidRolePtr;
 typedef QList<ITGidRolePtr> ITGidRoleList;
 
 typedef QSharedPointer<ITGameSkill> ITGameSkillPtr;
 typedef QList<ITGameSkillPtr> ITGameSkillList;
+
 typedef QSharedPointer<ITCharcterServer> ITCharcterServerPtr;
 typedef QList<ITCharcterServer> ITCharcterServerList;
 
+typedef QSharedPointer<ITRouteNode> ITRouteNodePtr;
+typedef QList<ITRouteNodePtr> ITRouteNodeList;
+
+Q_DECLARE_METATYPE(ITObjectPtr)
+Q_DECLARE_METATYPE(ITGameAttributeDataPtr)
+Q_DECLARE_METATYPE(ITGameBaseDataPtr)
 Q_DECLARE_METATYPE(ITGameItemPtr)
 Q_DECLARE_METATYPE(ITGamePetPtr)
 Q_DECLARE_METATYPE(ITGameMapPtr)
@@ -162,11 +183,13 @@ public:
 	int	_xp = 0;					//!< 经验
 	int _maxxp = 0;					//!< 最大经验
 	int _hp = 0;					//!< 血
-	int _maxhp = 0;
-	int _mp = 0;
-	int _maxmp = 0;
-	int _health = 0;
-	
+	int _maxhp = 0;					//!< 最大血
+	int _mp = 0;					//!< 魔
+	int _maxmp = 0;					//!< 最大魔
+	int _health = 0;				//!< 健康
+	int _skillslots = 0;			//!< 技能格
+	int _imageid = 0;				//!< 图片id
+
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameBaseData)
 //! 游戏基础数据-人物、宠物共有数据
@@ -205,7 +228,9 @@ public:
 	int _manu_skillful = 0;			//!< 灵巧
 	int _manu_intelligence = 0;		//!< 智力
 };
-class ITGamePet : public ITGameBaseData
+DECLARE_OBJECT_MODULE_FACTORY(ITGameAttributeData)
+
+class ITGamePet : public ITObject
 {
 public:
 	ITGamePet();
@@ -217,15 +242,15 @@ public:
 	int _loyality = 0;		//忠诚
 	int _petNumber = 0;		//宠物编号
 	int _state = 0;			//当前状态 战斗 待命 休息
-	int _skillslots = 0;	//技能格
 	int _race = 0;			//种族
 	int _grade = 0;			//档次
 	int _lossMinGrade = 0;	//最少掉档
 	int _lossMaxGrade = 0;	//最多掉档
-	int _pos = 0;
+	int _pos = 0;			//!< 宠物位置
 	bool _bExist = true;	//是否存在
 
-	ITGameBaseData* _pBaseData;//当前属性
+	ITGameBaseDataPtr _baseData = nullptr;		//!< 宠物相关信息
+	ITGameAttributeDataPtr _attrData = nullptr;	//!< 宠物属性
 	ITGameSkillList _skillList;
 	QMap<int, ITGameSkillPtr> _skillPosForSkill;
 };
@@ -250,6 +275,7 @@ public:
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameItem)
 
+//! 游戏地图信息
 class ITGameMap : public ITObject
 {
 public:
@@ -264,6 +290,7 @@ public:
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameMap)
 
+//! 传送点位信息
 class ITGameGateMap : public ITObject
 {
 public:
@@ -290,9 +317,7 @@ public:
 };
 
 DECLARE_OBJECT_MODULE_FACTORY(ITGameGateMap)
-class ITRouteNode;
-typedef QSharedPointer<ITRouteNode> ITRouteNodePtr;
-typedef QList<ITRouteNodePtr> ITRouteNodeList;
+
 
 struct ITRouteNode
 {
@@ -301,6 +326,7 @@ struct ITRouteNode
 	ITGameGateMapPtr cur = nullptr;
 	int nTotalCost = 0;
 };
+//! 游戏类型
 class ITLoginGameType : public ITObject
 {
 public:
@@ -348,58 +374,52 @@ public:
 
 DECLARE_OBJECT_MODULE_FACTORY(ITAccountGid)
 //游戏角色
-class ITGidRole : public ITGameBaseData
+class ITGameCharacter : public ITObject
 {
 public:
-	ITGidRole();
-	ITGidRole(QString szName, int nType, quint64 ullID);
-	virtual ~ITGidRole();
+	ITGameCharacter();
+	ITGameCharacter(QString szName, int nType, quint64 ullID);
+	virtual ~ITGameCharacter();
 
-	QString _gid;
-	int _type = 0;
-	int _imageid = 0;
-	int	_sex = 0;
-	int	_gold = 0;
-	int	_bankgold = 0;
-	int _souls = 0;
-	int _score = 0;
-	QString	_job;
-	QString _nickName;
-	int _useTitle = 0;
-	QStringList	_titles;
-	int _skillslots = 0;
-	int _avatar_id = 0;
-	int _unitid = 0;
-	int _petid = 0;
-	bool _petriding = false;
-	int _direction = 0;
-	int _punchclock = 0;
-	bool _usingpunchclock = false;
+	QString _gid;				//!< 游戏gid
+	int _type = 0;				//!< 左右角色
+	int	_sex = 0;				//!< 男女人物
+	int	_gold = 0;				//!< 金币
+	int	_bankgold = 0;			//!< 银行金币
+	int _souls = 0;				//!< 灵魂
+	int _score = 0;				//!< 战绩
+	QString	_job;				//!< 职业
+	QString _nickName;			//!< 自定称号
+	int _useTitle = 0;			//!< 当前使用的称号index
+	QStringList	_titles;		//!< 称号列表
+	int _avatar_id = 0;			//!< 
+	int _unitid = 0;			//!< 
+	int _petid = 0;				//!< 当前宠物id
+	bool _petriding = false;	//!< 是否骑乘中
+	int _direction = 0;			//!< 人物朝向
+	int _punchclock = 0;		//!< 卡时
+	bool _usingpunchclock = false;//!< 未使用卡时
 
-	int _value_charisma = 0;
-	int _x = 0;
-	int _y = 0;
-	int battle_position = 0;
-	QString _map_name = "";
-	int _map_number = 0;
-	int _server_line = 0;
-	int _big_line = 0;	//电信 网通
-
-	ITGamePetList _petList;	  //所有宠物信息
-	ITGameItemList _itemList; //所有道具信息
-	ITGameSkillList _skillList;
-	QMap<int, ITGamePetPtr> _petPosForPet;//宠物位置和指针映射
-	QMap<int, ITGameSkillPtr> _skillPosForSkill;
-
-
-	QMap<int, ITGameItemPtr> _itemPosForPtr;//物品id和物品指针映射
+	int _value_charisma = 0;	//!< 魅力
+	int _x = 0;					//!< 当前x坐标
+	int _y = 0;					//!< 当前y坐标
+	int battle_position = 0;	//!< 战斗站位
+	QString _map_name = "";		//!< 当前地图名称
+	int _map_number = 0;		//!< 当前地图编号
+	int _server_line = 0;		//!< 当前游戏线路
+	int _big_line = 0;			//!< 当前服务器-电信13|网通14
+	ITGameBaseDataPtr _baseData=nullptr;		//!< 角色相关信息
+	ITGameAttributeDataPtr _attrData=nullptr;	//!< 角色属性
+	QMap<int, ITGamePetPtr> _petPosForPet;		//!< 宠物位置和指针映射
+	QMap<int, ITGameSkillPtr> _skillPosForSkill;//!< 技能位置和技能映射
+	QMap<int, ITGameItemPtr> _itemPosForPtr;	//!< 物品id和物品指针映射
 	QMap<QString, ITGameItemPtr> _bankItemNameForPtr;//银行物品名称和物品指针映射
-	QMutex _mutex;
-	QTime _lastUploadTime;		//最后一次上传时间
-	int _connectState = 0; //0离线 1在线
+	QMutex _mutex;				//!< 加锁
+	QTime _lastUploadTime;		//!< 最后一次上传时间
+	int _connectState = 0;		//!< 0离线 1在线
 };
 
-DECLARE_OBJECT_MODULE_FACTORY(ITGidRole)
+DECLARE_OBJECT_MODULE_FACTORY(ITGameCharacter)
 
 class ITGameSkill :public ITObject
 {
@@ -409,15 +429,15 @@ public:
 	virtual ~ITGameSkill();
 
 	QString _info;			//技能介绍
-	int _id = 0;				//技能id
+	int _id = 0;			//技能id
 	int _cost = 0;			//耗魔
 	int _flags = 0;			//
 	int _index = 0;			//技能位置
 	int _level = 0;			//等级
 	int _maxLevel = 0;		//最高等级
-	bool _available = 0;		//是否可用
-	int _xp = 0;
-	int _maxxp = 0;
+	bool _available = 0;	//是否可用
+	int _xp = 0;			//!< 技能经验
+	int _maxxp = 0;			//!< 技能下一级经验
 	bool _bExist = true;	//是否存在
 
 	ITGameSkillList _subskills; //技能子项
@@ -440,7 +460,7 @@ public:
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITAccountGidRoleRunConfig)
 
-
+//! 宠物图鉴信息和算档信息
 class ITCGPetPictorialBook : public ITObject
 {
 public:
@@ -456,9 +476,9 @@ public:
 	int _growDefense = 0;  //防御成长
 	int _growAgility = 0;  //敏捷成长
 	int _growMagic = 0;	   //魔法成长
-	int _canCatch = 0;	//0=不可捕捉，1=可以捕捉
-	int _cardType = 0;	// 0 = 无，1 = 银卡，2 = 金卡
-	int _imageId = 0;	//图片id
+	int _canCatch = 0;		//0=不可捕捉，1=可以捕捉
+	int _cardType = 0;		// 0 = 无，1 = 银卡，2 = 金卡
+	int _imageId = 0;		//图片id
 	int _skillCount = 0;	//技能格
 	int _elementEarth = 0;	//地
 	int _elementWater = 0;	//水

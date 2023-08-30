@@ -71,7 +71,7 @@ QVariant ITTableModel::data(const QModelIndex& index, int role) const
 		{
 		case 0: return nrow+1;
 		case 1: return pRole->getObjectName();							//名称
-		case 2: return pRole->_level;									//等级
+		case 2: return pRole->_baseData->_level;									//等级
 		case 3: return pRole->_gold;									//金币
 		case 4: return pRole->_map_name;								//地图
 		case 5: return QString("%1,%2").arg(pRole->_x).arg(pRole->_y);	//坐标

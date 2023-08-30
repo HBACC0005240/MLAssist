@@ -56,6 +56,7 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	qRegisterMetaType<ITGameSkillPtr>("ITGameGateMapPtr");
 	qRegisterMetaType<ITAccountIdentityPtr>("ITAccountIdentityPtr");
 	qRegisterMetaType<ITCharcterServerPtr>("ITCharcterServerPtr");
+	qRegisterMetaType<ITGameCharacterPtr>("ITGameCharacterPtr");
 
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_GateMap, NEW_MODULE_FACTORY(ITGameGateMap));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_PetBook, NEW_MODULE_FACTORY(ITCGPetPictorialBook));
@@ -63,9 +64,9 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_AccountIdentity, NEW_MODULE_FACTORY(ITAccountIdentity));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Account, NEW_MODULE_FACTORY(ITAccount));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_AccountGid, NEW_MODULE_FACTORY(ITAccountGid));
-	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_GidRole, NEW_MODULE_FACTORY(ITGidRole));
-	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_GidRoleLeft, NEW_MODULE_FACTORY(ITGidRole));
-	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_GidRoleRight, NEW_MODULE_FACTORY(ITGidRole));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Character, NEW_MODULE_FACTORY(ITGameCharacter));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharacterLeft, NEW_MODULE_FACTORY(ITGameCharacter));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharacterRight, NEW_MODULE_FACTORY(ITGameCharacter));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_RoleRunConfig, NEW_MODULE_FACTORY(ITAccountGidRoleRunConfig));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Pet, NEW_MODULE_FACTORY(ITGamePet));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CGPet, NEW_MODULE_FACTORY(ITGamePet));
@@ -717,7 +718,7 @@ bool ITObjectDataMgr::LoadAccountRole()
 			}
 			if (objType == 0 )
 			{
-				objType = TObject_GidRole;
+				objType = TObject_Character;
 			}
 			ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 			if (pGid == nullptr)
@@ -729,7 +730,7 @@ bool ITObjectDataMgr::LoadAccountRole()
 				pGid->_userGid = sGid;
 				m_idForAccountGid.insert(sGid, pGid);
 			}
-			ITGidRolePtr pCharacter = newOneObject(objType, nID).dynamicCast<ITGidRole>();
+			ITGidRolePtr pCharacter = newOneObject(objType, nID).dynamicCast<ITGameCharacter>();
 			if (pCharacter)
 			{
 				if (pGid)
@@ -738,52 +739,52 @@ bool ITObjectDataMgr::LoadAccountRole()
 					pCharacter->setObjectParent(pGid);
 				}
 				pCharacter->_gid = sGid;
-				pCharacter->_level = recordset->getIntValue("level");
+				pCharacter->_baseData->_level = recordset->getIntValue("level");
 				pCharacter->_type = recordset->getIntValue("type");
-				pCharacter->_imageid = recordset->getIntValue("imageid");
+				pCharacter->_baseData->_imageid = recordset->getIntValue("imageid");
 				pCharacter->_sex = recordset->getIntValue("sex");
 				pCharacter->_gold = recordset->getIntValue("gold");
 				pCharacter->_bankgold = recordset->getIntValue("bankgold");
-				pCharacter->_xp = recordset->getIntValue("xp");
-				pCharacter->_maxxp = recordset->getIntValue("maxxp");
-				pCharacter->_hp = recordset->getIntValue("hp");
-				pCharacter->_maxhp = recordset->getIntValue("maxhp");
-				pCharacter->_mp = recordset->getIntValue("mp");
-				pCharacter->_maxmp = recordset->getIntValue("maxmp");
+				pCharacter->_baseData->_xp = recordset->getIntValue("xp");
+				pCharacter->_baseData->_maxxp = recordset->getIntValue("maxxp");
+				pCharacter->_baseData->_hp = recordset->getIntValue("hp");
+				pCharacter->_baseData->_maxhp = recordset->getIntValue("maxhp");
+				pCharacter->_baseData->_mp = recordset->getIntValue("mp");
+				pCharacter->_baseData->_maxmp = recordset->getIntValue("maxmp");
 				pCharacter->_score = recordset->getIntValue("score");
 				pCharacter->_job = recordset->getStrValue("job");
 				pCharacter->_useTitle = recordset->getIntValue("useTitle");
 				pCharacter->_titles = recordset->getStrValue("titles").split("|");
-				pCharacter->_skillslots = recordset->getIntValue("skillslots");
-				pCharacter->_manu_endurance = recordset->getIntValue("manu_endurance");
-				pCharacter->_manu_skillful = recordset->getIntValue("manu_skillful");
-				pCharacter->_manu_intelligence = recordset->getIntValue("manu_intelligence");
+				pCharacter->_baseData->_skillslots = recordset->getIntValue("skillslots");
+				pCharacter->_attrData->_manu_endurance = recordset->getIntValue("manu_endurance");
+				pCharacter->_attrData->_manu_skillful = recordset->getIntValue("manu_skillful");
+				pCharacter->_attrData->_manu_intelligence = recordset->getIntValue("manu_intelligence");
 				pCharacter->_value_charisma = recordset->getIntValue("value_charisma");
-				pCharacter->_points_endurance = recordset->getIntValue("points_endurance");
-				pCharacter->_points_strength = recordset->getIntValue("points_strength");
-				pCharacter->_points_defense = recordset->getIntValue("points_defense");
-				pCharacter->_points_agility = recordset->getIntValue("points_agility");
-				pCharacter->_points_magical = recordset->getIntValue("points_magical");
-				pCharacter->_value_attack = recordset->getIntValue("value_attack");
-				pCharacter->_value_defensive = recordset->getIntValue("value_defensive");
-				pCharacter->_value_agility = recordset->getIntValue("value_agility");
-				pCharacter->_value_spirit = recordset->getIntValue("value_spirit");
-				pCharacter->_value_recovery = recordset->getIntValue("value_recovery");
-				pCharacter->_resist_poison = recordset->getIntValue("resist_poison");
-				pCharacter->_resist_sleep = recordset->getIntValue("resist_sleep");
-				pCharacter->_resist_medusa = recordset->getIntValue("resist_medusa");
-				pCharacter->_resist_drunk = recordset->getIntValue("resist_drunk");
-				pCharacter->_resist_chaos = recordset->getIntValue("resist_chaos");
-				pCharacter->_resist_forget = recordset->getIntValue("resist_forget");
-				pCharacter->_fix_critical = recordset->getIntValue("fix_critical");
-				pCharacter->_fix_strikeback = recordset->getIntValue("fix_strikeback");
-				pCharacter->_fix_accurancy = recordset->getIntValue("fix_accurancy");
-				pCharacter->_fix_dodge = recordset->getIntValue("fix_dodge");
-				pCharacter->_element_earth = recordset->getIntValue("element_earth");
-				pCharacter->_element_water = recordset->getIntValue("element_water");
-				pCharacter->_element_fire = recordset->getIntValue("element_fire");
-				pCharacter->_element_wind = recordset->getIntValue("element_wind");
-				pCharacter->_points_remain = recordset->getIntValue("points_remain");
+				pCharacter->_attrData->_points_endurance = recordset->getIntValue("points_endurance");
+				pCharacter->_attrData->_points_strength = recordset->getIntValue("points_strength");
+				pCharacter->_attrData->_points_defense = recordset->getIntValue("points_defense");
+				pCharacter->_attrData->_points_agility = recordset->getIntValue("points_agility");
+				pCharacter->_attrData->_points_magical = recordset->getIntValue("points_magical");
+				pCharacter->_attrData->_value_attack = recordset->getIntValue("value_attack");
+				pCharacter->_attrData->_value_defensive = recordset->getIntValue("value_defensive");
+				pCharacter->_attrData->_value_agility = recordset->getIntValue("value_agility");
+				pCharacter->_attrData->_value_spirit = recordset->getIntValue("value_spirit");
+				pCharacter->_attrData->_value_recovery = recordset->getIntValue("value_recovery");
+				pCharacter->_attrData->_resist_poison = recordset->getIntValue("resist_poison");
+				pCharacter->_attrData->_resist_sleep = recordset->getIntValue("resist_sleep");
+				pCharacter->_attrData->_resist_medusa = recordset->getIntValue("resist_medusa");
+				pCharacter->_attrData->_resist_drunk = recordset->getIntValue("resist_drunk");
+				pCharacter->_attrData->_resist_chaos = recordset->getIntValue("resist_chaos");
+				pCharacter->_attrData->_resist_forget = recordset->getIntValue("resist_forget");
+				pCharacter->_attrData->_fix_critical = recordset->getIntValue("fix_critical");
+				pCharacter->_attrData->_fix_strikeback = recordset->getIntValue("fix_strikeback");
+				pCharacter->_attrData->_fix_accurancy = recordset->getIntValue("fix_accurancy");
+				pCharacter->_attrData->_fix_dodge = recordset->getIntValue("fix_dodge");
+				pCharacter->_attrData->_element_earth = recordset->getIntValue("element_earth");
+				pCharacter->_attrData->_element_water = recordset->getIntValue("element_water");
+				pCharacter->_attrData->_element_fire = recordset->getIntValue("element_fire");
+				pCharacter->_attrData->_element_wind = recordset->getIntValue("element_wind");
+				pCharacter->_attrData->_points_remain = recordset->getIntValue("points_remain");
 				pCharacter->_lastUploadTime.restart();
 				pCharacter->_connectState = 0;
 				pCharacter->setObjectName(sName);						
@@ -837,7 +838,7 @@ bool ITObjectDataMgr::LoadGidItems()
 				pItem->setObjectCode(item_id);
 				pItem->setObjectID(nID);
 
-				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
+				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGameCharacter>();
 				if (!pGidRole)//查找道具相关的角色 没找到 则删除当前道具对象
 				{
 					if (!m_pDelObjectList.contains(nID))
@@ -891,53 +892,53 @@ bool ITObjectDataMgr::LoadGidPets()
 
 				pObj->_character_id = character_id;
 				pObj->_realName = realname;
-				pObj->_level = recordset->getIntValue("level");
+				pObj->_baseData->_level = recordset->getIntValue("level");
 				pObj->_state = recordset->getIntValue("state");
-				pObj->_health = recordset->getIntValue("health");			
+				pObj->_baseData->_health = recordset->getIntValue("health");			
 				pObj->_loyality = recordset->getIntValue("loyality");			
 				pObj->_race = recordset->getIntValue("race");			
 				pObj->_grade = recordset->getIntValue("grade");			
 				pObj->_lossMinGrade = recordset->getIntValue("lossMinGrade");			
 				pObj->_lossMaxGrade = recordset->getIntValue("lossMaxGrade");			
-				pObj->_xp = recordset->getIntValue("xp");
-				pObj->_maxxp = recordset->getIntValue("maxxp");
-				pObj->_hp = recordset->getIntValue("hp");
-				pObj->_maxhp = recordset->getIntValue("maxhp");
-				pObj->_mp = recordset->getIntValue("mp");
-				pObj->_maxmp = recordset->getIntValue("maxmp");
-				pObj->_skillslots = recordset->getIntValue("skillslots");
-				pObj->_points_endurance = recordset->getIntValue("points_endurance");
-				pObj->_points_strength = recordset->getIntValue("points_strength");
-				pObj->_points_defense = recordset->getIntValue("points_defense");
-				pObj->_points_agility = recordset->getIntValue("points_agility");
-				pObj->_points_magical = recordset->getIntValue("points_magical");
-				pObj->_value_attack = recordset->getIntValue("value_attack");
-				pObj->_value_defensive = recordset->getIntValue("value_defensive");
-				pObj->_value_agility = recordset->getIntValue("value_agility");
-				pObj->_value_spirit = recordset->getIntValue("value_spirit");
-				pObj->_value_recovery = recordset->getIntValue("value_recovery");
-				pObj->_resist_poison = recordset->getIntValue("resist_poison");
-				pObj->_resist_sleep = recordset->getIntValue("resist_sleep");
-				pObj->_resist_medusa = recordset->getIntValue("resist_medusa");
-				pObj->_resist_drunk = recordset->getIntValue("resist_drunk");
-				pObj->_resist_chaos = recordset->getIntValue("resist_chaos");
-				pObj->_resist_forget = recordset->getIntValue("resist_forget");
-				pObj->_fix_critical = recordset->getIntValue("fix_critical");
-				pObj->_fix_strikeback = recordset->getIntValue("fix_strikeback");
-				pObj->_fix_accurancy = recordset->getIntValue("fix_accurancy");
-				pObj->_fix_dodge = recordset->getIntValue("fix_dodge");
-				pObj->_element_earth = recordset->getIntValue("element_earth");
-				pObj->_element_water = recordset->getIntValue("element_water");
-				pObj->_element_fire = recordset->getIntValue("element_fire");
-				pObj->_element_wind = recordset->getIntValue("element_wind");
-				pObj->_points_remain = recordset->getIntValue("points_remain");
+				pObj->_baseData->_xp = recordset->getIntValue("xp");
+				pObj->_baseData->_maxxp = recordset->getIntValue("maxxp");
+				pObj->_baseData->_hp = recordset->getIntValue("hp");
+				pObj->_baseData->_maxhp = recordset->getIntValue("maxhp");
+				pObj->_baseData->_mp = recordset->getIntValue("mp");
+				pObj->_baseData->_maxmp = recordset->getIntValue("maxmp");
+				pObj->_baseData->_skillslots = recordset->getIntValue("skillslots");
+				pObj->_attrData->_points_endurance = recordset->getIntValue("points_endurance");
+				pObj->_attrData->_points_strength = recordset->getIntValue("points_strength");
+				pObj->_attrData->_points_defense = recordset->getIntValue("points_defense");
+				pObj->_attrData->_points_agility = recordset->getIntValue("points_agility");
+				pObj->_attrData->_points_magical = recordset->getIntValue("points_magical");
+				pObj->_attrData->_value_attack = recordset->getIntValue("value_attack");
+				pObj->_attrData->_value_defensive = recordset->getIntValue("value_defensive");
+				pObj->_attrData->_value_agility = recordset->getIntValue("value_agility");
+				pObj->_attrData->_value_spirit = recordset->getIntValue("value_spirit");
+				pObj->_attrData->_value_recovery = recordset->getIntValue("value_recovery");
+				pObj->_attrData->_resist_poison = recordset->getIntValue("resist_poison");
+				pObj->_attrData->_resist_sleep = recordset->getIntValue("resist_sleep");
+				pObj->_attrData->_resist_medusa = recordset->getIntValue("resist_medusa");
+				pObj->_attrData->_resist_drunk = recordset->getIntValue("resist_drunk");
+				pObj->_attrData->_resist_chaos = recordset->getIntValue("resist_chaos");
+				pObj->_attrData->_resist_forget = recordset->getIntValue("resist_forget");
+				pObj->_attrData->_fix_critical = recordset->getIntValue("fix_critical");
+				pObj->_attrData->_fix_strikeback = recordset->getIntValue("fix_strikeback");
+				pObj->_attrData->_fix_accurancy = recordset->getIntValue("fix_accurancy");
+				pObj->_attrData->_fix_dodge = recordset->getIntValue("fix_dodge");
+				pObj->_attrData->_element_earth = recordset->getIntValue("element_earth");
+				pObj->_attrData->_element_water = recordset->getIntValue("element_water");
+				pObj->_attrData->_element_fire = recordset->getIntValue("element_fire");
+				pObj->_attrData->_element_wind = recordset->getIntValue("element_wind");
+				pObj->_attrData->_points_remain = recordset->getIntValue("points_remain");
 				pObj->_pos = recordset->getIntValue("pos");
 
 				pObj->setObjectName(sName);
 				//	pObj->setObjectDsec(sDesc);
 				//	pObj->setObjectCode(nCode);
 				pObj->setObjectID(nID);
-				ITGidRolePtr pGidRole = FindObject(character_id).dynamicCast<ITGidRole>();
+				ITGidRolePtr pGidRole = FindObject(character_id).dynamicCast<ITGameCharacter>();
 				if (!pGidRole)
 				{
 					if (!m_pDelObjectList.contains(nID))
@@ -1010,7 +1011,7 @@ bool ITObjectDataMgr::LoadGidSkills()
 				pObj->setObjectCode(skillid);
 				pObj->setObjectID(nID);
 
-				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGidRole>();
+				ITGidRolePtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGameCharacter>();
 				if (!pGidRole)
 				{
 					if (!m_pDelObjectList.contains(nID))
@@ -1410,7 +1411,7 @@ bool ITObjectDataMgr::deleteOneDeviceFromDB(ITObjectPtr pObj)
 		strSql = QString("DELETE FROM gateMap WHERE id=%1").arg((int)pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (GETDEVCLASS(objType) == TObject_GidRole)
+	else if (GETDEVCLASS(objType) == TObject_Character)
 	{
 		strSql = QString("DELETE FROM character WHERE id=%1").arg((int)pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -1623,23 +1624,23 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 			" VALUES(%1,'%2','%3',%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
 			"%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31,%32,%33,%34,%35,%36,%37,%38,%39,%40,%41,%42,%43,%44,%45,%46)")
 			.arg((int)char_id).arg(tmpObj->getObjectName())
-			.arg(tmpObj->_realName).arg(tmpObj->_level).arg(tmpObj->_hp).arg(tmpObj->_maxhp).arg(tmpObj->_mp)\
-			.arg(tmpObj->_maxmp).arg(tmpObj->_xp).arg(tmpObj->_maxxp).arg(tmpObj->_loyality).arg(tmpObj->_health).arg(tmpObj->_state)
-			.arg(tmpObj->_skillslots).arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
-			.arg(tmpObj->_points_remain).arg(tmpObj->_points_endurance)\
-			.arg(tmpObj->_points_strength).arg(tmpObj->_points_defense).arg(tmpObj->_points_agility).arg(tmpObj->_points_magical).arg(tmpObj->_value_attack)\
-			.arg(tmpObj->_value_defensive).arg(tmpObj->_value_agility).arg(tmpObj->_value_spirit).arg(tmpObj->_value_recovery).arg(tmpObj->_resist_poison)\
-			.arg(tmpObj->_resist_sleep).arg(tmpObj->_resist_medusa).arg(tmpObj->_resist_drunk).arg(tmpObj->_resist_chaos).arg(tmpObj->_resist_forget)\
-			.arg(tmpObj->_fix_critical).arg(tmpObj->_fix_strikeback).arg(tmpObj->_fix_accurancy).arg(tmpObj->_fix_dodge)
-			.arg(tmpObj->_element_earth).arg(tmpObj->_element_water).arg(tmpObj->_element_fire).arg(tmpObj->_element_wind)
+			.arg(tmpObj->_realName).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
+			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_loyality).arg(tmpObj->_baseData->_health).arg(tmpObj->_state)
+			.arg(tmpObj->_baseData->_skillslots).arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
+			.arg(tmpObj->_attrData->_points_remain).arg(tmpObj->_attrData->_points_endurance)\
+			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
+			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
+			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
+			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
+			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind)
 			.arg(tmpObj->getObjectType()).arg(tmpObj->_pos)
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (GETDEVCLASS(objType) == TObject_GidRole)
+	else if (GETDEVCLASS(objType) == TObject_Character)
 	{
 		QString szOwnCode;
-		auto tmpObj = pObj.dynamicCast<ITGidRole>();
+		auto tmpObj = pObj.dynamicCast<ITGameCharacter>();
 		QMutexLocker locker(&tmpObj->_mutex);
 		strSql = QString("INSERT INTO character(gid,type,name,level,imageid,sex,gold,bankgold,xp,"
 			"maxxp,hp,maxhp,mp,maxmp,score,job,useTitle,titles,skillslots,manu_endurance,manu_skillful,"
@@ -1649,15 +1650,15 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 			"fix_dodge,element_earth,element_water,element_fire,element_wind,points_remain,id,role_type)"
 			" VALUES('%1',%2,'%3',%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,'%16',%17,'%18',"
 			"%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31,%32,%33,%34,%35,%36,%37,%38,%39,%40,%41,%42,%43,%44,%45,%46,%47,%48,%49,%50)")
-			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_level).arg(tmpObj->_imageid).arg(tmpObj->_sex)
-			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_xp).arg(tmpObj->_maxxp).arg(tmpObj->_hp).arg(tmpObj->_maxhp).arg(tmpObj->_mp)\
-			.arg(tmpObj->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_skillslots)\
-			.arg(tmpObj->_manu_endurance).arg(tmpObj->_manu_skillful).arg(tmpObj->_manu_intelligence).arg(tmpObj->_value_charisma).arg(tmpObj->_points_endurance)\
-			.arg(tmpObj->_points_strength).arg(tmpObj->_points_defense).arg(tmpObj->_points_agility).arg(tmpObj->_points_magical).arg(tmpObj->_value_attack)\
-			.arg(tmpObj->_value_defensive).arg(tmpObj->_value_agility).arg(tmpObj->_value_spirit).arg(tmpObj->_value_recovery).arg(tmpObj->_resist_poison)\
-			.arg(tmpObj->_resist_sleep).arg(tmpObj->_resist_medusa).arg(tmpObj->_resist_drunk).arg(tmpObj->_resist_chaos).arg(tmpObj->_resist_forget)\
-			.arg(tmpObj->_fix_critical).arg(tmpObj->_fix_strikeback).arg(tmpObj->_fix_accurancy).arg(tmpObj->_fix_dodge)
-			.arg(tmpObj->_element_earth).arg(tmpObj->_element_water).arg(tmpObj->_element_fire).arg(tmpObj->_element_wind).arg(tmpObj->_points_remain)
+			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_imageid).arg(tmpObj->_sex)
+			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
+			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_baseData->_skillslots)\
+			.arg(tmpObj->_attrData->_manu_endurance).arg(tmpObj->_attrData->_manu_skillful).arg(tmpObj->_attrData->_manu_intelligence).arg(tmpObj->_value_charisma).arg(tmpObj->_attrData->_points_endurance)\
+			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
+			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
+			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
+			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
+			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind).arg(tmpObj->_attrData->_points_remain)
 			.arg((int)tmpObj->getObjectID()).arg(tmpObj->getObjectType());
 		bret = m_dbconn->execSql(strSql);
 	}
@@ -1821,15 +1822,15 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			"fix_critical=%36,fix_strikeback=%37,fix_accurancy=%38,fix_dodge=%39,element_earth=%40,element_water=%41,element_fire=%42,"
 			"element_wind=%43,type=%44,pos=%45   WHERE id=%46")
 			.arg((int)char_id).arg(tmpObj->getObjectName())
-			.arg(tmpObj->_realName).arg(tmpObj->_level).arg(tmpObj->_hp).arg(tmpObj->_maxhp).arg(tmpObj->_mp)\
-			.arg(tmpObj->_maxmp).arg(tmpObj->_xp).arg(tmpObj->_maxxp).arg(tmpObj->_loyality).arg(tmpObj->_health).arg(tmpObj->_state)
-			.arg(tmpObj->_skillslots).arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
-			.arg(tmpObj->_points_remain).arg(tmpObj->_points_endurance)\
-			.arg(tmpObj->_points_strength).arg(tmpObj->_points_defense).arg(tmpObj->_points_agility).arg(tmpObj->_points_magical).arg(tmpObj->_value_attack)\
-			.arg(tmpObj->_value_defensive).arg(tmpObj->_value_agility).arg(tmpObj->_value_spirit).arg(tmpObj->_value_recovery).arg(tmpObj->_resist_poison)\
-			.arg(tmpObj->_resist_sleep).arg(tmpObj->_resist_medusa).arg(tmpObj->_resist_drunk).arg(tmpObj->_resist_chaos).arg(tmpObj->_resist_forget)\
-			.arg(tmpObj->_fix_critical).arg(tmpObj->_fix_strikeback).arg(tmpObj->_fix_accurancy).arg(tmpObj->_fix_dodge)
-			.arg(tmpObj->_element_earth).arg(tmpObj->_element_water).arg(tmpObj->_element_fire).arg(tmpObj->_element_wind)
+			.arg(tmpObj->_realName).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
+			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_loyality).arg(tmpObj->_baseData->_health).arg(tmpObj->_state)
+			.arg(tmpObj->_baseData->_skillslots).arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
+			.arg(tmpObj->_attrData->_points_remain).arg(tmpObj->_attrData->_points_endurance)\
+			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
+			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
+			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
+			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
+			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind)
 			.arg(tmpObj->getObjectType()).arg(tmpObj->_pos)
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -1858,10 +1859,10 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
-	else if (GETDEVCLASS(objType) == TObject_GidRole)
+	else if (GETDEVCLASS(objType) == TObject_Character)
 	{
 		QString szOwnCode;
-		auto tmpObj = pObj.dynamicCast<ITGidRole>();
+		auto tmpObj = pObj.dynamicCast<ITGameCharacter>();
 		QMutexLocker locker(&tmpObj->_mutex);
 
 		strSql = QString("UPDATE character set gid='%1',type=%2,name='%3',level=%4,imageid=%5,sex=%6,gold=%7,bankgold=%8,xp=%9,\
@@ -1871,15 +1872,15 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 				value_recovery=%33,resist_poison=%34,resist_sleep=%35,resist_medusa=%36,resist_drunk=%37,resist_chaos=%38,resist_forget=%39,\
 				fix_critical=%40,fix_strikeback=%41,fix_accurancy=%42,fix_dodge=%43,element_earth=%44,element_water=%45,element_fire=%46,\
 				element_wind=%47,points_remain=%48,role_type=%49   WHERE id=%50")
-			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_level).arg(tmpObj->_imageid).arg(tmpObj->_sex)
-			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_xp).arg(tmpObj->_maxxp).arg(tmpObj->_hp).arg(tmpObj->_maxhp).arg(tmpObj->_mp)\
-			.arg(tmpObj->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_skillslots)\
-			.arg(tmpObj->_manu_endurance).arg(tmpObj->_manu_skillful).arg(tmpObj->_manu_intelligence).arg(tmpObj->_value_charisma).arg(tmpObj->_points_endurance)\
-			.arg(tmpObj->_points_strength).arg(tmpObj->_points_defense).arg(tmpObj->_points_agility).arg(tmpObj->_points_magical).arg(tmpObj->_value_attack)\
-			.arg(tmpObj->_value_defensive).arg(tmpObj->_value_agility).arg(tmpObj->_value_spirit).arg(tmpObj->_value_recovery).arg(tmpObj->_resist_poison)\
-			.arg(tmpObj->_resist_sleep).arg(tmpObj->_resist_medusa).arg(tmpObj->_resist_drunk).arg(tmpObj->_resist_chaos).arg(tmpObj->_resist_forget)\
-			.arg(tmpObj->_fix_critical).arg(tmpObj->_fix_strikeback).arg(tmpObj->_fix_accurancy).arg(tmpObj->_fix_dodge)
-			.arg(tmpObj->_element_earth).arg(tmpObj->_element_water).arg(tmpObj->_element_fire).arg(tmpObj->_element_wind).arg(tmpObj->_points_remain)
+			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_imageid).arg(tmpObj->_sex)
+			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
+			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_baseData->_skillslots)\
+			.arg(tmpObj->_attrData->_manu_endurance).arg(tmpObj->_attrData->_manu_skillful).arg(tmpObj->_attrData->_manu_intelligence).arg(tmpObj->_value_charisma).arg(tmpObj->_attrData->_points_endurance)\
+			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
+			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
+			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
+			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
+			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind).arg(tmpObj->_attrData->_points_remain)
 			.arg(tmpObj->getObjectType())
 			.arg((int)tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -2098,18 +2099,18 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	}
 	QString sID = sCharacterName + sBigLine;
 	int roleType = request->role_type();
-	int roleObjectType = TObject_GidRole;
+	int roleObjectType = TObject_Character;
 	if (roleType == 0)
 	{
-		roleObjectType = TObject_GidRoleLeft;
+		roleObjectType = TObject_CharacterLeft;
 	}else if (roleType == 1)
 	{
-		roleObjectType = TObject_GidRoleRight;
+		roleObjectType = TObject_CharacterRight;
 	}
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
-		pCharacter = newOneObject(roleObjectType, pGid).dynamicCast<ITGidRole>();;
+		pCharacter = newOneObject(roleObjectType, pGid).dynamicCast<ITGameCharacter>();;
 		m_idForAccountRole.insert(sID, pCharacter);
 	}
 	else
@@ -2127,21 +2128,21 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	}
 	pCharacter->setObjectName(sCharacterName);
 	pCharacter->_gid = QString::fromStdString(request->gid());
-	pCharacter->_level = request->character_data().base_data().level();
-	pCharacter->_hp = request->character_data().base_data().hp();
-	pCharacter->_mp = request->character_data().base_data().mp();
-	pCharacter->_maxhp = request->character_data().base_data().maxhp();
-	pCharacter->_maxmp = request->character_data().base_data().maxmp();
-	pCharacter->_xp = request->character_data().base_data().xp();
-	pCharacter->_maxxp = request->character_data().base_data().maxxp();
-	pCharacter->_health = request->character_data().base_data().health();
+	pCharacter->_baseData->_level = request->character_data().base_data().level();
+	pCharacter->_baseData->_hp = request->character_data().base_data().hp();
+	pCharacter->_baseData->_mp = request->character_data().base_data().mp();
+	pCharacter->_baseData->_maxhp = request->character_data().base_data().maxhp();
+	pCharacter->_baseData->_maxmp = request->character_data().base_data().maxmp();
+	pCharacter->_baseData->_xp = request->character_data().base_data().xp();
+	pCharacter->_baseData->_maxxp = request->character_data().base_data().maxxp();
+	pCharacter->_baseData->_health = request->character_data().base_data().health();
 	pCharacter->_souls = request->character_data().souls();
 	pCharacter->_gold = request->character_data().gold();
-	pCharacter->_imageid = request->character_data().image_id();		//人物模型图片id
-	pCharacter->_sex = GetCharacterSex(pCharacter->_imageid);
+	pCharacter->_baseData->_imageid = request->character_data().image_id();		//人物模型图片id
+	pCharacter->_sex = GetCharacterSex(pCharacter->_baseData->_imageid);
 
 	pCharacter->_score = request->character_data().score();				//战绩？
-	pCharacter->_skillslots = request->character_data().skillslots();			//技能格
+	pCharacter->_baseData->_skillslots = request->character_data().skillslots();			//技能格
 	pCharacter->_useTitle = request->character_data().use_title();		//当前使用的称号
 	pCharacter->_avatar_id = request->character_data().avatar_id();
 	pCharacter->_unitid = request->character_data().unitid();
@@ -2163,9 +2164,9 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		}
 	}
 
-	pCharacter->_manu_endurance = request->character_data().manu_endurance();		  //耐力
-	pCharacter->_manu_skillful = request->character_data().manu_skillful();		  //灵巧
-	pCharacter->_manu_intelligence = request->character_data().manu_intelligence();		  //智力
+	pCharacter->_attrData->_manu_endurance = request->character_data().manu_endurance();		  //耐力
+	pCharacter->_attrData->_manu_skillful = request->character_data().manu_skillful();		  //灵巧
+	pCharacter->_attrData->_manu_intelligence = request->character_data().manu_intelligence();		  //智力
 	pCharacter->_value_charisma = request->character_data().value_charisma();	  //魅力
 	pCharacter->_x = request->character_data().x();						  //当前坐标
 	pCharacter->_y = request->character_data().y();
@@ -2174,31 +2175,31 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	pCharacter->_server_line = request->character_data().server_line();		  //当前服务器线路
 	pCharacter->_big_line = request->character_data().has_big_line()? request->character_data().big_line():0; //当前服务器线路
 	qDebug() << QString::fromStdString(request->gid()) << QString::fromStdString(request->character_name()) << request->character_data().level();
-	pCharacter->_points_remain = request->character_data().detail().points_remain();
-	pCharacter->_points_endurance = request->character_data().detail().points_endurance();
-	pCharacter->_points_strength = request->character_data().detail().points_strength();
-	pCharacter->_points_defense = request->character_data().detail().points_defense();
-	pCharacter->_points_agility = request->character_data().detail().points_agility();
-	pCharacter->_points_magical = request->character_data().detail().points_magical();
-	pCharacter->_value_attack = request->character_data().detail().value_attack();
-	pCharacter->_value_defensive = request->character_data().detail().value_defensive();
-	pCharacter->_value_agility = request->character_data().detail().value_agility();
-	pCharacter->_value_spirit = request->character_data().detail().value_spirit();
-	pCharacter->_value_recovery = request->character_data().detail().value_recovery();
-	pCharacter->_resist_poison = request->character_data().detail().resist_poison();
-	pCharacter->_resist_sleep = request->character_data().detail().resist_sleep();
-	pCharacter->_resist_medusa = request->character_data().detail().resist_medusa();
-	pCharacter->_resist_drunk = request->character_data().detail().resist_drunk();
-	pCharacter->_resist_chaos = request->character_data().detail().resist_chaos();
-	pCharacter->_resist_forget = request->character_data().detail().resist_forget();
-	pCharacter->_fix_critical = request->character_data().detail().fix_critical();
-	pCharacter->_fix_strikeback = request->character_data().detail().fix_strikeback();
-	pCharacter->_fix_accurancy = request->character_data().detail().fix_accurancy();
-	pCharacter->_fix_dodge = request->character_data().detail().fix_dodge();
-	pCharacter->_element_earth = request->character_data().detail().element_earth();
-	pCharacter->_element_wind = request->character_data().detail().element_wind();
-	pCharacter->_element_water = request->character_data().detail().element_water();
-	pCharacter->_element_fire = request->character_data().detail().element_fire();
+	pCharacter->_attrData->_points_remain = request->character_data().detail().points_remain();
+	pCharacter->_attrData->_points_endurance = request->character_data().detail().points_endurance();
+	pCharacter->_attrData->_points_strength = request->character_data().detail().points_strength();
+	pCharacter->_attrData->_points_defense = request->character_data().detail().points_defense();
+	pCharacter->_attrData->_points_agility = request->character_data().detail().points_agility();
+	pCharacter->_attrData->_points_magical = request->character_data().detail().points_magical();
+	pCharacter->_attrData->_value_attack = request->character_data().detail().value_attack();
+	pCharacter->_attrData->_value_defensive = request->character_data().detail().value_defensive();
+	pCharacter->_attrData->_value_agility = request->character_data().detail().value_agility();
+	pCharacter->_attrData->_value_spirit = request->character_data().detail().value_spirit();
+	pCharacter->_attrData->_value_recovery = request->character_data().detail().value_recovery();
+	pCharacter->_attrData->_resist_poison = request->character_data().detail().resist_poison();
+	pCharacter->_attrData->_resist_sleep = request->character_data().detail().resist_sleep();
+	pCharacter->_attrData->_resist_medusa = request->character_data().detail().resist_medusa();
+	pCharacter->_attrData->_resist_drunk = request->character_data().detail().resist_drunk();
+	pCharacter->_attrData->_resist_chaos = request->character_data().detail().resist_chaos();
+	pCharacter->_attrData->_resist_forget = request->character_data().detail().resist_forget();
+	pCharacter->_attrData->_fix_critical = request->character_data().detail().fix_critical();
+	pCharacter->_attrData->_fix_strikeback = request->character_data().detail().fix_strikeback();
+	pCharacter->_attrData->_fix_accurancy = request->character_data().detail().fix_accurancy();
+	pCharacter->_attrData->_fix_dodge = request->character_data().detail().fix_dodge();
+	pCharacter->_attrData->_element_earth = request->character_data().detail().element_earth();
+	pCharacter->_attrData->_element_wind = request->character_data().detail().element_wind();
+	pCharacter->_attrData->_element_water = request->character_data().detail().element_water();
+	pCharacter->_attrData->_element_fire = request->character_data().detail().element_fire();
 	QVector<int> posExist;
 	if (request->character_data().skill_size() > 0)
 	{
@@ -2297,16 +2298,16 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			petPtr->_realName = QString::fromStdString(reqPet.real_name());
 
 			//	petPtr->setObjectCode(reqPet.petnumber);
-			petPtr->_level = reqPet.base_data().level();
-			petPtr->_hp = reqPet.base_data().hp();
-			petPtr->_mp = reqPet.base_data().mp();
-			petPtr->_maxhp = reqPet.base_data().maxhp();
-			petPtr->_maxmp = reqPet.base_data().maxmp();
-			petPtr->_xp = reqPet.base_data().xp();
-			petPtr->_maxxp = reqPet.base_data().maxxp();
-			petPtr->_health = reqPet.base_data().health();
+			petPtr->_baseData->_level = reqPet.base_data().level();
+			petPtr->_baseData->_hp = reqPet.base_data().hp();
+			petPtr->_baseData->_mp = reqPet.base_data().mp();
+			petPtr->_baseData->_maxhp = reqPet.base_data().maxhp();
+			petPtr->_baseData->_maxmp = reqPet.base_data().maxmp();
+			petPtr->_baseData->_xp = reqPet.base_data().xp();
+			petPtr->_baseData->_maxxp = reqPet.base_data().maxxp();
+			petPtr->_baseData->_health = reqPet.base_data().health();
 			//petPtr->_imageid = reqPet.image_id();		//人物模型图片id
-			petPtr->_skillslots = reqPet.skillslots();			//技能格
+			petPtr->_baseData->_skillslots = reqPet.skillslots();			//技能格
 			petPtr->_loyality = reqPet.loyality();
 			petPtr->_race = reqPet.race();
 			petPtr->_state = reqPet.state();
@@ -2316,31 +2317,31 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			petPtr->_pos = reqPet.index();
 
 
-			petPtr->_points_remain = reqPet.detail().points_remain();
-			petPtr->_points_endurance = reqPet.detail().points_endurance();
-			petPtr->_points_strength = reqPet.detail().points_strength();
-			petPtr->_points_defense = reqPet.detail().points_defense();
-			petPtr->_points_agility = reqPet.detail().points_agility();
-			petPtr->_points_magical = reqPet.detail().points_magical();
-			petPtr->_value_attack = reqPet.detail().value_attack();
-			petPtr->_value_defensive = reqPet.detail().value_defensive();
-			petPtr->_value_agility = reqPet.detail().value_agility();
-			petPtr->_value_spirit = reqPet.detail().value_spirit();
-			petPtr->_value_recovery = reqPet.detail().value_recovery();
-			petPtr->_resist_poison = reqPet.detail().resist_poison();
-			petPtr->_resist_sleep = reqPet.detail().resist_sleep();
-			petPtr->_resist_medusa = reqPet.detail().resist_medusa();
-			petPtr->_resist_drunk = reqPet.detail().resist_drunk();
-			petPtr->_resist_chaos = reqPet.detail().resist_chaos();
-			petPtr->_resist_forget = reqPet.detail().resist_forget();
-			petPtr->_fix_critical = reqPet.detail().fix_critical();
-			petPtr->_fix_strikeback = reqPet.detail().fix_strikeback();
-			petPtr->_fix_accurancy = reqPet.detail().fix_accurancy();
-			petPtr->_fix_dodge = reqPet.detail().fix_dodge();
-			petPtr->_element_earth = reqPet.detail().element_earth();
-			petPtr->_element_wind = reqPet.detail().element_wind();
-			petPtr->_element_water = reqPet.detail().element_water();
-			petPtr->_element_fire = reqPet.detail().element_fire();
+			petPtr->_attrData->_points_remain = reqPet.detail().points_remain();
+			petPtr->_attrData->_points_endurance = reqPet.detail().points_endurance();
+			petPtr->_attrData->_points_strength = reqPet.detail().points_strength();
+			petPtr->_attrData->_points_defense = reqPet.detail().points_defense();
+			petPtr->_attrData->_points_agility = reqPet.detail().points_agility();
+			petPtr->_attrData->_points_magical = reqPet.detail().points_magical();
+			petPtr->_attrData->_value_attack = reqPet.detail().value_attack();
+			petPtr->_attrData->_value_defensive = reqPet.detail().value_defensive();
+			petPtr->_attrData->_value_agility = reqPet.detail().value_agility();
+			petPtr->_attrData->_value_spirit = reqPet.detail().value_spirit();
+			petPtr->_attrData->_value_recovery = reqPet.detail().value_recovery();
+			petPtr->_attrData->_resist_poison = reqPet.detail().resist_poison();
+			petPtr->_attrData->_resist_sleep = reqPet.detail().resist_sleep();
+			petPtr->_attrData->_resist_medusa = reqPet.detail().resist_medusa();
+			petPtr->_attrData->_resist_drunk = reqPet.detail().resist_drunk();
+			petPtr->_attrData->_resist_chaos = reqPet.detail().resist_chaos();
+			petPtr->_attrData->_resist_forget = reqPet.detail().resist_forget();
+			petPtr->_attrData->_fix_critical = reqPet.detail().fix_critical();
+			petPtr->_attrData->_fix_strikeback = reqPet.detail().fix_strikeback();
+			petPtr->_attrData->_fix_accurancy = reqPet.detail().fix_accurancy();
+			petPtr->_attrData->_fix_dodge = reqPet.detail().fix_dodge();
+			petPtr->_attrData->_element_earth = reqPet.detail().element_earth();
+			petPtr->_attrData->_element_wind = reqPet.detail().element_wind();
+			petPtr->_attrData->_element_water = reqPet.detail().element_water();
+			petPtr->_attrData->_element_fire = reqPet.detail().element_fire();
 			petPtr->_bExist = true;
 
 			posExist.append(reqPet.index());
@@ -2416,20 +2417,20 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	if (sGid.isEmpty() || sCharacterName.isEmpty())
 		return;
 	int roleType = request->role_type();
-	int roleObjectType = TObject_GidRole;
+	int roleObjectType = TObject_Character;
 	if (roleType == 0)
 	{
-		roleObjectType = TObject_GidRoleLeft;
+		roleObjectType = TObject_CharacterLeft;
 	}
 	else if (roleType == 1)
 	{
-		roleObjectType = TObject_GidRoleRight;
+		roleObjectType = TObject_CharacterRight;
 	}
 	QString sID = sCharacterName + sBigLine;
 	auto pCharacter = m_idForAccountRole.value(sID);
 	if (!pCharacter)
 	{
-		pCharacter = newOneObject(roleObjectType).dynamicCast<ITGidRole>();;
+		pCharacter = newOneObject(roleObjectType).dynamicCast<ITGameCharacter>();;
 		m_idForAccountRole.insert(sID, pCharacter);
 	}
 	else
@@ -2493,16 +2494,16 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			petPtr->setObjectName(QString::fromStdString(reqPet.base_data().name()));
 			petPtr->_realName = QString::fromStdString(reqPet.real_name());
 			//	petPtr->setObjectCode(reqPet.petnumber);
-			petPtr->_level = reqPet.base_data().level();
-			petPtr->_hp = reqPet.base_data().hp();
-			petPtr->_mp = reqPet.base_data().mp();
-			petPtr->_maxhp = reqPet.base_data().maxhp();
-			petPtr->_maxmp = reqPet.base_data().maxmp();
-			petPtr->_xp = reqPet.base_data().xp();
-			petPtr->_maxxp = reqPet.base_data().maxxp();
-			petPtr->_health = reqPet.base_data().health();
+			petPtr->_baseData->_level = reqPet.base_data().level();
+			petPtr->_baseData->_hp = reqPet.base_data().hp();
+			petPtr->_baseData->_mp = reqPet.base_data().mp();
+			petPtr->_baseData->_maxhp = reqPet.base_data().maxhp();
+			petPtr->_baseData->_maxmp = reqPet.base_data().maxmp();
+			petPtr->_baseData->_xp = reqPet.base_data().xp();
+			petPtr->_baseData->_maxxp = reqPet.base_data().maxxp();
+			petPtr->_baseData->_health = reqPet.base_data().health();
 			//petPtr->_imageid = reqPet.image_id();		//人物模型图片id
-			petPtr->_skillslots = reqPet.skillslots();			//技能格
+			petPtr->_baseData->_skillslots = reqPet.skillslots();			//技能格
 			petPtr->_loyality = reqPet.loyality();
 			petPtr->_race = reqPet.race();
 			petPtr->_state = reqPet.state();
@@ -2512,31 +2513,31 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			petPtr->_pos = reqPet.index();
 
 
-			petPtr->_points_remain = reqPet.detail().points_remain();
-			petPtr->_points_endurance = reqPet.detail().points_endurance();
-			petPtr->_points_strength = reqPet.detail().points_strength();
-			petPtr->_points_defense = reqPet.detail().points_defense();
-			petPtr->_points_agility = reqPet.detail().points_agility();
-			petPtr->_points_magical = reqPet.detail().points_magical();
-			petPtr->_value_attack = reqPet.detail().value_attack();
-			petPtr->_value_defensive = reqPet.detail().value_defensive();
-			petPtr->_value_agility = reqPet.detail().value_agility();
-			petPtr->_value_spirit = reqPet.detail().value_spirit();
-			petPtr->_value_recovery = reqPet.detail().value_recovery();
-			petPtr->_resist_poison = reqPet.detail().resist_poison();
-			petPtr->_resist_sleep = reqPet.detail().resist_sleep();
-			petPtr->_resist_medusa = reqPet.detail().resist_medusa();
-			petPtr->_resist_drunk = reqPet.detail().resist_drunk();
-			petPtr->_resist_chaos = reqPet.detail().resist_chaos();
-			petPtr->_resist_forget = reqPet.detail().resist_forget();
-			petPtr->_fix_critical = reqPet.detail().fix_critical();
-			petPtr->_fix_strikeback = reqPet.detail().fix_strikeback();
-			petPtr->_fix_accurancy = reqPet.detail().fix_accurancy();
-			petPtr->_fix_dodge = reqPet.detail().fix_dodge();
-			petPtr->_element_earth = reqPet.detail().element_earth();
-			petPtr->_element_wind = reqPet.detail().element_wind();
-			petPtr->_element_water = reqPet.detail().element_water();
-			petPtr->_element_fire = reqPet.detail().element_fire();
+			petPtr->_attrData->_points_remain = reqPet.detail().points_remain();
+			petPtr->_attrData->_points_endurance = reqPet.detail().points_endurance();
+			petPtr->_attrData->_points_strength = reqPet.detail().points_strength();
+			petPtr->_attrData->_points_defense = reqPet.detail().points_defense();
+			petPtr->_attrData->_points_agility = reqPet.detail().points_agility();
+			petPtr->_attrData->_points_magical = reqPet.detail().points_magical();
+			petPtr->_attrData->_value_attack = reqPet.detail().value_attack();
+			petPtr->_attrData->_value_defensive = reqPet.detail().value_defensive();
+			petPtr->_attrData->_value_agility = reqPet.detail().value_agility();
+			petPtr->_attrData->_value_spirit = reqPet.detail().value_spirit();
+			petPtr->_attrData->_value_recovery = reqPet.detail().value_recovery();
+			petPtr->_attrData->_resist_poison = reqPet.detail().resist_poison();
+			petPtr->_attrData->_resist_sleep = reqPet.detail().resist_sleep();
+			petPtr->_attrData->_resist_medusa = reqPet.detail().resist_medusa();
+			petPtr->_attrData->_resist_drunk = reqPet.detail().resist_drunk();
+			petPtr->_attrData->_resist_chaos = reqPet.detail().resist_chaos();
+			petPtr->_attrData->_resist_forget = reqPet.detail().resist_forget();
+			petPtr->_attrData->_fix_critical = reqPet.detail().fix_critical();
+			petPtr->_attrData->_fix_strikeback = reqPet.detail().fix_strikeback();
+			petPtr->_attrData->_fix_accurancy = reqPet.detail().fix_accurancy();
+			petPtr->_attrData->_fix_dodge = reqPet.detail().fix_dodge();
+			petPtr->_attrData->_element_earth = reqPet.detail().element_earth();
+			petPtr->_attrData->_element_wind = reqPet.detail().element_wind();
+			petPtr->_attrData->_element_water = reqPet.detail().element_water();
+			petPtr->_attrData->_element_fire = reqPet.detail().element_fire();
 			petPtr->_bExist = true;
 			posExist.append(reqPet.index());
 
@@ -2631,13 +2632,13 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 	{
 		return Status::OK;
 	}
-	int roleObjType = TObject_GidRole;
+	int roleObjType = TObject_Character;
 	if (nRoleType == 1)
 	{
-		roleObjType = TObject_GidRoleRight;
+		roleObjType = TObject_CharacterRight;
 	}
 	else
-		roleObjType = TObject_GidRoleLeft;
+		roleObjType = TObject_CharacterLeft;
 	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
 	if (pGid)
 	{
@@ -2647,18 +2648,18 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 		{
 			if (pTmpRole->getObjectType() == roleObjType)
 			{
-				pRole =qSharedPointerDynamicCast<ITGidRole>(pTmpRole);
+				pRole =qSharedPointerDynamicCast<ITGameCharacter>(pTmpRole);
 				break;
 			}
 		}
 		if (pRole == nullptr)
 		{
-			roleObjType = TObject_GidRole;
+			roleObjType = TObject_Character;
 			for (auto pTmpRole : pGid->GetAllChildObj())
 			{
 				if (pTmpRole->getObjectType() == roleObjType)
 				{
-					pRole = qSharedPointerDynamicCast<ITGidRole>(pTmpRole);
+					pRole = qSharedPointerDynamicCast<ITGameCharacter>(pTmpRole);
 					break;
 				}
 			}
@@ -2668,16 +2669,16 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 			auto pChar = response->mutable_character_data();
 			response->set_character_name(pRole->getObjectName().toStdString());
 			pChar->set_souls(pRole->_souls);
-			pChar->set_level(pRole->_level);
+			pChar->set_level(pRole->_baseData->_level);
 			pChar->set_gold(pRole->_gold);
 			pChar->set_map_name(pRole->_map_name.toStdString());
 			pChar->set_map_number(pRole->_map_number);
 			pChar->set_job(pRole->_job.toStdString());
 			pChar->set_nick(pRole->_nickName.toStdString());
 			pChar->set_bank_gold(pRole->_bankgold);
-			pChar->set_image_id(pRole->_imageid);
+			pChar->set_image_id(pRole->_baseData->_imageid);
 			pChar->set_score(pRole->_score);
-			pChar->set_skillslots(pRole->_skillslots);
+			pChar->set_skillslots(pRole->_baseData->_skillslots);
 			pChar->set_use_title(pRole->_useTitle);
 			pChar->set_avatar_id(pRole->_avatar_id);
 			pChar->set_unitid(pRole->_unitid);
@@ -2690,9 +2691,9 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 			{
 				pChar->add_titles(tTitle.toStdString());
 			}
-			pChar->set_manu_endurance(pRole->_manu_endurance);
-			pChar->set_manu_skillful(pRole->_manu_skillful);
-			pChar->set_manu_intelligence(pRole->_manu_intelligence);
+			pChar->set_manu_endurance(pRole->_attrData->_manu_endurance);
+			pChar->set_manu_skillful(pRole->_attrData->_manu_skillful);
+			pChar->set_manu_intelligence(pRole->_attrData->_manu_intelligence);
 			pChar->set_value_charisma(pRole->_value_charisma);
 			pChar->set_x(pRole->_x);
 			pChar->set_y(pRole->_y);
@@ -2700,43 +2701,43 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 			//pChar->set_battle_position(pRole->_battle_position);
 			//pChar->set_battle_position(pRole->_battle_position);
 			auto detailData = pChar->mutable_detail();
-			detailData->set_points_remain(pRole->_points_remain);
-			detailData->set_points_endurance(pRole->_points_endurance);
-			detailData->set_points_strength(pRole->_points_strength);
-			detailData->set_points_defense(pRole->_points_defense);
-			detailData->set_points_agility(pRole->_points_agility);
-			detailData->set_points_magical(pRole->_points_magical);
-			detailData->set_value_attack(pRole->_value_attack);
-			detailData->set_value_defensive(pRole->_value_defensive);
-			detailData->set_value_agility(pRole->_value_agility);
-			detailData->set_value_spirit(pRole->_value_spirit);
-			detailData->set_value_recovery(pRole->_value_recovery);
-			detailData->set_resist_poison(pRole->_resist_poison);
-			detailData->set_resist_sleep(pRole->_resist_sleep);
-			detailData->set_resist_medusa(pRole->_resist_medusa);
-			detailData->set_resist_drunk(pRole->_resist_drunk);
-			detailData->set_resist_chaos(pRole->_resist_chaos);
-			detailData->set_resist_forget(pRole->_resist_forget);
-			detailData->set_fix_critical(pRole->_fix_critical);
-			detailData->set_fix_strikeback(pRole->_fix_strikeback);
-			detailData->set_fix_accurancy(pRole->_fix_accurancy);
-			detailData->set_fix_dodge(pRole->_fix_dodge);
-			detailData->set_element_earth(pRole->_element_earth);
-			detailData->set_element_water(pRole->_element_water);
-			detailData->set_element_fire(pRole->_element_fire);
-			detailData->set_element_wind(pRole->_element_wind);
+			detailData->set_points_remain(pRole->_attrData->_points_remain);
+			detailData->set_points_endurance(pRole->_attrData->_points_endurance);
+			detailData->set_points_strength(pRole->_attrData->_points_strength);
+			detailData->set_points_defense(pRole->_attrData->_points_defense);
+			detailData->set_points_agility(pRole->_attrData->_points_agility);
+			detailData->set_points_magical(pRole->_attrData->_points_magical);
+			detailData->set_value_attack(pRole->_attrData->_value_attack);
+			detailData->set_value_defensive(pRole->_attrData->_value_defensive);
+			detailData->set_value_agility(pRole->_attrData->_value_agility);
+			detailData->set_value_spirit(pRole->_attrData->_value_spirit);
+			detailData->set_value_recovery(pRole->_attrData->_value_recovery);
+			detailData->set_resist_poison(pRole->_attrData->_resist_poison);
+			detailData->set_resist_sleep(pRole->_attrData->_resist_sleep);
+			detailData->set_resist_medusa(pRole->_attrData->_resist_medusa);
+			detailData->set_resist_drunk(pRole->_attrData->_resist_drunk);
+			detailData->set_resist_chaos(pRole->_attrData->_resist_chaos);
+			detailData->set_resist_forget(pRole->_attrData->_resist_forget);
+			detailData->set_fix_critical(pRole->_attrData->_fix_critical);
+			detailData->set_fix_strikeback(pRole->_attrData->_fix_strikeback);
+			detailData->set_fix_accurancy(pRole->_attrData->_fix_accurancy);
+			detailData->set_fix_dodge(pRole->_attrData->_fix_dodge);
+			detailData->set_element_earth(pRole->_attrData->_element_earth);
+			detailData->set_element_water(pRole->_attrData->_element_water);
+			detailData->set_element_fire(pRole->_attrData->_element_fire);
+			detailData->set_element_wind(pRole->_attrData->_element_wind);
 
 			{
 				auto pBaseData = pChar->mutable_base_data();
-				pBaseData->set_hp(pRole->_hp);
-				pBaseData->set_mp(pRole->_mp);
+				pBaseData->set_hp(pRole->_baseData->_hp);
+				pBaseData->set_mp(pRole->_baseData->_mp);
 				pBaseData->set_name(pRole->getObjectName().toStdString());
-				pBaseData->set_maxhp(pRole->_maxhp);
-				pBaseData->set_maxmp(pRole->_maxmp);
-				pBaseData->set_level(pRole->_level);
-				pBaseData->set_xp(pRole->_xp);
-				pBaseData->set_maxxp(pRole->_maxxp);
-				pBaseData->set_health(pRole->_health);
+				pBaseData->set_maxhp(pRole->_baseData->_maxhp);
+				pBaseData->set_maxmp(pRole->_baseData->_maxmp);
+				pBaseData->set_level(pRole->_baseData->_level);
+				pBaseData->set_xp(pRole->_baseData->_xp);
+				pBaseData->set_maxxp(pRole->_baseData->_maxxp);
+				pBaseData->set_health(pRole->_baseData->_health);
 			}
 			auto persDescData = pChar->mutable_pers_desc();
 			//persDescData->set_buyicon(pRole->bu)
@@ -2749,15 +2750,15 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 				}
 				auto petData = response->add_pet_data();
 				auto pBaseData = petData->base_data();
-				pBaseData.set_hp(it.value()->_hp);
-				pBaseData.set_mp(it.value()->_mp);
+				pBaseData.set_hp(it.value()->_baseData->_hp);
+				pBaseData.set_mp(it.value()->_baseData->_mp);
 				pBaseData.set_name(it.value()->getObjectName().toStdString());
-				pBaseData.set_maxhp(it.value()->_maxhp);
-				pBaseData.set_maxmp(it.value()->_maxmp);
-				pBaseData.set_level(it.value()->_level);
-				pBaseData.set_xp(it.value()->_xp);
-				pBaseData.set_maxxp(it.value()->_maxxp);
-				pBaseData.set_health(it.value()->_health);
+				pBaseData.set_maxhp(it.value()->_baseData->_maxhp);
+				pBaseData.set_maxmp(it.value()->_baseData->_maxmp);
+				pBaseData.set_level(it.value()->_baseData->_level);
+				pBaseData.set_xp(it.value()->_baseData->_xp);
+				pBaseData.set_maxxp(it.value()->_baseData->_maxxp);
+				pBaseData.set_health(it.value()->_baseData->_health);
 				petData->set_index(it.key());
 				//petData->set_flags(it.value()->_fl);
 				petData->set_grade(it.value()->_grade);
@@ -2768,7 +2769,7 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 				petData->set_lossmaxgrade(it.value()->_lossMaxGrade);
 				petData->set_real_name(it.value()->_realName.toStdString());
 				petData->set_race(it.value()->_race);
-				petData->set_skillslots(it.value()->_skillslots);
+				petData->set_skillslots(it.value()->_baseData->_skillslots);
 			}
 			for (auto it = pRole->_itemPosForPtr.begin(); it != pRole->_itemPosForPtr.end(); ++it)
 			{
@@ -2841,16 +2842,16 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 		auto pChar = response->mutable_character_data();
 		response->set_character_name(pRole->getObjectName().toStdString());
 		pChar->set_souls(pRole->_souls);
-		pChar->set_level(pRole->_level);
+		pChar->set_level(pRole->_baseData->_level);
 		pChar->set_gold(pRole->_gold);
 		pChar->set_map_name(pRole->_map_name.toStdString());
 		pChar->set_map_number(pRole->_map_number);
 		pChar->set_job(pRole->_job.toStdString());
 		pChar->set_nick(pRole->_nickName.toStdString());
 		pChar->set_bank_gold(pRole->_bankgold);
-		pChar->set_image_id(pRole->_imageid);
+		pChar->set_image_id(pRole->_baseData->_imageid);
 		pChar->set_score(pRole->_score);
-		pChar->set_skillslots(pRole->_skillslots);
+		pChar->set_skillslots(pRole->_baseData->_skillslots);
 		pChar->set_use_title(pRole->_useTitle);
 		pChar->set_avatar_id(pRole->_avatar_id);
 		pChar->set_unitid(pRole->_unitid);
@@ -2863,9 +2864,9 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 		{
 			pChar->add_titles(tTitle.toStdString());
 		}
-		pChar->set_manu_endurance(pRole->_manu_endurance);
-		pChar->set_manu_skillful(pRole->_manu_skillful);
-		pChar->set_manu_intelligence(pRole->_manu_intelligence);
+		pChar->set_manu_endurance(pRole->_attrData->_manu_endurance);
+		pChar->set_manu_skillful(pRole->_attrData->_manu_skillful);
+		pChar->set_manu_intelligence(pRole->_attrData->_manu_intelligence);
 		pChar->set_value_charisma(pRole->_value_charisma);
 		pChar->set_x(pRole->_x);
 		pChar->set_y(pRole->_y);
@@ -2873,43 +2874,43 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 		//pChar->set_battle_position(pRole->_battle_position);
 		//pChar->set_battle_position(pRole->_battle_position);
 		auto detailData = pChar->mutable_detail();
-		detailData->set_points_remain(pRole->_points_remain);
-		detailData->set_points_endurance(pRole->_points_endurance);
-		detailData->set_points_strength(pRole->_points_strength);
-		detailData->set_points_defense(pRole->_points_defense);
-		detailData->set_points_agility(pRole->_points_agility);
-		detailData->set_points_magical(pRole->_points_magical);
-		detailData->set_value_attack(pRole->_value_attack);
-		detailData->set_value_defensive(pRole->_value_defensive);
-		detailData->set_value_agility(pRole->_value_agility);
-		detailData->set_value_spirit(pRole->_value_spirit);
-		detailData->set_value_recovery(pRole->_value_recovery);
-		detailData->set_resist_poison(pRole->_resist_poison);
-		detailData->set_resist_sleep(pRole->_resist_sleep);
-		detailData->set_resist_medusa(pRole->_resist_medusa);
-		detailData->set_resist_drunk(pRole->_resist_drunk);
-		detailData->set_resist_chaos(pRole->_resist_chaos);
-		detailData->set_resist_forget(pRole->_resist_forget);
-		detailData->set_fix_critical(pRole->_fix_critical);
-		detailData->set_fix_strikeback(pRole->_fix_strikeback);
-		detailData->set_fix_accurancy(pRole->_fix_accurancy);
-		detailData->set_fix_dodge(pRole->_fix_dodge);
-		detailData->set_element_earth(pRole->_element_earth);
-		detailData->set_element_water(pRole->_element_water);
-		detailData->set_element_fire(pRole->_element_fire);
-		detailData->set_element_wind(pRole->_element_wind);
+		detailData->set_points_remain(pRole->_attrData->_points_remain);
+		detailData->set_points_endurance(pRole->_attrData->_points_endurance);
+		detailData->set_points_strength(pRole->_attrData->_points_strength);
+		detailData->set_points_defense(pRole->_attrData->_points_defense);
+		detailData->set_points_agility(pRole->_attrData->_points_agility);
+		detailData->set_points_magical(pRole->_attrData->_points_magical);
+		detailData->set_value_attack(pRole->_attrData->_value_attack);
+		detailData->set_value_defensive(pRole->_attrData->_value_defensive);
+		detailData->set_value_agility(pRole->_attrData->_value_agility);
+		detailData->set_value_spirit(pRole->_attrData->_value_spirit);
+		detailData->set_value_recovery(pRole->_attrData->_value_recovery);
+		detailData->set_resist_poison(pRole->_attrData->_resist_poison);
+		detailData->set_resist_sleep(pRole->_attrData->_resist_sleep);
+		detailData->set_resist_medusa(pRole->_attrData->_resist_medusa);
+		detailData->set_resist_drunk(pRole->_attrData->_resist_drunk);
+		detailData->set_resist_chaos(pRole->_attrData->_resist_chaos);
+		detailData->set_resist_forget(pRole->_attrData->_resist_forget);
+		detailData->set_fix_critical(pRole->_attrData->_fix_critical);
+		detailData->set_fix_strikeback(pRole->_attrData->_fix_strikeback);
+		detailData->set_fix_accurancy(pRole->_attrData->_fix_accurancy);
+		detailData->set_fix_dodge(pRole->_attrData->_fix_dodge);
+		detailData->set_element_earth(pRole->_attrData->_element_earth);
+		detailData->set_element_water(pRole->_attrData->_element_water);
+		detailData->set_element_fire(pRole->_attrData->_element_fire);
+		detailData->set_element_wind(pRole->_attrData->_element_wind);
 
 		{
 			auto pBaseData = pChar->mutable_base_data();
-			pBaseData->set_hp(pRole->_hp);
-			pBaseData->set_mp(pRole->_mp);
+			pBaseData->set_hp(pRole->_baseData->_hp);
+			pBaseData->set_mp(pRole->_baseData->_mp);
 			pBaseData->set_name(pRole->getObjectName().toStdString());
-			pBaseData->set_maxhp(pRole->_maxhp);
-			pBaseData->set_maxmp(pRole->_maxmp);
-			pBaseData->set_level(pRole->_level);
-			pBaseData->set_xp(pRole->_xp);
-			pBaseData->set_maxxp(pRole->_maxxp);
-			pBaseData->set_health(pRole->_health);
+			pBaseData->set_maxhp(pRole->_baseData->_maxhp);
+			pBaseData->set_maxmp(pRole->_baseData->_maxmp);
+			pBaseData->set_level(pRole->_baseData->_level);
+			pBaseData->set_xp(pRole->_baseData->_xp);
+			pBaseData->set_maxxp(pRole->_baseData->_maxxp);
+			pBaseData->set_health(pRole->_baseData->_health);
 		}
 		auto persDescData = pChar->mutable_pers_desc();
 		//persDescData->set_buyicon(pRole->bu)
@@ -2922,15 +2923,15 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 			}
 			auto petData = response->add_pet_data();
 			auto pBaseData = petData->base_data();
-			pBaseData.set_hp(it.value()->_hp);
-			pBaseData.set_mp(it.value()->_mp);
+			pBaseData.set_hp(it.value()->_baseData->_hp);
+			pBaseData.set_mp(it.value()->_baseData->_mp);
 			pBaseData.set_name(it.value()->getObjectName().toStdString());
-			pBaseData.set_maxhp(it.value()->_maxhp);
-			pBaseData.set_maxmp(it.value()->_maxmp);
-			pBaseData.set_level(it.value()->_level);
-			pBaseData.set_xp(it.value()->_xp);
-			pBaseData.set_maxxp(it.value()->_maxxp);
-			pBaseData.set_health(it.value()->_health);
+			pBaseData.set_maxhp(it.value()->_baseData->_maxhp);
+			pBaseData.set_maxmp(it.value()->_baseData->_maxmp);
+			pBaseData.set_level(it.value()->_baseData->_level);
+			pBaseData.set_xp(it.value()->_baseData->_xp);
+			pBaseData.set_maxxp(it.value()->_baseData->_maxxp);
+			pBaseData.set_health(it.value()->_baseData->_health);
 			petData->set_index(it.key());
 			//petData->set_flags(it.value()->_fl);
 			petData->set_grade(it.value()->_grade);
@@ -2941,7 +2942,7 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 			petData->set_lossmaxgrade(it.value()->_lossMaxGrade);
 			petData->set_real_name(it.value()->_realName.toStdString());
 			petData->set_race(it.value()->_race);
-			petData->set_skillslots(it.value()->_skillslots);
+			petData->set_skillslots(it.value()->_baseData->_skillslots);
 		}
 		for (auto it = pRole->_itemPosForPtr.begin(); it != pRole->_itemPosForPtr.end(); ++it)
 		{

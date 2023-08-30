@@ -5,9 +5,9 @@ enum TObjectType
 	TObject_AccountIdentity = 0x100,//账号集合 某个人证件
 	TObject_Account = 0x110,		//账号
 	TObject_AccountGid = 0x211,		//账号子ID
-	TObject_GidRole = 0x300,		//账号子ID角色 左右角色
-	TObject_GidRoleLeft = 0x301,	//账号子ID角色 左右角色
-	TObject_GidRoleRight = 0x302,	//账号子ID角色 左右角色
+	TObject_Character = 0x300,		//账号子ID角色 左右角色
+	TObject_CharacterLeft = 0x301,	//账号子ID角色 左右角色
+	TObject_CharacterRight = 0x302,	//账号子ID角色 左右角色
 	TObject_CGPet = 0x1000,			//宠物
 	TObject_Pet = 0x1001,			//宠物
 	TObject_BankPet = 0x1002,		//银行宠物
@@ -30,7 +30,8 @@ enum TObjectType
 	TObject_Map = 0x4300,			//地图信息
 	TObject_PetBook = 0x4400,		//宠物图鉴
 	TObject_CharServer = 0x4500,	//服务信息		
-
+	TObject_BaseData=0x5100,
+	TObject_AttributeData=0x5200,
 
 };
 enum TBattleType

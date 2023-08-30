@@ -100,7 +100,7 @@ ITGamePet::ITGamePet()
 }
 
 ITGamePet::ITGamePet(QString szName, int nType, quint64 ullID) :
-	ITGameBaseData(szName, nType, ullID)
+	ITObject(szName, nType, ullID)
 
 {
 }
@@ -185,16 +185,16 @@ ITLoginGameType::~ITLoginGameType()
 {
 }
 
-ITGidRole::ITGidRole()
+ITGameCharacter::ITGameCharacter()
 {
 }
 
-ITGidRole::ITGidRole(QString szName, int nType, quint64 ullID) :
-	ITGameBaseData(szName, nType, ullID)
+ITGameCharacter::ITGameCharacter(QString szName, int nType, quint64 ullID) :
+	ITObject(szName, nType, ullID)
 {
 }
 
-ITGidRole::~ITGidRole()
+ITGameCharacter::~ITGameCharacter()
 {
 }
 
@@ -213,12 +213,13 @@ ITAccountIdentity::~ITAccountIdentity()
 
 ITGameBaseData::ITGameBaseData()
 {
-
+	setObjectType(TObject_BaseData);
 }
 
 ITGameBaseData::ITGameBaseData(QString szName, int nType, quint64 ullID) :
 	ITObject(szName, nType, ullID)
 {
+	setObjectType(TObject_BaseData);
 
 }
 
@@ -258,13 +259,13 @@ ITCGPetPictorialBook::~ITCGPetPictorialBook()
 
 ITGameAttributeData::ITGameAttributeData()
 {
-
+	setObjectType(TObject_AttributeData);
 }
 
 ITGameAttributeData::ITGameAttributeData(QString szName, int nType, quint64 ullID)
 	:ITObject(szName, nType, ullID)
 {
-
+	setObjectType(TObject_AttributeData);
 }
 
 ITGameAttributeData::~ITGameAttributeData()
