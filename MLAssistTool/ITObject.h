@@ -181,7 +181,8 @@ public:
 	ITGameBaseData();
 	ITGameBaseData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameBaseData();
-
+	bool operator!=(const ITGameBaseData& o)const;
+	bool operator==(const ITGameBaseData& o)const;
 	quint64 char_id;
 	int _level = 0;					//!< 等级
 	int	_xp = 0;					//!< 经验
@@ -203,6 +204,9 @@ public:
 	ITGameAttributeData();
 	ITGameAttributeData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameAttributeData();
+
+	bool operator!=(const ITGameAttributeData& o)const;
+	bool operator==(const ITGameAttributeData& o)const;
 	quint64 _char_id;
 	int _points_remain = 0;			//!< 未加点
 	int _points_endurance = 0;		//!< 体力

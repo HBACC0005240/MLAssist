@@ -1977,7 +1977,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_userGid)
 			.arg((int)aid)
 			.arg(tmpObj->getObjectDesc())
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVSUBCLASS(objType) == TObject_CharItem)
@@ -1995,7 +1995,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->getObjectType() == TObject_CharItem ? 0 : 1)
 			.arg(tmpObj->getObjectCode())
 			.arg(tmpObj->_itemPos)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVSUBCLASS(objType) == TObject_CGPet)
@@ -2025,7 +2025,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
 			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind)
 			.arg(tmpObj->getObjectType()).arg(tmpObj->_pos)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVSUBCLASS(objType) == TObject_CGSkill)
@@ -2049,7 +2049,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_cost)
 			.arg(tmpObj->_available)
 			.arg(tmpObj->_flags)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVCLASS(objType) == TObject_Character)
@@ -2058,24 +2058,76 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		auto tmpObj = pObj.dynamicCast<ITGameCharacter>();
 		QMutexLocker locker(&tmpObj->_mutex);
 
-		strSql = QString("UPDATE character set gid='%1',type=%2,name='%3',level=%4,imageid=%5,sex=%6,gold=%7,bankgold=%8,xp=%9,\
-				maxxp=%10,hp=%11,maxhp=%12,mp=%13,maxmp=%14,score=%15,job='%16',useTitle=%17,titles='%18',skillslots=%19,\
-				manu_endurance=%20,manu_skillful=%21,manu_intelligence=%22,value_charisma=%23,points_endurance=%24,points_strength=%25,\
-				points_defense=%26,points_agility=%27,points_magical=%28,value_attack=%29,value_defensive=%30,value_agility=%31,value_spirit=%32,\
-				value_recovery=%33,resist_poison=%34,resist_sleep=%35,resist_medusa=%36,resist_drunk=%37,resist_chaos=%38,resist_forget=%39,\
-				fix_critical=%40,fix_strikeback=%41,fix_accurancy=%42,fix_dodge=%43,element_earth=%44,element_water=%45,element_fire=%46,\
-				element_wind=%47,points_remain=%48,role_type=%49   WHERE id=%50")
-			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_imageid).arg(tmpObj->_sex)
-			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
-			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_baseData->_skillslots)\
-			.arg(tmpObj->_attrData->_manu_endurance).arg(tmpObj->_attrData->_manu_skillful).arg(tmpObj->_attrData->_manu_intelligence).arg(tmpObj->_value_charisma).arg(tmpObj->_attrData->_points_endurance)\
-			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
-			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
-			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
-			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
-			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind).arg(tmpObj->_attrData->_points_remain)
-			.arg(tmpObj->getObjectType())
-			.arg((int)tmpObj->getObjectID());
+		strSql = QString("UPDATE character set gid='%1',type=%2,name='%3',sex=%4,gold=%5,bankgold=%6,\
+				score=%7,job='%8',useTitle=%9,titles='%10',\
+				value_charisma=%11,souls=%12,nick_name='%13',avatar_id=%14,unitid=%15,petid=%16,petriding=%17,\
+				direction=%18,punchclock=%19,usingpunchclock=%20,x=%21,y=%22,battle_position=%23,map_name='%24',\
+				map_num=%25,line=%26,big_line=%27,last_time=%28,conn_state=%29,role_type=%30 WHERE id=%31")
+			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_sex)
+			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|"))\
+			.arg(tmpObj->_value_charisma).arg(tmpObj->getObjectType())
+			.arg(tmpObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (objType == TObject_BaseData)
+	{
+		QString szOwnCode;
+		auto tmpObj = pObj.dynamicCast<ITGameBaseData>();
+		strSql = QString("UPDATE base_data set char_id=%1,level=%2,hp=%3,maxhp=%4,mp=%5,maxmp=%6,xp=%7,"
+			"maxxp=%8,health=%9,skillslots=%10,imageid=%11 WHERE id=%12)")
+			.arg(tmpObj->char_id)
+			.arg(tmpObj->_level)
+			.arg(tmpObj->_hp)
+			.arg(tmpObj->_maxhp)
+			.arg(tmpObj->_mp)
+			.arg(tmpObj->_maxmp)
+			.arg(tmpObj->_xp)
+			.arg(tmpObj->_maxxp)
+			.arg(tmpObj->_health)
+			.arg(tmpObj->_skillslots)
+			.arg(tmpObj->_imageid)
+			.arg(tmpObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (objType == TObject_AttributeData)
+	{
+		QString szOwnCode;
+		auto tmpObj = pObj.dynamicCast<ITGameAttributeData>();
+		strSql = QString("UPDATE attribute_data SET char_id=%1,manu_endurance=%2,manu_skillful=%3,"
+			"manu_intelligence=%4,points_endurance=%5,points_strength=%6,points_defense=%7,points_agility=%8,"
+			"points_magical=%9,value_attack=%10,value_defensive=%11,value_agility=%12,value_spirit=%13,value_recovery=%14,resist_poison=%15,"
+			"resist_sleep=%16,resist_medusa=%17,resist_drunk=%18,resist_chaos=%19,resist_forget=%20,fix_critical=%21,fix_strikeback=%22,fix_accurancy=%23,"
+			"fix_dodge=%24,element_earth=%25,element_water=%26,element_fire=%27,element_wind=%28,points_remain=%29 WHERE id=%30)")
+			.arg(tmpObj->_char_id)
+			.arg(tmpObj->_manu_endurance)
+			.arg(tmpObj->_manu_skillful)
+			.arg(tmpObj->_manu_intelligence)
+			.arg(tmpObj->_points_endurance)
+			.arg(tmpObj->_points_strength)
+			.arg(tmpObj->_points_defense)
+			.arg(tmpObj->_points_agility)
+			.arg(tmpObj->_points_magical)
+			.arg(tmpObj->_value_attack)
+			.arg(tmpObj->_value_defensive)
+			.arg(tmpObj->_value_agility)
+			.arg(tmpObj->_value_spirit)
+			.arg(tmpObj->_value_recovery)
+			.arg(tmpObj->_resist_poison)
+			.arg(tmpObj->_resist_sleep)
+			.arg(tmpObj->_resist_medusa)
+			.arg(tmpObj->_resist_drunk)
+			.arg(tmpObj->_resist_chaos)
+			.arg(tmpObj->_resist_forget)
+			.arg(tmpObj->_fix_critical)
+			.arg(tmpObj->_fix_strikeback)
+			.arg(tmpObj->_fix_accurancy)
+			.arg(tmpObj->_fix_dodge)
+			.arg(tmpObj->_element_earth)
+			.arg(tmpObj->_element_water)
+			.arg(tmpObj->_element_fire)
+			.arg(tmpObj->_element_wind)
+			.arg(tmpObj->_points_remain)
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
