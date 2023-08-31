@@ -26,9 +26,9 @@ public slots:
 	void doAddAccount();
 	void doAddAccountGid();
 	void doTreeViewClicked(const QModelIndex& index);
-	void doUpdateBagItemTableWidget(ITGidRolePtr pRole);
-	void doUpdateBankItemTableWidget(ITGidRolePtr pRole);
-	void doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePtr pRole);
+	void doUpdateBagItemTableWidget(ITGameCharacterPtr pRole);
+	void doUpdateBankItemTableWidget(ITGameCharacterPtr pRole);
+	void doUpdatePetTableWidget(QTableWidget *pTable, ITGameCharacterPtr pRole);
 	void on_pushButton_refreshModel_clicked();
 	void on_pushButton_search_clicked();
 	void on_lineEdit_search_returnPressed();

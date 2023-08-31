@@ -90,8 +90,8 @@ public:
 	bool LoadOffLineMapImageData(int index, QImage& mapImage);
 	ITCGPetPictorialBookPtr GetGamePetFromNumber(int number) { return m_numberForPet.value(number); }
 	//获取连接过的角色信息
-	QHash<QString, ITGidRolePtr> GetAlreadyConnectedData() { return m_idForAccountRole; }
-	ITGidRolePtr GetGidRolePtrFromKey(const QString &sKey) { return m_idForAccountRole.value(sKey); }
+	QHash<QString, ITGameCharacterPtr> GetAlreadyConnectedData() { return m_idForAccountRole; }
+	ITGameCharacterPtr GetGidRolePtrFromKey(const QString &sKey) { return m_idForAccountRole.value(sKey); }
 	QStringList GetOnlineRoleKeys() { return m_onlineAccountRoles; }
 
 	int GetGameRoleCount() { return m_gameRoleCount; }
@@ -102,7 +102,9 @@ protected:
 	bool LoadIdentification();
 	bool LoadAccount();
 	bool LoadAccountGid();
-	bool LoadAccountRole();
+	bool LoadGameCharacter();
+	bool LoadBaseData();
+	bool LoadAttributeData();
 	bool LoadGidItems();
 	bool LoadGidPets();
 	bool LoadGidSkills();
@@ -146,15 +148,12 @@ private:
 	QString m_strDBType;		   //当前数据库类型
 	QString m_strDBUser;		   //当前数据库用户名
 	QString m_strDBPwd;			   //当前数据库密码
-	//ITObjectList m_pObjectList;	   //所有数据
-	//ITObjectList m_pAddObjectList; //新增数据
-	//ITObjectList m_pDelObjectList; //删除数据
-	//QHash<quint64, ITObjectPtr> m_idForObj;
-	//QHash<quint64, ITObjectPtr> m_idForDelObj;
-	//QHash<quint64, ITObjectPtr> m_idForAllObj;
-	QHash<quint64, ITObjectPtr> m_pObjectList;
-	QHash<quint64, ITObjectPtr> m_pAddObjectList;
-	QHash<quint64, ITObjectPtr> m_pDelObjectList;
+
+	QHash<quint64, ITObjectPtr> m_pObjectList;		//所有数据
+	QHash<quint64, ITObjectPtr> m_pAddObjectList;	//新增数据
+	QHash<quint64, ITObjectPtr> m_pDelObjectList;	//删除数据
+	QHash<int, ITGameServerTypePtr> _serverTypeForObj; //服务大区类型对应指针
+
 
 	QMap<int, QImage> m_mapIndexForData; //地图index和数据映射
 	//暂不使用 解析原dat地图数据用
@@ -168,7 +167,7 @@ private:
 	QMap<int, ITGameGateMapPtr> m_numberForGateMap;			//地图编码和地图可达对象映射
 	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
-	QHash<QString, ITGidRolePtr> m_idForAccountRole;	//name+大区 对应指定游戏人物
+	QHash<QString, ITGameCharacterPtr> m_idForAccountRole;	//name+大区 对应指定游戏人物
 	QStringList m_onlineAccountRoles;					//name+大区 在线列表 不在线清除此列表项
 	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid 对应指定gid
 	QHash<int, QHash<QString, ITCharcterServerPtr> > m_charNameForObj;

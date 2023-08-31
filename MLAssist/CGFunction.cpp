@@ -10879,7 +10879,21 @@ bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QIm
 		qDebug() << "离线地图寻路：离线地图宽高和当前不匹配！";
 		return false;
 	}
-	
+	//增加当前坐标周围地图校验
+	//CGA::cga_map_cells_t cells;
+	//if (g_CGAInterface->GetMapCollisionTable(true, cells))
+	//{
+	//	if (x > cells.x_size || y > cells.y_size)
+	//	{
+	//		qDebug() << "坐标超出地图范围";
+	//		return -1;
+	//	}
+	//	if (cells.cell.at((size_t)(x + y * cells.x_size)) == 0)
+	//		return 0; //没有墙
+	//	else
+	//		return 1; //有墙
+	//}
+	//qDebug() << "获取地图数据错误";
 	return true;
 }
 

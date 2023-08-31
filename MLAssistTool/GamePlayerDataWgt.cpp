@@ -258,7 +258,7 @@ void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 
 		if (GETDEVCLASS( m_curSelectObj->getObjectType()) != TObject_Character)
 			return;
-		ITGidRolePtr pRole = qSharedPointerCast<ITGameCharacter>(m_curSelectObj);
+		ITGameCharacterPtr pRole = qSharedPointerCast<ITGameCharacter>(m_curSelectObj);
 		ui.lineEdit_gold->setText(QString::number(pRole->_gold));
 		ui.lineEdit_bankGold->setText(QString::number(pRole->_bankgold));
 		doUpdateBagItemTableWidget(pRole);
@@ -274,7 +274,7 @@ void GamePlayerDataWgt::GetRowColFromItemPos(int itempos, int& row, int& col)
 	col = itempos % 5;
 }
 
-void GamePlayerDataWgt::doUpdateBagItemTableWidget(ITGidRolePtr pRole)
+void GamePlayerDataWgt::doUpdateBagItemTableWidget(ITGameCharacterPtr pRole)
 {
 	if (!pRole)
 		return;
@@ -341,7 +341,7 @@ void GamePlayerDataWgt::doUpdateBagItemTableWidget(ITGidRolePtr pRole)
 
 }
 
-void GamePlayerDataWgt::doUpdateBankItemTableWidget(ITGidRolePtr pRole)
+void GamePlayerDataWgt::doUpdateBankItemTableWidget(ITGameCharacterPtr pRole)
 {
 	if (!pRole)
 		return;
@@ -407,7 +407,7 @@ void GamePlayerDataWgt::doUpdateBankItemTableWidget(ITGidRolePtr pRole)
 	//ui.tableWidget_bankItem->resizeRowsToContents();
 }
 
-void GamePlayerDataWgt::doUpdatePetTableWidget(QTableWidget* pTable, ITGidRolePtr pRole)
+void GamePlayerDataWgt::doUpdatePetTableWidget(QTableWidget *pTable, ITGameCharacterPtr pRole)
 {
 	if (!pRole)
 		return;

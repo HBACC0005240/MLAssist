@@ -33,6 +33,15 @@ enum TObjectType
 	TObject_BaseData=0x5100,
 	TObject_AttributeData=0x5200,
 
+	TObject_ServerType=0x6100,						//!< 游戏服务大区
+	TObject_ServerType_ItemSales=0x6110,			//!< 道具电信
+	TObject_ServerType_ItemSales_Telecom=0x6111,	//!< 道具电信
+	TObject_ServerType_ItemSales_Netcom=0x6112,		//!< 道具网通
+	TObject_ServerType_PUK2=0x6120,					//!< 时长
+	TObject_ServerType_CGOld=0x6130,				//!< 怀旧
+	TObject_ServerType_CGOld_AriGem=0x6131,			//!< 怀旧牧羊双子
+	TObject_ServerType_CGOld_Taurus = 0x6132,		//!< 怀旧金牛
+
 };
 enum TBattleType
 {

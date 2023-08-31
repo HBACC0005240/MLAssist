@@ -23,6 +23,7 @@ class ITCGPetPictorialBook;
 class ITGameSkill;
 class ITCharcterServer;
 class ITRouteNode;
+class ITGameServerType;
 
 
 typedef QSharedPointer<ITObject> ITObjectPtr;
@@ -61,14 +62,15 @@ typedef QList<ITAccountPtr> ITAccountList;
 typedef QSharedPointer<ITAccountGid> ITAccountGidPtr;
 typedef QList<ITAccountGidPtr> ITAccountGidList;
 
-typedef QSharedPointer<ITGameCharacter> ITGidRolePtr;
-typedef QList<ITGidRolePtr> ITGidRoleList;
 
 typedef QSharedPointer<ITGameSkill> ITGameSkillPtr;
 typedef QList<ITGameSkillPtr> ITGameSkillList;
 
 typedef QSharedPointer<ITCharcterServer> ITCharcterServerPtr;
-typedef QList<ITCharcterServer> ITCharcterServerList;
+typedef QList<ITCharcterServerPtr> ITCharcterServerList;
+
+typedef QSharedPointer<ITGameServerType> ITGameServerTypePtr;
+typedef QList<ITGameServerTypePtr> ITGameServerTypeList;
 
 typedef QSharedPointer<ITRouteNode> ITRouteNodePtr;
 typedef QList<ITRouteNodePtr> ITRouteNodeList;
@@ -82,10 +84,11 @@ Q_DECLARE_METATYPE(ITGameMapPtr)
 Q_DECLARE_METATYPE(ITGameGateMapPtr)
 Q_DECLARE_METATYPE(ITAccountPtr)
 Q_DECLARE_METATYPE(ITAccountGidPtr)
-Q_DECLARE_METATYPE(ITGidRolePtr)
+Q_DECLARE_METATYPE(ITGameCharacterPtr)
 Q_DECLARE_METATYPE(ITCGPetPictorialBook)
 Q_DECLARE_METATYPE(ITGameSkillPtr)
 Q_DECLARE_METATYPE(ITCharcterServerPtr)
+Q_DECLARE_METATYPE(ITGameServerTypePtr)
 enum TObjStatus //设备状态
 {
 	TStatus_Normal = 0, //正常
@@ -179,6 +182,7 @@ public:
 	ITGameBaseData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameBaseData();
 
+	quint64 char_id;
 	int _level = 0;					//!< 等级
 	int	_xp = 0;					//!< 经验
 	int _maxxp = 0;					//!< 最大经验
@@ -199,6 +203,7 @@ public:
 	ITGameAttributeData();
 	ITGameAttributeData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameAttributeData();
+	quint64 _char_id;
 	int _points_remain = 0;			//!< 未加点
 	int _points_endurance = 0;		//!< 体力
 	int _points_strength = 0;		//!< 力量
@@ -229,7 +234,7 @@ public:
 	int _manu_intelligence = 0;		//!< 智力
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameAttributeData)
-
+// 用管理类生成，否则自己管理指针对象
 class ITGamePet : public ITObject
 {
 public:
@@ -369,7 +374,7 @@ public:
 	virtual ~ITAccountGid();
 
 	QString _userGid; //gid账号
-	ITGidRoleList _roleList;
+	ITGameCharacterList _roleList;
 };
 
 DECLARE_OBJECT_MODULE_FACTORY(ITAccountGid)
@@ -493,6 +498,17 @@ public:
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITCGPetPictorialBook)
 
+//! 游戏大区-道具电信-道具网通-时长-怀旧双鱼
+class ITGameServerType : public ITObject
+{
+public:
+	int _server_type;		//!< 对应类型值 13 14  1 23 24
+	QHash<quint64, ITObjectPtr> _idForObj;		//!< 数据表字段id映射
+	QHash<QString, ITObjectPtr> _nameForObj;	//!< 游戏人物名称映射
+};
+DECLARE_OBJECT_MODULE_FACTORY(ITGameServerType)
+
+//! 角色建立的服务
 class ITCharcterServer : public ITObject
 {
 public:
