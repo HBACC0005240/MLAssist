@@ -219,12 +219,12 @@ struct Character : public GameInfo
 	int souls = 0;		//掉魂
 	int level = 0;		//等级
 	int gold = 0;		//金钱
-	int unitid = 0;		//id
+	int unitid = 0;		//聊天单位id？
 	int image_id = 0;	//人物模型图片id
 	int score = 0;		//战绩？
 	int skillslots = 0; //技能格
 	int use_title = 0;	//当前使用的称号
-	int avatar_id = 0;
+	int avatar_id = 0;	//公共聊天id?
 	bool petriding = false;		  //骑乘中？
 	int petid = -1;				  //当前出战宠物id
 	int default_petid = -1;		  //默认出战宠物

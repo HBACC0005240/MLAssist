@@ -1522,57 +1522,57 @@ bool ITObjectDataMgr::deleteOneDeviceFromDB(ITObjectPtr pObj)
 	QString strSql;
 	if (objType == TObject_Item)
 	{
-		strSql = QString("DELETE FROM item WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM item WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_PetBook)
 	{
-		strSql = QString("DELETE FROM pet WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM pet WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_Map)
 	{
-		strSql = QString("DELETE FROM map WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM map WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_GateMap)
 	{
-		strSql = QString("DELETE FROM gateMap WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM gateMap WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVCLASS(objType) == TObject_Character)
 	{
-		strSql = QString("DELETE FROM character WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM character WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_Account)
 	{
-		strSql = QString("DELETE FROM account WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM account WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_AccountGid)
 	{
-		strSql = QString("DELETE FROM gid WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM gid WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_AccountIdentity)
 	{
-		strSql = QString("DELETE FROM identification WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM identification WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVSUBCLASS(objType) == TObject_CGSkill)
 	{
-		strSql = QString("DELETE FROM char_skill WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM char_skill WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVSUBCLASS(objType) == TObject_CharItem)
 	{
-		strSql = QString("DELETE FROM char_item WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM char_item WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVSUBCLASS(objType) == TObject_CGPet)
 	{
-		strSql = QString("DELETE FROM char_pet WHERE id=%1").arg((int)pObj->getObjectID());
+		strSql = QString("DELETE FROM char_pet WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -1662,7 +1662,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITAccountIdentity>();
 		strSql = QString("INSERT INTO identification(id,name,identityCard,sex,desc) VALUES(%1,'%2','%3',%4,'%5')")
-			.arg((int)tmpObj->getObjectID()).arg(tmpObj->getObjectName())
+			.arg(tmpObj->getObjectID()).arg(tmpObj->getObjectName())
 			.arg(tmpObj->_identity)
 			.arg(tmpObj->_sex)
 			.arg(tmpObj->getObjectDesc());
@@ -1673,7 +1673,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITAccount>();
 		strSql = QString("INSERT INTO account(id,user,passwd,identification,desc) VALUES(%1,'%2','%3','%4','%5')")
-			.arg((int)tmpObj->getObjectID()).arg(tmpObj->_userName)
+			.arg(tmpObj->getObjectID()).arg(tmpObj->_userName)
 			.arg(tmpObj->_passwd)
 			.arg(tmpObj->_identity)
 			.arg(tmpObj->getObjectDesc());
@@ -1688,7 +1688,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		if (pOwn)
 			aid = pOwn->getObjectID();
 		strSql = QString("INSERT INTO gid(id,gid,aid,desc) VALUES(%1,'%2','%3','%4')")
-			.arg((int)tmpObj->getObjectID()).arg(tmpObj->_userGid)
+			.arg(tmpObj->getObjectID()).arg(tmpObj->_userGid)
 			.arg(aid)
 			.arg(tmpObj->getObjectDesc());
 		bret = m_dbconn->execSql(strSql);
@@ -1702,7 +1702,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		if (pOwn)
 			char_id = pOwn->getObjectID();
 		strSql = QString("INSERT INTO char_item(id,character_id,name,count,isbank,item_id,item_pos) VALUES(%1,%2,'%3',%4,%5,%6,%7)")
-			.arg((int)tmpObj->getObjectID()).arg((int)char_id)
+			.arg(tmpObj->getObjectID()).arg(char_id)
 			.arg(tmpObj->getObjectName())
 			.arg(tmpObj->_itemCount)
 			.arg(tmpObj->getObjectType() == TObject_CharItem ? 0 : 1)
@@ -1720,8 +1720,8 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 			char_id = pOwn->getObjectID();
 		strSql = QString("INSERT INTO char_skill(id,linkid,type,name,info,s_index,level,maxlevel,xp,maxxp,cost,available,flags)"
 			" VALUES(%1,%2,%3,'%4','%5',%6,%7,%8,%9,%11,%12,%13,%14)")
-			.arg((int)tmpObj->getObjectID())
-			.arg((int)char_id)
+			.arg(tmpObj->getObjectID())
+			.arg(char_id)
 			.arg(tmpObj->getObjectType())
 			.arg(tmpObj->getObjectName())
 			.arg(tmpObj->_info)
@@ -1744,26 +1744,14 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		auto pOwn = tmpObj->getObjectParent();
 		if (pOwn)
 			char_id = pOwn->getObjectID();
-		strSql = QString("INSERT INTO char_pet(character_id,name,realname,level,hp,maxhp,mp,maxmp,xp,maxxp,loyality,"
-			"health,state,skillslots,race,grade,lossMinGrade,lossMaxGrade,points_remain,"
-			"points_endurance, points_strength, points_defense, points_agility,"
-			"points_magical,value_attack,value_defensive,value_agility,value_spirit,value_recovery,resist_poison,"
-			"resist_sleep,resist_medusa,resist_drunk,resist_chaos,resist_forget,fix_critical,fix_strikeback,fix_accurancy,"
-			"fix_dodge,element_earth,element_water,element_fire,element_wind,type,pos,id)"
-			" VALUES(%1,'%2','%3',%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
-			"%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31,%32,%33,%34,%35,%36,%37,%38,%39,%40,%41,%42,%43,%44,%45,%46)")
-			.arg((int)char_id).arg(tmpObj->getObjectName())
-			.arg(tmpObj->_realName).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
-			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_loyality).arg(tmpObj->_baseData->_health).arg(tmpObj->_state)
-			.arg(tmpObj->_baseData->_skillslots).arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
-			.arg(tmpObj->_attrData->_points_remain).arg(tmpObj->_attrData->_points_endurance)\
-			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
-			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
-			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
-			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
-			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind)
+		strSql = QString("INSERT INTO char_pet(character_id,name,realname,loyality,"
+			"state,race,grade,lossMinGrade,lossMaxGrade,type,pos,id)"
+			" VALUES(%1,'%2','%3',%4,%5,%6,%7,%8,%9,%10,%11,%12)")
+			.arg(char_id).arg(tmpObj->getObjectName())
+			.arg(tmpObj->_realName).arg(tmpObj->_loyality).arg(tmpObj->_state)
+			.arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
 			.arg(tmpObj->getObjectType()).arg(tmpObj->_pos)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (GETDEVCLASS(objType) == TObject_Character)
@@ -1771,24 +1759,17 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGameCharacter>();
 		QMutexLocker locker(&tmpObj->_mutex);
-		strSql = QString("INSERT INTO character(gid,type,name,level,imageid,sex,gold,bankgold,xp,"
-			"maxxp,hp,maxhp,mp,maxmp,score,job,useTitle,titles,skillslots,manu_endurance,manu_skillful,"
-			"manu_intelligence,value_charisma,points_endurance,points_strength,points_defense,points_agility,"
-			"points_magical,value_attack,value_defensive,value_agility,value_spirit,value_recovery,resist_poison,"
-			"resist_sleep,resist_medusa,resist_drunk,resist_chaos,resist_forget,fix_critical,fix_strikeback,fix_accurancy,"
-			"fix_dodge,element_earth,element_water,element_fire,element_wind,points_remain,id,role_type)"
-			" VALUES('%1',%2,'%3',%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,'%16',%17,'%18',"
-			"%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30,%31,%32,%33,%34,%35,%36,%37,%38,%39,%40,%41,%42,%43,%44,%45,%46,%47,%48,%49,%50)")
-			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_imageid).arg(tmpObj->_sex)
-			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
-			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|")).arg(tmpObj->_baseData->_skillslots)\
-			.arg(tmpObj->_attrData->_manu_endurance).arg(tmpObj->_attrData->_manu_skillful).arg(tmpObj->_attrData->_manu_intelligence).arg(tmpObj->_value_charisma).arg(tmpObj->_attrData->_points_endurance)\
-			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
-			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
-			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
-			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
-			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind).arg(tmpObj->_attrData->_points_remain)
-			.arg((int)tmpObj->getObjectID()).arg(tmpObj->getObjectType());
+		strSql = QString("INSERT INTO character(type,sex,gold,bankgold,score,job,useTitle,"
+			"avatar_id,unitid,petid,petriding,direction,punchclock,usingpunchclock,value_charisma,"
+			"x,y,battle_position,map_number,line,big_line,conn_state,last_time,id,role_type,souls,gid,name,titles,map_name,nick_name)"
+			" VALUES(%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
+			"%19,%20,%21,%22,%23,%24,%25,%26,'%27','%28','%29','%30','%31')")
+			.arg(tmpObj->_type).arg(tmpObj->_sex).arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle)
+			.arg(tmpObj->_avatar_id).arg(tmpObj->_unitid).arg(tmpObj->_petid).arg(tmpObj->_petriding).arg(tmpObj->_direction).arg(tmpObj->_punchclock)\
+			.arg(tmpObj->_usingpunchclock).arg(tmpObj->_value_charisma).arg(tmpObj->_x).arg(tmpObj->_y)\
+			.arg(tmpObj->battle_position).arg(tmpObj->_map_number).arg(tmpObj->_server_line).arg(tmpObj->_big_line).arg(tmpObj->_connectState)\
+			.arg(QDateTime::currentDateTime().toSecsSinceEpoch()).arg(tmpObj->getObjectID()).arg(tmpObj->getObjectType())\
+			.arg(tmpObj->_souls).arg(tmpObj->_gid).arg(tmpObj->getObjectName()).arg(tmpObj->_titles.join("|")).arg(tmpObj->_map_name).arg(tmpObj->_nickName);
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_BaseData)
@@ -1809,7 +1790,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 						 .arg(tmpObj->_health)
 						 .arg(tmpObj->_skillslots)				
 						 .arg(tmpObj->_imageid)	
-						 .arg((int)tmpObj->getObjectID());
+						 .arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_AttributeData)
@@ -1852,7 +1833,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 						 .arg(tmpObj->_element_fire)
 						 .arg(tmpObj->_element_wind)
 						 .arg(tmpObj->_points_remain)
-						 .arg((int)tmpObj->getObjectID());
+						 .arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -1880,7 +1861,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_itemLevel)
 			.arg(tmpObj->_sellMinCount)
 			.arg(tmpObj->_itemAttr)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_PetBook)
@@ -1907,7 +1888,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_elementWater)
 			.arg(tmpObj->_elementFire)
 			.arg(tmpObj->_elementWind)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_Map)
@@ -1919,7 +1900,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_mapNumber)
 			.arg(tmpObj->getObjectDesc())
 			.arg(tmpObj->_oftenMap)
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_GateMap)
@@ -1938,7 +1919,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_ty)
 			.arg(tmpObj->_warpType)
 			.arg(tmpObj->_npcSelect.join(";"))
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_AccountIdentity)
@@ -1950,7 +1931,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_identity)
 			.arg(tmpObj->_sex)
 			.arg(tmpObj->getObjectDesc())
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_Account)
@@ -1962,7 +1943,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_passwd)
 			.arg(tmpObj->_identity)
 			.arg(tmpObj->getObjectDesc())
-			.arg((int)tmpObj->getObjectID());
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_AccountGid)
@@ -1975,7 +1956,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			aid = pOwn->getObjectID();
 		strSql = QString("UPDATE gid gid='%1',aid=%2,desc='%3' WHERE id=%4")
 			.arg(tmpObj->_userGid)
-			.arg((int)aid)
+			.arg(aid)
 			.arg(tmpObj->getObjectDesc())
 			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -1989,7 +1970,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		if (pOwn)
 			char_id = pOwn->getObjectID();
 		strSql = QString("UPDATE char_item set character_id=%1,name='%2',count=%3,isbank=%4,item_id=%5,item_pos=%6 WHERE id=%7")
-			.arg((int)char_id)
+			.arg(char_id)
 			.arg(tmpObj->getObjectName())
 			.arg(tmpObj->_itemCount)
 			.arg(tmpObj->getObjectType() == TObject_CharItem ? 0 : 1)
@@ -2006,24 +1987,11 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		auto pOwn = tmpObj->getObjectParent();
 		if (pOwn)
 			char_id = pOwn->getObjectID();
-		strSql = QString("UPDATE char_pet set character_id=%1,name='%2',realname='%3',level=%4,"
-			"hp=%5,maxhp=%6,mp=%7,maxmp=%8,xp=%9,maxxp=%10,loyality=%11,health=%12,state=%13,"
-			"skillslots=%14,race=%15,grade=%16,lossMinGrade=%17,lossMaxGrade=%18,"
-			"points_remain=%19,points_endurance=%20,points_strength=%21,"
-			"points_defense=%22,points_agility=%23,points_magical=%24,value_attack=%25,value_defensive=%26,value_agility=%27,value_spirit=%28,"
-			"value_recovery=%29,resist_poison=%30,resist_sleep=%31,resist_medusa=%32,resist_drunk=%33,resist_chaos=%34,resist_forget=%35,"
-			"fix_critical=%36,fix_strikeback=%37,fix_accurancy=%38,fix_dodge=%39,element_earth=%40,element_water=%41,element_fire=%42,"
-			"element_wind=%43,type=%44,pos=%45   WHERE id=%46")
-			.arg((int)char_id).arg(tmpObj->getObjectName())
-			.arg(tmpObj->_realName).arg(tmpObj->_baseData->_level).arg(tmpObj->_baseData->_hp).arg(tmpObj->_baseData->_maxhp).arg(tmpObj->_baseData->_mp)\
-			.arg(tmpObj->_baseData->_maxmp).arg(tmpObj->_baseData->_xp).arg(tmpObj->_baseData->_maxxp).arg(tmpObj->_loyality).arg(tmpObj->_baseData->_health).arg(tmpObj->_state)
-			.arg(tmpObj->_baseData->_skillslots).arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)
-			.arg(tmpObj->_attrData->_points_remain).arg(tmpObj->_attrData->_points_endurance)\
-			.arg(tmpObj->_attrData->_points_strength).arg(tmpObj->_attrData->_points_defense).arg(tmpObj->_attrData->_points_agility).arg(tmpObj->_attrData->_points_magical).arg(tmpObj->_attrData->_value_attack)\
-			.arg(tmpObj->_attrData->_value_defensive).arg(tmpObj->_attrData->_value_agility).arg(tmpObj->_attrData->_value_spirit).arg(tmpObj->_attrData->_value_recovery).arg(tmpObj->_attrData->_resist_poison)\
-			.arg(tmpObj->_attrData->_resist_sleep).arg(tmpObj->_attrData->_resist_medusa).arg(tmpObj->_attrData->_resist_drunk).arg(tmpObj->_attrData->_resist_chaos).arg(tmpObj->_attrData->_resist_forget)\
-			.arg(tmpObj->_attrData->_fix_critical).arg(tmpObj->_attrData->_fix_strikeback).arg(tmpObj->_attrData->_fix_accurancy).arg(tmpObj->_attrData->_fix_dodge)
-			.arg(tmpObj->_attrData->_element_earth).arg(tmpObj->_attrData->_element_water).arg(tmpObj->_attrData->_element_fire).arg(tmpObj->_attrData->_element_wind)
+		strSql = QString("UPDATE char_pet set character_id=%1,name='%2',realname='%3',loyality=%4,"
+			"state=%5,race=%6,grade=%7,lossMinGrade=%8,lossMaxGrade=%9,type=%10,pos=%11 WHERE id=%12")
+			.arg(char_id).arg(tmpObj->getObjectName())
+			.arg(tmpObj->_realName).arg(tmpObj->_loyality).arg(tmpObj->_state)
+			.arg(tmpObj->_race).arg(tmpObj->_grade).arg(tmpObj->_lossMinGrade).arg(tmpObj->_lossMaxGrade)			
 			.arg(tmpObj->getObjectType()).arg(tmpObj->_pos)
 			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
@@ -2037,7 +2005,7 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		if (pOwn)
 			char_id = pOwn->getObjectID();
 		strSql = QString("UPDATE char_skill set linkid=%1,type=%2,name='%3',info='%4',s_index=%5,level=%6,maxlevel=%7,xp=%8,maxxp=%9,cost=%11,available=%12,flags=%13 WHERE id=%14")
-			.arg((int)char_id)
+			.arg(char_id)
 			.arg(tmpObj->getObjectType())
 			.arg(tmpObj->getObjectName())
 			.arg(tmpObj->_info)

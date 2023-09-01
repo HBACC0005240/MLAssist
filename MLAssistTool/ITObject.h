@@ -401,13 +401,13 @@ public:
 	QString _nickName;			//!< 自定称号
 	int _useTitle = 0;			//!< 当前使用的称号index
 	QStringList	_titles;		//!< 称号列表
-	int _avatar_id = 0;			//!< 
-	int _unitid = 0;			//!< 
+	int _avatar_id = 0;			//!< 公共聊天id?
+	int _unitid = 0;			//!< 聊天单位id？
 	int _petid = 0;				//!< 当前宠物id
 	bool _petriding = false;	//!< 是否骑乘中
 	int _direction = 0;			//!< 人物朝向
 	int _punchclock = 0;		//!< 卡时
-	bool _usingpunchclock = false;//!< 未使用卡时
+	bool _usingpunchclock = false;//!< 是否已打卡
 
 	int _value_charisma = 0;	//!< 魅力
 	int _x = 0;					//!< 当前x坐标
