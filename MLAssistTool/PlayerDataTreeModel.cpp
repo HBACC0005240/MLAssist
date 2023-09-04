@@ -7,7 +7,7 @@ PlayerDataTreeModel::PlayerDataTreeModel(QObject* parent)
 	: TreeModel(parent)
 {
 	m_columnCnt = 1;
-	m_rootItem = new TreeItem("根节点");
+	m_rootItem = new TreeItem("魔力宝贝");
 	//SetupModelData();
 }
 
@@ -48,10 +48,8 @@ QVariant PlayerDataTreeModel::headerData(int section, Qt::Orientation orientatio
 	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
 	{
 		if (section == 0)
-		{
-			/*INMSDevice* itemData = (INMSDevice*)m_rootItem->data();
-			return itemData->getDeviceName();*/
-			return m_rootItem->data(Qt::UserRole);
+		{		
+			return m_rootItem->data(Qt::DisplayRole);
 		}
 	}
 	return QVariant();
@@ -74,30 +72,43 @@ bool PlayerDataTreeModel::SortStringFun(const QString& s1,const QString& s2)
 		return true;
 }
 
-void PlayerDataTreeModel::SetupModelData( ITObjectList pObjList)
+void PlayerDataTreeModel::SetupModelData(ITObjectList pObjList, TreeItem *treeItem)
 {
 	if (pObjList.size() < 1)
 		return;
+	if (treeItem==nullptr)
+	{
+		return;
+	}
 	
-//	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
-
 	qSort(pObjList.begin(), pObjList.end(), [&](ITObjectPtr& a, ITObjectPtr& b)
 			{ return SortStringFun(a->getObjectName() , b->getObjectName()); });
 	for (ITObjectPtr tObj : pObjList)
-	{
-		TreeItem* tempitem = new TreeItem(tObj->getObjectName());
+	{		
+		TreeItem *tempitem = new TreeItem(tObj->getObjectName());
 		tempitem->setData(Qt::UserRole, tObj->getObjectID());
-		m_rootItem->appendChild(tempitem);
-		auto pAccountAsse = qSharedPointerDynamicCast<ITAccountGid>(tObj);
-		auto pAccountList = pAccountAsse->GetAllChildObj();
-		for (auto pAccount : pAccountList)
-		{
-			TreeItem* subitem = new TreeItem(pAccount->getObjectName());
-			subitem->setData(Qt::UserRole, pAccount->getObjectID());
+		treeItem->appendChild(tempitem);
 
-			tempitem->appendChild(subitem);
-			//SetupModelSubData(pAccount, subitem);
+		if (GETDEVCLASS(tObj->getObjectType()) == TObject_ServerType)
+		{			
+			auto pGameSeverType = qSharedPointerDynamicCast<ITGameServerType>(tObj);
+			ITObjectList pGidList;
+			for (auto it = pGameSeverType->_gidForObj.begin(); it != pGameSeverType->_gidForObj.end(); ++it)
+			{
+				pGidList.append(it.value());
+			}
+			SetupModelData(pGidList, tempitem);
 		}
+		else if (tObj->getObjectType() == TObject_AccountGid)
+		{
+			auto pAccountAsse = qSharedPointerDynamicCast<ITAccountGid>(tObj);
+			auto pAccountList = pAccountAsse->GetAllChildObj();
+			SetupModelData(pAccountList, tempitem);			
+		}
+	/*	else if (GETDEVCLASS(tObj->getObjectType()) == TObject_Character)
+		{
+		
+		}*/
 	}
 
 }

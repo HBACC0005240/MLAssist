@@ -1,6 +1,6 @@
 #include "ITObject.h"
 //#include "stdafx.h"
-
+#include "ITObjectDataMgr.h"
 ITObject::ITObject()
 {
 	m_ullID = 0;
@@ -228,6 +228,24 @@ ITGameBaseData::~ITGameBaseData()
 
 }
 
+ITGameBaseData& ITGameBaseData::operator=(const ITGameBaseData &o) 
+{
+	if (this == &o)
+		return *this;	
+	char_id = o.char_id;
+	_level = o._level;
+	_xp = o._xp;
+	_maxxp = o._maxxp;
+	_hp = o._hp;
+	_maxhp = o._maxhp;
+	_mp = o._mp;
+	_maxmp = o._maxmp;
+	_health = o._health;
+	_skillslots = o._skillslots;
+	_imageid = o._imageid;			
+	return *this;
+}
+
 bool ITGameBaseData::operator==(const ITGameBaseData& o) const
 {
 	return std::tie(char_id, _level, _xp, _maxxp, _hp, _maxhp, _mp, _maxmp, _health, _skillslots, _imageid) 
@@ -285,6 +303,44 @@ ITGameAttributeData::~ITGameAttributeData()
 
 }
 
+ITGameAttributeData &ITGameAttributeData::operator=(const ITGameAttributeData &o)
+{
+	if (this == &o)
+	{
+		return *this;
+	}
+	this->_char_id = o._char_id;
+	this->_points_remain = o._points_remain;
+	this->_points_endurance = o._points_endurance;
+	this->_points_strength = o._points_strength;
+	this->_points_defense = o._points_defense;
+	this->_points_agility = o._points_agility;
+	this->_points_magical = o._points_magical;
+	this->_value_attack = o._value_attack;
+	this->_value_defensive = o._value_defensive;
+	this->_value_agility = o._value_agility;
+	this->_value_spirit = o._value_spirit;
+	this->_value_recovery = o._value_recovery;
+	this->_resist_poison = o._resist_poison;
+	this->_resist_sleep = o._resist_sleep;
+	this->_resist_medusa = o._resist_medusa;
+	this->_resist_drunk = o._resist_drunk;
+	this->_resist_chaos = o._resist_chaos;
+	this->_resist_forget = o._resist_forget;
+	this->_fix_critical = o._fix_critical;
+	this->_fix_strikeback = o._fix_strikeback;
+	this->_fix_accurancy = o._fix_accurancy;
+	this->_fix_dodge = o._fix_dodge;
+	this->_element_earth = o._element_earth;
+	this->_element_water = o._element_water;
+	this->_element_fire = o._element_fire;
+	this->_element_wind = o._element_wind;
+	this->_manu_endurance = o._manu_endurance;
+	this->_manu_skillful = o._manu_skillful;
+	this->_manu_intelligence = o._manu_intelligence;
+	return *this;
+}
+
 bool ITGameAttributeData::operator==(const ITGameAttributeData& o) const
 {
 	return std::tie(_char_id,_points_remain, _points_endurance, _points_strength, _points_defense, \
@@ -313,4 +369,91 @@ bool ITGameAttributeData::operator!=(const ITGameAttributeData& o) const
 			o._resist_drunk, o._resist_chaos, o._resist_forget, o._fix_critical, o._fix_strikeback, \
 			o._fix_accurancy, o._fix_dodge, o._element_earth, o._element_water, o._element_fire, \
 			o._element_wind, o._manu_endurance, o._manu_skillful, o._manu_intelligence);
+}
+
+ITObjectPtr ITGameServerType::getRoleObjFromRoleName(const QString &sCharName)
+{
+	if (_nameForObj.contains(sCharName))
+	{
+		return _nameForObj.value(sCharName);
+	}
+	return nullptr;
+}
+
+ITObjectPtr ITGameServerType::getGidObjFromGidName(const QString &sGid)
+{
+	if (_gidForObj.contains(sGid))
+	{
+		return _gidForObj.value(sGid);
+	}
+	return nullptr;
+}
+
+void ITGameServerType::appendObject(ITObjectPtr pObj)
+{
+	if (pObj == nullptr)
+		return;
+	if (GETDEVCLASS(pObj->getObjectType()) == TObject_Character)
+	{
+		//建立大区和游戏角色关系
+		this->addChildObj(pObj);
+		this->_nameForObj.insert(pObj->getObjectName(), pObj);
+		auto tmpObj = pObj.dynamicCast<ITGameCharacter>();
+		//建立
+		auto pGidObj = this->getGidObjFromGidName(tmpObj->_gid).dynamicCast<ITAccountGid>();
+		if (pGidObj == nullptr)
+		{
+			pGidObj = ITObjectDataMgr::getInstance().newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
+			pGidObj->_userGid = tmpObj->_gid;
+			pGidObj->_serverTypeID = this->getObjectID();
+			pGidObj->setObjectParent(sharedFromThis());
+			this->addChildObj(pGidObj);
+			this->_gidForObj.insert(tmpObj->_gid, pGidObj);
+		}
+		pObj->setObjectParent(pGidObj);
+		pGidObj->addChildObj(pObj);
+	}
+	else if (pObj->getObjectType() == TObject_AccountGid)
+	{
+		auto pGidObj = pObj.dynamicCast<ITAccountGid>();
+
+		auto pExistGidObj = this->getGidObjFromGidName(pGidObj->_userGid);
+		if (pExistGidObj == nullptr)
+		{	
+			pGidObj->setObjectParent(sharedFromThis());
+			this->addChildObj(pGidObj);
+			this->_gidForObj.insert(pGidObj->_userGid, pGidObj);
+		}
+		else if (pExistGidObj != pGidObj)//已存在 又来一个 删掉前面的 更新
+		{
+			ITObjectDataMgr::getInstance().deleteOneObject(pExistGidObj);
+			pGidObj->setObjectParent(sharedFromThis());
+			this->addChildObj(pGidObj);
+			this->_gidForObj.insert(pGidObj->_userGid, pGidObj);
+		}	
+	}
+}
+
+void ITGameServerType::removeObject(ITObjectPtr pObj)
+{
+	if (pObj == nullptr)
+		return;
+	this->removeChildObj(pObj);
+	if (GETDEVCLASS(pObj->getObjectType()) == TObject_Character)
+	{
+		auto pCharObj = pObj.dynamicCast<ITGameCharacter>();
+		if (this->_nameForObj.contains(pCharObj->getObjectName()))
+		{
+			this->_nameForObj.remove(pCharObj->getObjectName());
+		}
+	}
+	else if (pObj->getObjectType() == TObject_AccountGid)
+	{
+		auto pDelGidObj = pObj.dynamicCast<ITAccountGid>();
+		auto pGidObj = this->getGidObjFromGidName(pDelGidObj->_userGid).dynamicCast<ITAccountGid>();
+		if (pGidObj)
+		{
+			this->_gidForObj.remove(pGidObj->_userGid);
+		}
+	}
 }

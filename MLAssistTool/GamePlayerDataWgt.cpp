@@ -23,8 +23,8 @@ GamePlayerDataWgt::~GamePlayerDataWgt()
 void GamePlayerDataWgt::init()
 {
 	m_pPlayerDataTreeModel = new PlayerDataTreeModel(this);
-	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
-	m_pPlayerDataTreeModel->SetupModelData(pObjList);
+	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_ServerType, 0xffffff00);
+	m_pPlayerDataTreeModel->SetupModelData(pObjList,m_pPlayerDataTreeModel->root());
 	ui.treeView->setModel(NULL);
 	ui.treeView->setModel(m_pPlayerDataTreeModel);
 	ui.treeView->expandAll();
@@ -87,7 +87,7 @@ void GamePlayerDataWgt::resetModel(ITObjectList pObjList)
 		m_pPlayerDataTreeModel = nullptr;
 	}
 	m_pPlayerDataTreeModel = new PlayerDataTreeModel(this);
-	m_pPlayerDataTreeModel->SetupModelData(pObjList);
+	m_pPlayerDataTreeModel->SetupModelData(pObjList,m_pPlayerDataTreeModel->root());
 	ui.treeView->setModel(NULL);
 	ui.treeView->setModel(m_pPlayerDataTreeModel);
 	ui.treeView->expandAll();
@@ -513,7 +513,7 @@ void GamePlayerDataWgt::setItemText(QTableWidget* pTable, int row, int col, cons
 }
 void GamePlayerDataWgt::on_pushButton_refreshModel_clicked()
 {
-	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_AccountGid);
+	auto pObjList = ITObjectDataMgr::getInstance().GetDstObjTypeList(TObject_ServerType,0xffffff00);
 	resetModel(pObjList);
 }
 

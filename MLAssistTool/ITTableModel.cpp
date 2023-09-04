@@ -60,22 +60,25 @@ QVariant ITTableModel::data(const QModelIndex& index, int role) const
 		return QVariant();
 	int ncol = index.column();
 	int nrow = index.row();
-	if (nrow >= m_sTableDataIds.size())
+	//if (nrow >= m_sTableDataIds.size())
+	if (nrow >= m_pCharacterList.size())
 	{
 		return QVariant();
 	}
-	auto pRole = ITObjectDataMgr::getInstance().GetGidRolePtrFromKey(m_sTableDataIds[nrow]);
+	auto pRole = m_pCharacterList[nrow].dynamicCast<ITGameCharacter>();
 	if (role == Qt::DisplayRole) 
 	{	
 		switch (ncol) 
 		{
 		case 0: return nrow+1;
 		case 1: return pRole->getObjectName();							//名称
-		case 2: return pRole->_baseData->_level;									//等级
+		case 2: return pRole->_baseData->_level;						//等级
 		case 3: return pRole->_gold;									//金币
 		case 4: return pRole->_map_name;								//地图
 		case 5: return QString("%1,%2").arg(pRole->_x).arg(pRole->_y);	//坐标
 		case 6: return pRole->_connectState ? "在线" : "离线";			//连接状态
+		case 7: return QString::number(pRole->_server_line);					//线路
+		case 8: return ITObjectDataMgr::getInstance().GetGameServerTypeText(pRole->_big_line); //大区
 		default:break;
 		}
 	}
@@ -124,6 +127,7 @@ QModelIndex ITTableModel::index(int row, int column, const QModelIndex& parent) 
 
 int ITTableModel::rowCount(const QModelIndex& parent) const
 {
-	return m_sTableDataIds.size();
-//	return ITObjectDataMgr::getInstance().GetAlreadyConnectedData().size();
+	//return m_sTableDataIds.size();
+	return m_pCharacterList.size();
+	//	return ITObjectDataMgr::getInstance().GetAlreadyConnectedData().size();
 }

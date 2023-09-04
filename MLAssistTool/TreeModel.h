@@ -33,9 +33,10 @@ public:
 	QModelIndex parent(const QModelIndex& index) const;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-
-	TreeItem* m_rootItem;			//树形的根节点，不在view里显示
+	TreeItem *root();
+	
 protected:
+	TreeItem *m_rootItem; //树形的根节点，不在view里显示
 	int		m_columnCnt;
 	QStringList	m_headerData;
 };

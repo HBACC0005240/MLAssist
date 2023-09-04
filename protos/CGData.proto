@@ -170,6 +170,7 @@ message SelectGidDataRequest
 {
 	string gid=1;				//游戏Gid
 	int32 role_type=2;			//角色类型 左右角色？
+	int32 big_line=3;			//游戏大区必须的  否则默认查道具电信
 }
 //查询大区下指定角色名称游戏数据
 message SelectCharacterDataRequest
@@ -185,6 +186,7 @@ message SelectCharacterDataResponse
 	CGCharacterData character_data=3;
 	repeated CGPetData pet_data=4;
 	repeated CGItemData items=5;
+	int32 online=6;		//是否在线 1在线 0不在线
 }
 //查询游戏gid数据
 message SelectCharacterServerRequest
@@ -235,6 +237,8 @@ message SelectGidDataResponse
 	CGCharacterData character_data=4;
 	repeated CGPetData pet_data=5;
 	repeated CGItemData items=6;
+	int32 online=7;		//是否在线 1在线 0不在线
+
 }
 message CGBaseData
 {

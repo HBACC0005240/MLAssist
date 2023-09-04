@@ -53,7 +53,7 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	qRegisterMetaType<ITGamePetPtr>("ITGamePetPtr");
 	qRegisterMetaType<ITGameMapPtr>("ITGameMapPtr");
 	qRegisterMetaType<ITGameGateMapPtr>("ITGameGateMapPtr");
-	qRegisterMetaType<ITGameSkillPtr>("ITGameGateMapPtr");
+	qRegisterMetaType<ITGameSkillPtr>("ITGameSkillPtr");
 	qRegisterMetaType<ITAccountIdentityPtr>("ITAccountIdentityPtr");
 	qRegisterMetaType<ITCharcterServerPtr>("ITCharcterServerPtr");
 	qRegisterMetaType<ITGameCharacterPtr>("ITGameCharacterPtr");
@@ -67,6 +67,8 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Character, NEW_MODULE_FACTORY(ITGameCharacter));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharacterLeft, NEW_MODULE_FACTORY(ITGameCharacter));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharacterRight, NEW_MODULE_FACTORY(ITGameCharacter));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_BaseData, NEW_MODULE_FACTORY(ITGameBaseData));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_AttributeData, NEW_MODULE_FACTORY(ITGameAttributeData));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_RoleRunConfig, NEW_MODULE_FACTORY(ITAccountGidRoleRunConfig));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Pet, NEW_MODULE_FACTORY(ITGamePet));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CGPet, NEW_MODULE_FACTORY(ITGamePet));
@@ -80,6 +82,31 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharSkill, NEW_MODULE_FACTORY(ITGameSkill));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharPetSkill, NEW_MODULE_FACTORY(ITGameSkill));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_CharServer, NEW_MODULE_FACTORY(ITCharcterServer));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_ItemSales, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_ItemSales_Telecom, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_ItemSales_Netcom, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_PUK2, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_CGOld, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_CGOld_AriGem, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_CGOld_Taurus, NEW_MODULE_FACTORY(ITGameServerType));
+	//m_serverTypeForObjType.insert(13, TObject_ServerType);
+	//m_serverTypeForObjType.insert(13, TObject_ServerType_ItemSales);
+	m_serverTypeForObjType.insert(13, TObject_ServerType_ItemSales_Telecom);
+	m_serverTypeForObjType.insert(14, TObject_ServerType_ItemSales_Netcom);
+	m_serverTypeForObjType.insert(1, TObject_ServerType_PUK2);
+	//m_serverTypeForObjType.insert(23, TObject_ServerType_CGOld);
+	m_serverTypeForObjType.insert(23, TObject_ServerType_CGOld_AriGem);
+	m_serverTypeForObjType.insert(24, TObject_ServerType_CGOld_Taurus);	
+	
+	//m_serverTypeForObjName.insert(13, TObject_ServerType);
+	//m_serverTypeForObjName.insert(13, TObject_ServerType_ItemSales);
+	m_serverTypeForObjName.insert(13, "道具电信");
+	m_serverTypeForObjName.insert(14, "道具网通");
+	m_serverTypeForObjName.insert(1, "时长");
+	//m_serverTypeForObjName.insert(23, TObject_ServerType_CGOld);
+	m_serverTypeForObjName.insert(23, "怀旧牧羊双子");
+	m_serverTypeForObjName.insert(24, "怀旧金牛");
 	connect(this, SIGNAL(signal_loadDataFini()), this, SLOT(doLoadDBInfoOver())); //这个是加载数据库完成
 	init();
 }
@@ -122,23 +149,25 @@ void ITObjectDataMgr::checkOnlineThread(ITObjectDataMgr *pThis)
 		return;
 	while (!pThis->m_bExit)
 	{
-		auto tmpObjs = pThis->m_idForAccountRole;
+		auto tmpObjs = pThis->GetAllCharacterList();
 		pThis->m_gameRoleCount = tmpObjs.size();
 		int onlineCount = 0;
 		int offlineCount = 0;
-		for (auto it = tmpObjs.begin(); it != tmpObjs.end(); ++it)
+		for (auto it : tmpObjs)
 		{
-			if (it.value()->_connectState == 1 && it.value()->_lastUploadTime.elapsed() > 30000) //30秒 状态更新为离线
+			ITGameCharacterPtr pCharacter = it.dynamicCast<ITGameCharacter>();
+			if (pCharacter->_connectState == 1 && pCharacter->_lastUploadTime.elapsed() > 30000) //30秒 状态更新为离线
 			{
 				//QMutexLocker locker(&it.value()->_mutex);
-				it.value()->_connectState = 0;
+				pCharacter->_connectState = 0;
 				offlineCount += 1;
-				if (pThis->m_onlineAccountRoles.contains(it.key()))
+				QString sOneID = pCharacter->getObjectName() + QString::number(pCharacter->_big_line);
+				if (pThis->m_onlineAccountRoles.contains(sOneID))
 				{
-					pThis->m_onlineAccountRoles.removeOne(it.key());
+					pThis->m_onlineAccountRoles.removeOne(sOneID);
 				}
 			}
-			else if (it.value()->_connectState == 1)
+			else if (pCharacter->_connectState == 1)
 			{
 				onlineCount += 1;
 			}
@@ -147,6 +176,16 @@ void ITObjectDataMgr::checkOnlineThread(ITObjectDataMgr *pThis)
 		pThis->m_onlineCount = onlineCount;
 		QThread::msleep(10000);		//10秒检测一次
 	}
+}
+
+ITObjectList ITObjectDataMgr::GetAllCharacterList()
+{
+	ITObjectList pAllList;
+	for (auto it = m_serverTypeForObj.begin(); it != m_serverTypeForObj.end();++it)
+	{
+		pAllList.append(it.value()->_nameForObj.values());
+	}
+	return pAllList;
 }
 
 bool ITObjectDataMgr::init()
@@ -309,7 +348,7 @@ bool ITObjectDataMgr::FindTargetNavigationEx(ITGameGateMapPtr cRoute, int tgtInd
 	return bAllow;
 }
 
-ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType)
+ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType, quint64 nVal)
 {
 	ITObjectList pSelectObjs;
 
@@ -318,10 +357,10 @@ ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType)
 	{
 		QMutexLocker locker(&m_objMutex);
 		tmpObjList = m_pObjectList;
-	}
+	}	
 	for (auto it= tmpObjList.begin();it!= tmpObjList.end();++it)
 	{
-		if (it.value()->getObjectType() == objType)
+		if ((it.value()->getObjectType() & nVal) == objType)
 		{
 			pSelectObjs.append(it.value());
 		}
@@ -332,7 +371,7 @@ ITObjectList ITObjectDataMgr::GetDstObjTypeList(int objType)
 	}
 	for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
 	{
-		if (it.value()->getObjectType() == objType)
+		if ((it.value()->getObjectType() & nVal) == objType)
 		{
 			pSelectObjs.append(it.value());
 		}
@@ -354,6 +393,7 @@ ITObjectPtr ITObjectDataMgr::FindObject(quint64 objid)
 	return nullptr;
 }
 
+
 void ITObjectDataMgr::loadDataBaseInfo(ITObjectDataMgr* pThis)
 {
 	if (!pThis)
@@ -367,12 +407,13 @@ void ITObjectDataMgr::loadDataBaseInfo(ITObjectDataMgr* pThis)
 	//角色数据
 	pThis->LoadIdentification();
 	pThis->LoadAccount();
+	pThis->LoadGameServerType();
 	pThis->LoadAccountGid();
 	pThis->LoadGameCharacter();
+	pThis->LoadGidPets();
 	pThis->LoadBaseData();
 	pThis->LoadAttributeData();
 	pThis->LoadGidItems();
-	pThis->LoadGidPets();
 	pThis->LoadGidSkills();
 	emit pThis->signal_loadDataFini();
 }
@@ -472,6 +513,7 @@ ITObjectPtr ITObjectDataMgr::newOneObject(int nObjType, ITObjectPtr pOwn /*= NUL
 	pNewObj = g_objectModuleReg.CreateNewObject(nObjType);
 	if (!pNewObj)
 		return nullptr;
+
 	pNewObj->setObjectType(nObjType);
 	pNewObj->setObjectID(uNewID);
 	if (pOwn)
@@ -503,24 +545,57 @@ bool ITObjectDataMgr::deleteOneObject(ITObjectPtr pObj)
 {
 	if (pObj == NULL)
 		return false;
-	ITObjectPtr pParentObj = pObj->getObjectParent();
-	if (pParentObj)
+
+	int nObjType = pObj->getObjectType();
+	ITObjectPtr pOwnObj = pObj->getObjectParent();
+	if (GETDEVCLASS(nObjType) == TObject_Character)
 	{
-		pParentObj->removeChildObj(pObj);
+		if (pOwnObj)
+		{
+			int pOwnType = pOwnObj->getObjectType();
+			if (pOwnType == TObject_AccountGid)
+			{
+				pOwnObj->removeChildObj(pObj);	
+				ITGameServerTypePtr pServerTypeObj = pOwnObj->getObjectParent().dynamicCast<ITGameServerType>();
+				if (pServerTypeObj && GETDEVCLASS(pServerTypeObj->getObjectType()) == TObject_ServerType)
+				{
+					pServerTypeObj->removeObject(pObj);	
+				}
+			}
+		}
 	}
+	else if (nObjType == TObject_AccountGid)
+	{
+		ITGameServerTypePtr pServerTypeObj = pOwnObj.dynamicCast<ITGameServerType>();
+		if (pServerTypeObj && GETDEVCLASS(pServerTypeObj->getObjectType()) == TObject_ServerType)
+		{
+			pServerTypeObj->removeObject(pObj);
+		}
+	}
+	else if (GETDEVCLASS(nObjType) == TObject_ServerType)
+	{
+		ITGameServerTypePtr pServerTypeObj = pObj.dynamicCast<ITGameServerType>();
+		m_serverTypeForObj.remove(pServerTypeObj->_server_type);
+	}
+	else
+	{
+		if (pOwnObj)
+		{
+			pOwnObj->removeChildObj(pObj);
+		}
+	}	
 	QMutexLocker locker(&m_objMutex);
 	int nstatus = pObj->getStatus();
 	if (nstatus == TStatus_Add)
 	{
-		pObj->setDelStatus();
+		pObj->setDelStatus();			// 还没写入数据库 移除释放即可
 		m_pAddObjectList.remove(pObj->getObjectID());
-	}
-	else
+	}else
 	{
 		pObj->setDelStatus();
 		m_pObjectList.remove(pObj->getObjectID());
 		if (!m_pDelObjectList.contains(pObj->getObjectID()))
-			m_pDelObjectList.insert(pObj->getObjectID(),pObj);
+			m_pDelObjectList.insert(pObj->getObjectID(), pObj);
 	}
 	return true;
 }
@@ -529,6 +604,28 @@ quint64 ITObjectDataMgr::getNewObjectID()
 {
 	//return ITObjectID::NewID();
 	return ITObjectID::NewID32();
+}
+
+void ITObjectDataMgr::gameCharacterAddToServerType(ITGameCharacterPtr pCharacter, ITGameServerTypePtr pServerType)
+{
+	//建立大区和游戏角色关系
+	pServerType->addChildObj(pCharacter);
+	pServerType->_nameForObj.insert(pCharacter->getObjectName(), pCharacter);
+	//建立
+	auto pGidObj = pServerType->getGidObjFromGidName(pCharacter->_gid).dynamicCast<ITAccountGid>();
+	if (pGidObj == nullptr)
+	{
+		//不需要再次查找 没有就创建
+		pGidObj = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
+		pGidObj->_userGid = pCharacter->_gid;
+		pGidObj->setObjectName(pCharacter->_gid);
+		pGidObj->_serverTypeID = pServerType->getObjectID();
+		pGidObj->setObjectParent(pServerType);
+		pServerType->addChildObj(pGidObj);
+		pServerType->_gidForObj.insert(pCharacter->_gid, pGidObj);
+	}
+	pCharacter->setObjectParent(pGidObj);
+	pGidObj->addChildObj(pCharacter);
 }
 
 bool ITObjectDataMgr::isNeedSaveData()
@@ -543,23 +640,23 @@ bool ITObjectDataMgr::isNeedSaveData()
 		
 	}
 	{
-		//QMutexLocker locker(&m_objMutex);
-		//tmpObjList = m_pObjectList;
-		for (auto it = m_pObjectList.begin(); it != m_pObjectList.end(); ++it)
+		QMutexLocker locker(&m_objMutex);
+		tmpObjList = m_pObjectList;
+	/*	for (auto it = m_pObjectList.begin(); it != m_pObjectList.end(); ++it)
 		{
 			if (it.value()->getStatus() != TStatus_Normal)
 			{
 				return true;
 			}
-		}
+		}*/
 	}
-	/*for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
+	for (auto it = tmpObjList.begin(); it != tmpObjList.end(); ++it)
 	{
 		if (it.value()->getStatus() != TStatus_Normal)
 		{
 			return true;
 		}
-	}*/
+	}
 	return false;
 }
 
@@ -672,26 +769,107 @@ bool ITObjectDataMgr::LoadAccountGid()
 			quint64 nID = recordset->getUInt64Value("id");
 			QString gid = recordset->getStrValue("gid");
 			quint64 aid = recordset->getUInt64Value("aid");
+			quint64 serverTypeID = recordset->getUInt64Value("server_type_id");
 			QString sDesc = recordset->getStrValue("desc");	//详细信息 从item表拿
 			if (gid.isEmpty())
 			{
+					//加入删除列表，后面自动删除数据库 这里未加入objectList和addObjectList 所以调deleteOneObject无意义
+				if (!m_pDelObjectList.contains(nID))
+				{
+					ITAccountGidPtr pObj = newOneObject(TObject_AccountGid, nID).dynamicCast<ITAccountGid>();
+					m_pDelObjectList.insert(pObj->getObjectID(), pObj);
+				}				
 				continue;
-			}
+				
+			}			
 			auto pAccountObj = FindObject(aid).dynamicCast<ITAccount>();
+			auto pServerTypeObj = FindObject(serverTypeID).dynamicCast<ITGameServerType>();
 			ITAccountGidPtr pObj = newOneObject(TObject_AccountGid, nID).dynamicCast<ITAccountGid>();
 			if (pObj)
 			{
 				pObj->_userGid = gid;
+				pObj->_serverTypeID = serverTypeID;
 				pObj->setObjectName(gid);
 				pObj->setObjectDsec(sDesc);
 				pObj->setObjectID(nID);
+				if (pServerTypeObj == nullptr)
+				{
+					//加入删除列表，后面自动删除数据库 这里未加入objectList和addObjectList 所以调deleteOneObject无意义
+					if (!m_pDelObjectList.contains(pObj->getObjectID()))
+						m_pDelObjectList.insert(pObj->getObjectID(), pObj);
+					continue;
+				}
 				if (pAccountObj)
 				{
 					pAccountObj->addChildObj(pObj);
 					pObj->setObjectParent(pAccountObj);
 				}
+
+
+				if (pServerTypeObj->_gidForObj.contains(gid))
+				{
+					deleteOneObject(pServerTypeObj->_gidForObj.value(gid));//释放老的
+				}
+				pObj->setObjectParent(pServerTypeObj);
+				pServerTypeObj->addChildObj(pObj);
+				pServerTypeObj->_gidForObj.insert(gid, pObj);
+
 				m_pObjectList.insert(nID, pObj);
-				m_idForAccountGid.insert(gid, pObj);
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+bool ITObjectDataMgr::LoadGameServerType()
+{
+	if (m_dbconn == NULL)
+		return false;
+	QString strsql = QString("SELECT * FROM game_server_type");
+	auto recordset = m_dbconn->execQuerySql(strsql);
+	if (recordset != NULL)
+	{
+		while (recordset->next())
+		{
+			quint64 nID = recordset->getUInt64Value("id");
+			int bigLine = recordset->getIntValue("big_line");
+			QString name = recordset->getStrValue("name");
+			if (bigLine <= 0)
+			{
+				if (!m_pDelObjectList.contains(nID))
+				{
+					ITGameServerTypePtr pObj = newOneObject(TObject_ServerType_ItemSales, nID).dynamicCast<ITGameServerType>();
+					m_pDelObjectList.insert(pObj->getObjectID(), pObj);
+				}
+				continue;
+			}
+			int nServerType;
+			if (m_serverTypeForObjType.contains(bigLine))
+			{
+				nServerType = m_serverTypeForObjType.value(bigLine);
+			}
+			else
+			{
+				nServerType = TObject_ServerType_ItemSales;
+			}
+		
+			ITGameServerTypePtr pObj = newOneObject(nServerType, nID).dynamicCast<ITGameServerType>();
+			if (pObj)
+			{
+				pObj->_server_type = bigLine;
+				pObj->setObjectName(name);			
+				pObj->setObjectID(nID);
+				if (m_serverTypeForObj.contains(bigLine))
+				{
+					auto oldServerTypeObj = m_serverTypeForObj.value(bigLine);
+					if (oldServerTypeObj != nullptr)
+					{						
+						deleteOneObject(oldServerTypeObj);						
+					}
+				}
+				m_pObjectList.insert(nID, pObj);
+				m_serverTypeForObj.insert(bigLine, pObj);
 			}
 		}
 		return true;
@@ -714,97 +892,86 @@ bool ITObjectDataMgr::LoadGameCharacter()
 			QString sGid = recordset->getStrValue("gid");
 			QString sName = recordset->getStrValue("name");
 			int objType = recordset->getIntValue("role_type");
-			if (sGid.isEmpty())
+			int bigLine = recordset->getIntValue("big_line");
+			if (sGid.isEmpty() || sName.isEmpty())
 			{
+				if (!m_pDelObjectList.contains(nID))
+				{
+					ITGameCharacterPtr pObj = newOneObject(TObject_Character, nID).dynamicCast<ITGameCharacter>();
+					m_pDelObjectList.insert(pObj->getObjectID(), pObj);
+				}
+			
 				continue;
 			}
 			if (objType == 0 )
 			{
 				objType = TObject_Character;
 			}
-			ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
-			if (pGid == nullptr)
+			if (bigLine==0)
+			{
+				bigLine = 13;	//默认道具电信
+			}
+			ITGameServerTypePtr pServerType = m_serverTypeForObj.value(bigLine);
+			if (pServerType == nullptr)
 			{
 				QMutexLocker locker(&m_rpcGidMutex);
-
-				pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
-				pGid->setObjectName(sGid);
-				pGid->_userGid = sGid;
-				m_idForAccountGid.insert(sGid, pGid);
+				int nServerType;
+				if (m_serverTypeForObjType.contains(bigLine))
+				{
+					nServerType = m_serverTypeForObjType.value(bigLine);
+				}else
+				{					
+					nServerType = TObject_ServerType_ItemSales_Telecom;
+					bigLine = 13;
+				}
+				pServerType = newOneObject(nServerType).dynamicCast<ITGameServerType>();
+				pServerType->setObjectName(m_serverTypeForObjName.value(bigLine));
+				pServerType->_server_type = bigLine;
+				m_serverTypeForObj.insert(bigLine, pServerType);
 			}
 			ITGameCharacterPtr pCharacter = newOneObject(objType, nID).dynamicCast<ITGameCharacter>();
 			if (pCharacter)
-			{
-				if (pGid)
-				{
-					pGid->addChildObj(pCharacter);
-					pCharacter->setObjectParent(pGid);
-				}
-				pCharacter->_gid = sGid;
-				pCharacter->_baseData->_level = recordset->getIntValue("level");
-				pCharacter->_type = recordset->getIntValue("type");
-				pCharacter->_baseData->_imageid = recordset->getIntValue("imageid");
+			{			
+				pCharacter->setObjectName(sName);						
+				pCharacter->_gid = sGid;			
+				pCharacter->_type = recordset->getIntValue("type");	
 				pCharacter->_sex = recordset->getIntValue("sex");
 				pCharacter->_gold = recordset->getIntValue("gold");
-				pCharacter->_bankgold = recordset->getIntValue("bankgold");
-				pCharacter->_baseData->_xp = recordset->getIntValue("xp");
-				pCharacter->_baseData->_maxxp = recordset->getIntValue("maxxp");
-				pCharacter->_baseData->_hp = recordset->getIntValue("hp");
-				pCharacter->_baseData->_maxhp = recordset->getIntValue("maxhp");
-				pCharacter->_baseData->_mp = recordset->getIntValue("mp");
-				pCharacter->_baseData->_maxmp = recordset->getIntValue("maxmp");
+				pCharacter->_bankgold = recordset->getIntValue("bankgold");			
+				pCharacter->_souls = recordset->getIntValue("souls");
 				pCharacter->_score = recordset->getIntValue("score");
 				pCharacter->_job = recordset->getStrValue("job");
 				pCharacter->_useTitle = recordset->getIntValue("useTitle");
-				pCharacter->_titles = recordset->getStrValue("titles").split("|");
-				pCharacter->_baseData->_skillslots = recordset->getIntValue("skillslots");
-				pCharacter->_attrData->_manu_endurance = recordset->getIntValue("manu_endurance");
-				pCharacter->_attrData->_manu_skillful = recordset->getIntValue("manu_skillful");
-				pCharacter->_attrData->_manu_intelligence = recordset->getIntValue("manu_intelligence");
-				pCharacter->_value_charisma = recordset->getIntValue("value_charisma");
-				pCharacter->_attrData->_points_endurance = recordset->getIntValue("points_endurance");
-				pCharacter->_attrData->_points_strength = recordset->getIntValue("points_strength");
-				pCharacter->_attrData->_points_defense = recordset->getIntValue("points_defense");
-				pCharacter->_attrData->_points_agility = recordset->getIntValue("points_agility");
-				pCharacter->_attrData->_points_magical = recordset->getIntValue("points_magical");
-				pCharacter->_attrData->_value_attack = recordset->getIntValue("value_attack");
-				pCharacter->_attrData->_value_defensive = recordset->getIntValue("value_defensive");
-				pCharacter->_attrData->_value_agility = recordset->getIntValue("value_agility");
-				pCharacter->_attrData->_value_spirit = recordset->getIntValue("value_spirit");
-				pCharacter->_attrData->_value_recovery = recordset->getIntValue("value_recovery");
-				pCharacter->_attrData->_resist_poison = recordset->getIntValue("resist_poison");
-				pCharacter->_attrData->_resist_sleep = recordset->getIntValue("resist_sleep");
-				pCharacter->_attrData->_resist_medusa = recordset->getIntValue("resist_medusa");
-				pCharacter->_attrData->_resist_drunk = recordset->getIntValue("resist_drunk");
-				pCharacter->_attrData->_resist_chaos = recordset->getIntValue("resist_chaos");
-				pCharacter->_attrData->_resist_forget = recordset->getIntValue("resist_forget");
-				pCharacter->_attrData->_fix_critical = recordset->getIntValue("fix_critical");
-				pCharacter->_attrData->_fix_strikeback = recordset->getIntValue("fix_strikeback");
-				pCharacter->_attrData->_fix_accurancy = recordset->getIntValue("fix_accurancy");
-				pCharacter->_attrData->_fix_dodge = recordset->getIntValue("fix_dodge");
-				pCharacter->_attrData->_element_earth = recordset->getIntValue("element_earth");
-				pCharacter->_attrData->_element_water = recordset->getIntValue("element_water");
-				pCharacter->_attrData->_element_fire = recordset->getIntValue("element_fire");
-				pCharacter->_attrData->_element_wind = recordset->getIntValue("element_wind");
-				pCharacter->_attrData->_points_remain = recordset->getIntValue("points_remain");
+				pCharacter->_titles = recordset->getStrValue("titles").split("|");				
+				pCharacter->_value_charisma = recordset->getIntValue("value_charisma");				
+				pCharacter->_map_name = recordset->getStrValue("map_name");		
+				pCharacter->_map_number = recordset->getIntValue("map_number");		
+				pCharacter->_nickName = recordset->getStrValue("nick_name");		
+				pCharacter->_big_line = bigLine;
+				pCharacter->_avatar_id = recordset->getIntValue("avatar_id");
+				pCharacter->_unitid = recordset->getIntValue("unitid");
+				pCharacter->_petid = recordset->getIntValue("petid");
+				pCharacter->_petriding = recordset->getIntValue("petriding");
+				pCharacter->_direction = recordset->getIntValue("direction");
+				pCharacter->_punchclock = recordset->getIntValue("punchclock");
+				pCharacter->_usingpunchclock = recordset->getIntValue("usingpunchclock");
+				pCharacter->_x = recordset->getIntValue("x");
+				pCharacter->_y = recordset->getIntValue("y");
+				pCharacter->_battle_position = recordset->getIntValue("battle_position");
+				pCharacter->_server_line = recordset->getIntValue("line");
+				pCharacter->_lastUpdateDateTime = QDateTime::fromSecsSinceEpoch(recordset->getInt64Value("last_time"));
+				pCharacter->_connectState = recordset->getIntValue("conn_state");		
 				pCharacter->_lastUploadTime.restart();
-				pCharacter->_connectState = 0;
-				pCharacter->setObjectName(sName);						
 
 				//重复 删除老的 插入新的  有bug先用名称顶一下
-				auto oldChara = m_idForAccountRole.value(sName);
+				auto oldChara = pServerType->getRoleObjFromRoleName(sName);
 				if (oldChara != nullptr)
 				{
-					if (!m_pDelObjectList.contains(oldChara->getObjectID()))
-					{
-						deleteOneObject(oldChara);
-					/*	m_pDelObjectList.insert(oldChara->getObjectID(), oldChara);
-						m_pObjectList.remove(oldChara->getObjectID());*/
-					}
+					deleteOneObject(oldChara);							
 				}
 				m_pObjectList.insert(nID, pCharacter);
-				m_idForAccountRole.insert(sName, pCharacter);
-				
+				gameCharacterAddToServerType(pCharacter, pServerType);				
+
 			}
 		}
 		return true;
@@ -825,14 +992,14 @@ bool ITObjectDataMgr::LoadBaseData()
 		{
 			quint64 nID = recordset->getUInt64Value("id");
 			quint64 char_id = recordset->getUInt64Value("char_id");	
-			ITObjectPtr pChar = m_pObjectList.value(char_id);
+			ITObjectPtr pChar = FindObject(char_id);
 			if (pChar == nullptr)
 			{				
 				if (!m_pDelObjectList.contains(nID))
 				{
-					ITGameBaseDataPtr pBaseData = newOneObject(TObject_BaseData).dynamicCast<ITGameBaseData>();
-					pBaseData->setObjectID(nID);
-					deleteOneObject(pBaseData);
+					ITGameBaseDataPtr pBaseData = newOneObject(TObject_BaseData, nID).dynamicCast<ITGameBaseData>();
+					//加入删除列表，后面自动删除数据库 这里未加入objectList和addObjectList 所以调deleteOneObject无意义
+					m_pDelObjectList.insert(pBaseData->getObjectID(), pBaseData);
 				}
 				continue;
 			}
@@ -848,6 +1015,11 @@ bool ITObjectDataMgr::LoadBaseData()
 				{
 					qSharedPointerDynamicCast<ITGamePet>(pChar)->_baseData = pBaseData;
 					pBaseData->setObjectParent(pChar);
+				}else
+				{					
+					if (!m_pDelObjectList.contains(pBaseData->getObjectID()))
+						m_pDelObjectList.insert(pBaseData->getObjectID(), pBaseData);
+					continue;
 				}
 				pBaseData->_level = recordset->getIntValue("level");
 				pBaseData->_imageid = recordset->getIntValue("imageid");
@@ -871,7 +1043,7 @@ bool ITObjectDataMgr::LoadAttributeData()
 	if (m_dbconn == NULL)
 		return false;
 	m_idForAccountRole.clear();
-	QString strsql = QString("SELECT * FROM character");
+	QString strsql = QString("SELECT * FROM attribute_data");
 	auto recordset = m_dbconn->execQuerySql(strsql);
 	if (recordset != NULL)
 	{
@@ -879,14 +1051,14 @@ bool ITObjectDataMgr::LoadAttributeData()
 		{
 			quint64 nID = recordset->getUInt64Value("id");
 			quint64 char_id = recordset->getUInt64Value("char_id");
-			ITObjectPtr pChar = m_pObjectList.value(char_id);
+			ITObjectPtr pChar = FindObject(char_id);
 			if (pChar == nullptr)
 			{
 				if (!m_pDelObjectList.contains(nID))
 				{
-					ITGameAttributeDataPtr pBaseData = newOneObject(TObject_AttributeData).dynamicCast<ITGameAttributeData>();
-					pBaseData->setObjectID(nID);
-					deleteOneObject(pBaseData);
+					ITGameAttributeDataPtr pBaseData = newOneObject(TObject_AttributeData, nID).dynamicCast<ITGameAttributeData>();
+					if (!m_pDelObjectList.contains(pBaseData->getObjectID()))
+						m_pDelObjectList.insert(pBaseData->getObjectID(), pBaseData);
 				}
 				continue;
 			}
@@ -902,7 +1074,11 @@ bool ITObjectDataMgr::LoadAttributeData()
 				{
 					qSharedPointerDynamicCast<ITGamePet>(pChar)->_attrData = pDBObj;
 					pDBObj->setObjectParent(pChar);
-				}			
+				}else
+				{
+					if (!m_pDelObjectList.contains(pDBObj->getObjectID()))
+						m_pDelObjectList.insert(pDBObj->getObjectID(), pDBObj);
+				}
 				pDBObj->_manu_endurance = recordset->getIntValue("manu_endurance");
 				pDBObj->_manu_skillful = recordset->getIntValue("manu_skillful");
 				pDBObj->_manu_intelligence = recordset->getIntValue("manu_intelligence");
@@ -984,9 +1160,7 @@ bool ITObjectDataMgr::LoadGidItems()
 					{							
 						if (!m_pDelObjectList.contains(oldItem->getObjectID()))
 						{
-							deleteOneObject(oldItem);
-							/*m_pDelObjectList.insert(oldItem->getObjectID(), oldItem);
-							m_pObjectList.remove(oldItem->getObjectID());*/
+							deleteOneObject(oldItem);							
 						}						
 					}		
 					pGidRole->_itemPosForPtr.insert(item_pos, pItem);//替换新的
@@ -1021,46 +1195,12 @@ bool ITObjectDataMgr::LoadGidPets()
 
 				pObj->_character_id = character_id;
 				pObj->_realName = realname;
-				pObj->_baseData->_level = recordset->getIntValue("level");
 				pObj->_state = recordset->getIntValue("state");
-				pObj->_baseData->_health = recordset->getIntValue("health");			
 				pObj->_loyality = recordset->getIntValue("loyality");			
 				pObj->_race = recordset->getIntValue("race");			
 				pObj->_grade = recordset->getIntValue("grade");			
 				pObj->_lossMinGrade = recordset->getIntValue("lossMinGrade");			
-				pObj->_lossMaxGrade = recordset->getIntValue("lossMaxGrade");			
-				pObj->_baseData->_xp = recordset->getIntValue("xp");
-				pObj->_baseData->_maxxp = recordset->getIntValue("maxxp");
-				pObj->_baseData->_hp = recordset->getIntValue("hp");
-				pObj->_baseData->_maxhp = recordset->getIntValue("maxhp");
-				pObj->_baseData->_mp = recordset->getIntValue("mp");
-				pObj->_baseData->_maxmp = recordset->getIntValue("maxmp");
-				pObj->_baseData->_skillslots = recordset->getIntValue("skillslots");
-				pObj->_attrData->_points_endurance = recordset->getIntValue("points_endurance");
-				pObj->_attrData->_points_strength = recordset->getIntValue("points_strength");
-				pObj->_attrData->_points_defense = recordset->getIntValue("points_defense");
-				pObj->_attrData->_points_agility = recordset->getIntValue("points_agility");
-				pObj->_attrData->_points_magical = recordset->getIntValue("points_magical");
-				pObj->_attrData->_value_attack = recordset->getIntValue("value_attack");
-				pObj->_attrData->_value_defensive = recordset->getIntValue("value_defensive");
-				pObj->_attrData->_value_agility = recordset->getIntValue("value_agility");
-				pObj->_attrData->_value_spirit = recordset->getIntValue("value_spirit");
-				pObj->_attrData->_value_recovery = recordset->getIntValue("value_recovery");
-				pObj->_attrData->_resist_poison = recordset->getIntValue("resist_poison");
-				pObj->_attrData->_resist_sleep = recordset->getIntValue("resist_sleep");
-				pObj->_attrData->_resist_medusa = recordset->getIntValue("resist_medusa");
-				pObj->_attrData->_resist_drunk = recordset->getIntValue("resist_drunk");
-				pObj->_attrData->_resist_chaos = recordset->getIntValue("resist_chaos");
-				pObj->_attrData->_resist_forget = recordset->getIntValue("resist_forget");
-				pObj->_attrData->_fix_critical = recordset->getIntValue("fix_critical");
-				pObj->_attrData->_fix_strikeback = recordset->getIntValue("fix_strikeback");
-				pObj->_attrData->_fix_accurancy = recordset->getIntValue("fix_accurancy");
-				pObj->_attrData->_fix_dodge = recordset->getIntValue("fix_dodge");
-				pObj->_attrData->_element_earth = recordset->getIntValue("element_earth");
-				pObj->_attrData->_element_water = recordset->getIntValue("element_water");
-				pObj->_attrData->_element_fire = recordset->getIntValue("element_fire");
-				pObj->_attrData->_element_wind = recordset->getIntValue("element_wind");
-				pObj->_attrData->_points_remain = recordset->getIntValue("points_remain");
+				pObj->_lossMaxGrade = recordset->getIntValue("lossMaxGrade");				
 				pObj->_pos = recordset->getIntValue("pos");
 
 				pObj->setObjectName(sName);
@@ -1084,9 +1224,7 @@ bool ITObjectDataMgr::LoadGidPets()
 					{
 						if (!m_pDelObjectList.contains(pOldObj->getObjectID()))
 						{
-							deleteOneObject(pOldObj);
-							/*m_pDelObjectList.insert(pOldObj->getObjectID(), pOldObj);
-							m_pObjectList.remove(pOldObj->getObjectID());*/
+							deleteOneObject(pOldObj);			
 						}						
 					}
 					pGidRole->_petPosForPet.insert(pObj->_pos, pObj);					
@@ -1575,6 +1713,21 @@ bool ITObjectDataMgr::deleteOneDeviceFromDB(ITObjectPtr pObj)
 		strSql = QString("DELETE FROM char_pet WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
+	else if (GETDEVCLASS(objType) == TObject_ServerType)
+	{
+		strSql = QString("DELETE FROM game_server_type WHERE id=%1").arg(pObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (objType == TObject_BaseData)
+	{
+		strSql = QString("DELETE FROM base_data WHERE id=%1").arg(pObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (objType == TObject_AttributeData)
+	{
+		strSql = QString("DELETE FROM attribute_data WHERE id=%1").arg(pObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
 	qDebug() << strSql;
 	return bret;
 }
@@ -1687,9 +1840,9 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		auto pOwn = tmpObj->getObjectParent();
 		if (pOwn)
 			aid = pOwn->getObjectID();
-		strSql = QString("INSERT INTO gid(id,gid,aid,desc) VALUES(%1,'%2','%3','%4')")
+		strSql = QString("INSERT INTO gid(id,gid,aid,server_type_id,desc) VALUES(%1,'%2',%3,%4,'%5')")
 			.arg(tmpObj->getObjectID()).arg(tmpObj->_userGid)
-			.arg(aid)
+			.arg(aid).arg(tmpObj->_serverTypeID)
 			.arg(tmpObj->getObjectDesc());
 		bret = m_dbconn->execSql(strSql);
 	}
@@ -1762,24 +1915,29 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		strSql = QString("INSERT INTO character(type,sex,gold,bankgold,score,job,useTitle,"
 			"avatar_id,unitid,petid,petriding,direction,punchclock,usingpunchclock,value_charisma,"
 			"x,y,battle_position,map_number,line,big_line,conn_state,last_time,id,role_type,souls,gid,name,titles,map_name,nick_name)"
-			" VALUES(%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
+			" VALUES(%1,%2,%3,%4,%5,'%6',%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
 			"%19,%20,%21,%22,%23,%24,%25,%26,'%27','%28','%29','%30','%31')")
 			.arg(tmpObj->_type).arg(tmpObj->_sex).arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle)
 			.arg(tmpObj->_avatar_id).arg(tmpObj->_unitid).arg(tmpObj->_petid).arg(tmpObj->_petriding).arg(tmpObj->_direction).arg(tmpObj->_punchclock)\
 			.arg(tmpObj->_usingpunchclock).arg(tmpObj->_value_charisma).arg(tmpObj->_x).arg(tmpObj->_y)\
-			.arg(tmpObj->battle_position).arg(tmpObj->_map_number).arg(tmpObj->_server_line).arg(tmpObj->_big_line).arg(tmpObj->_connectState)\
-			.arg(QDateTime::currentDateTime().toSecsSinceEpoch()).arg(tmpObj->getObjectID()).arg(tmpObj->getObjectType())\
+			.arg(tmpObj->_battle_position).arg(tmpObj->_map_number).arg(tmpObj->_server_line).arg(tmpObj->_big_line).arg(tmpObj->_connectState)\
+			.arg(tmpObj->_lastUpdateDateTime.toSecsSinceEpoch()).arg(tmpObj->getObjectID()) .arg(tmpObj->getObjectType())\
 			.arg(tmpObj->_souls).arg(tmpObj->_gid).arg(tmpObj->getObjectName()).arg(tmpObj->_titles.join("|")).arg(tmpObj->_map_name).arg(tmpObj->_nickName);
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_BaseData)
 	{
+		quint64 char_id = 0;
+		if (pObj->getObjectParent())
+		{
+			char_id = pObj->getObjectParent()->getObjectID();
+		}
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGameBaseData>();
 		strSql = QString("INSERT INTO base_data(char_id,level,hp,maxhp,mp,maxmp,xp,"
 						 "maxxp,health,skillslots,imageid,id)"
 						 " VALUES(%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12)")
-						 .arg(tmpObj->char_id)
+						 .arg(char_id)
 						 .arg(tmpObj->_level)
 						 .arg(tmpObj->_hp)
 						 .arg(tmpObj->_maxhp)
@@ -1795,6 +1953,11 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 	}
 	else if (objType == TObject_AttributeData)
 	{
+		quint64 char_id = 0;
+		if (pObj->getObjectParent())
+		{
+			char_id = pObj->getObjectParent()->getObjectID();
+		}
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGameAttributeData>();
 		strSql = QString("INSERT INTO attribute_data(char_id,manu_endurance,manu_skillful,"
@@ -1804,7 +1967,7 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 						 "fix_dodge,element_earth,element_water,element_fire,element_wind,points_remain,id)"
 						 " VALUES(%1,%2,%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
 						 "%19,%20,%21,%22,%23,%24,%25,%26,%27,%28,%29,%30)")
-						 .arg(tmpObj->_char_id)						
+						 .arg(char_id)						
 						 .arg(tmpObj->_manu_endurance)
 						 .arg(tmpObj->_manu_skillful)
 						 .arg(tmpObj->_manu_intelligence)
@@ -1834,6 +1997,16 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 						 .arg(tmpObj->_element_wind)
 						 .arg(tmpObj->_points_remain)
 						 .arg(tmpObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (GETDEVCLASS(objType) == TObject_ServerType)
+	{
+		QString szOwnCode;
+		auto tmpObj = pObj.dynamicCast<ITGameServerType>();
+		strSql = QString("INSERT INTO game_server_type(id,big_line,name) VALUES(%1,%2,'%3')")
+						 .arg(tmpObj->getObjectID())						 
+						 .arg(tmpObj->_server_type)
+						 .arg(tmpObj->getObjectName());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -1954,10 +2127,8 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		auto pOwn = tmpObj->getObjectParent();
 		if (pOwn)
 			aid = pOwn->getObjectID();
-		strSql = QString("UPDATE gid gid='%1',aid=%2,desc='%3' WHERE id=%4")
-			.arg(tmpObj->_userGid)
-			.arg(aid)
-			.arg(tmpObj->getObjectDesc())
+		strSql = QString("UPDATE gid gid='%1',aid=%2,server_type_id=%3,desc='%4' WHERE id=%5")
+			.arg(tmpObj->_userGid).arg(aid) .arg(tmpObj->_serverTypeID) .arg(tmpObj->getObjectDesc())
 			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
@@ -2026,24 +2197,48 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 		auto tmpObj = pObj.dynamicCast<ITGameCharacter>();
 		QMutexLocker locker(&tmpObj->_mutex);
 
-		strSql = QString("UPDATE character set gid='%1',type=%2,name='%3',sex=%4,gold=%5,bankgold=%6,\
-				score=%7,job='%8',useTitle=%9,titles='%10',\
-				value_charisma=%11,souls=%12,nick_name='%13',avatar_id=%14,unitid=%15,petid=%16,petriding=%17,\
-				direction=%18,punchclock=%19,usingpunchclock=%20,x=%21,y=%22,battle_position=%23,map_name='%24',\
-				map_num=%25,line=%26,big_line=%27,last_time=%28,conn_state=%29,role_type=%30 WHERE id=%31")
+		strSql = QString("UPDATE character set gid='%1',type=%2,name='%3',sex=%4,gold=%5,bankgold=%6,"
+				"score=%7,job='%8',useTitle=%9,titles='%10',"
+				"value_charisma=%11,souls=%12,nick_name='%13',avatar_id=%14,unitid=%15,petid=%16,petriding=%17,"
+				"direction=%18,punchclock=%19,usingpunchclock=%20,x=%21,y=%22,battle_position=%23,map_name='%24',"
+				"map_number=%25,line=%26,big_line=%27,last_time=%28,conn_state=%29,role_type=%30 WHERE id=%31")
 			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_sex)
 			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|"))\
-			.arg(tmpObj->_value_charisma).arg(tmpObj->getObjectType())
-			.arg(tmpObj->getObjectID());
+			.arg(tmpObj->_value_charisma)
+						 .arg(tmpObj->_souls)
+						 .arg(tmpObj->_nickName)
+						 .arg(tmpObj->_avatar_id)
+						 .arg(tmpObj->_unitid)
+						 .arg(tmpObj->_petid)
+						 .arg(tmpObj->_petriding)
+						 .arg(tmpObj->_direction)
+						 .arg(tmpObj->_punchclock)
+						 .arg(tmpObj->_usingpunchclock)
+						 .arg(tmpObj->_x)
+						 .arg(tmpObj->_y)
+						 .arg(tmpObj->_battle_position)
+						 .arg(tmpObj->_map_name)
+						 .arg(tmpObj->_map_number)
+						 .arg(tmpObj->_server_line)
+						 .arg(tmpObj->_big_line)
+						 .arg(tmpObj->_lastUpdateDateTime.toSecsSinceEpoch())
+						 .arg(tmpObj->_connectState)
+						 .arg(tmpObj->getObjectType())
+						 .arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_BaseData)
 	{
+		quint64 char_id = 0;
+		if (pObj->getObjectParent())
+		{
+			char_id = pObj->getObjectParent()->getObjectID();
+		}
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGameBaseData>();
 		strSql = QString("UPDATE base_data set char_id=%1,level=%2,hp=%3,maxhp=%4,mp=%5,maxmp=%6,xp=%7,"
-			"maxxp=%8,health=%9,skillslots=%10,imageid=%11 WHERE id=%12)")
-			.arg(tmpObj->char_id)
+			"maxxp=%8,health=%9,skillslots=%10,imageid=%11 WHERE id=%12")
+						 .arg(char_id)
 			.arg(tmpObj->_level)
 			.arg(tmpObj->_hp)
 			.arg(tmpObj->_maxhp)
@@ -2059,14 +2254,19 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 	}
 	else if (objType == TObject_AttributeData)
 	{
+		quint64 char_id = 0;
+		if (pObj->getObjectParent())
+		{
+			char_id = pObj->getObjectParent()->getObjectID();
+		}
 		QString szOwnCode;
 		auto tmpObj = pObj.dynamicCast<ITGameAttributeData>();
 		strSql = QString("UPDATE attribute_data SET char_id=%1,manu_endurance=%2,manu_skillful=%3,"
 			"manu_intelligence=%4,points_endurance=%5,points_strength=%6,points_defense=%7,points_agility=%8,"
 			"points_magical=%9,value_attack=%10,value_defensive=%11,value_agility=%12,value_spirit=%13,value_recovery=%14,resist_poison=%15,"
 			"resist_sleep=%16,resist_medusa=%17,resist_drunk=%18,resist_chaos=%19,resist_forget=%20,fix_critical=%21,fix_strikeback=%22,fix_accurancy=%23,"
-			"fix_dodge=%24,element_earth=%25,element_water=%26,element_fire=%27,element_wind=%28,points_remain=%29 WHERE id=%30)")
-			.arg(tmpObj->_char_id)
+			"fix_dodge=%24,element_earth=%25,element_water=%26,element_fire=%27,element_wind=%28,points_remain=%29 WHERE id=%30")
+			 .arg(char_id)
 			.arg(tmpObj->_manu_endurance)
 			.arg(tmpObj->_manu_skillful)
 			.arg(tmpObj->_manu_intelligence)
@@ -2096,6 +2296,16 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 			.arg(tmpObj->_element_wind)
 			.arg(tmpObj->_points_remain)
 			.arg(tmpObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (GETDEVCLASS(objType) == TObject_ServerType)
+	{
+		QString szOwnCode;
+		auto tmpObj = pObj.dynamicCast<ITGameServerType>();
+		strSql = QString("UPDATE game_server_type SET big_line=%1,name='%2' WHERE id=%3")
+						 .arg(tmpObj->_server_type)
+						 .arg(tmpObj->getObjectName())
+						 .arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -2293,23 +2503,32 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		return;
 	QString sGid = QString::fromStdString(request->gid());
 	QString sCharacterName = QString::fromStdString(request->character_name());
-	QString sBigLine = QString::number(request->big_line());
+	int nBigLine = request->big_line();
 	if (sGid.isEmpty() || sCharacterName.isEmpty())
 		return;
 	//附带生成一个gid
-	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
-	if (pGid == nullptr)
+	int nServerType;
+	if (m_serverTypeForObjType.contains(nBigLine))
 	{
-		QMutexLocker locker(&m_rpcGidMutex);
-		if (m_idForAccountGid.value(sGid) == nullptr)
-		{
-			pGid = newOneObject(TObject_AccountGid).dynamicCast<ITAccountGid>();
-			if (pGid)
-			{
-				m_idForAccountGid.insert(sGid, pGid);
-			}
-		}
+		nServerType = m_serverTypeForObjType.value(nBigLine);
 	}
+	else
+	{
+		nServerType = TObject_ServerType_ItemSales_Telecom;
+		nBigLine = 13;
+	}
+	auto pServerType = m_serverTypeForObj.value(nBigLine);
+	if (pServerType == nullptr)
+	{
+		QMutexLocker locker(&m_rpcGidMutex);		
+		pServerType = newOneObject(nServerType).dynamicCast<ITGameServerType>();
+		if (pServerType)
+		{
+			pServerType->setObjectName(m_serverTypeForObjName.value(nBigLine));
+			m_serverTypeForObj.insert(nBigLine, pServerType);
+		}		
+	}
+	QString sBigLine = QString::number(nBigLine);
 	QString sID = sCharacterName + sBigLine;
 	int roleType = request->role_type();
 	int roleObjectType = TObject_Character;
@@ -2320,16 +2539,29 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	{
 		roleObjectType = TObject_CharacterRight;
 	}
-	auto pCharacter = m_idForAccountRole.value(sID);
+	ITGameCharacterPtr pCharacter = pServerType->getRoleObjFromRoleName(sCharacterName).dynamicCast<ITGameCharacter>();		
 	if (!pCharacter)
 	{
-		pCharacter = newOneObject(roleObjectType, pGid).dynamicCast<ITGameCharacter>();;
-		m_idForAccountRole.insert(sID, pCharacter);
+		pCharacter = newOneObject(roleObjectType, pServerType).dynamicCast<ITGameCharacter>();		
+		pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();		
+		pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();		
+		gameCharacterAddToServerType(pCharacter, pServerType);
 	}
 	else
+	{
 		pCharacter->setEditStatus();
+		if (pCharacter->_baseData == nullptr)
+		{
+			pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();		
+		}
+		if (pCharacter->_attrData == nullptr)
+		{
+			pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();
+		}
+	}
 	pCharacter->_connectState = 1;
 	pCharacter->_lastUploadTime.restart();
+	pCharacter->_lastUpdateDateTime = QDateTime::currentDateTime();
 	if (!m_onlineAccountRoles.contains(sID))
 	{
 		m_onlineAccountRoles.append(sID);
@@ -2341,21 +2573,27 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	}
 	pCharacter->setObjectName(sCharacterName);
 	pCharacter->_gid = QString::fromStdString(request->gid());
-	pCharacter->_baseData->_level = request->character_data().base_data().level();
-	pCharacter->_baseData->_hp = request->character_data().base_data().hp();
-	pCharacter->_baseData->_mp = request->character_data().base_data().mp();
-	pCharacter->_baseData->_maxhp = request->character_data().base_data().maxhp();
-	pCharacter->_baseData->_maxmp = request->character_data().base_data().maxmp();
-	pCharacter->_baseData->_xp = request->character_data().base_data().xp();
-	pCharacter->_baseData->_maxxp = request->character_data().base_data().maxxp();
-	pCharacter->_baseData->_health = request->character_data().base_data().health();
+
+	ITGameBaseData tmpBaseData;
+	tmpBaseData._level = request->character_data().base_data().level();
+	tmpBaseData._hp = request->character_data().base_data().hp();
+	tmpBaseData._mp = request->character_data().base_data().mp();
+	tmpBaseData._maxhp = request->character_data().base_data().maxhp();
+	tmpBaseData._maxmp = request->character_data().base_data().maxmp();
+	tmpBaseData._xp = request->character_data().base_data().xp();
+	tmpBaseData._maxxp = request->character_data().base_data().maxxp();
+	tmpBaseData._health = request->character_data().base_data().health();
+	tmpBaseData._imageid = request->character_data().image_id(); //人物模型图片id
+	tmpBaseData._skillslots = request->character_data().skillslots(); //技能格
+	if (*pCharacter->_baseData != tmpBaseData)
+	{
+		*pCharacter->_baseData = tmpBaseData;
+		pCharacter->_baseData->setEditStatus();
+	}
 	pCharacter->_souls = request->character_data().souls();
 	pCharacter->_gold = request->character_data().gold();
-	pCharacter->_baseData->_imageid = request->character_data().image_id();		//人物模型图片id
 	pCharacter->_sex = GetCharacterSex(pCharacter->_baseData->_imageid);
-
 	pCharacter->_score = request->character_data().score();				//战绩？
-	pCharacter->_baseData->_skillslots = request->character_data().skillslots();			//技能格
 	pCharacter->_useTitle = request->character_data().use_title();		//当前使用的称号
 	pCharacter->_avatar_id = request->character_data().avatar_id();
 	pCharacter->_unitid = request->character_data().unitid();
@@ -2366,7 +2604,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	pCharacter->_usingpunchclock = request->character_data().usingpunchclock();	  //是否打卡中
 	pCharacter->_job = QString::fromStdString(request->character_data().job());				  //职业名称
 	pCharacter->_nickName = QString::fromStdString(request->character_data().nick());
-	pCharacter->battle_position = request->character_data().battle_position();
+	pCharacter->_battle_position = request->character_data().battle_position();
 	{
 		QMutexLocker locker(&pCharacter->_mutex);
 		pCharacter->_titles.clear();
@@ -2376,43 +2614,51 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			pCharacter->_titles.append(QString::fromStdString(request->character_data().titles(i)));
 		}
 	}
-
-	pCharacter->_attrData->_manu_endurance = request->character_data().manu_endurance();		  //耐力
-	pCharacter->_attrData->_manu_skillful = request->character_data().manu_skillful();		  //灵巧
-	pCharacter->_attrData->_manu_intelligence = request->character_data().manu_intelligence();		  //智力
-	pCharacter->_value_charisma = request->character_data().value_charisma();	  //魅力
-	pCharacter->_x = request->character_data().x();						  //当前坐标
+	pCharacter->_x = request->character_data().x(); //当前坐标
 	pCharacter->_y = request->character_data().y();
-	pCharacter->_map_name = QString::fromStdString(request->character_data().map_name());				  //地图名称
-	pCharacter->_map_number = request->character_data().map_number();			  //地图编号
-	pCharacter->_server_line = request->character_data().server_line();		  //当前服务器线路
-	pCharacter->_big_line = request->character_data().has_big_line()? request->character_data().big_line():0; //当前服务器线路
+	pCharacter->_map_name = QString::fromStdString(request->character_data().map_name());						 //地图名称
+	pCharacter->_map_number = request->character_data().map_number();											 //地图编号
+	pCharacter->_server_line = request->character_data().server_line();											 //当前服务器线路
+	pCharacter->_big_line = nBigLine; //当前服务器线路
+	pCharacter->_value_charisma = request->character_data().value_charisma();									 //魅力
+
 	qDebug() << QString::fromStdString(request->gid()) << QString::fromStdString(request->character_name()) << request->character_data().level();
-	pCharacter->_attrData->_points_remain = request->character_data().detail().points_remain();
-	pCharacter->_attrData->_points_endurance = request->character_data().detail().points_endurance();
-	pCharacter->_attrData->_points_strength = request->character_data().detail().points_strength();
-	pCharacter->_attrData->_points_defense = request->character_data().detail().points_defense();
-	pCharacter->_attrData->_points_agility = request->character_data().detail().points_agility();
-	pCharacter->_attrData->_points_magical = request->character_data().detail().points_magical();
-	pCharacter->_attrData->_value_attack = request->character_data().detail().value_attack();
-	pCharacter->_attrData->_value_defensive = request->character_data().detail().value_defensive();
-	pCharacter->_attrData->_value_agility = request->character_data().detail().value_agility();
-	pCharacter->_attrData->_value_spirit = request->character_data().detail().value_spirit();
-	pCharacter->_attrData->_value_recovery = request->character_data().detail().value_recovery();
-	pCharacter->_attrData->_resist_poison = request->character_data().detail().resist_poison();
-	pCharacter->_attrData->_resist_sleep = request->character_data().detail().resist_sleep();
-	pCharacter->_attrData->_resist_medusa = request->character_data().detail().resist_medusa();
-	pCharacter->_attrData->_resist_drunk = request->character_data().detail().resist_drunk();
-	pCharacter->_attrData->_resist_chaos = request->character_data().detail().resist_chaos();
-	pCharacter->_attrData->_resist_forget = request->character_data().detail().resist_forget();
-	pCharacter->_attrData->_fix_critical = request->character_data().detail().fix_critical();
-	pCharacter->_attrData->_fix_strikeback = request->character_data().detail().fix_strikeback();
-	pCharacter->_attrData->_fix_accurancy = request->character_data().detail().fix_accurancy();
-	pCharacter->_attrData->_fix_dodge = request->character_data().detail().fix_dodge();
-	pCharacter->_attrData->_element_earth = request->character_data().detail().element_earth();
-	pCharacter->_attrData->_element_wind = request->character_data().detail().element_wind();
-	pCharacter->_attrData->_element_water = request->character_data().detail().element_water();
-	pCharacter->_attrData->_element_fire = request->character_data().detail().element_fire();
+
+
+	ITGameAttributeData tmpAttrData;
+	tmpAttrData._manu_endurance = request->character_data().manu_endurance();		  //耐力
+	tmpAttrData._manu_skillful = request->character_data().manu_skillful();		  //灵巧
+	tmpAttrData._manu_intelligence = request->character_data().manu_intelligence();		  //智力
+	tmpAttrData._points_remain = request->character_data().detail().points_remain();
+	tmpAttrData._points_endurance = request->character_data().detail().points_endurance();
+	tmpAttrData._points_strength = request->character_data().detail().points_strength();
+	tmpAttrData._points_defense = request->character_data().detail().points_defense();
+	tmpAttrData._points_agility = request->character_data().detail().points_agility();
+	tmpAttrData._points_magical = request->character_data().detail().points_magical();
+	tmpAttrData._value_attack = request->character_data().detail().value_attack();
+	tmpAttrData._value_defensive = request->character_data().detail().value_defensive();
+	tmpAttrData._value_agility = request->character_data().detail().value_agility();
+	tmpAttrData._value_spirit = request->character_data().detail().value_spirit();
+	tmpAttrData._value_recovery = request->character_data().detail().value_recovery();
+	tmpAttrData._resist_poison = request->character_data().detail().resist_poison();
+	tmpAttrData._resist_sleep = request->character_data().detail().resist_sleep();
+	tmpAttrData._resist_medusa = request->character_data().detail().resist_medusa();
+	tmpAttrData._resist_drunk = request->character_data().detail().resist_drunk();
+	tmpAttrData._resist_chaos = request->character_data().detail().resist_chaos();
+	tmpAttrData._resist_forget = request->character_data().detail().resist_forget();
+	tmpAttrData._fix_critical = request->character_data().detail().fix_critical();
+	tmpAttrData._fix_strikeback = request->character_data().detail().fix_strikeback();
+	tmpAttrData._fix_accurancy = request->character_data().detail().fix_accurancy();
+	tmpAttrData._fix_dodge = request->character_data().detail().fix_dodge();
+	tmpAttrData._element_earth = request->character_data().detail().element_earth();
+	tmpAttrData._element_wind = request->character_data().detail().element_wind();
+	tmpAttrData._element_water = request->character_data().detail().element_water();
+	tmpAttrData._element_fire = request->character_data().detail().element_fire();
+	if (*pCharacter->_attrData != tmpAttrData)
+	{
+		*pCharacter->_attrData = tmpAttrData;
+		pCharacter->_attrData->setEditStatus();
+	}
 	QVector<int> posExist;
 	if (request->character_data().skill_size() > 0)
 	{
@@ -2502,25 +2748,43 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			if (!petPtr)
 			{
 				petPtr = qSharedPointerDynamicCast<ITGamePet>(newOneObject(TObject_CharPet, pCharacter));
+				petPtr->_baseData = newOneObject(TObject_BaseData, petPtr).dynamicCast<ITGameBaseData>();
+				petPtr->_attrData = newOneObject(TObject_AttributeData, petPtr).dynamicCast<ITGameAttributeData>();		
 				pCharacter->_petPosForPet.insert(reqPet.index(), petPtr);
 			}
 			else
+			{
 				petPtr->setEditStatus();
+				if (petPtr->_baseData == nullptr)
+				{
+					petPtr->_baseData = newOneObject(TObject_BaseData, petPtr).dynamicCast<ITGameBaseData>();
+				}
+				if (petPtr->_attrData == nullptr)
+				{
+					petPtr->_attrData = newOneObject(TObject_AttributeData, petPtr).dynamicCast<ITGameAttributeData>();
+				}
+			}
 
 			petPtr->setObjectName(QString::fromStdString(reqPet.base_data().name()));
 			petPtr->_realName = QString::fromStdString(reqPet.real_name());
 
-			//	petPtr->setObjectCode(reqPet.petnumber);
-			petPtr->_baseData->_level = reqPet.base_data().level();
-			petPtr->_baseData->_hp = reqPet.base_data().hp();
-			petPtr->_baseData->_mp = reqPet.base_data().mp();
-			petPtr->_baseData->_maxhp = reqPet.base_data().maxhp();
-			petPtr->_baseData->_maxmp = reqPet.base_data().maxmp();
-			petPtr->_baseData->_xp = reqPet.base_data().xp();
-			petPtr->_baseData->_maxxp = reqPet.base_data().maxxp();
-			petPtr->_baseData->_health = reqPet.base_data().health();
+			ITGameBaseData tmpBaseData;
+			tmpBaseData._level = reqPet.base_data().level();
+			tmpBaseData._hp = reqPet.base_data().hp();
+			tmpBaseData._mp = reqPet.base_data().mp();
+			tmpBaseData._maxhp = reqPet.base_data().maxhp();
+			tmpBaseData._maxmp = reqPet.base_data().maxmp();
+			tmpBaseData._xp = reqPet.base_data().xp();
+			tmpBaseData._maxxp = reqPet.base_data().maxxp();
+			tmpBaseData._health = reqPet.base_data().health();
+			tmpBaseData._skillslots = reqPet.skillslots(); //技能格
+			if (*petPtr->_baseData != tmpBaseData)
+			{
+				*petPtr->_baseData = tmpBaseData;
+				petPtr->_baseData->setEditStatus();
+			}
+
 			//petPtr->_imageid = reqPet.image_id();		//人物模型图片id
-			petPtr->_baseData->_skillslots = reqPet.skillslots();			//技能格
 			petPtr->_loyality = reqPet.loyality();
 			petPtr->_race = reqPet.race();
 			petPtr->_state = reqPet.state();
@@ -2529,32 +2793,38 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			petPtr->_lossMaxGrade = reqPet.lossmaxgrade();
 			petPtr->_pos = reqPet.index();
 
+			ITGameAttributeData tmpAttrData;			
+			tmpAttrData._points_remain = reqPet.detail().points_remain();
+			tmpAttrData._points_endurance = reqPet.detail().points_endurance();
+			tmpAttrData._points_strength = reqPet.detail().points_strength();
+			tmpAttrData._points_defense = reqPet.detail().points_defense();
+			tmpAttrData._points_agility = reqPet.detail().points_agility();
+			tmpAttrData._points_magical = reqPet.detail().points_magical();
+			tmpAttrData._value_attack = reqPet.detail().value_attack();
+			tmpAttrData._value_defensive = reqPet.detail().value_defensive();
+			tmpAttrData._value_agility = reqPet.detail().value_agility();
+			tmpAttrData._value_spirit = reqPet.detail().value_spirit();
+			tmpAttrData._value_recovery = reqPet.detail().value_recovery();
+			tmpAttrData._resist_poison = reqPet.detail().resist_poison();
+			tmpAttrData._resist_sleep = reqPet.detail().resist_sleep();
+			tmpAttrData._resist_medusa = reqPet.detail().resist_medusa();
+			tmpAttrData._resist_drunk = reqPet.detail().resist_drunk();
+			tmpAttrData._resist_chaos = reqPet.detail().resist_chaos();
+			tmpAttrData._resist_forget = reqPet.detail().resist_forget();
+			tmpAttrData._fix_critical = reqPet.detail().fix_critical();
+			tmpAttrData._fix_strikeback = reqPet.detail().fix_strikeback();
+			tmpAttrData._fix_accurancy = reqPet.detail().fix_accurancy();
+			tmpAttrData._fix_dodge = reqPet.detail().fix_dodge();
+			tmpAttrData._element_earth = reqPet.detail().element_earth();
+			tmpAttrData._element_wind = reqPet.detail().element_wind();
+			tmpAttrData._element_water = reqPet.detail().element_water();
+			tmpAttrData._element_fire = reqPet.detail().element_fire();
+			if (*petPtr->_attrData != tmpAttrData)
+			{
+				*petPtr->_attrData = tmpAttrData;
+				petPtr->_attrData->setEditStatus();
+			}
 
-			petPtr->_attrData->_points_remain = reqPet.detail().points_remain();
-			petPtr->_attrData->_points_endurance = reqPet.detail().points_endurance();
-			petPtr->_attrData->_points_strength = reqPet.detail().points_strength();
-			petPtr->_attrData->_points_defense = reqPet.detail().points_defense();
-			petPtr->_attrData->_points_agility = reqPet.detail().points_agility();
-			petPtr->_attrData->_points_magical = reqPet.detail().points_magical();
-			petPtr->_attrData->_value_attack = reqPet.detail().value_attack();
-			petPtr->_attrData->_value_defensive = reqPet.detail().value_defensive();
-			petPtr->_attrData->_value_agility = reqPet.detail().value_agility();
-			petPtr->_attrData->_value_spirit = reqPet.detail().value_spirit();
-			petPtr->_attrData->_value_recovery = reqPet.detail().value_recovery();
-			petPtr->_attrData->_resist_poison = reqPet.detail().resist_poison();
-			petPtr->_attrData->_resist_sleep = reqPet.detail().resist_sleep();
-			petPtr->_attrData->_resist_medusa = reqPet.detail().resist_medusa();
-			petPtr->_attrData->_resist_drunk = reqPet.detail().resist_drunk();
-			petPtr->_attrData->_resist_chaos = reqPet.detail().resist_chaos();
-			petPtr->_attrData->_resist_forget = reqPet.detail().resist_forget();
-			petPtr->_attrData->_fix_critical = reqPet.detail().fix_critical();
-			petPtr->_attrData->_fix_strikeback = reqPet.detail().fix_strikeback();
-			petPtr->_attrData->_fix_accurancy = reqPet.detail().fix_accurancy();
-			petPtr->_attrData->_fix_dodge = reqPet.detail().fix_dodge();
-			petPtr->_attrData->_element_earth = reqPet.detail().element_earth();
-			petPtr->_attrData->_element_wind = reqPet.detail().element_wind();
-			petPtr->_attrData->_element_water = reqPet.detail().element_water();
-			petPtr->_attrData->_element_fire = reqPet.detail().element_fire();
 			petPtr->_bExist = true;
 
 			posExist.append(reqPet.index());
@@ -2614,9 +2884,6 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 			deleteOneObject(petPtr);
 		}
 	}
-
-
-
 }
 
 void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRequest* request)
@@ -2625,10 +2892,37 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 		return;
 	QString sGid = QString::fromStdString(request->gid());
 	QString sCharacterName = QString::fromStdString(request->character_name());
-	QString sBigLine = QString::number(request->big_line());
+	int nBidLine = request->big_line();
 
 	if (sGid.isEmpty() || sCharacterName.isEmpty())
 		return;
+	int nServerType;
+	if (m_serverTypeForObjType.contains(nBidLine))
+	{
+		nServerType = m_serverTypeForObjType.value(nBidLine);
+	}
+	else
+	{
+		nServerType = TObject_ServerType_ItemSales_Telecom;
+		nBidLine = 13;
+	}
+	auto pServerType = m_serverTypeForObj.value(nBidLine);
+	if (pServerType == nullptr)
+	{
+		QMutexLocker locker(&m_rpcGidMutex);	
+		pServerType = newOneObject(nServerType).dynamicCast<ITGameServerType>();
+		if (pServerType)
+		{
+			pServerType->setObjectName(m_serverTypeForObjName.value(nBidLine));
+			m_serverTypeForObj.insert(nBidLine, pServerType);
+		}
+	}
+	QString sBigLine = QString::number(nBidLine);
+	QString sID = sCharacterName + sBigLine;
+	if (!m_onlineAccountRoles.contains(sID))
+	{
+		m_onlineAccountRoles.append(sID);
+	}	
 	int roleType = request->role_type();
 	int roleObjectType = TObject_Character;
 	if (roleType == 0)
@@ -2639,16 +2933,28 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 	{
 		roleObjectType = TObject_CharacterRight;
 	}
-	QString sID = sCharacterName + sBigLine;
-	auto pCharacter = m_idForAccountRole.value(sID);
+	ITGameCharacterPtr pCharacter = pServerType->getRoleObjFromRoleName(sCharacterName).dynamicCast<ITGameCharacter>();
 	if (!pCharacter)
 	{
-		pCharacter = newOneObject(roleObjectType).dynamicCast<ITGameCharacter>();;
-		m_idForAccountRole.insert(sID, pCharacter);
+		pCharacter = newOneObject(roleObjectType, pServerType).dynamicCast<ITGameCharacter>();
+		pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();
+		pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();
+		gameCharacterAddToServerType(pCharacter, pServerType);
 	}
 	else
+	{
 		pCharacter->setEditStatus();
-
+		if (pCharacter->_baseData == nullptr)
+		{
+			pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();
+		}
+		if (pCharacter->_attrData == nullptr)
+		{
+			pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();
+		}
+	}
+	pCharacter->_lastUploadTime.restart();
+	pCharacter->_lastUpdateDateTime = QDateTime::currentDateTime();
 	pCharacter->setObjectName(sCharacterName);
 	pCharacter->_gid = QString::fromStdString(request->gid());
 	pCharacter->_bankgold = request->gold();
@@ -2667,7 +2973,9 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 				pCharacter->_itemPosForPtr.insert(reqItem.pos(), pItemPtr);
 			}
 			else
+			{
 				pItemPtr->setEditStatus();
+			}
 			pItemPtr->_itemAttr = QString::fromStdString(reqItem.attr());
 			pItemPtr->setObjectName(QString::fromStdString(reqItem.name()));
 			pItemPtr->_itemCount = reqItem.count();
@@ -2699,24 +3007,42 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			if (!petPtr)
 			{
 				petPtr = qSharedPointerDynamicCast<ITGamePet>(newOneObject(TObject_BankPet, pCharacter));
+				petPtr->_baseData = newOneObject(TObject_BaseData, petPtr).dynamicCast<ITGameBaseData>();
+				petPtr->_attrData = newOneObject(TObject_AttributeData, petPtr).dynamicCast<ITGameAttributeData>();		
 				pCharacter->_petPosForPet.insert(reqPet.index(), petPtr);
 			}
 			else
+			{
 				petPtr->setEditStatus();
+				if (petPtr->_baseData == nullptr)
+				{
+					petPtr->_baseData = newOneObject(TObject_BaseData, petPtr).dynamicCast<ITGameBaseData>();
+				}
+				if (petPtr->_attrData == nullptr)
+				{
+					petPtr->_attrData = newOneObject(TObject_AttributeData, petPtr).dynamicCast<ITGameAttributeData>();
+				}
+			}
 
 			petPtr->setObjectName(QString::fromStdString(reqPet.base_data().name()));
 			petPtr->_realName = QString::fromStdString(reqPet.real_name());
 			//	petPtr->setObjectCode(reqPet.petnumber);
-			petPtr->_baseData->_level = reqPet.base_data().level();
-			petPtr->_baseData->_hp = reqPet.base_data().hp();
-			petPtr->_baseData->_mp = reqPet.base_data().mp();
-			petPtr->_baseData->_maxhp = reqPet.base_data().maxhp();
-			petPtr->_baseData->_maxmp = reqPet.base_data().maxmp();
-			petPtr->_baseData->_xp = reqPet.base_data().xp();
-			petPtr->_baseData->_maxxp = reqPet.base_data().maxxp();
-			petPtr->_baseData->_health = reqPet.base_data().health();
-			//petPtr->_imageid = reqPet.image_id();		//人物模型图片id
-			petPtr->_baseData->_skillslots = reqPet.skillslots();			//技能格
+			ITGameBaseData tmpBaseData;
+			tmpBaseData._level = reqPet.base_data().level();
+			tmpBaseData._hp = reqPet.base_data().hp();
+			tmpBaseData._mp = reqPet.base_data().mp();
+			tmpBaseData._maxhp = reqPet.base_data().maxhp();
+			tmpBaseData._maxmp = reqPet.base_data().maxmp();
+			tmpBaseData._xp = reqPet.base_data().xp();
+			tmpBaseData._maxxp = reqPet.base_data().maxxp();
+			tmpBaseData._health = reqPet.base_data().health();
+			//tmpBaseData._imageid = reqPet.image_id();		//人物模型图片id
+			tmpBaseData._skillslots = reqPet.skillslots(); //技能格
+			if (*petPtr->_baseData != tmpBaseData)
+			{
+				*petPtr->_baseData = tmpBaseData;
+				petPtr->_baseData->setEditStatus();
+			}
 			petPtr->_loyality = reqPet.loyality();
 			petPtr->_race = reqPet.race();
 			petPtr->_state = reqPet.state();
@@ -2726,31 +3052,37 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			petPtr->_pos = reqPet.index();
 
 
-			petPtr->_attrData->_points_remain = reqPet.detail().points_remain();
-			petPtr->_attrData->_points_endurance = reqPet.detail().points_endurance();
-			petPtr->_attrData->_points_strength = reqPet.detail().points_strength();
-			petPtr->_attrData->_points_defense = reqPet.detail().points_defense();
-			petPtr->_attrData->_points_agility = reqPet.detail().points_agility();
-			petPtr->_attrData->_points_magical = reqPet.detail().points_magical();
-			petPtr->_attrData->_value_attack = reqPet.detail().value_attack();
-			petPtr->_attrData->_value_defensive = reqPet.detail().value_defensive();
-			petPtr->_attrData->_value_agility = reqPet.detail().value_agility();
-			petPtr->_attrData->_value_spirit = reqPet.detail().value_spirit();
-			petPtr->_attrData->_value_recovery = reqPet.detail().value_recovery();
-			petPtr->_attrData->_resist_poison = reqPet.detail().resist_poison();
-			petPtr->_attrData->_resist_sleep = reqPet.detail().resist_sleep();
-			petPtr->_attrData->_resist_medusa = reqPet.detail().resist_medusa();
-			petPtr->_attrData->_resist_drunk = reqPet.detail().resist_drunk();
-			petPtr->_attrData->_resist_chaos = reqPet.detail().resist_chaos();
-			petPtr->_attrData->_resist_forget = reqPet.detail().resist_forget();
-			petPtr->_attrData->_fix_critical = reqPet.detail().fix_critical();
-			petPtr->_attrData->_fix_strikeback = reqPet.detail().fix_strikeback();
-			petPtr->_attrData->_fix_accurancy = reqPet.detail().fix_accurancy();
-			petPtr->_attrData->_fix_dodge = reqPet.detail().fix_dodge();
-			petPtr->_attrData->_element_earth = reqPet.detail().element_earth();
-			petPtr->_attrData->_element_wind = reqPet.detail().element_wind();
-			petPtr->_attrData->_element_water = reqPet.detail().element_water();
-			petPtr->_attrData->_element_fire = reqPet.detail().element_fire();
+			ITGameAttributeData tmpAttrData;
+			tmpAttrData._points_remain = reqPet.detail().points_remain();
+			tmpAttrData._points_endurance = reqPet.detail().points_endurance();
+			tmpAttrData._points_strength = reqPet.detail().points_strength();
+			tmpAttrData._points_defense = reqPet.detail().points_defense();
+			tmpAttrData._points_agility = reqPet.detail().points_agility();
+			tmpAttrData._points_magical = reqPet.detail().points_magical();
+			tmpAttrData._value_attack = reqPet.detail().value_attack();
+			tmpAttrData._value_defensive = reqPet.detail().value_defensive();
+			tmpAttrData._value_agility = reqPet.detail().value_agility();
+			tmpAttrData._value_spirit = reqPet.detail().value_spirit();
+			tmpAttrData._value_recovery = reqPet.detail().value_recovery();
+			tmpAttrData._resist_poison = reqPet.detail().resist_poison();
+			tmpAttrData._resist_sleep = reqPet.detail().resist_sleep();
+			tmpAttrData._resist_medusa = reqPet.detail().resist_medusa();
+			tmpAttrData._resist_drunk = reqPet.detail().resist_drunk();
+			tmpAttrData._resist_chaos = reqPet.detail().resist_chaos();
+			tmpAttrData._resist_forget = reqPet.detail().resist_forget();
+			tmpAttrData._fix_critical = reqPet.detail().fix_critical();
+			tmpAttrData._fix_strikeback = reqPet.detail().fix_strikeback();
+			tmpAttrData._fix_accurancy = reqPet.detail().fix_accurancy();
+			tmpAttrData._fix_dodge = reqPet.detail().fix_dodge();
+			tmpAttrData._element_earth = reqPet.detail().element_earth();
+			tmpAttrData._element_wind = reqPet.detail().element_wind();
+			tmpAttrData._element_water = reqPet.detail().element_water();
+			tmpAttrData._element_fire = reqPet.detail().element_fire();
+			if (*petPtr->_attrData != tmpAttrData)
+			{
+				*petPtr->_attrData = tmpAttrData;
+				petPtr->_attrData->setEditStatus();
+			}
 			petPtr->_bExist = true;
 			posExist.append(reqPet.index());
 
@@ -2841,10 +3173,27 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 {
 	QString sGid = QString::fromStdString(request->gid());
 	int nRoleType = request->role_type();
+	QString sBigLine = QString::number(request->big_line());
+	int nBigLine = request->big_line();
 	if (sGid.isEmpty())
 	{
 		return Status::OK;
 	}
+	if (nBigLine == 0)
+	{
+		nBigLine = 13;
+	}
+	ITGameServerTypePtr pServerType = m_serverTypeForObj.value(nBigLine);
+	if (pServerType == nullptr)
+	{
+		return Status::OK;
+	}
+	auto pGidObj = pServerType->getGidObjFromGidName(sGid);
+	if (!pGidObj)
+	{
+		return Status::OK;
+	}
+
 	int roleObjType = TObject_Character;
 	if (nRoleType == 1)
 	{
@@ -2852,10 +3201,11 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 	}
 	else
 		roleObjType = TObject_CharacterLeft;
-	ITAccountGidPtr pGid = m_idForAccountGid.value(sGid);
+	ITAccountGidPtr pGid = pGidObj.dynamicCast<ITAccountGid>();
 	if (pGid)
 	{
 		response->set_gid(pGid->_userGid.toStdString());
+		response->set_online(0);	
 		ITGameCharacterPtr pRole = nullptr;
 		for (auto pTmpRole : pGid->GetAllChildObj())
 		{
@@ -2879,6 +3229,7 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 		}
 		if (pRole)
 		{
+			response->set_online(pRole->_connectState);			
 			auto pChar = response->mutable_character_data();
 			response->set_character_name(pRole->getObjectName().toStdString());
 			pChar->set_souls(pRole->_souls);
@@ -2910,7 +3261,9 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 			pChar->set_value_charisma(pRole->_value_charisma);
 			pChar->set_x(pRole->_x);
 			pChar->set_y(pRole->_y);
-			pChar->set_server_line(pRole->_server_line);
+			pChar->set_server_line(pRole->_server_line);			
+			pChar->set_big_line(pRole->_big_line);
+			pChar->set_battle_position(pRole->_battle_position);
 			//pChar->set_battle_position(pRole->_battle_position);
 			//pChar->set_battle_position(pRole->_battle_position);
 			auto detailData = pChar->mutable_detail();
@@ -3039,32 +3392,40 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 		return Status::OK;
 	QString sCharacterName = QString::fromStdString(request->char_name());
 	QString sBigLine = QString::number(request->big_line());
+	int nBigLine = request->big_line();
 	if (sCharacterName.isEmpty())
 		return Status::OK;
-	QString sID = sCharacterName + sBigLine;
-	auto pCharacter = m_idForAccountRole.value(sID);
+	if (nBigLine == 0)
+	{
+		nBigLine = 13;
+	}
+	ITGameServerTypePtr pServerType = m_serverTypeForObj.value(nBigLine);
+	if (pServerType == nullptr)
+	{
+		return Status::OK;
+	}
+	auto pCharacter = pServerType->getRoleObjFromRoleName(sCharacterName);
 	if (!pCharacter)
 	{
 		return Status::OK;
 	}
 	response->set_character_name(pCharacter->getObjectName().toStdString().c_str());
 	response->set_big_line(request->big_line());
-	ITGameCharacterPtr pRole = pCharacter;
+	response->set_online(0);	
+	ITGameCharacterPtr pRole = pCharacter.dynamicCast<ITGameCharacter>();
 	if (pCharacter)
 	{
+		response->set_online(pRole->_connectState);
 		auto pChar = response->mutable_character_data();
 		response->set_character_name(pRole->getObjectName().toStdString());
 		pChar->set_souls(pRole->_souls);
-		pChar->set_level(pRole->_baseData->_level);
 		pChar->set_gold(pRole->_gold);
 		pChar->set_map_name(pRole->_map_name.toStdString());
 		pChar->set_map_number(pRole->_map_number);
 		pChar->set_job(pRole->_job.toStdString());
 		pChar->set_nick(pRole->_nickName.toStdString());
 		pChar->set_bank_gold(pRole->_bankgold);
-		pChar->set_image_id(pRole->_baseData->_imageid);
 		pChar->set_score(pRole->_score);
-		pChar->set_skillslots(pRole->_baseData->_skillslots);
 		pChar->set_use_title(pRole->_useTitle);
 		pChar->set_avatar_id(pRole->_avatar_id);
 		pChar->set_unitid(pRole->_unitid);
@@ -3077,57 +3438,68 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 		{
 			pChar->add_titles(tTitle.toStdString());
 		}
-		pChar->set_manu_endurance(pRole->_attrData->_manu_endurance);
-		pChar->set_manu_skillful(pRole->_attrData->_manu_skillful);
-		pChar->set_manu_intelligence(pRole->_attrData->_manu_intelligence);
-		pChar->set_value_charisma(pRole->_value_charisma);
 		pChar->set_x(pRole->_x);
 		pChar->set_y(pRole->_y);
 		pChar->set_server_line(pRole->_server_line);
-		//pChar->set_battle_position(pRole->_battle_position);
-		//pChar->set_battle_position(pRole->_battle_position);
-		auto detailData = pChar->mutable_detail();
-		detailData->set_points_remain(pRole->_attrData->_points_remain);
-		detailData->set_points_endurance(pRole->_attrData->_points_endurance);
-		detailData->set_points_strength(pRole->_attrData->_points_strength);
-		detailData->set_points_defense(pRole->_attrData->_points_defense);
-		detailData->set_points_agility(pRole->_attrData->_points_agility);
-		detailData->set_points_magical(pRole->_attrData->_points_magical);
-		detailData->set_value_attack(pRole->_attrData->_value_attack);
-		detailData->set_value_defensive(pRole->_attrData->_value_defensive);
-		detailData->set_value_agility(pRole->_attrData->_value_agility);
-		detailData->set_value_spirit(pRole->_attrData->_value_spirit);
-		detailData->set_value_recovery(pRole->_attrData->_value_recovery);
-		detailData->set_resist_poison(pRole->_attrData->_resist_poison);
-		detailData->set_resist_sleep(pRole->_attrData->_resist_sleep);
-		detailData->set_resist_medusa(pRole->_attrData->_resist_medusa);
-		detailData->set_resist_drunk(pRole->_attrData->_resist_drunk);
-		detailData->set_resist_chaos(pRole->_attrData->_resist_chaos);
-		detailData->set_resist_forget(pRole->_attrData->_resist_forget);
-		detailData->set_fix_critical(pRole->_attrData->_fix_critical);
-		detailData->set_fix_strikeback(pRole->_attrData->_fix_strikeback);
-		detailData->set_fix_accurancy(pRole->_attrData->_fix_accurancy);
-		detailData->set_fix_dodge(pRole->_attrData->_fix_dodge);
-		detailData->set_element_earth(pRole->_attrData->_element_earth);
-		detailData->set_element_water(pRole->_attrData->_element_water);
-		detailData->set_element_fire(pRole->_attrData->_element_fire);
-		detailData->set_element_wind(pRole->_attrData->_element_wind);
+		pChar->set_big_line(pRole->_big_line);
+		pChar->set_battle_position(pRole->_battle_position);
+		pChar->set_value_charisma(pRole->_value_charisma);
 
+		if (pRole->_attrData)
 		{
-			auto pBaseData = pChar->mutable_base_data();
+			pChar->set_manu_endurance(pRole->_attrData->_manu_endurance);
+			pChar->set_manu_skillful(pRole->_attrData->_manu_skillful);
+			pChar->set_manu_intelligence(pRole->_attrData->_manu_intelligence);
+			auto detailData = pChar->mutable_detail();
+			detailData->set_points_remain(pRole->_attrData->_points_remain);
+			detailData->set_points_endurance(pRole->_attrData->_points_endurance);
+			detailData->set_points_strength(pRole->_attrData->_points_strength);
+			detailData->set_points_defense(pRole->_attrData->_points_defense);
+			detailData->set_points_agility(pRole->_attrData->_points_agility);
+			detailData->set_points_magical(pRole->_attrData->_points_magical);
+			detailData->set_value_attack(pRole->_attrData->_value_attack);
+			detailData->set_value_defensive(pRole->_attrData->_value_defensive);
+			detailData->set_value_agility(pRole->_attrData->_value_agility);
+			detailData->set_value_spirit(pRole->_attrData->_value_spirit);
+			detailData->set_value_recovery(pRole->_attrData->_value_recovery);
+			detailData->set_resist_poison(pRole->_attrData->_resist_poison);
+			detailData->set_resist_sleep(pRole->_attrData->_resist_sleep);
+			detailData->set_resist_medusa(pRole->_attrData->_resist_medusa);
+			detailData->set_resist_drunk(pRole->_attrData->_resist_drunk);
+			detailData->set_resist_chaos(pRole->_attrData->_resist_chaos);
+			detailData->set_resist_forget(pRole->_attrData->_resist_forget);
+			detailData->set_fix_critical(pRole->_attrData->_fix_critical);
+			detailData->set_fix_strikeback(pRole->_attrData->_fix_strikeback);
+			detailData->set_fix_accurancy(pRole->_attrData->_fix_accurancy);
+			detailData->set_fix_dodge(pRole->_attrData->_fix_dodge);
+			detailData->set_element_earth(pRole->_attrData->_element_earth);
+			detailData->set_element_water(pRole->_attrData->_element_water);
+			detailData->set_element_fire(pRole->_attrData->_element_fire);
+			detailData->set_element_wind(pRole->_attrData->_element_wind);		
+		}
+	
+	
+		//pChar->set_battle_position(pRole->_battle_position);
+		//pChar->set_battle_position(pRole->_battle_position);
+		
+		auto pBaseData = pChar->mutable_base_data();
+		pBaseData->set_name(pRole->getObjectName().toStdString());
+		if (pRole->_baseData)
+		{
+			pChar->set_level(pRole->_baseData->_level);
+			pChar->set_image_id(pRole->_baseData->_imageid);
+			pChar->set_skillslots(pRole->_baseData->_skillslots);
 			pBaseData->set_hp(pRole->_baseData->_hp);
 			pBaseData->set_mp(pRole->_baseData->_mp);
-			pBaseData->set_name(pRole->getObjectName().toStdString());
 			pBaseData->set_maxhp(pRole->_baseData->_maxhp);
 			pBaseData->set_maxmp(pRole->_baseData->_maxmp);
 			pBaseData->set_level(pRole->_baseData->_level);
 			pBaseData->set_xp(pRole->_baseData->_xp);
 			pBaseData->set_maxxp(pRole->_baseData->_maxxp);
 			pBaseData->set_health(pRole->_baseData->_health);
-		}
+		}		
+		
 		auto persDescData = pChar->mutable_pers_desc();
-		//persDescData->set_buyicon(pRole->bu)
-
 		for (auto it = pRole->_petPosForPet.begin(); it != pRole->_petPosForPet.end(); ++it)
 		{
 			if (!it.value()->_bExist)
@@ -3136,15 +3508,20 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 			}
 			auto petData = response->add_pet_data();
 			auto pBaseData = petData->base_data();
-			pBaseData.set_hp(it.value()->_baseData->_hp);
-			pBaseData.set_mp(it.value()->_baseData->_mp);
 			pBaseData.set_name(it.value()->getObjectName().toStdString());
-			pBaseData.set_maxhp(it.value()->_baseData->_maxhp);
-			pBaseData.set_maxmp(it.value()->_baseData->_maxmp);
-			pBaseData.set_level(it.value()->_baseData->_level);
-			pBaseData.set_xp(it.value()->_baseData->_xp);
-			pBaseData.set_maxxp(it.value()->_baseData->_maxxp);
-			pBaseData.set_health(it.value()->_baseData->_health);
+
+			if (it.value()->_baseData)
+			{
+				pBaseData.set_hp(it.value()->_baseData->_hp);
+				pBaseData.set_mp(it.value()->_baseData->_mp);
+				pBaseData.set_maxhp(it.value()->_baseData->_maxhp);
+				pBaseData.set_maxmp(it.value()->_baseData->_maxmp);
+				pBaseData.set_level(it.value()->_baseData->_level);
+				pBaseData.set_xp(it.value()->_baseData->_xp);
+				pBaseData.set_maxxp(it.value()->_baseData->_maxxp);
+				pBaseData.set_health(it.value()->_baseData->_health);
+				petData->set_skillslots(it.value()->_baseData->_skillslots);
+			}			
 			petData->set_index(it.key());
 			//petData->set_flags(it.value()->_fl);
 			petData->set_grade(it.value()->_grade);
@@ -3155,7 +3532,6 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 			petData->set_lossmaxgrade(it.value()->_lossMaxGrade);
 			petData->set_real_name(it.value()->_realName.toStdString());
 			petData->set_race(it.value()->_race);
-			petData->set_skillslots(it.value()->_baseData->_skillslots);
 		}
 		for (auto it = pRole->_itemPosForPtr.begin(); it != pRole->_itemPosForPtr.end(); ++it)
 		{

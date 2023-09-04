@@ -215,7 +215,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT SelectAccountGidDataRequestDefa
 constexpr SelectGidDataRequest::SelectGidDataRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : gid_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , role_type_(0){}
+  , role_type_(0)
+  , big_line_(0){}
 struct SelectGidDataRequestDefaultTypeInternal {
   constexpr SelectGidDataRequestDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -244,7 +245,8 @@ constexpr SelectCharacterDataResponse::SelectCharacterDataResponse(
   , items_()
   , character_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , character_data_(nullptr)
-  , big_line_(0){}
+  , big_line_(0)
+  , online_(0){}
 struct SelectCharacterDataResponseDefaultTypeInternal {
   constexpr SelectCharacterDataResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -336,7 +338,8 @@ constexpr SelectGidDataResponse::SelectGidDataResponse(
   , gid_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , character_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , character_data_(nullptr)
-  , role_type_(0){}
+  , role_type_(0)
+  , online_(0){}
 struct SelectGidDataResponseDefaultTypeInternal {
   constexpr SelectGidDataResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -912,6 +915,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataRequest, gid_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataRequest, role_type_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataRequest, big_line_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterDataRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -929,6 +933,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterDataResponse, character_data_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterDataResponse, pet_data_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterDataResponse, items_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterDataResponse, online_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -985,6 +990,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataResponse, character_data_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataResponse, pet_data_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataResponse, items_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectGidDataResponse, online_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::CGBaseData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1333,38 +1339,38 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 94, -1, sizeof(::CGData::CGAccountGidData)},
   { 105, -1, sizeof(::CGData::SelectAccountGidDataRequest)},
   { 111, -1, sizeof(::CGData::SelectGidDataRequest)},
-  { 118, -1, sizeof(::CGData::SelectCharacterDataRequest)},
-  { 125, -1, sizeof(::CGData::SelectCharacterDataResponse)},
-  { 135, -1, sizeof(::CGData::SelectCharacterServerRequest)},
-  { 142, -1, sizeof(::CGData::SelectCharacterServerResponse)},
-  { 152, -1, sizeof(::CGData::SelectTaskInfoRequest)},
-  { 160, -1, sizeof(::CGData::SelectTaskInfoResponse)},
-  { 174, -1, sizeof(::CGData::SelectAccountGidDataResponse)},
-  { 180, -1, sizeof(::CGData::SelectGidDataResponse)},
-  { 191, -1, sizeof(::CGData::CGBaseData)},
-  { 205, -1, sizeof(::CGData::CGSkillBaseData)},
-  { 222, -1, sizeof(::CGData::CGAttrBaseData)},
-  { 252, -1, sizeof(::CGData::CGCharacterPersDesc)},
-  { 265, 303, sizeof(::CGData::CGCharacterData)},
-  { 336, -1, sizeof(::CGData::CGPetData)},
-  { 356, -1, sizeof(::CGData::CGItemData)},
-  { 371, -1, sizeof(::CGData::CGStoreMapRequest)},
-  { 378, -1, sizeof(::CGData::CGStoreMapResponse)},
-  { 383, -1, sizeof(::CGData::CGMapDataRequest)},
-  { 388, -1, sizeof(::CGData::CGMapDataResponse)},
-  { 394, -1, sizeof(::CGData::CGMapData)},
-  { 404, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
-  { 409, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
-  { 415, -1, sizeof(::CGData::CGPetGradeCalcData)},
-  { 441, -1, sizeof(::CGData::CGItemRequest)},
-  { 447, -1, sizeof(::CGData::CGItemResponse)},
-  { 463, -1, sizeof(::CGData::CGStoreItemRequest)},
-  { 478, -1, sizeof(::CGData::CGStoreItemResponse)},
-  { 485, -1, sizeof(::CGData::CGVoidData)},
-  { 490, -1, sizeof(::CGData::CGBoolData)},
-  { 496, -1, sizeof(::CGData::CGIntData)},
-  { 502, -1, sizeof(::CGData::CGSysTimeResponse)},
-  { 515, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
+  { 119, -1, sizeof(::CGData::SelectCharacterDataRequest)},
+  { 126, -1, sizeof(::CGData::SelectCharacterDataResponse)},
+  { 137, -1, sizeof(::CGData::SelectCharacterServerRequest)},
+  { 144, -1, sizeof(::CGData::SelectCharacterServerResponse)},
+  { 154, -1, sizeof(::CGData::SelectTaskInfoRequest)},
+  { 162, -1, sizeof(::CGData::SelectTaskInfoResponse)},
+  { 176, -1, sizeof(::CGData::SelectAccountGidDataResponse)},
+  { 182, -1, sizeof(::CGData::SelectGidDataResponse)},
+  { 194, -1, sizeof(::CGData::CGBaseData)},
+  { 208, -1, sizeof(::CGData::CGSkillBaseData)},
+  { 225, -1, sizeof(::CGData::CGAttrBaseData)},
+  { 255, -1, sizeof(::CGData::CGCharacterPersDesc)},
+  { 268, 306, sizeof(::CGData::CGCharacterData)},
+  { 339, -1, sizeof(::CGData::CGPetData)},
+  { 359, -1, sizeof(::CGData::CGItemData)},
+  { 374, -1, sizeof(::CGData::CGStoreMapRequest)},
+  { 381, -1, sizeof(::CGData::CGStoreMapResponse)},
+  { 386, -1, sizeof(::CGData::CGMapDataRequest)},
+  { 391, -1, sizeof(::CGData::CGMapDataResponse)},
+  { 397, -1, sizeof(::CGData::CGMapData)},
+  { 407, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
+  { 412, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
+  { 418, -1, sizeof(::CGData::CGPetGradeCalcData)},
+  { 444, -1, sizeof(::CGData::CGItemRequest)},
+  { 450, -1, sizeof(::CGData::CGItemResponse)},
+  { 466, -1, sizeof(::CGData::CGStoreItemRequest)},
+  { 481, -1, sizeof(::CGData::CGStoreItemResponse)},
+  { 488, -1, sizeof(::CGData::CGVoidData)},
+  { 493, -1, sizeof(::CGData::CGBoolData)},
+  { 499, -1, sizeof(::CGData::CGIntData)},
+  { 505, -1, sizeof(::CGData::CGSysTimeResponse)},
+  { 518, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1448,189 +1454,190 @@ const char descriptor_table_protodef_CGData_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "\022\021\n\tgame_type\030\003 \001(\005\022\022\n\nbig_server\030\004 \001(\005\022"
   "\023\n\013server_line\030\005 \001(\r\022\021\n\tcharacter\030\006 \001(\005\""
   ".\n\033SelectAccountGidDataRequest\022\017\n\007accoun"
-  "t\030\001 \001(\t\"6\n\024SelectGidDataRequest\022\013\n\003gid\030\001"
-  " \001(\t\022\021\n\trole_type\030\002 \001(\005\"A\n\032SelectCharact"
-  "erDataRequest\022\021\n\tchar_name\030\001 \001(\t\022\020\n\010big_"
-  "line\030\002 \001(\005\"\300\001\n\033SelectCharacterDataRespon"
-  "se\022\026\n\016character_name\030\001 \001(\t\022\020\n\010big_line\030\002"
-  " \001(\005\022/\n\016character_data\030\003 \001(\0132\027.CGData.CG"
-  "CharacterData\022#\n\010pet_data\030\004 \003(\0132\021.CGData"
-  ".CGPetData\022!\n\005items\030\005 \003(\0132\022.CGData.CGIte"
-  "mData\"C\n\034SelectCharacterServerRequest\022\021\n"
-  "\tchar_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\"n\n\035Se"
-  "lectCharacterServerResponse\022\021\n\tchar_name"
-  "\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\022\n\n\002ip\030\003 \001(\t\022\014\n\004"
-  "port\030\004 \001(\005\022\016\n\006online\030\005 \001(\005\"J\n\025SelectTask"
-  "InfoRequest\022\021\n\ttask_name\030\001 \001(\t\022\020\n\010big_li"
-  "ne\030\002 \001(\005\022\014\n\004line\030\003 \001(\005\"\335\001\n\026SelectTaskInf"
-  "oResponse\022\021\n\ttask_name\030\001 \001(\t\022\020\n\010big_line"
-  "\030\002 \001(\005\022\014\n\004line\030\003 \001(\005\022\021\n\tnpc_pos_x\030\004 \001(\005\022"
-  "\021\n\tnpc_pos_y\030\005 \001(\005\022\021\n\tlast_time\030\006 \001(\005\022\032\n"
-  "\022last_map_first_num\030\007 \001(\005\022\034\n\024last_map_fi"
-  "rst_width\030\010 \001(\005\022\035\n\025last_map_first_height"
-  "\030\t \001(\005\"N\n\034SelectAccountGidDataResponse\022."
-  "\n\007gidData\030\001 \003(\0132\035.CGData.SelectGidDataRe"
-  "sponse\"\310\001\n\025SelectGidDataResponse\022\013\n\003gid\030"
-  "\001 \001(\t\022\021\n\trole_type\030\002 \001(\005\022\026\n\016character_na"
-  "me\030\003 \001(\t\022/\n\016character_data\030\004 \001(\0132\027.CGDat"
-  "a.CGCharacterData\022#\n\010pet_data\030\005 \003(\0132\021.CG"
-  "Data.CGPetData\022!\n\005items\030\006 \003(\0132\022.CGData.C"
-  "GItemData\"\212\001\n\nCGBaseData\022\014\n\004name\030\001 \001(\t\022\n"
-  "\n\002hp\030\002 \001(\005\022\n\n\002mp\030\003 \001(\005\022\r\n\005maxhp\030\004 \001(\005\022\r\n"
-  "\005maxmp\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\n\n\002xp\030\007 \001(\005\022"
-  "\r\n\005maxxp\030\010 \001(\005\022\016\n\006health\030\t \001(\005\"\340\001\n\017CGSki"
-  "llBaseData\022\014\n\004name\030\001 \001(\t\022\014\n\004info\030\002 \001(\t\022\n"
-  "\n\002id\030\003 \001(\005\022\014\n\004cost\030\004 \001(\005\022\r\n\005flags\030\005 \001(\005\022"
-  "\r\n\005index\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\020\n\010maxLeve"
-  "l\030\010 \001(\005\022\021\n\tavailable\030\t \001(\010\022\n\n\002xp\030\n \001(\005\022\r"
-  "\n\005maxxp\030\013 \001(\005\022*\n\tsubskills\030\014 \003(\0132\027.CGDat"
-  "a.CGSkillBaseData\"\317\004\n\016CGAttrBaseData\022\025\n\r"
-  "points_remain\030\001 \001(\005\022\030\n\020points_endurance\030"
-  "\002 \001(\005\022\027\n\017points_strength\030\003 \001(\005\022\026\n\016points"
-  "_defense\030\004 \001(\005\022\026\n\016points_agility\030\005 \001(\005\022\026"
-  "\n\016points_magical\030\006 \001(\005\022\024\n\014value_attack\030\007"
-  " \001(\005\022\027\n\017value_defensive\030\010 \001(\005\022\025\n\rvalue_a"
-  "gility\030\t \001(\005\022\024\n\014value_spirit\030\n \001(\005\022\026\n\016va"
-  "lue_recovery\030\013 \001(\005\022\025\n\rresist_poison\030\014 \001("
-  "\005\022\024\n\014resist_sleep\030\r \001(\005\022\025\n\rresist_medusa"
-  "\030\016 \001(\005\022\024\n\014resist_drunk\030\017 \001(\005\022\024\n\014resist_c"
-  "haos\030\020 \001(\005\022\025\n\rresist_forget\030\021 \001(\005\022\024\n\014fix"
-  "_critical\030\022 \001(\005\022\026\n\016fix_strikeback\030\023 \001(\005\022"
-  "\025\n\rfix_accurancy\030\024 \001(\005\022\021\n\tfix_dodge\030\025 \001("
-  "\005\022\025\n\relement_earth\030\026 \001(\005\022\025\n\relement_wate"
-  "r\030\027 \001(\005\022\024\n\014element_fire\030\030 \001(\005\022\024\n\014element"
-  "_wind\030\031 \001(\005\"\255\001\n\023CGCharacterPersDesc\022\022\n\nc"
-  "hangeBits\030\001 \001(\005\022\020\n\010sellIcon\030\002 \001(\005\022\022\n\nsel"
-  "lString\030\003 \001(\t\022\017\n\007buyIcon\030\004 \001(\005\022\021\n\tbuyStr"
-  "ing\030\005 \001(\t\022\020\n\010wantIcon\030\006 \001(\005\022\022\n\nwantStrin"
-  "g\030\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\337\005\n\017CGCharac"
-  "terData\022%\n\tbase_data\030\001 \001(\0132\022.CGData.CGBa"
-  "seData\022\r\n\005souls\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004"
-  "gold\030\004 \001(\005\022\020\n\010image_id\030\005 \001(\005\022\r\n\005score\030\006 "
-  "\001(\005\022\022\n\nskillslots\030\007 \001(\005\022\021\n\tuse_title\030\010 \001"
-  "(\005\022\021\n\tavatar_id\030\t \001(\005\022\016\n\006unitid\030\n \001(\005\022\r\n"
-  "\005petid\030\013 \001(\005\022\021\n\tpetriding\030\014 \001(\010\022\021\n\tdirec"
-  "tion\030\r \001(\005\022\022\n\npunchclock\030\016 \001(\005\022\027\n\017usingp"
-  "unchclock\030\017 \001(\010\022\013\n\003job\030\020 \001(\t\022\016\n\006titles\030\021"
-  " \003(\t\022\026\n\016manu_endurance\030\022 \001(\005\022\025\n\rmanu_ski"
-  "llful\030\023 \001(\005\022\031\n\021manu_intelligence\030\024 \001(\005\022\026"
-  "\n\016value_charisma\030\025 \001(\005\022\t\n\001x\030\026 \001(\005\022\t\n\001y\030\027"
-  " \001(\005\022\020\n\010map_name\030\030 \001(\t\022\022\n\nmap_number\030\031 \001"
-  "(\005\022\023\n\013server_line\030\032 \001(\005\022&\n\006detail\030\033 \001(\0132"
-  "\026.CGData.CGAttrBaseData\022&\n\005skill\030\034 \003(\0132\027"
-  ".CGData.CGSkillBaseData\022\014\n\004nick\030\035 \001(\t\022.\n"
-  "\tpers_desc\030\036 \001(\0132\033.CGData.CGCharacterPer"
-  "sDesc\022\027\n\017battle_position\030\037 \001(\005\022\021\n\tbank_g"
-  "old\030  \001(\005\022\025\n\010big_line\030! \001(\005H\000\210\001\001B\013\n\t_big"
-  "_line\"\337\002\n\tCGPetData\022%\n\tbase_data\030\001 \001(\0132\022"
-  ".CGData.CGBaseData\022\r\n\005index\030\002 \001(\005\022\r\n\005fla"
-  "gs\030\003 \001(\005\022\024\n\014battle_flags\030\004 \001(\005\022\020\n\010loyali"
-  "ty\030\005 \001(\005\022\026\n\016default_battle\030\006 \001(\010\022\r\n\005stat"
-  "e\030\007 \001(\005\022\r\n\005grade\030\010 \001(\005\022\024\n\014lossMinGrade\030\t"
-  " \001(\005\022\024\n\014lossMaxGrade\030\n \001(\005\022&\n\005skill\030\013 \003("
-  "\0132\027.CGData.CGSkillBaseData\022&\n\006detail\030\014 \001"
-  "(\0132\026.CGData.CGAttrBaseData\022\021\n\treal_name\030"
-  "\r \001(\t\022\014\n\004race\030\016 \001(\005\022\022\n\nskillslots\030\017 \001(\005\""
-  "\244\001\n\nCGItemData\022\020\n\010image_id\030\001 \001(\005\022\017\n\007item"
-  "_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n"
-  "\005level\030\005 \001(\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004info\030\007 \001(\t"
-  "\022\013\n\003pos\030\010 \001(\005\022\020\n\010assessed\030\t \001(\010\022\r\n\005count"
-  "\030\n \001(\005\"9\n\021CGStoreMapRequest\022\022\n\nmap_numbe"
-  "r\030\001 \001(\005\022\020\n\010map_name\030\002 \001(\t\"\024\n\022CGStoreMapR"
-  "esponse\"\022\n\020CGMapDataRequest\"4\n\021CGMapData"
-  "Response\022\037\n\004maps\030\001 \003(\0132\021.CGData.CGMapDat"
-  "a\"Z\n\tCGMapData\022\n\n\002id\030\001 \001(\004\022\022\n\nmap_number"
-  "\030\002 \001(\005\022\020\n\010map_name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\r"
-  "\n\005often\030\005 \001(\005\"\027\n\025CGPetGradeCalcRequest\"A"
-  "\n\026CGPetGradeCalcResponse\022\'\n\003pet\030\001 \003(\0132\032."
-  "CGData.CGPetGradeCalcData\"\267\003\n\022CGPetGrade"
-  "CalcData\022\n\n\002id\030\001 \001(\004\022\016\n\006number\030\002 \001(\005\022\014\n\004"
-  "name\030\003 \001(\t\022\020\n\010raceType\030\004 \001(\005\022\024\n\014raceType"
-  "Name\030\005 \001(\t\022\016\n\006baseBP\030\006 \001(\001\022\022\n\ntotalGrade"
-  "\030\007 \001(\005\022\023\n\013bestBPGrade\030\010 \003(\001\022\021\n\tcan_catch"
-  "\030\t \001(\005\022\021\n\tcard_type\030\n \001(\005\022\020\n\010image_id\030\013 "
-  "\001(\005\022\026\n\016rate_endurance\030\014 \001(\005\022\025\n\rrate_stre"
-  "ngth\030\r \001(\005\022\024\n\014rate_defense\030\016 \001(\005\022\024\n\014rate"
-  "_agility\030\017 \001(\005\022\024\n\014rate_magical\030\020 \001(\005\022\025\n\r"
-  "element_earth\030\021 \001(\005\022\025\n\relement_water\030\022 \001"
-  "(\005\022\024\n\014element_fire\030\023 \001(\005\022\024\n\014element_wind"
-  "\030\024 \001(\005\022\023\n\013skill_slots\030\025 \001(\005\" \n\rCGItemReq"
-  "uest\022\017\n\007item_id\030\001 \001(\005\"\300\001\n\016CGItemResponse"
-  "\022\n\n\002id\030\001 \001(\004\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name\030\003 "
-  "\001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005price\030\005 \001(\005\022\017\n\007maxp"
-  "ile\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\026\n\016sellLimitCou"
-  "nt\030\010 \001(\005\022\021\n\tattribute\030\t \001(\t\022\014\n\004desc\030\n \001("
-  "\t\022\r\n\005exist\030\013 \001(\010\"\273\001\n\022CGStoreItemRequest\022"
-  "\017\n\007item_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004type\030\003"
-  " \001(\005\022\r\n\005price\030\004 \001(\005\022\017\n\007maxpile\030\005 \001(\005\022\r\n\005"
-  "level\030\006 \001(\005\022\026\n\016sellLimitCount\030\007 \001(\005\022\021\n\ta"
-  "ttribute\030\010 \001(\t\022\014\n\004desc\030\t \001(\t\022\020\n\010assessed"
-  "\030\n \001(\010\"4\n\023CGStoreItemResponse\022\n\n\002id\030\001 \001("
-  "\005\022\021\n\tmaybeName\030\002 \001(\t\"\014\n\nCGVoidData\"\031\n\nCG"
-  "BoolData\022\013\n\003val\030\001 \001(\010\"\030\n\tCGIntData\022\013\n\003va"
-  "l\030\001 \001(\005\"\223\001\n\021CGSysTimeResponse\022\r\n\005years\030\001"
-  " \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004days\030\003 \001(\005\022\r\n\005hou"
-  "rs\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004secs\030\006 \001(\005\022\022\n\n"
-  "local_time\030\007 \001(\005\022\023\n\013server_time\030\010 \001(\005\"8\n"
-  "\027CGPlayerFlagEnabledData\022\r\n\005index\030\001 \001(\005\022"
-  "\016\n\006enable\030\002 \001(\0102\237\004\n\014MLRpcService\022:\n\nInit"
-  "ialize\022\030.CGData.CGGmeTypeRequest\032\022.CGDat"
-  "a.CGVoidData\0221\n\007Connect\022\022.CGData.CGVoidD"
-  "ata\032\022.CGData.CGBoolData\0221\n\010IsInGame\022\022.CG"
-  "Data.CGVoidData\032\021.CGData.CGIntData\0227\n\016Ge"
-  "tWorldStatus\022\022.CGData.CGVoidData\032\021.CGDat"
-  "a.CGIntData\0226\n\rGetGameStatus\022\022.CGData.CG"
-  "VoidData\032\021.CGData.CGIntData\0224\n\013GetBGMInd"
-  "ex\022\022.CGData.CGVoidData\032\021.CGData.CGIntDat"
-  "a\022;\n\nGetSysTime\022\022.CGData.CGVoidData\032\031.CG"
-  "Data.CGSysTimeResponse\022<\n\rGetPlayerInfo\022"
-  "\022.CGData.CGVoidData\032\027.CGData.CGCharacter"
-  "Data\022K\n\024SetPlayerFlagEnabled\022\037.CGData.CG"
-  "PlayerFlagEnabledData\032\022.CGData.CGVoidDat"
-  "a2\233\014\n\014CGRpcService\022>\n\rGetCGItemData\022\025.CG"
-  "Data.CGItemRequest\032\026.CGData.CGItemRespon"
-  "se\0229\n\017GetConnectState\022\022.CGData.CGVoidDat"
-  "a\032\022.CGData.CGVoidData\022V\n\023GetPetGradeCalc"
-  "Data\022\035.CGData.CGPetGradeCalcRequest\032\036.CG"
-  "Data.CGPetGradeCalcResponse\"\000\022N\n\025GetServ"
-  "erStoreMapData\022\030.CGData.CGMapDataRequest"
-  "\032\031.CGData.CGMapDataResponse\"\000\022L\n\017StoreCG"
-  "ItemData\022\032.CGData.CGStoreItemRequest\032\033.C"
-  "GData.CGStoreItemResponse\"\000\022I\n\016StoreCGMa"
-  "pData\022\031.CGData.CGStoreMapRequest\032\032.CGDat"
-  "a.CGStoreMapResponse\"\000\022N\n\rUploadGidData\022"
-  "\034.CGData.UploadGidDataRequest\032\035.CGData.U"
-  "ploadGidDataResponse\"\000\022Z\n\021UploadGidBankD"
-  "ata\022 .CGData.UploadGidBankDataRequest\032!."
-  "CGData.UploadGidBankDataResponse\"\000\022P\n\rUp"
-  "loadMapData\022\034.CGData.UploadMapDataReques"
-  "t\032\035.CGData.UploadMapDataResponse\"\000(\001\022V\n\017"
-  "DownloadMapData\022\036.CGData.DownloadMapData"
-  "Request\032\037.CGData.DownloadMapDataResponse"
-  "\"\0000\001\022c\n\024UploadCharcterServer\022#.CGData.Up"
-  "loadCharcterServerRequest\032$.CGData.Uploa"
-  "dCharcterServerResponse\"\000\022/\n\007Publish\022\021.C"
-  "GData.StringPub\032\021.CGData.StringPub\0223\n\tSu"
-  "bscribe\022\021.CGData.StringPub\032\021.CGData.Stri"
-  "ngPub0\001\022c\n\024SelectAccountGidData\022#.CGData"
-  ".SelectAccountGidDataRequest\032$.CGData.Se"
-  "lectAccountGidDataResponse\"\000\022N\n\rSelectGi"
-  "dData\022\034.CGData.SelectGidDataRequest\032\035.CG"
-  "Data.SelectGidDataResponse\"\000\022\\\n\024SelectDs"
-  "tTypeGidData\022\034.CGData.SelectGidDataReque"
-  "st\032$.CGData.SelectAccountGidDataResponse"
-  "\"\000\022f\n\025SelectCharacterServer\022$.CGData.Sel"
-  "ectCharacterServerRequest\032%.CGData.Selec"
-  "tCharacterServerResponse\"\000\022Q\n\016SelectTask"
-  "Info\022\035.CGData.SelectTaskInfoRequest\032\036.CG"
-  "Data.SelectTaskInfoResponse\"\000\022`\n\023SelectC"
-  "haracterData\022\".CGData.SelectCharacterDat"
-  "aRequest\032#.CGData.SelectCharacterDataRes"
-  "ponse\"\000b\006proto3"
+  "t\030\001 \001(\t\"H\n\024SelectGidDataRequest\022\013\n\003gid\030\001"
+  " \001(\t\022\021\n\trole_type\030\002 \001(\005\022\020\n\010big_line\030\003 \001("
+  "\005\"A\n\032SelectCharacterDataRequest\022\021\n\tchar_"
+  "name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\"\320\001\n\033SelectC"
+  "haracterDataResponse\022\026\n\016character_name\030\001"
+  " \001(\t\022\020\n\010big_line\030\002 \001(\005\022/\n\016character_data"
+  "\030\003 \001(\0132\027.CGData.CGCharacterData\022#\n\010pet_d"
+  "ata\030\004 \003(\0132\021.CGData.CGPetData\022!\n\005items\030\005 "
+  "\003(\0132\022.CGData.CGItemData\022\016\n\006online\030\006 \001(\005\""
+  "C\n\034SelectCharacterServerRequest\022\021\n\tchar_"
+  "name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\"n\n\035SelectCh"
+  "aracterServerResponse\022\021\n\tchar_name\030\001 \001(\t"
+  "\022\020\n\010big_line\030\002 \001(\005\022\n\n\002ip\030\003 \001(\t\022\014\n\004port\030\004"
+  " \001(\005\022\016\n\006online\030\005 \001(\005\"J\n\025SelectTaskInfoRe"
+  "quest\022\021\n\ttask_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001"
+  "(\005\022\014\n\004line\030\003 \001(\005\"\335\001\n\026SelectTaskInfoRespo"
+  "nse\022\021\n\ttask_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005"
+  "\022\014\n\004line\030\003 \001(\005\022\021\n\tnpc_pos_x\030\004 \001(\005\022\021\n\tnpc"
+  "_pos_y\030\005 \001(\005\022\021\n\tlast_time\030\006 \001(\005\022\032\n\022last_"
+  "map_first_num\030\007 \001(\005\022\034\n\024last_map_first_wi"
+  "dth\030\010 \001(\005\022\035\n\025last_map_first_height\030\t \001(\005"
+  "\"N\n\034SelectAccountGidDataResponse\022.\n\007gidD"
+  "ata\030\001 \003(\0132\035.CGData.SelectGidDataResponse"
+  "\"\330\001\n\025SelectGidDataResponse\022\013\n\003gid\030\001 \001(\t\022"
+  "\021\n\trole_type\030\002 \001(\005\022\026\n\016character_name\030\003 \001"
+  "(\t\022/\n\016character_data\030\004 \001(\0132\027.CGData.CGCh"
+  "aracterData\022#\n\010pet_data\030\005 \003(\0132\021.CGData.C"
+  "GPetData\022!\n\005items\030\006 \003(\0132\022.CGData.CGItemD"
+  "ata\022\016\n\006online\030\007 \001(\005\"\212\001\n\nCGBaseData\022\014\n\004na"
+  "me\030\001 \001(\t\022\n\n\002hp\030\002 \001(\005\022\n\n\002mp\030\003 \001(\005\022\r\n\005maxh"
+  "p\030\004 \001(\005\022\r\n\005maxmp\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\n\n"
+  "\002xp\030\007 \001(\005\022\r\n\005maxxp\030\010 \001(\005\022\016\n\006health\030\t \001(\005"
+  "\"\340\001\n\017CGSkillBaseData\022\014\n\004name\030\001 \001(\t\022\014\n\004in"
+  "fo\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\022\014\n\004cost\030\004 \001(\005\022\r\n\005fl"
+  "ags\030\005 \001(\005\022\r\n\005index\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022"
+  "\020\n\010maxLevel\030\010 \001(\005\022\021\n\tavailable\030\t \001(\010\022\n\n\002"
+  "xp\030\n \001(\005\022\r\n\005maxxp\030\013 \001(\005\022*\n\tsubskills\030\014 \003"
+  "(\0132\027.CGData.CGSkillBaseData\"\317\004\n\016CGAttrBa"
+  "seData\022\025\n\rpoints_remain\030\001 \001(\005\022\030\n\020points_"
+  "endurance\030\002 \001(\005\022\027\n\017points_strength\030\003 \001(\005"
+  "\022\026\n\016points_defense\030\004 \001(\005\022\026\n\016points_agili"
+  "ty\030\005 \001(\005\022\026\n\016points_magical\030\006 \001(\005\022\024\n\014valu"
+  "e_attack\030\007 \001(\005\022\027\n\017value_defensive\030\010 \001(\005\022"
+  "\025\n\rvalue_agility\030\t \001(\005\022\024\n\014value_spirit\030\n"
+  " \001(\005\022\026\n\016value_recovery\030\013 \001(\005\022\025\n\rresist_p"
+  "oison\030\014 \001(\005\022\024\n\014resist_sleep\030\r \001(\005\022\025\n\rres"
+  "ist_medusa\030\016 \001(\005\022\024\n\014resist_drunk\030\017 \001(\005\022\024"
+  "\n\014resist_chaos\030\020 \001(\005\022\025\n\rresist_forget\030\021 "
+  "\001(\005\022\024\n\014fix_critical\030\022 \001(\005\022\026\n\016fix_strikeb"
+  "ack\030\023 \001(\005\022\025\n\rfix_accurancy\030\024 \001(\005\022\021\n\tfix_"
+  "dodge\030\025 \001(\005\022\025\n\relement_earth\030\026 \001(\005\022\025\n\rel"
+  "ement_water\030\027 \001(\005\022\024\n\014element_fire\030\030 \001(\005\022"
+  "\024\n\014element_wind\030\031 \001(\005\"\255\001\n\023CGCharacterPer"
+  "sDesc\022\022\n\nchangeBits\030\001 \001(\005\022\020\n\010sellIcon\030\002 "
+  "\001(\005\022\022\n\nsellString\030\003 \001(\t\022\017\n\007buyIcon\030\004 \001(\005"
+  "\022\021\n\tbuyString\030\005 \001(\t\022\020\n\010wantIcon\030\006 \001(\005\022\022\n"
+  "\nwantString\030\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\337\005"
+  "\n\017CGCharacterData\022%\n\tbase_data\030\001 \001(\0132\022.C"
+  "GData.CGBaseData\022\r\n\005souls\030\002 \001(\005\022\r\n\005level"
+  "\030\003 \001(\005\022\014\n\004gold\030\004 \001(\005\022\020\n\010image_id\030\005 \001(\005\022\r"
+  "\n\005score\030\006 \001(\005\022\022\n\nskillslots\030\007 \001(\005\022\021\n\tuse"
+  "_title\030\010 \001(\005\022\021\n\tavatar_id\030\t \001(\005\022\016\n\006uniti"
+  "d\030\n \001(\005\022\r\n\005petid\030\013 \001(\005\022\021\n\tpetriding\030\014 \001("
+  "\010\022\021\n\tdirection\030\r \001(\005\022\022\n\npunchclock\030\016 \001(\005"
+  "\022\027\n\017usingpunchclock\030\017 \001(\010\022\013\n\003job\030\020 \001(\t\022\016"
+  "\n\006titles\030\021 \003(\t\022\026\n\016manu_endurance\030\022 \001(\005\022\025"
+  "\n\rmanu_skillful\030\023 \001(\005\022\031\n\021manu_intelligen"
+  "ce\030\024 \001(\005\022\026\n\016value_charisma\030\025 \001(\005\022\t\n\001x\030\026 "
+  "\001(\005\022\t\n\001y\030\027 \001(\005\022\020\n\010map_name\030\030 \001(\t\022\022\n\nmap_"
+  "number\030\031 \001(\005\022\023\n\013server_line\030\032 \001(\005\022&\n\006det"
+  "ail\030\033 \001(\0132\026.CGData.CGAttrBaseData\022&\n\005ski"
+  "ll\030\034 \003(\0132\027.CGData.CGSkillBaseData\022\014\n\004nic"
+  "k\030\035 \001(\t\022.\n\tpers_desc\030\036 \001(\0132\033.CGData.CGCh"
+  "aracterPersDesc\022\027\n\017battle_position\030\037 \001(\005"
+  "\022\021\n\tbank_gold\030  \001(\005\022\025\n\010big_line\030! \001(\005H\000\210"
+  "\001\001B\013\n\t_big_line\"\337\002\n\tCGPetData\022%\n\tbase_da"
+  "ta\030\001 \001(\0132\022.CGData.CGBaseData\022\r\n\005index\030\002 "
+  "\001(\005\022\r\n\005flags\030\003 \001(\005\022\024\n\014battle_flags\030\004 \001(\005"
+  "\022\020\n\010loyality\030\005 \001(\005\022\026\n\016default_battle\030\006 \001"
+  "(\010\022\r\n\005state\030\007 \001(\005\022\r\n\005grade\030\010 \001(\005\022\024\n\014loss"
+  "MinGrade\030\t \001(\005\022\024\n\014lossMaxGrade\030\n \001(\005\022&\n\005"
+  "skill\030\013 \003(\0132\027.CGData.CGSkillBaseData\022&\n\006"
+  "detail\030\014 \001(\0132\026.CGData.CGAttrBaseData\022\021\n\t"
+  "real_name\030\r \001(\t\022\014\n\004race\030\016 \001(\005\022\022\n\nskillsl"
+  "ots\030\017 \001(\005\"\244\001\n\nCGItemData\022\020\n\010image_id\030\001 \001"
+  "(\005\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004typ"
+  "e\030\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004"
+  "info\030\007 \001(\t\022\013\n\003pos\030\010 \001(\005\022\020\n\010assessed\030\t \001("
+  "\010\022\r\n\005count\030\n \001(\005\"9\n\021CGStoreMapRequest\022\022\n"
+  "\nmap_number\030\001 \001(\005\022\020\n\010map_name\030\002 \001(\t\"\024\n\022C"
+  "GStoreMapResponse\"\022\n\020CGMapDataRequest\"4\n"
+  "\021CGMapDataResponse\022\037\n\004maps\030\001 \003(\0132\021.CGDat"
+  "a.CGMapData\"Z\n\tCGMapData\022\n\n\002id\030\001 \001(\004\022\022\n\n"
+  "map_number\030\002 \001(\005\022\020\n\010map_name\030\003 \001(\t\022\014\n\004de"
+  "sc\030\004 \001(\t\022\r\n\005often\030\005 \001(\005\"\027\n\025CGPetGradeCal"
+  "cRequest\"A\n\026CGPetGradeCalcResponse\022\'\n\003pe"
+  "t\030\001 \003(\0132\032.CGData.CGPetGradeCalcData\"\267\003\n\022"
+  "CGPetGradeCalcData\022\n\n\002id\030\001 \001(\004\022\016\n\006number"
+  "\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\020\n\010raceType\030\004 \001(\005\022\024"
+  "\n\014raceTypeName\030\005 \001(\t\022\016\n\006baseBP\030\006 \001(\001\022\022\n\n"
+  "totalGrade\030\007 \001(\005\022\023\n\013bestBPGrade\030\010 \003(\001\022\021\n"
+  "\tcan_catch\030\t \001(\005\022\021\n\tcard_type\030\n \001(\005\022\020\n\010i"
+  "mage_id\030\013 \001(\005\022\026\n\016rate_endurance\030\014 \001(\005\022\025\n"
+  "\rrate_strength\030\r \001(\005\022\024\n\014rate_defense\030\016 \001"
+  "(\005\022\024\n\014rate_agility\030\017 \001(\005\022\024\n\014rate_magical"
+  "\030\020 \001(\005\022\025\n\relement_earth\030\021 \001(\005\022\025\n\relement"
+  "_water\030\022 \001(\005\022\024\n\014element_fire\030\023 \001(\005\022\024\n\014el"
+  "ement_wind\030\024 \001(\005\022\023\n\013skill_slots\030\025 \001(\005\" \n"
+  "\rCGItemRequest\022\017\n\007item_id\030\001 \001(\005\"\300\001\n\016CGIt"
+  "emResponse\022\n\n\002id\030\001 \001(\004\022\017\n\007item_id\030\002 \001(\005\022"
+  "\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005price\030\005 \001"
+  "(\005\022\017\n\007maxpile\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\026\n\016se"
+  "llLimitCount\030\010 \001(\005\022\021\n\tattribute\030\t \001(\t\022\014\n"
+  "\004desc\030\n \001(\t\022\r\n\005exist\030\013 \001(\010\"\273\001\n\022CGStoreIt"
+  "emRequest\022\017\n\007item_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t"
+  "\022\014\n\004type\030\003 \001(\005\022\r\n\005price\030\004 \001(\005\022\017\n\007maxpile"
+  "\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\026\n\016sellLimitCount\030"
+  "\007 \001(\005\022\021\n\tattribute\030\010 \001(\t\022\014\n\004desc\030\t \001(\t\022\020"
+  "\n\010assessed\030\n \001(\010\"4\n\023CGStoreItemResponse\022"
+  "\n\n\002id\030\001 \001(\005\022\021\n\tmaybeName\030\002 \001(\t\"\014\n\nCGVoid"
+  "Data\"\031\n\nCGBoolData\022\013\n\003val\030\001 \001(\010\"\030\n\tCGInt"
+  "Data\022\013\n\003val\030\001 \001(\005\"\223\001\n\021CGSysTimeResponse\022"
+  "\r\n\005years\030\001 \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004days\030\003 "
+  "\001(\005\022\r\n\005hours\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004secs"
+  "\030\006 \001(\005\022\022\n\nlocal_time\030\007 \001(\005\022\023\n\013server_tim"
+  "e\030\010 \001(\005\"8\n\027CGPlayerFlagEnabledData\022\r\n\005in"
+  "dex\030\001 \001(\005\022\016\n\006enable\030\002 \001(\0102\237\004\n\014MLRpcServi"
+  "ce\022:\n\nInitialize\022\030.CGData.CGGmeTypeReque"
+  "st\032\022.CGData.CGVoidData\0221\n\007Connect\022\022.CGDa"
+  "ta.CGVoidData\032\022.CGData.CGBoolData\0221\n\010IsI"
+  "nGame\022\022.CGData.CGVoidData\032\021.CGData.CGInt"
+  "Data\0227\n\016GetWorldStatus\022\022.CGData.CGVoidDa"
+  "ta\032\021.CGData.CGIntData\0226\n\rGetGameStatus\022\022"
+  ".CGData.CGVoidData\032\021.CGData.CGIntData\0224\n"
+  "\013GetBGMIndex\022\022.CGData.CGVoidData\032\021.CGDat"
+  "a.CGIntData\022;\n\nGetSysTime\022\022.CGData.CGVoi"
+  "dData\032\031.CGData.CGSysTimeResponse\022<\n\rGetP"
+  "layerInfo\022\022.CGData.CGVoidData\032\027.CGData.C"
+  "GCharacterData\022K\n\024SetPlayerFlagEnabled\022\037"
+  ".CGData.CGPlayerFlagEnabledData\032\022.CGData"
+  ".CGVoidData2\233\014\n\014CGRpcService\022>\n\rGetCGIte"
+  "mData\022\025.CGData.CGItemRequest\032\026.CGData.CG"
+  "ItemResponse\0229\n\017GetConnectState\022\022.CGData"
+  ".CGVoidData\032\022.CGData.CGVoidData\022V\n\023GetPe"
+  "tGradeCalcData\022\035.CGData.CGPetGradeCalcRe"
+  "quest\032\036.CGData.CGPetGradeCalcResponse\"\000\022"
+  "N\n\025GetServerStoreMapData\022\030.CGData.CGMapD"
+  "ataRequest\032\031.CGData.CGMapDataResponse\"\000\022"
+  "L\n\017StoreCGItemData\022\032.CGData.CGStoreItemR"
+  "equest\032\033.CGData.CGStoreItemResponse\"\000\022I\n"
+  "\016StoreCGMapData\022\031.CGData.CGStoreMapReque"
+  "st\032\032.CGData.CGStoreMapResponse\"\000\022N\n\rUplo"
+  "adGidData\022\034.CGData.UploadGidDataRequest\032"
+  "\035.CGData.UploadGidDataResponse\"\000\022Z\n\021Uplo"
+  "adGidBankData\022 .CGData.UploadGidBankData"
+  "Request\032!.CGData.UploadGidBankDataRespon"
+  "se\"\000\022P\n\rUploadMapData\022\034.CGData.UploadMap"
+  "DataRequest\032\035.CGData.UploadMapDataRespon"
+  "se\"\000(\001\022V\n\017DownloadMapData\022\036.CGData.Downl"
+  "oadMapDataRequest\032\037.CGData.DownloadMapDa"
+  "taResponse\"\0000\001\022c\n\024UploadCharcterServer\022#"
+  ".CGData.UploadCharcterServerRequest\032$.CG"
+  "Data.UploadCharcterServerResponse\"\000\022/\n\007P"
+  "ublish\022\021.CGData.StringPub\032\021.CGData.Strin"
+  "gPub\0223\n\tSubscribe\022\021.CGData.StringPub\032\021.C"
+  "GData.StringPub0\001\022c\n\024SelectAccountGidDat"
+  "a\022#.CGData.SelectAccountGidDataRequest\032$"
+  ".CGData.SelectAccountGidDataResponse\"\000\022N"
+  "\n\rSelectGidData\022\034.CGData.SelectGidDataRe"
+  "quest\032\035.CGData.SelectGidDataResponse\"\000\022\\"
+  "\n\024SelectDstTypeGidData\022\034.CGData.SelectGi"
+  "dDataRequest\032$.CGData.SelectAccountGidDa"
+  "taResponse\"\000\022f\n\025SelectCharacterServer\022$."
+  "CGData.SelectCharacterServerRequest\032%.CG"
+  "Data.SelectCharacterServerResponse\"\000\022Q\n\016"
+  "SelectTaskInfo\022\035.CGData.SelectTaskInfoRe"
+  "quest\032\036.CGData.SelectTaskInfoResponse\"\000\022"
+  "`\n\023SelectCharacterData\022\".CGData.SelectCh"
+  "aracterDataRequest\032#.CGData.SelectCharac"
+  "terDataResponse\"\000b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_CGData_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_CGData_2eproto = {
-  false, false, 8335, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
+  false, false, 8385, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
   &descriptor_table_CGData_2eproto_once, nullptr, 0, 47,
   schemas, file_default_instances, TableStruct_CGData_2eproto::offsets,
   file_level_metadata_CGData_2eproto, file_level_enum_descriptors_CGData_2eproto, file_level_service_descriptors_CGData_2eproto,
@@ -5349,13 +5356,18 @@ SelectGidDataRequest::SelectGidDataRequest(const SelectGidDataRequest& from)
     gid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_gid(), 
       GetArenaForAllocation());
   }
-  role_type_ = from.role_type_;
+  ::memcpy(&role_type_, &from.role_type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&big_line_) -
+    reinterpret_cast<char*>(&role_type_)) + sizeof(big_line_));
   // @@protoc_insertion_point(copy_constructor:CGData.SelectGidDataRequest)
 }
 
 inline void SelectGidDataRequest::SharedCtor() {
 gid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-role_type_ = 0;
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&role_type_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&big_line_) -
+    reinterpret_cast<char*>(&role_type_)) + sizeof(big_line_));
 }
 
 SelectGidDataRequest::~SelectGidDataRequest() {
@@ -5387,7 +5399,9 @@ void SelectGidDataRequest::Clear() {
   (void) cached_has_bits;
 
   gid_.ClearToEmpty();
-  role_type_ = 0;
+  ::memset(&role_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&big_line_) -
+      reinterpret_cast<char*>(&role_type_)) + sizeof(big_line_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -5410,6 +5424,13 @@ const char* SelectGidDataRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAM
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           role_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 big_line = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          big_line_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -5458,6 +5479,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_role_type(), target);
   }
 
+  // int32 big_line = 3;
+  if (this->_internal_big_line() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_big_line(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -5486,6 +5513,13 @@ size_t SelectGidDataRequest::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_role_type());
+  }
+
+  // int32 big_line = 3;
+  if (this->_internal_big_line() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_big_line());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5522,6 +5556,9 @@ void SelectGidDataRequest::MergeFrom(const SelectGidDataRequest& from) {
   if (from._internal_role_type() != 0) {
     _internal_set_role_type(from._internal_role_type());
   }
+  if (from._internal_big_line() != 0) {
+    _internal_set_big_line(from._internal_big_line());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -5544,7 +5581,12 @@ void SelectGidDataRequest::InternalSwap(SelectGidDataRequest* other) {
       &gid_, GetArenaForAllocation(),
       &other->gid_, other->GetArenaForAllocation()
   );
-  swap(role_type_, other->role_type_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SelectGidDataRequest, big_line_)
+      + sizeof(SelectGidDataRequest::big_line_)
+      - PROTOBUF_FIELD_OFFSET(SelectGidDataRequest, role_type_)>(
+          reinterpret_cast<char*>(&role_type_),
+          reinterpret_cast<char*>(&other->role_type_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SelectGidDataRequest::GetMetadata() const {
@@ -5817,7 +5859,9 @@ SelectCharacterDataResponse::SelectCharacterDataResponse(const SelectCharacterDa
   } else {
     character_data_ = nullptr;
   }
-  big_line_ = from.big_line_;
+  ::memcpy(&big_line_, &from.big_line_,
+    static_cast<size_t>(reinterpret_cast<char*>(&online_) -
+    reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
   // @@protoc_insertion_point(copy_constructor:CGData.SelectCharacterDataResponse)
 }
 
@@ -5825,8 +5869,8 @@ inline void SelectCharacterDataResponse::SharedCtor() {
 character_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&character_data_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&big_line_) -
-    reinterpret_cast<char*>(&character_data_)) + sizeof(big_line_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&online_) -
+    reinterpret_cast<char*>(&character_data_)) + sizeof(online_));
 }
 
 SelectCharacterDataResponse::~SelectCharacterDataResponse() {
@@ -5865,7 +5909,9 @@ void SelectCharacterDataResponse::Clear() {
     delete character_data_;
   }
   character_data_ = nullptr;
-  big_line_ = 0;
+  ::memset(&big_line_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&online_) -
+      reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -5920,6 +5966,13 @@ const char* SelectCharacterDataResponse::_InternalParse(const char* ptr, ::PROTO
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
+        } else goto handle_unusual;
+        continue;
+      // int32 online = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          online_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -5991,6 +6044,12 @@ failure:
       InternalWriteMessage(5, this->_internal_items(i), target, stream);
   }
 
+  // int32 online = 6;
+  if (this->_internal_online() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->_internal_online(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6042,6 +6101,13 @@ size_t SelectCharacterDataResponse::ByteSizeLong() const {
         this->_internal_big_line());
   }
 
+  // int32 online = 6;
+  if (this->_internal_online() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_online());
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -6081,6 +6147,9 @@ void SelectCharacterDataResponse::MergeFrom(const SelectCharacterDataResponse& f
   if (from._internal_big_line() != 0) {
     _internal_set_big_line(from._internal_big_line());
   }
+  if (from._internal_online() != 0) {
+    _internal_set_online(from._internal_online());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -6106,8 +6175,8 @@ void SelectCharacterDataResponse::InternalSwap(SelectCharacterDataResponse* othe
       &other->character_name_, other->GetArenaForAllocation()
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SelectCharacterDataResponse, big_line_)
-      + sizeof(SelectCharacterDataResponse::big_line_)
+      PROTOBUF_FIELD_OFFSET(SelectCharacterDataResponse, online_)
+      + sizeof(SelectCharacterDataResponse::online_)
       - PROTOBUF_FIELD_OFFSET(SelectCharacterDataResponse, character_data_)>(
           reinterpret_cast<char*>(&character_data_),
           reinterpret_cast<char*>(&other->character_data_));
@@ -7567,7 +7636,9 @@ SelectGidDataResponse::SelectGidDataResponse(const SelectGidDataResponse& from)
   } else {
     character_data_ = nullptr;
   }
-  role_type_ = from.role_type_;
+  ::memcpy(&role_type_, &from.role_type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&online_) -
+    reinterpret_cast<char*>(&role_type_)) + sizeof(online_));
   // @@protoc_insertion_point(copy_constructor:CGData.SelectGidDataResponse)
 }
 
@@ -7576,8 +7647,8 @@ gid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyI
 character_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&character_data_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&role_type_) -
-    reinterpret_cast<char*>(&character_data_)) + sizeof(role_type_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&online_) -
+    reinterpret_cast<char*>(&character_data_)) + sizeof(online_));
 }
 
 SelectGidDataResponse::~SelectGidDataResponse() {
@@ -7618,7 +7689,9 @@ void SelectGidDataResponse::Clear() {
     delete character_data_;
   }
   character_data_ = nullptr;
-  role_type_ = 0;
+  ::memset(&role_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&online_) -
+      reinterpret_cast<char*>(&role_type_)) + sizeof(online_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -7682,6 +7755,13 @@ const char* SelectGidDataResponse::_InternalParse(const char* ptr, ::PROTOBUF_NA
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<50>(ptr));
+        } else goto handle_unusual;
+        continue;
+      // int32 online = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          online_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -7763,6 +7843,12 @@ failure:
       InternalWriteMessage(6, this->_internal_items(i), target, stream);
   }
 
+  // int32 online = 7;
+  if (this->_internal_online() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_online(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -7821,6 +7907,13 @@ size_t SelectGidDataResponse::ByteSizeLong() const {
         this->_internal_role_type());
   }
 
+  // int32 online = 7;
+  if (this->_internal_online() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_online());
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -7863,6 +7956,9 @@ void SelectGidDataResponse::MergeFrom(const SelectGidDataResponse& from) {
   if (from._internal_role_type() != 0) {
     _internal_set_role_type(from._internal_role_type());
   }
+  if (from._internal_online() != 0) {
+    _internal_set_online(from._internal_online());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -7893,8 +7989,8 @@ void SelectGidDataResponse::InternalSwap(SelectGidDataResponse* other) {
       &other->character_name_, other->GetArenaForAllocation()
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SelectGidDataResponse, role_type_)
-      + sizeof(SelectGidDataResponse::role_type_)
+      PROTOBUF_FIELD_OFFSET(SelectGidDataResponse, online_)
+      + sizeof(SelectGidDataResponse::online_)
       - PROTOBUF_FIELD_OFFSET(SelectGidDataResponse, character_data_)>(
           reinterpret_cast<char*>(&character_data_),
           reinterpret_cast<char*>(&other->character_data_));

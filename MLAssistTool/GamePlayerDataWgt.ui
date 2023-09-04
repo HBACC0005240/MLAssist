@@ -232,7 +232,7 @@
                <item>
                 <widget class="QLabel" name="label_2">
                  <property name="text">
-                  <string>金币：</string>
+                  <string>银行金币：</string>
                  </property>
                 </widget>
                </item>

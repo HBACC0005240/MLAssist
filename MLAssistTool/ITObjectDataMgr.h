@@ -49,7 +49,7 @@ public:
 	//查找到到目的地的路由 测试，暂时用地图名寻
 	ITGameGateMapList FindTargetNavigation(int tgtIndex, QPoint tgtPos);
 
-	ITObjectList GetDstObjTypeList(int objType);
+	ITObjectList GetDstObjTypeList(int objType,quint64 nVal=0xffffffff);
 	ITObjectPtr FindObject(quint64 objid);
 	///数据库连接判断
 	bool connectToDB(const QString& strDBType, const QString& strHostName, const QString& strDBName,\
@@ -62,6 +62,8 @@ public:
 	ITObjectPtr newOneObject(int devtype, quint64 devID); ///
 	bool deleteOneObject(ITObjectPtr dev);
 	quint64 getNewObjectID();
+	
+	void gameCharacterAddToServerType(ITGameCharacterPtr pCharacter, ITGameServerTypePtr pServerType);
 
 	//数据保存接口
 	bool isNeedSaveData();
@@ -94,14 +96,19 @@ public:
 	ITGameCharacterPtr GetGidRolePtrFromKey(const QString &sKey) { return m_idForAccountRole.value(sKey); }
 	QStringList GetOnlineRoleKeys() { return m_onlineAccountRoles; }
 
+	//! 在线游戏
 	int GetGameRoleCount() { return m_gameRoleCount; }
 	int GetGameRoleOnlineCount() { return m_onlineCount; }
 	int GetGameRoleOfflineCount() { return m_offlineCount; }
+	//! 获取所有大区游戏角色- 离线和在线
+	ITObjectList GetAllCharacterList();
+	QString GetGameServerTypeText(int type) { return m_serverTypeForObjName.value(type); }
 
 protected:
 	bool LoadIdentification();
 	bool LoadAccount();
 	bool LoadAccountGid();
+	bool LoadGameServerType();
 	bool LoadGameCharacter();
 	bool LoadBaseData();
 	bool LoadAttributeData();
@@ -152,7 +159,7 @@ private:
 	QHash<quint64, ITObjectPtr> m_pObjectList;		//所有数据
 	QHash<quint64, ITObjectPtr> m_pAddObjectList;	//新增数据
 	QHash<quint64, ITObjectPtr> m_pDelObjectList;	//删除数据
-	QHash<int, ITGameServerTypePtr> _serverTypeForObj; //服务大区类型对应指针
+	QHash<int, ITGameServerTypePtr> m_serverTypeForObj; //服务大区类型对应指针
 
 
 	QMap<int, QImage> m_mapIndexForData; //地图index和数据映射
@@ -167,10 +174,12 @@ private:
 	QMap<int, ITGameGateMapPtr> m_numberForGateMap;			//地图编码和地图可达对象映射
 	QHash<int, QList<int> > m_warpHash;						//地图以及可到达目标
 	QHash<int, ITCGPetPictorialBookPtr> m_numberForPet;				//编号映射宠物
+
+
 	QHash<QString, ITGameCharacterPtr> m_idForAccountRole;	//name+大区 对应指定游戏人物
+
 	QStringList m_onlineAccountRoles;					//name+大区 在线列表 不在线清除此列表项
-	QHash<QString, ITAccountGidPtr> m_idForAccountGid;	//gid 对应指定gid
-	QHash<int, QHash<QString, ITCharcterServerPtr> > m_charNameForObj;
+	QHash<int, QHash<QString, ITCharcterServerPtr> > m_charNameForObj;//游戏角色建立通信服务时才有用
 	ITRouteNodeList m_reachableRouteList;
 	bool m_bExit = false;
 	QMutex m_objMutex;
@@ -179,5 +188,7 @@ private:
 	int m_onlineCount = 0;
 	int m_offlineCount = 0;
 	int m_gameRoleCount = 0;
+	QMap<int, int> m_serverTypeForObjType;
+	QMap<int, QString> m_serverTypeForObjName;
 };
 #endif

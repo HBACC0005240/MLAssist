@@ -16,6 +16,11 @@ int TreeModel::columnCount(const QModelIndex& parent) const
 	return m_columnCnt;
 }
 
+TreeItem *TreeModel::root()
+{
+	return m_rootItem;
+}
+
 Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const
 {
 	if (!index.isValid())

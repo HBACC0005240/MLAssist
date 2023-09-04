@@ -33,11 +33,13 @@ public:
 
 	//设置表格数据
 	void setTableRowDataIds(QStringList sIDs);
+	void setTableRowDatas(ITObjectList pChars) { m_pCharacterList = pChars; }
 
 	//刷新
 	void updateTable();
 protected :
 	QStringList	m_sHorizontalHeader;		//头数据
 	QStringList m_sTableDataIds;			//行数据id索引
+	ITObjectList m_pCharacterList;	
 };
 

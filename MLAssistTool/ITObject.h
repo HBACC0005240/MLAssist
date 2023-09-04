@@ -122,7 +122,7 @@ public:
 #endif // !NEW_MODULE_FACTORY
 
 //! 对象基类
-class ITObject
+class ITObject : public QEnableSharedFromThis<ITObject>
 {
 public:
 	ITObject();
@@ -181,9 +181,10 @@ public:
 	ITGameBaseData();
 	ITGameBaseData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameBaseData();
+	ITGameBaseData& operator=(const ITGameBaseData &o);
 	bool operator!=(const ITGameBaseData& o)const;
 	bool operator==(const ITGameBaseData& o)const;
-	quint64 char_id;
+	quint64 char_id=0;
 	int _level = 0;					//!< 等级
 	int	_xp = 0;					//!< 经验
 	int _maxxp = 0;					//!< 最大经验
@@ -204,10 +205,10 @@ public:
 	ITGameAttributeData();
 	ITGameAttributeData(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameAttributeData();
-
+	ITGameAttributeData &operator=(const ITGameAttributeData &o);
 	bool operator!=(const ITGameAttributeData& o)const;
 	bool operator==(const ITGameAttributeData& o)const;
-	quint64 _char_id;
+	quint64 _char_id=0;
 	int _points_remain = 0;			//!< 未加点
 	int _points_endurance = 0;		//!< 体力
 	int _points_strength = 0;		//!< 力量
@@ -256,7 +257,7 @@ public:
 	int _lossMinGrade = 0;	//最少掉档
 	int _lossMaxGrade = 0;	//最多掉档
 	int _pos = 0;			//!< 宠物位置
-	bool _bExist = true;	//是否存在
+	bool _bExist = false;	//是否存在
 
 	ITGameBaseDataPtr _baseData = nullptr;		//!< 宠物相关信息
 	ITGameAttributeDataPtr _attrData = nullptr;	//!< 宠物属性
@@ -378,6 +379,7 @@ public:
 	virtual ~ITAccountGid();
 
 	QString _userGid; //gid账号
+	quint64 _serverTypeID;//所在游戏大区id
 	ITGameCharacterList _roleList;
 };
 
@@ -389,6 +391,9 @@ public:
 	ITGameCharacter();
 	ITGameCharacter(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameCharacter();
+
+	void setTargetGameServerType(ITGameServerTypePtr pServer) { _gameServerType = pServer; }
+	ITGameServerTypePtr getTargetGameServerType() { return _gameServerType; }
 
 	QString _gid;				//!< 游戏gid
 	int _type = 0;				//!< 左右角色
@@ -412,7 +417,7 @@ public:
 	int _value_charisma = 0;	//!< 魅力
 	int _x = 0;					//!< 当前x坐标
 	int _y = 0;					//!< 当前y坐标
-	int battle_position = 0;	//!< 战斗站位
+	int _battle_position = 0;	//!< 战斗站位
 	QString _map_name = "";		//!< 当前地图名称
 	int _map_number = 0;		//!< 当前地图编号
 	int _server_line = 0;		//!< 当前游戏线路
@@ -425,7 +430,9 @@ public:
 	QMap<QString, ITGameItemPtr> _bankItemNameForPtr;//银行物品名称和物品指针映射
 	QMutex _mutex;				//!< 加锁
 	QTime _lastUploadTime;		//!< 最后一次上传时间
+	QDateTime _lastUpdateDateTime;	//!< 最后一次上传时间
 	int _connectState = 0;		//!< 0离线 1在线
+	ITGameServerTypePtr _gameServerType = nullptr;//!< 游戏大区
 };
 
 DECLARE_OBJECT_MODULE_FACTORY(ITGameCharacter)
@@ -503,12 +510,19 @@ public:
 DECLARE_OBJECT_MODULE_FACTORY(ITCGPetPictorialBook)
 
 //! 游戏大区-道具电信-道具网通-时长-怀旧双鱼
-class ITGameServerType : public ITObject
+class ITGameServerType :virtual public ITObject
 {
 public:
 	int _server_type;		//!< 对应类型值 13 14  1 23 24
-	QHash<quint64, ITObjectPtr> _idForObj;		//!< 数据表字段id映射
-	QHash<QString, ITObjectPtr> _nameForObj;	//!< 游戏人物名称映射
+	//! 获取人物角色对象指针
+	ITObjectPtr getRoleObjFromRoleName(const QString& sCharName);
+	ITObjectPtr getGidObjFromGidName(const QString &sGid);
+
+	void appendObject(ITObjectPtr pObj);
+	void removeObject(ITObjectPtr pObj);
+
+	QHash<QString, ITObjectPtr> _nameForObj;	//!< 游戏人物名称映射 汇总 
+	QHash<QString, ITAccountGidPtr> _gidForObj;//!< 游戏gid和所辖人物角色列表映射 一般来说一个大区下有唯一gid  唯一gid下有左右两个角色
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameServerType)
 

@@ -34,7 +34,7 @@ enum TObjectType
 	TObject_AttributeData=0x5200,
 
 	TObject_ServerType=0x6100,						//!< 游戏服务大区
-	TObject_ServerType_ItemSales=0x6110,			//!< 道具电信
+	TObject_ServerType_ItemSales=0x6110,			//!< 道具
 	TObject_ServerType_ItemSales_Telecom=0x6111,	//!< 道具电信
 	TObject_ServerType_ItemSales_Netcom=0x6112,		//!< 道具网通
 	TObject_ServerType_PUK2=0x6120,					//!< 时长

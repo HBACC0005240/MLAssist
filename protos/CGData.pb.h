@@ -2761,6 +2761,7 @@ class SelectGidDataRequest final :
   enum : int {
     kGidFieldNumber = 1,
     kRoleTypeFieldNumber = 2,
+    kBigLineFieldNumber = 3,
   };
   // string gid = 1;
   void clear_gid();
@@ -2785,6 +2786,15 @@ class SelectGidDataRequest final :
   void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 big_line = 3;
+  void clear_big_line();
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
+  void set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_big_line() const;
+  void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.SelectGidDataRequest)
  private:
   class _Internal;
@@ -2794,6 +2804,7 @@ class SelectGidDataRequest final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gid_;
   ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -3074,6 +3085,7 @@ class SelectCharacterDataResponse final :
     kCharacterNameFieldNumber = 1,
     kCharacterDataFieldNumber = 3,
     kBigLineFieldNumber = 2,
+    kOnlineFieldNumber = 6,
   };
   // repeated .CGData.CGPetData pet_data = 4;
   int pet_data_size() const;
@@ -3152,6 +3164,15 @@ class SelectCharacterDataResponse final :
   void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 online = 6;
+  void clear_online();
+  ::PROTOBUF_NAMESPACE_ID::int32 online() const;
+  void set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_online() const;
+  void _internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.SelectCharacterDataResponse)
  private:
   class _Internal;
@@ -3164,6 +3185,7 @@ class SelectCharacterDataResponse final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
   ::CGData::CGCharacterData* character_data_;
   ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 online_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -4184,6 +4206,7 @@ class SelectGidDataResponse final :
     kCharacterNameFieldNumber = 3,
     kCharacterDataFieldNumber = 4,
     kRoleTypeFieldNumber = 2,
+    kOnlineFieldNumber = 7,
   };
   // repeated .CGData.CGPetData pet_data = 5;
   int pet_data_size() const;
@@ -4276,6 +4299,15 @@ class SelectGidDataResponse final :
   void _internal_set_role_type(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 online = 7;
+  void clear_online();
+  ::PROTOBUF_NAMESPACE_ID::int32 online() const;
+  void set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_online() const;
+  void _internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.SelectGidDataResponse)
  private:
   class _Internal;
@@ -4289,6 +4321,7 @@ class SelectGidDataResponse final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr character_name_;
   ::CGData::CGCharacterData* character_data_;
   ::PROTOBUF_NAMESPACE_ID::int32 role_type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 online_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_CGData_2eproto;
 };
@@ -11268,6 +11301,26 @@ inline void SelectGidDataRequest::set_role_type(::PROTOBUF_NAMESPACE_ID::int32 v
   // @@protoc_insertion_point(field_set:CGData.SelectGidDataRequest.role_type)
 }
 
+// int32 big_line = 3;
+inline void SelectGidDataRequest::clear_big_line() {
+  big_line_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataRequest::_internal_big_line() const {
+  return big_line_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataRequest::big_line() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataRequest.big_line)
+  return _internal_big_line();
+}
+inline void SelectGidDataRequest::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  big_line_ = value;
+}
+inline void SelectGidDataRequest::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_big_line(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataRequest.big_line)
+}
+
 // -------------------------------------------------------------------
 
 // SelectCharacterDataRequest
@@ -11576,6 +11629,26 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
 SelectCharacterDataResponse::items() const {
   // @@protoc_insertion_point(field_list:CGData.SelectCharacterDataResponse.items)
   return items_;
+}
+
+// int32 online = 6;
+inline void SelectCharacterDataResponse::clear_online() {
+  online_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterDataResponse::_internal_online() const {
+  return online_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterDataResponse::online() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterDataResponse.online)
+  return _internal_online();
+}
+inline void SelectCharacterDataResponse::_internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  online_ = value;
+}
+inline void SelectCharacterDataResponse::set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_online(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterDataResponse.online)
 }
 
 // -------------------------------------------------------------------
@@ -12432,6 +12505,26 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CGData::CGItemData >&
 SelectGidDataResponse::items() const {
   // @@protoc_insertion_point(field_list:CGData.SelectGidDataResponse.items)
   return items_;
+}
+
+// int32 online = 7;
+inline void SelectGidDataResponse::clear_online() {
+  online_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataResponse::_internal_online() const {
+  return online_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectGidDataResponse::online() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectGidDataResponse.online)
+  return _internal_online();
+}
+inline void SelectGidDataResponse::_internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  online_ = value;
+}
+inline void SelectGidDataResponse::set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_online(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectGidDataResponse.online)
 }
 
 // -------------------------------------------------------------------
