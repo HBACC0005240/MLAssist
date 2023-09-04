@@ -534,5 +534,9 @@ public:
 	int _port;
 	int _big_line;
 	int online;
+	bool is_open;					//是否监听中 true监听中 false服务已关闭
+	bool is_multicast ;
+	QString multicast_ip ;			//组播ip 预留
+	int multicast_port ;			//组播端口
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITCharcterServer)

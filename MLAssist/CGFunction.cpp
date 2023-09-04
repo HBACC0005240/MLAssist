@@ -4981,13 +4981,21 @@ int CGFunction::AutoMoveInternal(int x, int y, int timeout /*= 100*/, bool isLoo
 		QImage mapImage;
 		if(LoadOffLineMapImageData(mapImage))
 		{
-			findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
-			if (findPath.size() > 0)
+			if (CheckOffLineMapImageData(mapImage))
 			{
-				qDebug() << "离线地图查找路径成功,等指定迷宫等待时间后，继续寻路";
-				Sleep(m_mazeWaitTime);				
-				isOffLineMap = true;
+				findPath = CalculatePathEx(mapImage, curPos.x(), curPos.y(), x, y);
+				if (findPath.size() > 0)
+				{
+					qDebug() << "离线地图查找路径成功,等指定迷宫等待时间后，继续寻路";
+					Sleep(m_mazeWaitTime);
+					isOffLineMap = true;
+				}
 			}
+			else
+			{
+				qDebug() << "离线地图查找成功，但和当前坐标周围地图信息不匹配,返回";
+			}
+			
 		}
 		else
 		{
@@ -10879,21 +10887,7 @@ bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QIm
 		qDebug() << "离线地图寻路：离线地图宽高和当前不匹配！";
 		return false;
 	}
-	//增加当前坐标周围地图校验
-	//CGA::cga_map_cells_t cells;
-	//if (g_CGAInterface->GetMapCollisionTable(true, cells))
-	//{
-	//	if (x > cells.x_size || y > cells.y_size)
-	//	{
-	//		qDebug() << "坐标超出地图范围";
-	//		return -1;
-	//	}
-	//	if (cells.cell.at((size_t)(x + y * cells.x_size)) == 0)
-	//		return 0; //没有墙
-	//	else
-	//		return 1; //有墙
-	//}
-	//qDebug() << "获取地图数据错误";
+	
 	return true;
 }
 
@@ -10903,6 +10897,62 @@ bool CGFunction::LoadOffLineMapImageData(QImage &mapImage)
 	std::string sfilemap;
 	g_CGAInterface->GetMapIndex(index1, index2, index3, sfilemap);
 	return LoadOffLineMapImageData(index1, index2, index3, mapImage);
+}
+//增加当前坐标周围地图校验
+bool CGFunction::CheckOffLineMapImageData(QImage &mapImage)
+{
+	CGA::cga_map_cells_t cells;
+	g_CGAInterface->GetMapCollisionTable(true, cells);
+	auto curPoint = GetMapCoordinate();
+	int sX = curPoint.x()-10;
+	int sY = curPoint.y()-10;
+	int eX = curPoint.x()+10;
+	int eY = curPoint.y()+10;
+	if (sX < cells.cell.x_bottom)
+	{
+		sX = cells.cell.x_bottom;
+	}
+	if (sY < cells.cell.y_bottom)
+	{
+		sY = cells.cell.y_bottom;
+	}
+	if (eX > cells.cell.x_size)
+	{
+		eX = cells.cell.x_size;
+	}
+	if (eY > cells.cell.y_size)
+	{
+		eY = cells.cell.y_size;
+	}
+
+	if (eX > sX  || eY > sY)
+	{
+		return false;
+	}
+	QColor qRgb(0, 0, 0);
+	for (int y = sY; y < eY; ++y)
+	{
+		for (int x = sX; x < eX; ++x)
+		{
+			if (x < objCells.x_size && y < objCells.y_size)
+			{
+				auto cellWall = cells.cell.at((size_t)(x + y * cells.x_size));
+				auto mapData = mapImage.pixelColor(tmpy, tmpx);
+				if (mapData == qRgb) //不可通行 1)
+				{
+					if (cellWall != 1)	//可通行
+						return false;					
+					continue;
+				}else	//可通行
+				{
+					if (cellWall == 1)	//不可通行
+						return false;
+					continue;
+				}
+			}
+		}
+	}	
+	return true;
 }
 
 void CGFunction::Gesture(int index)

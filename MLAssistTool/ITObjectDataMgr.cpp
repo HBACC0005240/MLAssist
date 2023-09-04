@@ -3164,6 +3164,10 @@ void ITObjectDataMgr::UploadCharcterServer(const ::CGData::UploadCharcterServerR
 	pCharacter->_port = nPort;
 	pCharacter->_big_line = big_line;
 	pCharacter->online = nOnline;
+	pCharacter->is_open = request->is_open();
+	pCharacter->is_multicast = request->is_multicast();
+	pCharacter->multicast_ip = request->multicast_ip();
+	pCharacter->multicast_port = request->multicast_port();
 	pCharForObjHash.insert(sCharacterName, pCharacter);
 	m_charNameForObj.insert(big_line, pCharForObjHash);
 	
@@ -3383,6 +3387,11 @@ Status ITObjectDataMgr::SelectCharacterServer(const ::CGData::SelectCharacterSer
 	response->set_port(pCharacter->_port);
 	response->set_online(pCharacter->online);
 	response->set_big_line(pCharacter->_big_line);
+
+	response->set_is_open = pCharacter->is_open;
+	response->set_is_multicast = pCharacter->is_multicast;
+	response->set_multicast_ip = pCharacter->multicast_ip;
+	response->set_multicast_port = pCharacter->multicast_port;
 	return Status::OK;
 }
 

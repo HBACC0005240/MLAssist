@@ -312,6 +312,7 @@ public:
 	int GetMapFloorNumberFromName(bool bSerial = false, bool bBack = false);
 	bool LoadOffLineMapImageData(QImage &mapImage);
 	bool LoadOffLineMapImageData(int index1, int index2, int index3, QImage &mapImage);
+	bool CheckOffLineMapImageData(QImage& mapImage);
 	//获取当前坐标
 	QPoint GetMapCoordinate();
 
