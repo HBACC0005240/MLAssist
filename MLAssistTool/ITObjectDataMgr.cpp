@@ -2545,6 +2545,7 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		pCharacter = newOneObject(roleObjectType, pServerType).dynamicCast<ITGameCharacter>();		
 		pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();		
 		pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();		
+		pCharacter->setObjectName(sCharacterName);
 		gameCharacterAddToServerType(pCharacter, pServerType);
 	}
 	else
@@ -2571,9 +2572,8 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		pCharacter->setObjectType(roleObjectType);
 		pCharacter->setEditStatus();
 	}
-	pCharacter->setObjectName(sCharacterName);
 	pCharacter->_gid = QString::fromStdString(request->gid());
-
+	pCharacter->setObjectName(sCharacterName);
 	ITGameBaseData tmpBaseData;
 	tmpBaseData._level = request->character_data().base_data().level();
 	tmpBaseData._hp = request->character_data().base_data().hp();
@@ -2939,6 +2939,7 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 		pCharacter = newOneObject(roleObjectType, pServerType).dynamicCast<ITGameCharacter>();
 		pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();
 		pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();
+		pCharacter->setObjectName(sCharacterName);
 		gameCharacterAddToServerType(pCharacter, pServerType);
 	}
 	else
@@ -3166,7 +3167,7 @@ void ITObjectDataMgr::UploadCharcterServer(const ::CGData::UploadCharcterServerR
 	pCharacter->online = nOnline;
 	pCharacter->is_open = request->is_open();
 	pCharacter->is_multicast = request->is_multicast();
-	pCharacter->multicast_ip = request->multicast_ip();
+	pCharacter->multicast_ip = QString::fromStdString(request->multicast_ip());
 	pCharacter->multicast_port = request->multicast_port();
 	pCharForObjHash.insert(sCharacterName, pCharacter);
 	m_charNameForObj.insert(big_line, pCharForObjHash);
@@ -3388,10 +3389,10 @@ Status ITObjectDataMgr::SelectCharacterServer(const ::CGData::SelectCharacterSer
 	response->set_online(pCharacter->online);
 	response->set_big_line(pCharacter->_big_line);
 
-	response->set_is_open = pCharacter->is_open;
-	response->set_is_multicast = pCharacter->is_multicast;
-	response->set_multicast_ip = pCharacter->multicast_ip;
-	response->set_multicast_port = pCharacter->multicast_port;
+	response->set_is_open(pCharacter->is_open);
+	response->set_is_multicast(pCharacter->is_multicast);
+	response->set_multicast_ip( pCharacter->multicast_ip.toStdString());
+	response->set_multicast_port( pCharacter->multicast_port);
 	return Status::OK;
 }
 

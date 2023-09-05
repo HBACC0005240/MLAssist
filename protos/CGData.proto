@@ -141,6 +141,10 @@ message UploadCharcterServerRequest
 	string ip=3;					//游戏角色建立通信服务时的ip
 	int32 port=4;					//游戏角色建立通信服务时的端口
 	int32 online=5;					//游戏角色是否在线
+	int32 is_open=6;
+	optional int32 is_multicast=7;
+	optional string multicast_ip=8;
+	optional int32 multicast_port=9;
 }
 
 message UploadCharcterServerResponse
@@ -201,6 +205,10 @@ message SelectCharacterServerResponse
 	string ip=3;					//游戏角色建立通信服务时的ip
 	int32 port=4;					//游戏角色建立通信服务时的端口
 	int32 online=5;					//游戏角色是否在线
+	int32 is_open=6;
+	optional int32 is_multicast=7;
+	optional string multicast_ip=8;
+	optional int32 multicast_port=9;
 
 }
 

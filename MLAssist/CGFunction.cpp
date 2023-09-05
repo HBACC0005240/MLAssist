@@ -10908,21 +10908,21 @@ bool CGFunction::CheckOffLineMapImageData(QImage &mapImage)
 	int sY = curPoint.y()-10;
 	int eX = curPoint.x()+10;
 	int eY = curPoint.y()+10;
-	if (sX < cells.cell.x_bottom)
+	if (sX < cells.x_bottom)
 	{
-		sX = cells.cell.x_bottom;
+		sX = cells.x_bottom;
 	}
-	if (sY < cells.cell.y_bottom)
+	if (sY < cells.y_bottom)
 	{
-		sY = cells.cell.y_bottom;
+		sY = cells.y_bottom;
 	}
-	if (eX > cells.cell.x_size)
+	if (eX > cells.x_size)
 	{
-		eX = cells.cell.x_size;
+		eX = cells.x_size;
 	}
-	if (eY > cells.cell.y_size)
+	if (eY > cells.y_size)
 	{
-		eY = cells.cell.y_size;
+		eY = cells.y_size;
 	}
 
 	if (eX > sX  || eY > sY)
@@ -10934,10 +10934,10 @@ bool CGFunction::CheckOffLineMapImageData(QImage &mapImage)
 	{
 		for (int x = sX; x < eX; ++x)
 		{
-			if (x < objCells.x_size && y < objCells.y_size)
+			if (x < cells.x_size && y < cells.y_size)
 			{
 				auto cellWall = cells.cell.at((size_t)(x + y * cells.x_size));
-				auto mapData = mapImage.pixelColor(tmpy, tmpx);
+				auto mapData = mapImage.pixelColor(y, x);
 				if (mapData == qRgb) //不可通行 1)
 				{
 					if (cellWall != 1)	//可通行
