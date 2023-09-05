@@ -145,6 +145,7 @@ bool ITAccountTreeModel::setData(const QModelIndex& index, const QVariant& value
 			return true;
 		}
 	}
+	return false;
 }
 Qt::ItemFlags ITAccountTreeModel::flags(const QModelIndex& index)const
 {
@@ -225,6 +226,6 @@ bool ITAccountTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction acti
 			emit resetModelSignal();
 		}
 	}*/
-
+	return false;
 }
 

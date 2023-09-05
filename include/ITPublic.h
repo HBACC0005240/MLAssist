@@ -374,4 +374,5 @@ static int customCompareString(const QString& s1, const QString& s2)
 			return 1;
 		}
 	}
+	return 0;
 }

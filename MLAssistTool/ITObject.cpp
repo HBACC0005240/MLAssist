@@ -43,22 +43,22 @@ void ITObject::setObjectCode(int code)
 	m_gameCode = code;
 }
 
-int ITObject::getObjectCode()
+const int& ITObject::getObjectCode()const
 {
 	return m_gameCode;
 }
 
-int ITObject::getObjectType(void)
+const int& ITObject::getObjectType(void)const
 {
 	return m_nType;
 }
 
-quint64 ITObject::getObjectID(void)
+const quint64 ITObject::getObjectID(void)const
 {
 	return m_ullID;
 }
 
-QString ITObject::getObjectName(void)
+const QString ITObject::getObjectName(void)const
 {
 	QMutexLocker locker(m_nameMutex);
 	return m_szName;
@@ -121,6 +121,54 @@ ITGameItem::ITGameItem(QString szName, int nType, quint64 ullID) :
 
 ITGameItem::~ITGameItem()
 {
+}
+
+bool ITGameItem::operator==(const ITGameItem& o) const
+{
+	/*QString sName = getObjectName();
+	int nCode = getObjectCode();
+	QString sDesc = getObjectDesc();
+
+	QString oName = o.getObjectName();
+	int oCode = o.getObjectCode();
+	QString oDesc = o.getObjectDesc();*/
+	return std::tie(getObjectName(), getObjectCode(), getObjectDesc(), _itemCount, _itemType, _itemPrice, _itemPile, _itemLevel, _sellMinCount, _itemPos, _itemAttr, _bExist)
+		== std::tie(o.getObjectName(), o.getObjectCode(), o.getObjectDesc(), o._itemCount, o._itemType, o._itemPrice, o._itemPile, o._itemLevel, o._sellMinCount, o._itemPos, o._itemAttr, o._bExist);
+	/*return std::tie(sName, nCode, sDesc, _itemCount, _itemType, _itemPrice, _itemPile, _itemLevel, _sellMinCount, _itemPos, _itemAttr, _bExist)
+		== std::tie(oName, oCode, oDesc, o._itemCount, o._itemType, o._itemPrice, o._itemPile, o._itemLevel, o._sellMinCount, o._itemPos, o._itemAttr, o._bExist);*/
+
+}
+
+bool ITGameItem::operator!=(const ITGameItem& o) const
+{
+	QString sName = getObjectName();
+	int nCode = getObjectCode();
+	QString sDesc = getObjectDesc();
+
+	QString oName = o.getObjectName();
+	int oCode = o.getObjectCode();
+	QString oDesc = o.getObjectDesc();
+	return std::tie(sName, nCode, sDesc, _itemCount, _itemType, _itemPrice, _itemPile, _itemLevel, _sellMinCount, _itemPos, _itemAttr, _bExist)
+		!= std::tie(oName, oCode, oDesc, o._itemCount, o._itemType, o._itemPrice, o._itemPile, o._itemLevel, o._sellMinCount, o._itemPos, o._itemAttr, o._bExist);
+
+}
+
+ITGameItem& ITGameItem::operator=(const ITGameItem& o)
+{
+	if (this == &o)
+		return *this;
+	this->setObjectName(o.getObjectName());
+	this->setObjectCode(o.getObjectCode());
+	this->setObjectDsec(o.getObjectDesc());
+	this->_itemCount = o._itemCount;
+	this->_itemType = o._itemType;
+	this->_itemPrice = o._itemPrice;
+	this->_itemPile = o._itemPile;
+	this->_itemLevel = o._itemLevel;
+	this->_sellMinCount = o._sellMinCount;
+	this->_itemPos = o._itemPos;
+	this->_itemAttr = o._itemAttr;
+	this->_bExist = o._bExist;
 }
 
 ITGameMap::ITGameMap(QString szName, int nType, quint64 ullID) :
@@ -272,6 +320,40 @@ ITGameSkill::ITGameSkill(QString szName, int nType, quint64 ullID) :
 ITGameSkill::~ITGameSkill()
 {
 
+}
+
+bool ITGameSkill::operator==(const ITGameSkill& o) const
+{
+	return std::tie(getObjectName(), getObjectCode(), getObjectDesc(), _info, _id, _cost, _flags, _index, _level, _maxLevel, _available, _xp, _maxxp, _bExist)
+		== std::tie(o.getObjectName(), o.getObjectCode(), o.getObjectDesc(), o._info, o._id, o._cost, o._flags, o._index, o._level, o._maxLevel, o._available, o._xp,o._maxxp,o._bExist);
+
+}
+
+bool ITGameSkill::operator!=(const ITGameSkill& o) const
+{
+	return std::tie(getObjectName(), getObjectCode(), getObjectDesc(), _info, _id, _cost, _flags, _index, _level, _maxLevel, _available, _xp, _maxxp, _bExist)
+		!= std::tie(o.getObjectName(), o.getObjectCode(), o.getObjectDesc(), o._info, o._id, o._cost, o._flags, o._index, o._level, o._maxLevel, o._available, o._xp, o._maxxp,o._bExist);
+
+}
+
+ITGameSkill& ITGameSkill::operator=(const ITGameSkill& o)
+{
+	if (this == &o)
+		return *this;
+	this->setObjectName(o.getObjectName());
+	this->setObjectCode(o.getObjectCode());
+	this->setObjectDsec(o.getObjectDesc());
+	this->_info = o._info;
+	this->_id = o._id;
+	this->_cost = o._cost;
+	this->_flags = o._flags;
+	this->_index = o._index;
+	this->_level = o._level;
+	this->_maxLevel = o._maxLevel;
+	this->_available = o._available;
+	this->_xp = o._xp;
+	this->_maxxp = o._maxxp;
+	this->_bExist = o._bExist;
 }
 
 ITCGPetPictorialBook::ITCGPetPictorialBook()

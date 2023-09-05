@@ -135,6 +135,7 @@ QString ITObjectDataMgr::FindItemCodeName(int nCode)
 			return it.value()->getObjectName();
 		}
 	}
+	return "";
 }
 
 ITObjectDataMgr& ITObjectDataMgr::getInstance(void)
@@ -585,15 +586,15 @@ bool ITObjectDataMgr::deleteOneObject(ITObjectPtr pObj)
 		}
 	}	
 	QMutexLocker locker(&m_objMutex);
+	m_pObjectList.remove(pObj->getObjectID());//不管状态，在这里调一下，有就删，没有不影响
 	int nstatus = pObj->getStatus();
 	if (nstatus == TStatus_Add)
 	{
 		pObj->setDelStatus();			// 还没写入数据库 移除释放即可
-		m_pAddObjectList.remove(pObj->getObjectID());
+		m_pAddObjectList.remove(pObj->getObjectID());	//智能指针，其他地方没存的话，会自动释放
 	}else
 	{
-		pObj->setDelStatus();
-		m_pObjectList.remove(pObj->getObjectID());
+		pObj->setDelStatus();		
 		if (!m_pDelObjectList.contains(pObj->getObjectID()))
 			m_pDelObjectList.insert(pObj->getObjectID(), pObj);
 	}
@@ -1593,19 +1594,19 @@ bool ITObjectDataMgr::insertNewDataToDB()
 		it.value()->setNomalStatus();		
 	}
 	QMutexLocker locker(&m_objMutex);
-	if (!bSucc)
-	{ ///删除成功写入数据库的项
-		foreach(auto pDev, tempSuccessList)
+	///删除成功写入数据库的项
+	foreach(auto pDev, tempSuccessList)
+	{
+		m_pObjectList.insert(pDev->getObjectID(), pDev);
+		if (m_pAddObjectList.contains(pDev->getObjectID()))
 		{
-			m_pObjectList.insert(pDev->getObjectID(), pDev);
-			if (m_pAddObjectList.contains(pDev->getObjectID()))
-			{
-				m_pAddObjectList.remove(pDev->getObjectID());
-			}
+			m_pAddObjectList.remove(pDev->getObjectID());
 		}
-		return false;
 	}
-	m_pAddObjectList.clear();
+	if (!bSucc)
+	{		
+		return false;
+	}	
 	return true;
 }
 
@@ -2671,21 +2672,24 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 				skillPtr = qSharedPointerDynamicCast<ITGameSkill>(newOneObject(TObject_CharSkill, pCharacter));
 				pCharacter->_skillPosForSkill.insert(reqSkill.index(), skillPtr);
 			}
-			else
+			ITGameSkill tmpSkill;
+			tmpSkill.setObjectName(QString::fromStdString(reqSkill.name()));
+			tmpSkill._info = QString::fromStdString(reqSkill.info());
+			tmpSkill.setObjectCode(reqSkill.id());
+			tmpSkill._cost = reqSkill.cost();
+			tmpSkill._flags = reqSkill.flags();
+			tmpSkill._index = reqSkill.index();
+			tmpSkill._level = reqSkill.level();
+			tmpSkill._maxLevel = reqSkill.maxlevel();
+			tmpSkill._available = reqSkill.available();
+			tmpSkill._xp = reqSkill.xp();
+			tmpSkill._maxxp = reqSkill.maxxp();
+			tmpSkill._bExist = true;
+			if (*skillPtr != tmpSkill )
+			{
+				*skillPtr  = tmpSkill;
 				skillPtr->setEditStatus();
-			skillPtr->setObjectName(QString::fromStdString(reqSkill.name()));
-			skillPtr->_info = QString::fromStdString(reqSkill.info());
-			skillPtr->setObjectCode(reqSkill.id());
-			skillPtr->_cost = reqSkill.cost();
-			skillPtr->_flags = reqSkill.flags();
-			skillPtr->_index = reqSkill.index();
-			skillPtr->_level = reqSkill.level();
-			skillPtr->_maxLevel = reqSkill.maxlevel();
-			skillPtr->_available = reqSkill.available();
-			skillPtr->_xp = reqSkill.xp();
-			skillPtr->_maxxp = reqSkill.maxxp();
-			skillPtr->_bExist = true;
-
+			}
 			posExist.append(reqSkill.index());
 		}		
 	}
@@ -2714,15 +2718,19 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 				pItemPtr = qSharedPointerDynamicCast<ITGameItem>(newOneObject(TObject_CharItem, pCharacter));
 				pCharacter->_itemPosForPtr.insert(reqItem.pos(), pItemPtr);
 			}
-			else
+			ITGameItem tmpItem;			
+			tmpItem._itemAttr = QString::fromStdString(reqItem.attr());
+			tmpItem.setObjectName(QString::fromStdString(reqItem.name()));
+			tmpItem._itemCount = reqItem.count();
+			tmpItem._itemPos = reqItem.pos();
+			tmpItem._itemType = reqItem.type();	//不需要这么多信息的，从原始Item表拿
+			tmpItem._bExist = true;
+			tmpItem.setObjectCode(reqItem.item_id());
+			if (*pItemPtr != tmpItem)
+			{
+				*pItemPtr = tmpItem;
 				pItemPtr->setEditStatus();
-			pItemPtr->_itemAttr = QString::fromStdString(reqItem.attr());
-			pItemPtr->setObjectName(QString::fromStdString(reqItem.name()));
-			pItemPtr->_itemCount = reqItem.count();
-			pItemPtr->_itemPos = reqItem.pos();
-			pItemPtr->_itemType = reqItem.type();	//不需要这么多信息的，从原始Item表拿
-			pItemPtr->_bExist = true;
-			pItemPtr->setObjectCode(reqItem.item_id());
+			}
 			posExist.append(reqItem.pos());
 		}	
 	}
@@ -2843,18 +2851,25 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 					}
 					else
 						skillPtr->setEditStatus();
-					skillPtr->setObjectName(QString::fromStdString(reqSkill.name()));
-					skillPtr->_info = QString::fromStdString(reqSkill.info());
-					skillPtr->setObjectCode(reqSkill.id());
-					skillPtr->_cost = reqSkill.cost();
-					skillPtr->_flags = reqSkill.flags();
-					skillPtr->_index = reqSkill.index();
-					skillPtr->_level = reqSkill.level();
-					skillPtr->_maxLevel = reqSkill.maxlevel();
-					skillPtr->_available = reqSkill.available();
-					skillPtr->_xp = reqSkill.xp();
-					skillPtr->_maxxp = reqSkill.maxxp();
-					skillPtr->_bExist = true;
+
+					ITGameSkill tmpSkill;
+					tmpSkill.setObjectName(QString::fromStdString(reqSkill.name()));
+					tmpSkill._info = QString::fromStdString(reqSkill.info());
+					tmpSkill.setObjectCode(reqSkill.id());
+					tmpSkill._cost = reqSkill.cost();
+					tmpSkill._flags = reqSkill.flags();
+					tmpSkill._index = reqSkill.index();
+					tmpSkill._level = reqSkill.level();
+					tmpSkill._maxLevel = reqSkill.maxlevel();
+					tmpSkill._available = reqSkill.available();
+					tmpSkill._xp = reqSkill.xp();
+					tmpSkill._maxxp = reqSkill.maxxp();
+					tmpSkill._bExist = true;
+					if (*skillPtr != tmpSkill)
+					{
+						*skillPtr = tmpSkill;
+						skillPtr->setEditStatus();
+					}	
 					petSkillPosExist.append(reqSkill.index());
 				}
 				//技能删除
@@ -2972,18 +2987,21 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 			{
 				pItemPtr = qSharedPointerDynamicCast<ITGameItem>(newOneObject(TObject_CharBankItem, pCharacter));
 				pCharacter->_itemPosForPtr.insert(reqItem.pos(), pItemPtr);
-			}
-			else
+			}	
+
+			ITGameItem tmpItem;
+			tmpItem._itemAttr = QString::fromStdString(reqItem.attr());
+			tmpItem.setObjectName(QString::fromStdString(reqItem.name()));
+			tmpItem._itemCount = reqItem.count();
+			tmpItem._itemPos = reqItem.pos();
+			tmpItem._itemType = reqItem.type();	//不需要这么多信息的，从原始Item表拿
+			tmpItem._bExist = true;
+			tmpItem.setObjectCode(reqItem.item_id());
+			if (*pItemPtr != tmpItem)
 			{
+				*pItemPtr = tmpItem;
 				pItemPtr->setEditStatus();
-			}
-			pItemPtr->_itemAttr = QString::fromStdString(reqItem.attr());
-			pItemPtr->setObjectName(QString::fromStdString(reqItem.name()));
-			pItemPtr->_itemCount = reqItem.count();
-			pItemPtr->_itemPos = reqItem.pos();
-			pItemPtr->_itemType = reqItem.type();
-			pItemPtr->_bExist = true;
-			pItemPtr->setObjectCode(reqItem.item_id());
+			}	
 			posExist.append(reqItem.pos());
 		}		
 	}

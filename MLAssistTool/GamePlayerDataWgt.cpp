@@ -52,6 +52,32 @@ void GamePlayerDataWgt::init()
 	ui.tableWidget_bankPet->verticalHeader()->setVisible(true);
 	ui.tableWidget_pet->setVerticalHeaderLabels(rowHeadList);
 	ui.tableWidget_bankPet->setVerticalHeaderLabels(rowHeadList);
+
+	ui.tableWidget->setRowCount(16);
+	for (int i = 0; i < 16; ++i)
+	{
+		for (size_t n = 0; n < 4; n++)
+		{
+			QTableWidgetItem* pItem = new QTableWidgetItem();
+			ui.tableWidget->setItem(i, n, pItem);
+		}
+	}
+	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+	ui.tableWidget->horizontalHeader()->setStyleSheet("font:bold;");
+	//	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui.tableWidget->verticalHeader()->setVisible(false);
+	//	ui.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	//ui.tableWidget->horizontalHeader()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	//ui.tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+	//ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
+	ui.tableWidget->horizontalHeader()->setFixedHeight(20);
+	//ui.tableWidget->setColumnWidth(1, 100);
+	//ui.tableWidget->verticalHeader()->setDefaultSectionSize(15);
+	//ui.tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	//ui.tableWidget->resizeColumnsToContents();//根据内容调整列宽 但每次都变 太麻烦 修改下
+
 }
 
 void GamePlayerDataWgt::initTable(QTableWidget* pTable, int nCount/*=20*/, int height)
@@ -242,6 +268,243 @@ void GamePlayerDataWgt::doAddAccountGid()
 		resetModel(pObjList);
 	}
 }
+void GamePlayerDataWgt::setItemText(int row, int col, const QString& szText, const QColor& szColor)
+{
+	QTableWidgetItem* pItem = ui.tableWidget->item(row, col);
+	if (pItem && pItem->text() != szText)
+	{
+		pItem->setText(szText);
+		pItem->setTextColor(szColor);
+	}
+}
+
+QString GamePlayerDataWgt::getGameState(ITGameCharacterPtr pRole)
+{
+	int gameStatus, worldStatus;
+	//if (g_CGAInterface->GetGameStatus(gameStatus) && g_CGAInterface->GetWorldStatus(worldStatus))
+	{
+		switch (gameStatus)
+		{
+		case 1: return "战斗开场动画"; //开合动画
+		case 2: return "战斗结算";	   //"卡住战斗";
+		case 3:
+		{
+			return worldStatus == 9 ? "空闲" : "战斗开始"; //战斗开场动画
+		}
+		case 4: return "战斗选择";
+		case 5: return "遇敌过场动画"; //5遇敌开始和结束都有
+		case 6: return "战斗动画";
+		case 8: return "战斗结束"; //战斗结束动画
+		case 11: return "战斗切图";
+		case 200:
+		case 201: return "开始切图";
+		case 202: return "切图中";
+		case 203:
+		case 204:
+		case 205: return "切图结束";
+		default:
+			break;
+		}
+	}
+	return "未知";
+}
+QString GamePlayerDataWgt::FormaClockIn(int val)
+{
+	val /= 1000;
+	int hours = val / 3600;
+	int mins = (val - hours * 3600) / 60;
+	return QString("%1:%2").arg(hours).arg(mins, 2, 10, QLatin1Char('0'));
+}
+void GamePlayerDataWgt::doUpdateCharacterTable(ITGameCharacterPtr pRole)
+{
+	ui.tableWidget->setUpdatesEnabled(false);
+	auto gamePlayer = pRole;
+	setItemText(0, 0, gamePlayer->_gid, QColor("red"));
+	setItemText(1, 0, gamePlayer->getObjectName(), QColor("blue"));
+	//地图更新 还是由另外一个通知 比这个快点
+	setItemText(2, 0, gamePlayer->_map_name);
+	setItemText(3, 0, QString("东%1 南%2").arg(gamePlayer->_x).arg(gamePlayer->_y));
+	if (gamePlayer->_connectState)
+	{
+		setItemText(4, 0, QString("连接有效"), QColor("#00ff00"));
+	}
+	else
+	{
+		setItemText(4, 0, QString("连接断开"), QColor("red"));
+	}
+	setItemText(5, 0, QString("地图:%1").arg(gamePlayer->_map_number));
+	//setItemText(6, 0, g_pGameCtrl->getGameState());	//另外一个信号通知
+	//setItemText(7, 0, g_pGameFun->getSystemTime());
+	setItemText(8, 0, QString("卡时:%1").arg(FormaClockIn(gamePlayer->_punchclock)));
+	QColor healthColor("green");
+	if (gamePlayer->_baseData->_health > 25 && gamePlayer->_baseData->_health <= 50)
+		healthColor = QColor("yellow");
+	else if (gamePlayer->_baseData->_health > 50 && gamePlayer->_baseData->_health <= 75)
+		healthColor = QColor("purple");
+	else if (gamePlayer->_baseData->_health > 75 && gamePlayer->_baseData->_health <= 100)
+		healthColor = QColor("red");
+	if (gamePlayer->_souls > 0)
+		healthColor = QColor("red");
+	setItemText(9, 0, QString("健康:%1 掉魂:%2").arg(gamePlayer->_baseData->_health).arg(gamePlayer->_souls), healthColor);			//健康 图标后面补上
+	setItemText(10, 0, QString("Lv:%1 %2").arg(gamePlayer->_baseData->_level).arg(gamePlayer->_job));								//称号
+	//setItemText(11, 0, QString("Game:%1 World:%2").arg(g_pGameFun->GetGameStatus()).arg(g_pGameFun->GetWorldStatus())); //称号
+
+	
+	QString szHp = QString("HP:%1/%2").arg(gamePlayer->_baseData->_hp).arg(gamePlayer->_baseData->_maxhp);
+	QString szMp = QString("MP:%1/%2").arg(gamePlayer->_baseData->_mp).arg(gamePlayer->_baseData->_maxmp);
+
+	setItemText(0, 1, szHp, QColor("red"));
+	setItemText(1, 1, szMp, QColor("blue"));
+	
+
+	//获取升级经验
+	setItemText(2, 1, QString("升:%1").arg(gamePlayer->_baseData->_maxxp - gamePlayer->_baseData->_xp), QColor("green"));
+	setItemText(3, 1, QString("力:%1").arg(gamePlayer->_attrData->_value_attack), QColor(255, 128, 64));
+	setItemText(4, 1, QString("防:%1").arg(gamePlayer->_attrData->_value_defensive), QColor(0, 128, 128));
+	setItemText(5, 1, QString("敏:%1").arg(gamePlayer->_attrData->_value_agility), QColor(128, 0, 64));
+	setItemText(6, 1, QString("精:%1").arg(gamePlayer->_attrData->_value_spirit), QColor(0, 0, 128));
+	setItemText(7, 1, QString("回:%1").arg(gamePlayer->_attrData->_value_recovery), QColor(255, 0, 128));
+	setItemText(8, 1, QString("魅:%1").arg(gamePlayer->_value_charisma), QColor(255, 0, 128));
+
+	int nEarth = gamePlayer->_attrData->_element_earth;
+	int nWater = gamePlayer->_attrData->_element_water;
+	int nFire = gamePlayer->_attrData->_element_fire;
+	int nWind = gamePlayer->_attrData->_element_wind;
+	QString szAttribute = "属:";
+	if (nEarth > 0)
+		szAttribute += QString(" 地%1").arg(nEarth);
+	if (nWater > 0)
+		szAttribute += QString(" 水%1").arg(nWater);
+	if (nFire > 0)
+		szAttribute += QString(" 火%1").arg(nFire);
+	if (nWind > 0)
+		szAttribute += QString(" 风%1").arg(nWind);
+	setItemText(9, 1, szAttribute);
+	setItemText(10, 1, QString("钱:%1").arg(gamePlayer->_gold), QColor("#cd7f32"));
+	//setItemText(11, 1, gamePlayer->prestige, QColor(0, 0, 255)); //称号
+	setItemText(12, 1, QString("银行:%1").arg( gamePlayer->_bankgold), QColor("#cd7f32"));
+
+	/*int default_petid = gamePlayer->default_petid;
+	if (default_petid != -1)
+	{
+		if (default_petid >= 0 )
+		{
+			GamePetPtr battlePet = g_pGameFun->GetBattlePet();
+			if (battlePet)
+			{
+				setItemText(0, 3, QString("HP:%1/%2").arg(battlePet->hp).arg(battlePet->maxhp), QColor("red"));
+				setItemText(1, 3, QString("MP:%1/%2").arg(battlePet->mp).arg(battlePet->maxmp), QColor("blue"));
+				setItemText(2, 3, QString("升:%1").arg(battlePet->maxxp - battlePet->xp), QColor("green"));
+				setItemText(3, 3, QString("力:%1").arg(battlePet->detail.value_attack), QColor(255, 128, 64));
+				setItemText(4, 3, QString("防:%1").arg(battlePet->detail.value_defensive), QColor(0, 128, 128));
+				setItemText(5, 3, QString("敏:%1").arg(battlePet->detail.value_agility), QColor(128, 0, 64));
+				setItemText(6, 3, QString("精:%1").arg(battlePet->detail.value_spirit), QColor(0, 0, 128));
+				setItemText(7, 3, QString("忠:%1").arg(battlePet->loyality), QColor(255, 0, 128));
+				int nEarth = battlePet->detail.element_earth;
+				int nWater = battlePet->detail.element_water;
+				int nFire = battlePet->detail.element_fire;
+				int nWind = battlePet->detail.element_wind;
+				QString szAttribute = "属:";
+				if (nEarth > 0)
+					szAttribute += QString(" 地%1").arg(nEarth);
+				if (nWater > 0)
+					szAttribute += QString(" 水%1").arg(nWater);
+				if (nFire > 0)
+					szAttribute += QString(" 火%1").arg(nFire);
+				if (nWind > 0)
+					szAttribute += QString(" 风%1").arg(nWind);
+
+				setItemText(8, 3, szAttribute);
+				QColor petHealthColor("green");
+				if (battlePet->health > 25 && battlePet->health <= 50)
+					petHealthColor = QColor("yellow");
+				else if (battlePet->health > 50 && battlePet->health <= 75)
+					petHealthColor = QColor("purple");
+				else if (battlePet->health > 75 && battlePet->health <= 100)
+					petHealthColor = QColor("red");
+
+				if (battlePet->battle_flags)
+					setItemText(9, 3, QString("战斗 健康:%1").arg(battlePet->health), petHealthColor);
+				else
+					setItemText(9, 3, QString("健康:%1").arg(battlePet->health), petHealthColor);
+				setItemText(10, 3, QString("Lv:%1 %2").arg(battlePet->level).arg(battlePet->name.isEmpty() ? battlePet->realname : battlePet->name));
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 11; ++i)
+		{
+			setItemText(i, 3, "");
+		}
+	}*/
+
+	for (auto it = pRole->_skillPosForSkill.begin(); it!=pRole->_skillPosForSkill.end(); ++it)
+	{
+		int i = it.key();
+		if (i > 15)
+			break;
+		ITGameSkillPtr pSkill = it.value();
+		if (pSkill && pSkill->_bExist && !pSkill->getObjectName().isEmpty())
+		{
+			if (pSkill->_maxxp == 99999999 || pSkill->_xp >= 322200)
+				setItemText(i, 2, QString("%1 Lv:%2 %3").arg(pSkill->getObjectName()).arg(pSkill->_level).arg("已满"));
+			else
+				setItemText(i, 2, QString("%1 Lv:%2 %3").arg(pSkill->getObjectName()).arg(pSkill->_level).arg(pSkill->_maxxp - pSkill->_xp));
+		}
+		else
+			setItemText(i, 2, "");
+	}
+
+	ITGamePetPtr battlePet = pRole->_petPosForPet.value(pRole->_petid);
+	if (battlePet)
+	{
+		setItemText(0, 3, QString("HP:%1/%2").arg(battlePet->_baseData->_hp).arg(battlePet->_baseData->_maxhp), QColor("red"));
+		setItemText(1, 3, QString("MP:%1/%2").arg(battlePet->_baseData->_mp).arg(battlePet->_baseData->_maxmp), QColor("blue"));
+		setItemText(2, 3, QString("升:%1").arg(battlePet->_baseData->_maxxp - battlePet->_baseData->_xp), QColor("green"));
+		setItemText(3, 3, QString("力:%1").arg(battlePet->_attrData->_value_attack), QColor(255, 128, 64));
+		setItemText(4, 3, QString("防:%1").arg(battlePet->_attrData->_value_defensive), QColor(0, 128, 128));
+		setItemText(5, 3, QString("敏:%1").arg(battlePet->_attrData->_value_agility), QColor(128, 0, 64));
+		setItemText(6, 3, QString("精:%1").arg(battlePet->_attrData->_value_spirit), QColor(0, 0, 128));
+		setItemText(7, 3, QString("忠:%1").arg(battlePet->_loyality), QColor(255, 0, 128));
+		int nEarth = battlePet->_attrData->_element_earth;
+		int nWater = battlePet->_attrData->_element_water;
+		int nFire = battlePet->_attrData->_element_fire;
+		int nWind = battlePet->_attrData->_element_wind;
+		QString szAttribute = "属:";
+		if (nEarth > 0)
+			szAttribute += QString(" 地%1").arg(nEarth);
+		if (nWater > 0)
+			szAttribute += QString(" 水%1").arg(nWater);
+		if (nFire > 0)
+			szAttribute += QString(" 火%1").arg(nFire);
+		if (nWind > 0)
+			szAttribute += QString(" 风%1").arg(nWind);
+
+		setItemText(8, 3, szAttribute);
+		QColor petHealthColor("green");
+		if (battlePet->_baseData->_health > 25 && battlePet->_baseData->_health <= 50)
+			petHealthColor = QColor("yellow");
+		else if (battlePet->_baseData->_health > 50 && battlePet->_baseData->_health <= 75)
+			petHealthColor = QColor("purple");
+		else if (battlePet->_baseData->_health > 75 && battlePet->_baseData->_health <= 100)
+			petHealthColor = QColor("red");
+
+		/*if (battlePet->_battle_flags)
+			setItemText(9, 3, QString("战斗 健康:%1").arg(battlePet->_baseData->_health), petHealthColor);
+		else*/
+			setItemText(9, 3, QString("健康:%1").arg(battlePet->_baseData->_health), petHealthColor);
+		setItemText(10, 3, QString("Lv:%1 %2").arg(battlePet->_baseData->_level).arg(battlePet->getObjectName().isEmpty() ? battlePet->_realName : battlePet->getObjectName()));
+	}
+	else
+	{
+		for (int i = 0; i < 11; ++i)
+		{
+			setItemText(i, 3, "");
+		}
+	}
+	ui.tableWidget->setUpdatesEnabled(true);
+}
 
 void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 {
@@ -261,6 +524,7 @@ void GamePlayerDataWgt::doTreeViewClicked(const QModelIndex& index)
 		ITGameCharacterPtr pRole = qSharedPointerCast<ITGameCharacter>(m_curSelectObj);
 		ui.lineEdit_gold->setText(QString::number(pRole->_gold));
 		ui.lineEdit_bankGold->setText(QString::number(pRole->_bankgold));
+		doUpdateCharacterTable(pRole);
 		doUpdateBagItemTableWidget(pRole);
 		doUpdateBankItemTableWidget(pRole);
 		doUpdatePetTableWidget(ui.tableWidget_pet, pRole);

@@ -19,12 +19,15 @@ protected:
 	QString DisplayInputDlg(const QString& title, const QString& labelName);
 	void GetRowColFromItemPos(int itempos, int& row, int& col);
 	void setItemText(QTableWidget* pTable, int row, int col, const QString& szText, const QColor& szColor = QColor("black"), const QColor& backColor = QColor("white"));
-
+	void setItemText(int row, int col, const QString& szText, const QColor& szColor = QColor("black"));
+	QString getGameState(ITGameCharacterPtr pRole);
+	QString FormaClockIn(int val);
 public slots:
 	void on_treeView_customContextMenuRequested(const QPoint&);
 	void doAddAccountAssemble();
 	void doAddAccount();
 	void doAddAccountGid();
+	void doUpdateCharacterTable(ITGameCharacterPtr pRole);
 	void doTreeViewClicked(const QModelIndex& index);
 	void doUpdateBagItemTableWidget(ITGameCharacterPtr pRole);
 	void doUpdateBankItemTableWidget(ITGameCharacterPtr pRole);

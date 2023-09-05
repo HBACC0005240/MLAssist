@@ -145,11 +145,11 @@ public:
 	void setObjectCode(int code);
 
 	//获取属性值
-	int getObjectCode();
-	int getObjectType(void);
-	quint64 getObjectID(void);
-	QString getObjectName(void);
-	QString getObjectDesc(void) { return m_sObjDesc; }
+	const int& getObjectCode()const;
+	const int& getObjectType(void)const;
+	const quint64 getObjectID(void)const;
+	const QString getObjectName(void)const;
+	const QString getObjectDesc(void)const { return m_sObjDesc; }
 	void setObjectDsec(QString strDesc) { m_sObjDesc = strDesc; }
 
 	quint64 id64() { return m_ullID; }
@@ -272,6 +272,9 @@ public:
 	ITGameItem();
 	ITGameItem(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameItem();
+	ITGameItem& operator=(const ITGameItem& o);
+	bool operator!=(const ITGameItem& o)const;
+	bool operator==(const ITGameItem& o)const;
 
 	int _itemCount = 0;		//物品数量
 	int _itemType = 0;	   //道具类型
@@ -281,7 +284,7 @@ public:
 	int _sellMinCount = 0; //卖店最少数量
 	int _itemPos = 0;		//物品位置
 	QString _itemAttr;	   //物品描述
-	bool _bExist = true;	//是否存在
+	bool _bExist = false;	//是否存在
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITGameItem)
 
@@ -443,6 +446,9 @@ public:
 	ITGameSkill();
 	ITGameSkill(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameSkill();
+	ITGameSkill& operator=(const ITGameSkill& o);
+	bool operator!=(const ITGameSkill& o)const;
+	bool operator==(const ITGameSkill& o)const;
 
 	QString _info;			//技能介绍
 	int _id = 0;			//技能id
@@ -454,7 +460,7 @@ public:
 	bool _available = 0;	//是否可用
 	int _xp = 0;			//!< 技能经验
 	int _maxxp = 0;			//!< 技能下一级经验
-	bool _bExist = true;	//是否存在
+	bool _bExist = false;	//是否存在
 
 	ITGameSkillList _subskills; //技能子项
 };
