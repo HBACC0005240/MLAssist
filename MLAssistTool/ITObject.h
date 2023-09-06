@@ -387,6 +387,19 @@ public:
 };
 
 DECLARE_OBJECT_MODULE_FACTORY(ITAccountGid)
+
+class ITGameSysTime
+{
+public:
+	int years;
+	int month;
+	int days;
+	int hours;
+	int mins;
+	int secs;
+	int local_time;
+	int server_time;
+};
 //游戏角色
 class ITGameCharacter : public ITObject
 {
@@ -425,6 +438,12 @@ public:
 	int _map_number = 0;		//!< 当前地图编号
 	int _server_line = 0;		//!< 当前游戏线路
 	int _big_line = 0;			//!< 当前服务器-电信13|网通14
+	int _game_status = 0;		//!< 游戏状态
+	int _world_status = 0;		//!< 游戏世界状态
+	int _game_pid = 0;			//!< 游戏进程id
+	int _game_port = 0;			//!< 游戏端口
+	QString _prestige = "";		//!< 声望称号
+	ITGameSysTime _gameSysTime;	//!< 当前游戏时间
 	ITGameBaseDataPtr _baseData=nullptr;		//!< 角色相关信息
 	ITGameAttributeDataPtr _attrData=nullptr;	//!< 角色属性
 	QMap<int, ITGamePetPtr> _petPosForPet;		//!< 宠物位置和指针映射

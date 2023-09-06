@@ -22,6 +22,7 @@ protected:
 	void setItemText(int row, int col, const QString& szText, const QColor& szColor = QColor("black"));
 	QString getGameState(ITGameCharacterPtr pRole);
 	QString FormaClockIn(int val);
+	QString getSystemTime(ITGameCharacterPtr pRole);
 public slots:
 	void on_treeView_customContextMenuRequested(const QPoint&);
 	void doAddAccountAssemble();
@@ -40,4 +41,5 @@ private:
 	Ui::GamePlayerDataWgt ui;
 	PlayerDataTreeModel* m_pPlayerDataTreeModel;
 	ITObjectPtr m_curSelectObj;
+	QMap<int,QString> m_petState;
 };

@@ -160,9 +160,13 @@ constexpr UploadCharcterServerRequest::UploadCharcterServerRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : char_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , multicast_ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , big_line_(0)
   , port_(0)
-  , online_(0){}
+  , online_(0)
+  , is_open_(0)
+  , is_multicast_(0)
+  , multicast_port_(0){}
 struct UploadCharcterServerRequestDefaultTypeInternal {
   constexpr UploadCharcterServerRequestDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -273,9 +277,13 @@ constexpr SelectCharacterServerResponse::SelectCharacterServerResponse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : char_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , multicast_ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , big_line_(0)
   , port_(0)
-  , online_(0){}
+  , online_(0)
+  , is_open_(0)
+  , is_multicast_(0)
+  , multicast_port_(0){}
 struct SelectCharacterServerResponseDefaultTypeInternal {
   constexpr SelectCharacterServerResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -447,6 +455,25 @@ struct CGCharacterPersDescDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CGCharacterPersDescDefaultTypeInternal _CGCharacterPersDesc_default_instance_;
+constexpr CGGameSysTime::CGGameSysTime(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : years_(0)
+  , month_(0)
+  , days_(0)
+  , hours_(0)
+  , mins_(0)
+  , secs_(0)
+  , local_time_(0)
+  , server_time_(0){}
+struct CGGameSysTimeDefaultTypeInternal {
+  constexpr CGGameSysTimeDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~CGGameSysTimeDefaultTypeInternal() {}
+  union {
+    CGGameSysTime _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CGGameSysTimeDefaultTypeInternal _CGGameSysTime_default_instance_;
 constexpr CGCharacterData::CGCharacterData(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : titles_()
@@ -457,6 +484,7 @@ constexpr CGCharacterData::CGCharacterData(
   , base_data_(nullptr)
   , detail_(nullptr)
   , pers_desc_(nullptr)
+  , game_time_(nullptr)
   , souls_(0)
   , level_(0)
   , gold_(0)
@@ -481,7 +509,11 @@ constexpr CGCharacterData::CGCharacterData(
   , server_line_(0)
   , battle_position_(0)
   , bank_gold_(0)
-  , big_line_(0){}
+  , big_line_(0)
+  , game_status_(0)
+  , world_status_(0)
+  , game_pid_(0)
+  , game_port_(0){}
 struct CGCharacterDataDefaultTypeInternal {
   constexpr CGCharacterDataDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -792,7 +824,7 @@ struct CGPlayerFlagEnabledDataDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CGPlayerFlagEnabledDataDefaultTypeInternal _CGPlayerFlagEnabledData_default_instance_;
 }  // namespace CGData
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_CGData_2eproto[47];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_CGData_2eproto[48];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_CGData_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_CGData_2eproto = nullptr;
 
@@ -876,7 +908,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, maptype_),
   PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, filetime_),
   PROTOBUF_FIELD_OFFSET(::CGData::DownloadMapDataResponse, imagedata_),
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -886,6 +918,19 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, ip_),
   PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, port_),
   PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, online_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, is_open_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, is_multicast_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, multicast_ip_),
+  PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerRequest, multicast_port_),
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  1,
+  0,
+  2,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::UploadCharcterServerResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -941,7 +986,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerRequest, char_name_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerRequest, big_line_),
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -951,6 +996,19 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, ip_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, port_),
   PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, online_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, is_open_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, is_multicast_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, multicast_ip_),
+  PROTOBUF_FIELD_OFFSET(::CGData::SelectCharacterServerResponse, multicast_port_),
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  1,
+  0,
+  2,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::SelectTaskInfoRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1065,6 +1123,19 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterPersDesc, wanticon_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterPersDesc, wantstring_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterPersDesc, descstring_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, years_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, month_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, days_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, hours_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, mins_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, secs_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, local_time_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGGameSysTime, server_time_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1103,6 +1174,11 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, battle_position_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, bank_gold_),
   PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, big_line_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, game_time_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, game_status_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, world_status_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, game_pid_),
+  PROTOBUF_FIELD_OFFSET(::CGData::CGCharacterData, game_port_),
   ~0u,
   ~0u,
   ~0u,
@@ -1135,7 +1211,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_CGData_2eproto::offsets[] PROT
   ~0u,
   ~0u,
   ~0u,
+  1,
   0,
+  2,
+  3,
+  4,
+  5,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CGData::CGPetData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1334,43 +1415,44 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 56, -1, sizeof(::CGData::UploadMapDataResponse)},
   { 61, -1, sizeof(::CGData::DownloadMapDataRequest)},
   { 69, -1, sizeof(::CGData::DownloadMapDataResponse)},
-  { 79, -1, sizeof(::CGData::UploadCharcterServerRequest)},
-  { 89, -1, sizeof(::CGData::UploadCharcterServerResponse)},
-  { 94, -1, sizeof(::CGData::CGAccountGidData)},
-  { 105, -1, sizeof(::CGData::SelectAccountGidDataRequest)},
-  { 111, -1, sizeof(::CGData::SelectGidDataRequest)},
-  { 119, -1, sizeof(::CGData::SelectCharacterDataRequest)},
-  { 126, -1, sizeof(::CGData::SelectCharacterDataResponse)},
-  { 137, -1, sizeof(::CGData::SelectCharacterServerRequest)},
-  { 144, -1, sizeof(::CGData::SelectCharacterServerResponse)},
-  { 154, -1, sizeof(::CGData::SelectTaskInfoRequest)},
-  { 162, -1, sizeof(::CGData::SelectTaskInfoResponse)},
-  { 176, -1, sizeof(::CGData::SelectAccountGidDataResponse)},
-  { 182, -1, sizeof(::CGData::SelectGidDataResponse)},
-  { 194, -1, sizeof(::CGData::CGBaseData)},
-  { 208, -1, sizeof(::CGData::CGSkillBaseData)},
-  { 225, -1, sizeof(::CGData::CGAttrBaseData)},
-  { 255, -1, sizeof(::CGData::CGCharacterPersDesc)},
-  { 268, 306, sizeof(::CGData::CGCharacterData)},
-  { 339, -1, sizeof(::CGData::CGPetData)},
-  { 359, -1, sizeof(::CGData::CGItemData)},
-  { 374, -1, sizeof(::CGData::CGStoreMapRequest)},
-  { 381, -1, sizeof(::CGData::CGStoreMapResponse)},
-  { 386, -1, sizeof(::CGData::CGMapDataRequest)},
-  { 391, -1, sizeof(::CGData::CGMapDataResponse)},
-  { 397, -1, sizeof(::CGData::CGMapData)},
-  { 407, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
-  { 412, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
-  { 418, -1, sizeof(::CGData::CGPetGradeCalcData)},
-  { 444, -1, sizeof(::CGData::CGItemRequest)},
-  { 450, -1, sizeof(::CGData::CGItemResponse)},
-  { 466, -1, sizeof(::CGData::CGStoreItemRequest)},
-  { 481, -1, sizeof(::CGData::CGStoreItemResponse)},
-  { 488, -1, sizeof(::CGData::CGVoidData)},
-  { 493, -1, sizeof(::CGData::CGBoolData)},
-  { 499, -1, sizeof(::CGData::CGIntData)},
-  { 505, -1, sizeof(::CGData::CGSysTimeResponse)},
-  { 518, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
+  { 79, 93, sizeof(::CGData::UploadCharcterServerRequest)},
+  { 102, -1, sizeof(::CGData::UploadCharcterServerResponse)},
+  { 107, -1, sizeof(::CGData::CGAccountGidData)},
+  { 118, -1, sizeof(::CGData::SelectAccountGidDataRequest)},
+  { 124, -1, sizeof(::CGData::SelectGidDataRequest)},
+  { 132, -1, sizeof(::CGData::SelectCharacterDataRequest)},
+  { 139, -1, sizeof(::CGData::SelectCharacterDataResponse)},
+  { 150, -1, sizeof(::CGData::SelectCharacterServerRequest)},
+  { 157, 171, sizeof(::CGData::SelectCharacterServerResponse)},
+  { 180, -1, sizeof(::CGData::SelectTaskInfoRequest)},
+  { 188, -1, sizeof(::CGData::SelectTaskInfoResponse)},
+  { 202, -1, sizeof(::CGData::SelectAccountGidDataResponse)},
+  { 208, -1, sizeof(::CGData::SelectGidDataResponse)},
+  { 220, -1, sizeof(::CGData::CGBaseData)},
+  { 234, -1, sizeof(::CGData::CGSkillBaseData)},
+  { 251, -1, sizeof(::CGData::CGAttrBaseData)},
+  { 281, -1, sizeof(::CGData::CGCharacterPersDesc)},
+  { 294, -1, sizeof(::CGData::CGGameSysTime)},
+  { 307, 350, sizeof(::CGData::CGCharacterData)},
+  { 388, -1, sizeof(::CGData::CGPetData)},
+  { 408, -1, sizeof(::CGData::CGItemData)},
+  { 423, -1, sizeof(::CGData::CGStoreMapRequest)},
+  { 430, -1, sizeof(::CGData::CGStoreMapResponse)},
+  { 435, -1, sizeof(::CGData::CGMapDataRequest)},
+  { 440, -1, sizeof(::CGData::CGMapDataResponse)},
+  { 446, -1, sizeof(::CGData::CGMapData)},
+  { 456, -1, sizeof(::CGData::CGPetGradeCalcRequest)},
+  { 461, -1, sizeof(::CGData::CGPetGradeCalcResponse)},
+  { 467, -1, sizeof(::CGData::CGPetGradeCalcData)},
+  { 493, -1, sizeof(::CGData::CGItemRequest)},
+  { 499, -1, sizeof(::CGData::CGItemResponse)},
+  { 515, -1, sizeof(::CGData::CGStoreItemRequest)},
+  { 530, -1, sizeof(::CGData::CGStoreItemResponse)},
+  { 537, -1, sizeof(::CGData::CGVoidData)},
+  { 542, -1, sizeof(::CGData::CGBoolData)},
+  { 548, -1, sizeof(::CGData::CGIntData)},
+  { 554, -1, sizeof(::CGData::CGSysTimeResponse)},
+  { 567, -1, sizeof(::CGData::CGPlayerFlagEnabledData)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1401,6 +1483,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGSkillBaseData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGAttrBaseData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGCharacterPersDesc_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGGameSysTime_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGCharacterData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGPetData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CGData::_CGItemData_default_instance_),
@@ -1446,199 +1529,216 @@ const char descriptor_table_protodef_CGData_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "ype\030\003 \001(\t\"u\n\027DownloadMapDataResponse\022\020\n\010"
   "FileName\030\001 \001(\t\022\022\n\nServerLine\030\002 \001(\t\022\017\n\007Ma"
   "pType\030\003 \001(\t\022\020\n\010fileTime\030\004 \001(\t\022\021\n\tImageDa"
-  "ta\030\005 \001(\014\"l\n\033UploadCharcterServerRequest\022"
-  "\021\n\tchar_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\022\n\n\002"
-  "ip\030\003 \001(\t\022\014\n\004port\030\004 \001(\005\022\016\n\006online\030\005 \001(\005\"\036"
-  "\n\034UploadCharcterServerResponse\"\177\n\020CGAcco"
-  "untGidData\022\017\n\007account\030\001 \001(\t\022\013\n\003gid\030\002 \001(\t"
-  "\022\021\n\tgame_type\030\003 \001(\005\022\022\n\nbig_server\030\004 \001(\005\022"
-  "\023\n\013server_line\030\005 \001(\r\022\021\n\tcharacter\030\006 \001(\005\""
-  ".\n\033SelectAccountGidDataRequest\022\017\n\007accoun"
-  "t\030\001 \001(\t\"H\n\024SelectGidDataRequest\022\013\n\003gid\030\001"
-  " \001(\t\022\021\n\trole_type\030\002 \001(\005\022\020\n\010big_line\030\003 \001("
-  "\005\"A\n\032SelectCharacterDataRequest\022\021\n\tchar_"
-  "name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\"\320\001\n\033SelectC"
-  "haracterDataResponse\022\026\n\016character_name\030\001"
-  " \001(\t\022\020\n\010big_line\030\002 \001(\005\022/\n\016character_data"
-  "\030\003 \001(\0132\027.CGData.CGCharacterData\022#\n\010pet_d"
-  "ata\030\004 \003(\0132\021.CGData.CGPetData\022!\n\005items\030\005 "
-  "\003(\0132\022.CGData.CGItemData\022\016\n\006online\030\006 \001(\005\""
-  "C\n\034SelectCharacterServerRequest\022\021\n\tchar_"
-  "name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\"n\n\035SelectCh"
-  "aracterServerResponse\022\021\n\tchar_name\030\001 \001(\t"
-  "\022\020\n\010big_line\030\002 \001(\005\022\n\n\002ip\030\003 \001(\t\022\014\n\004port\030\004"
-  " \001(\005\022\016\n\006online\030\005 \001(\005\"J\n\025SelectTaskInfoRe"
-  "quest\022\021\n\ttask_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001"
-  "(\005\022\014\n\004line\030\003 \001(\005\"\335\001\n\026SelectTaskInfoRespo"
-  "nse\022\021\n\ttask_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005"
-  "\022\014\n\004line\030\003 \001(\005\022\021\n\tnpc_pos_x\030\004 \001(\005\022\021\n\tnpc"
-  "_pos_y\030\005 \001(\005\022\021\n\tlast_time\030\006 \001(\005\022\032\n\022last_"
-  "map_first_num\030\007 \001(\005\022\034\n\024last_map_first_wi"
-  "dth\030\010 \001(\005\022\035\n\025last_map_first_height\030\t \001(\005"
-  "\"N\n\034SelectAccountGidDataResponse\022.\n\007gidD"
-  "ata\030\001 \003(\0132\035.CGData.SelectGidDataResponse"
-  "\"\330\001\n\025SelectGidDataResponse\022\013\n\003gid\030\001 \001(\t\022"
-  "\021\n\trole_type\030\002 \001(\005\022\026\n\016character_name\030\003 \001"
-  "(\t\022/\n\016character_data\030\004 \001(\0132\027.CGData.CGCh"
-  "aracterData\022#\n\010pet_data\030\005 \003(\0132\021.CGData.C"
-  "GPetData\022!\n\005items\030\006 \003(\0132\022.CGData.CGItemD"
-  "ata\022\016\n\006online\030\007 \001(\005\"\212\001\n\nCGBaseData\022\014\n\004na"
-  "me\030\001 \001(\t\022\n\n\002hp\030\002 \001(\005\022\n\n\002mp\030\003 \001(\005\022\r\n\005maxh"
-  "p\030\004 \001(\005\022\r\n\005maxmp\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\n\n"
-  "\002xp\030\007 \001(\005\022\r\n\005maxxp\030\010 \001(\005\022\016\n\006health\030\t \001(\005"
-  "\"\340\001\n\017CGSkillBaseData\022\014\n\004name\030\001 \001(\t\022\014\n\004in"
-  "fo\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\022\014\n\004cost\030\004 \001(\005\022\r\n\005fl"
-  "ags\030\005 \001(\005\022\r\n\005index\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022"
-  "\020\n\010maxLevel\030\010 \001(\005\022\021\n\tavailable\030\t \001(\010\022\n\n\002"
-  "xp\030\n \001(\005\022\r\n\005maxxp\030\013 \001(\005\022*\n\tsubskills\030\014 \003"
-  "(\0132\027.CGData.CGSkillBaseData\"\317\004\n\016CGAttrBa"
-  "seData\022\025\n\rpoints_remain\030\001 \001(\005\022\030\n\020points_"
-  "endurance\030\002 \001(\005\022\027\n\017points_strength\030\003 \001(\005"
-  "\022\026\n\016points_defense\030\004 \001(\005\022\026\n\016points_agili"
-  "ty\030\005 \001(\005\022\026\n\016points_magical\030\006 \001(\005\022\024\n\014valu"
-  "e_attack\030\007 \001(\005\022\027\n\017value_defensive\030\010 \001(\005\022"
-  "\025\n\rvalue_agility\030\t \001(\005\022\024\n\014value_spirit\030\n"
-  " \001(\005\022\026\n\016value_recovery\030\013 \001(\005\022\025\n\rresist_p"
-  "oison\030\014 \001(\005\022\024\n\014resist_sleep\030\r \001(\005\022\025\n\rres"
-  "ist_medusa\030\016 \001(\005\022\024\n\014resist_drunk\030\017 \001(\005\022\024"
-  "\n\014resist_chaos\030\020 \001(\005\022\025\n\rresist_forget\030\021 "
-  "\001(\005\022\024\n\014fix_critical\030\022 \001(\005\022\026\n\016fix_strikeb"
-  "ack\030\023 \001(\005\022\025\n\rfix_accurancy\030\024 \001(\005\022\021\n\tfix_"
-  "dodge\030\025 \001(\005\022\025\n\relement_earth\030\026 \001(\005\022\025\n\rel"
-  "ement_water\030\027 \001(\005\022\024\n\014element_fire\030\030 \001(\005\022"
-  "\024\n\014element_wind\030\031 \001(\005\"\255\001\n\023CGCharacterPer"
-  "sDesc\022\022\n\nchangeBits\030\001 \001(\005\022\020\n\010sellIcon\030\002 "
-  "\001(\005\022\022\n\nsellString\030\003 \001(\t\022\017\n\007buyIcon\030\004 \001(\005"
-  "\022\021\n\tbuyString\030\005 \001(\t\022\020\n\010wantIcon\030\006 \001(\005\022\022\n"
-  "\nwantString\030\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\337\005"
-  "\n\017CGCharacterData\022%\n\tbase_data\030\001 \001(\0132\022.C"
-  "GData.CGBaseData\022\r\n\005souls\030\002 \001(\005\022\r\n\005level"
-  "\030\003 \001(\005\022\014\n\004gold\030\004 \001(\005\022\020\n\010image_id\030\005 \001(\005\022\r"
-  "\n\005score\030\006 \001(\005\022\022\n\nskillslots\030\007 \001(\005\022\021\n\tuse"
-  "_title\030\010 \001(\005\022\021\n\tavatar_id\030\t \001(\005\022\016\n\006uniti"
-  "d\030\n \001(\005\022\r\n\005petid\030\013 \001(\005\022\021\n\tpetriding\030\014 \001("
-  "\010\022\021\n\tdirection\030\r \001(\005\022\022\n\npunchclock\030\016 \001(\005"
-  "\022\027\n\017usingpunchclock\030\017 \001(\010\022\013\n\003job\030\020 \001(\t\022\016"
-  "\n\006titles\030\021 \003(\t\022\026\n\016manu_endurance\030\022 \001(\005\022\025"
-  "\n\rmanu_skillful\030\023 \001(\005\022\031\n\021manu_intelligen"
-  "ce\030\024 \001(\005\022\026\n\016value_charisma\030\025 \001(\005\022\t\n\001x\030\026 "
-  "\001(\005\022\t\n\001y\030\027 \001(\005\022\020\n\010map_name\030\030 \001(\t\022\022\n\nmap_"
-  "number\030\031 \001(\005\022\023\n\013server_line\030\032 \001(\005\022&\n\006det"
-  "ail\030\033 \001(\0132\026.CGData.CGAttrBaseData\022&\n\005ski"
-  "ll\030\034 \003(\0132\027.CGData.CGSkillBaseData\022\014\n\004nic"
-  "k\030\035 \001(\t\022.\n\tpers_desc\030\036 \001(\0132\033.CGData.CGCh"
-  "aracterPersDesc\022\027\n\017battle_position\030\037 \001(\005"
-  "\022\021\n\tbank_gold\030  \001(\005\022\025\n\010big_line\030! \001(\005H\000\210"
-  "\001\001B\013\n\t_big_line\"\337\002\n\tCGPetData\022%\n\tbase_da"
-  "ta\030\001 \001(\0132\022.CGData.CGBaseData\022\r\n\005index\030\002 "
-  "\001(\005\022\r\n\005flags\030\003 \001(\005\022\024\n\014battle_flags\030\004 \001(\005"
-  "\022\020\n\010loyality\030\005 \001(\005\022\026\n\016default_battle\030\006 \001"
-  "(\010\022\r\n\005state\030\007 \001(\005\022\r\n\005grade\030\010 \001(\005\022\024\n\014loss"
-  "MinGrade\030\t \001(\005\022\024\n\014lossMaxGrade\030\n \001(\005\022&\n\005"
-  "skill\030\013 \003(\0132\027.CGData.CGSkillBaseData\022&\n\006"
-  "detail\030\014 \001(\0132\026.CGData.CGAttrBaseData\022\021\n\t"
-  "real_name\030\r \001(\t\022\014\n\004race\030\016 \001(\005\022\022\n\nskillsl"
-  "ots\030\017 \001(\005\"\244\001\n\nCGItemData\022\020\n\010image_id\030\001 \001"
-  "(\005\022\017\n\007item_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004typ"
-  "e\030\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004"
-  "info\030\007 \001(\t\022\013\n\003pos\030\010 \001(\005\022\020\n\010assessed\030\t \001("
-  "\010\022\r\n\005count\030\n \001(\005\"9\n\021CGStoreMapRequest\022\022\n"
-  "\nmap_number\030\001 \001(\005\022\020\n\010map_name\030\002 \001(\t\"\024\n\022C"
-  "GStoreMapResponse\"\022\n\020CGMapDataRequest\"4\n"
-  "\021CGMapDataResponse\022\037\n\004maps\030\001 \003(\0132\021.CGDat"
-  "a.CGMapData\"Z\n\tCGMapData\022\n\n\002id\030\001 \001(\004\022\022\n\n"
-  "map_number\030\002 \001(\005\022\020\n\010map_name\030\003 \001(\t\022\014\n\004de"
-  "sc\030\004 \001(\t\022\r\n\005often\030\005 \001(\005\"\027\n\025CGPetGradeCal"
-  "cRequest\"A\n\026CGPetGradeCalcResponse\022\'\n\003pe"
-  "t\030\001 \003(\0132\032.CGData.CGPetGradeCalcData\"\267\003\n\022"
-  "CGPetGradeCalcData\022\n\n\002id\030\001 \001(\004\022\016\n\006number"
-  "\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\020\n\010raceType\030\004 \001(\005\022\024"
-  "\n\014raceTypeName\030\005 \001(\t\022\016\n\006baseBP\030\006 \001(\001\022\022\n\n"
-  "totalGrade\030\007 \001(\005\022\023\n\013bestBPGrade\030\010 \003(\001\022\021\n"
-  "\tcan_catch\030\t \001(\005\022\021\n\tcard_type\030\n \001(\005\022\020\n\010i"
-  "mage_id\030\013 \001(\005\022\026\n\016rate_endurance\030\014 \001(\005\022\025\n"
-  "\rrate_strength\030\r \001(\005\022\024\n\014rate_defense\030\016 \001"
-  "(\005\022\024\n\014rate_agility\030\017 \001(\005\022\024\n\014rate_magical"
-  "\030\020 \001(\005\022\025\n\relement_earth\030\021 \001(\005\022\025\n\relement"
-  "_water\030\022 \001(\005\022\024\n\014element_fire\030\023 \001(\005\022\024\n\014el"
-  "ement_wind\030\024 \001(\005\022\023\n\013skill_slots\030\025 \001(\005\" \n"
-  "\rCGItemRequest\022\017\n\007item_id\030\001 \001(\005\"\300\001\n\016CGIt"
-  "emResponse\022\n\n\002id\030\001 \001(\004\022\017\n\007item_id\030\002 \001(\005\022"
-  "\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005price\030\005 \001"
-  "(\005\022\017\n\007maxpile\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\026\n\016se"
-  "llLimitCount\030\010 \001(\005\022\021\n\tattribute\030\t \001(\t\022\014\n"
-  "\004desc\030\n \001(\t\022\r\n\005exist\030\013 \001(\010\"\273\001\n\022CGStoreIt"
-  "emRequest\022\017\n\007item_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t"
-  "\022\014\n\004type\030\003 \001(\005\022\r\n\005price\030\004 \001(\005\022\017\n\007maxpile"
-  "\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\026\n\016sellLimitCount\030"
-  "\007 \001(\005\022\021\n\tattribute\030\010 \001(\t\022\014\n\004desc\030\t \001(\t\022\020"
-  "\n\010assessed\030\n \001(\010\"4\n\023CGStoreItemResponse\022"
-  "\n\n\002id\030\001 \001(\005\022\021\n\tmaybeName\030\002 \001(\t\"\014\n\nCGVoid"
-  "Data\"\031\n\nCGBoolData\022\013\n\003val\030\001 \001(\010\"\030\n\tCGInt"
-  "Data\022\013\n\003val\030\001 \001(\005\"\223\001\n\021CGSysTimeResponse\022"
-  "\r\n\005years\030\001 \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004days\030\003 "
-  "\001(\005\022\r\n\005hours\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004secs"
-  "\030\006 \001(\005\022\022\n\nlocal_time\030\007 \001(\005\022\023\n\013server_tim"
-  "e\030\010 \001(\005\"8\n\027CGPlayerFlagEnabledData\022\r\n\005in"
-  "dex\030\001 \001(\005\022\016\n\006enable\030\002 \001(\0102\237\004\n\014MLRpcServi"
-  "ce\022:\n\nInitialize\022\030.CGData.CGGmeTypeReque"
-  "st\032\022.CGData.CGVoidData\0221\n\007Connect\022\022.CGDa"
-  "ta.CGVoidData\032\022.CGData.CGBoolData\0221\n\010IsI"
-  "nGame\022\022.CGData.CGVoidData\032\021.CGData.CGInt"
-  "Data\0227\n\016GetWorldStatus\022\022.CGData.CGVoidDa"
-  "ta\032\021.CGData.CGIntData\0226\n\rGetGameStatus\022\022"
-  ".CGData.CGVoidData\032\021.CGData.CGIntData\0224\n"
-  "\013GetBGMIndex\022\022.CGData.CGVoidData\032\021.CGDat"
-  "a.CGIntData\022;\n\nGetSysTime\022\022.CGData.CGVoi"
-  "dData\032\031.CGData.CGSysTimeResponse\022<\n\rGetP"
-  "layerInfo\022\022.CGData.CGVoidData\032\027.CGData.C"
-  "GCharacterData\022K\n\024SetPlayerFlagEnabled\022\037"
-  ".CGData.CGPlayerFlagEnabledData\032\022.CGData"
-  ".CGVoidData2\233\014\n\014CGRpcService\022>\n\rGetCGIte"
-  "mData\022\025.CGData.CGItemRequest\032\026.CGData.CG"
-  "ItemResponse\0229\n\017GetConnectState\022\022.CGData"
-  ".CGVoidData\032\022.CGData.CGVoidData\022V\n\023GetPe"
-  "tGradeCalcData\022\035.CGData.CGPetGradeCalcRe"
-  "quest\032\036.CGData.CGPetGradeCalcResponse\"\000\022"
-  "N\n\025GetServerStoreMapData\022\030.CGData.CGMapD"
-  "ataRequest\032\031.CGData.CGMapDataResponse\"\000\022"
-  "L\n\017StoreCGItemData\022\032.CGData.CGStoreItemR"
-  "equest\032\033.CGData.CGStoreItemResponse\"\000\022I\n"
-  "\016StoreCGMapData\022\031.CGData.CGStoreMapReque"
-  "st\032\032.CGData.CGStoreMapResponse\"\000\022N\n\rUplo"
-  "adGidData\022\034.CGData.UploadGidDataRequest\032"
-  "\035.CGData.UploadGidDataResponse\"\000\022Z\n\021Uplo"
-  "adGidBankData\022 .CGData.UploadGidBankData"
-  "Request\032!.CGData.UploadGidBankDataRespon"
-  "se\"\000\022P\n\rUploadMapData\022\034.CGData.UploadMap"
-  "DataRequest\032\035.CGData.UploadMapDataRespon"
-  "se\"\000(\001\022V\n\017DownloadMapData\022\036.CGData.Downl"
-  "oadMapDataRequest\032\037.CGData.DownloadMapDa"
-  "taResponse\"\0000\001\022c\n\024UploadCharcterServer\022#"
-  ".CGData.UploadCharcterServerRequest\032$.CG"
-  "Data.UploadCharcterServerResponse\"\000\022/\n\007P"
-  "ublish\022\021.CGData.StringPub\032\021.CGData.Strin"
-  "gPub\0223\n\tSubscribe\022\021.CGData.StringPub\032\021.C"
-  "GData.StringPub0\001\022c\n\024SelectAccountGidDat"
-  "a\022#.CGData.SelectAccountGidDataRequest\032$"
-  ".CGData.SelectAccountGidDataResponse\"\000\022N"
-  "\n\rSelectGidData\022\034.CGData.SelectGidDataRe"
-  "quest\032\035.CGData.SelectGidDataResponse\"\000\022\\"
-  "\n\024SelectDstTypeGidData\022\034.CGData.SelectGi"
-  "dDataRequest\032$.CGData.SelectAccountGidDa"
-  "taResponse\"\000\022f\n\025SelectCharacterServer\022$."
-  "CGData.SelectCharacterServerRequest\032%.CG"
-  "Data.SelectCharacterServerResponse\"\000\022Q\n\016"
-  "SelectTaskInfo\022\035.CGData.SelectTaskInfoRe"
-  "quest\032\036.CGData.SelectTaskInfoResponse\"\000\022"
-  "`\n\023SelectCharacterData\022\".CGData.SelectCh"
-  "aracterDataRequest\032#.CGData.SelectCharac"
-  "terDataResponse\"\000b\006proto3"
+  "ta\030\005 \001(\014\"\205\002\n\033UploadCharcterServerRequest"
+  "\022\021\n\tchar_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\022\n\n"
+  "\002ip\030\003 \001(\t\022\014\n\004port\030\004 \001(\005\022\016\n\006online\030\005 \001(\005\022"
+  "\017\n\007is_open\030\006 \001(\005\022\031\n\014is_multicast\030\007 \001(\005H\000"
+  "\210\001\001\022\031\n\014multicast_ip\030\010 \001(\tH\001\210\001\001\022\033\n\016multic"
+  "ast_port\030\t \001(\005H\002\210\001\001B\017\n\r_is_multicastB\017\n\r"
+  "_multicast_ipB\021\n\017_multicast_port\"\036\n\034Uplo"
+  "adCharcterServerResponse\"\177\n\020CGAccountGid"
+  "Data\022\017\n\007account\030\001 \001(\t\022\013\n\003gid\030\002 \001(\t\022\021\n\tga"
+  "me_type\030\003 \001(\005\022\022\n\nbig_server\030\004 \001(\005\022\023\n\013ser"
+  "ver_line\030\005 \001(\r\022\021\n\tcharacter\030\006 \001(\005\".\n\033Sel"
+  "ectAccountGidDataRequest\022\017\n\007account\030\001 \001("
+  "\t\"H\n\024SelectGidDataRequest\022\013\n\003gid\030\001 \001(\t\022\021"
+  "\n\trole_type\030\002 \001(\005\022\020\n\010big_line\030\003 \001(\005\"A\n\032S"
+  "electCharacterDataRequest\022\021\n\tchar_name\030\001"
+  " \001(\t\022\020\n\010big_line\030\002 \001(\005\"\320\001\n\033SelectCharact"
+  "erDataResponse\022\026\n\016character_name\030\001 \001(\t\022\020"
+  "\n\010big_line\030\002 \001(\005\022/\n\016character_data\030\003 \001(\013"
+  "2\027.CGData.CGCharacterData\022#\n\010pet_data\030\004 "
+  "\003(\0132\021.CGData.CGPetData\022!\n\005items\030\005 \003(\0132\022."
+  "CGData.CGItemData\022\016\n\006online\030\006 \001(\005\"C\n\034Sel"
+  "ectCharacterServerRequest\022\021\n\tchar_name\030\001"
+  " \001(\t\022\020\n\010big_line\030\002 \001(\005\"\207\002\n\035SelectCharact"
+  "erServerResponse\022\021\n\tchar_name\030\001 \001(\t\022\020\n\010b"
+  "ig_line\030\002 \001(\005\022\n\n\002ip\030\003 \001(\t\022\014\n\004port\030\004 \001(\005\022"
+  "\016\n\006online\030\005 \001(\005\022\017\n\007is_open\030\006 \001(\005\022\031\n\014is_m"
+  "ulticast\030\007 \001(\005H\000\210\001\001\022\031\n\014multicast_ip\030\010 \001("
+  "\tH\001\210\001\001\022\033\n\016multicast_port\030\t \001(\005H\002\210\001\001B\017\n\r_"
+  "is_multicastB\017\n\r_multicast_ipB\021\n\017_multic"
+  "ast_port\"J\n\025SelectTaskInfoRequest\022\021\n\ttas"
+  "k_name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\022\014\n\004line\030\003"
+  " \001(\005\"\335\001\n\026SelectTaskInfoResponse\022\021\n\ttask_"
+  "name\030\001 \001(\t\022\020\n\010big_line\030\002 \001(\005\022\014\n\004line\030\003 \001"
+  "(\005\022\021\n\tnpc_pos_x\030\004 \001(\005\022\021\n\tnpc_pos_y\030\005 \001(\005"
+  "\022\021\n\tlast_time\030\006 \001(\005\022\032\n\022last_map_first_nu"
+  "m\030\007 \001(\005\022\034\n\024last_map_first_width\030\010 \001(\005\022\035\n"
+  "\025last_map_first_height\030\t \001(\005\"N\n\034SelectAc"
+  "countGidDataResponse\022.\n\007gidData\030\001 \003(\0132\035."
+  "CGData.SelectGidDataResponse\"\330\001\n\025SelectG"
+  "idDataResponse\022\013\n\003gid\030\001 \001(\t\022\021\n\trole_type"
+  "\030\002 \001(\005\022\026\n\016character_name\030\003 \001(\t\022/\n\016charac"
+  "ter_data\030\004 \001(\0132\027.CGData.CGCharacterData\022"
+  "#\n\010pet_data\030\005 \003(\0132\021.CGData.CGPetData\022!\n\005"
+  "items\030\006 \003(\0132\022.CGData.CGItemData\022\016\n\006onlin"
+  "e\030\007 \001(\005\"\212\001\n\nCGBaseData\022\014\n\004name\030\001 \001(\t\022\n\n\002"
+  "hp\030\002 \001(\005\022\n\n\002mp\030\003 \001(\005\022\r\n\005maxhp\030\004 \001(\005\022\r\n\005m"
+  "axmp\030\005 \001(\005\022\r\n\005level\030\006 \001(\005\022\n\n\002xp\030\007 \001(\005\022\r\n"
+  "\005maxxp\030\010 \001(\005\022\016\n\006health\030\t \001(\005\"\340\001\n\017CGSkill"
+  "BaseData\022\014\n\004name\030\001 \001(\t\022\014\n\004info\030\002 \001(\t\022\n\n\002"
+  "id\030\003 \001(\005\022\014\n\004cost\030\004 \001(\005\022\r\n\005flags\030\005 \001(\005\022\r\n"
+  "\005index\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\020\n\010maxLevel\030"
+  "\010 \001(\005\022\021\n\tavailable\030\t \001(\010\022\n\n\002xp\030\n \001(\005\022\r\n\005"
+  "maxxp\030\013 \001(\005\022*\n\tsubskills\030\014 \003(\0132\027.CGData."
+  "CGSkillBaseData\"\317\004\n\016CGAttrBaseData\022\025\n\rpo"
+  "ints_remain\030\001 \001(\005\022\030\n\020points_endurance\030\002 "
+  "\001(\005\022\027\n\017points_strength\030\003 \001(\005\022\026\n\016points_d"
+  "efense\030\004 \001(\005\022\026\n\016points_agility\030\005 \001(\005\022\026\n\016"
+  "points_magical\030\006 \001(\005\022\024\n\014value_attack\030\007 \001"
+  "(\005\022\027\n\017value_defensive\030\010 \001(\005\022\025\n\rvalue_agi"
+  "lity\030\t \001(\005\022\024\n\014value_spirit\030\n \001(\005\022\026\n\016valu"
+  "e_recovery\030\013 \001(\005\022\025\n\rresist_poison\030\014 \001(\005\022"
+  "\024\n\014resist_sleep\030\r \001(\005\022\025\n\rresist_medusa\030\016"
+  " \001(\005\022\024\n\014resist_drunk\030\017 \001(\005\022\024\n\014resist_cha"
+  "os\030\020 \001(\005\022\025\n\rresist_forget\030\021 \001(\005\022\024\n\014fix_c"
+  "ritical\030\022 \001(\005\022\026\n\016fix_strikeback\030\023 \001(\005\022\025\n"
+  "\rfix_accurancy\030\024 \001(\005\022\021\n\tfix_dodge\030\025 \001(\005\022"
+  "\025\n\relement_earth\030\026 \001(\005\022\025\n\relement_water\030"
+  "\027 \001(\005\022\024\n\014element_fire\030\030 \001(\005\022\024\n\014element_w"
+  "ind\030\031 \001(\005\"\255\001\n\023CGCharacterPersDesc\022\022\n\ncha"
+  "ngeBits\030\001 \001(\005\022\020\n\010sellIcon\030\002 \001(\005\022\022\n\nsellS"
+  "tring\030\003 \001(\t\022\017\n\007buyIcon\030\004 \001(\005\022\021\n\tbuyStrin"
+  "g\030\005 \001(\t\022\020\n\010wantIcon\030\006 \001(\005\022\022\n\nwantString\030"
+  "\007 \001(\t\022\022\n\ndescString\030\010 \001(\t\"\217\001\n\rCGGameSysT"
+  "ime\022\r\n\005years\030\001 \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004day"
+  "s\030\003 \001(\005\022\r\n\005hours\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004"
+  "secs\030\006 \001(\005\022\022\n\nlocal_time\030\007 \001(\005\022\023\n\013server"
+  "_time\030\010 \001(\005\"\274\007\n\017CGCharacterData\022%\n\tbase_"
+  "data\030\001 \001(\0132\022.CGData.CGBaseData\022\r\n\005souls\030"
+  "\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004gold\030\004 \001(\005\022\020\n\010im"
+  "age_id\030\005 \001(\005\022\r\n\005score\030\006 \001(\005\022\022\n\nskillslot"
+  "s\030\007 \001(\005\022\021\n\tuse_title\030\010 \001(\005\022\021\n\tavatar_id\030"
+  "\t \001(\005\022\016\n\006unitid\030\n \001(\005\022\r\n\005petid\030\013 \001(\005\022\021\n\t"
+  "petriding\030\014 \001(\010\022\021\n\tdirection\030\r \001(\005\022\022\n\npu"
+  "nchclock\030\016 \001(\005\022\027\n\017usingpunchclock\030\017 \001(\010\022"
+  "\013\n\003job\030\020 \001(\t\022\016\n\006titles\030\021 \003(\t\022\026\n\016manu_end"
+  "urance\030\022 \001(\005\022\025\n\rmanu_skillful\030\023 \001(\005\022\031\n\021m"
+  "anu_intelligence\030\024 \001(\005\022\026\n\016value_charisma"
+  "\030\025 \001(\005\022\t\n\001x\030\026 \001(\005\022\t\n\001y\030\027 \001(\005\022\020\n\010map_name"
+  "\030\030 \001(\t\022\022\n\nmap_number\030\031 \001(\005\022\023\n\013server_lin"
+  "e\030\032 \001(\005\022&\n\006detail\030\033 \001(\0132\026.CGData.CGAttrB"
+  "aseData\022&\n\005skill\030\034 \003(\0132\027.CGData.CGSkillB"
+  "aseData\022\014\n\004nick\030\035 \001(\t\022.\n\tpers_desc\030\036 \001(\013"
+  "2\033.CGData.CGCharacterPersDesc\022\027\n\017battle_"
+  "position\030\037 \001(\005\022\021\n\tbank_gold\030  \001(\005\022\025\n\010big"
+  "_line\030! \001(\005H\000\210\001\001\022-\n\tgame_time\030\" \001(\0132\025.CG"
+  "Data.CGGameSysTimeH\001\210\001\001\022\030\n\013game_status\030#"
+  " \001(\005H\002\210\001\001\022\031\n\014world_status\030$ \001(\005H\003\210\001\001\022\025\n\010"
+  "game_pid\030% \001(\005H\004\210\001\001\022\026\n\tgame_port\030& \001(\005H\005"
+  "\210\001\001B\013\n\t_big_lineB\014\n\n_game_timeB\016\n\014_game_"
+  "statusB\017\n\r_world_statusB\013\n\t_game_pidB\014\n\n"
+  "_game_port\"\337\002\n\tCGPetData\022%\n\tbase_data\030\001 "
+  "\001(\0132\022.CGData.CGBaseData\022\r\n\005index\030\002 \001(\005\022\r"
+  "\n\005flags\030\003 \001(\005\022\024\n\014battle_flags\030\004 \001(\005\022\020\n\010l"
+  "oyality\030\005 \001(\005\022\026\n\016default_battle\030\006 \001(\010\022\r\n"
+  "\005state\030\007 \001(\005\022\r\n\005grade\030\010 \001(\005\022\024\n\014lossMinGr"
+  "ade\030\t \001(\005\022\024\n\014lossMaxGrade\030\n \001(\005\022&\n\005skill"
+  "\030\013 \003(\0132\027.CGData.CGSkillBaseData\022&\n\006detai"
+  "l\030\014 \001(\0132\026.CGData.CGAttrBaseData\022\021\n\treal_"
+  "name\030\r \001(\t\022\014\n\004race\030\016 \001(\005\022\022\n\nskillslots\030\017"
+  " \001(\005\"\244\001\n\nCGItemData\022\020\n\010image_id\030\001 \001(\005\022\017\n"
+  "\007item_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001"
+  "(\005\022\r\n\005level\030\005 \001(\005\022\014\n\004attr\030\006 \001(\t\022\014\n\004info\030"
+  "\007 \001(\t\022\013\n\003pos\030\010 \001(\005\022\020\n\010assessed\030\t \001(\010\022\r\n\005"
+  "count\030\n \001(\005\"9\n\021CGStoreMapRequest\022\022\n\nmap_"
+  "number\030\001 \001(\005\022\020\n\010map_name\030\002 \001(\t\"\024\n\022CGStor"
+  "eMapResponse\"\022\n\020CGMapDataRequest\"4\n\021CGMa"
+  "pDataResponse\022\037\n\004maps\030\001 \003(\0132\021.CGData.CGM"
+  "apData\"Z\n\tCGMapData\022\n\n\002id\030\001 \001(\004\022\022\n\nmap_n"
+  "umber\030\002 \001(\005\022\020\n\010map_name\030\003 \001(\t\022\014\n\004desc\030\004 "
+  "\001(\t\022\r\n\005often\030\005 \001(\005\"\027\n\025CGPetGradeCalcRequ"
+  "est\"A\n\026CGPetGradeCalcResponse\022\'\n\003pet\030\001 \003"
+  "(\0132\032.CGData.CGPetGradeCalcData\"\267\003\n\022CGPet"
+  "GradeCalcData\022\n\n\002id\030\001 \001(\004\022\016\n\006number\030\002 \001("
+  "\005\022\014\n\004name\030\003 \001(\t\022\020\n\010raceType\030\004 \001(\005\022\024\n\014rac"
+  "eTypeName\030\005 \001(\t\022\016\n\006baseBP\030\006 \001(\001\022\022\n\ntotal"
+  "Grade\030\007 \001(\005\022\023\n\013bestBPGrade\030\010 \003(\001\022\021\n\tcan_"
+  "catch\030\t \001(\005\022\021\n\tcard_type\030\n \001(\005\022\020\n\010image_"
+  "id\030\013 \001(\005\022\026\n\016rate_endurance\030\014 \001(\005\022\025\n\rrate"
+  "_strength\030\r \001(\005\022\024\n\014rate_defense\030\016 \001(\005\022\024\n"
+  "\014rate_agility\030\017 \001(\005\022\024\n\014rate_magical\030\020 \001("
+  "\005\022\025\n\relement_earth\030\021 \001(\005\022\025\n\relement_wate"
+  "r\030\022 \001(\005\022\024\n\014element_fire\030\023 \001(\005\022\024\n\014element"
+  "_wind\030\024 \001(\005\022\023\n\013skill_slots\030\025 \001(\005\" \n\rCGIt"
+  "emRequest\022\017\n\007item_id\030\001 \001(\005\"\300\001\n\016CGItemRes"
+  "ponse\022\n\n\002id\030\001 \001(\004\022\017\n\007item_id\030\002 \001(\005\022\014\n\004na"
+  "me\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\022\r\n\005price\030\005 \001(\005\022\017\n"
+  "\007maxpile\030\006 \001(\005\022\r\n\005level\030\007 \001(\005\022\026\n\016sellLim"
+  "itCount\030\010 \001(\005\022\021\n\tattribute\030\t \001(\t\022\014\n\004desc"
+  "\030\n \001(\t\022\r\n\005exist\030\013 \001(\010\"\273\001\n\022CGStoreItemReq"
+  "uest\022\017\n\007item_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004t"
+  "ype\030\003 \001(\005\022\r\n\005price\030\004 \001(\005\022\017\n\007maxpile\030\005 \001("
+  "\005\022\r\n\005level\030\006 \001(\005\022\026\n\016sellLimitCount\030\007 \001(\005"
+  "\022\021\n\tattribute\030\010 \001(\t\022\014\n\004desc\030\t \001(\t\022\020\n\010ass"
+  "essed\030\n \001(\010\"4\n\023CGStoreItemResponse\022\n\n\002id"
+  "\030\001 \001(\005\022\021\n\tmaybeName\030\002 \001(\t\"\014\n\nCGVoidData\""
+  "\031\n\nCGBoolData\022\013\n\003val\030\001 \001(\010\"\030\n\tCGIntData\022"
+  "\013\n\003val\030\001 \001(\005\"\223\001\n\021CGSysTimeResponse\022\r\n\005ye"
+  "ars\030\001 \001(\005\022\r\n\005month\030\002 \001(\005\022\014\n\004days\030\003 \001(\005\022\r"
+  "\n\005hours\030\004 \001(\005\022\014\n\004mins\030\005 \001(\005\022\014\n\004secs\030\006 \001("
+  "\005\022\022\n\nlocal_time\030\007 \001(\005\022\023\n\013server_time\030\010 \001"
+  "(\005\"8\n\027CGPlayerFlagEnabledData\022\r\n\005index\030\001"
+  " \001(\005\022\016\n\006enable\030\002 \001(\0102\237\004\n\014MLRpcService\022:\n"
+  "\nInitialize\022\030.CGData.CGGmeTypeRequest\032\022."
+  "CGData.CGVoidData\0221\n\007Connect\022\022.CGData.CG"
+  "VoidData\032\022.CGData.CGBoolData\0221\n\010IsInGame"
+  "\022\022.CGData.CGVoidData\032\021.CGData.CGIntData\022"
+  "7\n\016GetWorldStatus\022\022.CGData.CGVoidData\032\021."
+  "CGData.CGIntData\0226\n\rGetGameStatus\022\022.CGDa"
+  "ta.CGVoidData\032\021.CGData.CGIntData\0224\n\013GetB"
+  "GMIndex\022\022.CGData.CGVoidData\032\021.CGData.CGI"
+  "ntData\022;\n\nGetSysTime\022\022.CGData.CGVoidData"
+  "\032\031.CGData.CGSysTimeResponse\022<\n\rGetPlayer"
+  "Info\022\022.CGData.CGVoidData\032\027.CGData.CGChar"
+  "acterData\022K\n\024SetPlayerFlagEnabled\022\037.CGDa"
+  "ta.CGPlayerFlagEnabledData\032\022.CGData.CGVo"
+  "idData2\233\014\n\014CGRpcService\022>\n\rGetCGItemData"
+  "\022\025.CGData.CGItemRequest\032\026.CGData.CGItemR"
+  "esponse\0229\n\017GetConnectState\022\022.CGData.CGVo"
+  "idData\032\022.CGData.CGVoidData\022V\n\023GetPetGrad"
+  "eCalcData\022\035.CGData.CGPetGradeCalcRequest"
+  "\032\036.CGData.CGPetGradeCalcResponse\"\000\022N\n\025Ge"
+  "tServerStoreMapData\022\030.CGData.CGMapDataRe"
+  "quest\032\031.CGData.CGMapDataResponse\"\000\022L\n\017St"
+  "oreCGItemData\022\032.CGData.CGStoreItemReques"
+  "t\032\033.CGData.CGStoreItemResponse\"\000\022I\n\016Stor"
+  "eCGMapData\022\031.CGData.CGStoreMapRequest\032\032."
+  "CGData.CGStoreMapResponse\"\000\022N\n\rUploadGid"
+  "Data\022\034.CGData.UploadGidDataRequest\032\035.CGD"
+  "ata.UploadGidDataResponse\"\000\022Z\n\021UploadGid"
+  "BankData\022 .CGData.UploadGidBankDataReque"
+  "st\032!.CGData.UploadGidBankDataResponse\"\000\022"
+  "P\n\rUploadMapData\022\034.CGData.UploadMapDataR"
+  "equest\032\035.CGData.UploadMapDataResponse\"\000("
+  "\001\022V\n\017DownloadMapData\022\036.CGData.DownloadMa"
+  "pDataRequest\032\037.CGData.DownloadMapDataRes"
+  "ponse\"\0000\001\022c\n\024UploadCharcterServer\022#.CGDa"
+  "ta.UploadCharcterServerRequest\032$.CGData."
+  "UploadCharcterServerResponse\"\000\022/\n\007Publis"
+  "h\022\021.CGData.StringPub\032\021.CGData.StringPub\022"
+  "3\n\tSubscribe\022\021.CGData.StringPub\032\021.CGData"
+  ".StringPub0\001\022c\n\024SelectAccountGidData\022#.C"
+  "GData.SelectAccountGidDataRequest\032$.CGDa"
+  "ta.SelectAccountGidDataResponse\"\000\022N\n\rSel"
+  "ectGidData\022\034.CGData.SelectGidDataRequest"
+  "\032\035.CGData.SelectGidDataResponse\"\000\022\\\n\024Sel"
+  "ectDstTypeGidData\022\034.CGData.SelectGidData"
+  "Request\032$.CGData.SelectAccountGidDataRes"
+  "ponse\"\000\022f\n\025SelectCharacterServer\022$.CGDat"
+  "a.SelectCharacterServerRequest\032%.CGData."
+  "SelectCharacterServerResponse\"\000\022Q\n\016Selec"
+  "tTaskInfo\022\035.CGData.SelectTaskInfoRequest"
+  "\032\036.CGData.SelectTaskInfoResponse\"\000\022`\n\023Se"
+  "lectCharacterData\022\".CGData.SelectCharact"
+  "erDataRequest\032#.CGData.SelectCharacterDa"
+  "taResponse\"\000b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_CGData_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_CGData_2eproto = {
-  false, false, 8385, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
-  &descriptor_table_CGData_2eproto_once, nullptr, 0, 47,
+  false, false, 9060, descriptor_table_protodef_CGData_2eproto, "CGData.proto", 
+  &descriptor_table_CGData_2eproto_once, nullptr, 0, 48,
   schemas, file_default_instances, TableStruct_CGData_2eproto::offsets,
   file_level_metadata_CGData_2eproto, file_level_enum_descriptors_CGData_2eproto, file_level_service_descriptors_CGData_2eproto,
 };
@@ -4307,6 +4407,16 @@ void DownloadMapDataResponse::InternalSwap(DownloadMapDataResponse* other) {
 
 class UploadCharcterServerRequest::_Internal {
  public:
+  using HasBits = decltype(std::declval<UploadCharcterServerRequest>()._has_bits_);
+  static void set_has_is_multicast(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static void set_has_multicast_ip(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_multicast_port(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
 };
 
 UploadCharcterServerRequest::UploadCharcterServerRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -4319,7 +4429,8 @@ UploadCharcterServerRequest::UploadCharcterServerRequest(::PROTOBUF_NAMESPACE_ID
   // @@protoc_insertion_point(arena_constructor:CGData.UploadCharcterServerRequest)
 }
 UploadCharcterServerRequest::UploadCharcterServerRequest(const UploadCharcterServerRequest& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   char_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_char_name().empty()) {
@@ -4331,19 +4442,25 @@ UploadCharcterServerRequest::UploadCharcterServerRequest(const UploadCharcterSer
     ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ip(), 
       GetArenaForAllocation());
   }
+  multicast_ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_multicast_ip()) {
+    multicast_ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_multicast_ip(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&big_line_, &from.big_line_,
-    static_cast<size_t>(reinterpret_cast<char*>(&online_) -
-    reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
+    static_cast<size_t>(reinterpret_cast<char*>(&multicast_port_) -
+    reinterpret_cast<char*>(&big_line_)) + sizeof(multicast_port_));
   // @@protoc_insertion_point(copy_constructor:CGData.UploadCharcterServerRequest)
 }
 
 inline void UploadCharcterServerRequest::SharedCtor() {
 char_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+multicast_ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&big_line_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&online_) -
-    reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&multicast_port_) -
+    reinterpret_cast<char*>(&big_line_)) + sizeof(multicast_port_));
 }
 
 UploadCharcterServerRequest::~UploadCharcterServerRequest() {
@@ -4357,6 +4474,7 @@ inline void UploadCharcterServerRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   char_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  multicast_ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void UploadCharcterServerRequest::ArenaDtor(void* object) {
@@ -4377,14 +4495,25 @@ void UploadCharcterServerRequest::Clear() {
 
   char_name_.ClearToEmpty();
   ip_.ClearToEmpty();
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    multicast_ip_.ClearNonDefaultToEmpty();
+  }
   ::memset(&big_line_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&online_) -
-      reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
+      reinterpret_cast<char*>(&is_open_) -
+      reinterpret_cast<char*>(&big_line_)) + sizeof(is_open_));
+  if (cached_has_bits & 0x00000006u) {
+    ::memset(&is_multicast_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&multicast_port_) -
+        reinterpret_cast<char*>(&is_multicast_)) + sizeof(multicast_port_));
+  }
+  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* UploadCharcterServerRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -4428,6 +4557,38 @@ const char* UploadCharcterServerRequest::_InternalParse(const char* ptr, ::PROTO
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // int32 is_open = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          is_open_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 is_multicast = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          _Internal::set_has_is_multicast(&has_bits);
+          is_multicast_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional string multicast_ip = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          auto str = _internal_mutable_multicast_ip();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.UploadCharcterServerRequest.multicast_ip"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 multicast_port = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
+          _Internal::set_has_multicast_port(&has_bits);
+          multicast_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -4444,6 +4605,7 @@ const char* UploadCharcterServerRequest::_InternalParse(const char* ptr, ::PROTO
     }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -4495,6 +4657,34 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_online(), target);
   }
 
+  // int32 is_open = 6;
+  if (this->_internal_is_open() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->_internal_is_open(), target);
+  }
+
+  // optional int32 is_multicast = 7;
+  if (_internal_has_is_multicast()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_is_multicast(), target);
+  }
+
+  // optional string multicast_ip = 8;
+  if (_internal_has_multicast_ip()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_multicast_ip().data(), static_cast<int>(this->_internal_multicast_ip().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.UploadCharcterServerRequest.multicast_ip");
+    target = stream->WriteStringMaybeAliased(
+        8, this->_internal_multicast_ip(), target);
+  }
+
+  // optional int32 multicast_port = 9;
+  if (_internal_has_multicast_port()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(9, this->_internal_multicast_port(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4525,6 +4715,14 @@ size_t UploadCharcterServerRequest::ByteSizeLong() const {
         this->_internal_ip());
   }
 
+  // optional string multicast_ip = 8;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_multicast_ip());
+  }
+
   // int32 big_line = 2;
   if (this->_internal_big_line() != 0) {
     total_size += 1 +
@@ -4546,6 +4744,29 @@ size_t UploadCharcterServerRequest::ByteSizeLong() const {
         this->_internal_online());
   }
 
+  // int32 is_open = 6;
+  if (this->_internal_is_open() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_is_open());
+  }
+
+  if (cached_has_bits & 0x00000006u) {
+    // optional int32 is_multicast = 7;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_is_multicast());
+    }
+
+    // optional int32 multicast_port = 9;
+    if (cached_has_bits & 0x00000004u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_multicast_port());
+    }
+
+  }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -4580,6 +4801,9 @@ void UploadCharcterServerRequest::MergeFrom(const UploadCharcterServerRequest& f
   if (!from._internal_ip().empty()) {
     _internal_set_ip(from._internal_ip());
   }
+  if (from._internal_has_multicast_ip()) {
+    _internal_set_multicast_ip(from._internal_multicast_ip());
+  }
   if (from._internal_big_line() != 0) {
     _internal_set_big_line(from._internal_big_line());
   }
@@ -4588,6 +4812,19 @@ void UploadCharcterServerRequest::MergeFrom(const UploadCharcterServerRequest& f
   }
   if (from._internal_online() != 0) {
     _internal_set_online(from._internal_online());
+  }
+  if (from._internal_is_open() != 0) {
+    _internal_set_is_open(from._internal_is_open());
+  }
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000006u) {
+    if (cached_has_bits & 0x00000002u) {
+      is_multicast_ = from.is_multicast_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      multicast_port_ = from.multicast_port_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -4606,6 +4843,7 @@ bool UploadCharcterServerRequest::IsInitialized() const {
 void UploadCharcterServerRequest::InternalSwap(UploadCharcterServerRequest* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &char_name_, GetArenaForAllocation(),
@@ -4616,9 +4854,14 @@ void UploadCharcterServerRequest::InternalSwap(UploadCharcterServerRequest* othe
       &ip_, GetArenaForAllocation(),
       &other->ip_, other->GetArenaForAllocation()
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &multicast_ip_, GetArenaForAllocation(),
+      &other->multicast_ip_, other->GetArenaForAllocation()
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(UploadCharcterServerRequest, online_)
-      + sizeof(UploadCharcterServerRequest::online_)
+      PROTOBUF_FIELD_OFFSET(UploadCharcterServerRequest, multicast_port_)
+      + sizeof(UploadCharcterServerRequest::multicast_port_)
       - PROTOBUF_FIELD_OFFSET(UploadCharcterServerRequest, big_line_)>(
           reinterpret_cast<char*>(&big_line_),
           reinterpret_cast<char*>(&other->big_line_));
@@ -6419,6 +6662,16 @@ void SelectCharacterServerRequest::InternalSwap(SelectCharacterServerRequest* ot
 
 class SelectCharacterServerResponse::_Internal {
  public:
+  using HasBits = decltype(std::declval<SelectCharacterServerResponse>()._has_bits_);
+  static void set_has_is_multicast(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static void set_has_multicast_ip(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_multicast_port(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
 };
 
 SelectCharacterServerResponse::SelectCharacterServerResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -6431,7 +6684,8 @@ SelectCharacterServerResponse::SelectCharacterServerResponse(::PROTOBUF_NAMESPAC
   // @@protoc_insertion_point(arena_constructor:CGData.SelectCharacterServerResponse)
 }
 SelectCharacterServerResponse::SelectCharacterServerResponse(const SelectCharacterServerResponse& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   char_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_char_name().empty()) {
@@ -6443,19 +6697,25 @@ SelectCharacterServerResponse::SelectCharacterServerResponse(const SelectCharact
     ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ip(), 
       GetArenaForAllocation());
   }
+  multicast_ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_multicast_ip()) {
+    multicast_ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_multicast_ip(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&big_line_, &from.big_line_,
-    static_cast<size_t>(reinterpret_cast<char*>(&online_) -
-    reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
+    static_cast<size_t>(reinterpret_cast<char*>(&multicast_port_) -
+    reinterpret_cast<char*>(&big_line_)) + sizeof(multicast_port_));
   // @@protoc_insertion_point(copy_constructor:CGData.SelectCharacterServerResponse)
 }
 
 inline void SelectCharacterServerResponse::SharedCtor() {
 char_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+multicast_ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&big_line_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&online_) -
-    reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&multicast_port_) -
+    reinterpret_cast<char*>(&big_line_)) + sizeof(multicast_port_));
 }
 
 SelectCharacterServerResponse::~SelectCharacterServerResponse() {
@@ -6469,6 +6729,7 @@ inline void SelectCharacterServerResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   char_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  multicast_ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void SelectCharacterServerResponse::ArenaDtor(void* object) {
@@ -6489,14 +6750,25 @@ void SelectCharacterServerResponse::Clear() {
 
   char_name_.ClearToEmpty();
   ip_.ClearToEmpty();
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    multicast_ip_.ClearNonDefaultToEmpty();
+  }
   ::memset(&big_line_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&online_) -
-      reinterpret_cast<char*>(&big_line_)) + sizeof(online_));
+      reinterpret_cast<char*>(&is_open_) -
+      reinterpret_cast<char*>(&big_line_)) + sizeof(is_open_));
+  if (cached_has_bits & 0x00000006u) {
+    ::memset(&is_multicast_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&multicast_port_) -
+        reinterpret_cast<char*>(&is_multicast_)) + sizeof(multicast_port_));
+  }
+  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* SelectCharacterServerResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -6540,6 +6812,38 @@ const char* SelectCharacterServerResponse::_InternalParse(const char* ptr, ::PRO
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // int32 is_open = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          is_open_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 is_multicast = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          _Internal::set_has_is_multicast(&has_bits);
+          is_multicast_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional string multicast_ip = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          auto str = _internal_mutable_multicast_ip();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "CGData.SelectCharacterServerResponse.multicast_ip"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 multicast_port = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
+          _Internal::set_has_multicast_port(&has_bits);
+          multicast_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -6556,6 +6860,7 @@ const char* SelectCharacterServerResponse::_InternalParse(const char* ptr, ::PRO
     }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -6607,6 +6912,34 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_online(), target);
   }
 
+  // int32 is_open = 6;
+  if (this->_internal_is_open() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->_internal_is_open(), target);
+  }
+
+  // optional int32 is_multicast = 7;
+  if (_internal_has_is_multicast()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_is_multicast(), target);
+  }
+
+  // optional string multicast_ip = 8;
+  if (_internal_has_multicast_ip()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_multicast_ip().data(), static_cast<int>(this->_internal_multicast_ip().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CGData.SelectCharacterServerResponse.multicast_ip");
+    target = stream->WriteStringMaybeAliased(
+        8, this->_internal_multicast_ip(), target);
+  }
+
+  // optional int32 multicast_port = 9;
+  if (_internal_has_multicast_port()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(9, this->_internal_multicast_port(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6637,6 +6970,14 @@ size_t SelectCharacterServerResponse::ByteSizeLong() const {
         this->_internal_ip());
   }
 
+  // optional string multicast_ip = 8;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_multicast_ip());
+  }
+
   // int32 big_line = 2;
   if (this->_internal_big_line() != 0) {
     total_size += 1 +
@@ -6658,6 +6999,29 @@ size_t SelectCharacterServerResponse::ByteSizeLong() const {
         this->_internal_online());
   }
 
+  // int32 is_open = 6;
+  if (this->_internal_is_open() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_is_open());
+  }
+
+  if (cached_has_bits & 0x00000006u) {
+    // optional int32 is_multicast = 7;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_is_multicast());
+    }
+
+    // optional int32 multicast_port = 9;
+    if (cached_has_bits & 0x00000004u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_multicast_port());
+    }
+
+  }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -6692,6 +7056,9 @@ void SelectCharacterServerResponse::MergeFrom(const SelectCharacterServerRespons
   if (!from._internal_ip().empty()) {
     _internal_set_ip(from._internal_ip());
   }
+  if (from._internal_has_multicast_ip()) {
+    _internal_set_multicast_ip(from._internal_multicast_ip());
+  }
   if (from._internal_big_line() != 0) {
     _internal_set_big_line(from._internal_big_line());
   }
@@ -6700,6 +7067,19 @@ void SelectCharacterServerResponse::MergeFrom(const SelectCharacterServerRespons
   }
   if (from._internal_online() != 0) {
     _internal_set_online(from._internal_online());
+  }
+  if (from._internal_is_open() != 0) {
+    _internal_set_is_open(from._internal_is_open());
+  }
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000006u) {
+    if (cached_has_bits & 0x00000002u) {
+      is_multicast_ = from.is_multicast_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      multicast_port_ = from.multicast_port_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -6718,6 +7098,7 @@ bool SelectCharacterServerResponse::IsInitialized() const {
 void SelectCharacterServerResponse::InternalSwap(SelectCharacterServerResponse* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &char_name_, GetArenaForAllocation(),
@@ -6728,9 +7109,14 @@ void SelectCharacterServerResponse::InternalSwap(SelectCharacterServerResponse* 
       &ip_, GetArenaForAllocation(),
       &other->ip_, other->GetArenaForAllocation()
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &multicast_ip_, GetArenaForAllocation(),
+      &other->multicast_ip_, other->GetArenaForAllocation()
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SelectCharacterServerResponse, online_)
-      + sizeof(SelectCharacterServerResponse::online_)
+      PROTOBUF_FIELD_OFFSET(SelectCharacterServerResponse, multicast_port_)
+      + sizeof(SelectCharacterServerResponse::multicast_port_)
       - PROTOBUF_FIELD_OFFSET(SelectCharacterServerResponse, big_line_)>(
           reinterpret_cast<char*>(&big_line_),
           reinterpret_cast<char*>(&other->big_line_));
@@ -10082,6 +10468,364 @@ void CGCharacterPersDesc::InternalSwap(CGCharacterPersDesc* other) {
 
 // ===================================================================
 
+class CGGameSysTime::_Internal {
+ public:
+};
+
+CGGameSysTime::CGGameSysTime(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:CGData.CGGameSysTime)
+}
+CGGameSysTime::CGGameSysTime(const CGGameSysTime& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&years_, &from.years_,
+    static_cast<size_t>(reinterpret_cast<char*>(&server_time_) -
+    reinterpret_cast<char*>(&years_)) + sizeof(server_time_));
+  // @@protoc_insertion_point(copy_constructor:CGData.CGGameSysTime)
+}
+
+inline void CGGameSysTime::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&years_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&server_time_) -
+    reinterpret_cast<char*>(&years_)) + sizeof(server_time_));
+}
+
+CGGameSysTime::~CGGameSysTime() {
+  // @@protoc_insertion_point(destructor:CGData.CGGameSysTime)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void CGGameSysTime::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void CGGameSysTime::ArenaDtor(void* object) {
+  CGGameSysTime* _this = reinterpret_cast< CGGameSysTime* >(object);
+  (void)_this;
+}
+void CGGameSysTime::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void CGGameSysTime::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void CGGameSysTime::Clear() {
+// @@protoc_insertion_point(message_clear_start:CGData.CGGameSysTime)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&years_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&server_time_) -
+      reinterpret_cast<char*>(&years_)) + sizeof(server_time_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CGGameSysTime::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 years = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          years_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 month = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          month_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 days = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          days_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 hours = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          hours_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 mins = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          mins_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 secs = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          secs_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 local_time = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          local_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 server_time = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 64)) {
+          server_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* CGGameSysTime::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CGData.CGGameSysTime)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 years = 1;
+  if (this->_internal_years() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_years(), target);
+  }
+
+  // int32 month = 2;
+  if (this->_internal_month() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_month(), target);
+  }
+
+  // int32 days = 3;
+  if (this->_internal_days() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_days(), target);
+  }
+
+  // int32 hours = 4;
+  if (this->_internal_hours() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_hours(), target);
+  }
+
+  // int32 mins = 5;
+  if (this->_internal_mins() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_mins(), target);
+  }
+
+  // int32 secs = 6;
+  if (this->_internal_secs() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->_internal_secs(), target);
+  }
+
+  // int32 local_time = 7;
+  if (this->_internal_local_time() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_local_time(), target);
+  }
+
+  // int32 server_time = 8;
+  if (this->_internal_server_time() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(8, this->_internal_server_time(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CGData.CGGameSysTime)
+  return target;
+}
+
+size_t CGGameSysTime::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CGData.CGGameSysTime)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 years = 1;
+  if (this->_internal_years() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_years());
+  }
+
+  // int32 month = 2;
+  if (this->_internal_month() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_month());
+  }
+
+  // int32 days = 3;
+  if (this->_internal_days() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_days());
+  }
+
+  // int32 hours = 4;
+  if (this->_internal_hours() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_hours());
+  }
+
+  // int32 mins = 5;
+  if (this->_internal_mins() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_mins());
+  }
+
+  // int32 secs = 6;
+  if (this->_internal_secs() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_secs());
+  }
+
+  // int32 local_time = 7;
+  if (this->_internal_local_time() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_local_time());
+  }
+
+  // int32 server_time = 8;
+  if (this->_internal_server_time() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_server_time());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CGGameSysTime::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    CGGameSysTime::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CGGameSysTime::GetClassData() const { return &_class_data_; }
+
+void CGGameSysTime::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
+  static_cast<CGGameSysTime *>(to)->MergeFrom(
+      static_cast<const CGGameSysTime &>(from));
+}
+
+
+void CGGameSysTime::MergeFrom(const CGGameSysTime& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CGData.CGGameSysTime)
+  GOOGLE_DCHECK_NE(&from, this);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_years() != 0) {
+    _internal_set_years(from._internal_years());
+  }
+  if (from._internal_month() != 0) {
+    _internal_set_month(from._internal_month());
+  }
+  if (from._internal_days() != 0) {
+    _internal_set_days(from._internal_days());
+  }
+  if (from._internal_hours() != 0) {
+    _internal_set_hours(from._internal_hours());
+  }
+  if (from._internal_mins() != 0) {
+    _internal_set_mins(from._internal_mins());
+  }
+  if (from._internal_secs() != 0) {
+    _internal_set_secs(from._internal_secs());
+  }
+  if (from._internal_local_time() != 0) {
+    _internal_set_local_time(from._internal_local_time());
+  }
+  if (from._internal_server_time() != 0) {
+    _internal_set_server_time(from._internal_server_time());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CGGameSysTime::CopyFrom(const CGGameSysTime& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CGData.CGGameSysTime)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CGGameSysTime::IsInitialized() const {
+  return true;
+}
+
+void CGGameSysTime::InternalSwap(CGGameSysTime* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CGGameSysTime, server_time_)
+      + sizeof(CGGameSysTime::server_time_)
+      - PROTOBUF_FIELD_OFFSET(CGGameSysTime, years_)>(
+          reinterpret_cast<char*>(&years_),
+          reinterpret_cast<char*>(&other->years_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CGGameSysTime::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
+      file_level_metadata_CGData_2eproto[27]);
+}
+
+// ===================================================================
+
 class CGCharacterData::_Internal {
  public:
   using HasBits = decltype(std::declval<CGCharacterData>()._has_bits_);
@@ -10089,7 +10833,23 @@ class CGCharacterData::_Internal {
   static const ::CGData::CGAttrBaseData& detail(const CGCharacterData* msg);
   static const ::CGData::CGCharacterPersDesc& pers_desc(const CGCharacterData* msg);
   static void set_has_big_line(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static const ::CGData::CGGameSysTime& game_time(const CGCharacterData* msg);
+  static void set_has_game_time(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
+  }
+  static void set_has_game_status(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
+  static void set_has_world_status(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
+  static void set_has_game_pid(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
+  static void set_has_game_port(HasBits* has_bits) {
+    (*has_bits)[0] |= 32u;
   }
 };
 
@@ -10104,6 +10864,10 @@ CGCharacterData::_Internal::detail(const CGCharacterData* msg) {
 const ::CGData::CGCharacterPersDesc&
 CGCharacterData::_Internal::pers_desc(const CGCharacterData* msg) {
   return *msg->pers_desc_;
+}
+const ::CGData::CGGameSysTime&
+CGCharacterData::_Internal::game_time(const CGCharacterData* msg) {
+  return *msg->game_time_;
 }
 CGCharacterData::CGCharacterData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -10152,9 +10916,14 @@ CGCharacterData::CGCharacterData(const CGCharacterData& from)
   } else {
     pers_desc_ = nullptr;
   }
+  if (from._internal_has_game_time()) {
+    game_time_ = new ::CGData::CGGameSysTime(*from.game_time_);
+  } else {
+    game_time_ = nullptr;
+  }
   ::memcpy(&souls_, &from.souls_,
-    static_cast<size_t>(reinterpret_cast<char*>(&big_line_) -
-    reinterpret_cast<char*>(&souls_)) + sizeof(big_line_));
+    static_cast<size_t>(reinterpret_cast<char*>(&game_port_) -
+    reinterpret_cast<char*>(&souls_)) + sizeof(game_port_));
   // @@protoc_insertion_point(copy_constructor:CGData.CGCharacterData)
 }
 
@@ -10164,8 +10933,8 @@ map_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlr
 nick_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&base_data_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&big_line_) -
-    reinterpret_cast<char*>(&base_data_)) + sizeof(big_line_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&game_port_) -
+    reinterpret_cast<char*>(&base_data_)) + sizeof(game_port_));
 }
 
 CGCharacterData::~CGCharacterData() {
@@ -10183,6 +10952,7 @@ inline void CGCharacterData::SharedDtor() {
   if (this != internal_default_instance()) delete base_data_;
   if (this != internal_default_instance()) delete detail_;
   if (this != internal_default_instance()) delete pers_desc_;
+  if (this != internal_default_instance()) delete game_time_;
 }
 
 void CGCharacterData::ArenaDtor(void* object) {
@@ -10218,10 +10988,19 @@ void CGCharacterData::Clear() {
     delete pers_desc_;
   }
   pers_desc_ = nullptr;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    GOOGLE_DCHECK(game_time_ != nullptr);
+    game_time_->Clear();
+  }
   ::memset(&souls_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&bank_gold_) -
       reinterpret_cast<char*>(&souls_)) + sizeof(bank_gold_));
-  big_line_ = 0;
+  if (cached_has_bits & 0x0000003eu) {
+    ::memset(&big_line_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&game_port_) -
+        reinterpret_cast<char*>(&big_line_)) + sizeof(game_port_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -10483,6 +11262,45 @@ const char* CGCharacterData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // optional .CGData.CGGameSysTime game_time = 34;
+      case 34:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_game_time(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 game_status = 35;
+      case 35:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_game_status(&has_bits);
+          game_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 world_status = 36;
+      case 36:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          _Internal::set_has_world_status(&has_bits);
+          world_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 game_pid = 37;
+      case 37:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          _Internal::set_has_game_pid(&has_bits);
+          game_pid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional int32 game_port = 38;
+      case 38:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          _Internal::set_has_game_port(&has_bits);
+          game_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -10735,6 +11553,38 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(33, this->_internal_big_line(), target);
   }
 
+  // optional .CGData.CGGameSysTime game_time = 34;
+  if (_internal_has_game_time()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        34, _Internal::game_time(this), target, stream);
+  }
+
+  // optional int32 game_status = 35;
+  if (_internal_has_game_status()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(35, this->_internal_game_status(), target);
+  }
+
+  // optional int32 world_status = 36;
+  if (_internal_has_world_status()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(36, this->_internal_world_status(), target);
+  }
+
+  // optional int32 game_pid = 37;
+  if (_internal_has_game_pid()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(37, this->_internal_game_pid(), target);
+  }
+
+  // optional int32 game_port = 38;
+  if (_internal_has_game_port()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(38, this->_internal_game_port(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -10806,6 +11656,14 @@ size_t CGCharacterData::ByteSizeLong() const {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *pers_desc_);
+  }
+
+  // optional .CGData.CGGameSysTime game_time = 34;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *game_time_);
   }
 
   // int32 souls = 2;
@@ -10972,14 +11830,43 @@ size_t CGCharacterData::ByteSizeLong() const {
         this->_internal_bank_gold());
   }
 
-  // optional int32 big_line = 33;
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size += 2 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_big_line());
-  }
+  if (cached_has_bits & 0x0000003eu) {
+    // optional int32 big_line = 33;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_big_line());
+    }
 
+    // optional int32 game_status = 35;
+    if (cached_has_bits & 0x00000004u) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_game_status());
+    }
+
+    // optional int32 world_status = 36;
+    if (cached_has_bits & 0x00000008u) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_world_status());
+    }
+
+    // optional int32 game_pid = 37;
+    if (cached_has_bits & 0x00000010u) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_game_pid());
+    }
+
+    // optional int32 game_port = 38;
+    if (cached_has_bits & 0x00000020u) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_game_port());
+    }
+
+  }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -11027,6 +11914,9 @@ void CGCharacterData::MergeFrom(const CGCharacterData& from) {
   }
   if (from._internal_has_pers_desc()) {
     _internal_mutable_pers_desc()->::CGData::CGCharacterPersDesc::MergeFrom(from._internal_pers_desc());
+  }
+  if (from._internal_has_game_time()) {
+    _internal_mutable_game_time()->::CGData::CGGameSysTime::MergeFrom(from._internal_game_time());
   }
   if (from._internal_souls() != 0) {
     _internal_set_souls(from._internal_souls());
@@ -11100,8 +11990,24 @@ void CGCharacterData::MergeFrom(const CGCharacterData& from) {
   if (from._internal_bank_gold() != 0) {
     _internal_set_bank_gold(from._internal_bank_gold());
   }
-  if (from._internal_has_big_line()) {
-    _internal_set_big_line(from._internal_big_line());
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x0000003eu) {
+    if (cached_has_bits & 0x00000002u) {
+      big_line_ = from.big_line_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      game_status_ = from.game_status_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      world_status_ = from.world_status_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      game_pid_ = from.game_pid_;
+    }
+    if (cached_has_bits & 0x00000020u) {
+      game_port_ = from.game_port_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -11139,8 +12045,8 @@ void CGCharacterData::InternalSwap(CGCharacterData* other) {
       &other->nick_, other->GetArenaForAllocation()
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CGCharacterData, big_line_)
-      + sizeof(CGCharacterData::big_line_)
+      PROTOBUF_FIELD_OFFSET(CGCharacterData, game_port_)
+      + sizeof(CGCharacterData::game_port_)
       - PROTOBUF_FIELD_OFFSET(CGCharacterData, base_data_)>(
           reinterpret_cast<char*>(&base_data_),
           reinterpret_cast<char*>(&other->base_data_));
@@ -11149,7 +12055,7 @@ void CGCharacterData::InternalSwap(CGCharacterData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGCharacterData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[27]);
+      file_level_metadata_CGData_2eproto[28]);
 }
 
 // ===================================================================
@@ -11728,7 +12634,7 @@ void CGPetData::InternalSwap(CGPetData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[28]);
+      file_level_metadata_CGData_2eproto[29]);
 }
 
 // ===================================================================
@@ -12187,7 +13093,7 @@ void CGItemData::InternalSwap(CGItemData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGItemData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[29]);
+      file_level_metadata_CGData_2eproto[30]);
 }
 
 // ===================================================================
@@ -12414,7 +13320,7 @@ void CGStoreMapRequest::InternalSwap(CGStoreMapRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreMapRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[30]);
+      file_level_metadata_CGData_2eproto[31]);
 }
 
 // ===================================================================
@@ -12567,7 +13473,7 @@ void CGStoreMapResponse::InternalSwap(CGStoreMapResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreMapResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[31]);
+      file_level_metadata_CGData_2eproto[32]);
 }
 
 // ===================================================================
@@ -12720,7 +13626,7 @@ void CGMapDataRequest::InternalSwap(CGMapDataRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGMapDataRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[32]);
+      file_level_metadata_CGData_2eproto[33]);
 }
 
 // ===================================================================
@@ -12910,7 +13816,7 @@ void CGMapDataResponse::InternalSwap(CGMapDataResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGMapDataResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[33]);
+      file_level_metadata_CGData_2eproto[34]);
 }
 
 // ===================================================================
@@ -13237,7 +14143,7 @@ void CGMapData::InternalSwap(CGMapData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGMapData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[34]);
+      file_level_metadata_CGData_2eproto[35]);
 }
 
 // ===================================================================
@@ -13390,7 +14296,7 @@ void CGPetGradeCalcRequest::InternalSwap(CGPetGradeCalcRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetGradeCalcRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[35]);
+      file_level_metadata_CGData_2eproto[36]);
 }
 
 // ===================================================================
@@ -13580,7 +14486,7 @@ void CGPetGradeCalcResponse::InternalSwap(CGPetGradeCalcResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetGradeCalcResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[36]);
+      file_level_metadata_CGData_2eproto[37]);
 }
 
 // ===================================================================
@@ -14282,7 +15188,7 @@ void CGPetGradeCalcData::InternalSwap(CGPetGradeCalcData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPetGradeCalcData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[37]);
+      file_level_metadata_CGData_2eproto[38]);
 }
 
 // ===================================================================
@@ -14467,7 +15373,7 @@ void CGItemRequest::InternalSwap(CGItemRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGItemRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[38]);
+      file_level_metadata_CGData_2eproto[39]);
 }
 
 // ===================================================================
@@ -14949,7 +15855,7 @@ void CGItemResponse::InternalSwap(CGItemResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGItemResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[39]);
+      file_level_metadata_CGData_2eproto[40]);
 }
 
 // ===================================================================
@@ -15408,7 +16314,7 @@ void CGStoreItemRequest::InternalSwap(CGStoreItemRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreItemRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[40]);
+      file_level_metadata_CGData_2eproto[41]);
 }
 
 // ===================================================================
@@ -15635,7 +16541,7 @@ void CGStoreItemResponse::InternalSwap(CGStoreItemResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGStoreItemResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[41]);
+      file_level_metadata_CGData_2eproto[42]);
 }
 
 // ===================================================================
@@ -15788,7 +16694,7 @@ void CGVoidData::InternalSwap(CGVoidData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGVoidData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[42]);
+      file_level_metadata_CGData_2eproto[43]);
 }
 
 // ===================================================================
@@ -15971,7 +16877,7 @@ void CGBoolData::InternalSwap(CGBoolData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGBoolData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[43]);
+      file_level_metadata_CGData_2eproto[44]);
 }
 
 // ===================================================================
@@ -16156,7 +17062,7 @@ void CGIntData::InternalSwap(CGIntData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGIntData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[44]);
+      file_level_metadata_CGData_2eproto[45]);
 }
 
 // ===================================================================
@@ -16514,7 +17420,7 @@ void CGSysTimeResponse::InternalSwap(CGSysTimeResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGSysTimeResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[45]);
+      file_level_metadata_CGData_2eproto[46]);
 }
 
 // ===================================================================
@@ -16732,7 +17638,7 @@ void CGPlayerFlagEnabledData::InternalSwap(CGPlayerFlagEnabledData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CGPlayerFlagEnabledData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_CGData_2eproto_getter, &descriptor_table_CGData_2eproto_once,
-      file_level_metadata_CGData_2eproto[46]);
+      file_level_metadata_CGData_2eproto[47]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -16818,6 +17724,9 @@ template<> PROTOBUF_NOINLINE ::CGData::CGAttrBaseData* Arena::CreateMaybeMessage
 }
 template<> PROTOBUF_NOINLINE ::CGData::CGCharacterPersDesc* Arena::CreateMaybeMessage< ::CGData::CGCharacterPersDesc >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CGData::CGCharacterPersDesc >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CGData::CGGameSysTime* Arena::CreateMaybeMessage< ::CGData::CGGameSysTime >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CGData::CGGameSysTime >(arena);
 }
 template<> PROTOBUF_NOINLINE ::CGData::CGCharacterData* Arena::CreateMaybeMessage< ::CGData::CGCharacterData >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CGData::CGCharacterData >(arena);

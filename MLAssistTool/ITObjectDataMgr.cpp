@@ -107,6 +107,33 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	//m_serverTypeForObjName.insert(23, TObject_ServerType_CGOld);
 	m_serverTypeForObjName.insert(23, "怀旧牧羊双子");
 	m_serverTypeForObjName.insert(24, "怀旧金牛");
+
+	m_sPrestigeMap.insert("恶人", -3);
+	m_sPrestigeMap.insert("受忌讳的人", -2);
+	m_sPrestigeMap.insert("受挫折的人", -1);
+	m_sPrestigeMap.insert("无名的旅人", 0);
+	m_sPrestigeMap.insert("路旁的落叶", 1);
+	m_sPrestigeMap.insert("水面上的小草", 2);
+	m_sPrestigeMap.insert("呢喃的歌声", 3);
+	m_sPrestigeMap.insert("地上的月影", 4);
+	m_sPrestigeMap.insert("奔跑的春风", 5);
+	m_sPrestigeMap.insert("苍之风云", 6);
+	m_sPrestigeMap.insert("摇曳的金星", 7);
+	m_sPrestigeMap.insert("欢喜的慈雨", 8);
+	m_sPrestigeMap.insert("蕴含的太阳", 9);
+	m_sPrestigeMap.insert("敬畏的寂静", 10);
+	m_sPrestigeMap.insert("无尽星空", 11);
+	m_sPrestigeMap.insert("迈步前进者", 1);
+	m_sPrestigeMap.insert("追求技巧的人", 2);
+	m_sPrestigeMap.insert("刻于新月之铭", 3);
+	m_sPrestigeMap.insert("掌上的明珠", 4);
+	m_sPrestigeMap.insert("敬虔的技巧", 5);
+	m_sPrestigeMap.insert("踏入神的领域", 6);
+	m_sPrestigeMap.insert("贤者", 7);
+	m_sPrestigeMap.insert("神匠", 8);
+	m_sPrestigeMap.insert("摘星的技巧", 9);
+	m_sPrestigeMap.insert("万物创造者", 10);
+	m_sPrestigeMap.insert("持石之贤者", 11);
 	connect(this, SIGNAL(signal_loadDataFini()), this, SLOT(doLoadDBInfoOver())); //这个是加载数据库完成
 	init();
 }
@@ -1143,7 +1170,7 @@ bool ITObjectDataMgr::LoadGidItems()
 				//pItem->setObjectDsec(sDesc);
 				pItem->setObjectCode(item_id);
 				pItem->setObjectID(nID);
-
+				pItem->_bExist = true;
 				ITGameCharacterPtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGameCharacter>();
 				if (!pGidRole)//查找道具相关的角色 没找到 则删除当前道具对象
 				{
@@ -1203,7 +1230,7 @@ bool ITObjectDataMgr::LoadGidPets()
 				pObj->_lossMinGrade = recordset->getIntValue("lossMinGrade");			
 				pObj->_lossMaxGrade = recordset->getIntValue("lossMaxGrade");				
 				pObj->_pos = recordset->getIntValue("pos");
-
+				pObj->_bExist = true;
 				pObj->setObjectName(sName);
 				//	pObj->setObjectDsec(sDesc);
 				//	pObj->setObjectCode(nCode);
@@ -1278,7 +1305,7 @@ bool ITObjectDataMgr::LoadGidSkills()
 				//pItem->setObjectDsec(sDesc);
 				pObj->setObjectCode(skillid);
 				pObj->setObjectID(nID);
-
+				pObj->_bExist = true;
 				ITGameCharacterPtr pGidRole = FindObject(nChara_dbid).dynamicCast<ITGameCharacter>();
 				if (!pGidRole)
 				{
@@ -2622,9 +2649,26 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 	pCharacter->_server_line = request->character_data().server_line();											 //当前服务器线路
 	pCharacter->_big_line = nBigLine; //当前服务器线路
 	pCharacter->_value_charisma = request->character_data().value_charisma();									 //魅力
-
+	if (request->character_data().has_game_status())
+		pCharacter->_game_status = request->character_data().game_status();	  
+	if (request->character_data().has_world_status())
+		pCharacter->_world_status = request->character_data().world_status();		
+	if (request->character_data().has_game_pid())
+		pCharacter->_game_pid = request->character_data().game_pid();		  
+	if (request->character_data().has_game_port())
+		pCharacter->_game_port = request->character_data().game_port();				
+	if (request->character_data().has_game_time())
+	{
+		pCharacter->_gameSysTime.years = request->character_data().game_time().years();	  
+		pCharacter->_gameSysTime.month = request->character_data().game_time().month();	  
+		pCharacter->_gameSysTime.days = request->character_data().game_time().days();	  
+		pCharacter->_gameSysTime.hours = request->character_data().game_time().hours();	  
+		pCharacter->_gameSysTime.mins = request->character_data().game_time().mins();	  
+		pCharacter->_gameSysTime.secs = request->character_data().game_time().secs();	  
+		pCharacter->_gameSysTime.local_time = request->character_data().game_time().local_time();	  
+		pCharacter->_gameSysTime.server_time = request->character_data().game_time().server_time();	  
+	}
 	qDebug() << QString::fromStdString(request->gid()) << QString::fromStdString(request->character_name()) << request->character_data().level();
-
 
 	ITGameAttributeData tmpAttrData;
 	tmpAttrData._manu_endurance = request->character_data().manu_endurance();		  //耐力
@@ -2846,12 +2890,9 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 					auto skillPtr = petPtr->_skillPosForSkill.value(reqSkill.index());
 					if (!skillPtr)
 					{
-						skillPtr = qSharedPointerDynamicCast<ITGameSkill>(newOneObject(TObject_CharPetSkill, skillPtr));
+						skillPtr = qSharedPointerDynamicCast<ITGameSkill>(newOneObject(TObject_CharPetSkill, petPtr));
 						petPtr->_skillPosForSkill.insert(reqSkill.index(), skillPtr);
 					}
-					else
-						skillPtr->setEditStatus();
-
 					ITGameSkill tmpSkill;
 					tmpSkill.setObjectName(QString::fromStdString(reqSkill.name()));
 					tmpSkill._info = QString::fromStdString(reqSkill.info());

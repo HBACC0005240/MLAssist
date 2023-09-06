@@ -249,6 +249,21 @@ void RpcSocketClient::UploadGidData()
 		charData->set_job(pChara->job.toStdString());
 		charData->set_nick(pChara->nickname.toStdString());
 		charData->set_battle_position(pChara->battle_position);
+		auto pGameSysTime =  charData->mutable_game_time();
+		CGA::cga_sys_time_t sysTime;
+		g_CGAInterface->GetSysTime(sysTime);
+		pGameSysTime->set_years(sysTime.years);
+		pGameSysTime->set_month(sysTime.month);
+		pGameSysTime->set_days(sysTime.days);
+		pGameSysTime->set_hours(sysTime.hours);
+		pGameSysTime->set_mins(sysTime.mins);
+		pGameSysTime->set_secs(sysTime.secs);
+		pGameSysTime->set_local_time(sysTime.local_time);
+		pGameSysTime->set_server_time(sysTime.server_time);
+		charData->set_game_status(g_pGameFun->GetGameStatus());
+		charData->set_world_status(g_pGameFun->GetWorldStatus());
+		charData->set_game_pid(g_pGameCtrl->getGamePID());
+		charData->set_game_port(g_pGameCtrl->GetGamePort());
 		int bankGold = 0;
 		g_CGAInterface->GetBankGold(bankGold);
 		charData->set_bank_gold(bankGold);
@@ -400,7 +415,7 @@ void RpcSocketClient::UploadGidData()
 			for (int i = 0; i < pSkillList.size(); ++i)
 			{
 				auto pSkill = pSkillList[i];
-				auto charSkill = charData->add_skill();
+				auto charSkill = charPetData->add_skill();
 				charSkill->set_name(pSkill->name.toStdString());
 				charSkill->set_info(pSkill->info.toStdString());
 				charSkill->set_id(pSkill->id);

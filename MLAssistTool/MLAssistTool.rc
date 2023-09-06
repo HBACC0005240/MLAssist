@@ -61,8 +61,8 @@ IDI_ICON1               ICON                    "Resources\\logo.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 23,903,1,1
- PRODUCTVERSION 2023,9,3,1
+ FILEVERSION 23,906,2,2
+ PRODUCTVERSION 2023,9,6,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -79,12 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "qq:274100927"
             VALUE "FileDescription", "MLAssist-π‹¿Ì≥Ã–Ú"
-            VALUE "FileVersion", "23.903.1.1"
+            VALUE "FileVersion", "23.906.2.2"
             VALUE "InternalName", "MLAssistTool.exe"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "MLAssistTool.exe"
             VALUE "ProductName", "qq:274100927"
-            VALUE "ProductVersion", "2023.9.3.1"
+            VALUE "ProductVersion", "2023.9.6.2"
         END
     END
     BLOCK "VarFileInfo"

@@ -46,7 +46,7 @@ struct TableStruct_CGData_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[47]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[48]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -72,6 +72,9 @@ extern CGCharacterDataDefaultTypeInternal _CGCharacterData_default_instance_;
 class CGCharacterPersDesc;
 struct CGCharacterPersDescDefaultTypeInternal;
 extern CGCharacterPersDescDefaultTypeInternal _CGCharacterPersDesc_default_instance_;
+class CGGameSysTime;
+struct CGGameSysTimeDefaultTypeInternal;
+extern CGGameSysTimeDefaultTypeInternal _CGGameSysTime_default_instance_;
 class CGGmeTypeRequest;
 struct CGGmeTypeRequestDefaultTypeInternal;
 extern CGGmeTypeRequestDefaultTypeInternal _CGGmeTypeRequest_default_instance_;
@@ -203,6 +206,7 @@ template<> ::CGData::CGBaseData* Arena::CreateMaybeMessage<::CGData::CGBaseData>
 template<> ::CGData::CGBoolData* Arena::CreateMaybeMessage<::CGData::CGBoolData>(Arena*);
 template<> ::CGData::CGCharacterData* Arena::CreateMaybeMessage<::CGData::CGCharacterData>(Arena*);
 template<> ::CGData::CGCharacterPersDesc* Arena::CreateMaybeMessage<::CGData::CGCharacterPersDesc>(Arena*);
+template<> ::CGData::CGGameSysTime* Arena::CreateMaybeMessage<::CGData::CGGameSysTime>(Arena*);
 template<> ::CGData::CGGmeTypeRequest* Arena::CreateMaybeMessage<::CGData::CGGmeTypeRequest>(Arena*);
 template<> ::CGData::CGIntData* Arena::CreateMaybeMessage<::CGData::CGIntData>(Arena*);
 template<> ::CGData::CGItemData* Arena::CreateMaybeMessage<::CGData::CGItemData>(Arena*);
@@ -2094,9 +2098,13 @@ class UploadCharcterServerRequest final :
   enum : int {
     kCharNameFieldNumber = 1,
     kIpFieldNumber = 3,
+    kMulticastIpFieldNumber = 8,
     kBigLineFieldNumber = 2,
     kPortFieldNumber = 4,
     kOnlineFieldNumber = 5,
+    kIsOpenFieldNumber = 6,
+    kIsMulticastFieldNumber = 7,
+    kMulticastPortFieldNumber = 9,
   };
   // string char_name = 1;
   void clear_char_name();
@@ -2126,6 +2134,24 @@ class UploadCharcterServerRequest final :
   std::string* _internal_mutable_ip();
   public:
 
+  // optional string multicast_ip = 8;
+  bool has_multicast_ip() const;
+  private:
+  bool _internal_has_multicast_ip() const;
+  public:
+  void clear_multicast_ip();
+  const std::string& multicast_ip() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_multicast_ip(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_multicast_ip();
+  PROTOBUF_MUST_USE_RESULT std::string* release_multicast_ip();
+  void set_allocated_multicast_ip(std::string* multicast_ip);
+  private:
+  const std::string& _internal_multicast_ip() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_multicast_ip(const std::string& value);
+  std::string* _internal_mutable_multicast_ip();
+  public:
+
   // int32 big_line = 2;
   void clear_big_line();
   ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
@@ -2153,6 +2179,41 @@ class UploadCharcterServerRequest final :
   void _internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 is_open = 6;
+  void clear_is_open();
+  ::PROTOBUF_NAMESPACE_ID::int32 is_open() const;
+  void set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_is_open() const;
+  void _internal_set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 is_multicast = 7;
+  bool has_is_multicast() const;
+  private:
+  bool _internal_has_is_multicast() const;
+  public:
+  void clear_is_multicast();
+  ::PROTOBUF_NAMESPACE_ID::int32 is_multicast() const;
+  void set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_is_multicast() const;
+  void _internal_set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 multicast_port = 9;
+  bool has_multicast_port() const;
+  private:
+  bool _internal_has_multicast_port() const;
+  public:
+  void clear_multicast_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 multicast_port() const;
+  void set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_multicast_port() const;
+  void _internal_set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.UploadCharcterServerRequest)
  private:
   class _Internal;
@@ -2160,12 +2221,17 @@ class UploadCharcterServerRequest final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr char_name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr multicast_ip_;
   ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
   ::PROTOBUF_NAMESPACE_ID::int32 port_;
   ::PROTOBUF_NAMESPACE_ID::int32 online_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 is_open_;
+  ::PROTOBUF_NAMESPACE_ID::int32 is_multicast_;
+  ::PROTOBUF_NAMESPACE_ID::int32 multicast_port_;
   friend struct ::TableStruct_CGData_2eproto;
 };
 // -------------------------------------------------------------------
@@ -3463,9 +3529,13 @@ class SelectCharacterServerResponse final :
   enum : int {
     kCharNameFieldNumber = 1,
     kIpFieldNumber = 3,
+    kMulticastIpFieldNumber = 8,
     kBigLineFieldNumber = 2,
     kPortFieldNumber = 4,
     kOnlineFieldNumber = 5,
+    kIsOpenFieldNumber = 6,
+    kIsMulticastFieldNumber = 7,
+    kMulticastPortFieldNumber = 9,
   };
   // string char_name = 1;
   void clear_char_name();
@@ -3495,6 +3565,24 @@ class SelectCharacterServerResponse final :
   std::string* _internal_mutable_ip();
   public:
 
+  // optional string multicast_ip = 8;
+  bool has_multicast_ip() const;
+  private:
+  bool _internal_has_multicast_ip() const;
+  public:
+  void clear_multicast_ip();
+  const std::string& multicast_ip() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_multicast_ip(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_multicast_ip();
+  PROTOBUF_MUST_USE_RESULT std::string* release_multicast_ip();
+  void set_allocated_multicast_ip(std::string* multicast_ip);
+  private:
+  const std::string& _internal_multicast_ip() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_multicast_ip(const std::string& value);
+  std::string* _internal_mutable_multicast_ip();
+  public:
+
   // int32 big_line = 2;
   void clear_big_line();
   ::PROTOBUF_NAMESPACE_ID::int32 big_line() const;
@@ -3522,6 +3610,41 @@ class SelectCharacterServerResponse final :
   void _internal_set_online(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 is_open = 6;
+  void clear_is_open();
+  ::PROTOBUF_NAMESPACE_ID::int32 is_open() const;
+  void set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_is_open() const;
+  void _internal_set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 is_multicast = 7;
+  bool has_is_multicast() const;
+  private:
+  bool _internal_has_is_multicast() const;
+  public:
+  void clear_is_multicast();
+  ::PROTOBUF_NAMESPACE_ID::int32 is_multicast() const;
+  void set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_is_multicast() const;
+  void _internal_set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 multicast_port = 9;
+  bool has_multicast_port() const;
+  private:
+  bool _internal_has_multicast_port() const;
+  public:
+  void clear_multicast_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 multicast_port() const;
+  void set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_multicast_port() const;
+  void _internal_set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.SelectCharacterServerResponse)
  private:
   class _Internal;
@@ -3529,12 +3652,17 @@ class SelectCharacterServerResponse final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr char_name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr multicast_ip_;
   ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
   ::PROTOBUF_NAMESPACE_ID::int32 port_;
   ::PROTOBUF_NAMESPACE_ID::int32 online_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 is_open_;
+  ::PROTOBUF_NAMESPACE_ID::int32 is_multicast_;
+  ::PROTOBUF_NAMESPACE_ID::int32 multicast_port_;
   friend struct ::TableStruct_CGData_2eproto;
 };
 // -------------------------------------------------------------------
@@ -5477,6 +5605,222 @@ class CGCharacterPersDesc final :
 };
 // -------------------------------------------------------------------
 
+class CGGameSysTime final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.CGGameSysTime) */ {
+ public:
+  inline CGGameSysTime() : CGGameSysTime(nullptr) {}
+  ~CGGameSysTime() override;
+  explicit constexpr CGGameSysTime(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CGGameSysTime(const CGGameSysTime& from);
+  CGGameSysTime(CGGameSysTime&& from) noexcept
+    : CGGameSysTime() {
+    *this = ::std::move(from);
+  }
+
+  inline CGGameSysTime& operator=(const CGGameSysTime& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CGGameSysTime& operator=(CGGameSysTime&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CGGameSysTime& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CGGameSysTime* internal_default_instance() {
+    return reinterpret_cast<const CGGameSysTime*>(
+               &_CGGameSysTime_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    27;
+
+  friend void swap(CGGameSysTime& a, CGGameSysTime& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CGGameSysTime* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CGGameSysTime* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline CGGameSysTime* New() const final {
+    return new CGGameSysTime();
+  }
+
+  CGGameSysTime* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<CGGameSysTime>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CGGameSysTime& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const CGGameSysTime& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CGGameSysTime* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CGData.CGGameSysTime";
+  }
+  protected:
+  explicit CGGameSysTime(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kYearsFieldNumber = 1,
+    kMonthFieldNumber = 2,
+    kDaysFieldNumber = 3,
+    kHoursFieldNumber = 4,
+    kMinsFieldNumber = 5,
+    kSecsFieldNumber = 6,
+    kLocalTimeFieldNumber = 7,
+    kServerTimeFieldNumber = 8,
+  };
+  // int32 years = 1;
+  void clear_years();
+  ::PROTOBUF_NAMESPACE_ID::int32 years() const;
+  void set_years(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_years() const;
+  void _internal_set_years(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 month = 2;
+  void clear_month();
+  ::PROTOBUF_NAMESPACE_ID::int32 month() const;
+  void set_month(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_month() const;
+  void _internal_set_month(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 days = 3;
+  void clear_days();
+  ::PROTOBUF_NAMESPACE_ID::int32 days() const;
+  void set_days(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_days() const;
+  void _internal_set_days(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 hours = 4;
+  void clear_hours();
+  ::PROTOBUF_NAMESPACE_ID::int32 hours() const;
+  void set_hours(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_hours() const;
+  void _internal_set_hours(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 mins = 5;
+  void clear_mins();
+  ::PROTOBUF_NAMESPACE_ID::int32 mins() const;
+  void set_mins(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_mins() const;
+  void _internal_set_mins(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 secs = 6;
+  void clear_secs();
+  ::PROTOBUF_NAMESPACE_ID::int32 secs() const;
+  void set_secs(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_secs() const;
+  void _internal_set_secs(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 local_time = 7;
+  void clear_local_time();
+  ::PROTOBUF_NAMESPACE_ID::int32 local_time() const;
+  void set_local_time(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_local_time() const;
+  void _internal_set_local_time(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 server_time = 8;
+  void clear_server_time();
+  ::PROTOBUF_NAMESPACE_ID::int32 server_time() const;
+  void set_server_time(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_server_time() const;
+  void _internal_set_server_time(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CGData.CGGameSysTime)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::int32 years_;
+  ::PROTOBUF_NAMESPACE_ID::int32 month_;
+  ::PROTOBUF_NAMESPACE_ID::int32 days_;
+  ::PROTOBUF_NAMESPACE_ID::int32 hours_;
+  ::PROTOBUF_NAMESPACE_ID::int32 mins_;
+  ::PROTOBUF_NAMESPACE_ID::int32 secs_;
+  ::PROTOBUF_NAMESPACE_ID::int32 local_time_;
+  ::PROTOBUF_NAMESPACE_ID::int32 server_time_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_CGData_2eproto;
+};
+// -------------------------------------------------------------------
+
 class CGCharacterData final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CGData.CGCharacterData) */ {
  public:
@@ -5521,7 +5865,7 @@ class CGCharacterData final :
                &_CGCharacterData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(CGCharacterData& a, CGCharacterData& b) {
     a.Swap(&b);
@@ -5600,6 +5944,7 @@ class CGCharacterData final :
     kBaseDataFieldNumber = 1,
     kDetailFieldNumber = 27,
     kPersDescFieldNumber = 30,
+    kGameTimeFieldNumber = 34,
     kSoulsFieldNumber = 2,
     kLevelFieldNumber = 3,
     kGoldFieldNumber = 4,
@@ -5625,6 +5970,10 @@ class CGCharacterData final :
     kBattlePositionFieldNumber = 31,
     kBankGoldFieldNumber = 32,
     kBigLineFieldNumber = 33,
+    kGameStatusFieldNumber = 35,
+    kWorldStatusFieldNumber = 36,
+    kGamePidFieldNumber = 37,
+    kGamePortFieldNumber = 38,
   };
   // repeated string titles = 17;
   int titles_size() const;
@@ -5763,6 +6112,24 @@ class CGCharacterData final :
   void unsafe_arena_set_allocated_pers_desc(
       ::CGData::CGCharacterPersDesc* pers_desc);
   ::CGData::CGCharacterPersDesc* unsafe_arena_release_pers_desc();
+
+  // optional .CGData.CGGameSysTime game_time = 34;
+  bool has_game_time() const;
+  private:
+  bool _internal_has_game_time() const;
+  public:
+  void clear_game_time();
+  const ::CGData::CGGameSysTime& game_time() const;
+  PROTOBUF_MUST_USE_RESULT ::CGData::CGGameSysTime* release_game_time();
+  ::CGData::CGGameSysTime* mutable_game_time();
+  void set_allocated_game_time(::CGData::CGGameSysTime* game_time);
+  private:
+  const ::CGData::CGGameSysTime& _internal_game_time() const;
+  ::CGData::CGGameSysTime* _internal_mutable_game_time();
+  public:
+  void unsafe_arena_set_allocated_game_time(
+      ::CGData::CGGameSysTime* game_time);
+  ::CGData::CGGameSysTime* unsafe_arena_release_game_time();
 
   // int32 souls = 2;
   void clear_souls();
@@ -5993,6 +6360,58 @@ class CGCharacterData final :
   void _internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // optional int32 game_status = 35;
+  bool has_game_status() const;
+  private:
+  bool _internal_has_game_status() const;
+  public:
+  void clear_game_status();
+  ::PROTOBUF_NAMESPACE_ID::int32 game_status() const;
+  void set_game_status(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_game_status() const;
+  void _internal_set_game_status(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 world_status = 36;
+  bool has_world_status() const;
+  private:
+  bool _internal_has_world_status() const;
+  public:
+  void clear_world_status();
+  ::PROTOBUF_NAMESPACE_ID::int32 world_status() const;
+  void set_world_status(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_world_status() const;
+  void _internal_set_world_status(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 game_pid = 37;
+  bool has_game_pid() const;
+  private:
+  bool _internal_has_game_pid() const;
+  public:
+  void clear_game_pid();
+  ::PROTOBUF_NAMESPACE_ID::int32 game_pid() const;
+  void set_game_pid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_game_pid() const;
+  void _internal_set_game_pid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional int32 game_port = 38;
+  bool has_game_port() const;
+  private:
+  bool _internal_has_game_port() const;
+  public:
+  void clear_game_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 game_port() const;
+  void set_game_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_game_port() const;
+  void _internal_set_game_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:CGData.CGCharacterData)
  private:
   class _Internal;
@@ -6010,6 +6429,7 @@ class CGCharacterData final :
   ::CGData::CGBaseData* base_data_;
   ::CGData::CGAttrBaseData* detail_;
   ::CGData::CGCharacterPersDesc* pers_desc_;
+  ::CGData::CGGameSysTime* game_time_;
   ::PROTOBUF_NAMESPACE_ID::int32 souls_;
   ::PROTOBUF_NAMESPACE_ID::int32 level_;
   ::PROTOBUF_NAMESPACE_ID::int32 gold_;
@@ -6035,6 +6455,10 @@ class CGCharacterData final :
   ::PROTOBUF_NAMESPACE_ID::int32 battle_position_;
   ::PROTOBUF_NAMESPACE_ID::int32 bank_gold_;
   ::PROTOBUF_NAMESPACE_ID::int32 big_line_;
+  ::PROTOBUF_NAMESPACE_ID::int32 game_status_;
+  ::PROTOBUF_NAMESPACE_ID::int32 world_status_;
+  ::PROTOBUF_NAMESPACE_ID::int32 game_pid_;
+  ::PROTOBUF_NAMESPACE_ID::int32 game_port_;
   friend struct ::TableStruct_CGData_2eproto;
 };
 // -------------------------------------------------------------------
@@ -6083,7 +6507,7 @@ class CGPetData final :
                &_CGPetData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(CGPetData& a, CGPetData& b) {
     a.Swap(&b);
@@ -6408,7 +6832,7 @@ class CGItemData final :
                &_CGItemData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(CGItemData& a, CGItemData& b) {
     a.Swap(&b);
@@ -6661,7 +7085,7 @@ class CGStoreMapRequest final :
                &_CGStoreMapRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    31;
 
   friend void swap(CGStoreMapRequest& a, CGStoreMapRequest& b) {
     a.Swap(&b);
@@ -6816,7 +7240,7 @@ class CGStoreMapResponse final :
                &_CGStoreMapResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    32;
 
   friend void swap(CGStoreMapResponse& a, CGStoreMapResponse& b) {
     a.Swap(&b);
@@ -6942,7 +7366,7 @@ class CGMapDataRequest final :
                &_CGMapDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    33;
 
   friend void swap(CGMapDataRequest& a, CGMapDataRequest& b) {
     a.Swap(&b);
@@ -7068,7 +7492,7 @@ class CGMapDataResponse final :
                &_CGMapDataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    34;
 
   friend void swap(CGMapDataResponse& a, CGMapDataResponse& b) {
     a.Swap(&b);
@@ -7216,7 +7640,7 @@ class CGMapData final :
                &_CGMapData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    35;
 
   friend void swap(CGMapData& a, CGMapData& b) {
     a.Swap(&b);
@@ -7409,7 +7833,7 @@ class CGPetGradeCalcRequest final :
                &_CGPetGradeCalcRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    36;
 
   friend void swap(CGPetGradeCalcRequest& a, CGPetGradeCalcRequest& b) {
     a.Swap(&b);
@@ -7535,7 +7959,7 @@ class CGPetGradeCalcResponse final :
                &_CGPetGradeCalcResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    37;
 
   friend void swap(CGPetGradeCalcResponse& a, CGPetGradeCalcResponse& b) {
     a.Swap(&b);
@@ -7683,7 +8107,7 @@ class CGPetGradeCalcData final :
                &_CGPetGradeCalcData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    38;
 
   friend void swap(CGPetGradeCalcData& a, CGPetGradeCalcData& b) {
     a.Swap(&b);
@@ -8065,7 +8489,7 @@ class CGItemRequest final :
                &_CGItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    39;
 
   friend void swap(CGItemRequest& a, CGItemRequest& b) {
     a.Swap(&b);
@@ -8204,7 +8628,7 @@ class CGItemResponse final :
                &_CGItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    40;
 
   friend void swap(CGItemResponse& a, CGItemResponse& b) {
     a.Swap(&b);
@@ -8468,7 +8892,7 @@ class CGStoreItemRequest final :
                &_CGStoreItemRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    41;
 
   friend void swap(CGStoreItemRequest& a, CGStoreItemRequest& b) {
     a.Swap(&b);
@@ -8721,7 +9145,7 @@ class CGStoreItemResponse final :
                &_CGStoreItemResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    42;
 
   friend void swap(CGStoreItemResponse& a, CGStoreItemResponse& b) {
     a.Swap(&b);
@@ -8876,7 +9300,7 @@ class CGVoidData final :
                &_CGVoidData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    43;
 
   friend void swap(CGVoidData& a, CGVoidData& b) {
     a.Swap(&b);
@@ -9002,7 +9426,7 @@ class CGBoolData final :
                &_CGBoolData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    44;
 
   friend void swap(CGBoolData& a, CGBoolData& b) {
     a.Swap(&b);
@@ -9141,7 +9565,7 @@ class CGIntData final :
                &_CGIntData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    45;
 
   friend void swap(CGIntData& a, CGIntData& b) {
     a.Swap(&b);
@@ -9280,7 +9704,7 @@ class CGSysTimeResponse final :
                &_CGSysTimeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    46;
 
   friend void swap(CGSysTimeResponse& a, CGSysTimeResponse& b) {
     a.Swap(&b);
@@ -9496,7 +9920,7 @@ class CGPlayerFlagEnabledData final :
                &_CGPlayerFlagEnabledData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    47;
 
   friend void swap(CGPlayerFlagEnabledData& a, CGPlayerFlagEnabledData& b) {
     a.Swap(&b);
@@ -11001,6 +11425,140 @@ inline void UploadCharcterServerRequest::set_online(::PROTOBUF_NAMESPACE_ID::int
   // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.online)
 }
 
+// int32 is_open = 6;
+inline void UploadCharcterServerRequest::clear_is_open() {
+  is_open_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::_internal_is_open() const {
+  return is_open_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::is_open() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.is_open)
+  return _internal_is_open();
+}
+inline void UploadCharcterServerRequest::_internal_set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  is_open_ = value;
+}
+inline void UploadCharcterServerRequest::set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_is_open(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.is_open)
+}
+
+// optional int32 is_multicast = 7;
+inline bool UploadCharcterServerRequest::_internal_has_is_multicast() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool UploadCharcterServerRequest::has_is_multicast() const {
+  return _internal_has_is_multicast();
+}
+inline void UploadCharcterServerRequest::clear_is_multicast() {
+  is_multicast_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::_internal_is_multicast() const {
+  return is_multicast_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::is_multicast() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.is_multicast)
+  return _internal_is_multicast();
+}
+inline void UploadCharcterServerRequest::_internal_set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  is_multicast_ = value;
+}
+inline void UploadCharcterServerRequest::set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_is_multicast(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.is_multicast)
+}
+
+// optional string multicast_ip = 8;
+inline bool UploadCharcterServerRequest::_internal_has_multicast_ip() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool UploadCharcterServerRequest::has_multicast_ip() const {
+  return _internal_has_multicast_ip();
+}
+inline void UploadCharcterServerRequest::clear_multicast_ip() {
+  multicast_ip_.ClearToEmpty();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& UploadCharcterServerRequest::multicast_ip() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.multicast_ip)
+  return _internal_multicast_ip();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UploadCharcterServerRequest::set_multicast_ip(ArgT0&& arg0, ArgT... args) {
+ _has_bits_[0] |= 0x00000001u;
+ multicast_ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.multicast_ip)
+}
+inline std::string* UploadCharcterServerRequest::mutable_multicast_ip() {
+  std::string* _s = _internal_mutable_multicast_ip();
+  // @@protoc_insertion_point(field_mutable:CGData.UploadCharcterServerRequest.multicast_ip)
+  return _s;
+}
+inline const std::string& UploadCharcterServerRequest::_internal_multicast_ip() const {
+  return multicast_ip_.Get();
+}
+inline void UploadCharcterServerRequest::_internal_set_multicast_ip(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  multicast_ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UploadCharcterServerRequest::_internal_mutable_multicast_ip() {
+  _has_bits_[0] |= 0x00000001u;
+  return multicast_ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UploadCharcterServerRequest::release_multicast_ip() {
+  // @@protoc_insertion_point(field_release:CGData.UploadCharcterServerRequest.multicast_ip)
+  if (!_internal_has_multicast_ip()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return multicast_ip_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UploadCharcterServerRequest::set_allocated_multicast_ip(std::string* multicast_ip) {
+  if (multicast_ip != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  multicast_ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), multicast_ip,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.UploadCharcterServerRequest.multicast_ip)
+}
+
+// optional int32 multicast_port = 9;
+inline bool UploadCharcterServerRequest::_internal_has_multicast_port() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool UploadCharcterServerRequest::has_multicast_port() const {
+  return _internal_has_multicast_port();
+}
+inline void UploadCharcterServerRequest::clear_multicast_port() {
+  multicast_port_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::_internal_multicast_port() const {
+  return multicast_port_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UploadCharcterServerRequest::multicast_port() const {
+  // @@protoc_insertion_point(field_get:CGData.UploadCharcterServerRequest.multicast_port)
+  return _internal_multicast_port();
+}
+inline void UploadCharcterServerRequest::_internal_set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  multicast_port_ = value;
+}
+inline void UploadCharcterServerRequest::set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_multicast_port(value);
+  // @@protoc_insertion_point(field_set:CGData.UploadCharcterServerRequest.multicast_port)
+}
+
 // -------------------------------------------------------------------
 
 // UploadCharcterServerResponse
@@ -11875,6 +12433,140 @@ inline void SelectCharacterServerResponse::_internal_set_online(::PROTOBUF_NAMES
 inline void SelectCharacterServerResponse::set_online(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_online(value);
   // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.online)
+}
+
+// int32 is_open = 6;
+inline void SelectCharacterServerResponse::clear_is_open() {
+  is_open_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::_internal_is_open() const {
+  return is_open_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::is_open() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.is_open)
+  return _internal_is_open();
+}
+inline void SelectCharacterServerResponse::_internal_set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  is_open_ = value;
+}
+inline void SelectCharacterServerResponse::set_is_open(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_is_open(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.is_open)
+}
+
+// optional int32 is_multicast = 7;
+inline bool SelectCharacterServerResponse::_internal_has_is_multicast() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool SelectCharacterServerResponse::has_is_multicast() const {
+  return _internal_has_is_multicast();
+}
+inline void SelectCharacterServerResponse::clear_is_multicast() {
+  is_multicast_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::_internal_is_multicast() const {
+  return is_multicast_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::is_multicast() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.is_multicast)
+  return _internal_is_multicast();
+}
+inline void SelectCharacterServerResponse::_internal_set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  is_multicast_ = value;
+}
+inline void SelectCharacterServerResponse::set_is_multicast(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_is_multicast(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.is_multicast)
+}
+
+// optional string multicast_ip = 8;
+inline bool SelectCharacterServerResponse::_internal_has_multicast_ip() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool SelectCharacterServerResponse::has_multicast_ip() const {
+  return _internal_has_multicast_ip();
+}
+inline void SelectCharacterServerResponse::clear_multicast_ip() {
+  multicast_ip_.ClearToEmpty();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& SelectCharacterServerResponse::multicast_ip() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.multicast_ip)
+  return _internal_multicast_ip();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SelectCharacterServerResponse::set_multicast_ip(ArgT0&& arg0, ArgT... args) {
+ _has_bits_[0] |= 0x00000001u;
+ multicast_ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.multicast_ip)
+}
+inline std::string* SelectCharacterServerResponse::mutable_multicast_ip() {
+  std::string* _s = _internal_mutable_multicast_ip();
+  // @@protoc_insertion_point(field_mutable:CGData.SelectCharacterServerResponse.multicast_ip)
+  return _s;
+}
+inline const std::string& SelectCharacterServerResponse::_internal_multicast_ip() const {
+  return multicast_ip_.Get();
+}
+inline void SelectCharacterServerResponse::_internal_set_multicast_ip(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  multicast_ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerResponse::_internal_mutable_multicast_ip() {
+  _has_bits_[0] |= 0x00000001u;
+  return multicast_ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SelectCharacterServerResponse::release_multicast_ip() {
+  // @@protoc_insertion_point(field_release:CGData.SelectCharacterServerResponse.multicast_ip)
+  if (!_internal_has_multicast_ip()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return multicast_ip_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SelectCharacterServerResponse::set_allocated_multicast_ip(std::string* multicast_ip) {
+  if (multicast_ip != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  multicast_ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), multicast_ip,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:CGData.SelectCharacterServerResponse.multicast_ip)
+}
+
+// optional int32 multicast_port = 9;
+inline bool SelectCharacterServerResponse::_internal_has_multicast_port() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool SelectCharacterServerResponse::has_multicast_port() const {
+  return _internal_has_multicast_port();
+}
+inline void SelectCharacterServerResponse::clear_multicast_port() {
+  multicast_port_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::_internal_multicast_port() const {
+  return multicast_port_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SelectCharacterServerResponse::multicast_port() const {
+  // @@protoc_insertion_point(field_get:CGData.SelectCharacterServerResponse.multicast_port)
+  return _internal_multicast_port();
+}
+inline void SelectCharacterServerResponse::_internal_set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  multicast_port_ = value;
+}
+inline void SelectCharacterServerResponse::set_multicast_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_multicast_port(value);
+  // @@protoc_insertion_point(field_set:CGData.SelectCharacterServerResponse.multicast_port)
 }
 
 // -------------------------------------------------------------------
@@ -13827,6 +14519,170 @@ inline void CGCharacterPersDesc::set_allocated_descstring(std::string* descstrin
 
 // -------------------------------------------------------------------
 
+// CGGameSysTime
+
+// int32 years = 1;
+inline void CGGameSysTime::clear_years() {
+  years_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_years() const {
+  return years_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::years() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.years)
+  return _internal_years();
+}
+inline void CGGameSysTime::_internal_set_years(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  years_ = value;
+}
+inline void CGGameSysTime::set_years(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_years(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.years)
+}
+
+// int32 month = 2;
+inline void CGGameSysTime::clear_month() {
+  month_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_month() const {
+  return month_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::month() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.month)
+  return _internal_month();
+}
+inline void CGGameSysTime::_internal_set_month(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  month_ = value;
+}
+inline void CGGameSysTime::set_month(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_month(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.month)
+}
+
+// int32 days = 3;
+inline void CGGameSysTime::clear_days() {
+  days_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_days() const {
+  return days_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::days() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.days)
+  return _internal_days();
+}
+inline void CGGameSysTime::_internal_set_days(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  days_ = value;
+}
+inline void CGGameSysTime::set_days(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_days(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.days)
+}
+
+// int32 hours = 4;
+inline void CGGameSysTime::clear_hours() {
+  hours_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_hours() const {
+  return hours_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::hours() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.hours)
+  return _internal_hours();
+}
+inline void CGGameSysTime::_internal_set_hours(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  hours_ = value;
+}
+inline void CGGameSysTime::set_hours(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_hours(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.hours)
+}
+
+// int32 mins = 5;
+inline void CGGameSysTime::clear_mins() {
+  mins_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_mins() const {
+  return mins_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::mins() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.mins)
+  return _internal_mins();
+}
+inline void CGGameSysTime::_internal_set_mins(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  mins_ = value;
+}
+inline void CGGameSysTime::set_mins(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_mins(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.mins)
+}
+
+// int32 secs = 6;
+inline void CGGameSysTime::clear_secs() {
+  secs_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_secs() const {
+  return secs_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::secs() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.secs)
+  return _internal_secs();
+}
+inline void CGGameSysTime::_internal_set_secs(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  secs_ = value;
+}
+inline void CGGameSysTime::set_secs(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_secs(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.secs)
+}
+
+// int32 local_time = 7;
+inline void CGGameSysTime::clear_local_time() {
+  local_time_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_local_time() const {
+  return local_time_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::local_time() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.local_time)
+  return _internal_local_time();
+}
+inline void CGGameSysTime::_internal_set_local_time(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  local_time_ = value;
+}
+inline void CGGameSysTime::set_local_time(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_local_time(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.local_time)
+}
+
+// int32 server_time = 8;
+inline void CGGameSysTime::clear_server_time() {
+  server_time_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::_internal_server_time() const {
+  return server_time_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGGameSysTime::server_time() const {
+  // @@protoc_insertion_point(field_get:CGData.CGGameSysTime.server_time)
+  return _internal_server_time();
+}
+inline void CGGameSysTime::_internal_set_server_time(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  server_time_ = value;
+}
+inline void CGGameSysTime::set_server_time(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_server_time(value);
+  // @@protoc_insertion_point(field_set:CGData.CGGameSysTime.server_time)
+}
+
+// -------------------------------------------------------------------
+
 // CGCharacterData
 
 // .CGData.CGBaseData base_data = 1;
@@ -14834,7 +15690,7 @@ inline void CGCharacterData::set_bank_gold(::PROTOBUF_NAMESPACE_ID::int32 value)
 
 // optional int32 big_line = 33;
 inline bool CGCharacterData::_internal_has_big_line() const {
-  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline bool CGCharacterData::has_big_line() const {
@@ -14842,7 +15698,7 @@ inline bool CGCharacterData::has_big_line() const {
 }
 inline void CGCharacterData::clear_big_line() {
   big_line_ = 0;
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_big_line() const {
   return big_line_;
@@ -14852,12 +15708,214 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::big_line() const {
   return _internal_big_line();
 }
 inline void CGCharacterData::_internal_set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
   big_line_ = value;
 }
 inline void CGCharacterData::set_big_line(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_big_line(value);
   // @@protoc_insertion_point(field_set:CGData.CGCharacterData.big_line)
+}
+
+// optional .CGData.CGGameSysTime game_time = 34;
+inline bool CGCharacterData::_internal_has_game_time() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || game_time_ != nullptr);
+  return value;
+}
+inline bool CGCharacterData::has_game_time() const {
+  return _internal_has_game_time();
+}
+inline void CGCharacterData::clear_game_time() {
+  if (game_time_ != nullptr) game_time_->Clear();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::CGData::CGGameSysTime& CGCharacterData::_internal_game_time() const {
+  const ::CGData::CGGameSysTime* p = game_time_;
+  return p != nullptr ? *p : reinterpret_cast<const ::CGData::CGGameSysTime&>(
+      ::CGData::_CGGameSysTime_default_instance_);
+}
+inline const ::CGData::CGGameSysTime& CGCharacterData::game_time() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.game_time)
+  return _internal_game_time();
+}
+inline void CGCharacterData::unsafe_arena_set_allocated_game_time(
+    ::CGData::CGGameSysTime* game_time) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(game_time_);
+  }
+  game_time_ = game_time;
+  if (game_time) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:CGData.CGCharacterData.game_time)
+}
+inline ::CGData::CGGameSysTime* CGCharacterData::release_game_time() {
+  _has_bits_[0] &= ~0x00000001u;
+  ::CGData::CGGameSysTime* temp = game_time_;
+  game_time_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::CGData::CGGameSysTime* CGCharacterData::unsafe_arena_release_game_time() {
+  // @@protoc_insertion_point(field_release:CGData.CGCharacterData.game_time)
+  _has_bits_[0] &= ~0x00000001u;
+  ::CGData::CGGameSysTime* temp = game_time_;
+  game_time_ = nullptr;
+  return temp;
+}
+inline ::CGData::CGGameSysTime* CGCharacterData::_internal_mutable_game_time() {
+  _has_bits_[0] |= 0x00000001u;
+  if (game_time_ == nullptr) {
+    auto* p = CreateMaybeMessage<::CGData::CGGameSysTime>(GetArenaForAllocation());
+    game_time_ = p;
+  }
+  return game_time_;
+}
+inline ::CGData::CGGameSysTime* CGCharacterData::mutable_game_time() {
+  ::CGData::CGGameSysTime* _msg = _internal_mutable_game_time();
+  // @@protoc_insertion_point(field_mutable:CGData.CGCharacterData.game_time)
+  return _msg;
+}
+inline void CGCharacterData::set_allocated_game_time(::CGData::CGGameSysTime* game_time) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete game_time_;
+  }
+  if (game_time) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::CGData::CGGameSysTime>::GetOwningArena(game_time);
+    if (message_arena != submessage_arena) {
+      game_time = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, game_time, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  game_time_ = game_time;
+  // @@protoc_insertion_point(field_set_allocated:CGData.CGCharacterData.game_time)
+}
+
+// optional int32 game_status = 35;
+inline bool CGCharacterData::_internal_has_game_status() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool CGCharacterData::has_game_status() const {
+  return _internal_has_game_status();
+}
+inline void CGCharacterData::clear_game_status() {
+  game_status_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_game_status() const {
+  return game_status_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::game_status() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.game_status)
+  return _internal_game_status();
+}
+inline void CGCharacterData::_internal_set_game_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  game_status_ = value;
+}
+inline void CGCharacterData::set_game_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_game_status(value);
+  // @@protoc_insertion_point(field_set:CGData.CGCharacterData.game_status)
+}
+
+// optional int32 world_status = 36;
+inline bool CGCharacterData::_internal_has_world_status() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool CGCharacterData::has_world_status() const {
+  return _internal_has_world_status();
+}
+inline void CGCharacterData::clear_world_status() {
+  world_status_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_world_status() const {
+  return world_status_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::world_status() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.world_status)
+  return _internal_world_status();
+}
+inline void CGCharacterData::_internal_set_world_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000008u;
+  world_status_ = value;
+}
+inline void CGCharacterData::set_world_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_world_status(value);
+  // @@protoc_insertion_point(field_set:CGData.CGCharacterData.world_status)
+}
+
+// optional int32 game_pid = 37;
+inline bool CGCharacterData::_internal_has_game_pid() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool CGCharacterData::has_game_pid() const {
+  return _internal_has_game_pid();
+}
+inline void CGCharacterData::clear_game_pid() {
+  game_pid_ = 0;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_game_pid() const {
+  return game_pid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::game_pid() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.game_pid)
+  return _internal_game_pid();
+}
+inline void CGCharacterData::_internal_set_game_pid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000010u;
+  game_pid_ = value;
+}
+inline void CGCharacterData::set_game_pid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_game_pid(value);
+  // @@protoc_insertion_point(field_set:CGData.CGCharacterData.game_pid)
+}
+
+// optional int32 game_port = 38;
+inline bool CGCharacterData::_internal_has_game_port() const {
+  bool value = (_has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline bool CGCharacterData::has_game_port() const {
+  return _internal_has_game_port();
+}
+inline void CGCharacterData::clear_game_port() {
+  game_port_ = 0;
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::_internal_game_port() const {
+  return game_port_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CGCharacterData::game_port() const {
+  // @@protoc_insertion_point(field_get:CGData.CGCharacterData.game_port)
+  return _internal_game_port();
+}
+inline void CGCharacterData::_internal_set_game_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000020u;
+  game_port_ = value;
+}
+inline void CGCharacterData::set_game_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_game_port(value);
+  // @@protoc_insertion_point(field_set:CGData.CGCharacterData.game_port)
 }
 
 // -------------------------------------------------------------------
@@ -17402,6 +18460,8 @@ inline void CGPlayerFlagEnabledData::set_enable(bool value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

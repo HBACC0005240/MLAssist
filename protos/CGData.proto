@@ -314,6 +314,18 @@ message CGCharacterPersDesc
 	string wantString=7;
 	string descString=8;
 }
+//游戏时间
+message CGGameSysTime
+{
+	int32 years=1;
+	int32 month=2;
+	int32 days=3;
+	int32 hours=4;
+	int32 mins=5;
+	int32 secs=6;
+	int32 local_time=7;
+	int32 server_time=8;
+}
 message CGCharacterData
 {
 	CGBaseData base_data=1;	//人物角色数据
@@ -344,11 +356,16 @@ message CGCharacterData
 	int32 server_line = 26;	  //当前服务器线路
 	CGAttrBaseData detail=27;	  //属性
 	repeated CGSkillBaseData skill=28;//技能列表
-	string nick=29;
-	CGCharacterPersDesc pers_desc=30;
-	int32 battle_position=31;
-	int32 bank_gold=32;
-	optional int32 big_line=33;
+	string nick=29;					//个人称号
+	CGCharacterPersDesc pers_desc=30;//个人简介
+	int32 battle_position=31;		//战斗站位
+	int32 bank_gold=32;				//银行金币
+	optional int32 big_line=33;		//游戏大区
+	optional CGGameSysTime game_time=34;//游戏时间
+	optional int32 game_status=35;	//游戏状态
+	optional int32 world_status=36;	//游戏世界状态
+	optional int32 game_pid=37;		//游戏进程
+	optional int32 game_port=38;	//游戏端口
 }
 message CGPetData
 {

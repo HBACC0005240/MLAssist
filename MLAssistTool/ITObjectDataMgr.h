@@ -104,6 +104,9 @@ public:
 	ITObjectList GetAllCharacterList();
 	QString GetGameServerTypeText(int type) { return m_serverTypeForObjName.value(type); }
 
+
+	//!查询
+	QMap<QString,int>& GetPrestigeMap(){return m_sPrestigeMap;}
 protected:
 	bool LoadIdentification();
 	bool LoadAccount();
@@ -190,5 +193,6 @@ private:
 	int m_gameRoleCount = 0;
 	QMap<int, int> m_serverTypeForObjType;
 	QMap<int, QString> m_serverTypeForObjName;
+	QMap<QString,int> m_sPrestigeMap;
 };
 #endif
