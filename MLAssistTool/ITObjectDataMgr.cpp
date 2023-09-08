@@ -2574,6 +2574,8 @@ void ITObjectDataMgr::StoreUploadGidData(const ::CGData::UploadGidDataRequest* r
 		pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();		
 		pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();		
 		pCharacter->setObjectName(sCharacterName);
+		pCharacter->_gid = QString::fromStdString(request->gid());
+
 		gameCharacterAddToServerType(pCharacter, pServerType);
 	}
 	else
@@ -2996,6 +2998,8 @@ void ITObjectDataMgr::StoreUploadGidBankData(const ::CGData::UploadGidBankDataRe
 		pCharacter->_baseData = newOneObject(TObject_BaseData, pCharacter).dynamicCast<ITGameBaseData>();
 		pCharacter->_attrData = newOneObject(TObject_AttributeData, pCharacter).dynamicCast<ITGameAttributeData>();
 		pCharacter->setObjectName(sCharacterName);
+		pCharacter->_gid = QString::fromStdString(request->gid());
+
 		gameCharacterAddToServerType(pCharacter, pServerType);
 	}
 	else
