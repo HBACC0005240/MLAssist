@@ -643,7 +643,7 @@ QTableView
        <string>js</string>
       </attribute>
      </widget>
-     <widget class="GamePythonScriptWgt" name="tab_5">
+     <widget class="GamePythonScriptWgt" name="pythonScriptWgt">
       <attribute name="title">
        <string>Python</string>
       </attribute>

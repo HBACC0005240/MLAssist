@@ -682,14 +682,14 @@ void AttachGameWnd::OnKillProcess()
 
 	if (!IsWindow(attachHwnd))
 		return;
-	g_pGameCtrl->SetGamePort(0);
-	g_pGameCtrl->setGameProcess(0);
-
+	
 	DWORD pid, tid;
 	tid = GetWindowThreadProcessId(attachHwnd, &pid);
 	if (!pid || !tid)
 	{
-		g_pGameCtrl->setGameHwnd(nullptr);		
+		g_pGameCtrl->SetGamePort(0);
+		g_pGameCtrl->setGameProcess(0);
+		g_pGameCtrl->setGameHwnd(nullptr);
 		return;
 	}
 	HANDLE ProcessHandle = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
@@ -701,6 +701,10 @@ void AttachGameWnd::OnKillProcess()
 		}
 		CloseHandle(ProcessHandle);
 	}
+	//调整顺序，否则那边还没干掉，这边进程已经重置为0了
+	g_pGameCtrl->SetGamePort(0);
+	g_pGameCtrl->setGameProcess(0);
+	g_pGameCtrl->setGameHwnd(nullptr);
 }
 
 void AttachGameWnd::OnQueueAttachProcess(quint32 ProcessId, quint32 ThreadId, quint32 hWnd, QString dllPath)

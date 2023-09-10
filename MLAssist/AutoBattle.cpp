@@ -70,6 +70,12 @@ void CBattleWorker::init()
 	m_battleTPos.insert(18, QList<int>({ 13, 16 }));
 	m_battleTPos.insert(19, QList<int>({ 14, 17 }));
 
+	m_teammatePos.insert(0,5);
+	m_teammatePos.insert(1,6);
+	m_teammatePos.insert(2,7);
+	m_teammatePos.insert(3,8);
+	m_teammatePos.insert(4,9);
+
 	//m_devTypeText.insert(dtCondition_Ignore, "忽略");
 	//m_devTypeText.insert(dtCondition_EnemyCount, "敌人数");
 	//m_devTypeText.insert(dtCondition_TeammateCount, "队伍数");
@@ -877,6 +883,7 @@ void CBattleWorker::ResetBattleAnalysisData()
 void CBattleWorker::AnalysisBattleData()
 {
 	GameBattleUnitList pBattleUnitList = m_BattleContext.m_UnitGroup;
+	QVector<int> selfPosList;
 	for (size_t i = 0; i < pBattleUnitList.size(); ++i)
 	{
 		if (pBattleUnitList[i]->exist == false)
@@ -890,8 +897,10 @@ void CBattleWorker::AnalysisBattleData()
 		if (pBattleUnitList[i]->pos >= 0xA)
 			g_pAutoBattleCtrl->m_BattleContext.m_iEnemyCount++; //敌总数
 		else
-			g_pAutoBattleCtrl->m_BattleContext.m_iTeammateCount++; //己方总数
-
+		{
+			g_pAutoBattleCtrl->m_BattleContext.m_iAllTeammateCount++; //己方总数 
+			selfPosList.append(pBattleUnitList[i]->pos);
+		}
 		if (pBattleUnitList[i]->pos == g_pAutoBattleCtrl->m_BattleContext.m_iPlayerPosition)
 		{
 			if (pBattleUnitList[i]->petriding_modelid != 0)
@@ -943,6 +952,13 @@ void CBattleWorker::AnalysisBattleData()
 			//qDebug() << pBattleUnitList[i]->level;
 		}
 		//qDebug("pos %d debuff %X", i, group[i]->debuff);
+	}
+	for (auto it = m_teammatePos.begin(); it != m_teammatePos.end(); ++it)
+	{
+		if (selfPosList.contains(it.key()) || selfPosList.contains(it.value()))
+		{
+			g_pAutoBattleCtrl->m_BattleContext.m_iTeammateCount++;
+		}
 	}
 }
 int CBattleWorker::GetPetPosition(int playerPos)

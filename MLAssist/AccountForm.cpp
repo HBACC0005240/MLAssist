@@ -295,7 +295,8 @@ bool AccountForm::QueryAttachGameWnd()
 								if (g_pGameCtrl->GetStartGameRepeatedGidExit())
 								{
 									qDebug() << "该ID已附加，退出！" << pid << attachPid;
-									qApp->exit(0);
+									//qApp->exit(0);//这个退出没啥用 调用下面杀
+									TerminateProcess(GetCurrentProcess(), 0);								
 									return true;
 								}
 							}

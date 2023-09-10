@@ -94,6 +94,10 @@ GameLuaScriptWgt::GameLuaScriptWgt(QWidget *parent) :
 	connect(this, SIGNAL(runScriptFini()), this, SLOT(doRunScriptFini()));
 	connect(this, SIGNAL(runScriptSignal()), this, SLOT(on_pushButton_start_clicked()));
 	connect(this, SIGNAL(switchScript(const QString &)), this, SLOT(doSwitchScript(const QString &)));
+	connect(ui.pythonScriptWgt,SIGNAL(addLogToLogWgt(const QString&)),this,SLOT(doAddLogToLogWgt(const QString &)));
+	connect(ui.pythonScriptWgt,SIGNAL(clearLogWgtMsg()),this,SLOT(doClearLogWgtMsg()));
+
+	
 	connect(&ITObjectDataMgr::getInstance(), &ITObjectDataMgr::signal_mqttMsg, this, &GameLuaScriptWgt::DealMqttTopicData, Qt::ConnectionType::QueuedConnection);
 	ui.plainTextEdit->setMaximumBlockCount(10);
 	ui.textEdit_log->setMaximumBlockCount(m_scriptLogMaxLine);
@@ -1567,6 +1571,16 @@ void GameLuaScriptWgt::DealMqttTopicData(const QString &topicName, const QString
 	LuaObject objGlobal = (*m_pLuaState)->GetGlobals();
 	auto ls = objGlobal.GetState();
 	m_luaFun.CallRegisterFun(ls, topicName, msg);
+}
+
+void GameLuaScriptWgt::doAddLogToLogWgt(const QString & msg)
+{
+	AddScriptLogMsg(ui.textEdit_log, msg);
+}
+
+void GameLuaScriptWgt::doClearLogWgtMsg()
+{
+	ui.textEdit_log->clear();
 }
 
 void GameLuaScriptWgt::RestartScript()

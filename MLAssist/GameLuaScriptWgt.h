@@ -84,7 +84,8 @@ public slots:
 	void GameOnlineStateChange(int state);
 	void DoStopScriptThread();
 	void DealMqttTopicData(const QString &topicName, const QString &msg);
-
+	void doAddLogToLogWgt(const QString & msg);
+	void doClearLogWgtMsg();
 private:
 	Ui::GameLuaScriptWgt ui;
 	QString m_sLuaScriptRunMsg;

@@ -134,6 +134,8 @@ signals:
 	void signal_mqttMsg(const QString &, const QString &);
 	void signal_publishMqttMsg(const QString &, const QString &);
 	void signal_loadPetData(bool, bool);
+	void signal_addNewSubscribe(const QStringList &);
+
 
 public slots:
 	void doLoadPetData(bool,bool);
@@ -149,6 +151,7 @@ public slots:
 	void OnSubscribeState(QMqttSubscription::SubscriptionState s);
 	void on_publishMqttMsg(const QString &, const QString &);
 	void onCheckIniCfgModify();
+	void doAddNewSubscribe(const QStringList &scribe);
 
 private:
 	ITDataBaseConnPtr m_dbconn;								   //数据库连接对象

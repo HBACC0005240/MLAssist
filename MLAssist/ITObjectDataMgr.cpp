@@ -78,6 +78,7 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	connect(this, &ITObjectDataMgr::signal_publishMqttMsg, this, &ITObjectDataMgr::on_publishMqttMsg, Qt::ConnectionType::QueuedConnection);
 	connect(this, &ITObjectDataMgr::signal_loadPetData, this, &ITObjectDataMgr::doLoadPetData, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, SIGNAL(signal_attachGame()), this, SLOT(on_attachGame_sucess()));
+	connect(this, &ITObjectDataMgr::signal_addNewSubscribe, this, &ITObjectDataMgr::doAddNewSubscribe);
 	/*connect(g_pGameCtrl, &GameCtrl::NotifyGameItemsInfo, this, &ITObjectDataMgr::OnNotifyGetItemsInfo, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGamePetsInfo, this, &ITObjectDataMgr::OnNotifyGetPetsInfo, Qt::ConnectionType::QueuedConnection);*/
 }
@@ -1922,6 +1923,11 @@ void ITObjectDataMgr::onCheckIniCfgModify()
 	RpcSocketClient::getInstance().setServerIp(sServerIp);
 	RpcSocketClient::getInstance().setServerPort(sServerPort);
 	RpcSocketClient::getInstance().init();
+}
+
+void ITObjectDataMgr::doAddNewSubscribe(const QStringList &scribe)
+{
+	AddNewSubscribe(scribe);
 }
 
 bool ITObjectDataMgr::pingToDestination(const QString &strIp)

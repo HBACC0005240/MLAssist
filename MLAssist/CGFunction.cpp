@@ -4588,7 +4588,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 					//重新执行一次重新寻路
 					qDebug() << "还在原图：重新查找路径 进行寻路";
 					auto tgtPos = backPath.end();
-					return AutoMoveInternal(tgtPos->first, tgtPos->second, false);
+					return AutoMoveInternal(tgtPos->first, tgtPos->second, 10000, false);
 				}
 				else
 				{
@@ -4730,11 +4730,11 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 									if (tarX == curPos.x() && tarY == curPos.y())
 									{
 										auto tmpPos = GetRandomSpace(curPos.x(), curPos.y(), 1);
-										AutoMoveInternal(tmpPos.x(), tmpPos.y(), false);
-										bTryRet = AutoMoveInternal(tarX, tarY, false);
+										AutoMoveInternal(tmpPos.x(), tmpPos.y(), 10000, false);
+										bTryRet = AutoMoveInternal(tarX, tarY, 10000, false);
 									}
 									else
-										bTryRet = AutoMoveInternal(tarX, tarY, false);
+										bTryRet = AutoMoveInternal(tarX, tarY, 10000, false);
 									return bTryRet;
 								}
 							}
@@ -4808,7 +4808,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 							auto tmpPosList = GetRandomSpaceFourDir(curX, curY, 2);
 							for (auto tmpPos : tmpPosList)
 							{
-								if (AutoMoveInternal(tmpPos.x(), tmpPos.y(), false))
+								if (AutoMoveInternal(tmpPos.x(), tmpPos.y(), 10000, false))
 								{
 									bBlankRet = true;
 									break;									
@@ -4833,7 +4833,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 							else if (findPath.size() > 1 && isLoop)
 							{
 								qDebug() << "卡墙：AutoMoveInternal" << tarX << tarY;
-								if (AutoMoveInternal(tarX, tarY, false) == false)
+								if (AutoMoveInternal(tarX, tarY, 10000, false) == false)
 									return false;
 								dwLastTime = dwCurTime;
 							}

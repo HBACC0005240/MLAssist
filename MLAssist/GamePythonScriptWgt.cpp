@@ -125,7 +125,13 @@ void GamePythonScriptWgt::OnPythonReadyRead()
 	if (!m_bDebugging)
 	{
 		QString data = m_python->readAll();
-
+		if (data.size() < 1)
+		{
+			return;
+		}
+		if(data.endsWith("\r\n"))
+			data.chop(2);
+		emit addLogToLogWgt(data);
 		m_output->appendPlainText(data);
 
 		if (m_bNavigating)
@@ -287,29 +293,26 @@ void GamePythonScriptWgt::OnAutoRestart()
 
 void GamePythonScriptWgt::on_pushButton_load_clicked()
 {
-	QFileDialog *fileDialog = new QFileDialog(this);
-	fileDialog->setWindowTitle(tr("加载脚本"));
-	fileDialog->setDirectory(".");
-	fileDialog->setNameFilter(tr("Python脚本文件(*.py)"));
-	fileDialog->setFileMode(QFileDialog::ExistingFile);
-	if (fileDialog->exec() == QDialog::Accepted)
+	if (m_scriptPath.isEmpty())
+		m_scriptPath = QCoreApplication::applicationDirPath() + "//Python脚本//";
+	QString szPath = QFileDialog::getOpenFileName(nullptr, QString::fromLocal8Bit("打开"), m_scriptPath, "*.py"); //*.script;
+	if (szPath.isEmpty())
+		return;	
+	QFile file(szPath);
+	if (file.exists())
 	{
-		QString filePath = fileDialog->selectedFiles()[0];
-		QFile file(filePath);
-		if (file.exists())
-		{
-			m_scriptPath = filePath;
-			m_output->appendPlainText(tr("准备运行"));
-			ui.pushButton_run->setEnabled(true);
-			ui.pushButton_debug->setEnabled(true);
-			ui.pushButton_term->setEnabled(false);
-			ui.lineEdit_scriptPath->setText(filePath);
-		}
-		else
-		{
-			QMessageBox::critical(this, tr("错误"), tr("加载Python脚本错误.\n错误信息: %1").arg(file.errorString()), QMessageBox::Ok, 0);
-		}
+		m_scriptPath = szPath;
+		m_output->appendPlainText(tr("准备运行"));
+		ui.pushButton_run->setEnabled(true);
+		ui.pushButton_debug->setEnabled(true);
+		ui.pushButton_term->setEnabled(false);
+		ui.lineEdit_scriptPath->setText(szPath);
 	}
+	else
+	{
+		QMessageBox::critical(this, tr("错误"), tr("加载Python脚本错误.\n错误信息: %1").arg(file.errorString()), QMessageBox::Ok, 0);
+	}
+	
 }
 
 void GamePythonScriptWgt::on_pushButton_run_clicked()
@@ -330,7 +333,7 @@ void GamePythonScriptWgt::on_pushButton_run_clicked()
 		m_bListening = true;
 		m_bNavigating = false;
 		m_bPathBegin = false;
-
+		emit clearLogWgtMsg();
 		m_output->clear();
 
 		QStringList args;

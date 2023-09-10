@@ -8,6 +8,7 @@
 
 #include "../CGALib/gameinterface.h"
 #include "./Astar/AStar.h"
+#include "GPCalc.h"
 
 #define A_FIND_PATH std::vector<std::pair<int, int> >
 
@@ -275,6 +276,8 @@ public:
 	bool GetDebugLog() { return m_bDebugLog; }
 	void SetDebugLog(bool val) { m_bDebugLog = val; }
 
+	void initCaclPetData(stringList petData);
+	std::tuple<int, int> ParsePetGrade(stringList inputData);
 private:
 	CGA::CGAInterface* m_interface;
 	bool m_bMoveing = false;

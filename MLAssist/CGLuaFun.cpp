@@ -3427,7 +3427,7 @@ int CGLuaFun::Lua_SubscribeMsg(LuaState *L)
 	{
 		sDefaultVal << args[1].GetString();
 	}
-	ITObjectDataMgr::getInstance().AddNewSubscribe(sDefaultVal);
+	ITObjectDataMgr::getInstance().signal_addNewSubscribe(sDefaultVal);
 	L->PushBoolean(true);
 	return 1;
 }

@@ -71,7 +71,7 @@ PYBIND11_MODULE(CGAPython, m) {
 	m.def("noisy_function", &noisy_function, py::arg("msg"), py::arg("flush") = true);
 	py::class_<CGA::cga_game_data_t>(m, "cga_game_data_t")
 		.def(py::init<>())
-		.def_readwrite("reserved", &CGA::cga_game_data_t::reserved);
+		.def_readwrite("reserved", &CGA::cga_game_data_t::reserved);	
 	py::class_<CGA::cga_sys_time_t>(m, "cga_sys_time_t")
 		.def(py::init<>())
 		.def_readwrite("years", &CGA::cga_sys_time_t::years)
@@ -630,6 +630,8 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def("SendPetMail", &CGAPython::SendPetMail)
 		.def("GetGameServerInfo", &CGAPython::GetGameServerInfo)
 		.def("AutoMoveTo", &CGAPython::AutoMoveToEx, "自动寻路,参数(x,y,name,timeout),超时可选,单位毫秒", py::arg("x"), py::arg("y"), py::arg("sMapName")="", py::arg("timeout") = 10000)
+		.def("InitCaclPetData", &CGAPython::initCaclPetData)
+		.def("ParsePetGrade", &CGAPython::ParsePetGrade)
 
 		.def("RegisterChatMsgNotify", &CGAPython::RegisterChatMsgNotify)
 		.def("RegisterServerShutdownNotify", &CGAPython::RegisterServerShutdownNotify)

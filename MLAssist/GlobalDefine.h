@@ -434,6 +434,7 @@ typedef struct CGA_BattleContext_s
 	int m_iSkillAllowBit;			 //技能是否允许
 	int m_iPetSkillAllowBit;		 //宠物技能是否允许
 	int m_iConditionTarget;			 //判断目标
+	int m_iAllTeammateCount;		//己方总数包括宠物
 
 	CharacterPtr m_character;
 	GameSkillList m_PlayerSkills;

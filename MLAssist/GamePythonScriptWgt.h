@@ -26,6 +26,8 @@ public:
 signals:
 	void ReportNavigatorPath(QString json);
 	void ReportNavigatorFinish(int exitCode);
+	void addLogToLogWgt(const QString& msg);
+	void clearLogWgtMsg();
 
 public slots:
 	void OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, quint32 port, quint32 hWnd);

@@ -1573,6 +1573,19 @@ bool CGAPython::IsTeamLeader()
 	}
 	return false;
 }
+
+void CGAPython::initCaclPetData(stringList petData)
+{
+	g_pGamePetCalc->initCaclPetData(petData);
+}
+
+std::tuple<int, int> CGAPython::ParsePetGrade(stringList inputData)
+{
+	ParsePetCalcData retData;
+	g_pGamePetCalc->ParsePetGrade(inputData, retData);
+	return std::make_tuple(retData.lossMin,retData.lossMax);
+}
+
 int CGAPython::AutoMoveToEx(int x, int y, std::string sMapName, int timeout /*= 100*/)
 {
 	if (sMapName.empty())
