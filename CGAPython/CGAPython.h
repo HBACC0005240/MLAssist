@@ -215,7 +215,7 @@ public:
 	int GetCraftStatus();
 	bool DoRequest(int request_type);
 	bool EnableFlags(int type, bool enable);
-	bool TradeAddStuffs(cga_sell_items_t items, cga_sell_pets_t pets, int gold);
+	bool TradeAddStuffs(cga_sell_items_t items, std::vector<int> pets, int gold);
 	bool AddAllTradeItems(int step);
 	cga_team_players_t GetTeamPlayerInfo();
 

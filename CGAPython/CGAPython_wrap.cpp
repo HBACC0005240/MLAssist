@@ -1,6 +1,6 @@
 #include "CGAPython.h"
 namespace py = pybind11;
-PYBIND11_MAKE_OPAQUE(std::vector<int>);
+//PYBIND11_MAKE_OPAQUE(std::vector<int>);
 //写了这个 就必须def类  这个在Python调用 感觉也麻烦 就是效率高 另一种会默认转换为python格式
 //PYBIND11_MAKE_OPAQUE(std::vector<cga_pet_skill_info_t>);		
 
@@ -457,6 +457,13 @@ PYBIND11_MODULE(CGAPython, m) {
 		.def_readwrite("itempos", &CGA::cga_sell_item_t::itempos)
 		.def_readwrite("count", &CGA::cga_sell_item_t::count)
 		;
+	py::class_< std::vector<CGA::cga_sell_item_t>>(m, "cga_sell_items_t")
+		.def(py::init<>())
+		.def("append",
+			[](std::vector<cga_sell_item_t>& vec, cga_sell_item_t value) { vec.emplace_back(value); })
+		.def("__iter__", [](std::vector<cga_sell_item_t>& vec) {
+		return py::make_iterator(vec.begin(), vec.end());
+			}, py::keep_alive<0, 1>());
 	py::class_<CGA::cga_buy_item_t>(m, "cga_buy_item_t")
 		.def(py::init<>())
 		.def_readwrite("index", &CGA::cga_buy_item_t::index)
@@ -492,15 +499,16 @@ PYBIND11_MODULE(CGAPython, m) {
 
 	//py::bind_vector<std::vector<cga_pet_skill_info_t>>(m, "cga_pet_skills_info_t", py::module_local(false));
 	//py::bind_vector<std::vector<int>>(m, "VectorInt");
-	py::class_<std::vector<int>>(m, "IntVector")
+	/*py::class_<std::vector<int>>(m, "IntVector")
 		.def(py::init<>())
+		.def("append",
+			[](std::vector<int>& v, int value) { v.emplace_back(value); })
 		.def("clear", &std::vector<int>::clear)
 		.def("pop_back", &std::vector<int>::pop_back)
 		.def("__len__", [](const std::vector<int>& v) { return v.size(); })
 		.def("__iter__", [](std::vector<int>& v) {
 		return py::make_iterator(v.begin(), v.end());
-	}, py::keep_alive<0, 1>())
-		;
+	}, py::keep_alive<0, 1>());*/
 	//py::add_ostream_redirect(m, "ostream_redirect");
 
 	py::class_<CGAPython>(m, "CGA")

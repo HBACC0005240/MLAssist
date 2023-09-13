@@ -553,6 +553,7 @@ bool CGAPython::ClickNPCDialog(int option, int index)
 
 bool CGAPython::SellNPCStore(cga_sell_items_t& items)
 {
+	std::cout << "SellNPCStore" << std::endl;
 	bool bVal = false;
 	m_interface->SellNPCStore(items, bVal);
 	return bVal;
@@ -831,11 +832,19 @@ bool CGAPython::EnableFlags(int type, bool enable)
 	return bVal;
 }
 
+//bool CGAPython::TradeAddStuffs(cga_sell_items_t& items, std::vector<int>& pets, int gold)
+//{
+//	return m_interface->TradeAddStuffs(items, pets, gold);
+//}
 bool CGAPython::TradeAddStuffs(cga_sell_items_t items, cga_sell_pets_t pets, int gold)
 {
+	std::cout << "TradeAddStuffs" << std::endl;
+	for (auto item:items)
+	{
+		std::cout << item.itemid <<"count:" << item.count << "pos:"<<item.itempos << std::endl;
+	}
 	return m_interface->TradeAddStuffs(items, pets, gold);
 }
-
 bool CGAPython::AddAllTradeItems(int step)
 {
 	return m_interface->AddAllTradeItems(step);
