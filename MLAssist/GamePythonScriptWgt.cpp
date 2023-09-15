@@ -318,7 +318,7 @@ void GamePythonScriptWgt::on_pushButton_load_clicked()
 void GamePythonScriptWgt::on_pushButton_run_clicked()
 {
 	int ingame = 0;
-	if (m_port && ui.pushButton_run->isEnabled() && m_python->state() != QProcess::Running && g_CGAInterface->IsInGame(ingame) && ingame)
+	if (/*m_port &&*/ ui.pushButton_run->isEnabled() && m_python->state() != QProcess::Running /*&& g_CGAInterface->IsInGame(ingame) && ingame*/)
 	{
 		ui.pushButton_run->setEnabled(false);
 		ui.pushButton_debug->setEnabled(false);
