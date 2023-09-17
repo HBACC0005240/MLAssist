@@ -407,6 +407,7 @@ public:
 	ITGameCharacter();
 	ITGameCharacter(QString szName, int nType, quint64 ullID);
 	virtual ~ITGameCharacter();
+	ITGameCharacter &operator=(const ITGameCharacter &o);
 
 	void setTargetGameServerType(ITGameServerTypePtr pServer) { _gameServerType = pServer; }
 	ITGameServerTypePtr getTargetGameServerType() { return _gameServerType; }

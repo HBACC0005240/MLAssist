@@ -350,6 +350,7 @@ void GamePythonScriptWgt::on_pushButton_run_clicked()
 		env.insert("CGA_GUI_PID", QString("%1").arg(GetCurrentProcessId()));
 		env.insert("NODE_SKIP_PLATFORM_CHECK", "1");
 		env.insert("PYTHONIOENCODING", "utf-8");
+		env.insert("PYTHONPATH",QCoreApplication::applicationDirPath() + "//Python脚本//common//" );
 		//env.insert("PATH", qgetenv("PATH")+";"+QDir::currentPath());
 		m_python->setProcessEnvironment(env);
 

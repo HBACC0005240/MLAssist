@@ -3319,9 +3319,12 @@ Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* requ
 			pChar->set_direction(pRole->_direction);
 			pChar->set_punchclock(pRole->_punchclock);
 			pChar->set_usingpunchclock(pRole->_usingpunchclock);
-			for (auto tTitle : pRole->_titles)
 			{
-				pChar->add_titles(tTitle.toStdString());
+				QMutexLocker locker(&pRole->_mutex);
+				for (auto tTitle : pRole->_titles)
+				{
+					pChar->add_titles(tTitle.toStdString());
+				}
 			}
 			pChar->set_manu_endurance(pRole->_attrData->_manu_endurance);
 			pChar->set_manu_skillful(pRole->_attrData->_manu_skillful);
@@ -3477,17 +3480,23 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 	{
 		return Status::OK;
 	}
+	
 	auto pCharacter = pServerType->getRoleObjFromRoleName(sCharacterName);
 	if (!pCharacter)
 	{
 		return Status::OK;
 	}
-	response->set_character_name(pCharacter->getObjectName().toStdString().c_str());
+	ITGameCharacterPtr pRole = pCharacter.dynamicCast<ITGameCharacter>();
+
+	//查到了的话 复制一份
+	response->set_character_name(request->char_name());
 	response->set_big_line(request->big_line());
 	response->set_online(0);	
-	ITGameCharacterPtr pRole = pCharacter.dynamicCast<ITGameCharacter>();
-	if (pCharacter)
+	if (pRole)
 	{
+		/*ITGameCharacter tmpCharacter;
+		tmpCharacter = *(pRole.get());*/
+
 		response->set_online(pRole->_connectState);
 		auto pChar = response->mutable_character_data();
 		response->set_character_name(pRole->getObjectName().toStdString());
@@ -3507,10 +3516,15 @@ Status ITObjectDataMgr::SelectCharacterData(const ::CGData::SelectCharacterDataR
 		pChar->set_direction(pRole->_direction);
 		pChar->set_punchclock(pRole->_punchclock);
 		pChar->set_usingpunchclock(pRole->_usingpunchclock);
-		for (auto tTitle : pRole->_titles)
+
 		{
-			pChar->add_titles(tTitle.toStdString());
+			QMutexLocker locker(&pRole->_mutex);
+			for (auto tTitle : pRole->_titles)
+			{
+				pChar->add_titles(tTitle.toStdString());
+			}
 		}
+	
 		pChar->set_x(pRole->_x);
 		pChar->set_y(pRole->_y);
 		pChar->set_server_line(pRole->_server_line);

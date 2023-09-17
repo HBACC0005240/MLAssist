@@ -169,6 +169,7 @@ ITGameItem& ITGameItem::operator=(const ITGameItem& o)
 	this->_itemPos = o._itemPos;
 	this->_itemAttr = o._itemAttr;
 	this->_bExist = o._bExist;
+	return *this;
 }
 
 ITGameMap::ITGameMap(QString szName, int nType, quint64 ullID) :
@@ -244,6 +245,27 @@ ITGameCharacter::ITGameCharacter(QString szName, int nType, quint64 ullID) :
 
 ITGameCharacter::~ITGameCharacter()
 {
+}
+
+ITGameCharacter &ITGameCharacter::operator=(const ITGameCharacter &o)
+{
+	if (this == &o)
+		return *this;
+	this->setObjectName(o.getObjectName());
+	this->setObjectCode(o.getObjectCode());
+	this->setObjectDsec(o.getObjectDesc());
+	//this->_info = o._info;
+	//this->_id = o._id;
+	//this->_cost = o._cost;
+	//this->_flags = o._flags;
+	//this->_index = o._index;
+	//this->_level = o._level;
+	//this->_maxLevel = o._maxLevel;
+	//this->_available = o._available;
+	//this->_xp = o._xp;
+	//this->_maxxp = o._maxxp;
+	//this->_bExist = o._bExist;
+	return *this;
 }
 
 ITAccountIdentity::ITAccountIdentity()
@@ -354,6 +376,7 @@ ITGameSkill& ITGameSkill::operator=(const ITGameSkill& o)
 	this->_xp = o._xp;
 	this->_maxxp = o._maxxp;
 	this->_bExist = o._bExist;
+	return *this;
 }
 
 ITCGPetPictorialBook::ITCGPetPictorialBook()

@@ -1724,6 +1724,9 @@ bool GameCtrl::AutoPickItems()
 		return false;
 	if (m_pPickItemList.size() < 1)
 		return false;
+	if (GetScriptRunState() == SCRIPT_CTRL_RUN)
+		return false;
+	g_pGameFun->RestFun();
 	if (g_pGameFun->GetInventoryEmptySlotCount() < 1)
 	{
 		//	qDebug() << "包裹满了，不自动捡咯";
@@ -1751,6 +1754,7 @@ bool GameCtrl::AutoPickItems()
 				{
 					if (m_bAutoPickCfg.bFollow)
 					{
+						
 						if(g_pGameFun->MoveToNpcNear(unit.xpos, unit.ypos) ==false)
 							break;
 					}

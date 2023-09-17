@@ -4833,7 +4833,7 @@ bool CGFunction::AutoNavigator(A_FIND_PATH &path, bool isSyncMap, bool isLoop)
 							else if (findPath.size() > 1 && isLoop)
 							{
 								qDebug() << "卡墙：AutoMoveInternal" << tarX << tarY;
-								if (AutoMoveInternal(tarX, tarY, 10000, false) == false)
+								if (AutoNavigator(findPath, isSyncMap, false) == false)
 									return false;
 								dwLastTime = dwCurTime;
 							}
@@ -7792,15 +7792,16 @@ void CGFunction::AutoEncounterEnemyThread(CGFunction *pThis)
 		return;
 	}
 	else //回到原点
-	{
+	{		
 		//pThis->WaitInNormalState(20 * 1000); //20秒
 		if (pThis->IsInNormalState())
 		{
-			if (pThis->m_bIsShowAutoEncounterEnemy)
+			/*if (pThis->m_bIsShowAutoEncounterEnemy)
 				g_CGAInterface->WalkTo(startPoint.x(), startPoint.y());
-			else
-				g_CGAInterface->ForceMoveTo(startPoint.x(), startPoint.y(), false, bResult);
+			else*/
+				g_CGAInterface->ForceMoveTo(startPoint.x(), startPoint.y(), true, bResult);
 		}
+		qDebug() << "结束自动遇敌 起点不一致，移动到起点，返回";
 	}
 	emit pThis->signal_stopAutoEncounterEnemy();
 	qDebug() << "结束自动遇敌";

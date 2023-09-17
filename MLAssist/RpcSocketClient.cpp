@@ -475,6 +475,8 @@ void RpcSocketClient::UploadGidBankData()
 	request.set_gid(pChara->sGid.toStdString());
 	request.set_character_name(pChara->name.toStdString());
 	request.set_role_type(pChara->player_index);
+	int bigLine = g_pGameFun->GetGameServerType();
+	request.set_big_line(bigLine);
 
 	int bankGold = 0;
 	g_CGAInterface->GetBankGold(bankGold);
