@@ -31,11 +31,13 @@ void GameFunctionWgt::init()
 void GameFunctionWgt::doLoadUserConfig(QSettings &iniFile)
 {
 	ui.gameOftenFunWgt->doLoadUserConfig(iniFile);
+	ui.sysCfgWgt->doLoadUserConfig(iniFile);
 }
 
 void GameFunctionWgt::doSaveUserConfig(QSettings &iniFile)
 {
 	ui.gameOftenFunWgt->doSaveUserConfig(iniFile);
+	ui.sysCfgWgt->doSaveUserConfig(iniFile);
 }
 
 void GameFunctionWgt::doLoadJsConfig(QJsonObject &obj)

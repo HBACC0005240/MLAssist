@@ -39,6 +39,11 @@
        <string>常用</string>
       </attribute>
      </widget>
+     <widget class="GameSysCfgWgt" name="sysCfgWgt">
+      <attribute name="title">
+       <string>配置</string>
+      </attribute>
+     </widget>
      <widget class="GameNpcSymbolWgt" name="gameNpcSymbolWgt">
       <attribute name="title">
        <string>NPC地标</string>
@@ -93,6 +98,12 @@
    <class>GameAroundPetsWgt</class>
    <extends>QWidget</extends>
    <header>GameAroundPetsWgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameSysCfgWgt</class>
+   <extends>QWidget</extends>
+   <header>GameSysCfgWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

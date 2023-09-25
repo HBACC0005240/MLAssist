@@ -252,6 +252,14 @@ bool AccountForm::IsProcessAttached(quint32 ProcessId)
 bool AccountForm::QueryAttachGameWnd()
 {
 	QString sGid = ui->comboBox_gid->currentText();
+	int nSelectGameServerType = ui->comboBox_gameType->currentData().toInt();
+	if (nSelectGameServerType == 4)
+	{
+		nSelectGameServerType = 13;
+	}else if (nSelectGameServerType == 40)
+	{
+		nSelectGameServerType = 14;
+	}
 	if (sGid.isEmpty())
 	{
 		//	qDebug() << sGid << "游戏id为空";
@@ -277,9 +285,11 @@ bool AccountForm::QueryAttachGameWnd()
 					//登录成功后 读取用户账号
 					void *pBaseAddr = YunLai::GetProcessImageBase1(pid);
 					QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
+					int nGameServerType = g_pGameFun->GetGameServerType(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xB9E858, 15))));
+
 					//这里没有附加才进行附加辅助 已经附加辅助的，直接返回
 					//					qDebug() << "Read账号" <<szLoginUserID;
-					if (szLoginUserID == sGid)
+					if (szLoginUserID == sGid && nSelectGameServerType == nGameServerType)
 					{
 						if (!attached) //没有附加  进行附加
 						{
@@ -943,7 +953,7 @@ void AccountForm::on_account_changed()
 	{
 		if (g_CGAInterface->IsConnected())
 		{
-			g_CGAInterface->LoginGameServer("", "", 0, 0, 0, 0); //通知远端 不自动登录
+			g_CGAInterface->LoginGameServer("", "", -1, -1, -1, -1); //通知远端 不自动登录
 		}
 	}
 }
@@ -959,7 +969,7 @@ void AccountForm::on_checkBox_autoLogin_stateChanged(int state)
 	{
 		if (g_CGAInterface->IsConnected())
 		{
-			g_CGAInterface->LoginGameServer("", "", 0, 0, 0, 0); //通知远端 不自动登录
+			g_CGAInterface->LoginGameServer("", "", -1, -1, -1, -1); //通知远端 不自动登录
 		}
 
 		ui->label_status->setText(tr("自动登录功能已关闭"));

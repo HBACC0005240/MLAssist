@@ -474,6 +474,7 @@ enum TReturnGameData
 	TRet_Game_PetBookInfo,	   //图鉴信息
 	TRet_Game_CheckHavePetBook,//检查图鉴
 	TRet_Game_CustomPrestige,  //自定称号
+	TRet_Game_Charisma,			//人物魅力
 };
 //自定义快捷键
 enum TDefQuickKey

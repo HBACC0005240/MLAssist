@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CustomQuickKeyDlg</string>
+   <string>快捷键设置</string>
+  </property>
+  <property name="whatsThis">
+   <string>设置常用快捷键</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

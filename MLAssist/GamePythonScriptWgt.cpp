@@ -356,7 +356,7 @@ void GamePythonScriptWgt::on_pushButton_run_clicked()
 
 		m_python->setWorkingDirectory(fileInfo.dir().absolutePath());
 		m_python->setProcessChannelMode(QProcess::ProcessChannelMode::MergedChannels);
-		m_python->start(QCoreApplication::applicationDirPath() + "//python//Python310-32//python.exe", args);
+		m_python->start(QCoreApplication::applicationDirPath() + "//Python//Python//python.exe", args);
 
 		UpdateGameTextUI(true);
 	}

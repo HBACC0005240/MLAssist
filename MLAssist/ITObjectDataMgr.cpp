@@ -839,7 +839,7 @@ bool ITObjectDataMgr::LoadOffLineMapData(int index)
 
 bool ITObjectDataMgr::LoadOffLineMapImageData(int index, QImage &mapImage)
 {
-	QString sOffLineMapPath = QApplication::applicationDirPath() + QString("//map//%1.jpg").arg(index);
+	QString sOffLineMapPath = QApplication::applicationDirPath() + QString("//map//0//%1.bmp").arg(index);
 	if (QFile::exists(sOffLineMapPath) == false)
 	{
 		qDebug() << "跨图寻路：未找到指定地图数据！";
@@ -1779,39 +1779,61 @@ void ITObjectDataMgr::LoadPetDataThread(ITObjectDataMgr *pThis, bool isLoadPetCa
 					pThis->m_numberForPet.insert(petBook->number, pObj);
 				}
 			}
+		/*	else
+			{
+				if (isLoadOfflineDb)
+					pThis->loadOfflineDBData(isLoadPetCalcData);
+			}*/
 		}
 		RpcSocketClient::getInstance().GetServerStoreMapData();
 	}
 	else
-	{ //离线时候 算档数据同步过去
+	{ 
 		if (isLoadOfflineDb)
-		{
-			QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
-			bool bRet = false;
-			pThis->m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITECIPHER"));
-			if (pThis->connectToDB("SQLITECIPHER", "CG", sDBPath, "admin", "123456"))
-			{
-				qDebug() << "打开数据库成功！";
-				//		QtConcurrent::run(loadDataBaseInfo, this);
-				pThis->loadDataBaseInfo(pThis);
-				if (isLoadPetCalcData)
-				{
-					auto petData = pThis->LoadPetBook();
-					g_pGamePetCalc->setCaclPetData(petData);
-				}
-				bRet = true;
-			}
-			else
-			{
-				if (pThis->m_dbconn)
-					qDebug() << pThis->m_dbconn->getLastError();
-				bRet = false;
-				qDebug() << "打开数据库错误！";
-			}
-			SaveDataThread(pThis);
-			//			QtConcurrent::run(SaveDataThread, this);
-		}
+			pThis->loadOfflineDBData(isLoadPetCalcData);
 	}
+}
+
+void ITObjectDataMgr::LoadGateMapThread(ITObjectDataMgr *pThis)
+{
+	pThis->LoadMaps();
+	pThis->LoadGateMaps();
+	emit pThis->signal_loadGateMapFini();
+}
+
+void ITObjectDataMgr::loadGateMapData()
+{
+	QtConcurrent::run(LoadGateMapThread, this);
+}
+
+void ITObjectDataMgr::loadOfflineDBData(bool isLoadPetCalcData)
+{
+	//离线时候 算档数据同步过去	
+	QString sDBPath = QApplication::applicationDirPath() + "//db//cg.db";
+	bool bRet = false;
+	m_dbconn = ITDataBaseConnPtr(new ITDataBaseConn("SQLITECIPHER"));
+	if (connectToDB("SQLITECIPHER", "CG", sDBPath, "admin", "123456"))
+	{
+		qDebug() << "打开数据库成功！";
+		//		QtConcurrent::run(loadDataBaseInfo, this);
+		loadDataBaseInfo(this);
+		if (isLoadPetCalcData)
+		{
+			auto petData = this->LoadPetBook();
+			g_pGamePetCalc->setCaclPetData(petData);
+		}
+		bRet = true;
+	}
+	else
+	{
+		if (this->m_dbconn)
+			qDebug() << this->m_dbconn->getLastError();
+		bRet = false;
+		qDebug() << "打开数据库错误！";
+	}
+	SaveDataThread(this);
+	//			QtConcurrent::run(SaveDataThread, this);
+	
 }
 
 void ITObjectDataMgr::OnCheckConnectMqtt()

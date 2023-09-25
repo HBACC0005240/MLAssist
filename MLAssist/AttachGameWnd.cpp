@@ -81,17 +81,21 @@ void AttachGameWnd::OnQueueQueryProcess()
 			{
 				auto wndTitle = QString::fromWCharArray(szText);
 				bool attached = IsProcessAttached(pid);
-				if (!attached && !wndTitle.contains("CGA"))
+				void *pBaseAddr = YunLai::GetProcessImageBase1(pid); //这个占cpu
+				QString sUserName = QString(" [%1] ").arg(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xE12D30, 17))));
+				int nGameServerType = g_pGameFun->GetGameServerType(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xB9E858, 15))));
+				QString sGameServerType = g_pGameFun->GetGameServerTypeTextFromType(nGameServerType);
+				if (!attached && !wndTitle.contains("#"))
 				{
 					//登录成功后 读取用户账号
-					void *pBaseAddr = YunLai::GetProcessImageBase1(pid);
 					//	qDebug() << pBaseAddr;
-					QString sUserName = QString(" [%1] ").arg(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xE12D30, 17))));
+					wndTitle += " ";
+					wndTitle += sGameServerType;
+					wndTitle += " ";
 					wndTitle += sUserName;
-				}
-				void *pBaseAddr = YunLai::GetProcessImageBase1(pid);												   //这个占cpu
+				}						
 				QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
-				CProcessItemPtr item(new CProcessItem((quint32)pid, (quint32)tid, (quint32)hWnd, wndTitle, attached, szLoginUserID));
+				CProcessItemPtr item(new CProcessItem((quint32)pid, (quint32)tid, (quint32)hWnd, wndTitle, attached, szLoginUserID, nGameServerType));
 				list.append(item);
 
 				if (!attached && m_AutoAttachPID == pid && m_AutoAttachTID == tid)
@@ -177,12 +181,12 @@ bool AttachGameWnd::ReadSharedData(quint32 ProcessId, int &port, quint32 &hWnd)
 
 void AttachGameWnd::doLoadUserConfig(QSettings &iniFile)
 {
-	ui.sysCfgWgt->doLoadUserConfig(iniFile);
+	//ui.sysCfgWgt->doLoadUserConfig(iniFile);
 }
 
 void AttachGameWnd::doSaveUserConfig(QSettings &iniFile)
 {
-	ui.sysCfgWgt->doSaveUserConfig(iniFile);
+	//ui.sysCfgWgt->doSaveUserConfig(iniFile);
 }
 
 void AttachGameWnd::on_pushButton_logback()

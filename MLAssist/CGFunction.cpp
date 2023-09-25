@@ -188,6 +188,8 @@ CGFunction::CGFunction()
 	m_returnGameDataHash.insert("左右角色", TRet_Game_PlayerRole);
 	m_returnGameDataHash.insert("检查图鉴", TRet_Game_CheckHavePetBook);
 	m_returnGameDataHash.insert("图鉴信息", TRet_Game_PetBookInfo);
+	m_returnGameDataHash.insert("魅力", TRet_Game_Charisma);
+	m_returnGameDataHash.insert("charisma", TRet_Game_Charisma);
 
 	m_playerActionHash.insert("pk", TCharacter_Action_PK);
 	m_playerActionHash.insert("加入队伍", TCharacter_Action_JOINTEAM);
@@ -884,6 +886,11 @@ QVariant CGFunction::GetCharacterData(const QString &sType)
 		{			
 			return GetGameServerType();
 		}
+		case TRet_Game_Charisma:
+		{
+			playerinfo.value_charisma;
+			break;
+		}
 		default:
 			break;
 	}
@@ -1036,7 +1043,7 @@ int CGFunction::GetBattlePetData(const QString &sType, QString val, QString val2
 				}
 			}
 			break;
-		}
+		}		
 		default:
 			break;
 	}
@@ -5135,116 +5142,116 @@ int CGFunction::AutoMoveToTgtMap(int tx, int ty, int tgtMapIndex, int timeout /*
 		qDebug() << "跨地图寻路中 返回";
 		return 0;
 	}
-	return 0;
-	//auto pGateMapList = ITObjectDataMgr::getInstance().FindTargetNavigation(tgtMapIndex, QPoint(tx, ty));
-	//if (pGateMapList.size() < 1)
-	//{
-	//	qDebug() << "未找到可通行路径！";
-	//	emit signal_crossMapFini("未找到可通行路径！");
-	//	return 0;
-	//}
-	//m_bMapMoveing = true;
-	//bool bRes = false;
-	//for (int i = 0; i < pGateMapList.size(); ++i)
-	//{
-	//	if (g_pGameCtrl->GetExitGame() || m_bStop)
-	//	{
-	//		qDebug() << "跨地图寻路中 玩家手动停止 m_bStop 返回";
-	//		m_bMapMoveing = false;
-	//		emit signal_crossMapFini("玩家手动停止");
-	//		return 0;
-	//	}
-	//	auto pGateMap = pGateMapList.at(i);
-	//	int curMapIndex = GetMapIndex();
-	//	if (pGateMap->_mapNumber == curMapIndex)
-	//	{
-	//		qDebug() << "跨地图寻路 当前地图一致" << pGateMap->_x << pGateMap->_y;
-	//		int tmpTx = pGateMap->_x;
-	//		int tmpTy = pGateMap->_y;
-	//		if (pGateMap->_warpType != 0) //1 或 2
-	//		{
-	//			//获取npc周围一格
-	//			auto tmpTgtPos = GetRandomSpace(tmpTx, tmpTy, 1);
-	//			AutoMoveTo(tmpTgtPos.x(), tmpTgtPos.y(), timeout);
-	//			TurnAboutEx(tmpTx, tmpTy);
-	//			WaitRecvNpcDialog();
-	//			int npcSize = pGateMap->_npcSelect.size();
-	//			for (int i = 0; i < npcSize; ++i)
-	//			{
-	//				auto npcText = pGateMap->_npcSelect.at(i);
-	//				auto npcSelectOpe = npcText.split(",");
-	//				int opetion = 0;
-	//				int index = 0;
-	//				if (npcSelectOpe.size() == 1)
-	//				{
-	//					opetion = npcSelectOpe.at(0).toInt();
-	//				}
-	//				else if (npcSelectOpe.size() == 2)
-	//				{
-	//					opetion = npcSelectOpe.at(0).toInt();
-	//					index = npcSelectOpe.at(1).toInt();
-	//				}
-	//				else
-	//					continue;
-	//				g_CGAInterface->ClickNPCDialog(opetion, index, bRes);
-	//				if (i == (npcSize - 1))
-	//					continue;
-	//				WaitRecvNpcDialog();
-	//			}
-	//		}
-	//		else
-	//			AutoMoveTo(tmpTx, tmpTy, timeout);
-	//		NowhileMapEx(pGateMap->_targetMapNumber, pGateMap->_tx, pGateMap->_ty);
-	//	}
-	//	else //看能否回退一个地图
-	//	{
-	//		qDebug() << "跨地图寻路 当前地图不一致" << curMapIndex << " 路由图：" << pGateMap->_mapNumber << pGateMap->_x << pGateMap->_y;
-	//		if (i > 0)
-	//		{
-	//			pGateMap = pGateMapList.at(i - 1);
-	//			qDebug() << "跨地图寻路 回退一个地图 当前：" << curMapIndex << " 路由图：" << pGateMap->_mapNumber << pGateMap->_x << pGateMap->_y;
-	//			if (pGateMap->_mapNumber == curMapIndex)
-	//			{
-	//				AutoMoveTo(pGateMap->_x, pGateMap->_y, timeout);
-	//				if (g_pGameCtrl->GetExitGame() || m_bStop)
-	//				{
-	//					qDebug() << "跨地图寻路中 m_bStop 返回";
-	//					m_bMapMoveing = false;
-	//					emit signal_crossMapFini("玩家手动停止");
-	//					return 0;
-	//				}
-	//				curMapIndex = GetMapIndex();
-	//				if (pGateMap->_mapNumber == curMapIndex)
-	//				{
-	//					AutoMoveTo(pGateMap->_x, pGateMap->_y, timeout);
-	//				}
-	//			}
-	//			else
-	//			{
-	//				m_bMapMoveing = false;
-	//				qDebug() << "跨地图寻路错误，当前地图和寻路地图不一致！";
-	//				emit signal_crossMapFini("跨地图寻路错误，当前地图和寻路地图不一致");
-	//				return 0;
-	//			}
-	//		}
-	//	}
-	//	//1、判断战斗和切图
-	//	while (!IsInNormalState() && !m_bStop) //战斗或者切图 等待完毕
-	//	{
-	//		qDebug() << "跨地图寻路 战斗或者切图";
-	//		Sleep(1000);
-	//	}
-	//}
-	////最后一段路 貌似没有路由的  所以这里直接寻路
-	//int curMapIndex = GetMapIndex();
-	//if (tgtMapIndex == curMapIndex)
-	//{
-	//	qDebug() << "跨地图寻路 当前地图一致" << tx << ty;
-	//	AutoMoveTo(tx, ty, timeout);
-	//}
-	//qDebug() << "跨地图寻路正常结束";
-	//m_bMapMoveing = false;
-	//emit signal_crossMapFini("");
+	//return 0;
+	auto pGateMapList = ITObjectDataMgr::getInstance().FindTargetNavigation(tgtMapIndex, QPoint(tx, ty));
+	if (pGateMapList.size() < 1)
+	{
+		qDebug() << "未找到可通行路径！";
+		emit signal_crossMapFini("未找到可通行路径！");
+		return 0;
+	}
+	m_bMapMoveing = true;
+	bool bRes = false;
+	for (int i = 0; i < pGateMapList.size(); ++i)
+	{
+		if (g_pGameCtrl->GetExitGame() || m_bStop)
+		{
+			qDebug() << "跨地图寻路中 玩家手动停止 m_bStop 返回";
+			m_bMapMoveing = false;
+			emit signal_crossMapFini("玩家手动停止");
+			return 0;
+		}
+		auto pGateMap = pGateMapList.at(i);
+		int curMapIndex = GetMapIndex();
+		if (pGateMap->_mapNumber == curMapIndex)
+		{
+			qDebug() << "跨地图寻路 当前地图一致" << pGateMap->_x << pGateMap->_y;
+			int tmpTx = pGateMap->_x;
+			int tmpTy = pGateMap->_y;
+			if (pGateMap->_warpType != 0) //1 或 2
+			{
+				//获取npc周围一格
+				auto tmpTgtPos = GetRandomSpace(tmpTx, tmpTy, 1);
+				AutoMoveTo(tmpTgtPos.x(), tmpTgtPos.y(), timeout);
+				TurnAboutEx(tmpTx, tmpTy);
+				WaitRecvNpcDialog();
+				int npcSize = pGateMap->_npcSelect.size();
+				for (int i = 0; i < npcSize; ++i)
+				{
+					auto npcText = pGateMap->_npcSelect.at(i);
+					auto npcSelectOpe = npcText.split(",");
+					int opetion = 0;
+					int index = 0;
+					if (npcSelectOpe.size() == 1)
+					{
+						opetion = npcSelectOpe.at(0).toInt();
+					}
+					else if (npcSelectOpe.size() == 2)
+					{
+						opetion = npcSelectOpe.at(0).toInt();
+						index = npcSelectOpe.at(1).toInt();
+					}
+					else
+						continue;
+					g_CGAInterface->ClickNPCDialog(opetion, index, bRes);
+					if (i == (npcSize - 1))
+						continue;
+					WaitRecvNpcDialog();
+				}
+			}
+			else
+				AutoMoveTo(tmpTx, tmpTy, timeout);
+			NowhileMapEx(pGateMap->_targetMapNumber, pGateMap->_tx, pGateMap->_ty);
+		}
+		else //看能否回退一个地图
+		{
+			qDebug() << "跨地图寻路 当前地图不一致" << curMapIndex << " 路由图：" << pGateMap->_mapNumber << pGateMap->_x << pGateMap->_y;
+			if (i > 0)
+			{
+				pGateMap = pGateMapList.at(i - 1);
+				qDebug() << "跨地图寻路 回退一个地图 当前：" << curMapIndex << " 路由图：" << pGateMap->_mapNumber << pGateMap->_x << pGateMap->_y;
+				if (pGateMap->_mapNumber == curMapIndex)
+				{
+					AutoMoveTo(pGateMap->_x, pGateMap->_y, timeout);
+					if (g_pGameCtrl->GetExitGame() || m_bStop)
+					{
+						qDebug() << "跨地图寻路中 m_bStop 返回";
+						m_bMapMoveing = false;
+						emit signal_crossMapFini("玩家手动停止");
+						return 0;
+					}
+					curMapIndex = GetMapIndex();
+					if (pGateMap->_mapNumber == curMapIndex)
+					{
+						AutoMoveTo(pGateMap->_x, pGateMap->_y, timeout);
+					}
+				}
+				else
+				{
+					m_bMapMoveing = false;
+					qDebug() << "跨地图寻路错误，当前地图和寻路地图不一致！";
+					emit signal_crossMapFini("跨地图寻路错误，当前地图和寻路地图不一致");
+					return 0;
+				}
+			}
+		}
+		//1、判断战斗和切图
+		while (!IsInNormalState() && !m_bStop) //战斗或者切图 等待完毕
+		{
+			qDebug() << "跨地图寻路 战斗或者切图";
+			Sleep(1000);
+		}
+	}
+	//最后一段路 貌似没有路由的  所以这里直接寻路
+	int curMapIndex = GetMapIndex();
+	if (tgtMapIndex == curMapIndex)
+	{
+		qDebug() << "跨地图寻路 当前地图一致" << tx << ty;
+		AutoMoveTo(tx, ty, timeout);
+	}
+	qDebug() << "跨地图寻路正常结束";
+	m_bMapMoveing = false;
+	emit signal_crossMapFini("");
 }
 
 QList<QPoint> CGFunction::FindRandomEntryEx(int x, int y, int w, int h, QString filterPosList)
@@ -5548,10 +5555,10 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 	auto entranceList = GetMazeEntranceList();
 	if (entranceList.size() >= 2)
 	{
-		bool bReachable = true;
+		bool bReachable = true;	
 		for (auto tEntrance : entranceList)
 		{
-			if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+			if (!IsReachableTargetEx(curPos.x(), curPos.y(), tEntrance.x(), tEntrance.y(), false))
 			{
 				bReachable = false;
 				break;
@@ -5559,7 +5566,7 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 		}
 		if (bReachable) //两个出入口可达 退出 否则继续搜索
 		{
-			///begin 同步地图 判断迷宫是否已开
+			///begin 同步地图 判断迷宫是否已开 非离线地图 上传到tool进行同步
 			CheckUploadMapData();
 
 			qSort(entranceList.begin(), entranceList.end(), [&](QPoint a, QPoint b)
@@ -5568,11 +5575,14 @@ void CGFunction::MakeMapOpenContainNextEntrance(int isNearFar)
 						auto bd = GetDistanceEx(curPos.x(), curPos.y(), b.x(), b.y());
 						return ad < bd;
 					});
+			bool bMoveRet = false;
 			if (isNearFar) //取远
-				AutoMoveTo(entranceList[1].x(), entranceList[1].y());
+				bMoveRet = AutoMoveTo(entranceList[1].x(), entranceList[1].y());
 			else
-				AutoMoveTo(entranceList[0].x(), entranceList[0].y());
-			return;
+				bMoveRet = AutoMoveTo(entranceList[0].x(), entranceList[0].y());
+			if (bMoveRet)	//寻路成功返回 失败继续开图
+				return;
+			
 		}
 	}
 	///begin 同步地图 判断迷宫是否已开
@@ -5703,7 +5713,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 					bool bReachable = true;
 					for (auto tEntrance : entranceList)
 					{
-						if (!IsReachableTarget(tEntrance.x(), tEntrance.y()))
+						if (!IsReachableTarget(tEntrance.x(), tEntrance.y(),false))
 						{
 							bReachable = false;
 							break;
@@ -5854,23 +5864,40 @@ bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString 
 }
 
 //加载地图 判断坐标是否可达
-bool CGFunction::IsReachableTargetEx(int sx, int sy, int tx, int ty)
+bool CGFunction::IsReachableTargetEx(int sx, int sy, int tx, int ty, bool useOfflineMap )
 {
 	auto findPath = CalculatePath(sx, sy, tx, ty);
-	if (findPath.size() < 1) //离线地图查找一波
+	if (findPath.size() < 1 && useOfflineMap) //离线地图查找一波
 	{
 		qDebug() << "目标不可达，加载离线地图尝试！";
-		QImage mapImage;
-		if (LoadOffLineMapImageData(mapImage))
+		bool isLoadOfflineMap = false;
+		// 固定地图 可以用离线地图
+		if (!IsInRandomMap())
 		{
-			findPath = CalculatePathEx(mapImage, sx, sy, tx, ty);
-			if (findPath.size() > 0)
-				qDebug() << "离线地图查找路径成功，继续寻路";
-		}else
-		{
-			qDebug() << "未找到匹配的离线地图数据,返回";
+			isLoadOfflineMap = true;
 		}
-	
+		else
+		{
+			//迷宫地图 必须打开tool通信 以及打开同步地图配置 才能加载
+			if (g_pGameCtrl->GetIsOpenNetToMLAssistTool() && g_pGameCtrl->GetIsOpenSyncMap())
+			{
+				isLoadOfflineMap = true;
+			}
+		}
+		if (isLoadOfflineMap)
+		{
+			QImage mapImage;
+			if (LoadOffLineMapImageData(mapImage))
+			{
+				findPath = CalculatePathEx(mapImage, sx, sy, tx, ty);
+				if (findPath.size() > 0)
+					qDebug() << "离线地图查找路径成功，继续寻路";
+			}
+			else
+			{
+				qDebug() << "未找到匹配的离线地图数据,返回";
+			}
+		}	
 	}
 	if (findPath.size() > 0)
 	{
@@ -5879,13 +5906,59 @@ bool CGFunction::IsReachableTargetEx(int sx, int sy, int tx, int ty)
 	return false;
 }
 
-bool CGFunction::IsReachableTarget(int tx, int ty)
+bool CGFunction::IsReachableTargetEx2(int sx, int sy, int tx, int ty, bool &isOfflineMap)
+{
+	isOfflineMap = false;
+	auto findPath = CalculatePath(sx, sy, tx, ty);
+	if (findPath.size() < 1) //离线地图查找一波
+	{
+		qDebug() << "目标不可达，加载离线地图尝试！";
+		bool isLoadOfflineMap = false;
+		// 固定地图 可以用离线地图
+		if (!IsInRandomMap())
+		{
+			isLoadOfflineMap = true;
+		}
+		else
+		{
+			//迷宫地图 必须打开tool通信 以及打开同步地图配置 才能加载
+			if (g_pGameCtrl->GetIsOpenNetToMLAssistTool() && g_pGameCtrl->GetIsOpenSyncMap())
+			{
+				isLoadOfflineMap = true;
+			}
+		}
+		if (isLoadOfflineMap)
+		{
+			QImage mapImage;
+			if (LoadOffLineMapImageData(mapImage))
+			{
+				findPath = CalculatePathEx(mapImage, sx, sy, tx, ty);
+				if (findPath.size() > 0)
+				{
+					isOfflineMap = true;
+					qDebug() << "离线地图查找路径成功，继续寻路";
+				}
+			}
+			else
+			{
+				qDebug() << "未找到匹配的离线地图数据,返回";
+			}
+		}
+	}
+	if (findPath.size() > 0)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CGFunction::IsReachableTarget(int tx, int ty, bool useOfflineMap)
 {
 	//距离判断 虽然有些坐标很近，但有阻碍物，这里还是计算路径
 	try
 	{
 		QPoint curPos = GetMapCoordinate();
-		return IsReachableTargetEx(curPos.x(), curPos.y(), tx, ty);
+		return IsReachableTargetEx(curPos.x(), curPos.y(), tx, ty, useOfflineMap);
 	}
 	catch (const std::exception &e)
 	{
@@ -5897,6 +5970,7 @@ bool CGFunction::IsReachableTarget(int tx, int ty)
 	}
 	return false;
 }
+
 
 bool CGFunction::FindToRandomEntry(int tgtx, int tgty, int w, int h, QList<QPoint> filterPosList)
 {
@@ -10064,6 +10138,45 @@ int CGFunction::GetGameServerType()
 		//怀旧
 	}
 	return -1;
+}
+
+int CGFunction::GetGameServerType(const QString &sIP)
+{
+	if (m_serverNetcom.contains(sIP))
+	{
+		return 14; //网通
+	}
+	else if (m_serverTelecoms.contains(sIP))
+	{
+		return 13; //电信
+	}
+	return -1;
+}
+
+QString CGFunction::GetGameServerTypeText(const QString &sIP)
+{
+	if (m_serverNetcom.contains(sIP))
+	{
+		return "道具网通"; //网通
+	}
+	else if (m_serverTelecoms.contains(sIP))
+	{
+		return "道具电信"; //电信
+	}
+	return "";
+}
+
+QString CGFunction::GetGameServerTypeTextFromType(int serverType)
+{
+	if (serverType == 14)
+	{
+		return "道具网通"; //网通
+	}
+	else if (serverType == 13)
+	{
+		return "道具电信"; //电信
+	}
+	return "";
 }
 
 bool CGFunction::readCreateRandomNameJson()

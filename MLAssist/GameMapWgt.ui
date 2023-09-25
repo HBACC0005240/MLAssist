@@ -42,11 +42,6 @@
        <string>地图</string>
       </attribute>
      </widget>
-     <widget class="GameOftenCoordinateWgt" name="oftenCoordinateWgt">
-      <attribute name="title">
-       <string>常用坐标</string>
-      </attribute>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -57,12 +52,6 @@
    <class>MapForm</class>
    <extends>QWidget</extends>
    <header>MapForm.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>GameOftenCoordinateWgt</class>
-   <extends>QWidget</extends>
-   <header>GameOftenCoordinateWgt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

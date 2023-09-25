@@ -87,6 +87,7 @@ private:
 	bool m_bAutoMaze = false; //自动寻路
 	QString m_searchNpcName;
 	int m_searchType = 1;
+	QFuture<void> m_runNavigatorFuture;
 
 public:
 	bool m_bShowCrosshair = false;

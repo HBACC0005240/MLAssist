@@ -652,7 +652,7 @@ struct GamePickCfg
 class CProcessItem
 {
 public:
-	CProcessItem(quint32 pid, quint32 tid, quint32 hWnd, const QString &szTitle, bool bAttached, const QString &sGid)
+	CProcessItem(quint32 pid, quint32 tid, quint32 hWnd, const QString &szTitle, bool bAttached, const QString &sGid,int gameServerType)
 	{
 		m_ProcessId = pid;
 		m_ThreadId = tid;
@@ -660,6 +660,7 @@ public:
 		m_Title = szTitle; //QString::fromWCharArray(szTitle);
 		m_bAttached = bAttached;
 		m_sLoginUserID = sGid;
+		m_gameServerType = gameServerType;
 	}
 	quint32 m_ProcessId;
 	quint32 m_ThreadId;
@@ -667,6 +668,7 @@ public:
 	QString m_Title;
 	QString m_sLoginUserID;
 	bool m_bAttached;
+	int m_gameServerType = -1;
 };
 
 typedef QSharedPointer<CProcessItem> CProcessItemPtr;

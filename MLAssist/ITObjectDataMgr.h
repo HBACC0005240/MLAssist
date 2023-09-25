@@ -100,12 +100,14 @@ public:
 	QStringList GetLastTgtPublishMsg(const QString& topic);
 	QList<QStringList> GetAllRecvTopicMsgList();
 	void RemoveAllTopics();
+	void loadGateMapData();
 
 protected:
 	bool LoadItems();
 	bool LoadPets();
-	bool LoadGateMaps();
 	bool LoadMaps();
+	bool LoadGateMaps();
+
 	bool isLoading(); //是否加载中
 	bool updateOneDeviceToDB(ITObjectPtr pObj);
 	bool insertOneDeviceToDB(ITObjectPtr pObj);
@@ -128,6 +130,9 @@ protected:
 
 	static void NormalThread(ITObjectDataMgr *pThis);
 	static void LoadPetDataThread(ITObjectDataMgr *pThis,bool,bool);
+	static void LoadGateMapThread(ITObjectDataMgr *pThis);
+	
+	void loadOfflineDBData(bool isLoadPetCalcData=true);
 
 signals:
 	void signal_loadDataFini();
@@ -135,6 +140,7 @@ signals:
 	void signal_publishMqttMsg(const QString &, const QString &);
 	void signal_loadPetData(bool, bool);
 	void signal_addNewSubscribe(const QStringList &);
+	void signal_loadGateMapFini();
 
 
 public slots:

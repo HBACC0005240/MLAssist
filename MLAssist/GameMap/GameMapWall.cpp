@@ -243,7 +243,17 @@ void GameMapWall::mousePressEvent(QGraphicsSceneMouseEvent *event)
 				m_nav_y = mapY;
 				m_naverror = QString();
 				updateMousePosition(mapX, mapY);
-				QtConcurrent::run(RunNavigator, this, mapX, mapY, enter, &m_naverror);
+				if (m_bAutoMaze)
+				{
+					g_pGameFun->StopFun();
+					emit updateUIMsg(QString("上次寻路尚未结束，等待结束..."));
+				}
+				if (!m_runNavigatorFuture.isFinished())
+				{
+					m_runNavigatorFuture.waitForFinished();
+				}
+				emit updateUIMsg(QString("开始寻路..."));
+				m_runNavigatorFuture = QtConcurrent::run(RunNavigator, this, mapX, mapY, enter, &m_naverror);
 			}
 		}
 	}

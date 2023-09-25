@@ -76,6 +76,7 @@ private:
 	bool m_bMouseTranslate = false;
 	qreal m_zoomDelta = 0.1; // 缩放的增量
 	QPoint m_lastMousePos;	 // 鼠标最后按下的位置
+	QFuture<void> m_runNavigatorFuture;
 };
 
 #endif // MYPAINTMAP_H

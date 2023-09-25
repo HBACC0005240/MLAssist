@@ -7416,6 +7416,9 @@ void CGAService::LoginGameServer(std::string gid, std::string glt, int serverid,
 	if (gid.empty())
 	{
 		m_ui_auto_login = false;
+		m_ui_selectbigserver_click_index = bigServerIndex;
+		m_ui_selectserver_click_index = serverIndex;
+		m_ui_selectcharacter_click_index = character;
 	}
 	else
 	{

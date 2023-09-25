@@ -363,8 +363,10 @@ public:
 	bool SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
 			QPoint &nextPos, int searchType = 1, QList<QPoint> filterPosList = QList<QPoint>(), std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack = nullptr);
 	//目标是否可达
-	bool IsReachableTargetEx(int sx, int sy, int tx, int ty);
-	bool IsReachableTarget(int tx, int ty);
+	bool IsReachableTargetEx(int sx, int sy, int tx, int ty, bool useOfflineMap = true);
+	bool IsReachableTargetEx2(int sx, int sy, int tx, int ty,bool& isOfflineMap);
+	bool IsReachableTarget(int tx, int ty,bool useOfflineMap=true);
+
 
 	bool FindToRandomEntry(int x, int y, int w, int h, QList<QPoint> filterPosList);
 	bool FindToRandomEntryEx(int x, int y, int w, int h, QString filterPosList);
@@ -735,6 +737,9 @@ public:
 
 	//获取是网通还是电信
 	int GetGameServerType();
+	int GetGameServerType(const QString& sIP);
+	QString GetGameServerTypeText(const QString& sIP);
+	QString GetGameServerTypeTextFromType(int serverType);
 
 protected:
 	bool InternalAutoNavigator();

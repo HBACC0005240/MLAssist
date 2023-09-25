@@ -286,14 +286,21 @@ void MyPaintMap::mousePressEvent(QMouseEvent *event)
 				m_nav_x = mapX;
 				m_nav_y = mapY;
 				m_naverror = QString();
-				runNavigatorScript(mapX, mapY, enter, &m_naverror);
+				emit runNavigatorScript(mapX, mapY, enter, &m_naverror);
 				if (g_pGameCtrl->GetScriptRunState() == SCRIPT_CTRL_RUN)
 				{
 					QMessageBox::information(this, "提示：", "正在运行脚本！", "确定");
 					return;
 				}
 				else
-					QtConcurrent::run(RunNavigator, this, mapX, mapY, enter, &m_naverror);
+				{
+					if (!m_runNavigatorFuture.isFinished())
+					{
+						g_pGameFun->StopFun();
+						m_runNavigatorFuture.waitForFinished();
+					}
+					m_runNavigatorFuture = QtConcurrent::run(RunNavigator, this, mapX, mapY, enter, &m_naverror);
+				}
 			}
 		}
 	}

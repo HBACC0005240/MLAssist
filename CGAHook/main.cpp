@@ -21,6 +21,10 @@ char g_BasicWindowTitle[256] = { 0 };
 
 HMODULE g_hCGAModule = NULL;
 WCHAR g_szCGAModulePath[1024] = { 0 };
+//电信服务器列表
+std::vector<std::string> g_serverTelecoms = { "221.122.119.111","221.122.119.112","221.122.119.113","221.122.119.114","221.122.119.115" };
+//网通服务器列表
+std::vector<std::string> g_serverNetcom = { "221.122.119.117","221.122.119.119", "221.122.119.120", "221.122.119.166","221.122.119.167" };
 
 using typeCreateMutexA = decltype(CreateMutexA);
 
@@ -42,11 +46,21 @@ LPCWSTR ExtractFileName(LPCWSTR szPath)
 
 LRESULT UpdateGameWindowTitle(VOID)
 {
+	auto gameServerInfo = g_CGAService.GetGameServerInfo();
+	std::string sServerText = "";
+	if (std::find(g_serverNetcom.begin(),g_serverNetcom.end(), gameServerInfo.ip) != g_serverNetcom.end())
+	{
+		sServerText = "道具网通";
+	}
+	if (std::find(g_serverTelecoms.begin(), g_serverTelecoms.end(), gameServerInfo.ip) != g_serverTelecoms.end())
+	{
+		sServerText = "道具电信";
+	}
 	char szNewTitle[256] = { 0 };
 	if (g_CGAService.IsInGame() && g_CGAService.GetPlayerName() && g_CGAService.GetPlayerName()[0])
-		_snprintf(szNewTitle, 256, "%s CGA [%s] (%d线) #%d", g_BasicWindowTitle, g_CGAService.GetPlayerName(), g_CGAService.GetServerIndex(), g_MainPort - CGA_PORT_BASE + 1);
+		_snprintf(szNewTitle, 256, "%s %s [%s] (%d线) #%d", g_BasicWindowTitle, sServerText.c_str(),g_CGAService.GetPlayerName(), g_CGAService.GetServerIndex(), g_MainPort - CGA_PORT_BASE + 1);
 	else
-		_snprintf(szNewTitle, 256, "%s CGA #%d", g_BasicWindowTitle, g_MainPort - CGA_PORT_BASE + 1);
+		_snprintf(szNewTitle, 256, "%s %s #%d", g_BasicWindowTitle, sServerText.c_str(),g_MainPort - CGA_PORT_BASE + 1);
 	return DefWindowProcA(g_MainHwnd, WM_SETTEXT, NULL, (LPARAM)szNewTitle);
 }
 
