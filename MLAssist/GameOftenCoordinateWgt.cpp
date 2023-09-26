@@ -31,6 +31,7 @@ GameOftenCoordinateWgt::GameOftenCoordinateWgt(QWidget *parent) :
 	connect(&ITObjectDataMgr::getInstance(), SIGNAL(signal_loadDataFini()), this, SLOT(doInit()));
 	connect(&ITObjectDataMgr::getInstance(), SIGNAL(signal_loadGateMapFini()), this, SLOT(doInit()));
 	connect(g_pGameCtrl, &GameCtrl::NotifyGetMapInfo, this, &GameOftenCoordinateWgt::doUpdateMapData, Qt::ConnectionType::QueuedConnection);
+	connect(g_pGameCtrl, &GameCtrl::signal_switchFloatOftenMap, this, &GameOftenCoordinateWgt::signal_float_window);
 }
 
 GameOftenCoordinateWgt::~GameOftenCoordinateWgt()

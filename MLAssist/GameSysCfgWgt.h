@@ -35,6 +35,7 @@ public slots:
 	void on_toolButton_tradeNoAccept_clicked();
 	void on_toolButton_saveAll_clicked();
 	void on_toolButton_fetchAll_clicked();
+	void on_toolButton_often_map_clicked();
 	void on_pushButton_sortBag_clicked();
 	void on_pushButton_sortBank_clicked();
 	void on_checkBox_autoSaveBank_stateChanged(int state);

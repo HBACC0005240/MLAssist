@@ -88,7 +88,7 @@ void CGWeb::finishLoading(bool)
 	else if (sCurUrl == sCretaeGidUrl&& m_bCreateGid)	//"https://www.polchina.com.cn/register/?type=creategid&game=ItemSales" 
 	{
 		m_lastCreateGidTime.restart();
-		Sleep(1000);	//休息2秒 防止过快 503 貌似 多块都一样
+		Sleep(2000);	//休息2秒 防止过快 503 貌似 多块都一样
 		QString sGid = ui.lineEdit_gid->text();
 		QString sNewGidNum = QString("%1").arg(m_nBeginNum, m_precisionNum, 10, QLatin1Char('0'));
 		sGid += sNewGidNum;
@@ -255,7 +255,7 @@ void CGWeb::onCheckCreateGid()
 {
 	if (m_bCreateGid)
 	{
-		if (m_lastCreateGidTime.elapsed() < 10000)	//10秒检测  卡了重置
+		if (m_lastCreateGidTime.elapsed() < 60000)	//60秒检测  卡了重置
 			return;
 		QString sCretaeGidUrl = m_gameTypeForUrl.value(m_nGameType)[0];//创建游戏ID界面
 		ui.webEngineView->load(QUrl(sCretaeGidUrl));	//道具服务器

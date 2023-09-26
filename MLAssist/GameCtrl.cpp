@@ -131,6 +131,7 @@ GameCtrl::GameCtrl()
 	m_quickKeyMap.insert(TDef_Quick_Key_Cross, VK_F3);
 	m_quickKeyMap.insert(TDef_Quick_Key_Trade, VK_F4);
 	m_quickKeyMap.insert(TDef_Quick_Key_TradeNoAccept, VK_F5);
+	m_quickKeyMap.insert(TDef_Quick_Key_OftenMap, VK_F6);
 	m_quickKeyMap.insert(TDef_Quick_Key_SaveAll, VK_F7);
 	m_quickKeyMap.insert(TDef_Quick_Key_FetchAll, VK_F8);
 	m_quickKeyMap.insert(TDef_Quick_Key_CallFz, VK_INSERT);
@@ -2676,6 +2677,11 @@ void GameCtrl::OnNotifyGameWndKeyDown(unsigned int keyVal)
 		case TDef_Quick_Key_Encounter: //高速遇敌开关
 		{
 			emit signal_switchAutoEncounterUI(!g_pGameFun->isEncounter());
+			break;
+		}
+		case TDef_Quick_Key_OftenMap:	//常用地图
+		{
+			emit signal_switchFloatOftenMap();
 			break;
 		}
 		default: break;

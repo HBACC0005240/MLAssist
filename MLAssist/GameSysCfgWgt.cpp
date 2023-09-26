@@ -378,6 +378,17 @@ void GameSysCfgWgt::on_toolButton_fetchAll_clicked()
 	}
 }
 
+void GameSysCfgWgt::on_toolButton_often_map_clicked()
+{
+	QString sKey;
+	bool bInput = GetInputKey(sKey);
+	if (bInput)
+	{
+		g_pGameCtrl->SetQuickKey(TDef_Quick_Key_OftenMap, sKey);
+		ui.lineEdit_often_map->setText(sKey);
+	}
+}
+
 void GameSysCfgWgt::on_pushButton_sortBag_clicked()
 {
 	g_pGameFun->SortBagItems();

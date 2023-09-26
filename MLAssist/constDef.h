@@ -488,6 +488,7 @@ enum TDefQuickKey
 	TDef_Quick_Key_FetchAll,
 	TDef_Quick_Key_CallFz,
 	TDef_Quick_Key_Encounter,
+	TDef_Quick_Key_OftenMap,		//!< 常用地图
 };
 enum TScriptUIData
 {

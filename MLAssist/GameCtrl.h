@@ -211,6 +211,7 @@ private:
 	void RemoveTimeoutCache(QMutex &pMutex, TData &tmpCache);
 
 signals:
+	void signal_switchFloatOftenMap();															 //呼出常用地图
 	void signal_exit();																			 //退出辅助
 	void signal_ctrl_app(int);																	 //控制辅助窗口状态
 	void signal_gameWndList(CProcessItemList wndList);											 //游戏窗口列表

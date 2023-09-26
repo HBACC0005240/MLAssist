@@ -653,13 +653,23 @@ void AttachGameWnd::OnRetryAttachProcess()
 
 	int port = 0;
 	quint32 hwnd = 0;
+	quint32 processID = timer->m_ProcessId;
 	if (!ReadSharedData(timer->m_ProcessId, port, hwnd))
 	{
 		if (timer->m_retry > 10)
 		{
 			timer->stop();
 			timer->deleteLater();
-			QMessageBox::information(this, "提示:", "读取共享数据超时，重新加载！");
+			//QMessageBox::information(this, "提示:", "读取共享数据超时，重新加载！");
+			qDebug() << "读取共享数据超时，重新加载！";
+			HANDLE hProcess = ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, processID);
+			if (NULL == hProcess)
+			{
+				//	m_lastEroMsg = "OpenProcess Ero";
+				qDebug() << "打开进程失败";
+				return;
+			}
+			TerminateProcess(hProcess, 0);				
 			return;
 		}
 		else
