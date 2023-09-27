@@ -954,67 +954,63 @@ int CGFunction::GetBattlePetData(const QString &sType, QString val, QString val2
 			else if (val == "散步")
 				nVal = 16;
 			else
-				nVal = val.toInt();
-			if (nVal != 1 && nVal != 2 && nVal != 3 && nVal != 16)
-				return pPet ? pPet->battle_flags : 0;
+				nVal = val.toInt();			
+			int petIndex = -1;
+			if (val2.isEmpty())
+				petIndex = pPet ? pPet->index : -1;
 			else
 			{
-				int petIndex = -1;
-				if (val2.isEmpty())
-					petIndex = pPet ? pPet->index : -1;
-				else
+				petIndex = val2.toInt();
+				if (petIndex == 5) //等级高
 				{
-					petIndex = val2.toInt();
-					if (petIndex == 5) //等级高
-					{
-						int nLv = 0;
-						foreach (auto battlePet, pPetList)
-						{
-							if (battlePet && battlePet->exist && battlePet->level > nLv)
-							{
-								nLv = battlePet->level;
-								pPet = battlePet;
-							}
-						}
-						if (nLv != 0 && pPet)
-						{
-							petIndex = pPet->index;
-						}
-					}
-					else if (petIndex == 6) //等级低
-					{
-						int nLv = 200;
-						foreach (auto battlePet, pPetList)
-						{
-							if (battlePet && battlePet->exist && battlePet->level < nLv)
-							{
-								nLv = battlePet->level;
-								pPet = battlePet;
-							}
-						}
-						if (nLv != 200 && pPet)
-						{
-							petIndex = pPet->index;
-						}
-					}
-				}
-				if (petIndex < 0)
-					return 0;
-				if (nVal == TPET_STATE_BATTLE) //必须把当前战斗宠物设置为其余状态
-				{
+					int nLv = 0;
 					foreach (auto battlePet, pPetList)
 					{
-						if (battlePet && battlePet->exist && battlePet->battle_flags == TPET_STATE_BATTLE) //默认出战宠物
+						if (battlePet && battlePet->exist && battlePet->level > nLv)
 						{
-							g_CGAInterface->ChangePetState(battlePet->index, TPET_STATE_READY, bRet);
-							Sleep(1000);
-							break;
+							nLv = battlePet->level;
+							pPet = battlePet;
 						}
 					}
+					if (nLv != 0 && pPet)
+					{
+						petIndex = pPet->index;
+					}
 				}
-				g_CGAInterface->ChangePetState(petIndex, nVal, bRet);
-				return pPet ? pPet->battle_flags : 0;
+				else if (petIndex == 6) //等级低
+				{
+					int nLv = 200;
+					foreach (auto battlePet, pPetList)
+					{
+						if (battlePet && battlePet->exist && battlePet->level < nLv)
+						{
+							nLv = battlePet->level;
+							pPet = battlePet;
+						}
+					}
+					if (nLv != 200 && pPet)
+					{
+						petIndex = pPet->index;
+					}
+				}
 			}
+			if (petIndex < 0)
+				return 0;
+			if (nVal == TPET_STATE_BATTLE) //必须把当前战斗宠物设置为其余状态
+			{
+				foreach (auto battlePet, pPetList)
+				{
+					if (battlePet && battlePet->exist && battlePet->battle_flags == TPET_STATE_BATTLE) //默认出战宠物
+					{
+						g_CGAInterface->ChangePetState(battlePet->index, TPET_STATE_READY, bRet);
+						Sleep(1000);
+						break;
+					}
+				}
+			}
+			g_CGAInterface->ChangePetState(petIndex, nVal, bRet);
+			return pPet ? pPet->battle_flags : 0;
+			
 		}
 	/*	case TRet_Game_PetBookInfo:		//不支持返回表，其实可以返回字符串，然后转为表
 		{

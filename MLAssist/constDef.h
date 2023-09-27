@@ -417,7 +417,7 @@ enum TCmdConfig
 //宠物状态
 enum TPetState
 {
-	TPET_STATE_NONE = 0,
+	TPET_STATE_NONE = 0,	//!< 空
 	TPET_STATE_READY = 1,  //待命
 	TPET_STATE_BATTLE = 2, //战斗
 	TPET_STATE_REST = 3,   //休息
