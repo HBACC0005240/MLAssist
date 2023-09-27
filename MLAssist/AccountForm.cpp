@@ -342,7 +342,7 @@ void AccountForm::OnAutoLogin()
 	{
 		if (g_CGAInterface->IsConnected())
 		{
-			g_CGAInterface->LoginGameServer("", "", 0, 0, 0, 0); //通知远端 不自动登录
+			g_CGAInterface->LoginGameServer("", "", -1, -1, -1, -1); //通知远端 不自动登录
 		}
 
 		ui->label_status->setText(tr("自动登录功能已关闭"));
