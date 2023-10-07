@@ -876,6 +876,7 @@ void CBattleWorker::ResetBattleAnalysisData()
 	m_BattleContext.m_iBackCount = 0;
 	m_BattleContext.m_iEnemyCount = 0;
 	m_BattleContext.m_iTeammateCount = 0;
+	m_BattleContext.m_iAllTeammateCount = 0;
 	m_BattleContext.m_iPetPosition = -1;
 	m_BattleContext.m_bIsPetRiding = false;
 }

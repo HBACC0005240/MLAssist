@@ -404,6 +404,7 @@ typedef struct CGA_BattleContext_s
 		m_iPetSkillAllowBit = 0;
 		m_iConditionTarget = -1;
 		m_nCurDoubleAction = 0;
+		m_iAllTeammateCount = 0;
 	}
 
 	bool m_bIsPlayer;				 //是否人物

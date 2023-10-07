@@ -7496,6 +7496,8 @@ bool CGFunction::AutoWalkRandomMazeEx()
 		if (IsInRandomMap() == false) //固定地图 退出
 		{
 			qDebug() << "当前是固定地图，不进行自动走迷宫！";
+			m_mazeMoveAbleRange = 13;
+			m_mazeClipMoveAbleRange = 12;
 			return false;
 		}
 		if (sFilterNameList.size() > 0) //精确匹配
@@ -7503,6 +7505,8 @@ bool CGFunction::AutoWalkRandomMazeEx()
 			if (sFilterNameList.contains(curMapName) || sFilterNameList.contains(QString::number(curMapNum)))
 			{
 				qDebug() << "到达目的地" << curMapName << m_sTargetMazeName;
+				m_mazeMoveAbleRange = 13;
+				m_mazeClipMoveAbleRange = 12;
 				return true;
 			}
 		}
@@ -7511,6 +7515,8 @@ bool CGFunction::AutoWalkRandomMazeEx()
 			if (!m_sTargetMazeName.isEmpty() && (curMapName.contains(m_sTargetMazeName) || curMapNum == m_sTargetMazeName.toInt()))
 			{
 				qDebug() << "到达目的地" << curMapName << m_sTargetMazeName;
+				m_mazeMoveAbleRange = 13;
+				m_mazeClipMoveAbleRange = 12;
 				return true;
 			}
 		}
@@ -7536,9 +7542,16 @@ bool CGFunction::AutoWalkRandomMazeEx()
 		{
 			MakeMapOpenContainNextEntrance(1);
 			Sleep(2000); //等待2秒
+			if (curMapName == GetMapName())
+			{
+				qDebug() << "自动迷宫未走到下一层，缩小范围重试";
+				m_mazeMoveAbleRange=10;
+				m_mazeClipMoveAbleRange = 9;
+			}
 		}
 	}
-
+	m_mazeMoveAbleRange = 13;
+	m_mazeClipMoveAbleRange = 12;
 	return true;
 }
 

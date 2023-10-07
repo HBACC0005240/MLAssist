@@ -1727,7 +1727,6 @@ bool GameCtrl::AutoPickItems()
 		return false;
 	if (GetScriptRunState() == SCRIPT_CTRL_RUN)
 		return false;
-	g_pGameFun->RestFun();
 	if (g_pGameFun->GetInventoryEmptySlotCount() < 1)
 	{
 		//	qDebug() << "包裹满了，不自动捡咯";
@@ -1741,6 +1740,12 @@ bool GameCtrl::AutoPickItems()
 			pickNameList.append(pItem->name);
 		}
 	}
+	if (pickNameList.size() < 1)
+	{
+		return false;
+	}
+	g_pGameFun->RestFun();
+
 	QPoint curPos = g_pGameFun->GetMapCoordinate();
 	CGA::cga_map_units_t units;
 	if (g_CGAInterface->GetMapUnits(units))
@@ -4210,6 +4215,13 @@ void GameCtrl::OnSetRealUpdatePlayerUi(int state)
 void GameCtrl::OnEnableDataDisplayUi(int state)
 {
 	m_bEnabledDataDisplayUi = (state == Qt::Checked ? true : false);
+	if (!m_bEnabledDataDisplayUi)
+	{//空的数据 
+		QSharedPointer<CGA_MapCellData_t> mapcollision(new CGA_MapCellData_t);
+		QSharedPointer<CGA_MapCellData_t> mapobject(new CGA_MapCellData_t);
+		QSharedPointer<CGA_MapUnits_t> mapunits(new CGA_MapUnits_t);
+		emit NotifyGetMapCellInfo(mapcollision, mapobject, mapunits);
+	}
 }
 
 void GameCtrl::OnSetAutoEatDeepBlue(int state)
