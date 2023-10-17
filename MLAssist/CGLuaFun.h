@@ -86,6 +86,10 @@ public:
 	int Lua_GatherAccountInfo(LuaState *L);
 	//保存账号仓库信息
 	int Lua_SaveGatherAccountInfos(LuaState *L);
+	//上报仓库信息
+	int Lua_UploadAccountInfos(LuaState *L);
+	int Lua_UploadCharacterInfos(LuaState *L);
+	int Lua_UploadBankInfos(LuaState *L);
 	//等待完成
 	int Lua_Nowhile(LuaState *L);
 	//喊话

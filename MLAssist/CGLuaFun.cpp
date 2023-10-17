@@ -435,6 +435,25 @@ int CGLuaFun::Lua_SaveGatherAccountInfos(LuaState *L)
 	return 0;
 }
 
+int CGLuaFun::Lua_UploadAccountInfos(LuaState *L)
+{
+	RpcSocketClient::getInstance().UploadGidData();
+	RpcSocketClient::getInstance().UploadGidBankData();
+	return 0;
+}
+
+int CGLuaFun::Lua_UploadCharacterInfos(LuaState *L)
+{
+	RpcSocketClient::getInstance().UploadGidData();
+	return 0;
+}
+
+int CGLuaFun::Lua_UploadBankInfos(LuaState *L)
+{
+	RpcSocketClient::getInstance().UploadGidBankData();
+	return 0;
+}
+
 int CGLuaFun::Lua_Nowhile(LuaState *L)
 {
 	LuaStack args(L);

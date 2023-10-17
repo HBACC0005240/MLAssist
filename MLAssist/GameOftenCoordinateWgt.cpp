@@ -477,6 +477,8 @@ void GameOftenCoordinateWgt::on_pushButton_float_clicked()
 
 void GameOftenCoordinateWgt::doUpdateMapData(QString name, int index1, int index2, int index3, int x, int y)
 {
+	if (!this->isVisible())
+		return;
 	if (m_lastMapNumber == index3)
 		return;	
 	if (m_allMapForItem.size() <1)

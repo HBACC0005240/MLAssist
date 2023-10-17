@@ -508,6 +508,9 @@ void GameLuaScriptWgt::initScriptSystem()
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "获取仓库信息", m_luaFun, &CGLuaFun::Lua_GatherAccountInfo);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存仓库信息", m_luaFun, &CGLuaFun::Lua_SaveGatherAccountInfos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "上报仓库信息", m_luaFun, &CGLuaFun::Lua_UploadAccountInfos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "上报角色信息", m_luaFun, &CGLuaFun::Lua_UploadCharacterInfos);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "上报银行信息", m_luaFun, &CGLuaFun::Lua_UploadBankInfos);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "登出服务器", m_luaFun, &CGLuaFun::Lua_LogoutServer);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "获取游戏子账户", m_luaFun, &CGLuaFun::Lua_GetAccountGids);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "保存图鉴信息", m_luaFun, &CGLuaFun::Lua_SavePetPictorialBookToHtml);
