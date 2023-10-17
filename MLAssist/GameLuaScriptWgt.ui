@@ -555,6 +555,12 @@ QTableView
                  </item>
                  <item>
                   <widget class="QLabel" name="label_5">
+                   <property name="minimumSize">
+                    <size>
+                     <width>72</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                    <property name="text">
                     <string>秒登出</string>
                    </property>
@@ -563,7 +569,7 @@ QTableView
                 </layout>
                </item>
                <item>
-                <spacer name="horizontalSpacer_4">
+                <spacer name="horizontalSpacer_5">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -574,6 +580,13 @@ QTableView
                   </size>
                  </property>
                 </spacer>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_logoutKill">
+                 <property name="text">
+                  <string>登出重开</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -611,8 +624,8 @@ QTableView
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>98</width>
-                <height>28</height>
+                <width>368</width>
+                <height>192</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout">

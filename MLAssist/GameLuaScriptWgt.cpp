@@ -1279,6 +1279,10 @@ void GameLuaScriptWgt::OnAutoRestart()
 								m_LastMapChange2 = QTime::currentTime();
 								qDebug() << m_noMoveLogOutTime << "秒坐标未动，登出！";
 								g_pGameFun->LogoutServer();
+								if (ui.checkBox_logoutKill->isChecked())
+								{
+									g_pGameCtrl->KillGameWndProcess();
+								}
 								return;
 							}
 						}

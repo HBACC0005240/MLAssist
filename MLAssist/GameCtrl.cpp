@@ -2370,8 +2370,10 @@ void GameCtrl::NormalThread(GameCtrl *pThis)
 			//先不重置最后时间，上面有连接判断，在游戏才会进入此状态
 			if (pThis->m_lastNormalState.elapsed() > 30 * 60 * 1000) //30分钟 在游戏 状态不正常30分钟，回到服务器界面
 			{
-				qDebug() << "状态不正常，超过30分钟，登出服务器!";
+				qDebug() << "状态不正常，超过30分钟，登出服务器，杀掉游戏进程!";
+				// 登出服务器也不好使，碰到右键失灵问题，必须关闭游戏才行
 				g_pGameFun->LogoutServer();
+				pThis->KillGameWndProcess();			
 				pThis->m_lastNormalState.restart();
 			}
 			if (g_pGameFun->GetMapName() == "艾尔莎岛" && g_pGameFun->IsInBattle())

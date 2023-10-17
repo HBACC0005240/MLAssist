@@ -54,6 +54,8 @@ AccountForm::AccountForm(QWidget *parent) :
 	m_attachExistGameWndTime = QTime::currentTime().addSecs(-15);
 	m_glt_lock = NULL;
 	m_glt_map = NULL;
+	ui->radioButton_randomName->hide();
+	ui->radioButton_nameIncrease->hide();
 	m_loginInterval = g_pGameCtrl->GetAutoLoginInterval();
 	m_POLCN = new QProcess();
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

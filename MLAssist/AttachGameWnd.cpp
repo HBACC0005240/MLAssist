@@ -64,6 +64,16 @@ void AttachGameWnd::OnAutoAttachProcess(quint32 ProcessId, quint32 ThreadId)
 //定时扫描魔力宝贝进程
 void AttachGameWnd::OnQueueQueryProcess()
 {
+	// 界面不可见，说明暂时不关注这里
+	if (!isVisible())
+	{
+		// 游戏状态正常，则直接返回，不正常还是正常流程走
+		if (g_pGameCtrl->getGameConnectState())
+		{
+			return;
+		}
+	}
+	
 	CProcessItemList list;
 	//if (g_pGameCtrl->getGameHwnd() != nullptr) //已附加的 不刷新了 打开的话，后面的附加列没更新，其他打开是已更新的
 	//	return;

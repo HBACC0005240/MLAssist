@@ -57,7 +57,7 @@ void MLAssistTool::initTable()
 	ui.tableView_fz->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Fixed);
 	ui.tableView_fz->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Fixed);
 	ui.tableView_fz->setSelectionBehavior(QAbstractItemView::SelectRows);
-	ui.tableView_fz->setSelectionMode(QAbstractItemView::SingleSelection);
+	//ui.tableView_fz->setSelectionMode(QAbstractItemView::SingleSelection);
 	
 	
 	//ui.tableView_fz->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
@@ -69,7 +69,7 @@ void MLAssistTool::initTable()
 	ui.tableView_ml->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::Fixed);
 	ui.tableView_ml->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::Fixed);
 	ui.tableView_ml->setSelectionBehavior(QAbstractItemView::SelectRows);
-	ui.tableView_ml->setSelectionMode(QAbstractItemView::SingleSelection);	
+//	ui.tableView_ml->setSelectionMode(QAbstractItemView::SingleSelection);	
 
 	//ui.tableView_ml->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
 }
