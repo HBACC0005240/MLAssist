@@ -2374,6 +2374,17 @@ void GameCtrl::NormalThread(GameCtrl *pThis)
 			QThread::msleep(2000);
 			continue;
 		}
+		if (!pThis->m_bUploadPcInfoState)
+		{
+			pThis->m_nUploadPCInfoFailedCount++;
+			if (pThis->m_nUploadPCInfoFailedCount % 100 == 0)
+			{
+				pThis->m_nUploadPCInfoFailedCount = 0;
+				pThis->m_bUploadPcInfoState = RpcSocketClient::getInstance().UploadLocalPCData();
+			}
+		}
+		
+
 		if (!g_pGameFun->IsInNormalState()) //解决卡战斗问题
 		{
 			//先不重置最后时间，上面有连接判断，在游戏才会进入此状态

@@ -489,6 +489,8 @@ private:
 	bool m_bFloorPetVisble = false;															   //地面宠物隐藏显示
 	QTime m_lastPlayerAbnormalState;														   //判断正常状态 防止卡主
 	LocalPCInfo m_sLocalPcInfo;																	//!< 本机电脑信息	
+	bool m_bUploadPcInfoState = false;															//!< 上传本机电脑信息是否成功过
+	int m_nUploadPCInfoFailedCount = 0;															//!< 上传失败次数
 };
 
 template <typename TData>

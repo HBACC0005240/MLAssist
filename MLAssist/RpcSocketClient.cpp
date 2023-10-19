@@ -195,6 +195,44 @@ void RpcSocketClient::GetServerStoreMapData()
 	}
 }
 
+bool RpcSocketClient::UploadLocalPCData()
+{
+	if (!isConnected())
+		return false;
+
+	auto pChara = g_pGameFun->GetGameCharacter();
+	if (!pChara)
+		return false;
+
+	if (pChara->level == 0)
+	{
+		return false;
+	}
+	CGData::UploadLocalPCInfoRequest request;
+	int bigLine = g_pGameFun->GetGameServerType();
+	request.set_gid(pChara->sGid.toStdString());
+	request.set_role_type(pChara->player_index);
+	request.set_character_name(pChara->name.toStdString());
+	request.set_big_line(bigLine);
+	auto localPCInfo=g_pGameCtrl->GetLocalPcInfo();
+	request.set_pc_name(localPCInfo.sPcName.toStdString());
+	request.set_pc_user_name(localPCInfo.sPcUserName.toStdString());
+	request.set_pc_mac_addr(localPCInfo.sPcMacAddr.toStdString());
+	request.set_pc_local_ip(localPCInfo.sPcLocalIp.toStdString());
+	CGData::UploadLocalPCInfoResponse reply;
+	ClientContext context;
+	Status status = _stub->UploadLocalPCData(&context, request, &reply);
+	if (status.ok())
+	{
+		return true;
+	}
+	else
+	{
+		qDebug() << "UploadLocalPCData Failed:" <<  status.error_code() << ": " << status.error_message().c_str();
+	}
+	return false;
+}
+
 void RpcSocketClient::UploadGidData()
 {
 	if (!isConnected())

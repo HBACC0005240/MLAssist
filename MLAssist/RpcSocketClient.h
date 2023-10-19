@@ -124,6 +124,7 @@ public:
 	ITGameItemPtr GetCGItemData(int itemid);
 	QMap<QString, QSharedPointer<CGPetPictorialBook> > GetPetGradeCalcData();
 	void GetServerStoreMapData();
+	bool UploadLocalPCData();
 	void UploadGidData();
 	void UploadGidBankData();
 	void UploadMapData();

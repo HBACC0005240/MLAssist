@@ -36,6 +36,7 @@ service CGRpcService {
 	rpc StoreCGMapData (CGStoreMapRequest) returns (CGStoreMapResponse){};
 
 	//☆定时上报当辅助信息
+	rpc UploadLocalPCData (UploadLocalPCInfoRequest) returns (UploadLocalPCInfoResponse){};		//上报当前游戏所在机器信息
 	rpc UploadGidData (UploadGidDataRequest) returns (UploadGidDataResponse){};					//上报当前游戏数据
 	rpc UploadGidBankData (UploadGidBankDataRequest) returns (UploadGidBankDataResponse){};		//上报当前游戏数据
 	rpc UploadMapData (stream  UploadMapDataRequest) returns (UploadMapDataResponse){};			//上传当前迷宫地图数据
@@ -69,6 +70,23 @@ message CGGmeTypeRequest
 message StringPub
 {
   string value =1;
+}
+//上报当前游戏电脑信息
+message UploadLocalPCInfoRequest
+{
+	string gid=1;						//游戏gid
+	string character_name=2;			//游戏人物名称
+	int32 role_type=3;					//角色类型-左右角色
+	int32 big_line=4;					//角色所在大区 1-时长 13-电信 or 14-网通  23-怀旧牧羊双子 24-怀旧金牛
+	string pc_name=5;			//!< PC名称
+	string pc_user_name=6;		//!< 当前登录用户名称
+	string pc_mac_addr=7;		//!< 当前网卡MAC地址
+	string pc_local_ip=8;		//!< 当前网卡ip地址 注意：不等于公网ip
+}
+//上报当前游戏数据回传
+message UploadLocalPCInfoResponse
+{
+
 }
 //上报当前游戏数据 大区+游戏角色名称  是唯一的
 message UploadGidDataRequest
