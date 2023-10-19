@@ -6,6 +6,7 @@
 #include <QRect>
 #include <QSharedPointer>
 #include <QMutex>
+#include <string>
 
 static QPoint g_defAddTroop(521, 11);
 static QPoint g_defMapCtrl(624, 11);
@@ -649,6 +650,13 @@ struct GamePickCfg
 	int south = 0;				 //南
 	uint64_t lastPickTime = 0;	 //最后一次捡物时间
 	QList<QPoint> filterPosList; //过滤捡取失败物品坐标	貌似得每个物品加个时间 才行 一段时间回复
+};
+struct LocalPCInfo
+{
+	QString sPcName;		//!< PC名称
+	QString sPcUserName;	//!< 当前登录用户名称
+	QString sPcMacAddr;		//!< 当前网卡MAC地址
+	QString sPcLocalIp;		//!< 当前网卡ip地址 注意：不等于公网ip
 };
 class CProcessItem
 {

@@ -11,6 +11,7 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QtConcurrent>
+#include "ITSystemInfo.h"
 
 #define GAME_SKILL_NUM 16
 #define GAME_SUB_SKILL_NUM 10
@@ -51,6 +52,15 @@ GameCtrl::GameCtrl()
 	qRegisterMetaType<QSharedPointer<CProcessItem> >("QSharedPointer<CProcessItem>");
 	qRegisterMetaType<QSharedPointer<GameTeamPlayer> >("QSharedPointer<GameTeamPlayer>");
 	qRegisterMetaType<QList<QSharedPointer<GameTeamPlayer> > >("QList<QSharedPointer<GameTeamPlayer>>");
+	auto netInfos = ITSystemInfo::GetNetworkInfoFromQt();
+	if (netInfos.size() > 0)
+	{
+		m_sLocalPcInfo.sPcLocalIp = QString::fromStdString(netInfos[0].strIP);
+		m_sLocalPcInfo.sPcMacAddr = QString::fromStdString(netInfos[0].strMac);
+	}
+	m_sLocalPcInfo.sPcName = QString::fromStdString(ITSystemInfo::GetPcName());
+	m_sLocalPcInfo.sPcUserName = QString::fromStdString(ITSystemInfo::GetPcUserName());
+
 	m_nLastAutoRenTime.start();
 	m_lastUpdateTeamTime.start();
 	m_pGameCharacter = QSharedPointer<Character>(new Character);
@@ -2325,8 +2335,7 @@ void GameCtrl::GetCharacterDataThread(GameCtrl *pThis)
 			}
 			pThis->m_lastUploadTime.restart();
 		}
-		else
-			QThread::msleep(1000);
+		QThread::msleep(1000);	// 还是慢点请求
 	}
 }
 
@@ -3282,6 +3291,64 @@ void GameCtrl::OnGetCharacterData()
 	emit NotifyGamePetsInfo(newPetList);
 	emit NotifyGameSkillsInfo(newSkillList);
 	emit NotifyGameCompoundInfo(newCompoundList);
+
+	if (!m_bMapIsVisible && !m_bEnabledDataDisplayUi) //不可见 并且没有启用实时刷新周边地图数据 则不进行地图下载
+		return;
+
+	QSharedPointer<CGA_MapCellData_t> mapcollision(new CGA_MapCellData_t);
+	QSharedPointer<CGA_MapCellData_t> mapobject(new CGA_MapCellData_t);
+	QSharedPointer<CGA_MapUnits_t> mapunits(new CGA_MapUnits_t);
+	int st;
+	if (g_CGAInterface->GetGameStatus(st) && st == 3 /*&& m_tabindex == 5*/)
+	{
+		CGA::cga_map_cells_t cells;
+		if (g_CGAInterface->GetMapCollisionTable(true, cells))
+		{
+			mapcollision->xbottom = cells.x_bottom;
+			mapcollision->ybottom = cells.y_bottom;
+			mapcollision->xsize = cells.x_size;
+			mapcollision->ysize = cells.y_size;
+			mapcollision->cells = cells.cell;
+			int index1 = 0, index2 = 0, index3 = 0;
+			std::string filePath;
+			if (g_CGAInterface->GetMapIndex(index1, index2, index3, filePath))
+				mapcollision->mapindex = index3;
+		}
+
+		if (g_CGAInterface->GetMapObjectTable(true, cells))
+		{
+			mapobject->xbottom = cells.x_bottom;
+			mapobject->ybottom = cells.y_bottom;
+			mapobject->xsize = cells.x_size;
+			mapobject->ysize = cells.y_size;
+			mapobject->cells = cells.cell;
+		}
+
+		CGA::cga_map_units_t units;
+		if (g_CGAInterface->GetMapUnits(units))
+		{
+			mapunits->resize((int)units.size());
+			for (int i = 0; i < mapunits->size(); ++i)
+			{
+				(*mapunits)[i].valid = units[i].valid;
+				(*mapunits)[i].type = units[i].type;
+				(*mapunits)[i].unit_id = units[i].unit_id;
+				(*mapunits)[i].model_id = units[i].model_id;
+				(*mapunits)[i].xpos = units[i].xpos;
+				(*mapunits)[i].ypos = units[i].ypos;
+				(*mapunits)[i].item_count = units[i].item_count;
+				(*mapunits)[i].injury = units[i].injury;
+				(*mapunits)[i].level = units[i].level;
+				(*mapunits)[i].flags = units[i].flags;
+				(*mapunits)[i].icon = units[i].icon;
+				(*mapunits)[i].unit_name = QString::fromStdString(units[i].unit_name);
+				(*mapunits)[i].nick_name = QString::fromStdString(units[i].nick_name);
+				(*mapunits)[i].title_name = QString::fromStdString(units[i].title_name);
+				(*mapunits)[i].item_name = QString::fromStdString(units[i].item_name);
+			}
+		}
+	}
+	emit NotifyGetMapCellInfo(mapcollision, mapobject, mapunits);
 }
 
 void GameCtrl::OnGetTeamData()
@@ -3325,60 +3392,7 @@ void GameCtrl::OnGetMapData()
 	}
 	//这部分信号 目前也只有地图用了，用来刷新label信息的
 	emit NotifyGetMapInfo(QString::fromStdString(mapName), index1, index2, mapIndex, (int)(x / 64.0f), (int)(y / 64.0f));
-	if (!m_bMapIsVisible && !m_bEnabledDataDisplayUi) //不可见 并且没有启用实时刷新周边地图数据 则不进行地图下载
-		return;
-
-	QSharedPointer<CGA_MapCellData_t> mapcollision(new CGA_MapCellData_t);
-	QSharedPointer<CGA_MapCellData_t> mapobject(new CGA_MapCellData_t);
-	QSharedPointer<CGA_MapUnits_t> mapunits(new CGA_MapUnits_t);
-	int st;
-	if (g_CGAInterface->GetGameStatus(st) && st == 3 /*&& m_tabindex == 5*/)
-	{
-		CGA::cga_map_cells_t cells;
-		if (g_CGAInterface->GetMapCollisionTable(true, cells))
-		{
-			mapcollision->xbottom = cells.x_bottom;
-			mapcollision->ybottom = cells.y_bottom;
-			mapcollision->xsize = cells.x_size;
-			mapcollision->ysize = cells.y_size;
-			mapcollision->cells = cells.cell;
-			mapcollision->mapindex = mapIndex;
-		}
-
-		if (g_CGAInterface->GetMapObjectTable(true, cells))
-		{
-			mapobject->xbottom = cells.x_bottom;
-			mapobject->ybottom = cells.y_bottom;
-			mapobject->xsize = cells.x_size;
-			mapobject->ysize = cells.y_size;
-			mapobject->cells = cells.cell;
-		}
-
-		CGA::cga_map_units_t units;
-		if (g_CGAInterface->GetMapUnits(units))
-		{
-			mapunits->resize((int)units.size());
-			for (int i = 0; i < mapunits->size(); ++i)
-			{
-				(*mapunits)[i].valid = units[i].valid;
-				(*mapunits)[i].type = units[i].type;
-				(*mapunits)[i].unit_id = units[i].unit_id;
-				(*mapunits)[i].model_id = units[i].model_id;
-				(*mapunits)[i].xpos = units[i].xpos;
-				(*mapunits)[i].ypos = units[i].ypos;
-				(*mapunits)[i].item_count = units[i].item_count;
-				(*mapunits)[i].injury = units[i].injury;
-				(*mapunits)[i].level = units[i].level;
-				(*mapunits)[i].flags = units[i].flags;
-				(*mapunits)[i].icon = units[i].icon;
-				(*mapunits)[i].unit_name = QString::fromStdString(units[i].unit_name);
-				(*mapunits)[i].nick_name = QString::fromStdString(units[i].nick_name);
-				(*mapunits)[i].title_name = QString::fromStdString(units[i].title_name);
-				(*mapunits)[i].item_name = QString::fromStdString(units[i].item_name);
-			}
-		}
-	}
-	emit NotifyGetMapCellInfo(mapcollision, mapobject, mapunits);
+	
 }
 
 void GameCtrl::OnNotifyBattleAction(int flags)

@@ -85,6 +85,7 @@ public:
 	GamePickCfg *GetGamePickItemCfg() { return &m_bAutoPickCfg; }			   //获取人物自动捡物配置
 	GameUpgradeCfg *GetUpgradePetCfg() { return m_upgradePetCfg; }			   //获取宠物升级自动加点配置
 	GamePlayerUpgradeCfg *GetUpgradePlayerCfg() { return m_upgradePlayerCfg; } //获取人物升级自动加点配置
+	LocalPCInfo GetLocalPcInfo() { return m_sLocalPcInfo; }
 
 	//获取最后一次战斗己方宠物平均等级
 	int GetLastBattlePetAvgLv();
@@ -487,6 +488,7 @@ private:
 	bool m_bOpenSyncMap = false;															   //是否打开了同步地图功能
 	bool m_bFloorPetVisble = false;															   //地面宠物隐藏显示
 	QTime m_lastPlayerAbnormalState;														   //判断正常状态 防止卡主
+	LocalPCInfo m_sLocalPcInfo;																	//!< 本机电脑信息	
 };
 
 template <typename TData>
