@@ -1042,6 +1042,7 @@ bool ITObjectDataMgr::LoadGameCharacter()
 				pCharacter->_server_line = recordset->getIntValue("line");
 				pCharacter->_lastUpdateDateTime = QDateTime::fromSecsSinceEpoch(recordset->getInt64Value("last_time"));
 				pCharacter->_connectState = recordset->getIntValue("conn_state");		
+				pCharacter->_localHostId = recordset->getUInt64Value("host_id");
 				pCharacter->_lastUploadTime.restart();
 
 				//重复 删除老的 插入新的  有bug先用名称顶一下
