@@ -182,6 +182,7 @@ bool GameNpcSymbolWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
 		ui.tableWidget->setItem(rowno, 3, item4);
 		m_unitIDForItem.insert(unit.unit_id, item3);
 	}
+	return true;
 }
 
 bool GameNpcSymbolWgt::removeUnitRow(const CGA_MapUnit_t &unit)

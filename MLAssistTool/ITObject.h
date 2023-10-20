@@ -24,6 +24,7 @@ class ITGameSkill;
 class ITCharcterServer;
 class ITRouteNode;
 class ITGameServerType;
+class ITHost;
 
 
 typedef QSharedPointer<ITObject> ITObjectPtr;
@@ -60,8 +61,10 @@ typedef QSharedPointer<ITAccount> ITAccountPtr;
 typedef QList<ITAccountPtr> ITAccountList;
 
 typedef QSharedPointer<ITAccountGid> ITAccountGidPtr;
-typedef QList<ITAccountGidPtr> ITAccountGidList;
+typedef QList<ITAccountGidPtr> ITAccountGidList; 
 
+typedef QSharedPointer<ITHost> ITHostPtr;
+typedef QList<ITHostPtr> ITHostList;
 
 typedef QSharedPointer<ITGameSkill> ITGameSkillPtr;
 typedef QList<ITGameSkillPtr> ITGameSkillList;
@@ -89,6 +92,7 @@ Q_DECLARE_METATYPE(ITCGPetPictorialBook)
 Q_DECLARE_METATYPE(ITGameSkillPtr)
 Q_DECLARE_METATYPE(ITCharcterServerPtr)
 Q_DECLARE_METATYPE(ITGameServerTypePtr)
+Q_DECLARE_METATYPE(ITHostPtr)
 enum TObjStatus //设备状态
 {
 	TStatus_Normal = 0, //正常
@@ -143,6 +147,8 @@ public:
 	void setObjectID(quint64 nCode);
 	void setObjectName(const QString& sName);
 	void setObjectCode(int code);
+	void setObjectOrder(int order) { m_nOrder = order; }
+	void setObjectDsec(QString strDesc) { m_sObjDesc = strDesc; }
 
 	//获取属性值
 	const int& getObjectCode()const;
@@ -150,7 +156,7 @@ public:
 	const quint64 getObjectID(void)const;
 	const QString getObjectName(void)const;
 	const QString getObjectDesc(void)const { return m_sObjDesc; }
-	void setObjectDsec(QString strDesc) { m_sObjDesc = strDesc; }
+	int getObjectOrder( ) { return m_nOrder; }
 
 	quint64 id64() { return m_ullID; }
 	void setObjectParent(ITObjectPtr parent) { m_parent = parent; }
@@ -172,6 +178,7 @@ private:
 	ITObjectPtr m_parent;			//父设备
 	ITObjectList m_childList;		//子列表
 	QString m_sObjDesc;				//描述
+	int m_nOrder = 0;				//!< 排序用
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITObject)
 //! 游戏基础数据-人物、宠物共有数据
@@ -456,6 +463,7 @@ public:
 	QDateTime _lastUpdateDateTime;	//!< 最后一次上传时间
 	int _connectState = 0;		//!< 0离线 1在线
 	ITGameServerTypePtr _gameServerType = nullptr;//!< 游戏大区
+	quint64 _localHostId = 0;	//!< 所在电脑信息
 };
 
 DECLARE_OBJECT_MODULE_FACTORY(ITGameCharacter)
@@ -566,3 +574,12 @@ public:
 	int multicast_port ;			//组播端口
 };
 DECLARE_OBJECT_MODULE_FACTORY(ITCharcterServer)
+class ITHost : public ITObject
+{
+public:
+	QString _sPcName;			//!< PC名称
+	QString _sPcUserName;		//!< 当前登录用户名称
+	QString _sPcMacAddr;		//!< 当前网卡MAC地址
+	QString _sPcLocalIp;		//!< 当前网卡ip地址 注意：不等于公网ip
+};
+DECLARE_OBJECT_MODULE_FACTORY(ITHost)

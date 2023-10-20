@@ -360,7 +360,7 @@ public:
 	void MakeMapOpenContainNextEntrance(int isNearFar = 1);
 	//1地图全开 2有2个迷宫出入口，并可达即可
 	bool SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type = 1);
-	bool SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
+	int SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
 			QPoint &nextPos, int searchType = 1, QList<QPoint> filterPosList = QList<QPoint>(), std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack = nullptr);
 	//目标是否可达
 	bool IsReachableTargetEx(int sx, int sy, int tx, int ty, bool useOfflineMap = true);

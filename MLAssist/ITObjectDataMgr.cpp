@@ -185,6 +185,7 @@ bool ITObjectDataMgr::init()
 	RpcSocketClient::getInstance().setServerIp(sServerIp);
 	RpcSocketClient::getInstance().setServerPort(sServerPort);
 	RpcSocketClient::getInstance().init();
+
 	QtConcurrent::run(NormalThread, this);
 	QtConcurrent::run(LoadPetDataThread, this, isLoadPetCalcData, isLoadOfflineDb);
 
@@ -219,6 +220,7 @@ QString ITObjectDataMgr::FindItemCodeName(int nCode)
 			return pObj->getObjectName();
 		}
 	}
+	return "";
 }
 
 ITObjectDataMgr &ITObjectDataMgr::getInstance(void)

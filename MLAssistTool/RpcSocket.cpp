@@ -96,6 +96,12 @@ Status GGRpcServiceImpl::StoreCGMapData(::grpc::ServerContext* context, const ::
 	return Status::OK;
 }
 
+Status GGRpcServiceImpl::UploadLocalPCData(::grpc::ServerContext* context, const ::CGData::UploadLocalPCInfoRequest* request, ::CGData::UploadLocalPCInfoResponse* response)
+{
+	ITObjectDataMgr::getInstance().UploadLocalPCData(request, response);
+	return Status::OK;
+}
+
 Status GGRpcServiceImpl::UploadGidData(::grpc::ServerContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response)
 {
 	ITObjectDataMgr::getInstance().StoreUploadGidData(request);

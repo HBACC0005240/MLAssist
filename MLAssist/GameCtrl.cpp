@@ -473,6 +473,7 @@ int GameCtrl::GetLastBattlePetLv(int type)
 	else if (type == 2) //最高
 	{
 	}
+	return 0;
 }
 
 void GameCtrl::RestLastBattlePetLv(int type)
@@ -1426,6 +1427,7 @@ bool GameCtrl::AutoTransformation()
 	m_nWorkType = TWork_Transformation;
 	m_pTransformation->bChecked = true;
 	g_CGAInterface->StartWork(pSelectSkill->index, m_pTransformation->nLv, bResult);
+	return true;
 }
 
 bool GameCtrl::AutoCosplay()
@@ -1471,6 +1473,7 @@ bool GameCtrl::AutoCosplay()
 	m_nWorkType = TWork_Cosplay;
 	m_pCosplay->bChecked = true;
 	g_CGAInterface->StartWork(pSelectSkill->index, m_pCosplay->nLv, bResult);
+	return true;
 }
 
 bool GameCtrl::AutoPetRiding()
@@ -1515,6 +1518,7 @@ bool GameCtrl::AutoPetRiding()
 	m_nWorkType = TWork_PetRiding;
 	m_pAutoPetRiding->bChecked = true;
 	g_CGAInterface->StartWork(pSelectSkill->index, m_pAutoPetRiding->nLv, bResult);
+	return true;
 }
 
 void GameCtrl::OverTimeCheck()
@@ -1798,6 +1802,7 @@ bool GameCtrl::AutoPickItems()
 			m_bAutoPickCfg.lastPickTime = QDateTime::currentMSecsSinceEpoch();
 		}
 	}
+	return false;
 }
 
 bool GameCtrl::AutoUpgradeAddPoint()

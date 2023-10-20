@@ -223,6 +223,7 @@ bool GameGamerWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
 		ui.tableWidget->setItem(rowno, 8, item9);
 		m_unitIDForItem.insert(unit.unit_id, item4);
 	}
+	return true;
 }
 
 bool GameGamerWgt::removeUnitRow(const CGA_MapUnit_t &unit)

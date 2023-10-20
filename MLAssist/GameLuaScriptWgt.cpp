@@ -256,8 +256,8 @@ void GameLuaScriptWgt::AddMyLuaLoader(lua_State *pState)
 	lua_pushnil(pState);			  /* L: package loaded nil */
 	while (0 != lua_next(pState, -2)) /* L: package loaded, key, value，上一个栈顶为nil，弹出nil，获得表的第一个key和value，压入栈 */
 	{
-		QString key = lua_tostring(pState, -2, ""); /*这时候栈顶得下一个,是key*/
-		QString val = lua_tostring(pState, -1, ""); /*这时候栈顶得下一个,是key*/
+		QString key = lua_tostring(pState, -2); /*这时候栈顶得下一个,是key*/
+		QString val = lua_tostring(pState, -1); /*这时候栈顶得下一个,是key*/
 
 		QString tableKey = key; /*下面是对key的一段处理*/
 		qDebug() << key << val;

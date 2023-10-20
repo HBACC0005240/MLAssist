@@ -42,6 +42,13 @@ enum TObjectType
 	TObject_ServerType_CGOld_AriGem=0x6131,			//!< 怀旧牧羊双子
 	TObject_ServerType_CGOld_Taurus = 0x6132,		//!< 怀旧金牛
 
+	TObject_Host = 0x7100,							//!< 电脑
+	TObject_Host_PC = 0x7101,						//!< 台式电脑 服务器 笔记本先不配置了
+	TObject_Host_Notebook = 0x7102,					//!< 笔记本 
+	TObject_Host_Server = 0x7103,					//!< 服务器 
+	TObject_Host_Pad = 0x7103,						//!< 平板 
+
+
 };
 enum TBattleType
 {

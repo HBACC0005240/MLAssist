@@ -90,6 +90,11 @@ ITObjectDataMgr::ITObjectDataMgr(void)
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_CGOld, NEW_MODULE_FACTORY(ITGameServerType));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_CGOld_AriGem, NEW_MODULE_FACTORY(ITGameServerType));
 	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_ServerType_CGOld_Taurus, NEW_MODULE_FACTORY(ITGameServerType));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Host, NEW_MODULE_FACTORY(ITHost));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Host_PC, NEW_MODULE_FACTORY(ITHost));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Host_Notebook, NEW_MODULE_FACTORY(ITHost));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Host_Server, NEW_MODULE_FACTORY(ITHost));
+	ObjectModuleRegisty::GetInstance().RegisterModuleFactory(TObject_Host_Pad, NEW_MODULE_FACTORY(ITHost));
 	//m_serverTypeForObjType.insert(13, TObject_ServerType);
 	//m_serverTypeForObjType.insert(13, TObject_ServerType_ItemSales);
 	m_serverTypeForObjType.insert(13, TObject_ServerType_ItemSales_Telecom);
@@ -842,6 +847,54 @@ bool ITObjectDataMgr::LoadAccountGid()
 				pServerTypeObj->addChildObj(pObj);
 				pServerTypeObj->_gidForObj.insert(gid, pObj);
 
+				m_pObjectList.insert(nID, pObj);
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+bool ITObjectDataMgr::LoadHost()
+{
+	if (m_dbconn == NULL)
+		return false;
+	QString strsql = QString("SELECT * FROM host_data");
+	auto recordset = m_dbconn->execQuerySql(strsql);
+	if (recordset != NULL)
+	{
+		while (recordset->next())
+		{
+			quint64 nID = recordset->getUInt64Value("id");
+			QString pc_name = recordset->getStrValue("pc_name");
+			QString pc_user_name = recordset->getStrValue("pc_user_name");
+			QString pc_mac_addr = recordset->getStrValue("pc_mac_addr");
+			QString pc_local_ip = recordset->getStrValue("pc_local_ip");
+			int order = recordset->getIntValue("order_num");		
+			int type = recordset->getIntValue("type");		
+			QString sDesc = recordset->getStrValue("remark");	//详细信息 从item表拿
+			if (pc_mac_addr.isEmpty())
+			{
+				//加入删除列表，后面自动删除数据库 这里未加入objectList和addObjectList 所以调deleteOneObject无意义
+				if (!m_pDelObjectList.contains(nID))
+				{
+					ITHostPtr pObj = newOneObject(type, nID).dynamicCast<ITHost>();
+					m_pDelObjectList.insert(pObj->getObjectID(), pObj);
+				}
+				continue;
+
+			}
+			ITHostPtr pObj = newOneObject(type, nID).dynamicCast<ITHost>();
+			if (pObj)
+			{
+				pObj->_sPcName = pc_name;
+				pObj->_sPcUserName = pc_user_name;
+				pObj->_sPcMacAddr = pc_mac_addr;
+				pObj->_sPcLocalIp = pc_local_ip;
+				pObj->setObjectName(pc_name);
+				pObj->setObjectDsec(sDesc);
+				pObj->setObjectID(nID);				
+				pObj->setObjectOrder(order);
 				m_pObjectList.insert(nID, pObj);
 			}
 		}
@@ -1756,6 +1809,11 @@ bool ITObjectDataMgr::deleteOneDeviceFromDB(ITObjectPtr pObj)
 		strSql = QString("DELETE FROM attribute_data WHERE id=%1").arg(pObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
+	else if (GETDEVCLASS(objType) == TObject_Host)
+	{
+		strSql = QString("DELETE FROM  host_data WHERE id=%1").arg(pObj->getObjectID());			
+		bret = m_dbconn->execSql(strSql);
+	}
 	qDebug() << strSql;
 	return bret;
 }
@@ -1942,15 +2000,16 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 		QMutexLocker locker(&tmpObj->_mutex);
 		strSql = QString("INSERT INTO character(type,sex,gold,bankgold,score,job,useTitle,"
 			"avatar_id,unitid,petid,petriding,direction,punchclock,usingpunchclock,value_charisma,"
-			"x,y,battle_position,map_number,line,big_line,conn_state,last_time,id,role_type,souls,gid,name,titles,map_name,nick_name)"
+			"x,y,battle_position,map_number,line,big_line,conn_state,last_time,id,role_type,souls,gid,name,titles,map_name,nick_name,host_id)"
 			" VALUES(%1,%2,%3,%4,%5,'%6',%7,%8,%9,%10,%11,%12,%13,%14,%15,%16,%17,%18,"
-			"%19,%20,%21,%22,%23,%24,%25,%26,'%27','%28','%29','%30','%31')")
+			"%19,%20,%21,%22,%23,%24,%25,%26,'%27','%28','%29','%30','%31',%32)")
 			.arg(tmpObj->_type).arg(tmpObj->_sex).arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle)
 			.arg(tmpObj->_avatar_id).arg(tmpObj->_unitid).arg(tmpObj->_petid).arg(tmpObj->_petriding).arg(tmpObj->_direction).arg(tmpObj->_punchclock)\
 			.arg(tmpObj->_usingpunchclock).arg(tmpObj->_value_charisma).arg(tmpObj->_x).arg(tmpObj->_y)\
 			.arg(tmpObj->_battle_position).arg(tmpObj->_map_number).arg(tmpObj->_server_line).arg(tmpObj->_big_line).arg(tmpObj->_connectState)\
 			.arg(tmpObj->_lastUpdateDateTime.toSecsSinceEpoch()).arg(tmpObj->getObjectID()) .arg(tmpObj->getObjectType())\
-			.arg(tmpObj->_souls).arg(tmpObj->_gid).arg(tmpObj->getObjectName()).arg(tmpObj->_titles.join("|")).arg(tmpObj->_map_name).arg(tmpObj->_nickName);
+			.arg(tmpObj->_souls).arg(tmpObj->_gid).arg(tmpObj->getObjectName()).arg(tmpObj->_titles.join("|")).arg(tmpObj->_map_name).arg(tmpObj->_nickName)
+			.arg(tmpObj->_localHostId);
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_BaseData)
@@ -2035,6 +2094,19 @@ bool ITObjectDataMgr::insertOneDeviceToDB(ITObjectPtr pObj)
 						 .arg(tmpObj->getObjectID())						 
 						 .arg(tmpObj->_server_type)
 						 .arg(tmpObj->getObjectName());
+		bret = m_dbconn->execSql(strSql);
+	}else if (GETDEVCLASS(objType) == TObject_Host)
+	{
+		auto tmpObj = pObj.dynamicCast<ITHost>();
+		strSql = QString("INSERT INTO host_data(id,type,pc_name,pc_user_name,pc_mac_addr,pc_local_ip,order_num,remark) VALUES(%1,%2,'%3','%4','%5','%6',%7,'%8')")
+			.arg(tmpObj->getObjectID())
+			.arg(tmpObj->getObjectType())
+			.arg(tmpObj->_sPcName)			
+			.arg(tmpObj->_sPcUserName)
+			.arg(tmpObj->_sPcMacAddr)
+			.arg(tmpObj->_sPcLocalIp)
+			.arg(tmpObj->getObjectOrder())
+			.arg(tmpObj->getObjectDesc());
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -2229,30 +2301,31 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 				"score=%7,job='%8',useTitle=%9,titles='%10',"
 				"value_charisma=%11,souls=%12,nick_name='%13',avatar_id=%14,unitid=%15,petid=%16,petriding=%17,"
 				"direction=%18,punchclock=%19,usingpunchclock=%20,x=%21,y=%22,battle_position=%23,map_name='%24',"
-				"map_number=%25,line=%26,big_line=%27,last_time=%28,conn_state=%29,role_type=%30 WHERE id=%31")
+				"map_number=%25,line=%26,big_line=%27,last_time=%28,conn_state=%29,role_type=%30,host_id=%31 WHERE id=%32")
 			.arg(tmpObj->_gid).arg(tmpObj->_type).arg(tmpObj->getObjectName()).arg(tmpObj->_sex)
 			.arg(tmpObj->_gold).arg(tmpObj->_bankgold).arg(tmpObj->_score).arg(tmpObj->_job).arg(tmpObj->_useTitle).arg(tmpObj->_titles.join("|"))\
 			.arg(tmpObj->_value_charisma)
-						 .arg(tmpObj->_souls)
-						 .arg(tmpObj->_nickName)
-						 .arg(tmpObj->_avatar_id)
-						 .arg(tmpObj->_unitid)
-						 .arg(tmpObj->_petid)
-						 .arg(tmpObj->_petriding)
-						 .arg(tmpObj->_direction)
-						 .arg(tmpObj->_punchclock)
-						 .arg(tmpObj->_usingpunchclock)
-						 .arg(tmpObj->_x)
-						 .arg(tmpObj->_y)
-						 .arg(tmpObj->_battle_position)
-						 .arg(tmpObj->_map_name)
-						 .arg(tmpObj->_map_number)
-						 .arg(tmpObj->_server_line)
-						 .arg(tmpObj->_big_line)
-						 .arg(tmpObj->_lastUpdateDateTime.toSecsSinceEpoch())
-						 .arg(tmpObj->_connectState)
-						 .arg(tmpObj->getObjectType())
-						 .arg(tmpObj->getObjectID());
+			.arg(tmpObj->_souls)
+			.arg(tmpObj->_nickName)
+			.arg(tmpObj->_avatar_id)
+			.arg(tmpObj->_unitid)
+			.arg(tmpObj->_petid)
+			.arg(tmpObj->_petriding)
+			.arg(tmpObj->_direction)
+			.arg(tmpObj->_punchclock)
+			.arg(tmpObj->_usingpunchclock)
+			.arg(tmpObj->_x)
+			.arg(tmpObj->_y)
+			.arg(tmpObj->_battle_position)
+			.arg(tmpObj->_map_name)
+			.arg(tmpObj->_map_number)
+			.arg(tmpObj->_server_line)
+			.arg(tmpObj->_big_line)
+			.arg(tmpObj->_lastUpdateDateTime.toSecsSinceEpoch())
+			.arg(tmpObj->_connectState)
+			.arg(tmpObj->getObjectType())
+			.arg(tmpObj->_localHostId)
+			.arg(tmpObj->getObjectID());
 		bret = m_dbconn->execSql(strSql);
 	}
 	else if (objType == TObject_BaseData)
@@ -2334,6 +2407,21 @@ bool ITObjectDataMgr::updateOneDeviceToDB(ITObjectPtr pObj)
 						 .arg(tmpObj->_server_type)
 						 .arg(tmpObj->getObjectName())
 						 .arg(tmpObj->getObjectID());
+		bret = m_dbconn->execSql(strSql);
+	}
+	else if (GETDEVCLASS(objType) == TObject_Host)
+	{
+		auto tmpObj = pObj.dynamicCast<ITHost>();
+		strSql = QString("UPDATE host_data SET type=%1,pc_name='%2',pc_user_name='%3',pc_mac_addr='%4',pc_local_ip='%5',order_num=%6,remark='%7' WHERE id=%8")
+		.arg(tmpObj->getObjectType())
+		.arg(tmpObj->_sPcName)
+		.arg(tmpObj->_sPcUserName)
+		.arg(tmpObj->_sPcMacAddr)
+		.arg(tmpObj->_sPcLocalIp)
+		.arg(tmpObj->getObjectOrder())
+		.arg(tmpObj->getObjectDesc())
+		.arg(tmpObj->getObjectID())
+		;
 		bret = m_dbconn->execSql(strSql);
 	}
 	qDebug() << strSql;
@@ -3235,6 +3323,65 @@ void ITObjectDataMgr::UploadCharcterServer(const ::CGData::UploadCharcterServerR
 	pCharForObjHash.insert(sCharacterName, pCharacter);
 	m_charNameForObj.insert(big_line, pCharForObjHash);
 	
+}
+
+void ITObjectDataMgr::UploadLocalPCData(const ::CGData::UploadLocalPCInfoRequest* request, ::CGData::UploadLocalPCInfoResponse* response)
+{
+	QString sMac = QString::fromStdString(request->pc_mac_addr());
+	if (sMac.isEmpty())
+	{
+		return;
+	}
+	QString sGid = QString::fromStdString(request->gid());
+	QString sCharacterName = QString::fromStdString(request->character_name());
+	int nBidLine = request->big_line();
+
+	if (sGid.isEmpty() || sCharacterName.isEmpty())
+		return;
+	int nServerType;
+	if (m_serverTypeForObjType.contains(nBidLine))
+	{
+		nServerType = m_serverTypeForObjType.value(nBidLine);
+	}
+	else
+	{
+		nServerType = TObject_ServerType_ItemSales_Telecom;
+		nBidLine = 13;
+	}
+	auto pServerType = m_serverTypeForObj.value(nBidLine);
+	if (pServerType == nullptr)
+	{
+		return;
+	}
+	ITGameCharacterPtr pCharacter = pServerType->getRoleObjFromRoleName(sCharacterName).dynamicCast<ITGameCharacter>();
+	if (!pCharacter)
+		request;
+	
+	ITHostPtr pHost = nullptr;
+	auto pObjList = GetDstObjTypeList(TObject_Host);	
+	for (auto& pObj : pObjList)
+	{
+		auto pTmpHost = pObj.dynamicCast<ITHost>();
+		if (pTmpHost && pTmpHost->_sPcMacAddr == sMac)
+		{
+			pHost = pTmpHost;
+			break;
+		}
+	}	
+	if (!pHost)
+		pHost = newOneObject(TObject_Host).dynamicCast<ITHost>();
+	if (!pHost)
+	{
+		qDebug() << "UploadLocalPCInfo newOneObject Failed";
+		return;
+	}
+	pHost->_sPcMacAddr = sMac;
+	pHost->_sPcLocalIp = QString::fromStdString(request->pc_local_ip());
+	pHost->_sPcName = QString::fromStdString(request->pc_name());
+	pHost->_sPcUserName = QString::fromStdString(request->pc_user_name());
+	pHost->setEditStatus();
+	pCharacter->_localHostId = pHost->getObjectID();
+	pCharacter->setEditStatus();
 }
 
 Status ITObjectDataMgr::SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response)

@@ -76,6 +76,7 @@ public:
 	void StoreUploadGidData(const ::CGData::UploadGidDataRequest* request);
 	void StoreUploadGidBankData(const ::CGData::UploadGidBankDataRequest* request);
 	void UploadCharcterServer(const ::CGData::UploadCharcterServerRequest *request);
+	void UploadLocalPCData(const ::CGData::UploadLocalPCInfoRequest* request, ::CGData::UploadLocalPCInfoResponse* response);
 	//辅助查询接口
 	Status SelectGidData(const ::CGData::SelectGidDataRequest* request, ::CGData::SelectGidDataResponse* response);
 	Status SelectCharacterServer(const ::CGData::SelectCharacterServerRequest *request, ::CGData::SelectCharacterServerResponse *response);
@@ -111,6 +112,7 @@ protected:
 	bool LoadIdentification();
 	bool LoadAccount();
 	bool LoadAccountGid();
+	bool LoadHost();
 	bool LoadGameServerType();
 	bool LoadGameCharacter();
 	bool LoadBaseData();

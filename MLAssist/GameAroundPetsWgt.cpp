@@ -199,6 +199,7 @@ bool GameAroundPetsWgt::judgeNeedUpdate(const CGA_MapUnit_t &unit)
 
 		m_unitIDForPet.insert(unit.unit_id, item5);
 	}
+	return true;
 }
 
 bool GameAroundPetsWgt::removeUnitRow(const CGA_MapUnit_t &unit)

@@ -2928,6 +2928,7 @@ bool CGFunction::TradeInternal(const QString &sName /*= ""*/, const QString &myT
 	DoCharacterAction(TCharacter_Action_TRADE_CONFIRM);
 	qDebug() << "交易确认完成！";
 	WaitTradeMsg();
+	return true;
 }
 
 bool CGFunction::WaitTradeMsg()
@@ -3680,6 +3681,7 @@ bool CGFunction::SaveBagAllItemsToBank()
 			}
 		}
 	}
+	return true;
 }
 
 bool CGFunction::WithdrawItem(const QString &itemName, int count)
@@ -5248,6 +5250,7 @@ int CGFunction::AutoMoveToTgtMap(int tx, int ty, int tgtMapIndex, int timeout /*
 	qDebug() << "跨地图寻路正常结束";
 	m_bMapMoveing = false;
 	emit signal_crossMapFini("");
+	return true;
 }
 
 QList<QPoint> CGFunction::FindRandomEntryEx(int x, int y, int w, int h, QString filterPosList)
@@ -5734,7 +5737,7 @@ bool CGFunction::SearchAroundMapOpen(QList<QPoint> &allMoveAblePosList, int type
 	return false;
 }
 
-bool CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
+int CGFunction::SearchAroundMapUnit(QList<QPoint> &allMoveAblePosList, QString name, QPoint &findPos, QPoint &enterPos,
 		QPoint &nextPos, int searchType, QList<QPoint> filterPosList, std::function<QVariantList(QPoint findPos, QPoint nextPos)> callBack)
 {
 	if (g_pGameCtrl->GetExitGame() || m_bStop)
