@@ -8,7 +8,7 @@
 #include <QProcess>
 #include <QTime>
 #include <QWidget>
-
+#include <QTimer>
 namespace Ui
 {
 class AccountForm;
@@ -95,6 +95,7 @@ private:
 	QTime m_loginFailureTime; //登录失败定时器 30秒
 	QString m_loginFailureMsg;
 	int m_loginFailureState = 0;
+	QTimer m_autoLoginTimer;
 };
 
 #endif // ACCOUNTFORM_H

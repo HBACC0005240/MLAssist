@@ -442,6 +442,7 @@ void ITObjectDataMgr::loadDataBaseInfo(ITObjectDataMgr* pThis)
 	pThis->LoadAccount();
 	pThis->LoadGameServerType();
 	pThis->LoadAccountGid();
+	pThis->LoadHost();
 	pThis->LoadGameCharacter();
 	pThis->LoadGidPets();
 	pThis->LoadBaseData();

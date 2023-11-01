@@ -46,6 +46,7 @@ public:
 	void SetSelfHttpServerPort(int port) { m_nSelfHttpServerPort = port; }
 	void SetCreateLog(bool bFlag) { m_bCreateLog = bFlag; }
 	void SetCGGameInstallPath(const QString &sPath) { m_sCGInstallPath = sPath; }
+	void SetAutoLogin(bool bFlag) { m_bAutoLogin = bFlag; }
 
 	void Disconnect();
 	quint32 GetGameThreadID() { return m_nGameThreadID; }
@@ -57,6 +58,7 @@ public:
 	int GetSelfHttpServerPort() { return m_nSelfHttpServerPort; }
 	bool GetCreateLog() { return m_bCreateLog; }
 	QString GetCGGameInstallPath() { return m_sCGInstallPath; }
+	bool GetIsAutoLogin() { return m_bAutoLogin; }
 
 	void SetGameGid(const QString &gid);
 	QString GetGameGid();
@@ -491,6 +493,7 @@ private:
 	LocalPCInfo m_sLocalPcInfo;																	//!< 本机电脑信息	
 	bool m_bUploadPcInfoState = false;															//!< 上传本机电脑信息是否成功过
 	int m_nUploadPCInfoFailedCount = 0;															//!< 上传失败次数
+	bool m_bAutoLogin = true;																	//!< 自动登录是否打开
 };
 
 template <typename TData>

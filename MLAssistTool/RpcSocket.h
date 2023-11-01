@@ -129,6 +129,7 @@ public:
 	Status StoreCGItemData(::grpc::ServerContext* context, const ::CGData::CGStoreItemRequest* request, ::CGData::CGStoreItemResponse* response)override;
 	Status StoreCGMapData(::grpc::ServerContext* context, const ::CGData::CGStoreMapRequest* request, ::CGData::CGStoreMapResponse* response)override;
 
+	Status UploadLocalPCData(::grpc::ServerContext *context, const ::CGData::UploadLocalPCInfoRequest *request, ::CGData::UploadLocalPCInfoResponse *response);
 	Status UploadGidData(::grpc::ServerContext* context, const ::CGData::UploadGidDataRequest* request, ::CGData::UploadGidDataResponse* response)override;
 	Status UploadGidBankData(::grpc::ServerContext* context, const ::CGData::UploadGidBankDataRequest* request, ::CGData::UploadGidBankDataResponse* response)override;
 	Status UploadMapData(::grpc::ServerContext* context, ::grpc::ServerReader< ::CGData::UploadMapDataRequest>* stream, ::CGData::UploadMapDataResponse* response)override;

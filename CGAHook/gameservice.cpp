@@ -2659,13 +2659,13 @@ void CGAService::Initialize(game_type type)
 
 	if (m_game_type == cg_se_3000)
 	{
-		g_bgm_index = CONVERT_GAMEVAR(int*, 0);
+		g_bgm_index = CONVERT_GAMEVAR(int*, 0x252A84);
 		g_world_status = CONVERT_GAMEVAR(CXorValue*, 0xC0C350);
 		g_game_status = CONVERT_GAMEVAR(CXorValue*, 0xC0C360);
 		g_player_xpos = CONVERT_GAMEVAR(CXorValue*, 0x8B03B4);
 		g_player_ypos = CONVERT_GAMEVAR(CXorValue*, 0x8B03E4);
 		g_playerBase = CONVERT_GAMEVAR(playerbase_t**, 0xCAEF88);
-		g_player_name = CONVERT_GAMEVAR(char*, 0xA150B0);
+		g_player_name = CONVERT_GAMEVAR(char*, 0xA150B0);	//ACB8A8
 		g_bank_item_base = CONVERT_GAMEVAR(bank_item_info_t*, 0);//TODO
 		g_pet_base = CONVERT_GAMEVAR(pet_t*, 0xC0A0D0);
 		g_pet_id = CONVERT_GAMEVAR(int*, 0x8B918C);

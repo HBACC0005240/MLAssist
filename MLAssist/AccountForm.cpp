@@ -176,10 +176,9 @@ AccountForm::AccountForm(QWidget *parent) :
 			ui->comboBox_Chara->addItem(QIcon(sPath + QString::number(106250 + (i - 21) * 25) + ".gif"), roleName[i], i);
 		}
 	}
-	QTimer *timer = new QTimer(this);
-	connect(g_pGameCtrl, SIGNAL(signal_exit()), timer, SLOT(stop()));
-	connect(timer, SIGNAL(timeout()), this, SLOT(OnAutoLogin()));
-	timer->start(1000);
+	connect(g_pGameCtrl, SIGNAL(signal_exit()), &m_autoLoginTimer, SLOT(stop()));
+	connect(&m_autoLoginTimer, SIGNAL(timeout()), this, SLOT(OnAutoLogin()));
+	m_autoLoginTimer.start(1000);
 
 	m_game_pid = 0;
 	m_game_tid = 0;
@@ -308,6 +307,13 @@ bool AccountForm::QueryAttachGameWnd()
 								{
 									qDebug() << "该ID已附加，退出！" << pid << attachPid;
 									//qApp->exit(0);//这个退出没啥用 调用下面杀
+									QFile file("autoExit.txt");
+									if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+									{
+										QTextStream out(&file);
+										out.setCodec("UTF-8");
+										out << QString::fromWCharArray(L"该ID已附加，退出： ") << sGid << " ServerType:" << nGameServerType << " Pid:" << pid << "attachPid:" << attachPid << "\n";
+									}
 									TerminateProcess(GetCurrentProcess(), 0);								
 									return true;
 								}
@@ -323,7 +329,6 @@ bool AccountForm::QueryAttachGameWnd()
 
 void AccountForm::OnAutoLogin()
 {
-
 	//运行易玩通登录超时判断 超过15秒 如果还是运行中 则杀掉进程 返回，如果不是运行中进入下一步
 	if (m_loginquery.elapsed() > 15 * 1000)
 	{
@@ -336,8 +341,11 @@ void AccountForm::OnAutoLogin()
 
 	if (!ui->groupBox_createChara->isChecked()) //不创建人物
 	{
-		CGA::cga_create_chara_t req;
-		g_CGAInterface->CreateCharacter(req); //通知不创建人物
+		if (g_CGAInterface->IsConnected())
+		{
+			CGA::cga_create_chara_t req;
+			g_CGAInterface->CreateCharacter(req); //通知不创建人物
+		}		
 	}
 	//不自动登录 直接返回
 	if (!ui->checkBox_autoLogin->isChecked())
@@ -969,6 +977,25 @@ void AccountForm::on_checkBox_autoLogin_stateChanged(int state)
 {
 	if (state==Qt::Unchecked)
 	{
+		g_pGameCtrl->SetAutoLogin(false);
+		m_autoLoginTimer.stop();
+		//运行易玩通登录超时判断 超过15秒 如果还是运行中 则杀掉进程 返回，如果不是运行中进入下一步
+		if (m_loginquery.elapsed() > 15 * 1000)
+		{
+			if (m_POLCN->state() == QProcess::ProcessState::Running)
+			{
+				m_POLCN->kill();			
+			}
+		}
+		if (!ui->groupBox_createChara->isChecked()) //不创建人物
+		{
+			if (g_CGAInterface->IsConnected())
+			{
+				CGA::cga_create_chara_t req;
+				g_CGAInterface->CreateCharacter(req); //通知不创建人物
+			}
+		}
+		
 		if (g_CGAInterface->IsConnected())
 		{
 			g_CGAInterface->LoginGameServer("", "", -1, -1, -1, -1); //通知远端 不自动登录
@@ -987,6 +1014,11 @@ void AccountForm::on_checkBox_autoLogin_stateChanged(int state)
 			m_polcn_map = NULL;
 		}
 		emit g_pGameCtrl->NotifyLoginProgressEnd();
+	}
+	else
+	{
+		g_pGameCtrl->SetAutoLogin(true);
+		m_autoLoginTimer.start(1000);
 	}
 }
 

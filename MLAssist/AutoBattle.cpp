@@ -591,7 +591,7 @@ bool CBattleWorker::CheckHaveLv1()
 
 void CBattleWorker::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, quint32 port, quint32 hWnd)
 {
-	g_CGAInterface->RegisterBattleActionNotify(std::bind(&CBattleWorker::NotifyBattleAction, this, std::placeholders::_1));
+	//g_CGAInterface->RegisterBattleActionNotify(std::bind(&CBattleWorker::NotifyBattleAction, this, std::placeholders::_1));
 }
 
 void CBattleWorker::OnSetAutoBattle(int state)

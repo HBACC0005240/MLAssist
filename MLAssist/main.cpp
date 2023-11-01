@@ -65,7 +65,6 @@ int main(int argc, char *argv[])
 	{
 		scale = 1;
 	}
-
 	qputenv("QT_SCALE_FACTOR", QString::number(scale).toLatin1());
 	qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()) + QCoreApplication::applicationPid());
 	MApplication a(argc, argv);

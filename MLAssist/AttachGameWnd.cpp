@@ -19,7 +19,7 @@ AttachGameWnd::AttachGameWnd(QWidget *parent) :
 	ui.setupUi(this);
 	ui.listWidget->hide();
 	ui.textEdit_update->hide();
-	ui.pushButton_refresh->hide();
+	//ui.pushButton_refresh->hide();
 	ui.tabWidget->setStyle(new ITTabBarStyle);
 	m_model = new CProcessTableModel(ui.tableView);
 	ui.tableView->setModel(m_model);
@@ -73,7 +73,11 @@ void AttachGameWnd::OnQueueQueryProcess()
 			return;
 		}
 	}
-	
+	if (!g_pGameCtrl->GetIsAutoLogin())
+	{
+		//没打开自动登录 这里不自动刷新 
+		return;
+	}
 	CProcessItemList list;
 	//if (g_pGameCtrl->getGameHwnd() != nullptr) //已附加的 不刷新了 打开的话，后面的附加列没更新，其他打开是已更新的
 	//	return;
@@ -517,6 +521,58 @@ bool AttachGameWnd::InJectDll(DWORD ProcessId, const char *DllName)
 
 void AttachGameWnd::on_pushButton_refresh_clicked()
 {
+	CProcessItemList list;
+	//if (g_pGameCtrl->getGameHwnd() != nullptr) //已附加的 不刷新了 打开的话，后面的附加列没更新，其他打开是已更新的
+	//	return;
+	const wchar_t szFindGameClass[] = { 39764, 21147, 23453, 36125, 0 };
+
+	HWND hWnd = NULL;
+	DWORD pid, tid;
+	WCHAR szText[256];
+
+	while ((hWnd = FindWindowExW(NULL, hWnd, szFindGameClass, NULL)) != NULL)
+	{
+		if ((tid = GetWindowThreadProcessId(hWnd, (LPDWORD)&pid)) != 0 && pid != GetCurrentProcessId())
+		{
+			if (GetWindowTextW(hWnd, szText, 256))
+			{
+				auto wndTitle = QString::fromWCharArray(szText);
+				bool attached = IsProcessAttached(pid);
+				void *pBaseAddr = YunLai::GetProcessImageBase1(pid); //这个占cpu
+				QString sUserName = QString(" [%1] ").arg(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xE12D30, 17))));
+				int nGameServerType = g_pGameFun->GetGameServerType(QString::fromWCharArray(YunLai::ANSITOUNICODE1(YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xB9E858, 15))));
+				QString sGameServerType = g_pGameFun->GetGameServerTypeTextFromType(nGameServerType);
+				if (!attached && !wndTitle.contains("#"))
+				{
+					//登录成功后 读取用户账号
+					//	qDebug() << pBaseAddr;
+					wndTitle += " ";
+					wndTitle += sGameServerType;
+					wndTitle += " ";
+					wndTitle += sUserName;
+				}
+				QString szLoginUserID = YunLai::ReadMemoryStrFromProcessID(pid, (ULONG_PTR)pBaseAddr + 0xBDB488, 100); //游戏id
+				CProcessItemPtr item(new CProcessItem((quint32)pid, (quint32)tid, (quint32)hWnd, wndTitle, attached, szLoginUserID, nGameServerType));
+				list.append(item);
+
+				if (!attached && m_AutoAttachPID == pid && m_AutoAttachTID == tid)
+				{
+					if (g_pGameCtrl->GetStartGameHide())
+					{
+						YunLai::SetWindowVal(hWnd, 2);
+					}
+					OnQueueAttachProcess((quint32)pid, (quint32)tid, (quint32)hWnd, QString("CGAHook.dll"));
+					m_AutoAttachPID = 0;
+					m_AutoAttachTID = 0;
+				}
+			}
+		}
+	}
+	emit g_pGameCtrl->signal_gameWndList(list);
+	qSort(list.begin(), list.end(), [&](CProcessItemPtr p1, CProcessItemPtr p2)
+			{ return !p1->m_bAttached; });
+	OnNotifyQueryProcess(list);
+	return;
 	ui.listWidget->clear();
 	QMap<qint64, QString> processData;
 	YunLai::GetAllProcess(processData);
