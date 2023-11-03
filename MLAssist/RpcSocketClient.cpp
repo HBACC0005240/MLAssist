@@ -647,6 +647,7 @@ void RpcSocketClient::UploadMapData()
 	request.set_serverline(std::to_string(index2));
 	request.set_maptype(std::to_string(index1));
 	request.set_filetime(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss").toStdString());
+	request.set_game_type(std::to_string(g_pGameFun->GetGameServerType()));
 
 	/*
 	* //地图原始数据上传
@@ -704,6 +705,7 @@ bool RpcSocketClient::DownloadMapData(QImage &image)
 	request.set_filename(std::to_string(index3));
 	request.set_serverline(std::to_string(index2));
 	request.set_maptype(std::to_string(index1));
+	request.set_game_type(std::to_string(g_pGameFun->GetGameServerType()));
 	ClientContext context;
 
 	auto stream = _stub->DownloadMapData(&context, request);
@@ -721,7 +723,7 @@ bool RpcSocketClient::DownloadMapData(QImage &image)
 	if (index1 == 0)
 		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(index1).arg(index3);
 	else
-		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+		sPath = QString("%1/%2/%3/%4/%5.bmp").arg(sPath).arg(g_pGameFun->GetGameServerType()).arg(index1).arg(index2).arg(index3);
 
 	image.save(sPath);
 	return true;

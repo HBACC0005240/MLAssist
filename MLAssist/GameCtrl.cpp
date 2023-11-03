@@ -4129,6 +4129,41 @@ void GameCtrl::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 			}
 		}
 	}
+	// 检测游戏喊话内容，做对应操作
+	if (m_pGameCharacter && m_pGameCharacter->unitid == unitid)
+	{
+		// 脚本运行过程中 不进行输入寻路
+		if (GetScriptRunState() == SCRIPT_CTRL_RUN)
+			return;
+		if (msg.contains(",") || msg.contains("."))
+		{
+		//	bool bIsDigit = false;
+			for (auto msgChar:msg)
+			{
+				if (msgChar == "," || msgChar ==".")
+					continue;
+				if (!msgChar.isDigit())
+				{
+				//	bIsDigit = false;
+					qDebug() << "自动寻路的输入内容不是纯数字";
+					return;
+				}
+			}
+			
+			QStringList posList = msg.split(",");
+			if (posList.size() < 1)
+			{
+				msg.split(".");
+			}
+			if (posList.size() < 1)
+			{
+				return;
+			}
+			g_pGameFun->RestFun();
+			g_pGameFun->AutoMoveTo(posList[0].toInt(), posList[1].toInt());
+		}
+		
+	}
 }
 
 void GameCtrl::OnSetSyncGameWindowFlag(int state)

@@ -85,12 +85,9 @@ void PlayerDataTreeModel::SetupModelData(ITObjectList pObjList, TreeItem *treeIt
 			{ return SortStringFun(a->getObjectName() , b->getObjectName()); });
 	for (ITObjectPtr tObj : pObjList)
 	{		
-		TreeItem *tempitem = new TreeItem(tObj->getObjectName());
-		tempitem->setData(Qt::UserRole, tObj->getObjectID());
-		treeItem->appendChild(tempitem);
-
 		if (GETDEVCLASS(tObj->getObjectType()) == TObject_ServerType)
 		{			
+			auto tempitem = CreateTreeItem(treeItem, tObj);
 			auto pGameSeverType = qSharedPointerDynamicCast<ITGameServerType>(tObj);
 			ITObjectList pGidList;
 			for (auto it = pGameSeverType->_gidForObj.begin(); it != pGameSeverType->_gidForObj.end(); ++it)
@@ -100,8 +97,13 @@ void PlayerDataTreeModel::SetupModelData(ITObjectList pObjList, TreeItem *treeIt
 			SetupModelData(pGidList, tempitem);
 		}
 		else if (tObj->getObjectType() == TObject_AccountGid)
-		{
+		{		
 			auto pAccountAsse = qSharedPointerDynamicCast<ITAccountGid>(tObj);
+			if (!pAccountAsse->getObjectName().contains(m_filterData))
+			{
+				continue;
+			}
+			auto tempitem = CreateTreeItem(treeItem, tObj);
 			auto pAccountList = pAccountAsse->GetAllChildObj();
 			SetupModelData(pAccountList, tempitem);			
 		}
@@ -111,6 +113,13 @@ void PlayerDataTreeModel::SetupModelData(ITObjectList pObjList, TreeItem *treeIt
 		}*/
 	}
 
+}
+TreeItem* PlayerDataTreeModel::CreateTreeItem(TreeItem* parentItem, ITObjectPtr pObj)
+{
+	TreeItem* tempitem = new TreeItem(pObj->getObjectName());
+	tempitem->setData(Qt::UserRole, pObj->getObjectID());
+	parentItem->appendChild(tempitem);
+	return tempitem;
 }
 
 

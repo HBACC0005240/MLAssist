@@ -104,6 +104,13 @@ int main(int argc, char *argv[])
 	g_pGameCtrl->RunParseCmd();
 	g_pHttpServer->init();
 	int ret= a.exec();
+	QFile file(QCoreApplication::applicationDirPath() + "\\autoExitMain.txt");
+	if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+	{
+		QTextStream out(&file);
+		out.setCodec("UTF-8");
+		out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz") << QString::fromWCharArray(L"main 程序退出 ") << w.windowTitle() << "attachPid:" << g_pGameCtrl->getGamePID() << "\n";
+	}
 	//SafeDelete(g_CGAInterface);
 	return ret;
 }

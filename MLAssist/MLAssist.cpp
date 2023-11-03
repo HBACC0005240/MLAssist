@@ -204,12 +204,12 @@ void MLAssist::doIconActivated(QSystemTrayIcon::ActivationReason reason)
 }
 void MLAssist::quitAndDeleteAllInfo()
 {
-	QFile file("autoExit.txt");
+	QFile file(QCoreApplication::applicationDirPath() + "\\autoExitMLAssist.txt");
 	if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
 	{
 		QTextStream out(&file);
 		out.setCodec("UTF-8");
-		out << QString::fromWCharArray(L"quitAndDeleteAllInfo 程序退出 ") << this->windowTitle() << "attachPid:" << g_pGameCtrl->getGamePID() << "\n";
+		out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz") << QString::fromWCharArray(L"quitAndDeleteAllInfo 程序退出 ") << this->windowTitle() << "attachPid:" << g_pGameCtrl->getGamePID() << "\n";
 	}
 	qDebug() << "quitAndDeleteAllInfo 程序退出";
 	ITObjectDataMgr::getInstance().SetExitGame(true);

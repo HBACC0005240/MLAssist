@@ -131,7 +131,7 @@ Status GGRpcServiceImpl::UploadMapData(::grpc::ServerContext* context, ::grpc::S
 	if (std::stoi(request.maptype()) == 0)
 		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(request.maptype().c_str()).arg(request.filename().c_str());
 	else
-		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(request.maptype().c_str()).arg(request.serverline().c_str()).arg(request.filename().c_str());
+		sPath = QString("%1/%2/%3/%4/%5.bmp").arg(sPath).arg(request.game_type().c_str()).arg(request.maptype().c_str()).arg(request.serverline().c_str()).arg(request.filename().c_str());
 	QImage image;
 	image.loadFromData((uchar*)request.imagedata().c_str(), request.imagedata().size());;
 	image.save(sPath);
@@ -149,7 +149,7 @@ Status GGRpcServiceImpl::DownloadMapData(::grpc::ServerContext* context, const :
 	if (std::stoi(request->maptype()) == 0)
 		sPath = QString("%1/%2/%3.bmp").arg(sPath).arg(request->maptype().c_str()).arg(request->filename().c_str());
 	else
-		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(request->maptype().c_str()).arg(request->serverline().c_str()).arg(request->filename().c_str());
+		sPath = QString("%1/%2/%3/%4/%5.bmp").arg(sPath).arg(request->game_type().c_str()).arg(request->maptype().c_str()).arg(request->serverline().c_str()).arg(request->filename().c_str());
 
 	QImage image;
 	image.load(sPath);
@@ -157,6 +157,7 @@ Status GGRpcServiceImpl::DownloadMapData(::grpc::ServerContext* context, const :
 	response.set_filename(request->filename());
 	response.set_serverline(request->serverline());
 	response.set_maptype(request->maptype());
+	response.set_game_type(request->game_type());
 	QFileInfo mapInfo(sPath);
 	response.set_filetime(mapInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss").toStdString());
 

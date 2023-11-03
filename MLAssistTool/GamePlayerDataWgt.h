@@ -36,7 +36,9 @@ public slots:
 	void on_pushButton_refreshModel_clicked();
 	void on_pushButton_search_clicked();
 	void on_lineEdit_search_returnPressed();
-
+	void on_pushButton_filterGid_clicked();
+	void on_lineEdit_filter_returnPressed();
+	void filterGid();
 private:
 	Ui::GamePlayerDataWgt ui;
 	PlayerDataTreeModel* m_pPlayerDataTreeModel;

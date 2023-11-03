@@ -795,3 +795,20 @@ void GamePlayerDataWgt::on_lineEdit_search_returnPressed()
 {
 	on_pushButton_search_clicked();
 }
+
+void GamePlayerDataWgt::on_pushButton_filterGid_clicked()
+{
+	filterGid();
+}
+
+void GamePlayerDataWgt::on_lineEdit_filter_returnPressed()
+{
+	filterGid();
+}
+
+void GamePlayerDataWgt::filterGid()
+{
+	QString sGid = ui.lineEdit_filter->text();
+	if (m_pPlayerDataTreeModel)
+		m_pPlayerDataTreeModel->SetFilterData(sGid);
+}

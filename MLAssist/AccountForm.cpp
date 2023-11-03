@@ -307,12 +307,12 @@ bool AccountForm::QueryAttachGameWnd()
 								{
 									qDebug() << "该ID已附加，退出！" << pid << attachPid;
 									//qApp->exit(0);//这个退出没啥用 调用下面杀
-									QFile file("autoExit.txt");
+									QFile file(QCoreApplication::applicationDirPath() +  "\\autoExit.txt");
 									if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
 									{
 										QTextStream out(&file);
 										out.setCodec("UTF-8");
-										out << QString::fromWCharArray(L"该ID已附加，退出： ") << sGid << " ServerType:" << nGameServerType << " Pid:" << pid << "attachPid:" << attachPid << "\n";
+										out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz") << QString::fromWCharArray(L"该ID已附加，退出： ") << sGid << " ServerType:" << nGameServerType << " Pid:" << pid << "attachPid:" << attachPid << "\n";
 									}
 									TerminateProcess(GetCurrentProcess(), 0);								
 									return true;

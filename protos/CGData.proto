@@ -130,6 +130,8 @@ message UploadMapDataRequest
 	string MapType=3;			//地图类型 0固定地图 1迷宫地图	
 	string fileTime=4;			//地图时间
 	bytes ImageData = 5;		//地图数据
+	string game_type=6;			//电信还是网通
+
 }
 
 message UploadMapDataResponse {
@@ -142,6 +144,7 @@ message DownloadMapDataRequest {
 	string FileName = 1;		//地图编号名称
 	string ServerLine=2;		//服务线路
 	string MapType=3;			//地图类型 0固定地图 1迷宫地图
+	string game_type=4;			//电信还是网通
 }
 
 message DownloadMapDataResponse {
@@ -150,6 +153,8 @@ message DownloadMapDataResponse {
 	string MapType=3;			//地图类型 0固定地图 1迷宫地图
 	string fileTime=4;			//地图时间
 	bytes ImageData = 5;		//地图数据
+	string game_type=6;			//电信还是网通
+
 }
 //上报当前建立服务的ip 端口信息
 message UploadCharcterServerRequest

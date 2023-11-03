@@ -10988,7 +10988,7 @@ bool CGFunction::LoadOffLineMapImageData(int index1, int index2, int index3, QIm
 	{
 		if (!g_pGameCtrl->GetIsOpenNetToMLAssistTool() || !g_pGameCtrl->GetIsOpenSyncMap())
 			return false;		
-		sPath = QString("%1/%2/%3/%4.bmp").arg(sPath).arg(index1).arg(index2).arg(index3);
+		sPath = QString("%1/%2/%3/%4/%5.bmp").arg(sPath).arg(GetGameServerType()).arg(index1).arg(index2).arg(index3);
 	}
 
 	if (QFile::exists(sPath) == false)

@@ -84,7 +84,7 @@ using grpc::Status;
 #pragma comment(lib, "../lib/grpc/release/re2.lib")
 #pragma comment(lib, "../lib/grpc/release/absl_hash.lib")
 #pragma comment(lib, "../lib/grpc/release/absl_city.lib")
-#pragma comment(lib, "../lib/grpc/release/absl_wyhash.lib")
+//#pragma comment(lib, "../lib/grpc/release/absl_wyhash.lib")
 #pragma comment(lib, "../lib/grpc/release/absl_raw_hash_set.lib")
 #pragma comment(lib, "../lib/grpc/release/absl_hashtablez_sampler.lib")
 #pragma comment(lib, "../lib/grpc/release/absl_exponential_biased.lib")
