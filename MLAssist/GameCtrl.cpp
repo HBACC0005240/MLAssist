@@ -4135,32 +4135,40 @@ void GameCtrl::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 		// 脚本运行过程中 不进行输入寻路
 		if (GetScriptRunState() == SCRIPT_CTRL_RUN)
 			return;
-		if (msg.contains(",") || msg.contains("."))
+		if (msg.contains(",") || msg.contains(".") ||  msg.contains("\c"))
 		{
 		//	bool bIsDigit = false;
-			for (auto msgChar:msg)
+			QString tMsg = msg.remove(QString("%1: ").arg(m_pGameCharacter->name));
+			tMsg.remove("交易]");
+			tMsg.remove("[交易");
+			for (auto msgChar : tMsg)
 			{
-				if (msgChar == "," || msgChar ==".")
+				if (msgChar == "," || msgChar == "." || msgChar == ("\\") || msgChar == ("c"))
 					continue;
 				if (!msgChar.isDigit())
 				{
 				//	bIsDigit = false;
-					qDebug() << "自动寻路的输入内容不是纯数字";
+					qDebug() << "自动寻路的输入内容不是纯数字:" << tMsg;
 					return;
 				}
 			}
 			
-			QStringList posList = msg.split(",");
-			if (posList.size() < 1)
+			QStringList posList = tMsg.split(",");
+			if (posList.size() < 2)
 			{
-				msg.split(".");
+				posList = tMsg.split(".");
 			}
-			if (posList.size() < 1)
+			if (posList.size() < 2)
+			{
+				posList = tMsg.split("\\c");
+			}
+			if (posList.size() < 2)
 			{
 				return;
 			}
-			g_pGameFun->RestFun();
-			g_pGameFun->AutoMoveTo(posList[0].toInt(), posList[1].toInt());
+			emit g_pGameCtrl->signal_moveToTarget(posList[0].toInt(), posList[1].toInt());
+			/*g_pGameFun->RestFun();
+			g_pGameFun->AutoMoveTo(posList[0].toInt(), posList[1].toInt());*/
 		}
 		
 	}

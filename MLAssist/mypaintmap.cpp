@@ -21,7 +21,7 @@ MyPaintMap::MyPaintMap(QWidget *parent) :
 	m_zoomPos.setY(0);
 	qRegisterMetaType<QVector<quint32> >("QVector<quint32>");
 
-	connect(g_pGameCtrl, SIGNAL(signal_moveToTarget(int, int)), this, SLOT(MoveToTarget(int, int)));
+	connect(g_pGameCtrl, SIGNAL(signal_moveToTarget(int, int)), this, SLOT(MoveToTarget(int, int)), Qt::QueuedConnection);
 	connect(g_pGameCtrl, SIGNAL(signal_load_navpath(QVector<quint32>)), this, SLOT(on_load_navpath(QVector<quint32>)), Qt::QueuedConnection);
 }
 

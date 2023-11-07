@@ -318,7 +318,6 @@ signals:
 	void HttpLoadScript(QString query, QByteArray postdata, QJsonDocument *doc);
 
 	void signal_battleStateEnd();
-
 public slots:
 	void OnGetCharacterData();													//获取人物信息
 	void OnGetTeamData();														//获取队伍信息
