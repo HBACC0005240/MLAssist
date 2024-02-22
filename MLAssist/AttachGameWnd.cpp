@@ -129,7 +129,7 @@ void AttachGameWnd::OnQueueQueryProcess()
 
 					if (ReadSharedData(pid, port, hwnd) && g_CGAInterface->IsConnected() && g_CGAInterface->GetPort() == port)
 					{
-						if (hwnd != g_pGameCtrl->getGameHwnd())
+						if (hwnd != (quint32)g_pGameCtrl->getGameHwnd())
 						{
 							qDebug("Should not connect to port %d, disconnect", port);
 							g_CGAInterface->Disconnect();
