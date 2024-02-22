@@ -110,14 +110,20 @@ public:
 	static char* ReadMemoryStrFromWnd(HWND hwnd, const char* szAddress, int nLen);
 	static char* ReadMemoryStrFromProcessID(DWORD processID, const char* szAddress, int nLen);
 	static char* ReadMemoryStrFromProcessID(DWORD processID, DWORD pAddress, int nLen);
+	static bool ReadMemoryDataFromProcessID(DWORD processID, DWORD pAddress, int nLen,void* pRetData);
 
 	static int   ReadMemoryIntFromWnd(HWND hwnd, const char* szAddress);
 	static int   ReadMemoryIntFromProcessID(DWORD processID, const char* szAddress);
 	static int   ReadMemoryIntFromProcessID(DWORD processID, DWORD pAddress);
+	static float  ReadMemoryFloatFromProcessID(DWORD processID, DWORD pAddress);
 	static WORD   ReadMemoryWordFromProcessID(DWORD processID, DWORD pAddress);
 
+	static void  WriteMemoryIntToWnd(HWND hwnd, DWORD pAddress, int nVal);
 	static void  WriteMemoryIntToWnd(HWND hwnd, const char* szAddress, int nVal);
 	static void  WriteMemoryIntToProcess(DWORD hProcessID, const char* szAddress, int nVal);
+	static void  WriteMemoryIntToProcess(DWORD hProcessID, DWORD pAddress, int nVal);
+	static void  WriteMemoryToProcess(DWORD hProcessID, DWORD pAddress, void* pData, int nLen);
+
 	static bool KillProcess(HWND hwnd);
 	static bool KillProcessEx(DWORD hProcessID);
 

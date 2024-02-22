@@ -122,6 +122,20 @@ void AttachGameWnd::OnQueueQueryProcess()
 					m_AutoAttachPID = 0;
 					m_AutoAttachTID = 0;
 				}
+				if (attached)
+				{
+					int port = 0;
+					quint32 hwnd = 0;
+
+					if (ReadSharedData(pid, port, hwnd) && g_CGAInterface->IsConnected() && g_CGAInterface->GetPort() == port)
+					{
+						if (hwnd != g_pGameCtrl->getGameHwnd())
+						{
+							qDebug("Should not connect to port %d, disconnect", port);
+							g_CGAInterface->Disconnect();
+						}
+					}
+				}
 			}
 		}
 	}
@@ -660,10 +674,18 @@ void AttachGameWnd::OnCheckFreezeProcess()
 {
 	auto attachHwnd = g_pGameCtrl->getGameHwnd();
 	if (!attachHwnd)
+	{
+		if (g_CGAInterface->IsConnected())
+			Disconnect();
 		return;
+	}
 
 	if (!IsWindow(attachHwnd))
+	{
+		if (g_CGAInterface->IsConnected())
+			Disconnect();
 		return;
+	}
 
 	DWORD pid, tid;
 	tid = GetWindowThreadProcessId(attachHwnd, &pid);
@@ -671,6 +693,8 @@ void AttachGameWnd::OnCheckFreezeProcess()
 	{
 		g_pGameCtrl->setGameHwnd(nullptr);
 		g_pGameCtrl->SetGamePort(0);
+		if (g_CGAInterface->IsConnected())
+			Disconnect();
 		return;
 	}
 
