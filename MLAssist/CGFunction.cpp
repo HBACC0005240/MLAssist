@@ -1579,7 +1579,8 @@ void CGFunction::AllCompound(QString name)
 			auto pItemList = GetInventoryItems();
 			for (auto pItem : pItemList)
 			{
-				if (pRetSkill->compound.materials[nn].name.toStdString() == pItem.name && pItem.count >= pRetSkill->compound.materials[nn].count)
+				if (pRetSkill->compound.materials[nn].name.toStdString() == pItem.name
+					&& ((pItem.count == 0 && pRetSkill->compound.materials[nn].count ==1) || pItem.count >= pRetSkill->compound.materials[nn].count))
 				{
 					pRetSkill->compound.materials[nn].pos = pItem.pos;
 					break;
