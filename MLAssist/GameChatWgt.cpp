@@ -15,6 +15,7 @@ GameChatWgt::GameChatWgt(QWidget *parent) :
 	connect(g_pGameCtrl, SIGNAL(signal_addOneChat(const QString &)), this, SLOT(doAddOneChat(const QString &)), Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyChatMsg, this, &GameChatWgt::OnNotifyChatMsg, Qt::ConnectionType::QueuedConnection);
 	connect(g_pGameCtrl, &GameCtrl::NotifyGameCharacterInfo, this, &GameChatWgt::OnNotifyGetPlayerInfo, Qt::ConnectionType::QueuedConnection);
+	connect(g_pGameCtrl, &GameCtrl::NotifyFillChatSettings, this, &GameChatWgt::OnNotifyFillChatSettings, Qt::ConnectionType::QueuedConnection);
 
 	m_nLastIndex = 0;
 	m_chatStoreCount = ui.lineEdit_chatCount->text().toInt();
@@ -109,18 +110,41 @@ void GameChatWgt::OnTimeChat()
 
 void GameChatWgt::doLoadUserConfig(QSettings &iniFile)
 {
+	iniFile.beginGroup("chat");
+	ui.checkBox_BlockChatMsgs->setCheckState((Qt::CheckState)iniFile.value("blockState").toInt());
+	iniFile.endGroup();
 }
 
 void GameChatWgt::doSaveUserConfig(QSettings &iniFile)
 {
+	iniFile.beginGroup("chat");
+	iniFile.setValue("blockState", (int)ui.checkBox_BlockChatMsgs->checkState()); 
+	iniFile.endGroup();
 }
 
-void GameChatWgt::doLoadJsConfig(QJsonDocument &doc)
+void GameChatWgt::doLoadJsConfig(QJsonObject &obj)
 {
+	if (obj.contains("blockchatmsgs"))
+	{
+		int val = obj.take("blockchatmsgs").toInt();
+		if (val == 2)
+		{
+			ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::Checked);
+		}
+		else if (val == 1)
+		{
+			ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::PartiallyChecked);
+		}
+		else if (val == 0)
+		{
+			ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::Unchecked);
+		}
+	}
 }
 
-void GameChatWgt::doSaveJsConfig(QJsonDocument &doc)
+void GameChatWgt::doSaveJsConfig(QJsonObject &obj)
 {
+	obj.insert("blockchatmsgs", (int)ui.checkBox_BlockChatMsgs->checkState());
 }
 
 void GameChatWgt::on_comboBox_chatColor_currentIndexChanged(int index)
@@ -226,6 +250,25 @@ void GameChatWgt::on_listWidget_customContextMenuRequested(const QPoint &pos)
 	QMenu menu;
 	menu.addAction("刷新邮件列表", this, SLOT(OnUpdateFriendCard()));
 	menu.exec(QCursor::pos());
+}
+
+void GameChatWgt::on_checkBox_BlockChatMsgs_stateChanged(int state)
+{
+	if (g_CGAInterface->IsConnected())
+	{
+		switch (state)
+		{
+			case Qt::CheckState::Checked:
+				g_CGAInterface->SetBlockChatMsgs(2);
+				break;
+			case Qt::CheckState::PartiallyChecked:
+				g_CGAInterface->SetBlockChatMsgs(1);
+				break;
+			case Qt::CheckState::Unchecked:
+				g_CGAInterface->SetBlockChatMsgs(0);
+				break;
+		}
+	}
 }
 
 void GameChatWgt::addOneChatData(const QString &chatData, int nType, int color)
@@ -435,5 +478,21 @@ void GameChatWgt::OnNotifyChatMsg(int unitid, QString msg, int size, int color)
 		txtcur.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 		txtcur.insertHtml(line);
 		txtcur.insertBlock();
+	}
+}
+
+void GameChatWgt::OnNotifyFillChatSettings(int blockchatmsgs)
+{
+	if (blockchatmsgs == 2)
+	{
+		ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::Checked);
+	}
+	else if (blockchatmsgs == 1)
+	{
+		ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::PartiallyChecked);
+	}
+	else if (blockchatmsgs == 0)
+	{
+		ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::Unchecked);
 	}
 }

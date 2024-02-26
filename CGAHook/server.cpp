@@ -15,6 +15,7 @@ extern CGA::CGAService g_CGAService;
 
 extern int g_MainPort;
 extern HWND g_MainHwnd;
+extern ULONG g_MainProcessId;
 extern ULONG g_MainThreadId;
 extern HANDLE g_hQuitEvent;
 extern HANDLE g_hPortMutex;
@@ -35,6 +36,12 @@ void CGA_NotifyBattleAction(int flags)
 	}
 }
 
+void CGA_NotifyBattleMotionPacket(const std::string& buf)
+{
+	if (server && server.get()) {
+		server->pub("NotifyBattleMotionPacket", buf);
+	}
+}
 void CGA_NotifyPlayerMenu(const CGA::cga_player_menu_items_t& players)
 {
 	if (server && server.get()) {
@@ -123,14 +130,12 @@ BOOL CGA_CreatePortMutex(int port)
 
 void CGA_CreateSharedData(int port)
 {
-	ULONG ProcessId = GetCurrentProcessId();
-
-	WCHAR szLockName[32];
-	wsprintfW(szLockName, L"CGASharedDataLock_%d", ProcessId);
+	WCHAR szLockName[64];
+	wsprintfW(szLockName, L"CGASharedDataLock_%d", g_MainProcessId);
 	g_hDataLock = CreateMutexW(NULL, TRUE, szLockName);
 
-	WCHAR szMappingName[32];
-	wsprintfW(szMappingName, L"CGASharedData_%d", ProcessId);
+	WCHAR szMappingName[64];
+	wsprintfW(szMappingName, L"CGASharedData_%d", g_MainProcessId );
 	g_hFileMapping = CreateFileMappingW(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(CGA::CGAShare_t), szMappingName);
 	if (g_hFileMapping && GetLastError() != ERROR_ALREADY_EXISTS)
 	{
@@ -139,7 +144,7 @@ void CGA_CreateSharedData(int port)
 		{
 			CGA::CGAShare_t* data = (CGA::CGAShare_t*)pViewOfFile;
 
-			data->ProcessId = ProcessId;
+			data->ProcessId = g_MainProcessId;
 			data->ThreadId = g_MainThreadId;
 			data->hWnd = (int)g_MainHwnd;
 			data->Port = port;
@@ -322,7 +327,7 @@ DWORD WINAPI CGAServerThread(LPVOID)
 				server->register_handler("SendMail", timax::bind(&CGAService::SendMail, &g_CGAService));
 				server->register_handler("SendPetMail", timax::bind(&CGAService::SendPetMail, &g_CGAService));
 				server->register_handler("GetGameServerInfo", timax::bind(&CGAService::GetGameServerInfo, &g_CGAService));
-
+				server->register_handler("SetBlockChatMsgs", timax::bind(&CGAService::SetBlockChatMsgs, &g_CGAService));
 				server->start();
 
 				dwWait = WaitForSingleObject(g_hQuitEvent, INFINITE);

@@ -34,8 +34,8 @@ public slots:
 	void OnTimeChat();
 	void doLoadUserConfig(QSettings &iniFile);
 	void doSaveUserConfig(QSettings &iniFile);
-	void doLoadJsConfig(QJsonDocument &doc);
-	void doSaveJsConfig(QJsonDocument &doc);
+	void doLoadJsConfig(QJsonObject &obj);
+	void doSaveJsConfig(QJsonObject &obj);
 	void on_comboBox_chatColor_currentIndexChanged(int index);
 	void on_radioButton_big_toggled(bool checked);
 	void on_radioButton_mid_toggled(bool checked);
@@ -44,6 +44,8 @@ public slots:
 	void doItemDoubleClicked(QListWidgetItem *);
 	void OnNotifyGetPlayerInfo(CharacterPtr charinfo);
 	void on_listWidget_customContextMenuRequested(const QPoint &);
+	void on_checkBox_BlockChatMsgs_stateChanged(int state);
+	void OnNotifyFillChatSettings(int blockchatmsgs);
 
 private:
 	Ui::GameChatWgt ui;

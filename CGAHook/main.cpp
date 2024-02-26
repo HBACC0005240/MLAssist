@@ -8,8 +8,10 @@ LRESULT CALLBACK NewWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 LONG WINAPI MinidumpCallback(EXCEPTION_POINTERS* pException);
 extern CGA::CGAService g_CGAService;
 
+
 int g_MainPort = 0;
 HWND g_MainHwnd = NULL;
+ULONG g_MainProcessId = 0;
 ULONG g_MainThreadId = 0;
 WNDPROC g_OldProc = NULL;
 HANDLE g_hQuitEvent = NULL;
@@ -373,11 +375,11 @@ LRESULT CALLBACK NewWndProcPOLCN(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 	return CallWindowProcA(g_OldProc, hWnd, message, wParam, lParam);
 }
 
-void InitializeHooks(int ThreadId, HWND hWnd, CGA::game_type type)
+void InitializeHooks(ULONG ProcessId, ULONG ThreadId, HWND hWnd, CGA::game_type type)
 {
 	if (g_MainThreadId && g_MainThreadId != ThreadId)
 		return;
-
+	g_MainProcessId = ProcessId;
 	g_MainThreadId = ThreadId;
 	g_MainHwnd = hWnd;
 
@@ -409,19 +411,19 @@ extern "C"
 				LPCWSTR pModuleName = ExtractFileName(szModulePath);
 				if (!_wcsicmp(pModuleName, L"cg_se_3000.exe") && !strcmp(szClass, "Ä§Á¦±¦±´"))
 				{
-					InitializeHooks(GetCurrentThreadId(), pMsg->hwnd, CGA::cg_se_3000);
+					InitializeHooks(GetCurrentProcessId(), GetCurrentThreadId(), pMsg->hwnd, CGA::cg_se_3000);
 				}
 				else if (!_wcsicmp(pModuleName, L"cg_item_6000.exe") && !strcmp(szClass, "Ä§Á¦±¦±´"))
 				{
-					InitializeHooks(GetCurrentThreadId(), pMsg->hwnd, CGA::cg_item_6000);
+					InitializeHooks(GetCurrentProcessId(), GetCurrentThreadId(), pMsg->hwnd, CGA::cg_item_6000);
 				}
 				else if (!_wcsicmp(pModuleName, L"cg_se_6000.exe") && !strcmp(szClass, "Ä§Á¦±¦±´"))
 				{
-					//InitializeHooks(GetCurrentThreadId(), pMsg->hwnd, CGA::cg_se_6000);
+					//InitializeHooks(GetCurrentProcessId(),GetCurrentThreadId(), pMsg->hwnd, CGA::cg_se_6000);
 				}
 				else if (!_wcsicmp(pModuleName, L"POLCN_Launcher.exe"))
 				{
-					InitializeHooks(GetCurrentThreadId(), pMsg->hwnd, CGA::polcn);
+					InitializeHooks(GetCurrentProcessId(), GetCurrentThreadId(), pMsg->hwnd, CGA::polcn);
 				}
 			}
 		}
@@ -489,7 +491,7 @@ int WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 					return TRUE;
 			}
 
-			InitializeHooks(GetCurrentThreadId(), NULL, CGA::polcn);
+			InitializeHooks(GetCurrentProcessId(), GetCurrentThreadId(), NULL, CGA::polcn);
 		}
 		else if (!_wcsicmp(pModuleName, L"cg_se_6000.exe"))//Patch se_6000 windowed bug
 		{

@@ -1174,6 +1174,8 @@ namespace CGA
 		int IsItemTypeAssessable(int type);
 
 		void AddAllTradeItems(int step);
+		void SetBlockChatMsgs(int state);
+		bool IsPlayerInTeam(int unitId);
 		bool WM_BattleNormalAttack(int target);
 		bool WM_BattleSkillAttack(int skillpos, int skilllv, int target);
 		bool WM_BattleGuard();
@@ -1339,7 +1341,7 @@ namespace CGA
 
 		bool m_trade_add_all_stuffs;
 		int m_trade_step = 2;	//1只拿到右边，2全拿且取出物品
-
+		int m_ui_block_chatmsgs;
 		game_type m_game_type;
 
 		HFONT m_hFont;

@@ -127,8 +127,11 @@ namespace CGAServiceProtocol
 	TIMAX_DEFINE_PROTOCOL(LoginGameServer, void(std::string, std::string, int, int, int, int));
 	TIMAX_DEFINE_PROTOCOL(CreateCharacter, void(cga_create_chara_t));
 	TIMAX_DEFINE_PROTOCOL(GetGameServerInfo, cga_game_server_info_t());
+	TIMAX_DEFINE_PROTOCOL(SetBlockChatMsgs, void(int));
+
 	TIMAX_DEFINE_FORWARD(NotifyServerShutdown, int);
 	TIMAX_DEFINE_FORWARD(NotifyBattleAction, int);
+	TIMAX_DEFINE_FORWARD(NotifyBattleMotionPacket, std::string);
 	TIMAX_DEFINE_FORWARD(NotifyGameWndKeyDown, unsigned int);
 	TIMAX_DEFINE_FORWARD(NotifyPlayerMenu, cga_player_menu_items_t);
 	TIMAX_DEFINE_FORWARD(NotifyUnitMenu, cga_unit_menu_items_t);
@@ -1542,6 +1545,18 @@ namespace CGA
 			}
 			return false;
 		}
+		virtual bool SetBlockChatMsgs(int state)
+		{
+			if (m_connected) {
+				try {
+					m_client.call(std::chrono::milliseconds(10000), m_endpoint, CGAServiceProtocol::SetBlockChatMsgs, state);
+					return true;
+				}
+				catch (timax::rpc::exception const& e) { if (e.get_error_code() != timax::rpc::error_code::TIMEOUT) m_connected = false; OutputDebugStringA("rpc exception from " __FUNCTION__); OutputDebugStringA(e.get_error_message().c_str()); }
+				catch (msgpack::parse_error& e) { OutputDebugStringA("parse exception from " __FUNCTION__); OutputDebugStringA(e.what()); }
+			}
+			return false;
+		}
 		virtual bool RegisterServerShutdownNotify(const std::function<void(int)>& callback)
 		{
 			if (m_connected)
@@ -1607,6 +1622,32 @@ namespace CGA
 				catch (timax::rpc::exception const& e) {
 
 					OutputDebugStringA("RegisterGameWndKeyDownNotify failed");
+					OutputDebugStringA(e.get_error_message().c_str());
+				}
+			}
+			return false;
+		}
+		virtual bool RegisterBattleMotionPacketNotify(const std::function<void(std::string)>& callback)
+		{
+			if (m_connected)
+			{
+				try
+				{
+					m_async_client.sub(m_endpoint, CGAServiceProtocol::NotifyBattleMotionPacket,
+						[callback](const std::string& flags) {
+							if (callback)
+								callback(flags);
+						},
+						[](auto const& e) {
+							OutputDebugStringA("RegisterBattleMotionPacketNotify failed 2");
+							OutputDebugStringA(e.get_error_message().c_str());
+						}
+						);
+					return true;
+				}
+				catch (timax::rpc::exception const& e) {
+
+					OutputDebugStringA("RegisterBattleMotionPacketNotify failed");
 					OutputDebugStringA(e.get_error_message().c_str());
 				}
 			}

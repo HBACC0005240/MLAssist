@@ -298,6 +298,7 @@ char* NET_EscapeStringEx2(const char* str, char* dst, int maxlen)
 }
 void CGA_NotifyGameWndKeyDown(unsigned int key);
 void CGA_NotifyBattleAction(int flags);
+void CGA_NotifyBattleMotionPacket(const std::string& buf);
 void CGA_NotifyPlayerMenu(const cga_player_menu_items_t& players);
 void CGA_NotifyUnitMenu(const cga_unit_menu_items_t& units);
 void CGA_NotifyNPCDialog(const cga_npc_dialog_t& dlg);
@@ -1386,7 +1387,7 @@ void CGAService::NewNET_ParseBattlePackets(int a1, const char* buf)
 	{
 		m_btl_double_action = false;
 		m_btl_pet_skill_packet_send = false;
-
+		CGA_NotifyBattleMotionPacket(buf);
 		if (m_btl_highspeed_enable)
 		{
 			if (strstr(buf, "END|"))
@@ -1607,6 +1608,17 @@ void __cdecl NewNET_ParseWorkingResult(int a1, int success, int type, const char
 void CGAService::NewNET_ParseChatMsg(int a1, int unitid, const char* buf, int color, int size)
 {
 	WriteLog("NewNET_ParseChatMsg u=%d, buf=%s, color=%d, size=%d\n", unitid, buf, color, size);
+	if (m_ui_block_chatmsgs > 0 && buf[0] == 'P' && buf[1] == '|')
+	{
+		if (m_ui_block_chatmsgs >= 2)
+			return;
+
+		if (m_ui_block_chatmsgs == 1)
+		{
+			if (!IsPlayerInTeam(unitid) && unitid != (*g_playerBase)->unitid)
+				return;
+		}
+	}
 
 	if (buf[0] == 'P' && buf[1] == '|')
 	{
@@ -1615,6 +1627,24 @@ void CGAService::NewNET_ParseChatMsg(int a1, int unitid, const char* buf, int co
 	}
 
 	NET_ParseChatMsg(a1, unitid, buf, color, size);
+}
+bool CGAService::IsPlayerInTeam(int unitId)
+{
+	if (!*g_is_in_team)
+		return false;
+
+	for (int i = 0; i < 5; ++i)
+	{
+		if (g_team_player_base[i].valid)
+		{
+			if (g_team_player_base[i].unit_id == unitId)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 void __cdecl NewNET_ParseChatMsg(int a1, int unitid, const char* buf, int color, int size)
@@ -3472,6 +3502,7 @@ void CGAService::Initialize(game_type type)
 		m_ui_battle_action = 0;
 		m_ui_battle_hevent = CreateEventA(NULL, FALSE, FALSE, NULL);
 		m_trade_add_all_stuffs = false;
+		m_ui_block_chatmsgs = 0;
 
 		if (*g_mutex)
 		{
@@ -3542,7 +3573,7 @@ void CGAService::Initialize(game_type type)
 		m_ui_battle_action = 0;
 		m_ui_battle_hevent = CreateEventA(NULL, FALSE, FALSE, NULL);
 		m_trade_add_all_stuffs = false;
-
+		m_ui_block_chatmsgs = 0;
 		DetourTransactionBegin();
 		DetourAttach(&(void*&)BATTLE_PlayerAction, ::NewBATTLE_PlayerAction);
 		DetourAttach(&(void*&)NET_WriteEndBattlePacket_cgitem, ::NewNET_WriteEndBattlePacket_cgitem);
@@ -5299,6 +5330,10 @@ void CGAService::AddAllTradeItems(int step)
 	else
 		m_trade_step = step;
 }
+void CGAService::SetBlockChatMsgs(int state)
+{
+	m_ui_block_chatmsgs = state;
+}
 
 bool CGAService::WM_BattleNormalAttack(int target)
 {
@@ -5537,8 +5572,14 @@ bool CGAService::WM_BattleChangePet(int petid)
 	if (*g_btl_player_status != 1)
 		return false;
 
-	if (petid < 0 || petid > 4)
-		petid = 255;
+	if ((petid >= 0 && petid <= 4) || petid == 255)
+	{
+
+	}
+	else
+	{
+		return false;
+	}
 
 	char buf[32];
 	sprintf(buf, "M|%X", petid);

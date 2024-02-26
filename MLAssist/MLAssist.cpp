@@ -436,10 +436,10 @@ bool MLAssist::ParseSettings(const QByteArray &data, QJsonDocument &doc)
 	ui.gameBattleWgt->doLoadJsConfig(obj);
 	ui.gamePostwarWgt->doLoadJsConfig(obj);
 	ui.gameFuncWgt->doLoadJsConfig(obj);
-
 	if (obj.contains("chat"))
 	{
-		//ParseChatSettings(obj.take("chat"));
+		QJsonObject chatObj = obj.value("chat").toObject();
+		ui.gameChatWgt->doLoadJsConfig(chatObj);
 	}
 	return true;
 }
@@ -448,7 +448,6 @@ void MLAssist::save_json_config(QJsonDocument &doc)
 	QMutexLocker locker(&m_jsonMutex);
 
 	QJsonObject obj;
-	//ui.gameChatWgt->doSaveJsConfig(obj);
 	//ui.gameDataWgt->doSaveJsConfig(obj);
 	ui.gameBattleWgt->doSaveJsConfig(obj);
 	ui.gamePostwarWgt->doSaveJsConfig(obj);
@@ -459,6 +458,8 @@ void MLAssist::save_json_config(QJsonDocument &doc)
 	//ui.gameLuaWgt->doSaveJsConfig(obj);
 	QJsonObject chat;
 	obj.insert("chat", chat);
+	ui.gameChatWgt->doSaveJsConfig(chat);
+
 	doc.setObject(obj);
 }
 

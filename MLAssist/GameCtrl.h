@@ -316,6 +316,7 @@ signals:
 	void HttpLoadSettings(QString query, QByteArray postdata, QJsonDocument *doc);
 	void HttpLoadAccount(QString query, QByteArray postdata, QJsonDocument *doc);
 	void HttpLoadScript(QString query, QByteArray postdata, QJsonDocument *doc);
+	void NotifyFillChatSettings(int state);
 
 	void signal_battleStateEnd();
 public slots:

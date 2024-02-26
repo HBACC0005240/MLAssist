@@ -290,6 +290,22 @@
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <property name="spacing">
+        <number>3</number>
+       </property>
+       <property name="topMargin">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="checkBox_BlockChatMsgs">
+         <property name="text">
+          <string>屏蔽聊天信息</string>
+         </property>
+         <property name="tristate">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
@@ -311,7 +327,7 @@
           <property name="horizontalSpacing">
            <number>0</number>
           </property>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QListWidget" name="listWidget">
             <property name="maximumSize">
              <size>

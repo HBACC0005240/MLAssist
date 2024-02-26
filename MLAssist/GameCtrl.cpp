@@ -198,6 +198,7 @@ void GameCtrl::InitCmdParse()
 	QCommandLineOption *autochangeserver = new QCommandLineOption("autochangeserver", "", "autochangeserver");
 	QCommandLineOption *autokillgame = new QCommandLineOption("autokillgame", "", "autokillgame");
 	QCommandLineOption *autocreatechara = new QCommandLineOption("autocreatechara", "", "autocreatechara");
+//	QCommandLineOption *loginduration = new QCommandLineOption("loginduration", "", "loginduration");
 	QCommandLineOption *createcharachara = new QCommandLineOption("createcharachara", "", "createcharachara");
 	QCommandLineOption *createcharaeye = new QCommandLineOption("createcharaeye", "", "createcharaeye");
 	QCommandLineOption *createcharamouth = new QCommandLineOption("createcharamouth", "", "createcharamouth");
@@ -323,6 +324,7 @@ void GameCtrl::RunParseCmd()
 			m_cmdParser.value(*m_commandMap.value(TCmdConfig_TransUserInput)).toInt());
 
 	emit NotifyFillStaticSettings(m_cmdParser.value(*m_commandMap.value(TCmdConfig_KillFreeze)).toInt(), m_cmdParser.value(*m_commandMap.value(TCmdConfig_ChatMaxLines)).toInt());
+	//emit NotifyFillChatSettings(m_cmdParser.value());
 }
 
 void GameCtrl::Disconnect()
