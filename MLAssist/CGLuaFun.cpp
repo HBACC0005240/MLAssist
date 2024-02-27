@@ -246,6 +246,16 @@ int CGLuaFun::Lua_SetCharacterSwitch(LuaState *L)
 	return 1;
 }
 
+int CGLuaFun::Lua_ChatBlockMsgs(LuaState *L)
+{
+	LuaStack args(L);
+	if (args.Count() < 1)
+		return 0;
+	int nType = args[1].GetInteger();
+	g_CGAInterface->SetBlockChatMsgs(nType);
+	return 0;
+}
+
 int CGLuaFun::Lua_DoCharacterAction(LuaState *L)
 {
 	LuaStack args(L);

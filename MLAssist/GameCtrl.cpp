@@ -218,6 +218,7 @@ void GameCtrl::InitCmdParse()
 	QCommandLineOption *loadsettings = new QCommandLineOption("loadsettings", "", "loadsettings");
 	QCommandLineOption *killfreeze = new QCommandLineOption("killfreeze", "", "killfreeze", "60");
 	QCommandLineOption *consolemaxlines = new QCommandLineOption("consolemaxlines", "", "consolemaxlines", "100");
+	QCommandLineOption *scriptfreezeduration = new QCommandLineOption("scriptfreezeduration", "", "scriptfreezeduration", "60");
 	QCommandLineOption *chatmaxlines = new QCommandLineOption("chatmaxlines", "", "chatmaxlines", "100");
 	m_commandMap.insert(TCmdConfig_GameType, gameType);
 	m_commandMap.insert(TCmdConfig_LoginUser, loginUser);
@@ -250,6 +251,7 @@ void GameCtrl::InitCmdParse()
 	m_commandMap.insert(TCmdConfig_ChatMaxLines, chatmaxlines);
 	m_commandMap.insert(TCmdConfig_LogBackRestart, logBackRestart);
 	m_commandMap.insert(TCmdConfig_TransUserInput, transUserInput);
+	m_commandMap.insert(TCmdConfig_ScriptFreezeDuration, scriptfreezeduration);
 
 	m_cmdParser.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 	m_cmdParser.addOption(*gameType);
@@ -283,6 +285,7 @@ void GameCtrl::InitCmdParse()
 	m_cmdParser.addOption(*chatmaxlines);
 	m_cmdParser.addOption(*logBackRestart);
 	m_cmdParser.addOption(*transUserInput);
+	m_cmdParser.addOption(*scriptfreezeduration);
 	m_cmdParser.process(*qApp);
 }
 
@@ -321,7 +324,8 @@ void GameCtrl::RunParseCmd()
 			m_cmdParser.value(*m_commandMap.value(TCmdConfig_SoulProtect)).toInt(),
 			m_cmdParser.value(*m_commandMap.value(TCmdConfig_ConsoleMaxLines)).toInt(),
 			m_cmdParser.value(*m_commandMap.value(TCmdConfig_LogBackRestart)).toInt(),
-			m_cmdParser.value(*m_commandMap.value(TCmdConfig_TransUserInput)).toInt());
+			m_cmdParser.value(*m_commandMap.value(TCmdConfig_TransUserInput)).toInt(),
+			m_cmdParser.value(*m_commandMap.value(TCmdConfig_ScriptFreezeDuration)).toInt());
 
 	emit NotifyFillStaticSettings(m_cmdParser.value(*m_commandMap.value(TCmdConfig_KillFreeze)).toInt(), m_cmdParser.value(*m_commandMap.value(TCmdConfig_ChatMaxLines)).toInt());
 	//emit NotifyFillChatSettings(m_cmdParser.value());

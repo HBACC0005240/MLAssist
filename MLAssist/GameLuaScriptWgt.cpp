@@ -474,6 +474,7 @@ void GameLuaScriptWgt::initScriptSystem()
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "设置脚本简介", m_luaFun, &CGLuaFun::Lua_SetUIScriptDesc);
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "开关", m_luaFun, &CGLuaFun::Lua_SetCharacterSwitch);
+	this->RegisterLuaFun<CGLuaFun>(objGlobal, "聊天屏蔽", m_luaFun, &CGLuaFun::Lua_ChatBlockMsgs);
 
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "清除系统消息", m_luaFun, &CGLuaFun::Lua_ClearSysCue);	 //所有消息 都会清除
 	this->RegisterLuaFun<CGLuaFun>(objGlobal, "系统消息", m_luaFun, &CGLuaFun::Lua_GetSysChatMsg);		 //不调用清除接口 则返回是接收的所有系统消息 ;分割
@@ -1360,7 +1361,7 @@ void GameLuaScriptWgt::doSaveUserConfig(QSettings &iniFile)
 	ui.luaScriptInputWgt->doSaveUserConfig(iniFile);
 }
 
-void GameLuaScriptWgt::DoLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
+void GameLuaScriptWgt::DoLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput,int restartTime)
 {
 	if (path.isEmpty())
 		return;
@@ -1380,7 +1381,7 @@ void GameLuaScriptWgt::DoLoadScript(QString path, bool autorestart, bool freezes
 	m_scriptLogMaxLine = consolemaxlines;
 	ui.plainTextEdit->setMaximumBlockCount(10);
 	ui.textEdit_log->setMaximumBlockCount(m_scriptLogMaxLine);
-
+	ui.lineEdit_noMoveTime->setText(QString::number(restartTime));
 	//m_scriptPath = path;
 	ui.checkBox_scriptRestart->setChecked(autorestart);
 	ui.checkBox_noMove->setChecked(freezestop);

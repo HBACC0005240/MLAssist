@@ -413,6 +413,7 @@ enum TCmdConfig
 	TCmdConfig_ChatMaxLines,
 	TCmdConfig_LogBackRestart,
 	TCmdConfig_TransUserInput,
+	TCmdConfig_ScriptFreezeDuration,
 };
 //宠物状态
 enum TPetState

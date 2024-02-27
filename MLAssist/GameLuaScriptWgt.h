@@ -79,7 +79,8 @@ public slots:
 	void OnAutoRestart();
 	void doLoadUserConfig(QSettings &iniFile);
 	void doSaveUserConfig(QSettings &iniFile);
-	void DoLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput);
+	void DoLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot,
+			int consolemaxlines, int logBackRestart, int transInput, int restartTime);
 	void OnNotifyConnectionState(int state, QString msg);
 	void GameOnlineStateChange(int state);
 	void DoStopScriptThread();

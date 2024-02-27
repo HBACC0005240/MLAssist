@@ -180,6 +180,66 @@
          <layout class="QVBoxLayout" name="verticalLayout_6"/>
         </item>
         <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_freezeDuration">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>512</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>512</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>静止超时时间</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="horizontalSlider_freezeDuration">
+            <property name="toolTip">
+             <string>Freeze Duration in Seconds.</string>
+            </property>
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>600</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+            <property name="pageStep">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>60</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+            <property name="tickInterval">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="spacing">
            <number>6</number>
@@ -219,6 +279,9 @@
             <property name="text">
              <string>自动重启脚本</string>
             </property>
+            <property name="tristate">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -231,6 +294,9 @@
             </property>
             <property name="text">
              <string>60秒不动停止</string>
+            </property>
+            <property name="tristate">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

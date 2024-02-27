@@ -500,7 +500,8 @@ void GamePythonScriptWgt::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 Thr
 	qputenv("CGA_GAME_PORT", qportString);
 }
 
-void GamePythonScriptWgt::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
+void GamePythonScriptWgt::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot,
+	int consolemaxlines, int logBackRestart, int transInput,int scriptfreezeDuration)
 {
 	if (!path.endsWith("py"))
 		return;
@@ -531,7 +532,7 @@ void GamePythonScriptWgt::OnNotifyFillLoadScript(QString path, bool autorestart,
 		ui.checkBox_soulProt->setChecked(true);
 	if (freezestop)
 		ui.checkBox_freezestop->setChecked(true);
-
+	//ui->horizontalSlider_freezeDuration->setValue(scriptfreezeduration);
 	m_ConsoleMaxLines = consolemaxlines;
 	m_output->setMaximumBlockCount(m_ConsoleMaxLines);
 }

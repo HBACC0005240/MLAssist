@@ -46,12 +46,18 @@ ScriptForm::ScriptForm(QWidget *parent) :
 	connect(m_node, &QProcess::errorOccurred, this, &ScriptForm::OnNodeStartError);
 	connect(m_node, SIGNAL(readyRead()), this, SLOT(OnNodeReadyRead()));
 	connect(m_node, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(OnNodeFinish(int, QProcess::ExitStatus)));
+	connect(ui->horizontalSlider_freezeDuration, SIGNAL(valueChanged(int)), this, SLOT(OnSetFreezeDuration(int)));
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(OnAutoRestart()));
 	timer->start(1000);
+	ui->label_freezeDuration->setText(tr("静止超时时间: %1 s").arg(ui->horizontalSlider_freezeDuration->value()));
 }
 
+void ScriptForm::OnSetFreezeDuration(int value)
+{
+	ui->label_freezeDuration->setText(tr("静止超时时间: %1 s").arg(value));
+}
 void ScriptForm::dragEnterEvent(QDragEnterEvent *event)
 {
 	if (event->mimeData()->hasFormat("text/uri-list"))
@@ -224,67 +230,80 @@ void ScriptForm::OnAutoRestart()
 		int ingame = 0;
 		if (g_CGAInterface->IsInGame(ingame) && ingame)
 		{
-			CGA::cga_player_info_t playerinfo;
-			if (g_CGAInterface->GetPlayerInfo(playerinfo))
+			int worldStatus = 0, gameStatus = 0;
+			if (g_CGAInterface->GetWorldStatus(worldStatus) && g_CGAInterface->GetGameStatus(gameStatus) && gameStatus == 3)
 			{
-				if (playerinfo.health != 0 && ui->checkBox_injuryProt->isChecked())
-				{
-					if (m_node->state() == QProcess::Running)
-					{
-						on_pushButton_term_clicked();
-						return;
-					}
-					else
-					{
-						return;
-					}
-				}
-				if (playerinfo.souls != 0 && ui->checkBox_soulProt->isChecked())
-				{
-					if (m_node->state() == QProcess::Running)
-					{
-						on_pushButton_term_clicked();
-						return;
-					}
-					else
-					{
-						return;
-					}
-				}
-			}
+				bool bIsInBattleState = (worldStatus == 10) ? true : false;
+				bool bIsInNormalState = (worldStatus == 9) ? true : false;
 
-			if (ui->checkBox_freezestop->isChecked())
-			{
-				int x, y, index1, index2, index3;
-				std::string filename;
-				if (g_CGAInterface->GetMapXY(x, y) && g_CGAInterface->GetMapIndex(index1, index2, index3, filename))
+				CGA::cga_player_info_t playerinfo;
+				if (g_CGAInterface->GetPlayerInfo(playerinfo))
 				{
-					if (x != m_LastMapX || y != m_LastMapY || index3 != m_LastMapIndex)
+					if (playerinfo.health != 0 && ui->checkBox_injuryProt->isChecked())
 					{
-						m_LastMapChange = QTime::currentTime();
-					}
-					else
-					{
-						if (m_LastMapChange.elapsed() > 60 * 1000)
+						if (m_node->state() == QProcess::Running)
 						{
 							on_pushButton_term_clicked();
-
-							g_CGAInterface->LogBack();
+							return;
+						}
+						else
+						{
+							return;
+						}
+					}
+					if (playerinfo.souls != 0 && ui->checkBox_soulProt->isChecked())
+					{
+						if (m_node->state() == QProcess::Running)
+						{
+							on_pushButton_term_clicked();
+							return;
+						}
+						else
+						{
 							return;
 						}
 					}
 				}
-			}
-
-			if (ui->checkBox_autorestart->isChecked() && m_node->state() != QProcess::Running && !m_scriptPath.isEmpty())
-			{
-				int worldStatus = 0, gameStatus = 0;
-				if (g_CGAInterface->GetWorldStatus(worldStatus) && g_CGAInterface->GetGameStatus(gameStatus) && worldStatus == 9 && gameStatus == 3)
+				if (m_node->state() == QProcess::Running && ((ui->checkBox_freezestop->checkState() == Qt::CheckState::PartiallyChecked && !bIsInBattleState) || ui->checkBox_freezestop->checkState() == Qt::CheckState::Checked))
 				{
-					on_pushButton_run_clicked();
-					return;
+					int x, y, index1, index2, index3;
+					std::string filename;
+					if (g_CGAInterface->GetMapXY(x, y) && g_CGAInterface->GetMapIndex(index1, index2, index3, filename))
+					{
+						if (x != m_LastMapX || y != m_LastMapY || index3 != m_LastMapIndex)
+						{
+							m_LastMapChange = QTime::currentTime();
+							m_LastMapX = x;
+							m_LastMapY = y;
+							m_LastMapIndex = index3;
+						}
+						else
+						{
+							int freezeDuration = ui->horizontalSlider_freezeDuration->value();
+							if (m_LastMapChange.elapsed() > freezeDuration * 1000)
+							{
+								on_pushButton_term_clicked();
+								g_CGAInterface->LogBack();
+								return;
+							}
+						}
+					}
 				}
-			}
+
+				if (m_node->state() != QProcess::Running && !m_scriptPath.isEmpty())
+				{
+					if (ui->checkBox_autorestart->checkState() == Qt::CheckState::PartiallyChecked && bIsInNormalState)
+					{
+						on_pushButton_run_clicked();
+						return;
+					}
+					if (ui->checkBox_autorestart->checkState() == Qt::CheckState::Checked && (bIsInNormalState || bIsInBattleState))
+					{
+						on_pushButton_run_clicked();
+						return;
+					}
+				}
+			}			
 		}
 		else
 		{
@@ -342,7 +361,7 @@ void ScriptForm::on_pushButton_run_clicked()
 		ui->pushButton_suspend->setText(tr("暂停"));
 
 		m_output->appendPlainText(tr("Starting node..."));
-
+		m_LastMapChange = QTime::currentTime();
 		m_bDebugging = false;
 		m_bListening = true;
 		m_bNavigating = false;
@@ -361,6 +380,7 @@ void ScriptForm::on_pushButton_run_clicked()
 		env.insert("CGA_GAME_PORT", qgetenv("CGA_GAME_PORT"));
 		env.insert("CGA_GUI_PORT", qgetenv("CGA_GUI_PORT"));
 		env.insert("CGA_DIR_PATH", qgetenv("CGA_DIR_PATH"));
+		env.insert("CGA_DIR_PATH_UTF8", qgetenv("CGA_DIR_PATH_UTF8"));
 		env.insert("CGA_GUI_PID", QString("%1").arg(GetCurrentProcessId()));
 		env.insert("NODE_SKIP_PLATFORM_CHECK", "1");
 		//env.insert("PATH", qgetenv("PATH")+";"+QDir::currentPath());
@@ -541,7 +561,8 @@ void ScriptForm::OnNotifyAttachProcessOk(quint32 ProcessId, quint32 ThreadId, qu
 	qputenv("CGA_GAME_PORT", qportString);
 }
 
-void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop, bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput)
+void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool freezestop,
+	bool injuryprot, bool soulprot, int consolemaxlines, int logBackRestart, int transInput, int scriptfreezeduration)
 {
 	if (!path.endsWith("js"))
 		return;
@@ -564,15 +585,17 @@ void ScriptForm::OnNotifyFillLoadScript(QString path, bool autorestart, bool fre
 		}
 	}
 
-	if (autorestart)
-		ui->checkBox_autorestart->setChecked(true);
+	if (autorestart == 1)
+		ui->checkBox_autorestart->setCheckState(Qt::CheckState::PartiallyChecked);
+	else if (autorestart >= 2)
+		ui->checkBox_autorestart->setCheckState(Qt::CheckState::Checked);
 	if (injuryprot)
 		ui->checkBox_injuryProt->setChecked(true);
 	if (soulprot)
 		ui->checkBox_soulProt->setChecked(true);
 	if (freezestop)
 		ui->checkBox_freezestop->setChecked(true);
-
+	ui->horizontalSlider_freezeDuration->setValue(scriptfreezeduration);
 	m_ConsoleMaxLines = consolemaxlines;
 	m_output->setMaximumBlockCount(m_ConsoleMaxLines);
 }
@@ -674,6 +697,18 @@ void ScriptForm::OnHttpLoadScript(QString query, QByteArray postdata, QJsonDocum
 			{
 				ui->checkBox_autorestart->setChecked(qautorestart.toBool());
 			}
+			else if (qautorestart.toInt() == 2)
+			{
+				ui->checkBox_autorestart->setChecked(Qt::CheckState::Checked);
+			}
+			else if (qautorestart.toInt() == 1)
+			{
+				ui->checkBox_autorestart->setCheckState(Qt::CheckState::PartiallyChecked);
+			}
+			else if (qautorestart.toInt() == 0)
+			{
+				ui->checkBox_autorestart->setCheckState(Qt::CheckState::Unchecked);
+			}
 		}
 		if (newobj.contains("injuryprot"))
 		{
@@ -689,6 +724,22 @@ void ScriptForm::OnHttpLoadScript(QString query, QByteArray postdata, QJsonDocum
 			if (qsoulprot.isBool())
 			{
 				ui->checkBox_soulProt->setChecked(qsoulprot.toBool());
+			}
+		}
+		if (newobj.contains("freezestop"))
+		{
+			auto freezestop = newobj.take("freezestop");
+			if (freezestop.isBool())
+			{
+				ui->checkBox_freezestop->setChecked(freezestop.toBool());
+			}
+		}
+		if (newobj.contains("freezeduration"))
+		{
+			auto scriptfreezeduration = newobj.take("scriptfreezeduration");
+			if (scriptfreezeduration.toInt() >= 10 && scriptfreezeduration.toInt() <= 600)
+			{
+				ui->horizontalSlider_freezeDuration->setValue(scriptfreezeduration.toInt());
 			}
 		}
 	}

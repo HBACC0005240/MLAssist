@@ -47,6 +47,8 @@ public:
 
 	//设置战聊易
 	int Lua_SetCharacterSwitch(LuaState *L);
+	//! 聊天屏蔽
+	int Lua_ChatBlockMsgs(LuaState *L);
 	//发起pk 加队 交易 摆摊等
 	int Lua_DoCharacterAction(LuaState *L);
 	//删除技能
