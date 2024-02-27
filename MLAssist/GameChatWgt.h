@@ -46,6 +46,7 @@ public slots:
 	void on_listWidget_customContextMenuRequested(const QPoint &);
 	void on_checkBox_BlockChatMsgs_stateChanged(int state);
 	void OnNotifyFillChatSettings(int blockchatmsgs);
+	void OnSyncBlockChatMsgs();
 
 private:
 	Ui::GameChatWgt ui;
@@ -58,4 +59,5 @@ private:
 	int m_nChatSize = 0;	   //大2  中0  小1
 	int m_nChatColorIndex = 0; //颜色index
 	CharacterPtr m_player;
+	QTimer m_blockChatTimer;
 };

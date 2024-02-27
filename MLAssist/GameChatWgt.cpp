@@ -24,9 +24,12 @@ GameChatWgt::GameChatWgt(QWidget *parent) :
 	connect(ui.checkBox_timer, SIGNAL(stateChanged(int)), this, SLOT(OnCtrlTimer(int)), Qt::ConnectionType::QueuedConnection);
 	connect(&m_timer, SIGNAL(timeout()), this, SLOT(OnTimeChat()));
 	connect(&m_friendCardTimer, SIGNAL(timeout()), this, SLOT(OnUpdateFriendCard()));
+	connect(&m_blockChatTimer, SIGNAL(timeout()), this, SLOT(OnSyncBlockChatMsgs()));
 	m_friendCardTimer.start(10000); //100秒刷一次
+	m_blockChatTimer.setSingleShot(true);
 	connect(ui.listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(doItemDoubleClicked(QListWidgetItem *)));
 	ui.listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+	ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::PartiallyChecked);
 	//connect(ui.listWidget, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_listWidget_customContextMenuRequested(const QPoint &)));
 }
 
@@ -268,6 +271,9 @@ void GameChatWgt::on_checkBox_BlockChatMsgs_stateChanged(int state)
 				g_CGAInterface->SetBlockChatMsgs(0);
 				break;
 		}
+	}else
+	{
+		m_blockChatTimer.start(1000);
 	}
 }
 
@@ -494,5 +500,17 @@ void GameChatWgt::OnNotifyFillChatSettings(int blockchatmsgs)
 	else if (blockchatmsgs == 0)
 	{
 		ui.checkBox_BlockChatMsgs->setCheckState(Qt::CheckState::Unchecked);
+	}
+}
+
+void GameChatWgt::OnSyncBlockChatMsgs()
+{
+	m_blockChatTimer.stop();
+	if (g_CGAInterface->IsConnected())
+	{
+		g_CGAInterface->SetBlockChatMsgs((int)ui.checkBox_BlockChatMsgs->checkState());
+	}else
+	{
+		m_blockChatTimer.start(1000);
 	}
 }
